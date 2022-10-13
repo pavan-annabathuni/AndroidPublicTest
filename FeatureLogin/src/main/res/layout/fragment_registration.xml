@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/register_done_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.waycool.uicomponents.Text.Title1Bold
+                android:id="@+id/title_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:text="Welcome to Outgrow"
+                android:textColor="@color/textdark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.waycool.uicomponents.Text.ParagraphMedium
+                android:id="@+id/farmer_det_msg_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:text="The following details will help us to personalize your Outgrow app experience."
+                android:textColor="@color/textdark"
+                app:layout_constraintEnd_toEndOf="@id/title_tv"
+                app:layout_constraintStart_toStartOf="@+id/title_tv"
+                app:layout_constraintTop_toBottomOf="@+id/title_tv" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_textlayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:textColorHint="@color/textdark"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/textdark"
+                app:boxStrokeErrorColor="@color/red"
+                app:boxStrokeWidth="2dp"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/primaryColor"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/farmer_det_msg_tv">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/notosans_semibold"
+                    android:hint="Enter Your Name"
+                    android:inputType="textPersonName|textCapWords"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="48dp"
+                    android:textColor="@color/textdark"
+                    android:textColorHint="@color/textdark"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/name_mic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <ImageView
+                android:id="@+id/name_mic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_mic"
+                app:layout_constraintBottom_toBottomOf="@+id/name_textlayout"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@+id/name_textlayout"
+                app:layout_constraintTop_toTopOf="@+id/name_textlayout"
+                app:tint="@color/textdark" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/location_textlayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:textColorHint="@color/textdark"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/textdark"
+                app:boxStrokeErrorColor="@color/red"
+                app:boxStrokeWidth="2dp"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/primaryColor"
+                app:hintEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_textlayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/location_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/notosans_semibold"
+                    android:gravity="center_vertical"
+                    android:hint="Enter Your Location"
+                    android:inputType="textPersonName"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="48dp"
+                    android:textColor="@color/textdark"
+                    android:textColorHint="@color/textdark"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/location_iv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/location_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_my_location"
+                app:layout_constraintBottom_toBottomOf="@+id/location_textlayout"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@+id/location_textlayout"
+                app:layout_constraintTop_toTopOf="@+id/location_textlayout"
+                app:tint="@color/textdark" />
+
+            <!--            <com.waycool.uicomponents.Text.ParagraphMedium-->
+            <!--                android:id="@+id/farmer_location_tv"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:paddingTop="10dp"-->
+            <!--                android:text="Location"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                tools:layout_editor_absoluteX="16dp"-->
+            <!--                tools:layout_editor_absoluteY="232dp" />-->
+
+
+            <!--            <com.google.android.material.textfield.TextInputEditText-->
+            <!--                android:id="@+id/user_location_edittext"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:layout_marginStart="15dp"-->
+            <!--                android:layout_marginLeft="15dp"-->
+            <!--                android:layout_marginEnd="15dp"-->
+            <!--                android:layout_marginRight="15dp"-->
+            <!--                android:inputType="text"-->
+            <!--                android:lines="1"-->
+            <!--                android:maxLines="1"-->
+            <!--                android:textColor="@color/black_two"-->
+            <!--                android:textColorHint="@color/grey400"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintBottom_toTopOf="@+id/know_services_tv"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/getFarmerLocation" />-->
+
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/getFarmerLocation"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="35dp"-->
+            <!--                android:background="@android:color/transparent"-->
+            <!--                android:clickable="false"-->
+            <!--                android:enabled="false"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:src="@drawable/ic_location_disable"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/user_location_edittext"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/user_name_edittext" />-->
+
+
+            <com.waycool.uicomponents.Text.Title2Bold
+                android:id="@+id/know_services_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="58dp"
+                android:text="Know Your Services "
+                android:textColor="@color/black_two"
+                app:layout_constraintStart_toStartOf="@+id/know_services_recycler_view"
+                app:layout_constraintTop_toBottomOf="@+id/location_textlayout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/know_services_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/know_services_tv"
+                tools:listitem="@layout/viewholder_service_layout" />
+
+            <com.waycool.uicomponents.Text.Title2Bold
+                android:id="@+id/premium_features_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Premium Features"
+                android:textColor="@color/black_two"
+                app:layout_constraintStart_toStartOf="@+id/know_services_recycler_view"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/premium_features_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/premium_features_tv"
+                tools:listitem="@layout/viewholder_service_layout" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="24dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/know_services_recycler_view" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register_done_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Register"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

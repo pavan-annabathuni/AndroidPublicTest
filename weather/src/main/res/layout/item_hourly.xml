@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+    <variable
+        name="property"
+        type="com.example.weather.apiService.apiResponse.Hourly" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_hourly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:id="@+id/ll_hourly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5.00AM"
+                style="@style/Medium"
+                android:textSize="12sp"
+                android:text="@{Integer.toString(property.dt)}"
+                android:layout_margin="8dp"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                tools:src="@drawable/ic_rain"
+                imageUrl='@{@string/url+property.weather[0].icon+".png"}'
+                android:layout_margin="8dp" />
+
+            <TextView
+                android:id="@+id/tv_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{String.format("%.0f",property.temp)+"\u2103"}'
+                android:textSize="@dimen/tv14"
+                tools:text = "40C"
+                style="@style/Bold"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

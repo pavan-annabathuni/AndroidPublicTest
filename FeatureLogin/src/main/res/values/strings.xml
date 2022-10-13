@@ -1,0 +1,28 @@
+<resources>
+    <string name="USER_PREFERENCES">user_preferences</string>
+    <string name="mobile_stringextra">mobile_number</string>
+    <string name="nointernet">No Internet connection</string>
+    <string name="app_name">Outgrow</string>
+    <string name="enter_text">Enter your mobile number</string>
+    <string name="second_text">You’ll receive a 4 digit code to verify </string>
+    <string name="third_text">Enter mobile number </string>
+    <string name="btn_text">Get OTP</string>
+    <string name="opt_text1">OTP Verification</string>
+    <string name="opt_text2">Enter the 4 digit code sent to you at</string>
+    <string name="opt_text3">Enter OTP</string>
+    <string name="opt_text4">Don’t receive OTP?</string>
+    <string name="opt_text5">Resend OTP</string>
+    <string name="otp_btn">Continue</string>
+<!--    <string name="partnerKey">HYHB759ca24742a654d4b9fee1ffdecab5880</string>-->
+    <string name="partnerKey">DmucH58c353c252ec4515b94d878ff3be264d</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_text">Welcome Outgrow</string>
+    <string name="choose_text">Choose your Language</string>
+    <string name="privacy_text">I agree to Terms of Use ,Privacy Policy and to share my location</string>
+
+    <!--<string name="partnerKey">n0SO1405c0059c06f4f468c0963122620e6b2</string>-->
+    <!--
+    <string name="partnerKey_test_pavan">DmucH58c353c252ec4515b94d878ff3be264d</string>
+-->
+</resources>

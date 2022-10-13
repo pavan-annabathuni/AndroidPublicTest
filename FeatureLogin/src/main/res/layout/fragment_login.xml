@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="Back"
+        android:padding="16dp"
+        android:src="@drawable/ic_back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/textdark" />
+
+    <ImageView
+        android:id="@+id/login_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/ic_login_pic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_btn" />
+
+
+    <com.waycool.uicomponents.Text.Title1Bold
+        android:id="@+id/enter_number_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/enter_text"
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_pic" />
+
+    <com.waycool.uicomponents.Text.ParagraphMedium
+        android:id="@+id/receive_msg_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/second_text"
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="@+id/enter_number_tv"
+        app:layout_constraintStart_toStartOf="@+id/enter_number_tv"
+        app:layout_constraintTop_toBottomOf="@+id/enter_number_tv" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mobile_no_textlayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:textColorHint="@color/textdark"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxStrokeColor="@color/textdark"
+        app:boxStrokeErrorColor="@color/red"
+        app:boxStrokeWidth="2dp"
+        app:hintEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receive_msg_tv"
+        app:prefixText="🇮🇳 +91"
+        app:prefixTextAppearance="@style/TextInputPrefixTextAppearance"
+        app:prefixTextColor="@color/textdark">
+
+        <com.google.android.material.textfield.TextInputEditText
+           android:id="@+id/mobileno_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/notosans_semibold"
+            android:gravity="center_vertical"
+            android:hint="Mobile Number"
+            android:inputType="number"
+            android:maxLength="10"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/textdark"
+            android:textColorHint="@color/textdark"
+            android:textSize="16sp"
+            tools:ignore="TouchTargetSizeCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/getotp_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/btn_text"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mobile_no_textlayout" />
+
+    <com.waycool.uicomponents.Text.SmallTextMedium
+        android:id="@+id/terms_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="By continuing you agree to Outgrow's privacy policy and terms of service"
+        app:layout_constraintEnd_toEndOf="@id/getotp_btn"
+        app:layout_constraintStart_toStartOf="@+id/getotp_btn"
+        app:layout_constraintTop_toBottomOf="@+id/getotp_btn" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

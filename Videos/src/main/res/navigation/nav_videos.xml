@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_videos.xml"
+    app:startDestination="@id/videosListFragment">
+
+    <fragment
+        android:id="@+id/videosListFragment"
+        android:name="com.waycool.videos.fragments.VideosListFragment"
+        android:label="fragment_videos_list"
+        tools:layout="@layout/fragment_videos_list" >
+        <action
+            android:id="@+id/action_videosListFragment_to_playVideoFragment"
+            app:destination="@id/playVideoFragment"
+            app:popUpTo="@id/videosListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playVideoFragment"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="fragment_play_video"
+        tools:layout="@layout/fragment_play_video" />
+</navigation>

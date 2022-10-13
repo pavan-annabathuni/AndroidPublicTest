@@ -1,0 +1,15 @@
+<resources>
+    <string name="USER_PREFERENCES">user_preferences</string>
+    <string name="mobile_stringextra">mobile_number</string>
+    <string name="nointernet">No Internet connection</string>
+    <string name="app_name">Outgrow</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="text1">Welcome to Outgrow</string>
+    <string name="text2">The following details will help us to personalize your Outgrow experience.</string>
+    <string name="text3">Know your services</string>
+    <string name="text4">Premium features</string>
+    <string name="name_text">Enter Your Name</string>
+
+    <string name="location_text">Enter YourLocation</string>
+    <string name="btn">Submit</string>
+</resources>

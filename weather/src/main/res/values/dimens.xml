@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tv14">14sp</dimen>
+    <dimen name="tv16">16sp</dimen>
+    <dimen name="tv18">18sp</dimen>
+    <dimen name="tv20">20sp</dimen>
+</resources>

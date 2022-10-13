@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/space127"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/space4">
+    <ImageView
+        android:id="@+id/list_item_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_outgrow"/>
+    <RelativeLayout
+        android:id="@+id/transparent_layout"
+        android:layout_width="@dimen/space127"
+        android:layout_height="@dimen/space127"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_bg_transparent"/>
+        <ImageButton
+            android:id="@+id/getFarmerLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:enabled="false"
+            android:padding="@dimen/space10"
+            android:visibility="gone"
+            android:src="@drawable/ic_lock" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:enabled="false"
+            android:padding="@dimen/space10"
+            android:src="@drawable/ic_premium" />
+    </RelativeLayout>
+
+    <com.waycool.uicomponents.Text.ParagraphSemiBold
+        android:id="@+id/item_name"
+        android:layout_width="@dimen/space127"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_item_image"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/space16"
+        android:paddingRight="@dimen/space16"
+        android:textColor="#111827"
+        android:text="outgrow"
+        />
+
+</RelativeLayout>

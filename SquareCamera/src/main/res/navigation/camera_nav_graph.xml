@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/camera_nav_graph"
+    app:startDestination="@id/captureImageFragment">
+
+
+    <fragment
+        android:id="@+id/captureImageFragment"
+        android:name="com.waycool.squarecamera.CaptureImageFragment"
+        android:label="CaptureImageFragment" >
+        <action
+            android:id="@+id/action_captureImageFragment_to_imagePreviewFragment"
+            app:destination="@id/imagePreviewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/captureImageFragment" />
+        <action
+            android:id="@+id/action_captureImageFragment_to_dialogFragment"
+            app:destination="@id/dialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagePreviewFragment"
+        android:name="com.waycool.squarecamera.ImagePreviewFragment"
+        android:label="fragment_image_preview"
+        tools:layout="@layout/fragment_image_preview" />
+    <fragment
+        android:id="@+id/dialogFragment"
+        android:name="com.waycool.squarecamera.DialogFragment"
+        android:label="fragment_dialog"
+        tools:layout="@layout/fragment_dialog" />
+</navigation>

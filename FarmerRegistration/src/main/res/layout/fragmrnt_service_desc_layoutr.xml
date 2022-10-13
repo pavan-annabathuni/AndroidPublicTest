@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/transparent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/selector_half_shape_white"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="@dimen/space16">
+
+        <RelativeLayout
+            android:id="@+id/desc_header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <com.waycool.uicomponents.Text.Title2Bold
+                        android:id="@+id/desc_item_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="outgrow"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/space16" />
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space12"
+                        android:layout_toRightOf="@+id/desc_item_name"
+                        android:src="@drawable/ic_premium" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/privacy_close_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/ic_mic" />
+            </LinearLayout>
+
+            <com.waycool.uicomponents.Text.ParagraphMedium
+                android:id="@+id/desc_service_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/header_layout"
+                android:text="outgrow"
+                android:textColor="@color/gray"
+               />
+
+            <ImageView
+                android:id="@+id/desc_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space120"
+                android:layout_below="@+id/desc_service_name"
+                android:layout_marginTop="@dimen/space16" />
+
+            <LinearLayout
+                android:id="@+id/desc_listen_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_image"
+                android:layout_marginTop="@dimen/space12"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/desc_listen_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_listen" />
+
+                <TextView
+                    android:id="@+id/desc_listen_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:text="Listen"
+                    android:textColor="@color/green" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/audio_layout"
+                layout="@layout/content_audio_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_service_name"
+                android:layout_marginTop="@dimen/space12"
+                android:layout_toRightOf="@+id/desc_image"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <com.waycool.uicomponents.Text.ParagraphMedium
+            android:id="@+id/desc_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/desc_header_layout"
+            android:layout_marginTop="@dimen/space16"
+            android:maxLines="10"
+            android:text="Hello friends, I am Palash Kosta, an Android Developer. I wanted to have a list of good points that I should keep in mind during development of any Android application. So here I started. This list will help me as well as others who have started the Android Development recentlyYou can create the custom callback."
+            android:textColor="@color/desc_text"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space45"
+            android:layout_below="@+id/desc_tv"
+            android:layout_marginTop="@dimen/space16"
+            android:layout_marginBottom="@dimen/space16"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:enabled="false"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="@dimen/txt14" />
+
+    </RelativeLayout>
+</LinearLayout>

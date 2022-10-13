@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:padding="16dp"
+        android:src="@drawable/ic_back_button"
+        android:text="@string/app_name"
+        android:textSize="16dp"
+        app:tint="@color/textdark" />
+
+    <ImageView
+        android:id="@+id/otp_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/back_btn"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_otp_pic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/otp_pic"
+        android:orientation="vertical">
+
+
+        <com.waycool.uicomponents.Text.Title1Bold
+            android:id="@+id/enter_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/opt_text1"
+            android:textColor="@color/black_two"
+            android:textSize="20sp" />
+
+        <com.waycool.uicomponents.Text.ParagraphSemiBold
+            android:id="@+id/receive_msg_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/opt_text2"
+            android:textColor="@color/black_one" />
+
+        <com.waycool.uicomponents.Text.ParagraphMedium
+            android:id="@+id/receive_msg_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center_vertical"
+            android:text="@string/opt_text3"
+            android:textColor="@color/black_one" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/otpPassword"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp" />
+
+        <!-- <com.mukesh.OtpView
+             android:id="@+id/otpPassword"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="50dp"
+             android:layout_marginLeft="15dp"
+             android:inputType="number"
+             android:layout_centerVertical="true"
+             android:gravity="center"
+             android:layout_gravity="center"
+             android:textColor="@color/black"
+             app:OtpItemCount="4"
+             app:OtpItemRadius="8dp"
+             app:OtpLineColor="@color/black"
+             app:OtpState_filled="true"
+             app:OtpViewType="rectangle"/>-->
+
+        <com.view.circulartimerview.CircularTimerView
+            android:id="@+id/progress_circular"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="16dp"
+            app:backgroundColor="@color/white"
+            app:backgroundWidth="4"
+            app:isClockwise="true"
+            app:maxValue="30"
+            app:progressBackgroundColor="@color/grey300"
+            app:progressColor="#FFC24C"
+            app:progressText="30"
+            app:progressTextColor="@color/black"
+            app:startingPoint="bottom"
+            app:strokeWidthDimension="5"
+            app:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/otp_resend_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.waycool.uicomponents.Text.ParagraphSemiBold
+                android:id="@+id/didnot_receive_msg_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/opt_text4"
+                android:textColor="@color/textlight" />
+
+            <Button
+                android:id="@+id/resend_msg_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/notosans_semibold"
+                android:gravity="center_vertical"
+                android:text="@string/opt_text5"
+                android:textAllCaps="false"
+                android:textColor="@color/green" />
+
+            <com.waycool.uicomponents.Text.ParagraphSemiBold
+                android:id="@+id/otp_min_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/green"
+
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/otp_call_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/otp_resend_or"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="Or"
+                android:textColor="@color/textlight"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/otp_via_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:gravity="center_vertical"
+                android:text="Get OTP Via Call"
+                android:textColor="@color/green"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/done_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/otp_btn"
+        android:textAllCaps="false" />
+</RelativeLayout>
+
+
