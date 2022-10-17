@@ -1,0 +1,12 @@
+
+include ':app'
+include ':FeatureLogin'
+include ':Data'
+include ':Core'
+include ':UiComponents'
+include ':NewsAndArticles'
+include ':Videos'
+include ':weather'
+include ':SquareCamera'
+include ':FeatureCropHealth'
+include ':FeatureCropProtect'

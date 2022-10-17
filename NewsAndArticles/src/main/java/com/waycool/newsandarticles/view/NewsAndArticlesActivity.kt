@@ -1,0 +1,243 @@
+package com.waycool.newsandarticles.view
+
+import androidx.appcompat.app.AppCompatActivity
+import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
+import android.os.Bundle
+import android.text.TextWatcher
+import android.text.Editable
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.util.Log
+import android.view.View
+import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.newsandarticles.Util.AppUtil
+import com.waycool.newsandarticles.adapter.BannerAdapter
+import com.waycool.newsandarticles.adapter.NewsPagerAdapter
+import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
+import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
+import java.lang.Exception
+import java.util.*
+
+class NewsAndArticlesActivity : AppCompatActivity() {
+    private var selectedCategory: String? = null
+    private var searchTag: String? = null
+
+    var bannerImageList: MutableList<AdBannerImage> = ArrayList()
+
+
+    private lateinit var newsAdapter: NewsPagerAdapter
+
+    val binding: ActivityNewsAndArticlesBinding by lazy {
+        ActivityNewsAndArticlesBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel by lazy { ViewModelProvider(this)[NewsAndArticlesViewModel::class.java] }
+
+    private val newsCategoryList = listOf("All", "News", "Articles")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(binding.root)
+        binding.toolbarTitle.text="News & Articles"
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        binding.videosVideoListRv.layoutManager = LinearLayoutManager(this)
+
+        newsAdapter = NewsPagerAdapter(this)
+        binding.videosVideoListRv.adapter = newsAdapter
+
+
+        //for slider banner
+        setBanners()
+        getNewsCategories()
+
+        binding.search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                searchTag = charSequence.toString()
+                if (charSequence.isNotEmpty()) {
+                    binding.micBtn.visibility = View.GONE
+                } else {
+                    binding.micBtn.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
+
+        newsAdapter.onItemClick = {
+            val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+            intent.putExtra("title", it?.title)
+            intent.putExtra("content", it?.desc)
+            intent.putExtra("image", it?.thumbnailUrl)
+            intent.putExtra("audio", it?.audioUrl)
+            intent.putExtra("date", it?.startDate)
+            intent.putExtra("source", it?.sourceName)
+            startActivity(intent)
+        }
+
+        binding.micBtn.setOnClickListener { speechToText() }
+    }
+
+
+    private fun getNewsCategories() {
+        binding.videoCategoryChipGroup.removeAllViews()
+        selectedCategory = null
+        for (category in newsCategoryList) {
+            createChip(category)
+        }
+
+    }
+
+    private fun createChip(category: String) {
+        val chip = Chip(this)
+        chip.text = category
+        chip.isCheckable = true
+        chip.isClickable = true
+        chip.isCheckedIconVisible = false
+        chip.setTextColor(
+            AppCompatResources.getColorStateList(
+                this,
+                com.waycool.uicomponents.R.color.bg_chip_text
+            )
+        )
+        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+        chip.chipStrokeWidth = 1f
+        chip.chipStrokeColor = AppCompatResources.getColorStateList(
+            this,
+            com.waycool.uicomponents.R.color.bg_chip_text
+        )
+
+        if (selectedCategory == null) {
+            chip.isChecked = true
+            selectedCategory = category
+            if (category == "All")
+                getNews()
+            else getNews(vansType = category)
+        }
+
+
+        chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
+            if (b) {
+                selectedCategory = category
+                if (category == "All")
+                    getNews()
+                else getNews(vansType = category)
+            }
+        }
+        binding.videoCategoryChipGroup.addView(chip)
+    }
+
+    private fun getNews(
+        vansType: String? = null,
+        tags: String? = null
+    ) {
+
+        viewModel.getVansNewsList(vansType, tags).observe(this) {
+            newsAdapter.submitData(lifecycle, it)
+        }
+    }
+
+
+    fun shareClick(
+        pos: Int,
+        url: String?,
+        content: String,
+        imageView: ImageView?,
+        appLink: String
+    ) {
+        Log.d("url", (url)!!)
+        AppUtil.shareItem(this@NewsAndArticlesActivity, url, imageView, content + "\n" + appLink)
+    }
+
+    private fun setBanners() {
+        val adBannerImage =
+            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
+        bannerImageList.add(adBannerImage)
+        val adBannerImage2 = AdBannerImage(
+            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
+            "2",
+            "1"
+        )
+        bannerImageList.add(adBannerImage2)
+        val bannerAdapter = BannerAdapter(this, bannerImageList)
+        binding.bannerViewpager.adapter = bannerAdapter
+        TabLayoutMediator(
+            binding.bannerIndicators, binding.bannerViewpager
+        ) { tab: TabLayout.Tab, position: Int ->
+            tab.text = "${position + 1} / ${bannerImageList.size}"
+        }.attach()
+
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+    }
+
+
+    private fun speechToText() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        )
+        intent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE,
+            Locale.getDefault()
+        )
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+        } catch (e: Exception) {
+            Toast
+                .makeText(
+                    this@NewsAndArticlesActivity, " " + e.message,
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+    }
+
+    override fun onActivityResult(
+        requestCode: Int, resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            if (resultCode == RESULT_OK && data != null) {
+                val result = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS
+                )
+                searchTag = result?.get(0)
+                binding.search.setText(searchTag)
+
+            }
+        }
+    }
+
+    companion object {
+        private val REQUEST_CODE_SPEECH_INPUT = 1
+    }
+}

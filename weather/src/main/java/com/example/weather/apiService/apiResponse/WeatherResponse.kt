@@ -1,0 +1,12 @@
+package com.example.weather.apiService.apiResponse
+
+data class WeatherResponse(
+    val current: Current,
+    val daily: List<Daily>,
+    val hourly: List<Hourly>,
+    val alerts:List<Alerts>,
+    val lat: Double,
+    val lon: Double,
+    val timezone: String,
+    val timezone_offset: Int
+)

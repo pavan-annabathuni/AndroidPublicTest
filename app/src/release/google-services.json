@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "197412890480",
+    "project_id": "outgrow-fdded",
+    "storage_bucket": "outgrow-fdded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197412890480:android:dd94ce723fb746db3211b5",
+        "android_client_info": {
+          "package_name": "com.waycool.iwap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197412890480-bhnlkj9pkn825fndbv6gq0jnu20h270a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzLrAzc7K66kF42XWZipYnIxZwXUATGv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197412890480-bhnlkj9pkn825fndbv6gq0jnu20h270a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

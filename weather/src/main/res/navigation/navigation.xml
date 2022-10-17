@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/weatherFragment">
+
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.example.weather.fragment.WeatherFragment"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_weatherFragment_to_sheetDialogFragment"
+            app:destination="@id/sheetDialogFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_sheetHourlyFragment"
+            app:destination="@id/sheetHourlyFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/sheetDialogFragment"
+        android:name="com.example.weather.fragment.SheetDialogFragment"
+        android:label="SheetDialogFragment">
+        <argument android:name="daily"
+            app:argType="com.example.weather.apiService.apiResponse.Daily"/>
+    </dialog>
+    <dialog
+        android:id="@+id/sheetHourlyFragment"
+        android:name="com.example.weather.fragment.SheetHourlyFragment"
+        android:label="SheetHourlyFragment" >
+        <argument android:name="hourly"
+            app:argType="com.example.weather.apiService.apiResponse.Hourly"/>
+    </dialog>
+</navigation>

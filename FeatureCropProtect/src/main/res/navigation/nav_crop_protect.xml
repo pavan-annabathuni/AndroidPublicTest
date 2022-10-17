@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_crop_protect.xml"
+    app:startDestination="@id/cropSelectionFragment">
+
+    <fragment
+        android:id="@+id/cropSelectionFragment"
+        android:name="com.waycool.cropprotect.fragments.CropSelectionFragment"
+        android:label="CropSelectionFragment" >
+        <action
+            android:id="@+id/action_cropSelectionFragment_to_pestDiseaseFragment"
+            app:destination="@id/pestDiseaseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/pestDiseaseFragment"
+        android:name="com.waycool.cropprotect.fragments.PestDiseaseFragment"
+        android:label="PestDiseaseFragment" >
+        <action
+            android:id="@+id/action_pestDiseaseFragment_to_pestDiseaseDetailsFragment"
+            app:destination="@id/pestDiseaseDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/pestDiseaseDetailsFragment"
+        android:name="com.waycool.cropprotect.fragments.PestDiseaseDetailsFragment"
+        android:label="PestDiseaseDetailsFragment" />
+</navigation>

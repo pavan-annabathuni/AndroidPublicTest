@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="language_common">#373232</color>
+    <color name="language_native">#848C90</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#070D09</color>
+    <color name="light_green1">#DEFFE3</color>
+    <color name="desc_text">#888484</color>
+    <color name="green_unselected">#A1C0AD</color>
+    <color name="green">#146133</color>
+</resources>
