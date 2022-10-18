@@ -90,9 +90,15 @@ object LocalSource {
     suspend fun insertModuleMaster(moduleMaster: List<ModuleMasterEntity>) {
         DataStoreManager.insertModuleMaster(moduleMaster)
     }
+    suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
+        DataStoreManager.insertAddCropType(moduleMaster)
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         return DataStoreManager.getModuleMaster()
+    }
+    fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
+        return DataStoreManager.getAddCropType()
     }
 
     suspend fun insertCropCategoryMaster(cropCategory: List<CropCategoryEntity>) {

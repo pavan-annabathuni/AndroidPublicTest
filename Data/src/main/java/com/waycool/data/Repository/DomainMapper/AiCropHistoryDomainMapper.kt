@@ -21,6 +21,7 @@ class AiCropHistoryDomainMapper : DomainMapper<AiCropHistoryDomain, AiCropHistor
     }
 
     fun toDomainList(initial: List<AiCropHistoryEntity>): List<AiCropHistoryDomain> {
-        return initial.map { mapToDomain(it) }
+        return initial.map {
+            mapToDomain(it) }
     }
 }

@@ -4,14 +4,9 @@ import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkSource
-import com.waycool.data.Repository.DomainMapper.AiCropDetectionDomainMapper
-import com.waycool.data.Repository.DomainMapper.CropCategoryMasterDomainMapper
-import com.waycool.data.Repository.DomainMapper.CropMasterDomainMapper
-import com.waycool.data.Repository.DomainMapper.PestDiseaseDomainMapper
-import com.waycool.data.Repository.DomainModels.AiCropDetectionDomain
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
-import com.waycool.data.Repository.DomainModels.CropMasterDomain
-import com.waycool.data.Repository.DomainModels.PestDiseaseDomain
+import com.waycool.data.Repository.DomainMapper.*
+import com.waycool.data.Repository.DomainModels.*
+import com.waycool.data.Sync.syncer.AddCropTypeSyncer
 import com.waycool.data.Sync.syncer.CropCategorySyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
@@ -39,6 +34,25 @@ object CropsRepository {
             }
         }
     }
+    fun getAddCropType(): Flow<Resource<List<AddCropTypeDomain>?>> {
+        return AddCropTypeSyncer().getData().map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                      AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+    }
+
+
 
 
     fun getAllCrops(): Flow<Resource<List<CropMasterDomain>?>> {

@@ -43,6 +43,13 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>
     ): Response<ModuleMasterDTO>
 
+    //add crop get api
+
+    @GET("api/v1/soil-types")
+    suspend fun getAddCropType(
+        @HeaderMap headerMap: Map<String, String>
+    ): Response<AddCropTypeDTO>
+
 
     @POST("api/v1/register")
     @FormUrlEncoded
@@ -71,7 +78,8 @@ interface ApiInterface {
     @GET("api/v1/vans-category-master")
     suspend fun getVansCategory(@HeaderMap map: Map<String, String>): Response<VansCategoryDTO?>
 
-    //news list
+    //vans Feeder
+
     @GET("api/v1/vans-feeder")
     suspend fun getVansFeeder(
         @HeaderMap map: Map<String, String>,

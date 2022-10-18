@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.addcrop.AddCropActivity
 import com.example.weather.WeatherActivity
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
@@ -41,6 +42,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.newsButton.setOnClickListener {
             val intent = Intent(this, NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+
+        }
+        binding.addCrop.setOnClickListener {
+            val intent = Intent(this, AddCropActivity::class.java)
             startActivity(intent)
 
         }

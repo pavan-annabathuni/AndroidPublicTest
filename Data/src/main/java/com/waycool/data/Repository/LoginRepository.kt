@@ -15,6 +15,7 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.LangugeMasterEntityMapper
+import com.waycool.data.Local.mappers.ModuleMasterEntityMapper
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Repository.DomainMapper.*

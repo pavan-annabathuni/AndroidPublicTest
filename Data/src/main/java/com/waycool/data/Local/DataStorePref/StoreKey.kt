@@ -29,6 +29,10 @@ object StoreKey {
     //ModuleMaster
     val MODULE_MASTER = stringPreferencesKey("modulemaster")
 
+    //add crop
+    //ModuleMaster
+    val ADD_CROP_TYPE = stringPreferencesKey("addcroptype")
+
     //CropCategory
     val CROP_CATEGORY = stringPreferencesKey("cropcategory")
 

@@ -243,6 +243,14 @@ object DataStoreManager {
             Log.d("Languaga", "SavedLanguaga")
         }
     }
+    suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
+        performPrefsSanityCheck()
+        context?.moduleMaster?.edit {
+            it[StoreKey.ADD_CROP_TYPE] =
+                TypeConverter.convertStringToAddCropTypeString(moduleMaster)
+            Log.d("Languaga", "SavedLanguaga")
+        }
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         performPrefsSanityCheck()
@@ -253,6 +261,19 @@ object DataStoreManager {
             ?.map {
                 val string = it[StoreKey.MODULE_MASTER]
                 string?.let { TypeConverter.convertStringToModuleMaster(string) } ?: emptyList()
+            }
+
+    }
+    fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
+        performPrefsSanityCheck()
+        return context?.moduleMaster?.data
+            ?.catch { exception ->
+                Log.d("languageDataStore: ", exception.toString())
+            }
+            ?.map {
+                val string = it[StoreKey.MODULE_MASTER]
+                string?.let {
+                    TypeConverter.convertStringToAddCropType(string) } ?: emptyList()
             }
 
     }

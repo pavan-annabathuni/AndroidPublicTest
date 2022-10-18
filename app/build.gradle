@@ -44,6 +44,7 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':weather')
     implementation project(path: ':FeatureCropHealth')
+    implementation project(path: ':addcrop')
 
     implementation(libraries.appCompat)
     implementation(libraries.material)
