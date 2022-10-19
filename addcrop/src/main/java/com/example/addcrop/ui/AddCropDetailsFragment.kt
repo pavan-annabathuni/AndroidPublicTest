@@ -5,22 +5,18 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.model.addcroppost.AddCropRequest
 import com.example.addcrop.viewmodel.AddViewModel
+import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,14 +59,16 @@ class AddCropDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
+//        viewModel.getUserData()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemClicked()
-        spinner()
-        spinnerYear()
+
+//        spinner()
+//        spinnerYear()
         binding.tvCalender.setOnClickListener {
             showCalender()
         }
@@ -82,115 +80,124 @@ class AddCropDetailsFragment : Fragment() {
 
     }
 
-    private fun spinner() {
-        val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
-        binding.tvSpinner.adapter = arrayAdapter
-        binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                itemClicked()
-                val item = p0?.selectedItem
-                irrigation_selected = item.toString()
-//                arrayList.add(irrigation)
-                if (colors[1] == (irrigation_selected)) {
-
-                    binding.clPlotNumber.visibility = View.GONE
-                    binding.plotNumber.visibility = View.GONE
-                    binding.tvCheckCrop.setText("Next")
-                    binding.cardCheckHealth.setOnClickListener {
-                        it.hideSoftInput()
-//                        nickName = binding.etPlotNumber.text.toString().trim()
-                        area = binding.etPincodeNumber.text.toString().trim()
-                        numberOfPlanets = binding.etState.text.toString().trim()
-                        date = binding.etCalender.text.toString().trim()
-                         if (area.isEmpty()) {
-                            binding.etPincodeNumber.error = "Enter Area"
-                            return@setOnClickListener
-                        } else if (date.isEmpty()) {
-                            binding.etCalender.error = "Pick up the Date"
-                            return@setOnClickListener
-
-                        } else if (numberOfPlanets.isEmpty()) {
-                            binding.etState.error = "Enter Number of Planets"
-                            return@setOnClickListener
-                        } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-                                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT)
-                                    .show()
-                                val bundle = Bundle()
-                                bundle.putString("area", area)
-                                bundle.putString("date", date)
-                                bundle.putString("irrigation_selected",irrigation_selected)
-                                bundle.putString("numberOfPlanets",numberOfPlanets)
-                                findNavController().navigate(R.id.action_addCropDetailsFragment_to_plantSpacingFragment,bundle)
-
-
-                        }
-                    }
-                } else if (colors[2] == (item)) {
+//    private fun spinner() {
+//        val arrayAdapter =
+//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
+//        binding.tvSpinner.adapter = arrayAdapter
+//        binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+////                itemClicked()
+//                val item = p0?.selectedItem
+//                irrigation_selected = item.toString()
+////                arrayList.add(irrigation)
+//                if (colors[1] == (irrigation_selected)) {
+//
+//                    binding.clPlotNumber.visibility = View.GONE
+//                    binding.plotNumber.visibility = View.GONE
+//                    binding.tvCheckCrop.setText("Next")
+//                    binding.cardCheckHealth.setOnClickListener {
+//                        it.hideSoftInput()
+////                        nickName = binding.etPlotNumber.text.toString().trim()
+//                        area = binding.etPincodeNumber.text.toString().trim()
+//                        numberOfPlanets = binding.etState.text.toString().trim()
+//                        date = binding.etCalender.text.toString().trim()
+//                         if (area.isEmpty()) {
+//                            binding.etPincodeNumber.error = "Enter Area"
+//                            return@setOnClickListener
+//                        } else if (date.isEmpty()) {
+//                            binding.etCalender.error = "Pick up the Date"
+//                            return@setOnClickListener
+//
+//                        } else if (numberOfPlanets.isEmpty()) {
+//                            binding.etState.error = "Enter Number of Planets"
+//                            return@setOnClickListener
+//                        } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
+//                                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT)
+//                                    .show()
+//                                val bundle = Bundle()
+//                                bundle.putString("area", area)
+//                                bundle.putString("date", date)
+//                                bundle.putString("irrigation_selected",irrigation_selected)
+//                                bundle.putString("numberOfPlanets",numberOfPlanets)
+//                                findNavController().navigate(R.id.action_addCropDetailsFragment_to_plantSpacingFragment,bundle)
+//
+//
+//                        }
+//                    }
+//                } else if (colors[2] == (item)) {
+////                    itemClicked()
+//                    binding.clPlotNumber.visibility = View.VISIBLE
+//                    binding.plotNumber.visibility = View.VISIBLE
+//                    binding.tvCheckCrop.setText("Save Crop")
+//
+//                } else if (colors[3] == (item)) {
+////                    binding.etPincodeNumber.notify().
+//                    binding.clPlotNumber.visibility = View.VISIBLE
+//                    binding.plotNumber.visibility = View.VISIBLE
+//                    binding.tvCheckCrop.setText("Save Crop")
 //                    itemClicked()
-                    binding.clPlotNumber.visibility = View.VISIBLE
-                    binding.plotNumber.visibility = View.VISIBLE
-                    binding.tvCheckCrop.setText("Save Crop")
+//
+//
+//                }
+//
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        }
+//
+//    }
 
-                } else if (colors[3] == (item)) {
-//                    binding.etPincodeNumber.notify().
-                    binding.clPlotNumber.visibility = View.VISIBLE
-                    binding.plotNumber.visibility = View.VISIBLE
-                    binding.tvCheckCrop.setText("Save Crop")
-                    itemClicked()
-
-
-                }
-
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-
-    }
-
-    private fun spinnerYear() {
-        val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
-        binding.tvSpinnerYear.adapter = arrayAdapter
-        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val item = p0?.selectedItem
-                year_selected = item.toString()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-
-    }
+//    private fun spinnerYear() {
+//        val arrayAdapter =
+//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
+//        binding.tvSpinnerYear.adapter = arrayAdapter
+//        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val item = p0?.selectedItem
+//                year_selected = item.toString()
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        }
+//
+//    }
 
     private fun itemClicked() {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()
-            nickName = binding.etPlotNumber.text.toString().trim()
-            area = binding.etPincodeNumber.text.toString().trim()
-            numberOfPlanets = binding.etState.text.toString().trim()
+            nickName = binding.etNickName.text.toString().trim()
+            area = binding.etAreaNumber.text.toString().trim()
             date = binding.etCalender.text.toString().trim()
+
+//            numberOfPlanets = binding.etState.text.toString().trim()
+
             if (nickName.isEmpty()) {
-                binding.etPlotNumber.error = "Nick name should not be empty"
+                binding.etNickName.error = "Nick name should not be empty"
                 return@setOnClickListener
             } else if (area.isEmpty()) {
-                binding.etPincodeNumber.error = "Enter Area"
+                binding.etAreaNumber.error = "Enter Area"
                 return@setOnClickListener
             } else if (date.isEmpty()) {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
 
-            } else if (numberOfPlanets.isEmpty()) {
-                binding.etState.error = "Enter Number of Planets"
-                return@setOnClickListener
-            } else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
+            }
+//            else if (numberOfPlanets.isEmpty()) {
+//                binding.etState.error = "Enter Number of Planets"
+//                return@setOnClickListener
+//            }
+            else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty()) {
+                val addCropRequestDTO= AddCropRequestDomain(1,1,"praveen",binding.etNickName.toString(),
+                "",1,"praveen", binding.etCalender.toString(),"","","","",binding.etAreaNumber.toString(),
+                112345,"","","")
+                viewModel.addCropPassData(addCropRequestDTO)
+                Log.d(TAG, "itemClicked:$addCropRequestDTO")
                 Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
             }
 
@@ -259,8 +266,10 @@ class AddCropDetailsFragment : Fragment() {
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.etCalender.text = dateFormat.format(myCalendar.getTime())
     }
+
     fun View.hideSoftInput() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 

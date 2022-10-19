@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_add_crop"
-    app:startDestination="@id/addCropFragment">
+    app:startDestination="@id/selectAddCropFragment">
 
     <fragment
         android:id="@+id/addCropFragment"
@@ -30,5 +30,14 @@
         android:label="fragment_plant_spacing"
         tools:layout="@layout/fragment_plant_spacing" >
 
+    </fragment>
+    <fragment
+        android:id="@+id/selectAddCropFragment"
+        android:name="com.example.addcrop.ui.SelectAddCropFragment"
+        android:label="fragment_select_add_crop"
+        tools:layout="@layout/fragment_select_add_crop" >
+        <action
+            android:id="@+id/action_selectAddCropFragment_to_addCropFragment"
+            app:destination="@id/addCropFragment" />
     </fragment>
 </navigation>

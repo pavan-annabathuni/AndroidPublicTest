@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.waycool.data.Local.Entity.AddCropTypeEntity
 import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.Entity.TagsEntity
@@ -25,6 +26,13 @@ interface OutgrowDao {
 
     @Query("SELECT * FROM crop_master ORDER BY crop_name Asc")
     fun getCropMaster(): Flow<List<CropMasterEntity>?>
+
+    //add crop
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertAddCrop(crops: List<AddCropTypeEntity>)
+//
+//    @Query("SELECT * FROM crop_master ORDER BY crop_name Asc")
+//    fun getAddCropType(): Flow<List<AddCropTypeEntity>?>
 
     @Query("SELECT * FROM crop_master WHERE pest_disease_info = 1 AND crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
     fun getCropsPestDiseases(search: String? = ""): Flow<List<CropMasterEntity>?>

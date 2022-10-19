@@ -3,6 +3,7 @@ package com.waycool.data.Network.ApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
 import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
+import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -57,6 +58,10 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>,
         @FieldMap data: Map<String, String>
     ): Response<RegisterDTO>
+
+    @POST("api/v1/plots")
+    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,@Body addCropPost: AddCropRequestDomain)
+    : Response<AddCropResponseDTO>
 
     @GET("api/v1/crop-master")
     suspend fun getCropMaster(

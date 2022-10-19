@@ -2,6 +2,8 @@ package com.waycool.data.Repository
 
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Network.NetworkModels.AddCropRequestDTO
+import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Repository.DomainMapper.*
@@ -39,7 +41,7 @@ object CropsRepository {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                      AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
+                      AddCropTypeDomainMapper().toDomainList(it.data?: emptyList())
                     )
                 }
                 is Resource.Loading -> {
@@ -162,6 +164,9 @@ object CropsRepository {
                 }
             }
         }
+    }
+    fun addCropPassData(addCropRequestDomain: AddCropRequestDomain): Flow<Resource<AddCropResponseDTO?>> {
+        return NetworkSource.addCropPassData(addCropRequestDomain)
     }
 
     suspend fun postAiCropImage(

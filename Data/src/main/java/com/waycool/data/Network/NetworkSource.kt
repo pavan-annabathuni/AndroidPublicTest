@@ -12,6 +12,7 @@ import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.VansPagingSource
+import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -131,6 +132,19 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+    fun addCropPassData(addCropRequest: AddCropRequestDomain) = flow<Resource<AddCropResponseDTO?>> {
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.addCropPassData(headerMapPublic,addCropRequest)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 
     fun getModuleMaster() = flow<Resource<ModuleMasterDTO?>> {
         try {
@@ -167,9 +181,10 @@ object NetworkSource {
             pagingSourceFactory = { VansPagingSource(apiInterface, queryMap) }
         ).flow
     }
-    fun getAddCropType() = flow<Resource<AddCropTypeDTO?>> {
+
+    fun getAddCropType(headerMap: Map<String, String>) = flow<Resource<AddCropTypeDTO?>> {
         try {
-            val response = apiInterface.getAddCropType(headerMapPublic)
+            val response = apiInterface.getAddCropType(headerMap)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {

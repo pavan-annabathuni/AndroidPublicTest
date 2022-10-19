@@ -271,7 +271,7 @@ object DataStoreManager {
                 Log.d("languageDataStore: ", exception.toString())
             }
             ?.map {
-                val string = it[StoreKey.MODULE_MASTER]
+                val string = it[StoreKey.ADD_CROP_TYPE]
                 string?.let {
                     TypeConverter.convertStringToAddCropType(string) } ?: emptyList()
             }

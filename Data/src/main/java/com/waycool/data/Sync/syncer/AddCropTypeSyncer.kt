@@ -36,37 +36,40 @@ class AddCropTypeSyncer : SyncInterface {
     private fun getDataFromLocal(): Flow<Resource<List<AddCropTypeEntity>>> {
 
 //        emit(Resource.Loading())
-        return  LocalSource.getAddCropType()?.map {
+        return LocalSource.getAddCropType()?.map {
             if (it != null) {
                 Resource.Success(it)
             } else {
                 Resource.Error("")
             }
-        }?: emptyFlow()
+        } ?: emptyFlow()
     }
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
-            NetworkSource.getAddCropType()
-                .collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            LocalSource.insertAddCropType(
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            if (headerMap != null) {
+                NetworkSource.getAddCropType(headerMap)
+                    .collect {
+                        when (it) {
+                            is Resource.Success -> {
+                                LocalSource.insertAddCropType(
+                                    AddCropTypeEntityMapper().toEntityList(
+                                        it.data?.data!!
+                                    )
+                                )
+                                setSyncStatus(true)
+                            }
 
-                                AddCropTypeEntityMapper().toEntityList(
-                                    it.data?.data!!)
-                            )
-                            setSyncStatus(true)
-                        }
+                            is Resource.Loading -> {
 
-                        is Resource.Loading -> {
-
-                        }
-                        is Resource.Error -> {
-                            setSyncStatus(false)
+                            }
+                            is Resource.Error -> {
+                                setSyncStatus(false)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }

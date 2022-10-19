@@ -1,0 +1,92 @@
+package com.example.soiltesting.ui.history
+
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.soiltesting.R
+import com.example.soiltesting.databinding.ItemSoilHistoryBinding
+import com.example.soiltesting.model.history.Data
+
+class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
+
+    var details = mutableListOf<Data>()
+    fun setMovieList(movies: List<Data>) {
+        this.details = movies.toMutableList()
+        notifyDataSetChanged()
+    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryDataHolder {
+        val binding =
+            ItemSoilHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HistoryDataHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: HistoryDataHolder, position: Int) {
+        val details = details[position]
+        if (details.status == "1"){
+            holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
+            holder. binding.tvStatus.text = "Pending"
+//                    binding.ivStatus.setBackground(R.drawable.ic_pending)
+            holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
+        }else if (details.status == "2"){
+            holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
+            holder. binding.tvStatus.text = "Completed"
+            holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
+        }
+        else if (details.status == "3"){
+            //rejected
+            holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
+            holder. binding.tvStatus.text = "Rejected"
+            holder. binding.ivStatus.setImageResource(R.drawable.ic_rejected)
+        }
+
+
+//        when (details.status.length) {
+//            7 -> {
+//                //pending
+//               holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
+//                holder. binding.tvStatus.text = details.status
+////                    binding.ivStatus.setBackground(R.drawable.ic_pending)
+//                holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
+//
+//            }
+//            8 -> {
+//                //rejected
+//                holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
+//                holder.   binding.tvStatus.text = details.status
+//                holder. binding.ivStatus.setImageResource(R.drawable.ic_rejected)
+//            }
+//            9 -> {
+//                //Completed
+//                holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
+//                holder.  binding.tvStatus.text = details.status
+//                holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
+//
+//
+//            }
+//        }
+        holder.  binding.tvRequest.text = "Plot Number : " + details.plot_no
+        holder.  binding.tvDesiessName.text = "Id : " + details.soil_test_number
+        holder. binding.tvDate.text = details.updated_at
+        holder.   binding.clTracker.setOnClickListener {
+           statusTrackerListener.statusTracker(details)
+
+        }
+    }
+
+
+    override fun getItemCount(): Int {
+        return details.size
+    }
+    fun upDateList(list: ArrayList<Data>) {
+        details.clear()
+        details.addAll(list)
+        notifyDataSetChanged()
+
+    }
+
+}
+class HistoryDataHolder( val binding: ItemSoilHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
+
+
+}

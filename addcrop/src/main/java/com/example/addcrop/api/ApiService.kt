@@ -11,7 +11,7 @@ interface ApiService {
         @HeaderMap headerMap: Map<String, String>
     ): Response<AddCropResponse>
 
-    @POST("/users/signup")
+    @POST("api/v1/plots")
     suspend fun addCropPassData(@Body addCropPost: AddCropRequest) : Response<AddCropRequest>
     //type
     //https://adminuat.outgrowdigital.com/api/v1/soil-types

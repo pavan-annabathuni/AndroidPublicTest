@@ -22,6 +22,7 @@ import com.example.addcrop.viewmodel.AddViewModel
 import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
 import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
+import kotlin.math.log
 
 
 class AddCropFragment : Fragment(), AddCropItemClick {
@@ -30,7 +31,8 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
     //    private var categoryAdapter = CategoryAdapter(this)
     private var responseDataList = ArrayList<Data>()
-//    private val viewModel: CropProtectViewModel by lazy {
+
+    //    private val viewModel: CropProtectViewModel by lazy {
 //        ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
 //    }
     private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
@@ -48,7 +50,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bindObserversCategory()
-        binding.toolbar .setOnClickListener {
+        binding.toolbar.setOnClickListener {
             findNavController().navigate(R.id.action_addCropFragment_to_addCropDetailsFragment)
         }
 //        categoryAdapter.upDateList(responseDataList)
@@ -66,11 +68,12 @@ class AddCropFragment : Fragment(), AddCropItemClick {
     }
 
     private fun bindObserversCategory() {
-        viewModel.getAddCropType().observe(requireActivity()){
+        viewModel.getAddCropType().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    Log.d("TAG", "bindObserversCategoryData: ${it.data}")
 //                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
-                    val response = it.data as java.util.ArrayList<AddCropTypeDomain>
+                    val response = it.data!!
                     Log.d("TAG", "bindObserversCategory:$response ")
                     categoryAdapter.setMovieList(response)
 
@@ -86,7 +89,6 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             }
 
         }
-
 
 
 //        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer {
@@ -114,16 +116,14 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         binding.cardCheckHealth.isEnabled = true
         binding.cardCheckHealth.setOnClickListener {
             categoryAdapter.upDateList()
-            if (!name.isSelected!!) {
+            if (name.isSelected == false) {
                 Toast.makeText(requireContext(), "PleaseSelect Soil Type", Toast.LENGTH_SHORT)
                     .show()
             } else {
                 findNavController().navigate(R.id.action_addCropFragment_to_addCropDetailsFragment)
 
-//            }
             }
 
-//        Toast.makeText(requireContext(), "item is clicked", Toast.LENGTH_SHORT).show()
 
         }
 

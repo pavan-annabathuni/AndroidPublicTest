@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/soilTestingHomeFragment">
+
+    <fragment
+        android:id="@+id/soilTestingHomeFragment"
+        android:name="com.example.soiltesting.ui.checksoil.SoilTestingHomeFragment"
+        android:label="fragment_soil_testing_home"
+        tools:layout="@layout/fragment_soil_testing_home" >
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_allHistoryFragment"
+            app:destination="@id/allHistoryFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_allVideoFragment"
+            app:destination="@id/allVideoFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_checkSoilTestFragment"
+            app:destination="@id/checkSoilTestFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_statusTrackerFragment"
+            app:destination="@id/statusTrackerFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_customeDialogFragment"
+            app:destination="@id/customeDialogFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+        <!--        <action-->
+<!--            android:id="@+id/action_soilTestingHomeFragment_to_newSoilTestFormFragment"-->
+<!--            app:destination="@id/newSoilTestFormFragment" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/newSoilTestFormFragment"
+        android:name="com.example.soiltesting.ui.request.NewSoilTestFormFragment"
+        android:label="fragment_new_soil_test_form"
+        tools:layout="@layout/fragment_new_soil_test_form" >
+        <action
+            android:id="@+id/action_newSoilTestFormFragment_to_sucessFullFragment"
+            app:destination="@id/sucessFullFragment" />
+        <action
+            android:id="@+id/action_newSoilTestFormFragment_to_checkSoilTestFragment"
+            app:destination="@id/checkSoilTestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statusTrackerFragment"
+        android:name="com.example.soiltesting.ui.tracker.StatusTrackerFragment"
+        android:label="fragment_status_tracker"
+        tools:layout="@layout/fragment_status_tracker" >
+        <action
+            android:id="@+id/action_statusTrackerFragment_to_feedbackFragment"
+            app:destination="@id/feedbackFragment" />
+        <action
+            android:id="@+id/action_statusTrackerFragment_to_viewReportFragment"
+            app:destination="@id/viewReportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allHistoryFragment"
+        android:name="com.example.soiltesting.ui.history.AllHistoryFragment"
+        android:label="fragment_all_history"
+        tools:layout="@layout/fragment_all_history" >
+        <action
+            android:id="@+id/action_allHistoryFragment_to_statusTrackerFragment"
+            app:destination="@id/statusTrackerFragment" />
+        <action
+            android:id="@+id/action_allHistoryFragment_to_customeDialogFragment"
+            app:destination="@id/customeDialogFragment" />
+        <action
+            android:id="@+id/action_allHistoryFragment_to_checkSoilTestFragment"
+            app:destination="@id/checkSoilTestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allVideoFragment"
+        android:name="com.example.soiltesting.ui.AllVideoFragment"
+        android:label="fragment_all_video"
+        tools:layout="@layout/fragment_all_video" />
+    <fragment
+        android:id="@+id/checkSoilTestFragment"
+        android:name="com.example.soiltesting.ui.checksoil.CheckSoilTestFragment"
+        android:label="fragment_check_soil_test"
+        tools:layout="@layout/fragment_check_soil_test" >
+        <action
+            android:id="@+id/action_checkSoilTestFragment_to_newSoilTestFormFragment"
+            app:destination="@id/newSoilTestFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sucessFullFragment"
+        android:name="com.example.soiltesting.ui.request.SucessFullFragment"
+        android:label="fragment_sucess_full"
+        tools:layout="@layout/fragment_sucess_full" />
+    <dialog
+        android:id="@+id/customeDialogFragment"
+        android:name="com.example.soiltesting.ui.checksoil.CustomeDialogFragment"
+        android:label="fragment_custome_dialog"
+        tools:layout="@layout/fragment_custome_dialog" >
+        <action
+            android:id="@+id/action_customeDialogFragment_to_soilTestingHomeFragment"
+            app:destination="@id/soilTestingHomeFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/feedbackFragment"
+        android:name="com.example.soiltesting.ui.tracker.FeedbackFragment"
+        android:label="fragment_feedback"
+        tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/viewReportFragment"
+        android:name="com.example.soiltesting.ui.request.ViewReportFragment"
+        android:label="fragment_view_report"
+        tools:layout="@layout/fragment_view_report" />
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="com.example.soiltesting.home.HomePagesFragment"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_pages" />
+</navigation>
