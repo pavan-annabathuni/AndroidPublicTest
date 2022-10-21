@@ -43,6 +43,28 @@ object TypeConverter {
         val listType = object : TypeToken<List<ModuleMasterEntity>?>() {}.type
         return Gson().fromJson(s, listType)
     }
+    fun convertStringToAddCropType(s: String): List<AddCropTypeEntity>? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<List<AddCropTypeEntity>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    fun convertStringToAddCropTypeString(language: List<AddCropTypeEntity>): String {
+        Log.d("TypeConverterTO", language.toString())
+        val gson = Gson()
+        return gson.toJson(language)
+    }
+
+    fun convertStringSoilTestHistory(s: String): List<SoilTestHistoryEntity>? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<List<SoilTestHistoryEntity>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    fun convertSoilTestHistoryString(language: List<SoilTestHistoryEntity>): String {
+        Log.d("TypeConverterTO", language.toString())
+        val gson = Gson()
+        return gson.toJson(language)
+    }
+
 
 
     fun convertCropCategoryToString(language: List<CropCategoryEntity>): String {

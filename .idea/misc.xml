@@ -59,6 +59,39 @@
       </map>
     </option>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
+        <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
+        <entry key="FeatureCropProtect/src/main/res/layout/activity_crop_protect.xml" value="0.30512820512820515" />
+        <entry key="FeatureCropProtect/src/main/res/layout/fragment_crop_selection.xml" value="0.30512820512820515" />
+        <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease_details.xml" value="0.2212962962962963" />
+        <entry key="UiComponents/src/main/res/layout/viewholder_crop.xml" value="0.2675925925925926" />
+        <entry key="Videos/src/main/res/layout/fragment_play_video.xml" value="0.3098958333333333" />
+        <entry key="Videos/src/main/res/layout/generic_layout_videos_list.xml" value="0.24791666666666667" />
+        <entry key="addcrop/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
+        <entry key="addcrop/src/main/res/drawable/ic_mic.xml" value="0.1385" />
+        <entry key="addcrop/src/main/res/layout/fragment_add_crop.xml" value="0.30512820512820515" />
+        <entry key="addcrop/src/main/res/layout/fragment_add_crop_details.xml" value="0.2722222222222222" />
+        <entry key="addcrop/src/main/res/layout/fragment_select_add_crop.xml" value="0.30512820512820515" />
+        <entry key="addcrop/src/main/res/layout/item.xml" value="0.2675925925925926" />
+        <entry key="addcrop/src/main/res/layout/item_sand.xml" value="0.1296875" />
+        <entry key="addcrop/src/main/res/layout/item_select_crop.xml" value="0.2675925925925926" />
+        <entry key="addcrop/src/main/res/layout/item_selected_crop.xml" value="0.2675925925925926" />
+        <entry key="addcrop/src/main/res/layout/item_selected_crop_list.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/fragment_all_history.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/fragment_all_services.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/fragment_all_video.xml" value="0.2796296296296296" />
+        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.24444444444444444" />
+        <entry key="soiltesting/src/main/res/layout/fragment_home_pages.xml" value="0.1" />
+        <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/fragment_soil_testing_home.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/item_labs_sample.xml" value="0.2796296296296296" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

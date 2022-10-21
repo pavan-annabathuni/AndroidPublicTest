@@ -6,19 +6,19 @@ import com.waycool.data.Repository.DomainModels.LanguageMasterDomain
 import com.waycool.data.Repository.DomainModels.ModuleMasterDomain
 import com.waycool.data.Repository.util.DomainMapper
 
-class ModuleMasterDomainMapper:DomainMapper<ModuleMasterDomain,ModuleMasterEntity> {
+class ModuleMasterDomainMapper : DomainMapper<ModuleMasterDomain, ModuleMasterEntity> {
     override fun mapToDomain(dto: ModuleMasterEntity): ModuleMasterDomain {
 
         return ModuleMasterDomain(
-             id=dto.id,
-       moduleType=dto.moduleType,
-       moduleIcon=dto.moduleIcon,
-       moduleDesc=dto.moduleDesc,
-       Premium=dto.Premium,
-       tittle=dto.tittle,
-       price=dto.price,
-       audioURl=dto.audioURl,
-       translation=dto.translation,
+            id = dto.id,
+            moduleType = dto.moduleType,
+            moduleIcon = dto.moduleIcon,
+            moduleDesc = dto.moduleDesc,
+            Premium = dto.Premium,
+            tittle = dto.tittle,
+            price = dto.price,
+            audioURl = dto.audioURl,
+            translation = dto.translation,
         )
     }
 

@@ -67,6 +67,9 @@ object LocalSource {
     fun getCropMaster(): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropMaster()
     }
+//    fun getAddCropType(): Flow<List<AddCropTypeEntity>?> {
+//        return outgrowDao.getAddCropType()
+//    }
 
     fun getCropsPestDiseases(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropsPestDiseases(searchQuery)
@@ -90,9 +93,21 @@ object LocalSource {
     suspend fun insertModuleMaster(moduleMaster: List<ModuleMasterEntity>) {
         DataStoreManager.insertModuleMaster(moduleMaster)
     }
+    suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
+        DataStoreManager.insertAddCropType(moduleMaster)
+    }
+    suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
+        DataStoreManager.insertSoilTestHistory(moduleMaster)
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         return DataStoreManager.getModuleMaster()
+    }
+    fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
+        return DataStoreManager.getAddCropType()
+    }
+    fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
+        return DataStoreManager.getSoilTestHistory()
     }
 
     suspend fun insertCropCategoryMaster(cropCategory: List<CropCategoryEntity>) {

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/bg_ans">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <!--        <CheckBox-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"/>-->
+
+        <CheckBox
+            android:id="@+id/iv_Check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:button="@drawable/check_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <!--        android:button="@drawable/check_box"-->
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLabTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:text="Krishna’s Lab"
+            android:textColor="#171717"
+            android:textSize="@dimen/space16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/iv_Check"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:text="B.Mudhuganapalli \n Village Devaripalli Post Talk, Hosur,\n Tamilnadu - PIN 635124"
+            android:textColor=" #828699"
+            android:textSize="@dimen/space16"
+            app:layout_constraintStart_toEndOf="@+id/iv_Check"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pinCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:layout_marginEnd="@dimen/txt16"
+            android:text="PIN 635124"
+            android:textColor=" #828699"
+            android:textSize="@dimen/space16"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvName"
+
+            />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/space16"
+            android:background="#EDEDED"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space0_5"
+            android:background="#F9F9F9"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+
+            <ImageView
+                android:id="@+id/ivClick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_distance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCheckCrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space8"
+                android:layout_marginTop="@dimen/space8"
+                android:layout_marginBottom="@dimen/space8"
+                android:text="11 Km from your location"
+                android:textColor="#585858"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivClick"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.waycool.data.Local.Entity.*
+import com.waycool.data.Local.Entity.AddCropTypeEntity
+import com.waycool.data.Local.Entity.CropMasterEntity
+import com.waycool.data.Local.Entity.PestDiseaseEntity
+import com.waycool.data.Local.Entity.TagsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

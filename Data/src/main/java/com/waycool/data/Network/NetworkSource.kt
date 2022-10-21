@@ -19,6 +19,8 @@ import okhttp3.MultipartBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import java.io.File
+import java.text.DateFormat
+import java.util.*
 import kotlin.Exception
 
 object NetworkSource {
@@ -146,6 +148,7 @@ object NetworkSource {
         }
     }
 
+
     fun logout(contact: String) = flow<Resource<LogoutDTO?>> {
         emit(Resource.Loading())
         try {
@@ -183,6 +186,35 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date:String) = flow<Resource<AddCropResponseDTO?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.addCropPassData(headerMap!!,crop_id,account_id, plot_nickname,is_active,sowing_date)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun postNewSoil(plot_no:String,pincode:String,address:String,number:String) = flow<Resource<SoilTestResponseDTO?>> {
+         try {
+             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.postNewSoil(headerMap!!,plot_no,pincode,address,number)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                Log.d("Soil", "postNewSoil: "+response.errorBody()?.charStream()?.readText())
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+             Log.d("Soil", "postNewSoil: "+e.message)
+             emit(Resource.Error(e.message))
+        }
+    }
 
 
     fun login(
@@ -345,6 +377,70 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+   //add crop
+    fun getAddCropType(headerMap: Map<String, String>) = flow<Resource<AddCropTypeDTO?>> {
+        try {
+            val response = apiInterface.getAddCropType(headerMap)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun getSoilTesAllHistory(headerMap: Map<String, String>,account_id:Int) = flow<Resource<SoilTestHistoryDTO?>> {
+        try {
+            val response = apiInterface.getSoilTestAllHistory(headerMap,account_id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun getSoilTestLab(account_id:Int,lat:Double,long:Double) = flow<Resource<CheckSoilTestLabDTO?>> {
+        try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.getSoilTestLab(headerMap!!,account_id,lat,long)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun getTracker(soil_test_request_id: Int) = flow<Resource<TrackerDTO?>> {
+        try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.getTracker(headerMap!!,soil_test_request_id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+
+
+
+}
 
     fun getCropInformation(
         headerMap: Map<String, String>,

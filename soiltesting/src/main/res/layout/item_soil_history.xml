@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/space16"
+    android:background="@drawable/bg_ans">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space2"
+        android:background="@drawable/bg_ans"
+        android:elevation="8dp"
+        app:cardCornerRadius="@dimen/space8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space16">
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/iVHistory"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="@dimen/space12"-->
+            <!--                android:src="@drawable/disease"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <TextView
+                android:id="@+id/tvRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginTop="@dimen/space16"
+                android:text="Plot Number : 110012"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDesiessName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginTop="@dimen/space2"
+                android:text="Id : IWAP100214"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRequest" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvCropID"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:layout_marginEnd="@dimen/space12"-->
+            <!--                android:text="Id : 110012"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="12sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvRequestID"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="12dp"-->
+            <!--                android:layout_marginTop="4dp"-->
+            <!--                android:text="Request Id : 110012"-->
+            <!--                android:textColor="#2B2B2B"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/iVHistory"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />-->
+
+            <ImageView
+                android:id="@+id/ivStatus"
+                android:layout_width="@dimen/space16"
+                android:layout_height="@dimen/space16"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginTop="@dimen/space12"
+                android:src="@drawable/ic_pending"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="@dimen/txt9"
+                android:padding="@dimen/space2"
+                android:text="Pending"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/ivStatus"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space10"
+                android:layout_marginTop="@dimen/space5"
+                android:layout_marginEnd="@dimen/space16"
+                android:text="05 March 21, 14:50 pm"
+                android:textColor="#828699"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRequest"
+
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate">
+
+                <ImageView
+                    android:id="@+id/ivStatusTracker"
+                    android:layout_width="@dimen/space16"
+                    android:layout_height="@dimen/space16"
+                    android:layout_marginEnd="@dimen/space16"
+                    android:src="@drawable/ic_viewall"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvViewStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/txt8"
+                    android:text="View Status"
+                    android:textColor="#146133"
+                    android:textSize="@dimen/txt14"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ivStatusTracker"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
