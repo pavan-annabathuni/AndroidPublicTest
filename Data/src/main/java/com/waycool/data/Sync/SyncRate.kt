@@ -16,7 +16,8 @@ object SyncRate {
         SyncKey.AI_CROP_HISTORY to 30,
         SyncKey.WEATHER to 30,
         SyncKey.CROPS_CATEGORY_MASTER to 30,
-        SyncKey.PEST_DISEASE_MASTER to 30
+        SyncKey.PEST_DISEASE_MASTER to 30,
+        SyncKey.CROP_INFORMATION_MASTER to 60
     )
 
 

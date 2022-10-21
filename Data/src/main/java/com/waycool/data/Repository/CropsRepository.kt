@@ -1,18 +1,15 @@
 package com.waycool.data.Repository
 
+import com.waycool.data.Local.Entity.CropInformationEntityData
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
+import com.waycool.data.Network.NetworkModels.CropInfoData
 import com.waycool.data.Network.NetworkSource
-import com.waycool.data.Repository.DomainMapper.AiCropDetectionDomainMapper
-import com.waycool.data.Repository.DomainMapper.CropCategoryMasterDomainMapper
-import com.waycool.data.Repository.DomainMapper.CropMasterDomainMapper
-import com.waycool.data.Repository.DomainMapper.PestDiseaseDomainMapper
-import com.waycool.data.Repository.DomainModels.AiCropDetectionDomain
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
-import com.waycool.data.Repository.DomainModels.CropMasterDomain
-import com.waycool.data.Repository.DomainModels.PestDiseaseDomain
+import com.waycool.data.Repository.DomainMapper.*
+import com.waycool.data.Repository.DomainModels.*
 import com.waycool.data.Sync.syncer.CropCategorySyncer
+import com.waycool.data.Sync.syncer.CropInformationSyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
 import com.waycool.data.utils.Resource
@@ -77,8 +74,8 @@ object CropsRepository {
         }
     }
 
-    fun getCropInfoCrops(): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsCropInfo().map {
+    fun getCropInfoCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+        return CropMasterSyncer().getCropsCropInfo(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -179,6 +176,44 @@ object CropsRepository {
         } else {
             throw RuntimeException("Header Map is null")
         }
+    }
+
+    fun getCropInformation(crop_id:Int): Flow<Resource<List<CropInformationDomainData>>> {
+        return CropInformationSyncer().getCropInformation(crop_id).map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        CropInformationDomainMapper().toDomainList(it.data?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+
+    }
+
+    fun getUpdateProfile(crop_id:Int): Flow<Resource<List<CropInformationDomainData>>> {
+        return CropInformationSyncer().getCropInformation(crop_id).map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        CropInformationDomainMapper().toDomainList(it.data?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+
     }
 
 }

@@ -33,4 +33,6 @@ object SyncKey {
 
     //Pest Disease Master
     val PEST_DISEASE_MASTER = stringPreferencesKey("pest_disease")
+
+    val CROP_INFORMATION_MASTER = stringPreferencesKey("crop_information")
 }

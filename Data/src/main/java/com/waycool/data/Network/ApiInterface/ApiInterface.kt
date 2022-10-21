@@ -113,4 +113,28 @@ interface ApiInterface {
         @Part("crop_name") crop_name: String,
         @Part file: MultipartBody.Part
     ): Response<AiCropDetectionDTO>
+
+    @GET("api/v1/crop-advisory")
+    suspend fun getCropInformation(
+        @HeaderMap headerMap: Map<String, String>,
+    ):Response<CropInfo>
+
+    @PUT("api/v1/profiles")
+    @FormUrlEncoded
+    suspend fun updateProfile(
+        @HeaderMap map: Map<String, String>,
+        @Field("name")name:String,
+        @Field("address") address:String,
+        @Field("village") village:String,
+        @Field("pincode") pincode:String,
+        @Field("state") state:String,
+        @Field("district")district:String
+    ):Response<profile>
+
+    @Multipart
+    @POST("api/v1/update-profile-picture")
+    suspend fun getProfilePic(
+        @HeaderMap headerMap: Map<String, String>,
+        @Part file:MultipartBody.Part
+    ):Response<profilePicModel>
 }

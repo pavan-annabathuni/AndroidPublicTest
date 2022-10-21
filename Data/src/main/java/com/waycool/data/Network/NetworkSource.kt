@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
+import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
@@ -344,5 +345,74 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
-}
+
+    fun getCropInformation(
+        headerMap: Map<String, String>,
+    ) = flow<Resource<CropInfo?>> {
+
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getCropInformation(headerMap)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun updateProfile(name:String,
+        address:String,village:String,pincode:String,state:String,district:String,
+        headerMap: Map<String, String>,
+    ) = flow<Resource<profile?>> {
+
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateProfile(headerMap,name,address,village, pincode, state, district)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun getUserProfile(headerMap: Map<String, String>,
+    ) = flow<Resource<UserDetailsDTO?>> {
+
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getUserDetails(headerMap)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+        fun getUserProfilePic(headerMap: Map<String, String>,file:MultipartBody.Part
+        ) = flow<Resource<profilePicModel?>> {
+
+            emit(Resource.Loading())
+            try {
+                val response = apiInterface.
+                getProfilePic(headerMap, file)
+
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }}
+
 

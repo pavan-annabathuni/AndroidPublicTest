@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyTransparentBottomSheetDialogTheme" parent="Theme.AppCompat.Light">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+    <style name="Medium">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+    </style>
+    <style name="SemiBold">
+        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+    </style>
+    <style name="Bold">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+<!--    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+<!--        &lt;!&ndash; Add attributes here &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/WoodBrown</item>-->
+<!--    </style>-->
+<!--    <style name="Theme.App" parent="Theme.Design.NoActionBar">-->
+
+<!--        <item name="colorPrimary">@color/WoodBrown</item>-->
+<!--        <item name="colorOnPrimary">@color/white</item>-->
+<!--        <item name="colorOnSurface">@color/WoodBrown</item>-->
+<!--    </style>-->
+    <style name="MyTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">#F00</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="MyTooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">@color/WoodBrown</item>
+        <item name="android:textAppearance">@style/MyTooltip.TextAppearance</item>
+    </style>
+
+    <style name="MyTooltip.TextAppearance" parent="@style/TextAppearance.MaterialComponents.Tooltip">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

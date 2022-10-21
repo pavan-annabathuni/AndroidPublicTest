@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation project(path:':cropinformation')
+    implementation project(path:':Profile')
     implementation project(path: ':UiComponents')
     implementation project(path: ':FeatureLogin')
     implementation project(path: ':NewsAndArticles')
@@ -44,6 +46,8 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':weather')
     implementation project(path: ':FeatureCropHealth')
+    implementation project(path: ':Videos')
+
 
     implementation(libraries.appCompat)
     implementation(libraries.material)

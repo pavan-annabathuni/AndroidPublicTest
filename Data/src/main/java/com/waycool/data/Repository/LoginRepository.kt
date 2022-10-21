@@ -196,7 +196,7 @@ object LoginRepository {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        UserDetailsDomainMapper().mapToDomain(it.data ?: UserDetailsEntity())
+                        UserDetailsDomainMapper().mapToDomain(it.data!!)
                     )
                 }
                 is Resource.Loading -> {

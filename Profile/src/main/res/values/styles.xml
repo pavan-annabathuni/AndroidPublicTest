@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyTransparentBottomSheetDialogTheme" parent="Theme.AppCompat.Light">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+    <style name="Medium">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+    </style>
+    <style name="SemiBold">
+        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+    </style>
+    <style name="Bold">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Add attributes here -->
+        <item name="colorPrimary">@color/WoodBrown</item>
+    </style>
+    <style name="Theme.App" parent="Theme.Design.NoActionBar">
+
+        <item name="colorPrimary">@color/WoodBrown</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/WoodBrown</item>
+    </style>
+    <style name="ActionBar">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/noto_sans_bold</item>
+    </style>
+    <style name="button">
+        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="textColor">@color/white</item>
+        <item name="android:radius">8dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="background">@color/DarkGreen</item>
+    </style>
+    <style name="MenuDialog" parent="Theme.AppCompat.Light.Dialog">
+        <!--This attribute removes the shadow-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--This attribute updates the background color of the window-->
+        <item name="android:windowBackground">@android:color/white</item>
+        <!--Optional: This attribute makes the dialog window non-floating-->
+        <item name="android:windowIsFloating">false</item>
+    </style>
+    <style name="MyTextViewStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:color">@color/black</item>
+        <item name="android:colorPrimary">@color/black</item>
+
+    </style>
+</resources>

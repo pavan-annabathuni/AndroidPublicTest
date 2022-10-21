@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
+import com.waycool.data.Network.NetworkModels.CropVarietyModel
 
 object TypeConverter {
 
@@ -75,6 +76,11 @@ object TypeConverter {
     }
 
     fun convertStringToUserDetails(s: String): UserDetailsEntity? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<UserDetailsEntity?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    fun convertStringToCropVariety(s: String): CropVarietyModel? {
         Log.d("TypeConverterFrom", s)
         val listType = object : TypeToken<UserDetailsEntity?>() {}.type
         return Gson().fromJson(s, listType)

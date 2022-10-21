@@ -44,8 +44,8 @@ data class ProfileNetwork(
     @SerializedName("profile_pic") var profilePic: String? = null,
     @SerializedName("user_id") var userId: Int? = null,
     @SerializedName("lang_id") var langId: Int? = null,
-    @SerializedName("state_id") var stateId: String? = null,
-    @SerializedName("district_id") var districtId: String? = null,
+    @SerializedName("state") var stateId: String? = null,
+    @SerializedName("district") var districtId: String? = null,
     @SerializedName("sub_district_id") var subDistrictId: String? = null
 
 )

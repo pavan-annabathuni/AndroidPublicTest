@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.cropinformation.CropInfo
 import com.example.weather.WeatherActivity
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
@@ -62,6 +63,11 @@ class MainActivity : AppCompatActivity() {
 //
         binding.crophealthButton.setOnClickListener {
             val intent = Intent(this, CropHealthActivity::class.java)
+            startActivity(intent);
+        }
+
+        binding.cropInfoButton.setOnClickListener {
+            val intent = Intent(this, CropInfo::class.java)
             startActivity(intent);
         }
 //        if (SharedPreferenceUtility.getMobileNumber(applicationContext) != "0") {
