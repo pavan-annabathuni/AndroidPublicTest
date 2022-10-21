@@ -79,8 +79,8 @@ object LocalSource {
         return outgrowDao.getCropsAiCrop()
     }
 
-    fun getCropsInfo(): Flow<List<CropMasterEntity>?> {
-        return outgrowDao.getCropsInfo()
+    fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
+        return outgrowDao.getCropsInfo(searchQuery)
     }
 
     suspend fun insertVansCategory(vansCategory: List<VansCategoryEntity>) {
@@ -134,7 +134,7 @@ object LocalSource {
         DataStoreManager.insertUserDetails(userDetails)
     }
 
-    suspend fun getUserDetails(): Flow<UserDetailsEntity>? {
+     fun getUserDetails(): Flow<UserDetailsEntity>? {
         return DataStoreManager.getUserDetails()
     }
 
@@ -150,5 +150,10 @@ object LocalSource {
 
     fun getSelectedDiseasesForCrop(diseaseId: Int) = outgrowDao.getSelectedDisease(diseaseId)
 
+    fun insertCropInformation(CropInformation: List<CropInformationEntityData>) {
+        outgrowDao.insertCropInformation(CropInformation)
+    }
+
+    fun getCropInformation(crop_id:Int) = outgrowDao.getCropInformation(crop_id)
 
 }

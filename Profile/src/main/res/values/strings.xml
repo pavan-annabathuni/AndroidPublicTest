@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_marathahalli">Marathahalli -Sarjapur Outer Ring Rd,</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="str_delete_acc">Are you Sure you want to delete Krishna kumar’s account?</string>
+    <string name="str_mobile_number">Mobile Number</string>
+    <string name="str_farmer_name">Farmer name <font color='#FF0000'>*</font></string>
+    <string name="str_address_line_1">Address Line 1 <font color='#FF0000'>*</font></string>
+    <string name="address_line_2">Address Line 2 <font color='#FF0000'>*</font></string>
+    <string name="str_city">City <font color='#FF0000'>*</font></string>
+    <string name="str_state">State <font color='#FF0000'>*</font></string>
+    <string name="str_pincode">Pincode <font color='#FF0000'>*</font></string>
+    <string name="submit">Submit</string>
+    <string name="zui_toolbar_title">Chat and Support</string>
+    <string name="str_plz">Please let us know how can we help you. You can ask any question about your crop or field</string>
+</resources>

@@ -40,14 +40,10 @@ interface ApiInterface {
     ): Response<LogoutDTO>
 
 
-
-
     @GET("api/v1/module-masters")
     suspend fun getModuleMaster(
         @HeaderMap map: Map<String, String>
     ): Response<ModuleMasterDTO>
-
-
 
 
     @POST("api/v1/register")
@@ -56,8 +52,6 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>,
         @FieldMap data: Map<String, String>
     ): Response<RegisterDTO>
-
-
 
     @GET("api/v1/crop-master")
     suspend fun getCropMaster(
@@ -79,8 +73,7 @@ interface ApiInterface {
     @GET("api/v1/vans-category-master")
     suspend fun getVansCategory(@HeaderMap map: Map<String, String>): Response<VansCategoryDTO?>
 
-    //vans Feeder
-
+    //news list
     @GET("api/v1/vans-feeder")
     suspend fun getVansFeeder(
         @HeaderMap map: Map<String, String>,
@@ -177,4 +170,28 @@ interface ApiInterface {
                              @Field("number")number:String?,
                              ): Response<SoilTestResponseDTO>
 
+
+    @GET("api/v1/crop-advisory")
+    suspend fun getCropInformation(
+        @HeaderMap headerMap: Map<String, String>,
+    ):Response<CropInfo>
+
+    @PUT("api/v1/profiles")
+    @FormUrlEncoded
+    suspend fun updateProfile(
+        @HeaderMap map: Map<String, String>,
+        @Field("name")name:String,
+        @Field("address") address:String,
+        @Field("village") village:String,
+        @Field("pincode") pincode:String,
+        @Field("state") state:String,
+        @Field("district")district:String
+    ):Response<profile>
+
+    @Multipart
+    @POST("api/v1/update-profile-picture")
+    suspend fun getProfilePic(
+        @HeaderMap headerMap: Map<String, String>,
+        @Part file:MultipartBody.Part
+    ):Response<profilePicModel>
 }

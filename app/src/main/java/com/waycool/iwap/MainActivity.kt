@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.cropinformation.CropInfo
 import com.example.addcrop.AddCropActivity
 import com.example.soiltesting.SoilTestActivity
 import com.example.weather.WeatherActivity
@@ -73,6 +74,11 @@ class MainActivity : AppCompatActivity() {
         }
         binding.soilTesting.setOnClickListener {
             val intent = Intent(this, SoilTestActivity::class.java)
+            startActivity(intent);
+        }
+
+        binding.cropInfoButton.setOnClickListener {
+            val intent = Intent(this, CropInfo::class.java)
             startActivity(intent);
         }
 //        if (SharedPreferenceUtility.getMobileNumber(applicationContext) != "0") {

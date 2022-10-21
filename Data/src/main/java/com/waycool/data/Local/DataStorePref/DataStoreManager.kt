@@ -363,8 +363,7 @@ object DataStoreManager {
             }
             ?.map {
                 val string = it[StoreKey.USER_DETAILS]
-                string?.let { TypeConverter.convertStringToUserDetails(string) }
-                    ?: UserDetailsEntity()
+                string?.let { TypeConverter.convertStringToUserDetails(string) } ?: UserDetailsEntity()
             }
 
     }
