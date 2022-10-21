@@ -59,13 +59,21 @@ class AddCropDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
+
 //        viewModel.getUserData()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        itemClicked()
+        if (arguments!=null){
+            var onp_id = arguments?.getInt("cropid")
+            Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $onp_id")
+            itemClicked(onp_id!!)
+        }
+
+
+
 
 //        spinner()
 //        spinnerYear()
@@ -168,7 +176,7 @@ class AddCropDetailsFragment : Fragment() {
 //
 //    }
 
-    private fun itemClicked() {
+    private fun itemClicked(rop_id:Int) {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
@@ -193,11 +201,10 @@ class AddCropDetailsFragment : Fragment() {
 //                return@setOnClickListener
 //            }
             else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty()) {
-                val addCropRequestDTO= AddCropRequestDomain(1,1,"praveen",binding.etNickName.toString(),
-                "",1,"praveen", binding.etCalender.toString(),"","","","",binding.etAreaNumber.toString(),
-                112345,"","","")
-                viewModel.addCropPassData(addCropRequestDTO)
-                Log.d(TAG, "itemClicked:$addCropRequestDTO")
+                viewModel.addCropPassData(rop_id,1,binding.etNickName.toString(),1, dateCrop).observe(requireActivity()){
+                    Log.d(TAG, "itemClickedData: $myCalendar")
+
+                }
                 Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
             }
 
@@ -262,7 +269,7 @@ class AddCropDetailsFragment : Fragment() {
     }
 
     private fun updateLabel(myCalendar: Calendar) {
-        val myFormat = "dd-MM-yyyy"
+        val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.etCalender.text = dateFormat.format(myCalendar.getTime())
     }

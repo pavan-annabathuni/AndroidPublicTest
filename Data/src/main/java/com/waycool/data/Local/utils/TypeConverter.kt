@@ -53,6 +53,18 @@ object TypeConverter {
         return gson.toJson(language)
     }
 
+    fun convertStringSoilTestHistory(s: String): List<SoilTestHistoryEntity>? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<List<SoilTestHistoryEntity>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    fun convertSoilTestHistoryString(language: List<SoilTestHistoryEntity>): String {
+        Log.d("TypeConverterTO", language.toString())
+        val gson = Gson()
+        return gson.toJson(language)
+    }
+
+
 
     fun convertCropCategoryToString(language: List<CropCategoryEntity>): String {
         Log.d("TypeConverterTO", language.toString())

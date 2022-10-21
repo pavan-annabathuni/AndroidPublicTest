@@ -6,22 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentCheckSoilTestBinding
-import com.example.soiltesting.model.checksoil.Data
-import com.example.soiltesting.utils.Constant
-import okhttp3.internal.notifyAll
-import java.util.ArrayList
+import com.waycool.data.Network.NetworkModels.CheckSoilTestData
+import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
 
 class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
     private var _binding: FragmentCheckSoilTestBinding? = null
     private val binding get() = _binding!!
     private var soilTestingLabsAdapter = SoilTestingLabsAdapter(this)
+    private var list:CheckSoilTestData?=null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -29,7 +27,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
-        var your_list  = arguments?.getParcelableArrayList<Data>("list")
+        var your_list  = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
         Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
         binding.recyclerviewStatusLab.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -77,7 +75,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
         _binding = null
     }
 
-    override fun checkBoxSoilTest(data: Data) {
+    override fun checkBoxSoilTest(data: CheckSoilTestDomain) {
         binding.cardCheckHealth.isEnabled=true
         binding.cardCheckHealth.setOnClickListener {
             soilTestingLabsAdapter.upDateList()

@@ -37,7 +37,7 @@
         android:label="fragment_select_add_crop"
         tools:layout="@layout/fragment_select_add_crop" >
         <action
-            android:id="@+id/action_selectAddCropFragment_to_addCropFragment"
-            app:destination="@id/addCropFragment" />
+            android:id="@+id/action_selectAddCropFragment_to_addCropDetailsFragment2"
+            app:destination="@id/addCropDetailsFragment" />
     </fragment>
 </navigation>

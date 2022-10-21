@@ -12,12 +12,13 @@ import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemStatusTrackerBinding
 import com.example.soiltesting.model.tracker.DataX
 import com.example.soiltesting.utils.Constant.TAG
+import com.waycool.data.Repository.DomainModels.TrackerDemain
 import java.text.SimpleDateFormat
 
 class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerView.Adapter<StatusTrackerHolder>() {
 
-    var details = mutableListOf<DataX>()
-    fun setMovieList(movies: List<DataX>) {
+    var details = mutableListOf<TrackerDemain>()
+    fun setMovieList(movies: List<TrackerDemain>) {
         this.details = movies.toMutableList()
         notifyDataSetChanged()
     }
@@ -35,7 +36,7 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_pending_status)
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
-        } else if (details.is_approved == 1 && details.date.toString().isNotEmpty()) {
+        } else if (details.is_approved == 2 && details.date.toString().isNotEmpty()) {
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_status_completed)

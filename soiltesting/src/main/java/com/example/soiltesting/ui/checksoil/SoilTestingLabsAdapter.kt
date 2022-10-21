@@ -6,14 +6,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemLabsSampleBinding
 import com.example.soiltesting.model.history.Data
+import com.waycool.data.Network.NetworkModels.CheckSoilTestData
+import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
+import java.util.ArrayList
 
 
 class SoilTestingLabsAdapter(private val checkSoilTestListener: CheckSoilTestListener) :
     RecyclerView.Adapter<SoilTestingLabsHolder>() {
     private var selectedPosition = -1
-    var details = mutableListOf<com.example.soiltesting.model.checksoil.Data>()
-    fun setMovieList(movies: ArrayList<com.example.soiltesting.model.checksoil.Data>) {
-        this.details = movies.toMutableList()
+    var details = mutableListOf<CheckSoilTestDomain>()
+    fun setMovieList(movies: ArrayList<CheckSoilTestDomain>?) {
+        if (movies != null) {
+            this.details = movies.toMutableList()
+        }
         notifyDataSetChanged()
     }
 

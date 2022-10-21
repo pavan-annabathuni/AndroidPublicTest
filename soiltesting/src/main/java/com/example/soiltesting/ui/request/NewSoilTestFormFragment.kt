@@ -1,11 +1,14 @@
 package com.example.soiltesting.ui.request
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
@@ -17,11 +20,14 @@ import com.example.soiltesting.model.postsoil.NewSoilTestPost
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
 import com.example.soiltesting.utils.NetworkResult
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.waycool.data.utils.Resource
 
-class NewSoilTestFormFragment : Fragment()  {
+class NewSoilTestFormFragment : Fragment() {
     private var _binding: FragmentNewSoilTestFormBinding? = null
     private val binding get() = _binding!!
     private val viewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
+    private val soilViewModel by lazy { ViewModelProvider(this)[SoilTestRequestViewModel::class.java] }
     var ploteNumber: String = ""
     var pincode: String = ""
     var address: String = ""
@@ -44,26 +50,56 @@ class NewSoilTestFormFragment : Fragment()  {
         super.onViewCreated(view, savedInstanceState)
         initViewBackClick()
 //        itemClicked()
-        initView()
+//        initView()
         mvvm()
         binding.cardCheckHealth.setOnClickListener {
-            val newSoilTestPost = NewSoilTestPost(
-                "123456",
-                ploteNumber.toString(),
-                pincode.toString(),
-                "12.9344",
-                "72.000",
-                address.toString(),
-                city.toString(),
-                state.toString(),
-                mobileNumber,
-                "1"
-            )
-            viewModel.postNewSoil(newSoilTestPost)
+            itemClicked()
+//            initView()
+//            val newSoilTestPost = NewSoilTestPost(
+//                "123456",
+//                ploteNumber.toString(),
+//                pincode.toString(),
+//                "12.9344",
+//                "72.000",
+//                address.toString(),
+//                city.toString(),
+//                state.toString(),
+//                mobileNumber,
+//                "1"
+//            )
+//            viewModel.postNewSoil(newSoilTestPost)
+            Log.d(TAG, "onViewCreated: ButtonClicked")
+//            soilViewModel.postNewSoil(
+//                binding.etPlotNumber.toString(),
+//                binding.etPincodeNumber.toString(),
+//                binding.etAddress.toString(),
+//                "123456782345"
+//            ).observe(requireActivity()) {
+//                when (it) {
+//                    is Resource.Success -> {
+//                        val bundle=Bundle()
+//                        bundle.putString("soil_test_number",it.data?.data.toString())
+//                        Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber.toString())
+//                        findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment)
+//                    }
+//                    is Resource.Loading -> {
+//
+//
+//                    }
+//                    is Resource.Error -> {
+//                        Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+//                            .show()
+////                        .show()
+//                    }
+//                }
+//
+//
+//            }
 
         }
 
     }
+
     private fun onBottomButtonBackPress() {
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -75,25 +111,33 @@ class NewSoilTestFormFragment : Fragment()  {
     }
 
     private fun initView() {
-        viewModel.newSoilTestLiveData.observe(viewLifecycleOwner , Observer {
+        soilViewModel.postNewSoil(
+            binding.etPlotNumber.toString(),
+            binding.etPincodeNumber.toString(),
+            binding.etAddress.toString(),
+            "123456782345"
+        ).observe(viewLifecycleOwner, Observer {
             when (it) {
-                is NetworkResult.Success -> {
-//                    val response = it.data?.data as ArrayList<com.example.soiltesting.model.postsoil.Data>
-//                    val arrayList = ArrayList<Data>()
-//                    arrayList.add(response[0].)
-                    val bundle=Bundle()
-                    bundle.putString("soil_test_number",it.data?.data?.id.toString())
-                    Log.d(TAG, "initViewsendingId: "+it.data?.data?.id.toString())
-                    findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
+                is Resource.Success -> {
+                    val bundle = Bundle()
+                    bundle.putString("soil_test_number", it.data?.data.toString())
+                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber.toString())
+                    findNavController().navigate(
+                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
+                        bundle
+                    )
+                }
+                is Resource.Loading -> {
+
 
                 }
-                is NetworkResult.Error -> {
+                is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                         .show()
-                }
-                is NetworkResult.Loading -> {
+//                        .show()
                 }
             }
+
         })
 
 
@@ -143,22 +187,33 @@ class NewSoilTestFormFragment : Fragment()  {
                 binding.etMobile.error = "Enter Mobile Number"
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
-                val newSoilTestPost =
-                    NewSoilTestPost(
-                        "6333F77F01A6C",
-                        ploteNumber.toString(),
-                        pincode.toString(),
-                        "12.9344",
-                        "72.000",
-                        address.toString(),
-                        city.toString(),
-                        state.toString(),
-                        mobileNumber,
-                        "1"
-                    )
-                viewModel.postNewSoil(newSoilTestPost)
-                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment)
+                soilViewModel.postNewSoil(
+                    binding.etPlotNumber.toString(),
+                    binding.etPincodeNumber.toString(),
+                    binding.etAddress.toString(),
+                    binding.etMobile.toString()
+                ).observe(requireActivity()) {
+                    when (it) {
+                        is Resource.Success -> {
+                            val bundle=Bundle()
+                            bundle.putString("soil_test_number",it.data?.data.toString())
+                            Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber.toString())
+                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment)
+                        }
+                        is Resource.Loading -> {
+
+
+                        }
+                        is Resource.Error -> {
+                            Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                                .show()
+//                        .show()
+                        }
+                    }
+
+
+                }
+
             }
 
         }

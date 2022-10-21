@@ -96,12 +96,18 @@ object LocalSource {
     suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
         DataStoreManager.insertAddCropType(moduleMaster)
     }
+    suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
+        DataStoreManager.insertSoilTestHistory(moduleMaster)
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         return DataStoreManager.getModuleMaster()
     }
     fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
         return DataStoreManager.getAddCropType()
+    }
+    fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
+        return DataStoreManager.getSoilTestHistory()
     }
 
     suspend fun insertCropCategoryMaster(cropCategory: List<CropCategoryEntity>) {

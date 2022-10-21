@@ -14,9 +14,6 @@
             android:id="@+id/action_soilTestingHomeFragment_to_allHistoryFragment"
             app:destination="@id/allHistoryFragment" />
         <action
-            android:id="@+id/action_soilTestingHomeFragment_to_allVideoFragment"
-            app:destination="@id/allVideoFragment" />
-        <action
             android:id="@+id/action_soilTestingHomeFragment_to_checkSoilTestFragment"
             app:destination="@id/checkSoilTestFragment" />
         <action
@@ -28,6 +25,12 @@
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_homePageFragment"
             app:destination="@id/homePageFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_newSoilTestFormFragment"
+            app:destination="@id/newSoilTestFormFragment" />
+        <action
+            android:id="@+id/action_soilTestingHomeFragment_to_playVideoFragment2"
+            app:destination="@id/playVideoFragment2" />
         <!--        <action-->
 <!--            android:id="@+id/action_soilTestingHomeFragment_to_newSoilTestFormFragment"-->
 <!--            app:destination="@id/newSoilTestFormFragment" />-->
@@ -55,6 +58,12 @@
         <action
             android:id="@+id/action_statusTrackerFragment_to_viewReportFragment"
             app:destination="@id/viewReportFragment" />
+        <action
+            android:id="@+id/action_statusTrackerFragment_to_allHistoryFragment"
+            app:destination="@id/allHistoryFragment" />
+        <action
+            android:id="@+id/action_statusTrackerFragment_to_soilTestingHomeFragment"
+            app:destination="@id/soilTestingHomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/allHistoryFragment"
@@ -71,11 +80,6 @@
             android:id="@+id/action_allHistoryFragment_to_checkSoilTestFragment"
             app:destination="@id/checkSoilTestFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/allVideoFragment"
-        android:name="com.example.soiltesting.ui.AllVideoFragment"
-        android:label="fragment_all_video"
-        tools:layout="@layout/fragment_all_video" />
     <fragment
         android:id="@+id/checkSoilTestFragment"
         android:name="com.example.soiltesting.ui.checksoil.CheckSoilTestFragment"
@@ -114,4 +118,8 @@
         android:name="com.example.soiltesting.home.HomePagesFragment"
         android:label="fragment_home_page"
         tools:layout="@layout/fragment_home_pages" />
+    <fragment
+        android:id="@+id/playVideoFragment2"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="PlayVideoFragment" />
 </navigation>

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
-import com.example.addcrop.model.Data
 import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
 
 class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : RecyclerView.Adapter<CategoryViewHolder>()  {

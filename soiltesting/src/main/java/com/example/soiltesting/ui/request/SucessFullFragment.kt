@@ -21,9 +21,13 @@ class SucessFullFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentSucessFullBinding.inflate(inflater, container, false)
-        var soil_test_number = arguments?.getString("soil_test_number")
-        Log.d(TAG, "onCreateViewSoilTestNumber: $soil_test_number ")
-        binding.tvRequestIDText.text="Your soil test request for "+soil_test_number.toString()
+        if (arguments!=null) {
+            var soil_test_number = arguments?.getString("soil_test_number")
+            Log.d(TAG, "onCreateViewSoilTestNumber: $soil_test_number ")
+
+            binding.tvRequestIDText.text =
+                "Your soil test request for " + soil_test_number.toString()
+        }
         return binding.root
     }
 

@@ -32,6 +32,8 @@ object StoreKey {
     //add crop
     //ModuleMaster
     val ADD_CROP_TYPE = stringPreferencesKey("addcroptype")
+    //ModuleMaster
+    val SOIL_TEST_HISTORY = stringPreferencesKey("soiltesthistory")
 
     //CropCategory
     val CROP_CATEGORY = stringPreferencesKey("cropcategory")

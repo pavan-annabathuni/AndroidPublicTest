@@ -3,7 +3,6 @@ package com.waycool.data.Network.ApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
 import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
-import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -12,6 +11,8 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
+import java.text.DateFormat
+import java.util.*
 
 interface ApiInterface {
     @GET("api/v1/language-master")
@@ -39,17 +40,14 @@ interface ApiInterface {
     ): Response<LogoutDTO>
 
 
+
+
     @GET("api/v1/module-masters")
     suspend fun getModuleMaster(
         @HeaderMap map: Map<String, String>
     ): Response<ModuleMasterDTO>
 
-    //add crop get api
 
-    @GET("api/v1/soil-types")
-    suspend fun getAddCropType(
-        @HeaderMap headerMap: Map<String, String>
-    ): Response<AddCropTypeDTO>
 
 
     @POST("api/v1/register")
@@ -59,9 +57,7 @@ interface ApiInterface {
         @FieldMap data: Map<String, String>
     ): Response<RegisterDTO>
 
-    @POST("api/v1/plots")
-    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,@Body addCropPost: AddCropRequestDomain)
-    : Response<AddCropResponseDTO>
+
 
     @GET("api/v1/crop-master")
     suspend fun getCropMaster(
@@ -126,4 +122,59 @@ interface ApiInterface {
         @Part("crop_name") crop_name: String,
         @Part file: MultipartBody.Part
     ): Response<AiCropDetectionDTO>
+    //add crop get api
+
+    @GET("api/v1/soil-types")
+    suspend fun getAddCropType(
+        @HeaderMap headerMap: Map<String, String>
+    ): Response<AddCropTypeDTO>
+
+
+    //soil testing
+    @GET("api/v1/soil-test-request/history")
+    suspend fun getSoilTestAllHistory(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("account_id") user_id: Int
+    ): Response<SoilTestHistoryDTO>
+
+
+    //SoilTest check
+
+    @GET("api/v1/check-soil-test")
+    suspend fun getSoilTestLab(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("account_id") user_id: Int,
+        @Query("lat") lat: Double,
+        @Query("long") long: Double
+    ): Response<CheckSoilTestLabDTO>
+
+    //Status Tracker Api
+
+    @GET("api/v1/soil-test-tracker")
+    suspend fun getTracker(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("soil_test_request_id") soil_test_request_id: Int
+    ): Response<TrackerDTO>
+
+    @FormUrlEncoded
+    @POST("api/v1/plots")
+    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
+                                 @Field("crop_id")crop_id:Int,
+                                 @Field("account_no_id")account_no_id:Int,
+                                 @Field("plot_nickname")plot_nickname:String,
+                                 @Field("is_active")is_active:Int,
+                                 @Field("sowing_date")sowing_date:String
+    )
+//                                 @Body addCropPost: AddCropRequestDomain)
+            : Response<AddCropResponseDTO>
+    //New Soil Test Request
+    @FormUrlEncoded
+    @POST("api/v1/soil-test-request")
+    suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
+                             @Field("plot_no")plot_no:String?,
+                             @Field("pincode")pincode:String?,
+                             @Field("address")address:String?,
+                             @Field("number")number:String?,
+                             ): Response<SoilTestResponseDTO>
+
 }

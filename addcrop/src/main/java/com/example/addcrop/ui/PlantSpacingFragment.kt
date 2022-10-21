@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
-import com.example.addcrop.model.addcroppost.AddCropRequest
+
 import com.example.addcrop.viewmodel.AddViewModel
 
 class PlantSpacingFragment : Fragment() {

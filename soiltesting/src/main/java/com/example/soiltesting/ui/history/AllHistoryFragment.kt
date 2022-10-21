@@ -27,6 +27,9 @@ import com.example.soiltesting.utils.Constant
 import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.Network.NetworkModels.SoilTestHistoryDTO
+import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
+import com.waycool.data.utils.Resource
 
 
 class AllHistoryFragment : Fragment(), StatusTrackerListener {
@@ -40,8 +43,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
     private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
-    val filteredList = java.util.ArrayList<Data>()
-    lateinit var cropDetailsList: SoilHistory
+    val filteredList = java.util.ArrayList<SoilTestHistoryDomain>()
+//    lateinit var cropDetailsList: SoilHistory
 
 
     override fun onCreateView(
@@ -57,16 +60,13 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllHistory(1)
         binding.recyclerviewStatusTracker.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewStatusTracker.adapter = soilHistoryAdapter
         initViewBackClick()
-        bindObservers()
+        bindObserversSoilTestHistory()
         locationClick()
-        clickSearch()
-
-
+//        clickSearch()
     }
 
     private fun initViewBackClick() {
@@ -74,20 +74,203 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
+        binding.cardCheckHealth.setOnClickListener {
+            isLocationPermissionGranted()
+        }
     }
 
     private fun locationClick() {
         checkSoilTestViewModel.getSoilTest(1, 13.078100, 77.636580)
 //        checkSoilTestViewModel.getSoilTest(4,13.22,3.33)
 
-        binding.cardCheckHealth.setOnClickListener {
-            isLocationPermissionGranted()
-//            bindObserversCheckSoilTest()
-//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_newSoilTestFormFragment)
-        }
+//        binding.cardCheckHealth.setOnClickListener {
+//            isLocationPermissionGranted()
+////            bindObserversCheckSoilTest()
+////            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_newSoilTestFormFragment)
+//        }
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    private fun isLocationPermissionGranted(): Boolean {
+//        return if (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            ActivityCompat.requestPermissions(
+//                requireActivity(),
+//                arrayOf(
+//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+//                ),
+//                100
+//            )
+//            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
+//            false
+//        } else {
+//            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
+//            fusedLocationClient.lastLocation
+//                .addOnSuccessListener { location ->
+//                    if (location != null) {
+//                        // use your location object
+//                        // get latitude , longitude and other info from this
+//                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
+////                        getAddress(location.latitude, location.longitude)
+//                        Log.d(
+//                            Constant.TAG,
+//                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
+//                        )
+//                        Log.d(
+//                            Constant.TAG,
+//                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
+//                        )
+//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
+//                        bindObserversCheckSoilTest()
+//
+//                    }
+//                }
+//            true
+//        }
+//    }
+
+//    private fun bindObserversCheckSoilTest() {
+//        checkSoilTestViewModel.checkSoilTestLiveData.observe(viewLifecycleOwner, Observer { model ->
+//            when (model) {
+//                is NetworkResult.Success -> {
+//
+//                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
+//                    if (model.data?.data!!.isEmpty()) {
+//                        findNavController().navigate(R.id.action_allHistoryFragment_to_customeDialogFragment)
+//                    } else if (model.data.data.isNotEmpty()) {
+//                        val response = model.data.data
+//                        var bundle = Bundle().apply {
+//                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+//                        }
+//                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
+//                        findNavController().navigate(
+//                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
+//                            bundle
+//                        )
+//                    }
+//                }
+//                is NetworkResult.Error -> {
+//                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+//                    binding.progressBar.isVisible = false
+//                    binding.clProgressBar.visibility = View.GONE
+//                }
+//                is NetworkResult.Loading -> {
+//                    binding.clProgressBar.visibility = View.VISIBLE
+//                    binding.progressBar.isVisible = true
+//
+//                }
+//            }
+//
+//        })
+//
+//    }
+
+    private fun bindObserversSoilTestHistory() {
+        viewModel.getSoilTestHistory().observe(requireActivity()) {
+
+            when (it) {
+                is Resource.Success -> {
+                    val response = it.data as ArrayList<SoilTestHistoryDomain>
+                    soilHistoryAdapter.setMovieList(response)
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+                is Resource.Loading -> {
+
+                }
+            }
+        }
+    }
+
+    private fun clickSearch() {
+
+        binding.searchView.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+
+            ) {
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+                filteredList.clear()
+//                Log.d("TAG", "::::str $charSequence")
+                for (item in filteredList[0].soil_test_number!!.indices) {
+                    Log.d("TAG", "::::stderr $charSequence")
+                    if (filteredList[0].soil_test_number!!.lowercase()
+                            .startsWith(charSequence.toString().lowercase())
+                    ) {
+//                        filteredList.add(filteredList)
+                        Log.d(TAG, "onTextChangedList:$filteredList")
+                        Log.d("TAG", "::::::::stderr $charSequence")
+                    }
+
+                }
+                soilHistoryAdapter.upDateList(filteredList)
+//                binding.etSearchItem.getText().clear();
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun statusTracker(data: SoilTestHistoryDomain) {
+        val bundle = Bundle()
+        bundle.putInt("id", data.id!!)
+        bundle.putString("soil_test_number", data.soil_test_number)
+        findNavController().navigate(
+            R.id.action_allHistoryFragment_to_statusTrackerFragment,
+            bundle
+        )
+
+    }
     private fun isLocationPermissionGranted(): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -116,135 +299,62 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         // get latitude , longitude and other info from this
                         Log.d("checkLocation", "isLocationPermissionGranted: $location")
 //                        getAddress(location.latitude, location.longitude)
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
-                        )
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
-                        )
-                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
-                        bindObserversCheckSoilTest()
+                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
+                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
+
+//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
+//                        bindObserversCheckSoilTest()
+                        viewModel.getCheckSoilTestLab(
+                            location.latitude,
+                            location.longitude
+                        ).observe(requireActivity()) {
+                            when (it) {
+                                is Resource.Success -> {
+                                    binding.progressBar.isVisible = false
+                                    binding.clProgressBar.visibility = View.GONE
+                                    Log.d(
+                                        "TAG",
+                                        "bindObserversDataCheckSoilData:" + it.data.toString()
+                                    )
+                                    if (it.data!!.isNullOrEmpty()) {
+//                        binding.clProgressBar.visibility = View.VISIBLE
+//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
+                                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                                    } else if (it.data!!.isNotEmpty()) {
+                                        val response = it.data
+                                        Log.d(
+                                            Constant.TAG,
+                                            "bindObserversCheckSoilTestModelFJndsj: $response")
+                                        var bundle = Bundle().apply {
+                                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+                                        }
+
+                                        findNavController().navigate(
+                                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
+                                            bundle
+                                        )
+                                    }
+
+                                }
+                                is Resource.Error -> {
+                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                                        .show()
+
+                                }
+                                is Resource.Loading -> {
+                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                                        .show()
+
+                                }
+                            }
+
+                        }
+
 
                     }
                 }
             true
         }
-    }
-
-    private fun bindObserversCheckSoilTest() {
-        checkSoilTestViewModel.checkSoilTestLiveData.observe(viewLifecycleOwner, Observer { model ->
-            when (model) {
-                is NetworkResult.Success -> {
-                    binding.progressBar.isVisible = false
-                    binding.clProgressBar.visibility = View.GONE
-                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
-                    if (model.data?.data!!.isEmpty()) {
-                        findNavController().navigate(R.id.action_allHistoryFragment_to_customeDialogFragment)
-                    } else if (model.data.data.isNotEmpty()) {
-                        val response = model.data.data
-                        var bundle = Bundle().apply {
-                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
-                        }
-                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
-                        findNavController().navigate(
-                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
-                            bundle
-                        )
-                    }
-                }
-                is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(), model.message .toString(), Toast.LENGTH_SHORT)
-                        .show()
-                    binding.progressBar.isVisible = false
-                    binding.clProgressBar.visibility = View.GONE
-                }
-                is NetworkResult.Loading -> {
-                    binding.clProgressBar.visibility = View.VISIBLE
-                    binding.progressBar.isVisible = true
-
-                }
-            }
-
-        })
-
-    }
-
-    private fun bindObservers() {
-        viewModel.historyLiveData.observe(viewLifecycleOwner, Observer { model ->
-            when (model) {
-                is NetworkResult.Success -> {
-                    Log.d("TAG", "bindObserversData:" + model.data.toString())
-                    val response = model.data?.data as ArrayList<Data>
-                    cropDetailsList = SoilHistory(response, "", true)
-                    soilHistoryAdapter.setMovieList(response)
-                }
-                is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
-                }
-                is NetworkResult.Loading -> {
-
-                }
-            }
-
-        })
-    }
-
-    private fun clickSearch() {
-
-        binding.searchView.addTextChangedListener(object : TextWatcher {
-
-            override fun beforeTextChanged(
-                charSequence: CharSequence,
-                i: Int,
-                i1: Int,
-                i2: Int
-
-            ) {
-            }
-
-            override fun onTextChanged(
-                charSequence: CharSequence,
-                i: Int,
-                i1: Int,
-                i2: Int
-            ) {
-                filteredList.clear()
-//                Log.d("TAG", "::::str $charSequence")
-                for (item in cropDetailsList.data.indices) {
-                    Log.d("TAG", "::::stderr $charSequence")
-                    if (cropDetailsList.data[item].soil_test_number.lowercase()
-                            .startsWith(charSequence.toString().lowercase())
-                    ) {
-                        filteredList.add(cropDetailsList.data[item])
-                        Log.d(TAG, "onTextChangedList:$filteredList")
-                        Log.d("TAG", "::::::::stderr $charSequence")
-                    }
-
-                }
-                soilHistoryAdapter.upDateList(filteredList)
-//                binding.etSearchItem.getText().clear();
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun statusTracker(data: Data) {
-        val bundle = Bundle()
-        bundle.putInt("id", data.id)
-        bundle.putString("soil_test_number", data.soil_test_number)
-        findNavController().navigate(
-            R.id.action_allHistoryFragment_to_statusTrackerFragment,
-            bundle
-        )
     }
 
 

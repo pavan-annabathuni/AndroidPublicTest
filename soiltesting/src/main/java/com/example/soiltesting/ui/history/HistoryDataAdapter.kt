@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemSoilHistoryBinding
 import com.example.soiltesting.model.history.Data
+import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
 
 class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
 
-    var details = mutableListOf<Data>()
-    fun setMovieList(movies: List<Data>) {
+    var details = mutableListOf<SoilTestHistoryDomain>()
+    fun setMovieList(movies: List<SoilTestHistoryDomain>) {
         this.details = movies.toMutableList()
         notifyDataSetChanged()
     }
@@ -78,7 +79,7 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
     override fun getItemCount(): Int {
         return details.size
     }
-    fun upDateList(list: ArrayList<Data>) {
+    fun upDateList(list: ArrayList<SoilTestHistoryDomain>) {
         details.clear()
         details.addAll(list)
         notifyDataSetChanged()

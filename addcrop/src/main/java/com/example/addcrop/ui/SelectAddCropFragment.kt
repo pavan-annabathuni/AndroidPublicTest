@@ -7,6 +7,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -80,9 +81,11 @@ class SelectAddCropFragment : Fragment() {
         adapter.onItemClick = {
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
-            it?.cropName?.let { it1 -> args.putString("cropname", it1) }
+            it?.cropName?.let { it1 -> args.putString("cropname", it1)
+                Log.d("TAG", "onViewCreatedbdjvb: ${it.cropId}")
+            }
             findNavController().navigate(
-                R.id.action_selectAddCropFragment_to_addCropFragment,
+                R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
                 args
             )
         }
