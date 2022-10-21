@@ -74,7 +74,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //MSG91
-    implementation 'com.github.walkovermsg91:walkover-sendOTP:1.1.8'
+   // implementation 'com.github.walkovermsg91:walkover-sendOTP:1.1.8'
     implementation 'com.github.sureshmaidaragi1919:CircularTimer:1.3'
     //For location based services
     implementation 'com.google.android.gms:play-services-location:16.0.0'

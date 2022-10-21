@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/cropSelectionFragment">
+
+    <fragment
+        android:id="@+id/cropInfoFragment"
+        android:name="com.example.cropinformation.fragments.CropInfoFragment"
+        android:label="fragment_crop_info"
+        tools:layout="@layout/fragment_crop_info" >
+
+        <action
+            android:id="@+id/action_cropInfoFragment_to_playVideoFragment2"
+            app:destination="@id/playVideoFragment2" />
+        <action
+            android:id="@+id/action_cropInfoFragment_to_newsFullviewActivity"
+            app:destination="@id/newsFullviewActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/cropSelectionFragment"
+        android:name="com.example.cropinformation.CropSelectionFragment"
+        android:label="CropSelectionFragment" >
+        <action
+            android:id="@+id/action_cropSelectionFragment_to_cropInfoFragment"
+            app:destination="@id/cropInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+    <dialog
+        android:id="@+id/playVideoFragment2"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="PlayVideoFragment" />
+    <activity
+        android:id="@+id/newsFullviewActivity"
+        android:name="com.waycool.newsandarticles.view.NewsFullviewActivity"
+        android:label="NewsFullviewActivity" />
+</navigation>

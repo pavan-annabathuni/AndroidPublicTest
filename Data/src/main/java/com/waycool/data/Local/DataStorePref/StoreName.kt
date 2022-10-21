@@ -12,6 +12,10 @@ object StoreName {
 
     //ModuleMaster
     const val MODULE_MASTER = "modulemaster"
+    //soil test history
+    const val SOIL_TEST_HISTORY = "soiltesthisory"
+    //add crop
+    const val ADD_CROP_TYPE = "addcroptype"
 
     //CropCategory
     const val CROP_CATEGORY = "cropcategory"

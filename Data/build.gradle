@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id "org.jetbrains.kotlin.plugin.parcelize"
+    id 'kotlin-parcelize'
 }
 apply plugin: 'kotlin-android'
 

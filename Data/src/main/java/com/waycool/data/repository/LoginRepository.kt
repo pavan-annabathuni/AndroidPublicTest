@@ -4,6 +4,8 @@ import android.util.Log
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Local.mappers.LangugeMasterEntityMapper
+import com.waycool.data.Local.mappers.ModuleMasterEntityMapper
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.repository.DomainMapper.*
@@ -369,7 +371,7 @@ object LoginRepository {
 //                    call: Call<OTPResponseDTO?>,
 //                    response: Response<OTPResponseDTO?>
 //                ) {
-//                    if (response.isSuccessful) {
+//                    if (response.?isSuccessful) {
 //                        // you can get otp form message filled
 //                        Toast.makeText(context, "OTP Verified", Toast.LENGTH_SHORT).show()
 //                        verifyLivedata.postValue(true)
@@ -410,6 +412,7 @@ object LoginRepository {
             }
         }
     }
+
 
     fun getModuleMaster(): Flow<Resource<List<ModuleMasterDomain>>> {
         return ModuleMasterSyncer().getData().map {

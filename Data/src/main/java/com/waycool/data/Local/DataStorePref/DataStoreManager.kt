@@ -35,6 +35,8 @@ object DataStoreManager {
     private val Context.userPreferences: DataStore<Preferences> by preferencesDataStore(name = StoreName.USER_PREFS)
     private val Context.vansCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.VANS_CATEGORY)
     private val Context.moduleMaster: DataStore<Preferences> by preferencesDataStore(name = StoreName.MODULE_MASTER)
+    private val Context.addCropType: DataStore<Preferences> by preferencesDataStore(name = StoreName.ADD_CROP_TYPE)
+    private val Context.soilTestHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.SOIL_TEST_HISTORY)
     private val Context.cropCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.CROP_CATEGORY)
     private val Context.aiCropHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.AI_CROP_HISTORY)
     private val Context.weather: DataStore<Preferences> by preferencesDataStore(name = StoreName.WEATHER)
@@ -245,6 +247,22 @@ object DataStoreManager {
             Log.d("Languaga", "SavedLanguaga")
         }
     }
+    suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
+        performPrefsSanityCheck()
+        context?.addCropType?.edit {
+            it[StoreKey.ADD_CROP_TYPE] =
+                TypeConverter.convertStringToAddCropTypeString(moduleMaster)
+            Log.d("Languaga", "SavedLanguaga")
+        }
+    }
+    suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
+        performPrefsSanityCheck()
+        context?.soilTestHistory?.edit {
+            it[StoreKey.SOIL_TEST_HISTORY] =
+                TypeConverter.convertSoilTestHistoryString(moduleMaster)
+            Log.d("Languaga", "SavedLanguaga")
+        }
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         performPrefsSanityCheck()
@@ -255,6 +273,32 @@ object DataStoreManager {
             ?.map {
                 val string = it[StoreKey.MODULE_MASTER]
                 string?.let { TypeConverter.convertStringToModuleMaster(string) } ?: emptyList()
+            }
+
+    }
+    fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
+        performPrefsSanityCheck()
+        return context?.addCropType?.data
+            ?.catch { exception ->
+                Log.d("languageDataStore: ", exception.toString())
+            }
+            ?.map {
+                val string = it[StoreKey.ADD_CROP_TYPE]
+                string?.let {
+                    TypeConverter.convertStringToAddCropType(string) } ?: emptyList()
+            }
+
+    }
+    fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
+        performPrefsSanityCheck()
+        return context?.soilTestHistory?.data
+            ?.catch { exception ->
+                Log.d("languageDataStore: ", exception.toString())
+            }
+            ?.map {
+                val string = it[StoreKey.SOIL_TEST_HISTORY]
+                string?.let {
+                    TypeConverter.convertStringSoilTestHistory(string) } ?: emptyList()
             }
 
     }
@@ -321,8 +365,7 @@ object DataStoreManager {
             }
             ?.map {
                 val string = it[StoreKey.USER_DETAILS]
-                string?.let { TypeConverter.convertStringToUserDetails(string) }
-                    ?: UserDetailsEntity()
+                string?.let { TypeConverter.convertStringToUserDetails(string) } ?: UserDetailsEntity()
             }
 
     }

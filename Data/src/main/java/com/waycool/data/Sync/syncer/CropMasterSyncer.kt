@@ -53,18 +53,18 @@ class CropMasterSyncer : SyncInterface {
         return getCropsAiCropHealthFromLocal(searchQuery)
     }
 
-    fun getCropsCropInfo(): Flow<Resource<List<CropMasterEntity>>> {
+    fun getCropsCropInfo(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
         GlobalScope.launch(Dispatchers.IO) {
             if (isSyncRequired()) {
                 makeNetworkCall()
             }
         }
-        return getCropsInfoFromLocal()
+        return getCropsInfoFromLocal(searchQuery)
     }
 
-    private fun getCropsInfoFromLocal(): Flow<Resource<List<CropMasterEntity>>> {
+    private fun getCropsInfoFromLocal(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
 
-        return LocalSource.getCropsInfo().map {
+        return LocalSource.getCropsInfo(searchQuery).map {
             if (it != null) {
                 (Resource.Success(it))
             } else {
