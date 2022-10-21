@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_add_crop"
+    app:startDestination="@id/selectAddCropFragment">
+
+    <fragment
+        android:id="@+id/addCropFragment"
+        android:name="com.example.addcrop.ui.AddCropFragment"
+        android:label="fragment_add_crop"
+        tools:layout="@layout/fragment_add_crop" >
+        <action
+            android:id="@+id/action_addCropFragment_to_addCropDetailsFragment"
+            app:destination="@id/addCropDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCropDetailsFragment"
+        android:name="com.example.addcrop.ui.AddCropDetailsFragment"
+        android:label="fragment_add_crop_details"
+        tools:layout="@layout/fragment_add_crop_details" >
+        <action
+            android:id="@+id/action_addCropDetailsFragment_to_plantSpacingFragment"
+            app:destination="@id/plantSpacingFragment"
+             />
+    </fragment>
+    <fragment
+        android:id="@+id/plantSpacingFragment"
+        android:name="com.example.addcrop.ui.PlantSpacingFragment"
+        android:label="fragment_plant_spacing"
+        tools:layout="@layout/fragment_plant_spacing" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/selectAddCropFragment"
+        android:name="com.example.addcrop.ui.SelectAddCropFragment"
+        android:label="fragment_select_add_crop"
+        tools:layout="@layout/fragment_select_add_crop" >
+        <action
+            android:id="@+id/action_selectAddCropFragment_to_addCropDetailsFragment2"
+            app:destination="@id/addCropDetailsFragment" />
+    </fragment>
+</navigation>

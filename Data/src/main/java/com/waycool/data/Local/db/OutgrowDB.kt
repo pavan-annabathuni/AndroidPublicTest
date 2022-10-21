@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.waycool.data.Local.Entity.AddCropTypeEntity
 import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.Entity.TagsEntity
