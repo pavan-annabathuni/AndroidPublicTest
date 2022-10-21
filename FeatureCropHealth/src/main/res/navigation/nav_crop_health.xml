@@ -16,8 +16,11 @@
             android:id="@+id/action_cropHealthFragment_to_cropSelectFragment"
             app:destination="@id/cropSelectFragment" />
         <action
-            android:id="@+id/action_cropHealthFragment_to_cropVideoFragment"
-            app:destination="@id/cropVideoFragment" />
+            android:id="@+id/action_cropHealthFragment_to_pestDiseaseDetailsFragment2"
+            app:destination="@id/pestDiseaseDetailsFragment2" />
+        <action
+            android:id="@+id/action_cropHealthFragment_to_playVideoFragment3"
+            app:destination="@id/playVideoFragment3" />
 
     </fragment>
     <fragment
@@ -28,6 +31,9 @@
         <action
             android:id="@+id/action_cropHistoryFragment_to_cropSelectFragment"
             app:destination="@id/cropSelectFragment" />
+        <action
+            android:id="@+id/action_cropHistoryFragment_to_pestDiseaseDetailsFragment2"
+            app:destination="@id/pestDiseaseDetailsFragment2" />
     </fragment>
     <fragment
         android:id="@+id/cropSelectFragment"
@@ -39,32 +45,30 @@
             app:destination="@id/cropDetailsCaptureFragment" />
     </fragment>
     <fragment
-        android:id="@+id/cropVideoFragment"
-        android:name="com.waycool.featurecrophealth.ui.history.CropVideoFragment"
-        android:label="fragment_crop_video"
-        tools:layout="@layout/fragment_crop_video" />
-    <fragment
         android:id="@+id/cropDetailsCaptureFragment"
         android:name="com.waycool.featurecrophealth.ui.detect.CropDetailsCaptureFragment"
         android:label="fragment_crop_details_capture"
         tools:layout="@layout/fragment_crop_details_capture" >
         <action
-            android:id="@+id/action_cropDetailsCaptureFragment_to_cropResultFragment"
-            app:destination="@id/cropResultFragment" />
-        <action
             android:id="@+id/action_cropDetailsCaptureFragment_to_howToClickFragment"
             app:destination="@id/howToClickFragment" />
+        <action
+            android:id="@+id/action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2"
+            app:destination="@id/pestDiseaseDetailsFragment2" />
     </fragment>
-    <fragment
-        android:id="@+id/cropResultFragment"
-        android:name="com.waycool.featurecrophealth.ui.CropResultFragment"
-        android:label="fragment_crop_result"
-        tools:layout="@layout/fragment_crop_result" />
     <dialog
         android:id="@+id/howToClickFragment"
         android:name="com.waycool.featurecrophealth.ui.detect.HowToClickFragment"
         android:label="fragment_how_to_click"
         tools:layout="@layout/fragment_how_to_click" />
+    <fragment
+        android:id="@+id/pestDiseaseDetailsFragment2"
+        android:name="com.waycool.cropprotect.fragments.PestDiseaseDetailsFragment"
+        android:label="PestDiseaseDetailsFragment" />
+    <fragment
+        android:id="@+id/playVideoFragment3"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="PlayVideoFragment" />
     <!--    <fragment-->
 <!--        android:id="@+id/paginationFragment"-->
 <!--        android:name="com.example.featurecrophealth.pagination.PaginationFragment"-->

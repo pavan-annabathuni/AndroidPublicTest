@@ -18,4 +18,7 @@ object StoreName {
 
     //Ai Crop History
     const val AI_CROP_HISTORY = "aicrophistory"
+
+    //Weather
+    const val WEATHER = "weather"
 }

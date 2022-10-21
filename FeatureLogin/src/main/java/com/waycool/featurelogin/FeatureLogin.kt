@@ -1,6 +1,6 @@
 package com.waycool.featurelogin
 
-import com.waycool.data.Repository.LoginRepository
+import com.waycool.data.repository.LoginRepository
 
 object FeatureLogin {
 

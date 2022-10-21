@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.waycool.data.Repository.DomainModels.ModuleMasterDomain;
+import com.waycool.data.repository.domainModels.ModuleMasterDomain;
 import com.waycool.featurelogin.R;
 import com.waycool.featurelogin.fragment.RegistrationFragment;
 

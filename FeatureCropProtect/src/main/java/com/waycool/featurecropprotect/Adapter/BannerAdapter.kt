@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.Repository.DomainModels.CropMasterDomain
 import com.waycool.uicomponents.R
 
 class BannerAdapter(private val context: Context) :

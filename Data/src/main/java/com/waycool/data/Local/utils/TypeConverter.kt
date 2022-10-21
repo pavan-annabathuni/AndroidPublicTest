@@ -79,4 +79,16 @@ object TypeConverter {
         val listType = object : TypeToken<UserDetailsEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
+    fun convertWeatherToString(w: WeatherMasterEntity): String {
+        Log.d("TypeConverterTO", w.toString())
+        val gson = Gson()
+        return gson.toJson(w)
+    }
+
+    fun convertStringToWeather(s: String): WeatherMasterEntity? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<WeatherMasterEntity?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
 }

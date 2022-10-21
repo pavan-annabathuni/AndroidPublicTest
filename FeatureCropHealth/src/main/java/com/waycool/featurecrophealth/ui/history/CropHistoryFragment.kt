@@ -11,24 +11,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.waycool.data.utils.Resource
+import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHistoryBinding
-import com.waycool.featurecrophealth.model.historydata.Data
-import com.waycool.featurecrophealth.model.historydata.HistoryResponse
+
 import com.waycool.featurecrophealth.utils.Constant
 import com.waycool.featurecrophealth.utils.NetworkResult
-import com.waycool.featurecrophealth.viewmodel.HistoryViewModel
 
 
 class CropHistoryFragment : Fragment() {
     private var _binding: FragmentCropHistoryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dataStore: Data
-    private lateinit var historyAdapter: NoteAdapter
-    var objectListNew = java.util.ArrayList<HistoryResponse>()
-    val filteredList = java.util.ArrayList<Data>()
-    lateinit var cropDetailsList: HistoryResponse
-    private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+    private lateinit var historyAdapter: AiCropHistoryAdapter
+    private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +32,13 @@ class CropHistoryFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCropHistoryBinding.inflate(inflater, container, false)
-        historyAdapter = NoteAdapter(requireContext())
+        historyAdapter = AiCropHistoryAdapter(requireContext())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllHistory(13,requireContext())
-//        clickSearch()
+
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = historyAdapter
@@ -51,6 +46,14 @@ class CropHistoryFragment : Fragment() {
         bindObservers()
         onclick()
 //        clickSearch()
+
+        historyAdapter.onItemClick={
+            val bundle=Bundle()
+            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+//            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+            findNavController().navigate(R.id.action_cropHistoryFragment_to_pestDiseaseDetailsFragment2,bundle)
+
+        }
     }
 
     private fun onclick() {
@@ -64,21 +67,21 @@ class CropHistoryFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.historyLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.getAiCropHistory().observe(viewLifecycleOwner, Observer {
 
             when (it) {
-                is NetworkResult.Success -> {
+                is Resource.Success -> {
                     Log.d(Constant.TAG, "bindObserversData:" + it.data.toString())
-                    val response = it.data?.data as ArrayList<Data>
+                    val response = it.data
                     historyAdapter.submitList(response)
-                    cropDetailsList = HistoryResponse(response,"",true)
+//                    cropDetailsList = HistoryResponse(response,"",true)
 
                 }
-                is NetworkResult.Error -> {
+                is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                         .show()
                 }
-                is NetworkResult.Loading -> {
+                is Resource.Loading -> {
 
                 }
             }
@@ -87,9 +90,9 @@ class CropHistoryFragment : Fragment() {
     }
 
 
-    private fun onNoteClicked(noteResponse: Data) {
-
-    }
+//    private fun onNoteClicked(noteResponse: Data) {
+//
+//    }
 //    private fun clickSearch() {
 //
 //        binding.searchView.addTextChangedListener(object : TextWatcher {

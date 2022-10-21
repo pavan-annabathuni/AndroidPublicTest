@@ -2,10 +2,9 @@ package com.waycool.featurelogin.loginViewModel
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
-import com.waycool.data.Repository.DomainModels.*
-import com.waycool.data.Repository.LoginRepository
+import com.waycool.data.repository.domainModels.*
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.*
 

@@ -32,8 +32,6 @@ object NetworkUtils {
             .build()
 
         val request = ImageRequest.Builder(this.context)
-            .crossfade(true)
-            .crossfade(500)
             .placeholder(R.drawable.disease)
             .error(R.drawable.card_shape)
             .data(url)

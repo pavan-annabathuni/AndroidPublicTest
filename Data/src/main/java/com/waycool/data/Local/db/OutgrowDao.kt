@@ -29,8 +29,8 @@ interface OutgrowDao {
     @Query("SELECT * FROM crop_master WHERE pest_disease_info = 1 AND crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
     fun getCropsPestDiseases(search: String? = ""): Flow<List<CropMasterEntity>?>
 
-    @Query("SELECT * FROM crop_master WHERE ai_crop_health = 1 ORDER BY crop_name Asc")
-    fun getCropsAiCrop(): Flow<List<CropMasterEntity>?>
+    @Query("SELECT * FROM crop_master WHERE ai_crop_health = 1 AND crop_name LIKE '%' || :searchQuery || '%' ORDER BY crop_name Asc")
+    fun getCropsAiCrop(searchQuery: String? = ""): Flow<List<CropMasterEntity>?>
 
     @Query("SELECT * FROM crop_master WHERE crop_info = 1 ORDER BY crop_name Asc")
     fun getCropsInfo(): Flow<List<CropMasterEntity>?>

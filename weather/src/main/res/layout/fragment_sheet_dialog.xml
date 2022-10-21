@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.weather.viewModel.DailyvViewModel" />
+            type="com.waycool.weather.viewModel.DailyvViewModel" />
 
     </data>
 
@@ -164,7 +164,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(viewModel.selectedProperty.humidity)+'%'}"
+                        android:text="@{String.valueOf(viewModel.selectedProperty.humidity)+'%'}"
                         android:textColor="@color/black"
                         style="@style/Bold"
                         android:textSize="20sp"
@@ -254,7 +254,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{Double.toString(viewModel.selectedProperty.rain)+"mm"}'
+                        android:text='@{String.valueOf(viewModel.selectedProperty.rain)+"mm"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         style="@style/Bold"
@@ -284,7 +284,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{String.format("%.0f",viewModel.selectedProperty.wind_speed)+" Km/h"}'
+                        android:text='@{String.format("%.0f",viewModel.selectedProperty.windSpeed)+" Km/h"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         style="@style/Bold"
@@ -314,7 +314,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{String.format("%.0f",viewModel.selectedProperty.wind_gust)}'
+                        android:text='@{String.format("%.0f",viewModel.selectedProperty.windGust)}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         tools:text="3"

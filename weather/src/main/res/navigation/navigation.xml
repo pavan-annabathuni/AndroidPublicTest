@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.example.weather.fragment.WeatherFragment"
+        android:name="com.waycool.weather.fragment.WeatherFragment"
         android:label="fragment_weather"
         tools:layout="@layout/fragment_weather" >
         <action
@@ -19,16 +19,16 @@
     </fragment>
     <dialog
         android:id="@+id/sheetDialogFragment"
-        android:name="com.example.weather.fragment.SheetDialogFragment"
+        android:name="com.waycool.weather.fragment.SheetDialogFragment"
         android:label="SheetDialogFragment">
         <argument android:name="daily"
-            app:argType="com.example.weather.apiService.apiResponse.Daily"/>
+            app:argType="com.waycool.data.repository.domainModels.weather.DailyDomain"/>
     </dialog>
     <dialog
         android:id="@+id/sheetHourlyFragment"
-        android:name="com.example.weather.fragment.SheetHourlyFragment"
+        android:name="com.waycool.weather.fragment.SheetHourlyFragment"
         android:label="SheetHourlyFragment" >
         <argument android:name="hourly"
-            app:argType="com.example.weather.apiService.apiResponse.Hourly"/>
+            app:argType="com.waycool.data.repository.domainModels.weather.HourlyDomain"/>
     </dialog>
 </navigation>

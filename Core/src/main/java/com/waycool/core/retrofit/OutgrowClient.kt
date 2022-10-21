@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 object OutgrowClient {
 
-    private lateinit var BASE_URL: String
+    private  val BASE_URL: String
     var retrofit: Retrofit
 
 

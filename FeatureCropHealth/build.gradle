@@ -43,7 +43,10 @@ android {
 
 dependencies {
     implementation project(path:':SquareCamera')
-    implementation project(path:':Data')
+    implementation project(path: ':UiComponents')
+    implementation project(path: ':Data')
+    implementation project(path: ':Videos')
+    implementation project(path: ':FeatureCropProtect')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

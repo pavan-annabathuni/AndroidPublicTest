@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,13 +19,13 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.waycool.core.utils.AppSecrets
-import com.waycool.data.Repository.DomainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.videos.R
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
-class PlayVideoFragment : BottomSheetDialogFragment() {
+class PlayVideoFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayVideoBinding
     private var videoSelected: VansFeederListDomain? = null
@@ -134,42 +135,42 @@ class PlayVideoFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener { dialogInterface ->
-            val bottomSheetDialog =
-                dialogInterface as BottomSheetDialog
-            setupFullHeight(bottomSheetDialog)
-        }
-        return dialog
-    }
-
-
-    private fun setupFullHeight(bottomSheetDialog: BottomSheetDialog) {
-        val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-        val behavior = BottomSheetBehavior.from(bottomSheet?.rootView!!)
-        val layoutParams = bottomSheet.layoutParams
-        val windowHeight = getWindowHeight()
-        if (layoutParams != null) {
-            layoutParams.height = windowHeight
-        }
-        behavior.isHideable = false
-        behavior.isDraggable = false
-        bottomSheet.layoutParams = layoutParams
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {}
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        })
-    }
-
-    private fun getWindowHeight(): Int {
-        // Calculate window height for fullscreen use
-        val displayMetrics = DisplayMetrics()
-        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return displayMetrics.heightPixels
-    }
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = super.onCreateDialog(savedInstanceState)
+//        dialog.setOnShowListener { dialogInterface ->
+//            val bottomSheetDialog =
+//                dialogInterface as BottomSheetDialog
+//            setupFullHeight(bottomSheetDialog)
+//        }
+//        return dialog
+//    }
+//
+//
+//    private fun setupFullHeight(bottomSheetDialog: BottomSheetDialog) {
+//        val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+//        val behavior = BottomSheetBehavior.from(bottomSheet?.rootView!!)
+//        val layoutParams = bottomSheet.layoutParams
+//        val windowHeight = getWindowHeight()
+//        if (layoutParams != null) {
+//            layoutParams.height = windowHeight
+//        }
+//        behavior.isHideable = false
+//        behavior.isDraggable = false
+//        bottomSheet.layoutParams = layoutParams
+//        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+//            override fun onStateChanged(bottomSheet: View, newState: Int) {}
+//            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            }
+//        })
+//    }
+//
+//    private fun getWindowHeight(): Int {
+//        // Calculate window height for fullscreen use
+//        val displayMetrics = DisplayMetrics()
+//        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+//        return displayMetrics.heightPixels
+//    }
 
 }

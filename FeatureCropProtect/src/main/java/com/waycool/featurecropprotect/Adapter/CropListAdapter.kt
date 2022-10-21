@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-import com.waycool.data.Repository.DomainModels.CropMasterDomain
+import com.waycool.data.repository.domainModels.CropMasterDomain
 import com.waycool.uicomponents.databinding.ViewholderCropBinding
 
 class CropListAdapter : ListAdapter<CropMasterDomain, CropListAdapter.CropsListVH>(DiffCallback) {

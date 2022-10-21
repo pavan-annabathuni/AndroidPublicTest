@@ -14,12 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SharedPreferenceUtility
+import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
 import com.waycool.featurecrophealth.utils.Constant.TAG
 import com.waycool.featurecrophealth.utils.NetworkUtils.loadUrl
-import com.waycool.featurecrophealth.viewmodel.HistoryViewModel
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.flow.collect
@@ -41,7 +42,7 @@ class CropDetailsCaptureFragment : Fragment() {
     private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
     private lateinit var photoFile: File
     private var selecteduri: Uri? = null
-    private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
 
 
     override fun onCreateView(
@@ -52,11 +53,11 @@ class CropDetailsCaptureFragment : Fragment() {
 
         _binding = FragmentCropDetailsCaptureBinding.inflate(inflater, container, false)
         val bundle = Bundle()
-        if (arguments != null)
+        if (arguments != null) {
             crop_id = arguments?.getInt("crop_id")
-        crop_name = arguments?.getString("name").toString()
-        crop_logo = arguments?.getString("crop_logo").toString()
-
+            crop_name = arguments?.getString("name").toString()
+            crop_logo = arguments?.getString("crop_logo").toString()
+        }
 
         // bundle.getInt("project_id").toString()
         Log.wtf("received:", "$crop_logo")
@@ -121,7 +122,7 @@ class CropDetailsCaptureFragment : Fragment() {
 
                 val profileImageBody: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
-                        "image",
+                        "image_url",
                         file.name, profileImage
                     )
 
@@ -132,9 +133,7 @@ class CropDetailsCaptureFragment : Fragment() {
                     SharedPreferenceUtility.getUserDetails(requireContext()).data?.profile?.userId
 
                 if (userId != null) {
-                    viewModel.createNote(
-                        requireContext(),
-
+                    postImage(
                         crop_id!!,
                         crop_name!!,
                         profileImageBody
@@ -166,31 +165,33 @@ class CropDetailsCaptureFragment : Fragment() {
 
                 val profileImageBody: MultipartBody.Part =
                     MultipartBody.Part.createFormData(
-                        "image",
+                        "image_url",
                         file.name, profileImage
                     )
 
+                Log.d("aidetect",selecteduri.toString())
+                Log.d("aidetect",file.name.toString())
+                Log.d("aidetect",profileImage.toString())
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
 
 
-                viewModel.createNote(
-                    requireContext(),
+                postImage(
                     crop_id!!,
                     crop_name!!,
                     profileImageBody
                 )
 
-                viewModel.aiResponse.observe(requireActivity()) {
-                    Toast.makeText(requireContext(), "Check your crop type", Toast.LENGTH_SHORT)
-                        .show()
-
-
-                    if (it?.data?.message != null)
-                        Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT)
-                            .show()
-                }
+//                viewModel.aiResponse.observe(requireActivity()) {
+//                    Toast.makeText(requireContext(), "Check your crop type", Toast.LENGTH_SHORT)
+//                        .show()
+//
+//
+//                    if (it?.data?.message != null)
+//                        Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT)
+//                            .show()
+//                }
 //                if (crop_name.equals("The image has invalid image dimensions.")){
 //                    Toast.makeText(requireContext(),"The image has invalid image dimensions.", Toast.LENGTH_SHORT).show()
 //                }
@@ -202,6 +203,29 @@ class CropDetailsCaptureFragment : Fragment() {
             binding.uploadedImg.setImageURI(uri)
             selecteduri = uri!!
 
+        }
+    }
+
+    private fun postImage(crop_id:Int?, crop_name:String?, profileImageBody:MultipartBody.Part){
+        viewModel.postAiImage(
+            crop_id!!,
+            crop_name!!,
+            profileImageBody
+        ).observe(requireActivity()){
+            when(it){
+                is Resource.Success->{
+                    val data=it.data
+                    data?.diseaseId
+                    val bundle=Bundle()
+                    data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
+                    findNavController().navigate(R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,bundle)
+
+                }
+                is Resource.Error->{
+                    Toast.makeText(requireContext(),"Error Occurred",Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading->{}
+            }
         }
     }
 

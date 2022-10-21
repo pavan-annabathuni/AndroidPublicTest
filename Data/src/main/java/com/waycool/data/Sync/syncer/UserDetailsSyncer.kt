@@ -14,6 +14,7 @@ import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -32,16 +33,14 @@ class UserDetailsSyncer : SyncInterface {
         return getDataFromLocal()
     }
 
-    private fun getDataFromLocal() = flow<Resource<UserDetailsEntity>> {
-
-        emit(Resource.Loading())
-        LocalSource.getUserDetails()?.map {
+    private fun getDataFromLocal() :Flow<Resource<UserDetailsEntity>> {
+      return  LocalSource.getUserDetails()?.map {
             if (it != null) {
-                emit(Resource.Success(it))
+                Resource.Success(it)
             } else {
-                emit(Resource.Error(""))
+               Resource.Error("")
             }
-        }
+        }?: emptyFlow()
     }
 
     private fun makeNetworkCall() {

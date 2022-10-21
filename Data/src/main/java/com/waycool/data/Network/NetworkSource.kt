@@ -6,15 +6,20 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.waycool.core.retrofit.OTPApiCient
 import com.waycool.core.retrofit.OutgrowClient
+import com.waycool.core.retrofit.WeatherClient
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
+import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.VansPagingSource
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
@@ -23,6 +28,7 @@ import kotlin.Exception
 object NetworkSource {
 
     private val apiInterface: ApiInterface
+    private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
 
@@ -33,7 +39,8 @@ object NetworkSource {
         headerMapPublic = AppSecrets.getHeaderPublic()
         val otpRetrofit: Retrofit = OTPApiCient.apiClient
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
-
+        val weatherClient = WeatherClient.apiClient
+        weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -252,8 +259,6 @@ object NetworkSource {
 //        emit(Resource.Loading())
 
         try {
-
-
             val response = otpInterface.retryOTP(
                 AppSecrets.getOTPKey(),
                 "91$contact", type
@@ -270,7 +275,6 @@ object NetworkSource {
     }
 
     fun verifyOTP(contact: String, otp: String) = flow<Resource<OTPResponseDTO?>> {
-        emit(Resource.Loading())
         try {
             val response = otpInterface.verifyOTP(
                 AppSecrets.getOTPKey(), otp,
@@ -289,7 +293,6 @@ object NetworkSource {
 
     fun getAiCropHistory(headerMap: Map<String, String>) =
         flow<Resource<AiCropHistoryDTO?>> {
-            emit(Resource.Loading())
             try {
                 val response = apiInterface.getAiCropHistory(headerMap)
                 if (response.isSuccessful)
@@ -303,21 +306,27 @@ object NetworkSource {
         }
 
     fun detectAiCrop(
-        headerMap: Map<String, String>,
-        userId: Int,
         cropId: Int,
         cropName: String,
         image: MultipartBody.Part
     ) = flow<Resource<AiCropDetectionDTO?>> {
 
-        emit(Resource.Loading())
-        try {
-            val response = apiInterface.postAiCrop(headerMap, userId, cropId, cropName, image)
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val userDetailsEntity = LocalSource.getUserDetailsEntity() ?: UserDetailsEntity()
 
-            if (response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+        try {
+            val response =
+                headerMap?.let { userDetailsEntity.id?.let { it1 ->
+                    apiInterface.postAiCrop(it,
+                        it1, cropId, cropName, image)
+                } }
+
+            if (response != null) {
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
             }
         } catch (e: Exception) {
             emit(Resource.Error(e.message))
@@ -326,7 +335,6 @@ object NetworkSource {
 
     fun getPestDisease(cropId: Int? = null) =
         flow<Resource<PestDiseaseDTO?>> {
-            emit(Resource.Loading())
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 if (headerMap != null) {
@@ -344,5 +352,19 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+
+    fun getWeatherForecast(lat:String,lon:String,lang:String="en") = flow<Resource<WeatherDTO?>> {
+        try {
+            val response = weatherInterface.getWeather(lat,lon,AppSecrets.getWeatherApiKey(),lang)
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
 

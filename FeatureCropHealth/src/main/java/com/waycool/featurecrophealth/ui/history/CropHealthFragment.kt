@@ -1,35 +1,36 @@
 package com.waycool.featurecrophealth.ui.history
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.waycool.data.utils.Resource
+import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHealthBinding
-import com.waycool.featurecrophealth.model.historydata.Data
-import com.waycool.featurecrophealth.utils.Constant.TAG
-import com.waycool.featurecrophealth.utils.NetworkResult
-import com.waycool.featurecrophealth.viewmodel.HistoryViewModel
+import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.VideosGenericAdapter
+import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlin.math.roundToInt
 
 
 class CropHealthFragment : Fragment() {
     private var _binding: FragmentCropHealthBinding? = null
     private val binding get() = _binding!!
-    private lateinit var historyAdapter: NoteAdapter
-    private val data = ArrayList<Data>()
-    private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+    private lateinit var historyAdapter: AiCropHistoryAdapter
+    private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCropHealthBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -37,11 +38,10 @@ class CropHealthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllHistory(13,requireContext())
 //        initView()
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        historyAdapter = NoteAdapter(requireContext())
+        historyAdapter = AiCropHistoryAdapter(requireContext())
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
             findNavController().navigate(R.id.action_cropHealthFragment_to_cropSelectFragment)
@@ -52,8 +52,58 @@ class CropHealthFragment : Fragment() {
 
 
         bindObservers()
+        getVideos()
 
+        historyAdapter.onItemClick={
+            val bundle=Bundle()
+            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+//            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+            findNavController().navigate(R.id.action_cropHealthFragment_to_pestDiseaseDetailsFragment2,bundle)
+        }
 
+    }
+
+    private fun getVideos() {
+
+        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
+        val adapter = VideosGenericAdapter()
+        videosBinding.videosListRv.adapter = adapter
+        viewModel.getVansVideosList().observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+        }
+
+        adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putParcelable("video", it)
+            findNavController().navigate(
+                R.id.action_cropHealthFragment_to_playVideoFragment3,
+                bundle
+            )
+        }
+
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+
+        videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
+
+        videosBinding.videosListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                videosBinding.videosScroll.value =
+                    calculateScrollPercentage(videosBinding).toFloat()
+            }
+        })
+    }
+    fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
+        val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
+        val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
+        val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
+        val scroll = 100.0f * offset / (range - extent).toFloat()
+        if (scroll.isNaN())
+            return 0
+        return scroll.roundToInt()
     }
 //    private fun initView() {
 //        binding.recyclerview.layoutManager =
@@ -63,28 +113,30 @@ class CropHealthFragment : Fragment() {
 
     private fun bindObservers() {
 
-        viewModel.historyLiveData.observe(viewLifecycleOwner, Observer { model ->
-            if (model.data?.data?.isEmpty() == true) {
+        viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
+            if (it.data?.isEmpty() == true) {
                 binding.takeGuide.visibility = View.VISIBLE
             } else
-                when (model) {
-                    is NetworkResult.Success -> {
-                        Log.d(TAG, "bindObserversData:" + model.data.toString())
-                        val response = model.data?.data as ArrayList<Data>
+                when (it) {
+                    is Resource.Success -> {
+//                        Log.d(TAG, "bindObserversData:" + model.data.toString())
+                        historyAdapter.submitList(it.data)
 
-                        if (response.size <=2) {
-
-                            historyAdapter.submitList(response)
-
-                        }
-                        else{
-                            val arrayList = ArrayList<Data>()
-                            arrayList.add(response[0])
-                            arrayList.add(response[1])
-
-                            historyAdapter.submitList(arrayList)
-
-                        }
+//                        val response = it.data
+//
+//                        if (response?.size!! <=2) {
+//
+//                            historyAdapter.submitList(response)
+//
+//                        }
+//                        else{
+//                            val arrayList = ArrayList<Data>()
+//                            arrayList.add(response[0])
+//                            arrayList.add(response[1])
+//
+//                            historyAdapter.submitList(arrayList)
+//
+//                        }
 //                        else if (response.size==2){
 //                            historyAdapter = NoteAdapter(2)
 //                            historyAdapter.submitList(response)
@@ -95,25 +147,23 @@ class CropHealthFragment : Fragment() {
 //                            historyAdapter.submitList(response)
 //
 //                        }
-                    }is NetworkResult.Error -> {
+                    }
+                    is Resource.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            model.message.toString(),
+                            it.message.toString(),
                             Toast.LENGTH_SHORT
                         )
                             .show()
                     }
-                    is NetworkResult.Loading -> {
+                    is Resource.Loading -> {
 
                     }
                 }
-        })
+        }
 
     }
 
-    private fun onNoteClicked(noteResponse: Data) {
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -2,7 +2,6 @@ package com.waycool.featurelogin.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -37,7 +36,7 @@ import com.waycool.core.retrofit.OTPApiCient
 import com.waycool.data.utils.NetworkUtil
 //import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
-import com.waycool.data.Repository.DomainModels.OTPResponseDomain
+import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
 import com.waycool.featurelogin.databinding.FragmentOtpBinding

@@ -34,4 +34,7 @@ object StoreKey {
 
     //Ai Crop History
     val AI_CROP_HISTORY = stringPreferencesKey("aicrophistory")
+
+    //weather
+    val WEATHER = stringPreferencesKey("weather")
 }

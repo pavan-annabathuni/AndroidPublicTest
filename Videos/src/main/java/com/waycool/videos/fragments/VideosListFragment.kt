@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +28,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.Repository.DomainModels.VansCategoryDomain
+import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.videos.R
 import com.waycool.videos.adapter.BannerAdapter
