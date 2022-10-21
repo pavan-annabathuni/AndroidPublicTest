@@ -186,10 +186,24 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
-    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date:String) = flow<Resource<AddCropResponseDTO?>> {
+
+    fun addCropPassData(
+        crop_id: Int,
+        account_id: Int,
+        plot_nickname: String,
+        is_active: Int,
+        sowing_date: String
+    ) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.addCropPassData(headerMap!!,crop_id,account_id, plot_nickname,is_active,sowing_date)
+            val response = apiInterface.addCropPassData(
+                headerMap!!,
+                crop_id,
+                account_id,
+                plot_nickname,
+                is_active,
+                sowing_date
+            )
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -200,21 +214,23 @@ object NetworkSource {
         }
     }
 
-    fun postNewSoil(plot_no:String,pincode:String,address:String,number:String) = flow<Resource<SoilTestResponseDTO?>> {
-         try {
-             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.postNewSoil(headerMap!!,plot_no,pincode,address,number)
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()))
-            } else {
-                Log.d("Soil", "postNewSoil: "+response.errorBody()?.charStream()?.readText())
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+    fun postNewSoil(plot_no: String, pincode: String, address: String, number: String) =
+        flow<Resource<SoilTestResponseDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+                val response =
+                    apiInterface.postNewSoil(headerMap!!, plot_no, pincode, address, number)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    Log.d("Soil", "postNewSoil: " + response.errorBody()?.charStream()?.readText())
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                Log.d("Soil", "postNewSoil: " + e.message)
+                emit(Resource.Error(e.message))
             }
-        } catch (e: Exception) {
-             Log.d("Soil", "postNewSoil: "+e.message)
-             emit(Resource.Error(e.message))
         }
-    }
 
 
     fun login(
@@ -377,7 +393,8 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
-   //add crop
+
+    //add crop
     fun getAddCropType(headerMap: Map<String, String>) = flow<Resource<AddCropTypeDTO?>> {
         try {
             val response = apiInterface.getAddCropType(headerMap)
@@ -390,35 +407,40 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-    fun getSoilTesAllHistory(headerMap: Map<String, String>,account_id:Int) = flow<Resource<SoilTestHistoryDTO?>> {
-        try {
-            val response = apiInterface.getSoilTestAllHistory(headerMap,account_id)
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()))
-            } else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+
+    fun getSoilTesAllHistory(headerMap: Map<String, String>, account_id: Int) =
+        flow<Resource<SoilTestHistoryDTO?>> {
+            try {
+                val response = apiInterface.getSoilTestAllHistory(headerMap, account_id)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message))
         }
-    }
-    fun getSoilTestLab(account_id:Int,lat:Double,long:Double) = flow<Resource<CheckSoilTestLabDTO?>> {
-        try {
+
+    fun getSoilTestLab(account_id: Int, lat: Double, long: Double) =
+        flow<Resource<CheckSoilTestLabDTO?>> {
+            try {
 //            val header =
 //                LocalSource.getUserDetailsEntity()?.account
 //                    ?.firstOrNull { it.accountType == "outgrow" }
-            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-            val response = apiInterface.getSoilTestLab(headerMap!!,account_id,lat,long)
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()))
-            } else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                val response = apiInterface.getSoilTestLab(headerMap!!, account_id, lat, long)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message))
         }
-    }
+
     fun getTracker(soil_test_request_id: Int) = flow<Resource<TrackerDTO?>> {
         try {
 //            val header =
@@ -426,7 +448,7 @@ object NetworkSource {
 //                    ?.firstOrNull { it.accountType == "outgrow" }
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-            val response = apiInterface.getTracker(headerMap!!,soil_test_request_id)
+            val response = apiInterface.getTracker(headerMap!!, soil_test_request_id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -437,10 +459,6 @@ object NetworkSource {
         }
     }
 
-
-
-
-}
 
     fun getCropInformation(
         headerMap: Map<String, String>,
@@ -459,14 +477,24 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-    fun updateProfile(name:String,
-        address:String,village:String,pincode:String,state:String,district:String,
+
+    fun updateProfile(
+        name: String,
+        address: String, village: String, pincode: String, state: String, district: String,
         headerMap: Map<String, String>,
     ) = flow<Resource<profile?>> {
 
         emit(Resource.Loading())
         try {
-            val response = apiInterface.updateProfile(headerMap,name,address,village, pincode, state, district)
+            val response = apiInterface.updateProfile(
+                headerMap,
+                name,
+                address,
+                village,
+                pincode,
+                state,
+                district
+            )
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -477,7 +505,9 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-    fun getUserProfile(headerMap: Map<String, String>,
+
+    fun getUserProfile(
+        headerMap: Map<String, String>,
     ) = flow<Resource<UserDetailsDTO?>> {
 
         emit(Resource.Loading())
@@ -493,22 +523,23 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-        fun getUserProfilePic(headerMap: Map<String, String>,file:MultipartBody.Part
-        ) = flow<Resource<profilePicModel?>> {
 
-            emit(Resource.Loading())
-            try {
-                val response = apiInterface.
-                getProfilePic(headerMap, file)
+    fun getUserProfilePic(
+        headerMap: Map<String, String>, file: MultipartBody.Part
+    ) = flow<Resource<profilePicModel?>> {
 
-                if (response.isSuccessful)
-                    emit(Resource.Success(response.body()))
-                else {
-                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-                }
-            } catch (e: Exception) {
-                emit(Resource.Error(e.message))
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getProfilePic(headerMap, file)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
-        }}
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 
-
+}

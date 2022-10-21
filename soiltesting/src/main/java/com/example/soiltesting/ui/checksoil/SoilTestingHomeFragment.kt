@@ -119,7 +119,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             )
         }
 
-        videosBinding.paragraphSemiBold.setOnClickListener {
+        videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
