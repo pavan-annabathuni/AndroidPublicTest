@@ -10,9 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemStatusTrackerBinding
-import com.example.soiltesting.model.tracker.DataX
 import com.example.soiltesting.utils.Constant.TAG
-import com.waycool.data.Repository.DomainModels.TrackerDemain
+import com.waycool.data.repository.domainModels.TrackerDemain
 import java.text.SimpleDateFormat
 
 class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerView.Adapter<StatusTrackerHolder>() {

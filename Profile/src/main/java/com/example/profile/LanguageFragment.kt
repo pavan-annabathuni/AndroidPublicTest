@@ -12,11 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.profile.adapter.LanguageAdapter
 import com.example.profile.databinding.FragmentLanguageBinding
-import com.waycool.data.Repository.DomainModels.LanguageMasterDomain
+import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.featurelogin.R
-import com.waycool.featurelogin.adapter.LanguageSelectionAdapter
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 
 

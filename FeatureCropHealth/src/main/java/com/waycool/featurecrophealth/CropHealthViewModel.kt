@@ -10,7 +10,6 @@ import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
 class CropHealthViewModel : ViewModel() {

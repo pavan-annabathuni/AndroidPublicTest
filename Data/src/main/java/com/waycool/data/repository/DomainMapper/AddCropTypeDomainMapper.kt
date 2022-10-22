@@ -1,8 +1,8 @@
-package com.waycool.data.Repository.DomainMapper
+package com.waycool.data.repository.DomainMapper
 
 import com.waycool.data.Local.Entity.AddCropTypeEntity
-import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
-import com.waycool.data.Repository.util.DomainMapper
+import com.waycool.data.repository.domainModels.AddCropTypeDomain
+import com.waycool.data.repository.util.DomainMapper
 
 class AddCropTypeDomainMapper : DomainMapper<AddCropTypeDomain, AddCropTypeEntity> {
     override fun mapToDomain(dto: AddCropTypeEntity): AddCropTypeDomain {

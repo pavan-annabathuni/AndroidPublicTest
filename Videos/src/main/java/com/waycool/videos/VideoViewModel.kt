@@ -3,10 +3,10 @@ package com.waycool.videos
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.TagsAndKeywordsDomain
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
-import com.waycool.data.repository.VansRepository
 import com.waycool.data.utils.Resource
 
 

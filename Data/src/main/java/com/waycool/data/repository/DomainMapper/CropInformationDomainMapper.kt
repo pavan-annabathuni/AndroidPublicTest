@@ -1,15 +1,11 @@
-package com.waycool.data.Repository.DomainMapper
+package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Local.Entity.AccountEntity
-import com.waycool.data.Local.Entity.CropCategoryEntity
 import com.waycool.data.Local.Entity.CropInformationEntityData
-import com.waycool.data.Network.NetworkModels.CropInfoData
-import com.waycool.data.Repository.DomainModels.AccountDomain
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
-import com.waycool.data.Repository.DomainModels.CropInformationDomainData
-import com.waycool.data.Repository.util.DomainMapper
+import com.waycool.data.repository.domainModels.CropInformationDomainData
+import com.waycool.data.repository.util.DomainMapper
 
-class CropInformationDomainMapper: DomainMapper<CropInformationDomainData, CropInformationEntityData> {
+class CropInformationDomainMapper:
+    DomainMapper<CropInformationDomainData, CropInformationEntityData> {
     override fun mapToDomain(dto: CropInformationEntityData): CropInformationDomainData {
         return CropInformationDomainData(
             crop_id = dto.crop_id,

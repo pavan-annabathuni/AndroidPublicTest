@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation"
+        app:navGraph="@navigation/navigation_weather"
         tools:layout="@layout/fragment_weather" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

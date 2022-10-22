@@ -1,11 +1,8 @@
-package com.waycool.data.Repository.DomainMapper
+package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Local.Entity.SoilTestHistoryEntity
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
-import com.waycool.data.Network.NetworkModels.CheckSoilTestLabDTO
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
-import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
-import com.waycool.data.Repository.util.DomainMapper
+import com.waycool.data.repository.domainModels.CheckSoilTestDomain
+import com.waycool.data.repository.util.DomainMapper
 
 class CheckSoilTestLabMapper: DomainMapper<CheckSoilTestDomain, CheckSoilTestData> {
     override fun mapToDomain(dto: CheckSoilTestData): CheckSoilTestDomain {

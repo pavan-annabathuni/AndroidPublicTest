@@ -1,4 +1,4 @@
-package com.waycool.data.Repository.DomainModels
+package com.waycool.data.repository.domainModels
 
 data class SoilTestHistoryDomain (
     val id: Int?=null,

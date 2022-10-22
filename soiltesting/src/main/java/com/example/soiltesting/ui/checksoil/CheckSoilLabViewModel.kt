@@ -3,9 +3,8 @@ package com.example.soiltesting.ui.checksoil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.waycool.data.Repository.CropsRepository
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
-import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
+import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.utils.Resource
 
 class CheckSoilLabViewModel:ViewModel() {

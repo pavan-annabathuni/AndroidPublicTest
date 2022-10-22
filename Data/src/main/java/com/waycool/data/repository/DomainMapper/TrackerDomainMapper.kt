@@ -1,10 +1,9 @@
-package com.waycool.data.Repository.DomainMapper
+package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Network.NetworkModels.CheckSoilTestData
 import com.waycool.data.Network.NetworkModels.TrackerData
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
-import com.waycool.data.Repository.DomainModels.TrackerDemain
-import com.waycool.data.Repository.util.DomainMapper
+import com.waycool.data.repository.domainModels.TrackerDemain
+import com.waycool.data.repository.util.DomainMapper
+
 
 class TrackerDomainMapper: DomainMapper<TrackerDemain, TrackerData> {
     override fun mapToDomain(dto: TrackerData): TrackerDemain {

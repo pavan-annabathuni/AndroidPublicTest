@@ -1,33 +1,21 @@
-package com.waycool.data.Repository
+package com.waycool.data.repository
 
-import com.waycool.data.Local.Entity.CropInformationEntityData
 import com.waycool.data.Local.Entity.PestDiseaseEntity
-import com.waycool.data.Local.Entity.UserDetailsEntity
-import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
-import com.waycool.data.Network.NetworkModels.CropInfoData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.syncer.AiCropHistorySyncer
-import com.waycool.data.Repository.DomainMapper.*
-import com.waycool.data.Repository.DomainModels.*
+import com.waycool.data.repository.DomainMapper.*
+import com.waycool.data.repository.domainModels.*
 import com.waycool.data.Sync.syncer.CropCategorySyncer
 import com.waycool.data.Sync.syncer.CropInformationSyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
-import com.waycool.data.Repository.DomainMapper.*
-import com.waycool.data.Repository.DomainModels.*
 import com.waycool.data.Sync.syncer.*
-import com.waycool.data.repository.DomainMapper.*
-import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import java.text.DateFormat
-import java.util.*
 
 object CropsRepository {
 

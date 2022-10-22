@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.cropinformation.CropInfo
 import com.example.addcrop.AddCropActivity
+import com.example.profile.ProfileActivity
 import com.example.soiltesting.SoilTestActivity
-import com.example.weather.WeatherActivity
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
@@ -61,11 +61,11 @@ class MainActivity : AppCompatActivity() {
 //
 //
         binding.weatherButton.setOnClickListener {
-            val intent =  Intent(this, WeatherActivity::class.java)
+            val intent = Intent(this, WeatherActivity::class.java)
             startActivity(intent)
         }
         binding.cropprotectButton.setOnClickListener {
-            val intent =  Intent(this, CropProtectActivity::class.java)
+            val intent = Intent(this, CropProtectActivity::class.java)
             startActivity(intent)
         }
 //
@@ -82,11 +82,16 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CropInfo::class.java)
             startActivity(intent);
         }
+
+        binding.profileButton.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 //        if (SharedPreferenceUtility.getMobileNumber(applicationContext) != "0") {
 
-        binding.textView5.text= "Version ${BuildConfig.VERSION_NAME}"
+        binding.textView5.text = "Version ${BuildConfig.VERSION_NAME}"
 
-        loginViewModel.getUserDetails().observe(this){}
+        loginViewModel.getUserDetails().observe(this) {}
 
         val mobileno = loginViewModel.getMobileNumber()
         if (mobileno != null)

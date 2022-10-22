@@ -1,4 +1,4 @@
-package com.waycool.data.Repository.DomainModels
+package com.waycool.data.repository.domainModels
 
 import com.google.gson.annotations.SerializedName
 

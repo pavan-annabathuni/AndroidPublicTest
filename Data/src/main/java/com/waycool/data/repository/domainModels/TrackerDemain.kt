@@ -1,4 +1,4 @@
-package com.waycool.data.Repository.DomainModels
+package com.waycool.data.repository.domainModels
 
 data class TrackerDemain(
     val is_approved: Int? = null,

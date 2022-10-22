@@ -1,4 +1,4 @@
-package com.waycool.data.Repository
+package com.waycool.data.repository
 
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
@@ -8,7 +8,6 @@ import com.waycool.data.Network.NetworkSource
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
-import java.io.File
 
 object ProfileRepository {
 

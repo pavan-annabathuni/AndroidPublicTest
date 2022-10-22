@@ -1,9 +1,7 @@
-package com.waycool.data.Repository.DomainMapper
+package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Network.NetworkModels.AddCropRequestDTO
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
-import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
-import com.waycool.data.Repository.util.DomainMapper
+import com.waycool.data.repository.util.DomainMapper
 
 class AddCropRequestDomainMapper: DomainMapper<AddCropResponseDTO, AddCropResponseDTO> {
     //    override fun mapToDomain(dto: AddCropResponseDTO): AddCropRequestDomain {

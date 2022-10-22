@@ -21,7 +21,7 @@ import com.example.cropinformation.adapter.CropListAdapter
 import com.example.cropinformation.databinding.FragmentCropSelectionBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import java.util.*
 

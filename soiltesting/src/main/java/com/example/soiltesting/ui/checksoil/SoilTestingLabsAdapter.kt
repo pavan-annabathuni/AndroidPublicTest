@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemLabsSampleBinding
-import com.example.soiltesting.model.history.Data
-import com.waycool.data.Network.NetworkModels.CheckSoilTestData
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
+import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import java.util.ArrayList
 
 

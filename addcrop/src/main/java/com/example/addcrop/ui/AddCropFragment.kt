@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.viewmodel.AddViewModel
-import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
+import com.waycool.data.repository.domainModels.AddCropTypeDomain
 import com.waycool.data.utils.Resource
 
 

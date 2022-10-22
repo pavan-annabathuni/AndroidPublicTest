@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.databinding.ItemSelectedCropListBinding
-import com.waycool.data.Repository.DomainModels.CropMasterDomain
-import com.waycool.uicomponents.databinding.ViewholderCropBinding
+import com.waycool.data.repository.domainModels.CropMasterDomain
 
 class SelectCropAdapter: ListAdapter<CropMasterDomain, SelectCropAdapter.SelectCropViewHolder>(DiffCallback) {
     var onItemClick: ((CropMasterDomain?) -> Unit)? = null
