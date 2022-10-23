@@ -2,11 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
     <variable
         name="property"
-        type="com.example.weather.apiService.apiResponse.Hourly" />
+        type="com.waycool.data.repository.domainModels.weather.HourlyDomain" />
     </data>
 
     <androidx.cardview.widget.CardView

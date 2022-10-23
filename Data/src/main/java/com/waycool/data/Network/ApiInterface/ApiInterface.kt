@@ -106,8 +106,8 @@ interface ApiInterface {
         @HeaderMap headerMap: Map<String, String>
     ): Response<AiCropHistoryDTO>
 
-    @POST("api/v1/ai-crop-health")
     @Multipart
+    @POST("api/v1/ai-crop-health")
     suspend fun postAiCrop(
         @HeaderMap headerMap: Map<String, String>,
         @Part("user_id") user_id: Int,

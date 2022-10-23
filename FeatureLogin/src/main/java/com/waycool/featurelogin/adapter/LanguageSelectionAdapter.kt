@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.waycool.data.Repository.DomainModels.LanguageMasterDomain
+import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.featurelogin.databinding.ViewholderLanguageCardviewBinding
 import com.waycool.featurelogin.support.LanguageDiffCallback
 

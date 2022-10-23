@@ -1,13 +1,12 @@
 package com.example.addcrop.ui
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
-import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
+import com.waycool.data.repository.domainModels.AddCropTypeDomain
 
 class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : RecyclerView.Adapter<CategoryViewHolder>()  {
     var details = mutableListOf<AddCropTypeDomain>()

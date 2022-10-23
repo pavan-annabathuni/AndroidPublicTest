@@ -10,7 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/toolbar_background"
+        app:layout_scrollEffect="compress"
+        app:layout_scrollFlags="scroll|enterAlways"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -94,7 +95,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvRequest"
-                            tools:listitem="@layout/item_select_crop" />
+                            tools:listitem="@layout/viewholder_crop" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,9 +146,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/mic_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:padding="4dp"
                         android:src="@drawable/ic_speech"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -223,56 +226,89 @@
             <!--                    app:layout_constraintTop_toBottomOf="@+id/tvAllCrop"-->
             <!--                    tools:listitem="@layout/item_select_crop" />-->
 
-            <TextView
-                android:id="@+id/all"
-                android:layout_width="wrap_content"
+<!--            <TextView-->
+<!--                android:id="@+id/all"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/space16"-->
+<!--                android:layout_marginTop="@dimen/space16"-->
+<!--                android:background="@drawable/btn_background"-->
+<!--                android:padding="@dimen/space5"-->
+<!--                android:text="All"-->
+<!--                android:textColor="#FFFFFF"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/recyclerviewDetails"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/cardSearch"-->
+
+<!--                />-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/tttt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/space8"-->
+<!--                android:layout_marginTop="@dimen/space16"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/all"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/cardSearch">-->
+
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/recyclerviewCategory"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="#FFFFFF"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/cardSearch"-->
+<!--                    tools:listitem="@layout/item_flex" />-->
+
+<!--            </LinearLayout>-->
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView4"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space16"
-                android:layout_marginTop="@dimen/space16"
-                android:background="@drawable/btn_background"
-                android:padding="@dimen/space5"
-                android:text="All"
-                android:textColor="#FFFFFF"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerviewDetails"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardSearch"
-
-                />
-
-            <LinearLayout
-                android:id="@+id/tttt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space8"
-                android:layout_marginTop="@dimen/space16"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toEndOf="@+id/all"
                 app:layout_constraintTop_toBottomOf="@+id/cardSearch">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerviewCategory"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/crop_category_chip_group"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@+id/cardSearch"
-                    tools:listitem="@layout/item_flex" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/AppTheme"
+                    app:chipSpacing="8dp"
+                    app:chipSpacingHorizontal="6dp"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-            </LinearLayout>
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
                 android:background="#FFFFFF"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tttt"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView4"
                 app:spanCount="3"
-                tools:listitem="@layout/item_select_crop" />
+                tools:itemCount="5"
+                tools:listitem="@layout/viewholder_crop" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

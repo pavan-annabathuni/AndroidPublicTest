@@ -6,7 +6,7 @@
     <data>
          <variable
              name="viewModel"
-             type="com.example.weather.viewModel.HourlyViewModel" />
+             type="com.waycool.weather.viewModel.HourlyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_humidity"
                     android:drawablePadding="8dp"
-                    android:text="@{Integer.toString(viewModel.selectedProperty.humidity)+'%'}"
+                    android:text="@{Double.toString(viewModel.selectedProperty.humidity)+'%'}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/tv20"
                     tools:text="30%" />

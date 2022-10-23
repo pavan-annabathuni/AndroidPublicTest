@@ -7,19 +7,19 @@ object AppSecrets {
     }
 
     external fun getBASEURLDebug(): String
-    external fun getOTPBaseURL():String
+    external fun getOTPBaseURL(): String
     external fun getApiKey(): String
     external fun getWeatherBaseUrl(): String
     external fun getWeatherApiKey(): String
 
-    external fun getOTPKey():String
-    external fun getOTPTemplateId():String
+    external fun getOTPKey(): String
+    external fun getOTPTemplateId(): String
 
-    external fun getYoutubeKey():String
+    external fun getYoutubeKey(): String
 
 
-    fun getHeaderPublic(): Map<String, String> {
-        return mapOf("x-api-key" to AppSecrets.getApiKey(), "Authorization" to  "")
-    }
+    fun getHeaderPublic(): Map<String, String> =
+        mapOf("x-api-key" to getApiKey(), "Accept" to "application/json, text/plain, */*")
+
 
 }

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentCheckSoilTestBinding
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
+import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 
 class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
     private var _binding: FragmentCheckSoilTestBinding? = null

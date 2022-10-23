@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.utils.TypeConverter
@@ -17,10 +18,10 @@ object DataStoreManager {
     private var context: Context? = null
 
     fun init(context: Context) {
-        this.context=context
+        this.context = context
 //        this.context ?: synchronized(this) {
 //            context.applicationContext
-            Log.d("DataStore Init","DataStore Initialized")
+        Log.d("DataStore Init", "DataStore Initialized")
 //        }
 
     }
@@ -38,6 +39,7 @@ object DataStoreManager {
     private val Context.soilTestHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.SOIL_TEST_HISTORY)
     private val Context.cropCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.CROP_CATEGORY)
     private val Context.aiCropHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.AI_CROP_HISTORY)
+    private val Context.weather: DataStore<Preferences> by preferencesDataStore(name = StoreName.WEATHER)
 
 
     suspend fun insertLanguageMaster(language: List<LanguageMasterEntity>) {
@@ -382,4 +384,25 @@ object DataStoreManager {
 
     }
 
+    suspend fun insertWeather(weather: WeatherMasterEntity,lat:String,lon:String) {
+        performPrefsSanityCheck()
+        context?.weather?.edit {
+            it[stringPreferencesKey("weather_$lat$lon")] =
+                TypeConverter.convertWeatherToString(weather)
+            Log.d("Languaga", "SavedLanguaga")
+        }
+    }
+
+     fun getWeather(lat:String,lon:String): Flow<WeatherMasterEntity>? {
+        performPrefsSanityCheck()
+        return context?.weather?.data
+            ?.catch { exception ->
+                Log.d("languageDataStore: ", exception.toString())
+            }
+            ?.map {
+                val string = it[stringPreferencesKey("weather_$lat$lon")]
+                string?.let { TypeConverter.convertStringToWeather(string) }
+                    ?: WeatherMasterEntity()
+            }
+    }
 }

@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemSoilHistoryBinding
-import com.example.soiltesting.model.history.Data
-import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
+import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 
 class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
 

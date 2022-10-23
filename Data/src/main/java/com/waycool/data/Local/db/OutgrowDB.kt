@@ -13,7 +13,7 @@ import java.lang.Exception
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class], version = 1, exportSchema = false)
+@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class], version = 2, exportSchema = false)
  abstract class OutgrowDB : RoomDatabase() {
 
     abstract fun outgrowDao(): OutgrowDao

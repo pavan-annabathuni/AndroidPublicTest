@@ -1,11 +1,8 @@
 package com.example.soiltesting.ui.checksoil
 
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 
 import android.content.pm.PackageManager
-import android.location.*
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -16,7 +13,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,24 +21,19 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
-import com.example.soiltesting.model.history.Data
 import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
-import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.gson.Gson
-import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
+import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
-import kotlin.properties.Delegates
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {

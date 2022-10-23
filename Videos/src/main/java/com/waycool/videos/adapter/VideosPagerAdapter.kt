@@ -4,15 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.waycool.data.Repository.DomainModels.LanguageMasterDomain
-import com.waycool.data.Repository.DomainModels.VansFeederListDomain
-import com.waycool.videos.R
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.videos.Util.AppUtil
 import com.waycool.videos.databinding.ViewholderVideosListBinding
 

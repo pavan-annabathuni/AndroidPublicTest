@@ -1,18 +1,11 @@
 package com.example.cropinformation.adapter
 
 import android.os.Bundle
-import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.cropinformation.*
-import com.example.cropinformation.apiservice.response.cropAdvisory.Data
 import com.example.cropinformation.fragments.*
-import com.example.cropinformation.utils.Constants.Companion.CROP_ID
-import com.waycool.data.Local.Entity.CropInformationEntityData
-import com.waycool.data.Repository.DomainModels.CropInformationDomainData
-import com.waycool.data.utils.Resource
+import com.waycool.data.repository.domainModels.CropInformationDomainData
 
 //private val data: MutableList<Data> = mutableListOf()
 

@@ -1,5 +1,6 @@
 package com.waycool.cropprotect.fragments
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -19,13 +20,18 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.Repository.DomainModels.PestDiseaseDomain
+import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.BannerAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
+import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
+import com.waycool.newsandarticles.adapter.NewsGenericAdapter
+import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
+import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlin.math.roundToInt
@@ -57,7 +63,7 @@ class PestDiseaseDetailsFragment : Fragment() {
 
         arguments?.let {
             diseaseId = it.getInt("diseaseid")
-            diseaseName = it.getString("diseasename")
+            diseaseName = it.getString("diseasename", "")
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -75,6 +81,9 @@ class PestDiseaseDetailsFragment : Fragment() {
             viewModel.getSelectedDisease(diseaseId).observe(requireActivity()) {
                 when (it) {
                     is Resource.Success -> {
+
+                        binding.toolbarTitle.text = it.data?.diseaseName
+                        binding.cropProtectDiseaseName.text = it.data?.diseaseName
 
                         adapter.submitList(listOf("", "", "", "", ""))
                         activity?.let { act ->
@@ -154,7 +163,32 @@ class PestDiseaseDetailsFragment : Fragment() {
     }
 
     private fun setNews() {
+        val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
+        val adapter = NewsGenericAdapter()
+        newsBinding.newsListRv.adapter = adapter
+        viewModel.getVansNewsList().observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+        }
 
+        newsBinding.viewAllNews.setOnClickListener {
+            val intent=Intent(requireActivity(),NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
+
+        adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putString("title", it?.title)
+            bundle.putString("content", it?.desc)
+            bundle.putString("image", it?.thumbnailUrl)
+            bundle.putString("audio", it?.audioUrl)
+            bundle.putString("date", it?.startDate)
+            bundle.putString("source", it?.sourceName)
+
+            findNavController().navigate(
+                R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
+                bundle
+            )
+        }
 
     }
 
@@ -164,10 +198,21 @@ class PestDiseaseDetailsFragment : Fragment() {
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
-            Toast.makeText(requireContext(), "Videos: ${adapter.itemCount}", Toast.LENGTH_SHORT)
-                .show()
         }
 
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent =Intent(requireActivity(),VideoActivity::class.java)
+            startActivity(intent)
+        }
+
+        adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putParcelable("video", it)
+            findNavController().navigate(
+                R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
+                bundle
+            )
+        }
         videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         videosBinding.videosListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -183,7 +228,10 @@ class PestDiseaseDetailsFragment : Fragment() {
         val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
         val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
         val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
-        return (100.0f * offset / (range - extent).toFloat()).roundToInt()
+        val scroll = 100.0f * offset / (range - extent).toFloat()
+        if (scroll.isNaN())
+            return 0
+        return scroll.roundToInt()
     }
 
 

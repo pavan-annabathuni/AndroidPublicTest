@@ -46,7 +46,7 @@ object LocalSource {
         if (getUserToken() != null) {
             return mapOf(
                 "Authorization" to "Bearer ${getUserToken()}",
-                "Accept" to "application/json, text/plain, */*"
+                "Accept" to "application/json"
             )
         }
         return null
@@ -67,16 +67,13 @@ object LocalSource {
     fun getCropMaster(): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropMaster()
     }
-//    fun getAddCropType(): Flow<List<AddCropTypeEntity>?> {
-//        return outgrowDao.getAddCropType()
-//    }
 
     fun getCropsPestDiseases(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropsPestDiseases(searchQuery)
     }
 
-    fun getCropsAiCropHealth(): Flow<List<CropMasterEntity>?> {
-        return outgrowDao.getCropsAiCrop()
+    fun getCropsAiCropHealth(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
+        return outgrowDao.getCropsAiCrop(searchQuery)
     }
 
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
@@ -150,6 +147,11 @@ object LocalSource {
 
     fun getSelectedDiseasesForCrop(diseaseId: Int) = outgrowDao.getSelectedDisease(diseaseId)
 
+    suspend fun insertWeatherData(weather: WeatherMasterEntity,lat:String,lon:String) {
+        DataStoreManager.insertWeather(weather,lat, lon)
+    }
+
+    fun getWeather(lat:String,lon:String) = DataStoreManager.getWeather(lat,lon)
     fun insertCropInformation(CropInformation: List<CropInformationEntityData>) {
         outgrowDao.insertCropInformation(CropInformation)
     }

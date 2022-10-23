@@ -18,7 +18,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.CropListAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel

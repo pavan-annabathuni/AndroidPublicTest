@@ -1,16 +1,10 @@
 package com.waycool.newsandarticles.viewmodel
 
-import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.waycool.data.Repository.DomainModels.VansCategoryDomain
-import com.waycool.data.Repository.DomainModels.VansFeederDomain
-import com.waycool.data.Repository.DomainModels.VansFeederListDomain
-import com.waycool.data.Repository.VansRepository
-import com.waycool.data.utils.Resource
-import java.util.HashMap
+import com.waycool.data.repository.VansRepository
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 
 class NewsAndArticlesViewModel : ViewModel() {
 

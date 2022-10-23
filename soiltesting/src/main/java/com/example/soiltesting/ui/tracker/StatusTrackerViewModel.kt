@@ -1,15 +1,9 @@
 package com.example.soiltesting.ui.tracker
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.soiltesting.apiclient.ApiService
-import com.example.soiltesting.network.RetrofitBuilder
-import com.example.soiltesting.repository.SoilTestingRepository
-import com.waycool.data.Repository.CropsRepository
-import com.waycool.data.Repository.DomainModels.CheckSoilTestDomain
-import com.waycool.data.Repository.DomainModels.TrackerDemain
+import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.domainModels.TrackerDemain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.launch
 
 class StatusTrackerViewModel :ViewModel() {
     fun getTracker(soil_test_request_id: Int): LiveData<Resource<List<TrackerDemain>?>> {

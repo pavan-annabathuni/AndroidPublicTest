@@ -54,9 +54,9 @@ class NewsFullviewActivity : AppCompatActivity() {
         }
         binding.newsHeading.text = "News Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
-        binding.title.text = title
-        binding.desc.text = Html.fromHtml(desc)
-        binding.newsDate.text = AppUtil.changeDateFormat(newsDate)
+        binding.title.text = title?:""
+        binding.desc.text = Html.fromHtml(desc?:"")
+        binding.newsDate.text = AppUtil.changeDateFormat(newsDate?:"")
         binding.shareBtn.setTextColor(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
 
         if (source != null) {
@@ -88,6 +88,7 @@ class NewsFullviewActivity : AppCompatActivity() {
                 playAudio(audioUrl!!)
             } else {
                 Toast.makeText(this, "Audio file not found", Toast.LENGTH_SHORT).show()
+                
             }
         }
         mediaPlayer = MediaPlayer()

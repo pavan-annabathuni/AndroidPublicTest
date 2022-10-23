@@ -8,15 +8,12 @@ import com.example.profile.apiService.userResponse.Data
 import com.example.profile.apiService.userResponse.Profile
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
 import com.waycool.data.Network.NetworkModels.profilePicModel
-import com.waycool.data.Repository.DomainModels.UserDetailsDomain
-import com.waycool.data.Repository.LoginRepository
-import com.waycool.data.Repository.ProfileRepository
+import com.waycool.data.repository.domainModels.UserDetailsDomain
+import com.waycool.data.repository.LoginRepository
+import com.waycool.data.repository.ProfileRepository
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 
 class EditProfileViewModel:ViewModel() {
     private val _status = MutableLiveData<String>()

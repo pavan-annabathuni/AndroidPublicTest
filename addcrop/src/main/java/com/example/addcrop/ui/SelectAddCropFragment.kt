@@ -22,7 +22,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import java.util.*
 

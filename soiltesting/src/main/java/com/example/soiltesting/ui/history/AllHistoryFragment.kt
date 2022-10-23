@@ -14,21 +14,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
-import com.example.soiltesting.model.history.Data
-import com.example.soiltesting.model.history.SoilHistory
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant
-import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.waycool.data.Network.NetworkModels.SoilTestHistoryDTO
-import com.waycool.data.Repository.DomainModels.SoilTestHistoryDomain
+import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 
 

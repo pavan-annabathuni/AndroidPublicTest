@@ -14,7 +14,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.Repository.DomainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.BannerAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesParentAdapter

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="property"
-            type="com.example.weather.apiService.apiResponse.Daily" />
+            type="com.waycool.data.repository.domainModels.weather.DailyDomain" />
 
     </data>
 
@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
         android:layout_marginTop="8dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="12dp"

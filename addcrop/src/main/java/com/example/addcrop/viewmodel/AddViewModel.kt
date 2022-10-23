@@ -1,16 +1,12 @@
 package com.example.addcrop.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.*
 
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
-import com.waycool.data.Repository.CropsRepository
-import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
-import com.waycool.data.Repository.DomainModels.AddCropTypeDomain
+import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.domainModels.AddCropTypeDomain
 
 import com.waycool.data.utils.Resource
-import java.text.DateFormat
-import java.util.*
 
 class AddViewModel :ViewModel() {
 

@@ -3,15 +3,11 @@ package com.waycool.videos
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.waycool.data.Repository.DomainModels.TagsAndKeywordsDomain
-import com.waycool.data.Repository.DomainModels.VansCategoryDomain
-import com.waycool.data.Repository.DomainModels.VansFeederDomain
-import com.waycool.data.Repository.DomainModels.VansFeederListDomain
-import com.waycool.data.Repository.VansRepository
+import com.waycool.data.repository.VansRepository
+import com.waycool.data.repository.domainModels.TagsAndKeywordsDomain
+import com.waycool.data.repository.domainModels.VansCategoryDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import java.util.HashMap
 
 
 class VideoViewModel : ViewModel() {

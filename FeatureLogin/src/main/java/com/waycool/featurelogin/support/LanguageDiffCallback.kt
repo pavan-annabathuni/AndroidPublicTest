@@ -2,8 +2,7 @@ package com.waycool.featurelogin.support
 
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
-import com.waycool.data.Network.NetworkModels.LanguageData
-import com.waycool.data.Repository.DomainModels.LanguageMasterDomain
+import com.waycool.data.repository.domainModels.LanguageMasterDomain
 
 class LanguageDiffCallback(private val oldList: List<LanguageMasterDomain>, private val newList: List<LanguageMasterDomain>) : DiffUtil.Callback() {
 

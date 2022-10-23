@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddViewModel
-import com.waycool.data.Repository.DomainModels.AddCropRequestDomain
 import java.text.SimpleDateFormat
 import java.util.*
 
