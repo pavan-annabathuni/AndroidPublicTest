@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomePagesFragment">
+    tools:context="com.waycool.iwap.home.HomePagesFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -33,7 +33,7 @@
                     android:id="@+id/backBanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="center"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/illustration"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -102,20 +102,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="24dp"
                     android:elevation="15dp"
                     app:cardCornerRadius="@dimen/txt10"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/backBanner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvGoodMorning">
+                    app:layout_constraintTop_toBottomOf="@+id/backBanner">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:visibility="visible"
                         android:layout_height="wrap_content"
+                        android:visibility="visible"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -181,19 +180,21 @@ more details."
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent">
+
                         <TextView
                             android:id="@+id/tvMyCrop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/space16"
                             android:text="My Crop"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt14"
-                            android:layout_margin="@dimen/space16"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -211,11 +212,11 @@ more details."
                             android:id="@+id/tvMyForm"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space16"
                             android:layout_marginEnd="5dp"
                             android:text="Add Farm"
                             android:textColor="#146133"
                             android:textSize="14sp"
-                            android:layout_marginTop="@dimen/space16"
                             app:layout_constraintEnd_toStartOf="@+id/ivMyForm"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -524,15 +525,16 @@ to the farm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="21dp"
+                    android:layout_marginEnd="@dimen/space16"
+                    android:layout_marginBottom="8dp"
                     android:background="#F5F5F5"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginEnd="@dimen/space16"
                     app:layout_constraintTop_toBottomOf="@+id/tvRequest"
                     app:spanCount="2"
                     tools:itemCount="2"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     tools:listitem="@layout/item_mandi" />
 
                 <TextView
@@ -579,7 +581,7 @@ to the farm"
                         android:id="@+id/tvOurService"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mandi Prices"
+                        android:text="Our Services"
                         android:textColor="#111827"
                         android:textSize="@dimen/space20"
                         android:textStyle="bold"
@@ -591,6 +593,7 @@ to the farm"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_viewall"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -601,7 +604,10 @@ to the farm"
                         android:layout_marginEnd="5dp"
                         android:text="View All"
                         android:textColor="#146133"
+                        android:padding="4dp"
                         android:textSize="14sp"
+                        android:drawablePadding="8dp"
+                        android:drawableEnd="@drawable/ic_viewall"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/ivOurService"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -720,7 +726,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Soil Testing"
+                                android:text="Crop Health"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
                                 android:textStyle="bold"
@@ -733,7 +739,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Enables you with an \n informations of soil and yield! "
+                                android:text="Explore about our AI enable feature."
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt14"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -811,7 +817,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Soil Testing"
+                                android:text="Crop Information"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
                                 android:textStyle="bold"
@@ -824,7 +830,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Enables you with an \n informations of soil and yield! "
+                                android:text="Understand the complete information about your crops"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt14"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -885,8 +891,10 @@ to the farm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         android:elevation="10dp"
                         app:cardCornerRadius="@dimen/txt10"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/clCropInformation">
@@ -902,7 +910,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Soil Testing"
+                                android:text="Crop Protection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
                                 android:textStyle="bold"
@@ -915,7 +923,7 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Enables you with an \n informations of soil and yield! "
+                                android:text="Complete information to fight against all the possible diseases."
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt14"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -976,6 +984,28 @@ to the farm"
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/layout_videos"
+                layout="@layout/generic_layout_videos_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clCardBackground" />
+
+            <include
+                android:id="@+id/layout_news"
+                layout="@layout/generic_layout_news_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

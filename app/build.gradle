@@ -52,6 +52,8 @@ dependencies {
     implementation project(path: ':soiltesting')
     implementation project(path: ':Videos')
 
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
 
     implementation(libraries.appCompat)
     implementation(libraries.material)
@@ -62,6 +64,10 @@ dependencies {
 
     //Glide
     implementation(libraries.glide)
+
+    //Navigation
+    implementation(navGraph.navfragment)
+    implementation(navGraph.navui)
 
     //Firebase
     implementation platform(firebase.bom)

@@ -12,13 +12,16 @@
         tools:layout="@layout/fragment_my_profile" >
         <action
             android:id="@+id/action_myProfileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            app:popUpTo="@id/myProfileFragment" />
         <action
             android:id="@+id/action_myProfileFragment_to_farmSupportFragment"
-            app:destination="@id/farmSupportFragment" />
+            app:destination="@id/farmSupportFragment"
+            app:popUpTo="@id/myProfileFragment" />
         <action
             android:id="@+id/action_myProfileFragment_to_languageFragment3"
-            app:destination="@id/languageFragment3" />
+            app:destination="@id/languageFragment3"
+            app:popUpTo="@id/myProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -32,7 +35,8 @@
         tools:layout="@layout/fragment_farm_support" >
         <action
             android:id="@+id/action_farmSupportFragment_to_addFarmFragment"
-            app:destination="@id/addFarmFragment" />
+            app:destination="@id/addFarmFragment"
+            app:popUpTo="@id/farmSupportFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFarmFragment"
@@ -45,6 +49,7 @@
         android:label="LanguageFragment" >
         <action
             android:id="@+id/action_languageFragment3_to_myProfileFragment"
-            app:destination="@id/myProfileFragment" />
+            app:destination="@id/myProfileFragment"
+            app:popUpTo="@id/languageFragment3" />
     </fragment>
 </navigation>
