@@ -115,7 +115,7 @@
         tools:layout="@layout/fragment_view_report" />
     <fragment
         android:id="@+id/homePageFragment"
-        android:name="com.example.soiltesting.home.HomePagesFragment"
+        android:name="com.waycool.iwap.home.HomePagesFragment"
         android:label="fragment_home_page"
         tools:layout="@layout/fragment_home_pages" />
     <fragment
