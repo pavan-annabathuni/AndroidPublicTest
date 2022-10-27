@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mandiFragment">
+
+    <fragment
+        android:id="@+id/mandiFragment"
+        android:name="com.example.mandiprice.fragments.MandiFragment"
+        android:label="MandiFragment" >
+        <action
+            android:id="@+id/action_mandiFragment_to_mandiGraphFragment"
+            app:destination="@id/mandiGraphFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_mandiFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/mandiGraphFragment"
+        android:name="com.example.mandiprice.fragments.MandiGraphFragment"
+        android:label="fragment_mandi_graph"
+        tools:layout="@layout/fragment_mandi_graph" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.mandiprice.fragments.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_mandiFragment"
+            app:destination="@id/mandiFragment"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_searchFragment_to_mandiGraphFragment"
+            app:destination="@id/mandiGraphFragment" />
+    </fragment>
+</navigation>

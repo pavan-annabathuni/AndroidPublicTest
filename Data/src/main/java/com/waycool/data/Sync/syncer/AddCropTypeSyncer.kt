@@ -2,10 +2,8 @@ package com.waycool.data.Sync.syncer
 
 import androidx.datastore.preferences.core.Preferences
 import com.waycool.data.Local.Entity.AddCropTypeEntity
-import com.waycool.data.Local.Entity.ModuleMasterEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.AddCropTypeEntityMapper
-import com.waycool.data.Local.mappers.ModuleMasterEntityMapper
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncInterface
 import com.waycool.data.Sync.SyncKey

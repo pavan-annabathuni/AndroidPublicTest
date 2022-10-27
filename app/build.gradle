@@ -38,6 +38,7 @@ dependencies {
 
     implementation project(path: ':Profile')
     implementation project(path: ':weather')
+    implementation project(path: ':Mandi')
     implementation project(path: ':cropinformation')
     implementation project(path: ':UiComponents')
     implementation project(path: ':FeatureLogin')

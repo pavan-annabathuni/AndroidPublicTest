@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.cropinformation.CropInfo
 import com.example.addcrop.AddCropActivity
+import com.example.mandiprice.MandiActivity
 import com.example.profile.ProfileActivity
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.featurecrophealth.CropHealthActivity
@@ -85,6 +86,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.profileButton.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.mandiButton.setOnClickListener {
+            val intent = Intent(this,MandiActivity::class.java)
             startActivity(intent)
         }
 //        if (SharedPreferenceUtility.getMobileNumber(applicationContext) != "0") {

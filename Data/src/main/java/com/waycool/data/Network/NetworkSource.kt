@@ -14,23 +14,23 @@ import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
+import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
+import com.waycool.data.repository.DomainMapper.MandiDomainMapper
+import com.waycool.data.repository.domainModels.MandiDomain
+import com.waycool.data.repository.domainModels.MandiDomainRecord
+import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import java.io.File
-import java.text.DateFormat
-import java.util.*
 import kotlin.Exception
 
 object NetworkSource {
 
-    private val apiInterface: ApiInterface
+     val apiInterface: ApiInterface
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
@@ -564,5 +564,50 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+//    fun getFullMandiList(
+//        headerMap: Map<String, String>?,crop_category:String?,state:String?,crop:String?,
+//         sortBy: String, orderBy: String?
+//    ) = flow<Resource<MandiDomain?>> {
+//
+//        emit(Resource.Loading())
+//        try {
+//            val response = apiInterface.getMandiList(headerMap,"77.22","18.22",crop_category,
+//                state,crop,1,sortBy,orderBy)
+//
+//            if (response.isSuccessful)
+//                emit(Resource.Success(response.body()))
+//            else {
+//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+//            }
+//        } catch (e: Exception) {
+//            emit(Resource.Error(e.message))
+//        }
+//    }
+    fun getMandiList(lat: String?,lon: String?,crop_category:String?,state:String?,crop:String?,
+                     sortBy: String, orderBy: String?,search:String?): Flow<PagingData<MandiDomainRecord>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50, maxSize = 150),
+            pagingSourceFactory = { MandiPagingSource(
+                apiInterface,lat,lon,crop_category,
+                state,crop,sortBy,orderBy,search) }
+        ).flow
+    }
+    fun getMandiHistory(
+        headerMap: Map<String, String>,crop_master_id:Int?,mandi_master_id:Int?
+    ) = flow<Resource<MandiHistoryDomain?>> {
 
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getMandiHistory(headerMap,crop_master_id,mandi_master_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
+

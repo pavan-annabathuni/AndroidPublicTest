@@ -1,7 +1,6 @@
 package com.waycool.data.Local.mappers
 
 import com.waycool.data.Local.Entity.AddCropTypeEntity
-import com.waycool.data.Local.Entity.CropCategoryEntity
 import com.waycool.data.Local.utils.EntityMapper
 import com.waycool.data.Network.NetworkModels.AddCropTypeData
 

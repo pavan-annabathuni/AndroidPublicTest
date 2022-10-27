@@ -1,9 +1,7 @@
 package com.waycool.data.Local.mappers
 
 import com.waycool.data.Local.Entity.CropInformationEntityData
-import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.utils.EntityMapper
-import com.waycool.data.Network.NetworkModels.CropInfo
 import com.waycool.data.Network.NetworkModels.CropInfoData
 
 class CropInformationEntityMapper: EntityMapper<CropInformationEntityData,CropInfoData> {

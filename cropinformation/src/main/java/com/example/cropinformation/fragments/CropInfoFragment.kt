@@ -2,18 +2,13 @@ package com.example.cropinformation.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -21,12 +16,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.cropinformation.R
-import com.example.cropinformation.adapter.NewsAdapter
-import com.example.cropinformation.adapter.VideoAdapter
 import com.example.cropinformation.adapter.ViewpagerAdapter
-import com.example.cropinformation.apiservice.response.cropAdvisory.Data
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
-import com.example.cropinformation.utils.Constants.Companion.CROP_ID
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -39,13 +30,9 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import okhttp3.internal.notifyAll
-import zendesk.answerbot.AnswerBot
-import zendesk.chat.Chat
 import zendesk.core.AnonymousIdentity
 import zendesk.core.Identity
 import zendesk.core.Zendesk
-import zendesk.messaging.MessagingActivity
 import zendesk.support.Support
 import zendesk.support.guide.HelpCenterActivity
 import kotlin.math.roundToInt

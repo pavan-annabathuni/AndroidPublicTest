@@ -24,7 +24,6 @@ import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
-import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
 import java.lang.Exception
 import java.util.*
 

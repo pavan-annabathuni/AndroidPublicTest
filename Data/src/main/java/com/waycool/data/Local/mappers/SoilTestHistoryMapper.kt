@@ -1,9 +1,7 @@
 package com.waycool.data.Local.mappers
 
-import com.waycool.data.Local.Entity.AddCropTypeEntity
 import com.waycool.data.Local.Entity.SoilTestHistoryEntity
 import com.waycool.data.Local.utils.EntityMapper
-import com.waycool.data.Network.NetworkModels.AddCropTypeData
 import com.waycool.data.Network.NetworkModels.SoilTestData
 
 class SoilTestHistoryMapper : EntityMapper<SoilTestHistoryEntity,SoilTestData> {
