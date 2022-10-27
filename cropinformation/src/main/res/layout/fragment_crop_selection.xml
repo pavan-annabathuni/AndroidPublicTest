@@ -23,12 +23,14 @@
             app:navigationIcon="@drawable/ic_arrow_back"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <com.waycool.uicomponents.Text.Title2SemiBold
+            <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Toolbar Title"
+                android:text="Crop information"
+                android:textSize="18sp"
+                style="@style/Bold"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

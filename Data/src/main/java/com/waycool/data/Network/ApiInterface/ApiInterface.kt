@@ -3,6 +3,8 @@ package com.waycool.data.Network.ApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
 import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
+import com.waycool.data.repository.domainModels.MandiDomain
+import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -11,8 +13,6 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
-import java.text.DateFormat
-import java.util.*
 
 interface ApiInterface {
     @GET("api/v1/language-master")
@@ -194,4 +194,25 @@ interface ApiInterface {
         @HeaderMap headerMap: Map<String, String>,
         @Part file:MultipartBody.Part
     ):Response<profilePicModel>
+
+    @GET("api/v1/get-mandi")
+    suspend fun getMandiList(
+        @HeaderMap map: Map<String, String>?,
+        @Query("lat") lat:String?,
+        @Query("long") long:String?,
+        @Query("crop_category") category:String?,
+        @Query("state") state:String?,
+        @Query("crop") crop:String?,
+        @Query("page") page: Int,
+        @Query("sort_by") sort_by:String?,
+        @Query("order_by") orderBy:String?,
+        @Query("search") search:String?
+    ):Response<MandiDomain>
+
+    @GET("api/v1/get-mandi-history")
+    suspend fun getMandiHistory(
+        @HeaderMap map: Map<String, String>?,
+        @Query("crop_master_id") crop_master_id:Int?,
+        @Query("mandi_master_id") mandi_master_id:Int?
+    ):Response<MandiHistoryDomain>
 }

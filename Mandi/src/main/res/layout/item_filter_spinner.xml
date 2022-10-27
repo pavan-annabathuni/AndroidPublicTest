@@ -1,0 +1,11 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView"
+    android:layout_width="104dp"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:text="Vegetable"
+    android:gravity="start"
+    android:background="@color/LightGray"
+    android:textColor="@color/black"
+    android:textSize="12sp"
+    />

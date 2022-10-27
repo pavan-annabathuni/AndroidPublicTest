@@ -1,10 +1,8 @@
 package com.waycool.data.Local.mappers
 
 import com.waycool.data.Local.Entity.AiCropHistoryEntity
-import com.waycool.data.Local.Entity.CropCategoryEntity
 import com.waycool.data.Local.utils.EntityMapper
 import com.waycool.data.Network.NetworkModels.AiHistoryData
-import com.waycool.data.Network.NetworkModels.CropCategoryData
 
 class AiCropHistoryEntityMapper : EntityMapper<AiCropHistoryEntity, AiHistoryData> {
     fun mapFromEntity(entity: AiCropHistoryEntity): AiHistoryData {
