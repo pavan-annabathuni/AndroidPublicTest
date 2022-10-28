@@ -10,4 +10,8 @@
         android:id="@+id/cropProtectActivity"
         android:name="com.waycool.featurecropprotect.CropProtectActivity"
         android:label="CropProtectActivity" />
+    <activity
+        android:id="@+id/mandiActivity"
+        android:name="com.example.mandiprice.MandiActivity"
+        android:label="MandiActivity" />
 </navigation>

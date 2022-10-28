@@ -8,11 +8,16 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.AddCropActivity
-import com.example.cropinformation.CropInfo
+import com.example.mandiprice.MandiActivity
+import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
+import com.waycool.data.Network.NetworkModels.CropInfo
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.featurecropprotect.R
@@ -24,14 +29,23 @@ import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment() {
 
     private var _binding: FragmentHomePagesBinding? = null
     private val binding get() = _binding!!
+    private var orderBy: String = "distance"
+    private var cropCategory: String? = null
+    private var state: String? = null
+    private var crop: String? = null
+    private var search: String? = null
+    private var sortBy: String = "asc"
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
+    private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
+    private val mandiAdapter = MandiHomePageAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +56,9 @@ class HomePagesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.recyclerview.layoutManager =
+            GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        binding.recyclerview.adapter = mandiAdapter
         binding.tvAddFromService.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent);
@@ -58,8 +74,8 @@ class HomePagesFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.tvAddFromServiceCropInformation.setOnClickListener {
-            val intent = Intent(activity, CropInfo::class.java)
+        binding.clAddFromServiceCropInformation.setOnClickListener {
+            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent);
         }
 
@@ -67,10 +83,28 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
+        binding.tvViewAllMandi.setOnClickListener {
+            val intent = Intent(activity, MandiActivity::class.java)
+            startActivity(intent)
+        }
 
+        mandiViewModel.viewModelScope.launch {
+            mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
+                    // binding.viewModel = it
+//                adapterMandi.submitData(lifecycle,it)
+                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                }
+        }
         setVideos()
         setNews()
     }
+
+//    private fun setMandi() {
+//        mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search)
+//        mandiViewModel
+//    }
 
 
     private fun setNews() {

@@ -4,19 +4,25 @@
     <item
         android:id="@id/nav_home"
         android:icon="@drawable/home"
-        android:title="Home"/>
+        android:title="HOME" />
+    <item
+       android:id="@+id/mandiActivity"
+        android:icon="@drawable/ic_mandi_nav"
+        android:title="MANDI" />
+
 
     <item
         android:id="@+id/cropProtectActivity"
-        android:title="Crop Protect"/>
+        android:icon="@drawable/ic_crop_protection"
+        android:title="CROP PROTECTION" />
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/user"
-        android:title="Profile"/>
+        android:title="PROFILE" />
 
-<!--    <item-->
-<!--        android:id="@+id/fragment3"-->
-<!--        android:icon="@drawable/ic_filter_3_black_24dp"-->
-<!--        android:title="@string/fragment_3"/>-->
+    <!--    <item-->
+    <!--        android:id="@+id/fragment3"-->
+    <!--        android:icon="@drawable/ic_filter_3_black_24dp"-->
+    <!--        android:title="@string/fragment_3"/>-->
 </menu>

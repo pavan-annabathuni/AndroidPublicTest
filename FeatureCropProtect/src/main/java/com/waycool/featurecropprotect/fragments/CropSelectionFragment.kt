@@ -44,7 +44,7 @@ class CropSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCropSelectionBinding.inflate(inflater)
+        binding = FragmentCropSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
