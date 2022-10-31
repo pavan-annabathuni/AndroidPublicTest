@@ -38,6 +38,12 @@
         <activity
             android:name="com.waycool.iwap.MainActivity"
             android:exported="true" />
+<!--        <activity-->
+<!--            android:name="com.waycool.featurecrophealth.CropHealthActivity"-->
+<!--            android:exported="true" />-->
+<!--        <activity-->
+<!--            android:name="com.waycool.featurecropprotect.CropProtectActivity"-->
+<!--            android:exported="true" />-->
     </application>
 
     <queries>

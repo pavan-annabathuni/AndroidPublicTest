@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-     <variable
-         name="property"
-         type="com.waycool.data.repository.domainModels.MandiDomainRecord"/>
+        <variable
+            name="property"
+            type="com.waycool.data.repository.domainModels.MandiDomainRecord"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView

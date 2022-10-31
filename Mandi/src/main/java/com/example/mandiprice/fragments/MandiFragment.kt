@@ -123,7 +123,6 @@ class MandiFragment : Fragment() {
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
             viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
-
             observe(viewLifecycleOwner){
                // binding.viewModel = it
                 adapterMandi.submitData(lifecycle,it)

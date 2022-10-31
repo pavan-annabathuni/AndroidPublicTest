@@ -30,7 +30,8 @@ import java.util.*
 class CropSelectionFragment : Fragment() {
 
     private var selectedCategory: CropCategoryMasterDomain? = null
-    private lateinit var binding: FragmentCropSelectionBinding
+    private var _binding: FragmentCropSelectionBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
     }
@@ -44,7 +45,7 @@ class CropSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCropSelectionBinding.inflate(inflater)
+        _binding = FragmentCropSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
 

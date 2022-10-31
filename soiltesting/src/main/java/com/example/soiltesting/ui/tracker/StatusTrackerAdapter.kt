@@ -35,11 +35,11 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_pending_status)
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
-        } else if (details.is_approved == 2 && details.date.toString().isNotEmpty()) {
+        } else if (details.is_approved == 1 && details.date.toString().isNotEmpty()) {
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_status_completed)
-        } else if (details.is_approved == 2 && details.date.toString().isNotEmpty()) {
+        } else if (details.is_approved ==2  && details.date.toString().isNotEmpty()) {
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_rejected_status)

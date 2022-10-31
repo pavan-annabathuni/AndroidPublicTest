@@ -14,11 +14,12 @@ import com.waycool.data.repository.domainModels.MandiDomainRecord
 
 class DistanceAdapter(val onClickListener: OnClickListener) :
     PagingDataAdapter<MandiDomainRecord, DistanceAdapter.MyViewHolder>(DiffCallback) {
+
+
     class MyViewHolder(private val binding: ItemDistanceBinding):
         RecyclerView.ViewHolder(binding.root) {
         val distance = binding.distance
         val imageView = binding.imageViewPrice
-
         fun bind(data: MandiDomainRecord?) {
             binding.property = data
             binding.executePendingBindings()
