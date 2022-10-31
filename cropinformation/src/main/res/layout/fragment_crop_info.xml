@@ -145,6 +145,16 @@
                     app:tabMode="scrollable"
                     app:tabTextColor="@color/black" />
 
+                <ImageView
+                    android:id="@+id/img_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:src="@drawable/ic_next"
+                    app:layout_constraintBottom_toTopOf="@+id/view1"
+                    app:layout_constraintEnd_toEndOf="@+id/tabLayout"
+                    app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
@@ -299,6 +309,7 @@
             android:layout_marginBottom="42dp"
             android:backgroundTint="@color/DarkGreen"
             android:src="@drawable/ic_chat"
+            app:tint="@color/white"
             app:fabSize="normal" />
     </RelativeLayout>
 </layout>

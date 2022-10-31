@@ -49,6 +49,7 @@ class CropInfoFragment : Fragment() {
     private var cropId: Int? = null
     private var cropName: String? = null
     private var cropLogo:String? = null
+    private var size:Int = 0
 
 
 
@@ -132,6 +133,7 @@ class CropInfoFragment : Fragment() {
 
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) { it ->
             val data = it.data!!
+            size = it.data!!.size
 
                 //data.sortedBy { it.id }
             binding.ViewPager.adapter = ViewpagerAdapter(this,it.data, data.size,cropId!!)
@@ -139,22 +141,23 @@ class CropInfoFragment : Fragment() {
 
 
 
+
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
-                val customView = tab.setCustomView(R.layout.item_tab)
+                val customView = tab.setCustomView(R.layout.item_tab_crop)
 
                 when (data[position].label_name) {
 
                     "Crop Variety" -> {
-                        tab.text = data[position].label_name
+                       tab.text = data[position].label_name
                         tab.setIcon(R.drawable.img_crop_variety)
                         customView
 
                     }
                     "Soil Type Others" -> {
-//                        tab.text = data[position].label_name
-//                        tab.setIcon(R.drawable.planting_others)
-//                        customView
-//                        binding.tabLayout.removeTabAt(position)
+                        tab.text = data[position].label_name
+                        tab.setIcon(R.drawable.planting_others)
+                        customView
+                        binding.tabLayout.removeTabAt(position)
                     }
                     "Soil pH" -> {
                         tab.text = data[position].label_name
@@ -164,7 +167,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Soil Type" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_soil_type)
+                        tab.setIcon(R.drawable.ci_soil_type_img)
                         customView
                     }
                     "Sowing Season" -> {
@@ -181,18 +184,18 @@ class CropInfoFragment : Fragment() {
                     "Days to first harvest" -> {
                         //  binding.tabLayout.getTabAt(position)?.setCustomView(R.layout.emptytab)
                         tab.text = data[position].label_name
-                        //tab.setIcon(R.drawable.ic_harvest)
+                        tab.setIcon(R.drawable.ic_harves_img)
                         customView
                     }
                     "Seed Rate (Pit Sowing)" -> {
                         tab.text = data[position].label_name
-                      //  tab.setIcon(R.drawable.ic_planting_material)
+                       tab.setIcon(R.drawable.ci_seed_pit)
                         customView
 
                     }
                     "Planting Material" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_planting_material)
+                       tab.setIcon(R.drawable.ci_planting_material)
                         customView
 
                     }
@@ -204,18 +207,18 @@ class CropInfoFragment : Fragment() {
                     }
                     "Nursery Practices" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_nursery_practices)
+                        tab.setIcon(R.drawable.ci_nursery_period_img)
                         customView
                     }
                     "Seed Rate (Line Sowing)" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ci_seed_line)
+                        tab.setIcon(R.drawable.ci_seed_line)
                         customView
 
                     }
                     "Seed Rate (Broadcast)" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_seed_line)
+                        tab.setIcon(R.drawable.ci_seed_broadcast)
                         customView
 
                     }
@@ -227,24 +230,24 @@ class CropInfoFragment : Fragment() {
                     }
                     "Sowing Depth(cm)" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_sowing_depth)
+                        tab.setIcon(R.drawable.ci_sowing_depth_img)
                         customView
 
                     }
                     "Spacing between Row to Row" -> {
                         tab.text = data[position].label_name
-                       tab.setIcon(R.drawable.ic_spacing)
+                       tab.setIcon(R.drawable.img_spacing)
                         customView
 
                     }
                     "Spacing between Plant to Plant" -> {
                         tab.text = data[position].label_name
-                      //  tab.setIcon(R.drawable.ic_spacing)
+                        tab.setIcon(R.drawable.img_spacing)
                         customView
                     }
                     "Field preparation" -> {
                         tab.text = data[position].label_name
-                      //  tab.setIcon(R.drawable.ic_field_preparation)
+                        tab.setIcon(R.drawable.ci_field_preparation_img)
                         customView
 
                     }
@@ -267,7 +270,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Irrigation Type" -> {
                         tab.setText(data[position].label_name)
-                        tab.setIcon(R.drawable.ic_irrigation)
+                        tab.setIcon(R.drawable.ci_irrigation_img)
                         customView
                     }
                     "Flooding" -> {
@@ -289,38 +292,38 @@ class CropInfoFragment : Fragment() {
 
                     "Fertilizers" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_fertilizers)
+                        tab.setIcon(R.drawable.ci_fertiliz_image)
                         customView
 
 
                     }
                     "Micronutrients" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_micronutrients)
+                        tab.setIcon(R.drawable.ci_micro_img)
                         customView
 
 
                     }
                     "Border crop" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_border_crop)
+                        tab.setIcon(R.drawable.ci_border_image)
                         customView
 
 
                     }
                     "Intercrop" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_intercrop)
+                        tab.setIcon(R.drawable.ci_intercrop_image)
                         customView
                     }
                     "Weed control(cultural)" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_weed_control_cultural)
+                        tab.setIcon(R.drawable.ci_weed_image)
                         customView
                     }
                     "Weed control(chemical)" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_weed_control_chemical)
+                        tab.setIcon(R.drawable.ci_weed_chemical_img)
                         customView
                     }
                     "Harvest (sowing, planting, transplantation)" -> {
@@ -330,17 +333,17 @@ class CropInfoFragment : Fragment() {
                     }
                     "Sowing/Planting-Yield" -> {
                         tab.text = data[position].label_name
-                        // tab.setIcon(R.drawable.ic_soilph_image)
+                        //tab.setIcon(R.drawable.ci_sowing_planting_img)
                         customView
                     }
                     "Yield ( kg or tons/ac)" -> {
                         tab.text = data[position].label_name
-                       // tab.setIcon(R.drawable.ic_yield_tons)
+                        tab.setIcon(R.drawable.ci_yield_image)
                         customView
                     }
                     "Yield-Harvest" -> {
                         tab.text = data[position].label_name
-                        // tab.setIcon(R.drawable.ic_soilph_image)
+                     //   tab.setIcon(R.drawable.ci_yield_image)
                         customView
                     }
                     "Post Harvesting" -> {
@@ -350,7 +353,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Proposed Next Crops" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_proposed_next_crop)
+                        tab.setIcon(R.drawable.ci_pro_nextcrop_img)
                         customView
                     }
                     "Sowing_Planting" -> {
@@ -360,21 +363,21 @@ class CropInfoFragment : Fragment() {
                     }
                     "Training and Pruning" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_rimming_pruning)
+                        tab.setIcon(R.drawable.ci_trimming_image)
                         customView
                     }
                     "Ratooning" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_ratooning)
+                       tab.setIcon(R.drawable.ci_ratooning_image)
                         customView
                     }
                     "Planting Material Others" -> {
                         tab.text = data[position].label_name
-                        tab.setIcon(R.drawable.ic_ratooning)
+                        tab.setIcon(R.drawable.planting_others)
                         customView
                     }
                     else->{
-                        tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
+                      //  tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
 
 
                     }
@@ -387,6 +390,15 @@ class CropInfoFragment : Fragment() {
         var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.tvCount.text = (position + 1).toString()
+                if(position<(size-1)){
+                    binding.imgNext.visibility = View.VISIBLE
+                binding.imgNext.setOnClickListener(){
+                    binding.ViewPager.setCurrentItem(position+1)
+                }
+                }else{
+                    binding.imgNext.visibility = View.GONE
+                }
+
             }
         }
         binding.ViewPager.registerOnPageChangeCallback(myPageChangeCallback)

@@ -35,8 +35,11 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 
@@ -73,7 +76,9 @@ class EditProfileFragment : Fragment() {
         onClick()
         observerName()
         binding.submit.setOnClickListener {
+
             editProfile()
+
         }
 
 
@@ -96,11 +101,11 @@ class EditProfileFragment : Fragment() {
                 binding.tvCity.setText(it.data?.data?.profile?.districtId)
             }
         }
-//        viewModel.response2.observe(viewLifecycleOwner) {
-//            if (it.profile?.profile_pic != null && selecteduri == null) {
-//                Glide.with(this).load(it.profile?.profile_pic).into(binding.imageView)
-//            }
-//        }
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if (it.data?.profile?.profilePic != null && selecteduri == null) {
+                Glide.with(this).load(it.data?.profile?.profilePic).into(binding.imageView)
+            }
+        }
 
         if (selecteduri != null) {
             Toast.makeText(context, "Image Uploaded", Toast.LENGTH_SHORT).show()
@@ -115,6 +120,7 @@ class EditProfileFragment : Fragment() {
 //    }
 
     fun editProfile() {
+
         val name: String = binding.tvName.text.toString()
         val address: String = binding.tvAddress1.text.toString()
         val village = binding.tvAddress2.text.toString()
@@ -132,26 +138,30 @@ class EditProfileFragment : Fragment() {
                         Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
                     }
             }
-                // viewModel.getProfile(name, address, village, pincode, state,city)
 
-             //   val file: File? = selecteduri?.toFile()
-                // val requestFile: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
-              //  val profileImage: RequestBody = RequestBody.create(
-                  //  "image/jpg".toMediaTypeOrNull(),
-                 //   file!!
-              //  )
+            val fileDir = context?.filesDir
+            val file: File = File(fileDir, ".png")
+            val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
+            val openInput = FileOutputStream(file)
+            inputStream!!.copyTo(openInput)
 
-              //  val profileImageBody: MultipartBody.Part =
-                //    MultipartBody.Part.createFormData(
-                  //      "profile_pic",
-                  //      file.name, profileImage
-                 //   )
-//                viewModel.viewModelScope.launch {
-//                    selecteduri?.let { viewModel.getUserProfilePic(profileImageBody) }
-//                }
-                viewModel.status.observe(viewLifecycleOwner) {
-                    Log.d("TAG2", "editProfile: $it")
-            }
+            val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val profileImageBody: MultipartBody.Part =
+                MultipartBody.Part.createFormData(
+                    "profile_pic",
+                    file.name, requestFile
+                )
+
+            Log.d("selecteduri", "editProfile: $profileImageBody")
+            if(selecteduri!=null)
+                viewModel.viewModelScope.launch {
+                    viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner){
+                        Log.d("selecteduri", "editProfile: ${it.data?.profile_pic}")
+                    }
+                }
+
+            this.findNavController().navigateUp()
+
         } else {
             Toast.makeText(context, "Please Fill All Fields", Toast.LENGTH_SHORT).show()
         }
@@ -160,6 +170,16 @@ class EditProfileFragment : Fragment() {
     private fun onClick() {
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
+        }
+        binding.addImage.setOnClickListener {
+            mGetContent.launch("image/*")
+
+//            val intent = Intent(Intent.ACTION_GET_CONTENT)
+//            intent.type = "image/*"
+//            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+//                startActivityForResult(intent, requestImageId)
+//                Log.d("PROFILE", "onClick: $requestImageId")
+//           }
         }
         binding.imgAutoText.setOnClickListener() {
             val pla: List<Place.Field> =
@@ -181,15 +201,6 @@ class EditProfileFragment : Fragment() {
 //            startActivityForResult(i, 102)
 //
 //        }
-        binding.addImage.setOnClickListener {
-            mGetContent.launch("image/*")
-//            val intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "image/*"
-//            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-//                startActivityForResult(intent, requestImageId)
-//                Log.d("PROFILE", "onClick: $requestImageId")
-//            }
-        }
 
 
     }
@@ -232,20 +243,21 @@ class EditProfileFragment : Fragment() {
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri.let {
-            val selectedImage: Uri? = it
-            val pic = File(requireActivity().externalCacheDir, "profile.jpg")
+            selecteduri = it
+            binding.imageView.setImageURI(it)
+            val pic = File(requireActivity().externalCacheDir, "pest.jpg")
 
             val options: UCrop.Options = UCrop.Options()
             options.setCompressionQuality(100)
             options.setMaxBitmapSize(10000)
 
-            if (selectedImage != null)
-                UCrop.of(selectedImage, Uri.fromFile(pic))
+            if (selecteduri != null)
+                UCrop.of(selecteduri!!, Uri.fromFile(pic))
                     .withAspectRatio(1F, 1F)
                     .withMaxResultSize(1000, 1000)
                     .withOptions(options)
-                    .start(requireActivity())
-            Log.d("ProfilePicImage2", "editProfile:$selectedImage")
+                    .start(requireContext(),this)
+
         }
 
     }
@@ -275,27 +287,25 @@ class EditProfileFragment : Fragment() {
             binding.tvCity.setText(lstValues[0])
             binding.tvState.setText(lstValues[1])
 
-        }
-
-        else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId) {
+        } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId) {
             // Toast.makeText(context, "$requestCode", Toast.LENGTH_SHORT).show()
-            val selectedImage: Uri? = data?.data// handle chosen image
-            val pic = File(requireContext().cacheDir, "pic")
-           // pic.mkdirs()
-            pic.createNewFile()
-            val options: UCrop.Options = UCrop.Options()
-            options.setCompressionQuality(100)
-            options.setMaxBitmapSize(10000)
+//            val selectedImage: Uri? = data?.data// handle chosen image
+//            val pic = File(requireContext().cacheDir, "pic")
+            // pic.mkdirs()
+//            pic.createNewFile()
+//            val options: UCrop.Options = UCrop.Options()
+//            options.setCompressionQuality(100)
+//            options.setMaxBitmapSize(10000)
+//
+//            selecteduri = selectedImage
 
-            selecteduri = selectedImage
 
-
-            if (selectedImage != null)
-                UCrop.of(selectedImage, Uri.fromFile(pic))
-                    .withAspectRatio(1F, 1F)
-                    .withMaxResultSize(1000, 1000)
-                    .withOptions(options)
-                    .start(requireActivity())
+//            if (selectedImage != null)
+//                UCrop.of(selectedImage, Uri.fromFile(pic))
+//                    .withAspectRatio(1F, 1F)
+//                    .withMaxResultSize(1000, 1000)
+//                    .withOptions(options)
+//                    .start(requireActivity())
             Log.d("ProfilePicImage", "editProfile: $resultCode")
             Log.d("ProfilePicImage", "editProfile: $requestCode")
 //            val file = selectedImage?.toFile()
@@ -316,8 +326,7 @@ class EditProfileFragment : Fragment() {
             //Toast.makeText(context, "Image Uploaded", Toast.LENGTH_LONG).show()
 
 
-        }
-        else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+        } else if(resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val uri: Uri? = data?.let { UCrop.getOutput(it) }
             binding.imageView.setImageURI(uri)
             selecteduri = uri
@@ -332,9 +341,9 @@ class EditProfileFragment : Fragment() {
 //                    "profile_pic",
 //                    file.name, profileImage
 //                )
-////            viewModel.viewModelScope.launch {
-////                selecteduri?.let { viewModel.getUserProfilePic(profileImageBody) }
-////            }
+//            viewModel.viewModelScope.launch {
+//                selecteduri?.let { viewModel.getUserProfilePic(profileImageBody) }
+//            }
             Log.d("ProfilePicImage2", "editProfile: $selecteduri")
         }
     }

@@ -106,12 +106,19 @@ class MandiGraphFragment : Fragment() {
 
 
     private fun graph() {
+        viewModel.viewModelScope.launch {
+        viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner){
+
+
         listLine = ArrayList()
-        listLine.add(Entry(10f, 12f))
-        listLine.add(Entry(20f,13f))
-        listLine.add(Entry(30f,11f))
-        listLine.add(Entry(40f,13f))
-        listLine.add(Entry(60f,12f))
+            for(i in it.data?.data!!.indices){
+        listLine.add(Entry(it.data!!.data[i]?.avgPrice!!.toFloat(), it.data!!.data[i].arrivalDate!!.toFloat()
+        ))
+            }
+//        listLine.add(Entry(20f,13f))
+//        listLine.add(Entry(30f,11f))
+//        listLine.add(Entry(40f,13f))
+//        listLine.add(Entry(60f,12f))
         lineDataSet = LineDataSet(listLine,"")
 
         val labels = ArrayList<String>()
@@ -142,7 +149,7 @@ class MandiGraphFragment : Fragment() {
         binding.lineChart.xAxis.spaceMax = 2f
         binding.lineChart.fitScreen()
         binding.lineChart.isScaleXEnabled = false
-
+        }}
 
     }
     private fun setBanners() {

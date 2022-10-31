@@ -35,7 +35,7 @@
                 android:textAlignment="center"
                 app:buttonGravity="center_vertical"
                 app:navigationIcon="@drawable/ic_back"
-                app:title="Edit Profile"
+                app:title="Farmer Profile"
                 app:titleCentered="true"
                 app:titleTextAppearance="@style/ActionBar"
                 app:titleTextColor="@color/black" />

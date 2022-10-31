@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <group
+        android:checkableBehavior="single">
+
     <item
         android:id="@+id/action_crick"
         android:title="Low to High"
@@ -10,4 +13,5 @@
         android:id="@+id/action_ftbal"
         android:title="High to Low"
         app:showAsAction="never"/>
+    </group>
 </menu>
