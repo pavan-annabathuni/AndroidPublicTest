@@ -9,6 +9,8 @@
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_history.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_select.xml" value="0.21481481481481482" />
+        <entry key="FeatureCropHealth/src/main/res/layout/fragment_bialogical.xml" value="0.3098958333333333" />
+        <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.3098958333333333" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/layout/activity_crop_protect.xml" value="0.30512820512820515" />
