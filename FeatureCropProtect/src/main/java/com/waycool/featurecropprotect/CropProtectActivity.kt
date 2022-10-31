@@ -12,18 +12,18 @@ class CropProtectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crop_protect)
-        navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
+//        navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        navHost.let { navFragment ->
-            navFragment.childFragmentManager.primaryNavigationFragment?.onActivityResult(
-                requestCode,
-                resultCode,
-                data
-            )
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        navHost.let { navFragment ->
+//            navFragment.childFragmentManager.primaryNavigationFragment?.onActivityResult(
+//                requestCode,
+//                resultCode,
+//                data
+//            )
+//        }
+//    }
 }

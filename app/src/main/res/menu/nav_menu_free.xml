@@ -6,7 +6,7 @@
         android:icon="@drawable/home"
         android:title="HOME" />
     <item
-       android:id="@+id/mandiActivity"
+        android:id="@+id/mandiActivity"
         android:icon="@drawable/ic_mandi_nav"
         android:title="MANDI" />
 
