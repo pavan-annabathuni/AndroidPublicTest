@@ -80,7 +80,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
         binding.cardCheckHealth.setOnClickListener {
             soilTestingLabsAdapter.upDateList()
             val bundle = Bundle()
-            bundle.putString("soil_test_number",data.onp_name.toString())
+            bundle.putString("soil_test_number",data.onp_id.toString())
             findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)
 //            soilTestingLabsAdapter.upDateList(ArrayList(data))
 

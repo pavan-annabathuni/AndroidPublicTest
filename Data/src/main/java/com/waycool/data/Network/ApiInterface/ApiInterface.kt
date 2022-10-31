@@ -164,6 +164,7 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")
     suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
+                             @Field("org_id")org_id:Int?,
                              @Field("plot_no")plot_no:String?,
                              @Field("pincode")pincode:String?,
                              @Field("address")address:String?,

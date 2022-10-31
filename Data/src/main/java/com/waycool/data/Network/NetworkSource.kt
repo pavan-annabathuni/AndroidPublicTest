@@ -220,12 +220,12 @@ object NetworkSource {
         }
     }
 
-    fun postNewSoil(plot_no: String, pincode: String, address: String, number: String) =
+    fun postNewSoil(org_id:Int,plot_no: String, pincode: String, address: String, number: String) =
         flow<Resource<SoilTestResponseDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 val response =
-                    apiInterface.postNewSoil(headerMap!!, plot_no, pincode, address, number)
+                    apiInterface.postNewSoil(headerMap!!, org_id,plot_no, pincode, address, number)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {

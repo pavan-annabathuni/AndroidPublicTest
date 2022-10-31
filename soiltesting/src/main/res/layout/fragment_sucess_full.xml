@@ -14,6 +14,14 @@
         android:src="@drawable/ic_seccess_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivClose"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/space25"
+        android:src="@drawable/ic_closed"
+        android:layout_width="@dimen/space25"
+        android:layout_height="@dimen/space20"/>
     <TextView
         android:id="@+id/tvRequestID"
         android:layout_width="wrap_content"

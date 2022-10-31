@@ -42,7 +42,10 @@ class NewSoilTestFormFragment : Fragment() {
     ): View? {
         _binding = FragmentNewSoilTestFormBinding.inflate(inflater, container, false)
         var onp_id = arguments?.getString("soil_test_number")
-        Log.d(TAG, "onCreateViewONPIDPrinted: $onp_id")
+        binding.cardCheckHealth.setOnClickListener {
+            itemClicked(onp_id!!.toInt())
+            Log.d(TAG, "onCreateViewONPIDPrinted: $onp_id")
+        }
         return binding.root
     }
 
@@ -52,8 +55,7 @@ class NewSoilTestFormFragment : Fragment() {
 //        itemClicked()
 //        initView()
         mvvm()
-        binding.cardCheckHealth.setOnClickListener {
-            itemClicked()
+
 //            initView()
 //            val newSoilTestPost = NewSoilTestPost(
 //                "123456",
@@ -96,7 +98,7 @@ class NewSoilTestFormFragment : Fragment() {
 //
 //            }
 
-        }
+
 
     }
 
@@ -110,38 +112,38 @@ class NewSoilTestFormFragment : Fragment() {
 
     }
 
-    private fun initView() {
-        soilViewModel.postNewSoil(
-            binding.etPlotNumber.toString(),
-            binding.etPincodeNumber.toString(),
-            binding.etAddress.toString(),
-            "123456782345"
-        ).observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    val bundle = Bundle()
-                    bundle.putString("soil_test_number", it.data?.data.toString())
-                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber.toString())
-                    findNavController().navigate(
-                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
-                        bundle
-                    )
-                }
-                is Resource.Loading -> {
-
-
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+//    private fun initView() {
+//        soilViewModel.postNewSoil(
+//            binding.etPlotNumber.toString(),
+//            binding.etPincodeNumber.toString(),
+//            binding.etAddress.toString(),
+//            binding.etMobile.toString()
+//        ).observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                is Resource.Success -> {
+//                    val bundle = Bundle()
+//                    bundle.putString("soil_test_number", it.data?.data.toString())
+//                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber.toString())
+//                    findNavController().navigate(
+//                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
+//                        bundle
+//                    )
+//                }
+//                is Resource.Loading -> {
+//
+//
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
 //                        .show()
-                }
-            }
-
-        })
-
-
-    }
+////                        .show()
+//                }
+//            }
+//
+//        })
+//
+//
+//    }
 
     private fun mvvm() {
 //        binding.cardCheckHealth.setOnClickListener {
@@ -160,7 +162,7 @@ class NewSoilTestFormFragment : Fragment() {
     }
 
 
-    private fun itemClicked() {
+    private fun itemClicked(onp_number:Int) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
             pincode = binding.etPincodeNumber.text.toString().trim()
@@ -188,6 +190,7 @@ class NewSoilTestFormFragment : Fragment() {
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
                 soilViewModel.postNewSoil(
+                    onp_number,
                     binding.etPlotNumber.toString(),
                     binding.etPincodeNumber.toString(),
                     binding.etAddress.toString(),

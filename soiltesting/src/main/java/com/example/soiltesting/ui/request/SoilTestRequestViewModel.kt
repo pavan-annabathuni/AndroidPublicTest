@@ -9,7 +9,7 @@ import com.waycool.data.utils.Resource
 
 class SoilTestRequestViewModel :ViewModel() {
 
-    fun postNewSoil(plot_no:String,pincode:String,address:String,number:String): LiveData<Resource<SoilTestResponseDTO?>> =
-        CropsRepository.postNewSoil(plot_no,pincode,address,number).asLiveData()
+    fun postNewSoil(org_id:Int,plot_no:String,pincode:String,address:String,number:String): LiveData<Resource<SoilTestResponseDTO?>> =
+        CropsRepository.postNewSoil(org_id,plot_no,pincode,address,number).asLiveData()
 
 }

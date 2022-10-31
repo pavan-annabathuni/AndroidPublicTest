@@ -93,7 +93,11 @@
         android:id="@+id/sucessFullFragment"
         android:name="com.example.soiltesting.ui.request.SucessFullFragment"
         android:label="fragment_sucess_full"
-        tools:layout="@layout/fragment_sucess_full" />
+        tools:layout="@layout/fragment_sucess_full" >
+        <action
+            android:id="@+id/action_sucessFullFragment_to_soilTestingHomeFragment"
+            app:destination="@id/soilTestingHomeFragment" />
+    </fragment>
     <dialog
         android:id="@+id/customeDialogFragment"
         android:name="com.example.soiltesting.ui.checksoil.CustomeDialogFragment"

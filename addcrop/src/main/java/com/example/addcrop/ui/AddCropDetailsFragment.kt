@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddViewModel
+import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -202,9 +203,15 @@ class AddCropDetailsFragment : Fragment() {
             else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty()) {
                 viewModel.addCropPassData(rop_id,1,binding.etNickName.toString(),1, dateCrop).observe(requireActivity()){
                     Log.d(TAG, "itemClickedData: $myCalendar")
+                    if (it is Resource.Success) {
+                        activity?.finish()
+                    }else{
+                        activity?.finish()
+                        Toast.makeText(requireContext(), "Error API Call", Toast.LENGTH_SHORT).show()
+                    }
 
                 }
-                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
+
             }
 
         }
