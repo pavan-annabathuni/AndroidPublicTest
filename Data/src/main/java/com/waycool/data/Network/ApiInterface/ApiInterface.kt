@@ -106,7 +106,6 @@ interface ApiInterface {
         @HeaderMap headerMap: Map<String, String>
     ): Response<AiCropHistoryDTO>
 
-    @FormUrlEncoded
     @Multipart
     @POST("api/v1/ai-crop-health")
     suspend fun postAiCrop(
@@ -157,7 +156,8 @@ interface ApiInterface {
                                  @Field("account_no_id")account_no_id:Int,
                                  @Field("plot_nickname")plot_nickname:String,
                                  @Field("is_active")is_active:Int,
-                                 @Field("sowing_date")sowing_date:String
+                                 @Field("sowing_date")sowing_date:String,
+                                 @Field("area")area:Double
     )
 //                                 @Body addCropPost: AddCropRequestDomain)
             : Response<AddCropResponseDTO>

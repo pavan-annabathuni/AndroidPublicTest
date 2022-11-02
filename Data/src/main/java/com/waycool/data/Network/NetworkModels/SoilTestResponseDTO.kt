@@ -9,8 +9,8 @@ data class SoilTestResponseDTO(
 
 data class NewSoilTestResponse(
     @SerializedName("soil_test_number" ) var soilTestNumber : String? = null,
-    @SerializedName("lat"              ) var lat            : Int?    = null,
-    @SerializedName("long"             ) var long           : Int?    = null,
+    @SerializedName("lat"              ) var lat            : String?    = null,
+    @SerializedName("long"             ) var long           : String?    = null,
     @SerializedName("org_id"           ) var orgId          : String? = null,
     @SerializedName("plot_no"          ) var plotNo         : String? = null,
     @SerializedName("status"           ) var status         : Int?    = null,
