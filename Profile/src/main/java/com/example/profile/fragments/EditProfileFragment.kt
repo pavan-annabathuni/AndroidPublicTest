@@ -138,27 +138,28 @@ class EditProfileFragment : Fragment() {
                         Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
                     }
             }
+            if(selecteduri!=null) {
+                val fileDir = context?.filesDir
+                val file: File = File(fileDir, ".png")
+                val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
+                val openInput = FileOutputStream(file)
+                inputStream!!.copyTo(openInput)
 
-            val fileDir = context?.filesDir
-            val file: File = File(fileDir, ".png")
-            val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
-            val openInput = FileOutputStream(file)
-            inputStream!!.copyTo(openInput)
+                val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val profileImageBody: MultipartBody.Part =
+                    MultipartBody.Part.createFormData(
+                        "profile_pic",
+                        file.name, requestFile
+                    )
 
-            val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val profileImageBody: MultipartBody.Part =
-                MultipartBody.Part.createFormData(
-                    "profile_pic",
-                    file.name, requestFile
-                )
+                Log.d("selecteduri", "editProfile: $profileImageBody")
 
-            Log.d("selecteduri", "editProfile: $profileImageBody")
-            if(selecteduri!=null)
                 viewModel.viewModelScope.launch {
-                    viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner){
+                    viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner) {
                         Log.d("selecteduri", "editProfile: ${it.data?.profile_pic}")
                     }
                 }
+            }
 
             this.findNavController().navigateUp()
 

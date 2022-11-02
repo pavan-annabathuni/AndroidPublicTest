@@ -8,10 +8,9 @@
     <item
         android:id="@+id/action_crick"
         android:title="Low to High"
-        app:showAsAction="never" />
+        />
     <item
         android:id="@+id/action_ftbal"
-        android:title="High to Low"
-        app:showAsAction="never"/>
+        android:title="High to Low" />
     </group>
 </menu>

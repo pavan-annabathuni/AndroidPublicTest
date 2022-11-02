@@ -3,6 +3,7 @@ package com.example.mandiprice.fragments
 import android.content.Intent
 import android.net.wifi.WifiConfiguration.AuthAlgorithm.strings
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,6 +32,7 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.utils.Resource
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
 import kotlinx.coroutines.launch
@@ -101,6 +103,9 @@ class MandiFragment : Fragment() {
 //        viewModel.status.observe(viewLifecycleOwner){
 //           // Toast.makeText(context,it.toString(),Toast.LENGTH_SHORT).show()
 //        }
+        binding.topAppBar.setNavigationOnClickListener(){
+            activity?.finish()
+        }
 
 
         return binding.root
@@ -117,15 +122,22 @@ class MandiFragment : Fragment() {
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
             it?.crop?.let { it1 -> args.putString("cropName", it1) }
             it?.market?.let { it1 -> args.putString("market", it1) }
+            args.putString("fragment","one")
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment,args)
         })
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
             viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
-            observe(viewLifecycleOwner){
-               // binding.viewModel = it
-                adapterMandi.submitData(lifecycle,it)
+            observe(requireActivity()){
+                   adapterMandi.submitData(lifecycle, it)
+                Handler().postDelayed({
+                    binding.llPorgressBar.visibility = View.GONE
+                }, 1500)
+
+
+
+
                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
             }
         }
@@ -169,6 +181,8 @@ class MandiFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_crick -> {
+                        if(item.isChecked){ item.setChecked(false)}
+                        else {item.setChecked(true)}
                         sortBy = "asc"
                         binding.filter.text = "Low to High"
                         binding.recycleViewDis.adapter = adapterMandi
@@ -182,6 +196,8 @@ class MandiFragment : Fragment() {
 
                     }
                     R.id.action_ftbal -> {
+                        if(item.isChecked){ item.setChecked(false)}
+                        else {item.setChecked(true)}
                         sortBy = "desc"
                         binding.recycleViewDis.adapter = adapterMandi
                         viewModel.viewModelScope.launch {
@@ -237,7 +253,7 @@ class MandiFragment : Fragment() {
             }
 
         }
-
+        val crops = resources.getStringArray(R.array.autoComplete)
         val arrayAdapter2 = ArrayAdapter(requireContext(), R.layout.item_spinner, crops)
         binding.spinner2.adapter = arrayAdapter2
         binding.spinner2?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -324,21 +340,21 @@ class MandiFragment : Fragment() {
                             if(binding.filter.text == "Sort by") {
                                 orderBy = "distance"
                                 sortBy = "asc"
-                                binding.recycleViewDis.adapter = adapterMandi
+//                                binding.recycleViewDis.adapter = adapterMandi
                                 viewModel.viewModelScope.launch {
                                     viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
 
                                     observe(viewLifecycleOwner){
                                         // binding.viewModel = it
                                         adapterMandi.submitData(lifecycle,it)
-                                        Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                                       // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                                     }
                                 }
 
                             }
                             else{
                                 orderBy = "distance"
-                                binding.recycleViewDis.adapter = adapterMandi
+//                                binding.recycleViewDis.adapter = adapterMandi
                                 viewModel.viewModelScope.launch {
                                     viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
 
@@ -358,23 +374,32 @@ class MandiFragment : Fragment() {
                             orderBy = "price"
                              sortBy = "desc"
                                 binding.recycleViewDis.adapter = adapterMandi
+                                binding.llPorgressBar.visibility = View.VISIBLE
                                 viewModel.viewModelScope.launch {
                                     viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
 
                                     observe(viewLifecycleOwner){
                                         // binding.viewModel = it
                                         adapterMandi.submitData(lifecycle,it)
+                                        Handler().postDelayed({
+                                            binding.llPorgressBar.visibility = View.GONE
+                                        }, 2000)
                                         // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                                     }
                                 }}
                             else{
                                 orderBy = "price"
                                 binding.recycleViewDis.adapter = adapterMandi
+                                binding.llPorgressBar.visibility = View.VISIBLE
                                 viewModel.viewModelScope.launch {
                                     viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy,search).
                                     observe(viewLifecycleOwner){
                                         // binding.viewModel = it
                                         adapterMandi.submitData(lifecycle,it)
+                                        Handler().postDelayed({
+                                            binding.llPorgressBar.visibility = View.GONE
+                                        }, 2000)
+
                                         // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                                     }
                                 }
