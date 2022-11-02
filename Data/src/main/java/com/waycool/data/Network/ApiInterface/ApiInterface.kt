@@ -156,7 +156,8 @@ interface ApiInterface {
                                  @Field("account_no_id")account_no_id:Int,
                                  @Field("plot_nickname")plot_nickname:String,
                                  @Field("is_active")is_active:Int,
-                                 @Field("sowing_date")sowing_date:String
+                                 @Field("sowing_date")sowing_date:String,
+                                 @Field("area")area:Double
     )
 //                                 @Body addCropPost: AddCropRequestDomain)
             : Response<AddCropResponseDTO>
@@ -164,9 +165,15 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")
     suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
+                             @Field("account_id")account_id:Int,
+                             @Field("lat")lat:Double,
+                             @Field("long")long:Double,
+                             @Field("org_id")org_id:Int?,
                              @Field("plot_no")plot_no:String?,
                              @Field("pincode")pincode:String?,
                              @Field("address")address:String?,
+                             @Field("state")state:String,
+                             @Field("district")district:String,
                              @Field("number")number:String?,
                              ): Response<SoilTestResponseDTO>
 

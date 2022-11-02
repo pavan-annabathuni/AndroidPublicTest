@@ -78,13 +78,14 @@
                 android:id="@+id/tvRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="@dimen/space16"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Click only the Image\n of the leaf"
+                android:text="Capture the image\n
+of the leaf"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageOne" />
 
@@ -118,7 +119,8 @@
                 android:layout_marginTop="@dimen/space16"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Click only the Image\n of the leaf"
+                android:text="Do not click a blur image
+"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +156,8 @@
                 android:layout_marginTop="@dimen/space16"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Do not Capture the \nfull plant"
+                android:text="Do not Capture the\n
+full plant"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
                 app:layout_constraintStart_toStartOf="parent"
@@ -190,7 +193,8 @@
                 android:layout_marginTop="@dimen/space16"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Do not Capture the \nfull plant"
+                android:text="Do not capture other\n
+objects"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
 

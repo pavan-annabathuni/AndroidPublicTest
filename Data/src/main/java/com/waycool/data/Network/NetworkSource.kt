@@ -198,7 +198,8 @@ object NetworkSource {
         account_id: Int,
         plot_nickname: String,
         is_active: Int,
-        sowing_date: String
+        sowing_date: String,
+        area:Double
     ) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
@@ -208,7 +209,8 @@ object NetworkSource {
                 account_id,
                 plot_nickname,
                 is_active,
-                sowing_date
+                sowing_date,
+                area
             )
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
@@ -220,12 +222,13 @@ object NetworkSource {
         }
     }
 
-    fun postNewSoil(plot_no: String, pincode: String, address: String, number: String) =
+    fun postNewSoil(account_id: Int,lat: Double,long: Double,org_id:Int, plot_no: String, pincode: String,
+                    address: String,state:String,district:String ,number: String) =
         flow<Resource<SoilTestResponseDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 val response =
-                    apiInterface.postNewSoil(headerMap!!, plot_no, pincode, address, number)
+                    apiInterface.postNewSoil(headerMap!!,account_id,lat,long, org_id,plot_no,pincode, address, state,district,number)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {

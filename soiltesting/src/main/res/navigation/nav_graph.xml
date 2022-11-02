@@ -42,7 +42,8 @@
         tools:layout="@layout/fragment_new_soil_test_form" >
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_sucessFullFragment"
-            app:destination="@id/sucessFullFragment" />
+            app:destination="@id/sucessFullFragment"
+            app:popUpTo="@id/soilTestingHomeFragment" />
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_checkSoilTestFragment"
             app:destination="@id/checkSoilTestFragment" />

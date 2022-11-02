@@ -107,7 +107,7 @@
     <!--                android:layout_width="wrap_content"-->
     <!--                android:layout_height="wrap_content"-->
     <!--                android:text="Next"-->
-    <!--                android:textColor="#FFFFFF"-->
+    <!--                android:textCo lor="#FFFFFF"-->
     <!--                android:textSize="16sp"-->
     <!--                android:textStyle="bold"-->
     <!--                app:layout_constraintBottom_toBottomOf="parent"-->

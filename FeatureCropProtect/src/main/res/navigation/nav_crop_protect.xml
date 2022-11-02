@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_crop_protect"
-    app:startDestination="@id/tempFragment">
+    app:startDestination="@id/cropSelectionFragment">
 
     <fragment
         android:id="@+id/cropSelectionFragment"
@@ -52,13 +52,4 @@
         android:id="@+id/playVideoFragment3"
         android:name="com.waycool.videos.fragments.PlayVideoFragment"
         android:label="PlayVideoFragment" />
-    <fragment
-        android:id="@+id/tempFragment"
-        android:name="com.waycool.featurecropprotect.fragments.TempFragment"
-        android:label="fragment_temp"
-        tools:layout="@layout/fragment_temp" >
-        <action
-            android:id="@+id/action_tempFragment_to_cropSelectionFragment"
-            app:destination="@id/cropSelectionFragment" />
-    </fragment>
 </navigation>
