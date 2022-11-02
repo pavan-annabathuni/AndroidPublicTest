@@ -248,9 +248,9 @@ object CropsRepository {
     fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date: String) : Flow<Resource<AddCropResponseDTO?>> {
         return NetworkSource.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date)
     }
-    fun postNewSoil(org_id:Int,plot_no:String,pincode:String,address:String,number:String): Flow<Resource<SoilTestResponseDTO?>>{
+    fun postNewSoil(account_id: Int,lat: Double,long: Double,org_id:Int,plot_no:String,pincode:String,address:String,state:String,district:String ,number:String): Flow<Resource<SoilTestResponseDTO?>>{
 
-      return  NetworkSource.postNewSoil(org_id,plot_no,pincode,address,number)
+      return  NetworkSource.postNewSoil(account_id,lat,long,org_id,plot_no,pincode,address,state,district,number)
     }
 
      fun postAiCropImage(

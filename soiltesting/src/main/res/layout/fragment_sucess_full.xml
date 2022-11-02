@@ -1,62 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.request.SucessFullFragment">
+
     <ImageView
         android:id="@+id/ivStatus"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/ic_seccess_status"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_seccess_status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/ivClose"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="@dimen/space25"
+        android:layout_height="@dimen/space20"
         android:layout_margin="@dimen/space25"
         android:src="@drawable/ic_closed"
-        android:layout_width="@dimen/space25"
-        android:layout_height="@dimen/space20"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvRequestID"
         android:layout_width="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivStatus"
-        android:text="Request Successful!"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="Request Successful!"
         android:textColor="#000000"
         android:textSize="@dimen/txt18"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toBottomOf="@+id/ivStatus" />
+
     <TextView
         android:id="@+id/tvRequestIDText"
         android:layout_width="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRequestID"
-        android:text="Your soil Test Request for IWAP100214"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space16"
+        android:text="Your soil Test Request for "
         android:textColor="#000000"
         android:textSize="@dimen/txt14"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvRequestID" />
+
     <TextView
         android:id="@+id/tvRequestIDTextStatus"
         android:layout_width="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRequestIDText"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space4"
         android:text="Successfully Completed"
-       android:layout_marginTop="@dimen/space4"
         android:textColor="#000000"
         android:textSize="@dimen/txt14"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_height="wrap_content"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/tvRequestIDText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

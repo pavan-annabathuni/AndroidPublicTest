@@ -35,6 +35,7 @@ class SucessFullFragment : Fragment() {
 //                val isSuccess = findNavController().navigateUp()
 //                if (!isSuccess) requireActivity().finish()
                 Toast.makeText(requireActivity(), "nckskvcnk", Toast.LENGTH_SHORT).show()
+
             }
         }
         return binding.root

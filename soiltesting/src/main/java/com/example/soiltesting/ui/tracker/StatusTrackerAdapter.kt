@@ -31,7 +31,11 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
     @SuppressLint("ResourceAsColor", "SimpleDateFormat")
     override fun onBindViewHolder(holder: StatusTrackerHolder, position: Int) {
         val details = details[position]
-        if (details.is_approved == 0 && details.date.toString().isNotEmpty()) {
+        if (details.is_approved==null && details.date.toString().isNullOrEmpty()){
+            holder.binding.tvTitle.text = details.title
+            holder.binding.mcvCircle.setImageResource(R.drawable.ic_ellipse_default)
+        }
+       else if (details.is_approved == 0 && details.date.toString().isNotEmpty()) {
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_pending_status)
             holder.binding.tvTitle.text = details.title
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)

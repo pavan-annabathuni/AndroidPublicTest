@@ -194,14 +194,13 @@ class AddCropDetailsFragment : Fragment() {
             } else if (date.isEmpty()) {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
-
             }
 //            else if (numberOfPlanets.isEmpty()) {
 //                binding.etState.error = "Enter Number of Planets"
 //                return@setOnClickListener
 //            }
             else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty()) {
-                viewModel.addCropPassData(rop_id,1,binding.etNickName.toString(),1, dateCrop).observe(requireActivity()){
+                viewModel.addCropPassData(rop_id,1,binding.etNickName.text.toString(),1, dateCrop).observe(requireActivity()){
                     Log.d(TAG, "itemClickedData: $myCalendar")
                     if (it is Resource.Success) {
                         activity?.finish()

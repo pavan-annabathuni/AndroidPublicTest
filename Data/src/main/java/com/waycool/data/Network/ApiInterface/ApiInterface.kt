@@ -106,6 +106,7 @@ interface ApiInterface {
         @HeaderMap headerMap: Map<String, String>
     ): Response<AiCropHistoryDTO>
 
+    @FormUrlEncoded
     @Multipart
     @POST("api/v1/ai-crop-health")
     suspend fun postAiCrop(
@@ -164,10 +165,15 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")
     suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
+                             @Field("account_id")account_id:Int,
+                             @Field("lat")lat:Double,
+                             @Field("long")long:Double,
                              @Field("org_id")org_id:Int?,
                              @Field("plot_no")plot_no:String?,
                              @Field("pincode")pincode:String?,
                              @Field("address")address:String?,
+                             @Field("state")state:String,
+                             @Field("district")district:String,
                              @Field("number")number:String?,
                              ): Response<SoilTestResponseDTO>
 
