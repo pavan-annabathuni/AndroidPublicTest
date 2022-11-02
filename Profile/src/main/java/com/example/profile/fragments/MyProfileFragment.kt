@@ -97,6 +97,12 @@ class MyProfileFragment : Fragment() {
             startActivity(intent)
             Toast.makeText(context,"Worked",Toast.LENGTH_SHORT).show()
         }
+        binding.back.setOnClickListener(){
+            this.findNavController().navigateUp()
+        }
+
+//        binding.version.setText("2.5.5")
+
         binding.cvChat.setOnClickListener() {
             Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
                 "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
@@ -143,9 +149,7 @@ class MyProfileFragment : Fragment() {
 //                }
 //            }
 //        }
-        binding.back.setOnClickListener(){
-            this.findNavController().navigateUp()
-        }
+
         binding.ll2.setOnClickListener() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToLanguageFragment3())

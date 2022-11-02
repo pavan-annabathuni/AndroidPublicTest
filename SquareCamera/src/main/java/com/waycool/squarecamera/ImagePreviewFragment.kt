@@ -44,7 +44,7 @@ class ImagePreviewFragment : Fragment() {
         binding.imageSaveButton.setOnClickListener {
             val intent = Intent()
             intent.data = uri
-            Toast.makeText(requireContext(),"Save called",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(),"Save called",Toast.LENGTH_SHORT).show()
             requireActivity().setResult(AppCompatActivity.RESULT_OK, intent)
             requireActivity().finish()
         }

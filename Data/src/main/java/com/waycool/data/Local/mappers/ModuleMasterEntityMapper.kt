@@ -1,9 +1,7 @@
 package com.waycool.data.Local.mappers
 
-import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.Entity.ModuleMasterEntity
 import com.waycool.data.Local.utils.EntityMapper
-import com.waycool.data.Network.NetworkModels.CropMasterData
 import com.waycool.data.Network.NetworkModels.ModuleData
 
 class ModuleMasterEntityMapper : EntityMapper<ModuleMasterEntity, ModuleData> {

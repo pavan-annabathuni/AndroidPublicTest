@@ -56,7 +56,7 @@ class CropSelectionFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = "Protect Your Crop"
+        binding.toolbarTitle.text = "Crop information"
 
         binding.cropsRv.adapter = adapter
 

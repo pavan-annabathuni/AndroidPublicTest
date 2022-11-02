@@ -70,7 +70,8 @@ class LanguageFragment : Fragment() {
             }
         }
         binding.imgBack.setOnClickListener(){
-            this.findNavController().navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
+            this.findNavController().navigateUp()
+           // this.findNavController().navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
         }
 //        binding.privacyCheckBox.setOnCheckedChangeListener { compoundButton, b ->
 //            binding.doneBtn.isEnabled = b

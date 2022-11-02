@@ -16,11 +16,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddViewModel
+import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
+    private var accountID: Int? = null
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
     val myCalendar = Calendar.getInstance()
@@ -65,13 +67,29 @@ class AddCropDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments!=null){
+        if (arguments != null) {
             var onp_id = arguments?.getInt("cropid")
             Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $onp_id")
             itemClicked(onp_id!!)
         }
 
 
+
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+            for (i in it.data!!.account) {
+                if (i.accountType == "outgrow") {
+                    Log.d(TAG, "onCreateViewAccountID:${i.id}")
+                    accountID = i.id
+                }
+
+
+//                            if (account!=null){
+//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
+//                            }
+            }
+        }
 
 
 //        spinner()
@@ -175,7 +193,7 @@ class AddCropDetailsFragment : Fragment() {
 //
 //    }
 
-    private fun itemClicked(rop_id:Int) {
+    private fun itemClicked(rop_id: Int) {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
@@ -193,18 +211,29 @@ class AddCropDetailsFragment : Fragment() {
             } else if (date.isEmpty()) {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
-
+            }else if(accountID==null){
+                Toast.makeText(requireContext(),"Incorrect Id",Toast.LENGTH_SHORT).show()
             }
 //            else if (numberOfPlanets.isEmpty()) {
 //                binding.etState.error = "Enter Number of Planets"
 //                return@setOnClickListener
 //            }
-            else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty()) {
-                viewModel.addCropPassData(rop_id,1,binding.etNickName.toString(),1, dateCrop).observe(requireActivity()){
+            else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && accountID != null) {
+                viewModel.addCropPassData(rop_id, accountID!!, binding.etNickName.text.toString(), 1,
+                    sowing_date = dateCrop,
+                    area = area.toDouble()
+                ).observe(requireActivity()) {
                     Log.d(TAG, "itemClickedData: $myCalendar")
+                    if (it is Resource.Success) {
+                        activity?.finish()
+                    } else {
+                        activity?.finish()
+                        Toast.makeText(requireContext(), "Error API Call", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
                 }
-                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
+
             }
 
         }

@@ -1,0 +1,72 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.OutGrow" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/DarkGreen</item>
+        <item name="colorPrimaryVariant">@color/DarkGreen</item>
+        <item name="colorOnPrimary">@color/DarkGreen</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/darkGray</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">#022E0E</item>
+        <item name="textColor">@color/white</item>
+        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="toolbarStyle">@style/Base_ToolbarStyle</item>
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+
+<!--        <item name="textColor">@color/black</item>-->
+<!--        <item name="android:textViewStyle">@style/MyTextViewStyle</item>-->
+
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="textStyle" parent="android:Widget.TextView">
+        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="textColor">@color/Red</item>
+    </style>
+
+    <style name="YourLightTheme" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/Red</item>
+    </style>
+
+    <style name="Base_ToolbarStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:theme">@style/Base_ToolbarTheme</item>
+        <item name="titleTextAppearance">@style/CustomTitleTextAppearance</item>
+        <item name="subtitleTextAppearance">@style/CustomSubTitleTextAppearance</item>
+        <item name="colorControlNormal">@color/darkGray</item>
+        <item name="navigationIconTint">@color/black</item>
+
+    </style>
+
+    <style name="Base_ToolbarTheme">
+        <!-- Color used for the title of the Toolbar - as long as not overridden -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- Used to color back button and three dots -->
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="CustomTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomSubTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">italic</item>
+    </style>.
+    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:popupBackground">@color/white</item>
+        <item name="android:itemBackground">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,32 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selected_not_found">Selected Crop or Mandi is not available with us.</string>
+    <string name="search_crop_or_mandi">Search Crop or Mandi</string>
+    <string-array name="crops">
+        <item>Vegetable</item>
+        <item>Fruits</item>
+    </string-array>
+    <string-array name="str_states">
+        <item>PUNJAB</item>
+        <item>CHANDIGARH</item>
+        <item>UTTARAKHAND</item>
+        <item>HARYANA</item>
+        <item>DELHI</item>
+        <item>RAJASTHAN</item>
+        <item>UTTAR PRADESH</item>
+        <item>BIHAR</item>
+        <item>SIKKIM</item>
+    </string-array>
+
+    <string-array name="autoComplete">
+        <item>Apple</item>
+        <item>Mango</item>
+        <item>Banana</item>
+        <item>Carrot</item>
+        <item>Cabbage</item>
+        <item>Capsicum</item>
+        <item>Brinjal</item>
+
+    </string-array>
+</resources>

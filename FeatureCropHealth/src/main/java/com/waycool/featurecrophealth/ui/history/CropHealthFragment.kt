@@ -61,6 +61,10 @@ class CropHealthFragment : Fragment() {
             findNavController().navigate(R.id.action_cropHealthFragment_to_pestDiseaseDetailsFragment2,bundle)
         }
 
+        binding.backBtn.setOnClickListener(){
+            activity?.finish()
+        }
+
     }
 
     private fun getVideos() {

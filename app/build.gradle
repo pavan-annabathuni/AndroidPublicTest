@@ -29,7 +29,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
@@ -38,6 +38,7 @@ dependencies {
 
     implementation project(path: ':Profile')
     implementation project(path: ':weather')
+    implementation project(path: ':Mandi')
     implementation project(path: ':cropinformation')
     implementation project(path: ':UiComponents')
     implementation project(path: ':FeatureLogin')
@@ -52,6 +53,8 @@ dependencies {
     implementation project(path: ':soiltesting')
     implementation project(path: ':Videos')
 
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
 
     implementation(libraries.appCompat)
     implementation(libraries.material)
@@ -62,6 +65,10 @@ dependencies {
 
     //Glide
     implementation(libraries.glide)
+
+    //Navigation
+    implementation(navGraph.navfragment)
+    implementation(navGraph.navui)
 
     //Firebase
     implementation platform(firebase.bom)

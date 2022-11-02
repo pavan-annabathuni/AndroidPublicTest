@@ -3,7 +3,6 @@ package com.waycool.data.Sync.syncer
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
 import com.waycool.data.Local.Entity.LanguageMasterEntity
-import com.waycool.data.Local.Entity.TagsEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.LangugeMasterEntityMapper
 import com.waycool.data.Network.NetworkSource
@@ -15,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

@@ -42,7 +42,8 @@
         tools:layout="@layout/fragment_new_soil_test_form" >
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_sucessFullFragment"
-            app:destination="@id/sucessFullFragment" />
+            app:destination="@id/sucessFullFragment"
+            app:popUpTo="@id/soilTestingHomeFragment" />
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_checkSoilTestFragment"
             app:destination="@id/checkSoilTestFragment" />
@@ -115,7 +116,7 @@
         tools:layout="@layout/fragment_view_report" />
     <fragment
         android:id="@+id/homePageFragment"
-        android:name="com.example.soiltesting.home.HomePagesFragment"
+        android:name="com.waycool.iwap.home.HomePagesFragment"
         android:label="fragment_home_page"
         tools:layout="@layout/fragment_home_pages" />
     <fragment

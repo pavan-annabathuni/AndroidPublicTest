@@ -152,6 +152,7 @@ object LocalSource {
     }
 
     fun getWeather(lat:String,lon:String) = DataStoreManager.getWeather(lat,lon)
+
     fun insertCropInformation(CropInformation: List<CropInformationEntityData>) {
         outgrowDao.insertCropInformation(CropInformation)
     }

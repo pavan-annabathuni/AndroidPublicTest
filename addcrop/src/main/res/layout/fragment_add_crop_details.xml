@@ -95,7 +95,7 @@
                     android:layout_marginEnd="@dimen/space4"
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#ffffff"
-                    android:hint="e.g plot name"
+                    android:hint="e.g crop name"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

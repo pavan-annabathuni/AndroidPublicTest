@@ -37,7 +37,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             deviceMan
         ).asLiveData()
 
-
     fun logout(mobile_no: String): LiveData<Resource<LogoutDomain>> =
         LoginRepository.logout(mobile_no).asLiveData()
 

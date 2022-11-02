@@ -174,9 +174,12 @@ object LoginRepository {
         return UserDetailsSyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
+                    Log.d("TAG", "getUserDetailsAccountID:${it.data} ")
                     Resource.Success(
                         UserDetailsDomainMapper().mapToDomain(it.data!!)
+
                     )
+
                 }
                 is Resource.Loading -> {
                     Resource.Loading()
