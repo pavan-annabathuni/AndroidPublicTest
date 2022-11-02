@@ -6,11 +6,15 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
+import com.waycool.data.repository.WeatherRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.WeatherMasterDomain
+import com.waycool.data.utils.Resource
 
 class MainViewModel:ViewModel() {
-
+    fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
     //Videos
     fun getVansVideosList(
         tags: String? = null,
@@ -47,5 +51,12 @@ class MainViewModel:ViewModel() {
 
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
+    fun getWeather(
+        lat: String,
+        lon: String,
+        lang: String = "en"
+    ): LiveData<Resource<WeatherMasterDomain?>> {
 
+        return WeatherRepository.getWeather(lat, lon, lang).asLiveData()
+}
 }

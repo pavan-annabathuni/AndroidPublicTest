@@ -97,94 +97,107 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             tools:text="Humid and Overcast" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="50dp"
-            android:background="@drawable/border"
-            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:strokeColor="@color/LightGray"
+            app:strokeWidth="1dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingStart="24dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="16dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_sunrise"
-                    style="@style/Bold"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_humidity"
-                    android:drawablePadding="8dp"
-                    android:text="@{Double.toString(viewModel.selectedProperty.humidity)+'%'}"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/tv20"
-                    tools:text="30%" />
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="24dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="16dp">
 
-                <TextView
-                    style="@style/Medium"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_sunrise"
+                        style="@style/Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_humidity"
+                        android:drawablePadding="8dp"
+                        android:text="@{Double.toString(viewModel.selectedProperty.humidity)+'%'}"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/tv20"
+                        tools:text="30%" />
+
+                    <TextView
+                        style="@style/Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/str_humidity"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/LightGray"
+                    android:padding="10dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/str_humidity"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_rain"
+                        style="@style/Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_rain"
+                        android:drawablePadding="8dp"
+                        android:text='@{String.format("%.0f",viewModel.selectedProperty.pop*100)+"%"}'
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/tv20"
+                        tools:text="20%" />
+
+                    <TextView
+                        style="@style/Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/str_chance_of_rain"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/LightGray"
-                android:padding="10dp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp">
-
-                <TextView
-                    android:id="@+id/tv_rain"
-                    style="@style/Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_humidity"
-                    android:drawablePadding="8dp"
-                    android:text='@{String.format("%.0f",viewModel.selectedProperty.pop*100)+"%"}'
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/tv20"
-                    tools:text="20%" />
-
-                <TextView
-                    style="@style/Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/str_chance_of_rain"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

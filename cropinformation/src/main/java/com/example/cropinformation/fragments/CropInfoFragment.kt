@@ -30,9 +30,11 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import zendesk.chat.*
 import zendesk.core.AnonymousIdentity
 import zendesk.core.Identity
 import zendesk.core.Zendesk
+import zendesk.messaging.MessagingActivity
 import zendesk.support.Support
 import zendesk.support.guide.HelpCenterActivity
 import kotlin.math.roundToInt
@@ -71,7 +73,6 @@ class CropInfoFragment : Fragment() {
         binding = FragmentCropInfoBinding.inflate(inflater)
 
        setBanners()
-        zenDesk()
 
 
 //        Zendesk.INSTANCE.init(this.requireContext(), zendeskUrl, appId, oauthClientId);
@@ -95,6 +96,9 @@ class CropInfoFragment : Fragment() {
         binding.back.setOnClickListener(){
             findNavController().popBackStack()
         }
+        binding.addFab.setOnClickListener(){
+            zenDesk()
+        }
         setTabs()
         Glide.with(requireContext()).load(cropLogo).into(binding.cropLogo)
         imageSlider()
@@ -110,23 +114,30 @@ class CropInfoFragment : Fragment() {
     }
 
     private fun zenDesk() {
-        Zendesk.INSTANCE.init(
-            this.requireContext(), "https://waycoolindia.zendesk.com/",
-            "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8f",
-            "mobile_sdk_client_fe9f35bccdf520d03f84"
-        )
+        Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
+            "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
+        val chatConfiguration = ChatConfiguration.builder()
+            .withAgentAvailabilityEnabled(false)
+            .withTranscriptEnabled(false)
+//
+            .build()
+        val visitorInfo: VisitorInfo = VisitorInfo.builder()
+            .withName("Bob")
+            .withEmail("bob@example.com")
+            .withPhoneNumber("123456") // numeric string
+            .build();
 
-        val identity: Identity = AnonymousIdentity()
-        Zendesk.INSTANCE.setIdentity(identity)
+        val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
+            .withVisitorInfo(visitorInfo)
+            .withDepartment("English Language Group")
+            .build()
+
+        Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
 
 
-        Support.INSTANCE.init(Zendesk.INSTANCE)
-        binding.addFab.setOnClickListener() {
-            this.context?.let { it1 ->
-                HelpCenterActivity.builder()
-                    .show(it1)
-            };
-        }
+        MessagingActivity.builder()
+            .withEngines(ChatEngine.engine())
+            .show(requireContext(), chatConfiguration);
     }
 
     private fun setTabs() {
@@ -157,7 +168,6 @@ class CropInfoFragment : Fragment() {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.planting_others)
                         customView
-                        binding.tabLayout.removeTabAt(position)
                     }
                     "Soil pH" -> {
                         tab.text = data[position].label_name

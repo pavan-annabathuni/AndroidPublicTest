@@ -8,18 +8,36 @@
         <item>Fruits</item>
     </string-array>
     <string-array name="str_states">
+        <item>States</item>
         <item>PUNJAB</item>
         <item>CHANDIGARH</item>
+        <item>KARNATAKA</item>
+        <item>TAMIL NADU</item>
+        <item>NAGALAND</item>
+        <item>MANIPUR</item>
+        <item>MIZORAM</item>
+        <item>TRIPURA</item>
+        <item>MEGHALAYA</item>
+        <item>ASSAM</item>
+        <item>WEST BENGAL</item>
         <item>UTTARAKHAND</item>
         <item>HARYANA</item>
         <item>DELHI</item>
+        <item>TELANGANA</item>
         <item>RAJASTHAN</item>
         <item>UTTAR PRADESH</item>
         <item>BIHAR</item>
         <item>SIKKIM</item>
+        <item>JHARKHAND</item>
+        <item>CHHATTISGARH</item>
+        <item>GUJARAT</item>
+        <item>ANDHRA PRADESH</item>
+        <item>GOA</item>
+        <item>KERALA</item>
     </string-array>
 
     <string-array name="autoComplete">
+        <item>Crop</item>
         <item>Apple</item>
         <item>Mango</item>
         <item>Banana</item>
@@ -27,6 +45,14 @@
         <item>Cabbage</item>
         <item>Capsicum</item>
         <item>Brinjal</item>
+        <item>Bottle Ground</item>
+        <item>Lemon</item>
+        <item>Onion</item>
+        <item>Potato</item>
+        <item>Tomato</item>
+        <item>Garlic</item>
+        <item>Bitter Gourd</item>
 
     </string-array>
+
 </resources>

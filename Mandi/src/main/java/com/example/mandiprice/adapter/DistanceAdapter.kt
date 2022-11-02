@@ -44,9 +44,11 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         when (properties?.price_status) {
             1 -> {
                 holder.imageView.setImageResource(R.drawable.ic_uip)
+                holder.imageView.visibility = View.VISIBLE
             }
             -1 -> {
                 holder.imageView.setImageResource(R.drawable.ic_down)
+                holder.imageView.visibility = View.VISIBLE
             }
             else -> holder.imageView.visibility = View.GONE
         }

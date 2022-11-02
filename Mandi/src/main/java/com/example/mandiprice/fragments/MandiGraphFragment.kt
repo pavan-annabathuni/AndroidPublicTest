@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,7 @@ class MandiGraphFragment : Fragment() {
     private var mandi_master_id:Int? =null
     private var crop_name:String? =null
     private var market_name:String? =null
+    private var fragment:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -61,6 +63,8 @@ class MandiGraphFragment : Fragment() {
             mandi_master_id =it.getInt("mandiId")
             crop_name = it.getString("cropName")
             market_name = it.getString("market")
+
+            fragment =it.getString("fragment")
         }
     }
 
@@ -78,7 +82,7 @@ class MandiGraphFragment : Fragment() {
         viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner){
                 binding.viewModel = it.data
-                Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
+           //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -96,9 +100,16 @@ class MandiGraphFragment : Fragment() {
     }
 
     private fun onClick() {
+
+            Log.d("navigation", "onClick: $fragment")
         binding.imgBack.setOnClickListener(){
-            this.findNavController().navigateUp()
-        }
+            if(fragment=="one"){
+            this.findNavController()
+                .navigate(MandiGraphFragmentDirections.actionMandiGraphFragmentToMandiFragment())
+        }else{
+                this.findNavController()
+                    .navigate(MandiGraphFragmentDirections.actionMandiGraphFragmentToSearchFragment())
+            }}
         binding.imgShare.setOnClickListener(){
             screenShot()
         }
@@ -111,10 +122,10 @@ class MandiGraphFragment : Fragment() {
 
 
         listLine = ArrayList()
-            for(i in it.data?.data!!.indices){
-        listLine.add(Entry(it.data!!.data[i]?.avgPrice!!.toFloat(), it.data!!.data[i].arrivalDate!!.toFloat()
-        ))
-            }
+//            for(i in it.data?.data!!.indices){
+//        listLine.add(Entry(it.data!!.data[i]?.avgPrice!!.toFloat(), it.data!!.data[i].arrivalDate!!.toFloat()
+//        ))
+          //  }
 //        listLine.add(Entry(20f,13f))
 //        listLine.add(Entry(30f,11f))
 //        listLine.add(Entry(40f,13f))

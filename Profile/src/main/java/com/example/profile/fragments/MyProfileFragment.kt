@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.launch
 import zendesk.chat.*
@@ -67,12 +68,12 @@ class MyProfileFragment : Fragment() {
           }
 
 
-//        viewModel.response2.observe(viewLifecycleOwner){
-//            if(it.profile?.profile_pic!=null) {
-//               Glide.with(this).load(it.profile.profile_pic).into(binding.proPic)
-//            Log.d("ProfilePic", "observer: $it")
-//
-//        }}
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            if(it.data?.profile?.profilePic!=null) {
+               Glide.with(this).load(it.data?.profile?.profilePic).into(binding.proPic)
+            Log.d("ProfilePic", "observer: $it")
+
+        }}
          return true
     }
 
@@ -99,6 +100,19 @@ class MyProfileFragment : Fragment() {
         }
         binding.back.setOnClickListener(){
             this.findNavController().navigateUp()
+        }
+        binding.textView.setOnClickListener(){
+            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            intent.putExtra("url", "http://one.waycool.in/Outgrow_PrivacyPolicy.html")
+            intent.putExtra("tittle", "Privacy Policy")
+            requireActivity().startActivity(intent)
+        }
+        binding.textView2.setOnClickListener(){
+            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            intent.putExtra("url", "http://one.waycool.in/Terms_and_Conditions.html")
+            intent.putExtra("tittle", "Terms and Conditions")
+            requireActivity().startActivity(intent)
+
         }
 
 //        binding.version.setText("2.5.5")

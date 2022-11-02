@@ -23,7 +23,7 @@ class HourlyAdapter(val onClickListener:OnClickListener)
             binding.executePendingBindings()
         }
         val x = binding.tvTime
-        val ll = binding.llHourly
+        val ll = binding.cvHourly
         var tv = binding.tvTemp
     }
 
@@ -52,11 +52,11 @@ class HourlyAdapter(val onClickListener:OnClickListener)
             notifyDataSetChanged()
         }
         if(index == position) {
-            holder.ll.setBackgroundResource(R.drawable.green_border)
+           // holder.ll.setBackgroundResource(R.drawable.green_border)
             holder.tv.setTextColor(Color.parseColor("#146133"))
         }
         else{
-            holder.ll.setBackgroundResource(R.drawable.border)
+          //  holder.ll.setBackgroundResource(R.drawable.border)
             holder.tv.setTextColor(Color.parseColor("#000000"))
         }
 
