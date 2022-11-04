@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Network.NetworkModels.CropVarietyModel
+import com.waycool.data.repository.domainModels.CropVarityDomain
+import com.waycool.data.repository.domainModels.UserDetailsDomain
 
 object TypeConverter {
 
@@ -102,9 +104,9 @@ object TypeConverter {
         val listType = object : TypeToken<UserDetailsEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
-    fun convertStringToCropVariety(s: String): CropVarietyModel? {
+    fun convertStringToCropVariety(s: String): List<CropVarityDomain>? {
         Log.d("TypeConverterFrom", s)
-        val listType = object : TypeToken<UserDetailsEntity?>() {}.type
+        val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
         return Gson().fromJson(s, listType)
     }
 

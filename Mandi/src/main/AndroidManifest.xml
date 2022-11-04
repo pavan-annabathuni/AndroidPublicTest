@@ -8,7 +8,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MandiActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.outgrow"

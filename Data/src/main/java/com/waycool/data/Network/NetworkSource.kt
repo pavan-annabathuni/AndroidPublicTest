@@ -198,7 +198,8 @@ object NetworkSource {
         account_id: Int,
         plot_nickname: String,
         is_active: Int,
-        sowing_date: String
+        sowing_date: String,
+        area:Double
     ) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
@@ -208,7 +209,8 @@ object NetworkSource {
                 account_id,
                 plot_nickname,
                 is_active,
-                sowing_date
+                sowing_date,
+                area
             )
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))

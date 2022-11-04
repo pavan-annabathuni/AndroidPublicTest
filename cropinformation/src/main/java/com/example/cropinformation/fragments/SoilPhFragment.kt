@@ -35,6 +35,9 @@ class SoilPhFragment : Fragment() {
         binding = FragmentSoilPhBinding.inflate(inflater)
         ViewModel.cropAdvisory()
 
+        binding.slider.setCustomThumbDrawable(R.drawable.ic_indicator)
+
+
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
 

@@ -28,7 +28,14 @@
         android:id="@+id/mandiGraphFragment"
         android:name="com.example.mandiprice.fragments.MandiGraphFragment"
         android:label="fragment_mandi_graph"
-        tools:layout="@layout/fragment_mandi_graph" />
+        tools:layout="@layout/fragment_mandi_graph" >
+        <action
+            android:id="@+id/action_mandiGraphFragment_to_mandiFragment"
+            app:destination="@id/mandiFragment" />
+        <action
+            android:id="@+id/action_mandiGraphFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.mandiprice.fragments.SearchFragment"

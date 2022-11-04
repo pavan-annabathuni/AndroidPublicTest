@@ -21,7 +21,7 @@ class SucessFullFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSucessFullBinding.inflate(inflater, container, false)
         if (arguments!=null) {
@@ -29,13 +29,13 @@ class SucessFullFragment : Fragment() {
             Log.d(TAG, "onCreateViewSoilTestNumber: $soil_test_number ")
             binding.tvRequestIDText.text =
                 "Your soil test request for " + soil_test_number.toString()
+
             binding.ivClose.setOnClickListener {
 //                activity?.finish()
 //                findNavController().navigate(R.id.action_sucessFullFragment_to_soilTestingHomeFragment)
 //                val isSuccess = findNavController().navigateUp()
 //                if (!isSuccess) requireActivity().finish()
-                Toast.makeText(requireActivity(), "nckskvcnk", Toast.LENGTH_SHORT).show()
-
+                findNavController().navigateUp()
             }
         }
         return binding.root

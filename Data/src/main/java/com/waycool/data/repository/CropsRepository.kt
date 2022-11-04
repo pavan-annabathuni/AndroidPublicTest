@@ -245,8 +245,8 @@ object CropsRepository {
             }
         }
     }
-    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date: String) : Flow<Resource<AddCropResponseDTO?>> {
-        return NetworkSource.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date)
+    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date: String,area:Double) : Flow<Resource<AddCropResponseDTO?>> {
+        return NetworkSource.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area)
     }
     fun postNewSoil(account_id: Int,lat: Double,long: Double,org_id:Int,plot_no:String,pincode:String,address:String,state:String,district:String ,number:String): Flow<Resource<SoilTestResponseDTO?>>{
 
