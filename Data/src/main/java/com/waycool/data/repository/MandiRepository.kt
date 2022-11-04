@@ -20,7 +20,7 @@ object MandiRepository {
             Flow<PagingData<MandiDomainRecord>> {
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         Log.d("HeaderMap", "getMandiList: $map")
-        return NetworkSource.getMandiList("78.22,","12.22",crop_category,
+        return NetworkSource.getMandiList("12.929842", "77.685520",crop_category,
             state,crop,sortBy,orderBy,search)
     }
 
