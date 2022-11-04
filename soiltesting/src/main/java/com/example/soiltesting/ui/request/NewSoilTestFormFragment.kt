@@ -66,27 +66,9 @@ class NewSoilTestFormFragment : Fragment() {
                             }
 
                             }
-
-
-//                            if (account!=null){
-//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
-//                            }
                         }
                     }
-
-
             }
-
-//            if (account!=null){
-//                itemClicked(account!!, lat!!, long!!, onp_id!!)
-//            }
-
-
-
-//        binding.cardCheckHealth.setOnClickListener {
-
-
-//        }
         return binding.root
     }
 
@@ -96,20 +78,7 @@ class NewSoilTestFormFragment : Fragment() {
 //        itemClicked()
 //        initView()
         mvvm()
-//            initView()
-//            val newSoilTestPost = NewSoilTestPost(
-//                "123456",
-//                ploteNumber.toString(),
-//                pincode.toString(),
-//                "12.9344",
-//                "72.000",
-//                address.toString(),
-//                city.toString(),
-//                state.toString(),
-//                mobileNumber,
-//                "1"
-//            )
-//            viewModel.postNewSoil(newSoilTestPost)
+
             Log.d(TAG, "onViewCreated: ButtonClicked")
 //            soilViewModel.postNewSoil(
 //                binding.etPlotNumber.toString(),
