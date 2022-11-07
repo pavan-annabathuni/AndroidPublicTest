@@ -15,6 +15,7 @@ class UserDetailsEnitityMapper : EntityMapper<UserDetailsEntity, UserDetailsData
             name = entity.name,
             contact = entity.contact,
             email = entity.email,
+            encryptedToken=entity.encryptedToken,
             approved = entity.approved,
             orgCodeId = entity.orgCodeId,
             profile = entity.profile?.let { ProfileMapper().mapFromEntity(it) },
@@ -29,6 +30,7 @@ class UserDetailsEnitityMapper : EntityMapper<UserDetailsEntity, UserDetailsData
             contact = dto.contact,
             email = dto.email,
             approved = dto.approved,
+            encryptedToken=dto.encryptedToken,
             orgCodeId = dto.orgCodeId,
             profile = dto.profile?.let { ProfileMapper().mapToEntity(it) },
             account = AccountMapper().toEntityList(dto.account) as ArrayList<AccountEntity>

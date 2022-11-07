@@ -6,6 +6,7 @@ data class UserDetailsEntity(
     var id: Int? = null,
     var name: String? = null,
     var contact: String? = null,
+    var encryptedToken: String? = null,
     var email: String? = null,
     var approved: Int? = null,
     var orgCodeId: String? = null,

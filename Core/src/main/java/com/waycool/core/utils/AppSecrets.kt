@@ -16,7 +16,8 @@ object AppSecrets {
     external fun getOTPTemplateId(): String
 
     external fun getYoutubeKey(): String
-
+    external fun getChatAppId(): String
+    external fun getAccountKey(): String
 
     fun getHeaderPublic(): Map<String, String> =
         mapOf("x-api-key" to getApiKey(), "Accept" to "application/json, text/plain, */*")

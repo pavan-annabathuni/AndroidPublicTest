@@ -125,3 +125,15 @@ Java_com_waycool_core_utils_AppSecrets_getYoutubeKey(JNIEnv *env, jobject thiz) 
     std::string base_url = "AIzaSyB-6QNre3Dz_Kz-he8zY4ex2kw7PVGHkNg";
     return env->NewStringUTF(base_url.c_str());
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getChatAppId(JNIEnv *env, jobject thiz) {
+    std::string base_url = "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getAccountKey(JNIEnv *env, jobject thiz) {
+    std::string base_url = "dt55P5snqpfyOrXfNqz56lwrup8amDdz";
+    return env->NewStringUTF(base_url.c_str());
+}

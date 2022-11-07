@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.waycool.core.utils.AppSecrets
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
@@ -31,6 +32,7 @@ class MyProfileFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    private var jwtToken:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -64,6 +66,7 @@ class MyProfileFragment : Fragment() {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
+                  jwtToken = it.data?.data?.encryptedToken
               }
           }
 
@@ -96,7 +99,6 @@ class MyProfileFragment : Fragment() {
         binding.rateUs.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
             startActivity(intent)
-            Toast.makeText(context,"Worked",Toast.LENGTH_SHORT).show()
         }
         binding.back.setOnClickListener(){
             this.findNavController().navigateUp()
@@ -118,25 +120,31 @@ class MyProfileFragment : Fragment() {
 //        binding.version.setText("2.5.5")
 
         binding.cvChat.setOnClickListener() {
-            Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
-                "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
+            Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),
+            AppSecrets.getChatAppId())
             val chatConfiguration = ChatConfiguration.builder()
                 .withAgentAvailabilityEnabled(false)
                 .withTranscriptEnabled(false)
-//
                 .build()
-            val visitorInfo: VisitorInfo = VisitorInfo.builder()
-                .withName("Bob")
-                .withEmail("bob@example.com")
-                .withPhoneNumber("123456") // numeric string
-                .build();
+//            val visitorInfo: VisitorInfo = VisitorInfo.builder()
+//                .withName("Bob")
+//                .withEmail("bob@example.com")
+//                .withPhoneNumber("123456") // numeric string
+//                .build();
 
             val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-                .withVisitorInfo(visitorInfo)
+//                .withVisitorInfo(visitorInfo)
                 .withDepartment("English Language Group")
                 .build()
 
             Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
+
+            val jwtAuthenticator =  JwtAuthenticator {
+                it.onTokenLoaded(jwtToken)
+                it.onError()
+                Log.d("JWT", "onClick: $jwtToken")
+            }
+            Chat.INSTANCE.setIdentity(jwtAuthenticator)
 
 
             MessagingActivity.builder()

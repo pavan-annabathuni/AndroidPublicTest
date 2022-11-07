@@ -1,21 +1,15 @@
 package com.example.mandiprice.fragments
 
 import android.content.Intent
-import android.net.wifi.WifiConfiguration.AuthAlgorithm.strings
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.speech.RecognizerIntent
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -23,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.denzcoskun.imageslider.models.SlideModel
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.adapter.DistanceAdapter.*
@@ -32,13 +25,12 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
-import com.waycool.videos.adapter.VideosPagerAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MandiFragment : Fragment() {
@@ -76,21 +68,6 @@ class MandiFragment : Fragment() {
         binding.lifecycleOwner = this
 
 
-        //binding.viewModel = viewModel
-
-//        viewModel.pagination(cropCategory,state,crop, orderBy, "asc").observe(viewLifecycleOwner){
-//            Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//            Log.d("Pagination", "onCreateView: ${it.toString()} ")
-//            val distanceAdapter = DistanceAdapter(DiffCallback.OnClickListener{
-//
-//            })
-//            binding.recycleViewDis.adapter=distanceAdapter
-//            distanceAdapter.submitData(lifecycle,it)
-//            Log.d("Pagination", "onCreateView: ${distanceAdapter.itemCount} ")
-//
-//        }
-
-
         binding.searchBar.setOnClickListener() {
             this.findNavController()
                 .navigate(MandiFragmentDirections.actionMandiFragmentToSearchFragment())
@@ -100,9 +77,6 @@ class MandiFragment : Fragment() {
                 .navigate(MandiFragmentDirections.actionMandiFragmentToSearchFragment())
         }
 
-//        viewModel.status.observe(viewLifecycleOwner){
-//           // Toast.makeText(context,it.toString(),Toast.LENGTH_SHORT).show()
-//        }
         binding.topAppBar.setNavigationOnClickListener(){
             activity?.finish()
         }
@@ -146,6 +120,7 @@ class MandiFragment : Fragment() {
         tabs()
         spinnerSetup()
         onClick()
+        fabButton()
 
 
 
@@ -449,5 +424,30 @@ class MandiFragment : Fragment() {
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
-
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
+    }
     }

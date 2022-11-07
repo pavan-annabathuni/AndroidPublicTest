@@ -18,7 +18,7 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 
 
-class LanguageFragment : Fragment() {
+class ProfileLanguageFragment : Fragment() {
 
 
     lateinit var binding: FragmentLanguageBinding
@@ -66,7 +66,7 @@ class LanguageFragment : Fragment() {
                     selectedLanguage!!.id
                 )
                 Navigation.findNavController(binding.root)
-                    .navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
+                    .navigateUp()
             }
         }
         binding.imgBack.setOnClickListener(){

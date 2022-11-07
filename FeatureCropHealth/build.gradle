@@ -46,6 +46,8 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Videos')
+    implementation project(path: ':Core')
+    implementation project(path: ':featureChat')
     implementation project(path: ':FeatureCropProtect')
 
     implementation 'androidx.core:core-ktx:1.8.0'

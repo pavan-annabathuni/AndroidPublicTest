@@ -1,10 +1,10 @@
 package com.example.cropinformation.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -14,7 +14,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.denzcoskun.imageslider.models.SlideModel
 import com.example.cropinformation.R
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
@@ -22,6 +21,8 @@ import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -31,12 +32,7 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import zendesk.chat.*
-import zendesk.core.AnonymousIdentity
-import zendesk.core.Identity
-import zendesk.core.Zendesk
 import zendesk.messaging.MessagingActivity
-import zendesk.support.Support
-import zendesk.support.guide.HelpCenterActivity
 import kotlin.math.roundToInt
 
 
@@ -90,27 +86,63 @@ class CropInfoFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.topName.text = cropName
         binding.back.setOnClickListener(){
             findNavController().popBackStack()
         }
-        binding.addFab.setOnClickListener(){
-            zenDesk()
-        }
+//        binding.addFab.setOnClickListener(){
+//
+//           // zenDesk()
+//            val popupMenu = PopupMenu(context, binding.addFab,R.style.myListPopupWindow)
+//            popupMenu.menuInflater.inflate(R.menu.chat_menu_cropinfo, popupMenu.menu)
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                popupMenu.gravity = Gravity.END
+//            }
+//
+//            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+//                when (item.itemId) {
+//                    R.id.call -> {
+//                        val intent = Intent(Intent.ACTION_DIAL)
+//                        intent.data = Uri.parse("tel:09020601234")
+//                        startActivity(intent)
+//                    }
+//                    R.id.chat->{
+//                        //zenDesk()
+//                        ZendeskChat.zenDesk(requireContext())
+//
+//                    }
+//                }
+//                true
+//            })
+//            try{
+//                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+//                fieldMPopup.isAccessible = true
+//                val mPopup = fieldMPopup.get(popupMenu)
+//                mPopup.javaClass
+//                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+//                    .invoke(mPopup, true)
+//            } catch (e: Exception){
+//                Log.e("Main", "Error showing menu icons.", e)
+//            } finally {
+//                popupMenu.show()
+//            }
+//             popupMenu.show()
+//
+//        }
         setTabs()
         Glide.with(requireContext()).load(cropLogo).into(binding.cropLogo)
-        imageSlider()
         tabCount()
         ViewModel.cropAdvisory()
         binding.ViewPager.setPageTransformer { page, position ->
             updatePagerHeightForChild(page, binding.ViewPager)
         }
-//        ViewModel.getTabItem()
-//        ViewModel.getNewsItem()
         setVideos()
         setNews()
+        fabButton()
     }
 
     private fun zenDesk() {
@@ -432,18 +464,34 @@ class CropInfoFragment : Fragment() {
 //        })
     }
 
-    private fun imageSlider() {
-        val imageList = ArrayList<SlideModel>() // Create image list
-
-        // imageList.add(SlideModel("String Url" or R.drawable)
-        // imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
-
-        imageList.add(SlideModel(R.drawable.ad))
-        imageList.add(SlideModel(R.drawable.ad))
-
-        val imageSlider = binding.imgSlider
-        imageSlider.setImageList(imageList)
+    //Zendesk Chat and Calling Function
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+                        intent.data = Uri.parse(CALL_NUMBER)
+                        startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
     }
+
 
 
     private fun updatePagerHeightForChild(view: View, pager: ViewPager2) {
@@ -559,5 +607,6 @@ class CropInfoFragment : Fragment() {
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
+
 
 }
