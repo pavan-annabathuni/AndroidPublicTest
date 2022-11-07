@@ -1,5 +1,6 @@
 package com.example.soiltesting.ui.history
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -31,6 +32,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private var _binding: FragmentAllHistoryBinding? = null
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var accountID: Int? = null
 
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private var soilHistoryAdapter = HistoryDataAdapter(this)
@@ -59,7 +61,21 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewStatusTracker.adapter = soilHistoryAdapter
         initViewBackClick()
-        bindObserversSoilTestHistory()
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+            for (i in it.data!!.account) {
+                if (i.accountType == "outgrow") {
+                    Log.d(ContentValues.TAG, "onCreateViewAccountID:${i.id}")
+                    accountID = i.id
+                    if (accountID !=null) {
+                        bindObserversSoilTestHistory(accountID!!)
+                    }
+
+                }
+            }
+        }
+
         locationClick()
 //        clickSearch()
     }
@@ -70,12 +86,25 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             if (!isSuccess) requireActivity().onBackPressed()
         }
         binding.cardCheckHealth.setOnClickListener {
-            isLocationPermissionGranted()
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+                for (i in it.data!!.account) {
+                    if (i.accountType == "outgrow") {
+                        Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:${i.id}")
+                        accountID = i.id
+                        if (accountID !=null) {
+                            isLocationPermissionGranted(accountID!!)
+                        }
+
+                    }
+                }
+            }
         }
     }
 
     private fun locationClick() {
-        checkSoilTestViewModel.getSoilTest(1, 13.078100, 77.636580)
+//        checkSoilTestViewModel.getSoilTest(1, 13.078100, 77.636580)
 //        checkSoilTestViewModel.getSoilTest(4,13.22,3.33)
 
 //        binding.cardCheckHealth.setOnClickListener {
@@ -83,6 +112,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 ////            bindObserversCheckSoilTest()
 ////            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_newSoilTestFormFragment)
 //        }
+
 
     }
 
@@ -193,8 +223,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 //
 //    }
 
-    private fun bindObserversSoilTestHistory() {
-        viewModel.getSoilTestHistory().observe(requireActivity()) {
+    private fun bindObserversSoilTestHistory(account_id: Int) {
+        viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
 
             when (it) {
                 is Resource.Success -> {
@@ -266,7 +296,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         )
 
     }
-    private fun isLocationPermissionGranted(): Boolean {
+    private fun isLocationPermissionGranted(account_id:Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -297,9 +327,12 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
                         Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
 
+
+
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
                         viewModel.getCheckSoilTestLab(
+                            account_id,
                             location.latitude,
                             location.longitude
                         ).observe(requireActivity()) {

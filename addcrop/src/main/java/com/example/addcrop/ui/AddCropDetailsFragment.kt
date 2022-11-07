@@ -1,5 +1,6 @@
 package com.example.addcrop.ui
 
+import android.R
 import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -10,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -47,10 +50,11 @@ class AddCropDetailsFragment : Fragment() {
         "Flood Irrigation"
     )
     val years = arrayOf(
-        "0-1",
-        "1-2",
-        "2-3",
-        "3-4"
+        "Acres",
+        "Gunta",
+        "Cent",
+        "Hectare",
+        "Bigha"
     )
 
 
@@ -70,10 +74,11 @@ class AddCropDetailsFragment : Fragment() {
         if (arguments != null) {
             var onp_id = arguments?.getInt("cropid")
             Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $onp_id")
-            itemClicked(onp_id!!)
+//            itemClicked(onp_id!!)
+            binding.cardCheckHealth.setOnClickListener {
+                postAddCrop(onp_id!!)
+            }
         }
-
-
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -83,19 +88,15 @@ class AddCropDetailsFragment : Fragment() {
                     Log.d(TAG, "onCreateViewAccountID:${i.id}")
                     accountID = i.id
                 }
-
-
-//                            if (account!=null){
-//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
-//                            }
             }
         }
 
 
 //        spinner()
-//        spinnerYear()
+        spinnerYear()
         binding.tvCalender.setOnClickListener {
             showCalender()
+//            showDateDailog()
         }
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
@@ -175,23 +176,41 @@ class AddCropDetailsFragment : Fragment() {
 //
 //    }
 
-//    private fun spinnerYear() {
-//        val arrayAdapter =
-//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
-//        binding.tvSpinnerYear.adapter = arrayAdapter
-//        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                val item = p0?.selectedItem
-//                year_selected = item.toString()
-//            }
-//
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }
-//
-//    }
+    private fun spinnerYear() {
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, years)
+        binding.Acres.adapter = arrayAdapter
+        binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val item = p0?.selectedItem
+                year_selected = item.toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+    }
+
+    private fun postAddCrop(rop_id: Int) {
+        viewModel.addCropPassData(
+            rop_id, accountID!!, binding.etNickName.text.toString(), 1,
+            sowing_date = dateCrop,
+            area = area.toDouble()
+        ).observe(requireActivity()) {
+//            Log.d(TAG, "itemClickedData: $myCalendar")
+            if (it is Resource.Success) {
+                activity?.finish()
+            } else {
+//                activity?.finish()
+                Toast.makeText(requireContext(), "Error API Call", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+        }
+    }
 
     private fun itemClicked(rop_id: Int) {
         binding.cardCheckHealth.setOnClickListener {
@@ -211,8 +230,8 @@ class AddCropDetailsFragment : Fragment() {
             } else if (date.isEmpty()) {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
-            }else if(accountID==null){
-                Toast.makeText(requireContext(),"Incorrect Id",Toast.LENGTH_SHORT).show()
+            } else if (accountID == null) {
+                Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
             }
 //            else if (numberOfPlanets.isEmpty()) {
 //                binding.etState.error = "Enter Number of Planets"
@@ -221,8 +240,7 @@ class AddCropDetailsFragment : Fragment() {
             else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && accountID != null) {
                 viewModel.addCropPassData(rop_id, accountID!!, binding.etNickName.text.toString(), 1,
                     sowing_date = dateCrop,
-                    area = area.toDouble()
-                ).observe(requireActivity()) {
+                    area = area.toDouble()).observe(requireActivity()) {
                     Log.d(TAG, "itemClickedData: $myCalendar")
                     if (it is Resource.Success) {
                         activity?.finish()
@@ -270,13 +288,18 @@ class AddCropDetailsFragment : Fragment() {
 
     private fun showCalender() {
 
+
         var date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, 0);
+                myCalendar.add(Calendar.YEAR, -1);
+                view.setMinDate(myCalendar.timeInMillis)
                 updateLabel(myCalendar)
+                myCalendar.add(Calendar.YEAR,1)
+                view.setMaxDate(myCalendar.timeInMillis)
+
             }
 
         val dialog = DatePickerDialog(
@@ -287,13 +310,17 @@ class AddCropDetailsFragment : Fragment() {
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
         dateCrop = dateofBirthFormat.format(myCalendar.time)
+        myCalendar.add(Calendar.YEAR, -1);
+        dialog.datePicker.setMinDate(myCalendar.timeInMillis)
+        myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
+        dialog.datePicker.setMaxDate(myCalendar.getTimeInMillis());
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")
         );
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
-        );
+        )
     }
 
     private fun updateLabel(myCalendar: Calendar) {

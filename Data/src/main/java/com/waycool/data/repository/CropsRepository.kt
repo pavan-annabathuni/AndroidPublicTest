@@ -130,8 +130,8 @@ object CropsRepository {
         }
     }
 
-    fun getSoilTestHistory(): Flow<Resource<List<SoilTestHistoryDomain>?>> {
-        return SoilTestHistorySyncer().getData().map {
+    fun getSoilTestHistory(account_id: Int): Flow<Resource<List<SoilTestHistoryDomain>?>> {
+        return SoilTestHistorySyncer().getData(account_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -149,12 +149,15 @@ object CropsRepository {
     }
     //check soil test lab
 
-    fun getSoilTestLab(lat:Double,long:Double): Flow<Resource<List<CheckSoilTestDomain>?>> {
-        return NetworkSource.getSoilTestLab(1,lat,long).map {
+
+    fun getSoilTestLab(account:Int,lat:Double,long:Double): Flow<Resource<List<CheckSoilTestDomain>?>> {
+        return NetworkSource.getSoilTestLab(account,lat,long).map {
             when (it) {
                 is Resource.Success -> {
+                    SoilTestHistorySyncer().invalidateSync()
                     Resource.Success(
                         CheckSoilTestLabMapper().toDomainList(it.data?.data?: emptyList())
+
 //                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
                     )
                 }

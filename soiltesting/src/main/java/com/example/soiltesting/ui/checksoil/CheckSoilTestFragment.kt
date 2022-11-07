@@ -27,13 +27,14 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
-        var your_list  = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
-        Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
-        binding.recyclerviewStatusLab.layoutManager =
-            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        binding.recyclerviewStatusLab.adapter = soilTestingLabsAdapter
-        soilTestingLabsAdapter.setMovieList(your_list!!)
-        soilTestingLabsAdapter.notifyDataSetChanged()
+        if (arguments!=null) {
+            var your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
+            Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
+            binding.recyclerviewStatusLab.layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            binding.recyclerviewStatusLab.adapter = soilTestingLabsAdapter
+            soilTestingLabsAdapter.setMovieList(your_list!!)
+            soilTestingLabsAdapter.notifyDataSetChanged()
 //        binding.cardCheckHealth.setOnClickListener {
 //            val bundle=Bundle()
 //            bundle.putString("onp_id",your_list[0].onp_name.toString())
@@ -42,6 +43,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
 //            findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)
 //
 //        }
+        }
         return binding.root
     }
 

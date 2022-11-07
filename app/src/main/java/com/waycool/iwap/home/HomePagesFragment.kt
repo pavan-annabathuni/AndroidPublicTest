@@ -250,9 +250,9 @@ class HomePagesFragment : Fragment() {
         viewModel.getWeather(lat,lon).observe(viewLifecycleOwner) {
             binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
             binding.tvWindDegree.text = String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
-            binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
+//            binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
             Log.d("Weather", "weather: $it")
-             Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)
+  //           Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)
 
             if (it?.data != null) {
 

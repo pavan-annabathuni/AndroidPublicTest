@@ -37,6 +37,7 @@ class NewSoilTestFormFragment : Fragment() {
     var state: String = ""
     private var accountID: Int? =null
     var mobileNumber: String = ""
+    var contactNumber:String=""
 
 
     override fun onCreateView(
@@ -56,13 +57,22 @@ class NewSoilTestFormFragment : Fragment() {
                 soilViewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
+                    contactNumber= it.data?.contact.toString()
+                    binding.tvContact.text=contactNumber
+
+
+
                     for ( i in it.data!!.account){
                         if (i.accountType=="outgrow"){
                             Log.d(TAG, "onCreateViewAccountID:${i.id}")
                             accountID=i.id
+//                            binding.tvContact
+//                            mobileNumber=i.accountNo.toString()
+
+
                             if (accountID!=null){
                                 Log.d(TAG, "onCreateViewAccountID:$accountID")
-                                itemClicked(accountID!!, lat!!, long!!, onp_id!!)
+                                itemClicked(accountID!!, lat!!, long!!, onp_id!!,contactNumber)
                             }
 
                             }
@@ -171,23 +181,61 @@ class NewSoilTestFormFragment : Fragment() {
         }
     }
 
+    private fun bindObserversSoilTestHistory(account_id:Int ,lat:Double,long:Double,onp_number:Int,phoneNumber:String){
+        soilViewModel.postNewSoil(
+            account_id,lat,long,
+            onp_number,
+            binding.etPlotNumber.text.toString(),
+            binding.etPincodeNumber.text.toString(),
+            binding.etAddress.text. toString(),
+            binding.etState.text.toString(),
+            binding.etCity.text.toString(),
+            phoneNumber
+
+        ).observe(requireActivity()) {
+            when (it) {
+                is Resource.Success -> {
+                    val bundle=Bundle()
+                    bundle.putString("soil_req_number",it.data!!.data.soilTestNumber)
+                    Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber)
+                    findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
+                }
+                is Resource.Loading -> {
 
 
-    private fun itemClicked(account_id:Int ,lat:Double,long:Double,onp_number:Int) {
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+//                        .show()
+                }
+            }
+
+
+        }
+    }
+
+
+
+    private fun itemClicked(account_id:Int ,lat:Double,long:Double,onp_number:Int,phoneNumber:String) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
             pincode = binding.etPincodeNumber.text.toString().trim()
             address = binding.etAddress.text.toString().trim()
             city = binding.etCity.text.toString().trim()
             state = binding.etState.text.toString().trim()
-            mobileNumber = binding.etMobile.text.toString().trim()
+            mobileNumber = binding.tvContact.text.toString().trim()
             if (ploteNumber.isEmpty()) {
                 binding.etPlotNumber.error = "Plot Number should not be empty"
                 return@setOnClickListener
-            } else if (pincode.isEmpty()) {
+            } else if (pincode.isEmpty() && pincode>="6") {
                 binding.etPincodeNumber.error = "Enter Pincode "
                 return@setOnClickListener
-            } else if (address.isEmpty()) {
+            }else if (pincode.length!=6){
+                Toast.makeText(requireContext(), "PLease Enter 6 Digit Pincode", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else if (address.isEmpty()) {
                 binding.etState.error = "Enter Address"
                 return@setOnClickListener
             } else if (city.isEmpty()) {
@@ -197,7 +245,7 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.etState.error = "Enter State"
                 return@setOnClickListener
             } else if (mobileNumber.isEmpty()) {
-                binding.etMobile.error = "Enter Mobile Number"
+                binding.tvContact.error = "Enter Mobile Number"
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
                 soilViewModel.postNewSoil(
@@ -208,14 +256,14 @@ class NewSoilTestFormFragment : Fragment() {
                     binding.etAddress.text. toString(),
                     binding.etState.text.toString(),
                     binding.etCity.text.toString(),
-                    binding.etMobile.text.toString()
+                    phoneNumber
                 ).observe(requireActivity()) {
                     when (it) {
                         is Resource.Success -> {
                             val bundle=Bundle()
-                            bundle.putString("soil_test_number",it.data?.data.toString())
-                            Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber.toString())
-                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment)
+                            bundle.putString("soil_req_number",it.data!!.data.soilTestNumber)
+                            Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber)
+                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
                         }
                         is Resource.Loading -> {
 
