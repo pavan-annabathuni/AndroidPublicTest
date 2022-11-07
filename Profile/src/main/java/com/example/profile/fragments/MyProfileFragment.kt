@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -52,16 +53,22 @@ class MyProfileFragment : Fragment() {
        // viewModel.getUserDetails()
         onClick()
         observer()
-
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                   this@MyProfileFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         return binding.root
     }
 
      fun observer():Boolean {
-//        viewModel.response2.observe(viewLifecycleOwner){
-//            binding.username.text = it.name
-//            binding.phoneNo.text = "+91 ${it.contact}"
-//
-//        }
+
           viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
@@ -200,4 +207,5 @@ class MyProfileFragment : Fragment() {
         startActivity(intent)
         activity?.finish()
     }
+
    }
