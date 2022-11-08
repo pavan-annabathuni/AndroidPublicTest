@@ -45,6 +45,8 @@ class SelectAddCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSelectAddCropBinding.inflate(inflater)
+        val add_crop= arguments?.getString("userId")
+        Log.d("TAG", "onCreateViewadd_crop: $add_crop")
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +56,7 @@ class SelectAddCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = "Protect Your Crop"
+        binding.toolbarTitle.text = "Add Crop"
 
         binding.cropsRv.adapter = adapter
 

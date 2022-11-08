@@ -46,7 +46,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
 
-
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 

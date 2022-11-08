@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="weatherViewModel"
-            type="com.waycool.data.repository.domainModels.WeatherMasterDomain"/>
+            type="com.waycool.data.repository.domainModels.WeatherMasterDomain" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
-                        android:text="Good Evening!"
+                        android:text="Namaste"
                         android:textColor="#111827"
                         android:textSize="@dimen/txt20"
                         android:textStyle="bold"
@@ -349,9 +350,9 @@ more details."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/txt16"
+                    android:background="@drawable/bg_ans"
                     android:elevation="6dp"
                     app:cardCornerRadius="@dimen/txt10"
-                    android:background="@drawable/bg_ans"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clAddForm">
@@ -423,10 +424,10 @@ more details."
                             android:id="@+id/ViewOne"
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:background="#EDEDED"
                             android:layout_marginTop="@dimen/txt8"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:background="#EDEDED"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvDay" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -576,17 +577,17 @@ more details."
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/clRain">
 
-<!--                            <ImageView-->
-<!--                                android:id="@+id/ivCloudy"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginStart="@dimen/txt16"-->
-<!--                                android:layout_marginTop="8dp"-->
-<!--                                android:layout_marginBottom="@dimen/txt8"-->
-<!--                                android:src="@drawable/ic_cloudy_deng"-->
-<!--                                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                                app:layout_constraintStart_toStartOf="parent"-->
-<!--                                app:layout_constraintTop_toTopOf="parent" />-->
+                            <!--                            <ImageView-->
+                            <!--                                android:id="@+id/ivCloudy"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:layout_marginStart="@dimen/txt16"-->
+                            <!--                                android:layout_marginTop="8dp"-->
+                            <!--                                android:layout_marginBottom="@dimen/txt8"-->
+                            <!--                                android:src="@drawable/ic_cloudy_deng"-->
+                            <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+                            <!--                                app:layout_constraintStart_toStartOf="parent"-->
+                            <!--                                app:layout_constraintTop_toTopOf="parent" />-->
 
                             <TextView
                                 android:id="@+id/tvCloudy"
@@ -596,9 +597,9 @@ more details."
                                 android:layout_marginTop="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:drawableStart="@drawable/ic_cloudy_deng"
+                                android:drawablePadding="8dp"
                                 android:text="Cloudy with a thunderstorm this afternoon"
                                 android:textColor="#FF2C23"
-                                android:drawablePadding="8dp"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
