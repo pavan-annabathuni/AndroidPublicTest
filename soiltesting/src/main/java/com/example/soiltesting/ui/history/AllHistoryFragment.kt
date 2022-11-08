@@ -282,10 +282,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
@@ -383,6 +379,11 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 }
             true
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 
