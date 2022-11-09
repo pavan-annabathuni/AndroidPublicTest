@@ -146,7 +146,7 @@ more details."
                                 android:layout_marginTop="16dp"
                                 android:layout_marginBottom="16dp"
                                 android:background="@drawable/bg_add_form"
-                                app:layout_constraintBottom_toBottomOf="parent"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
 
@@ -741,8 +741,8 @@ to the farm"
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardImageBanner3x1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
                         android:layout_marginEnd="@dimen/space16"
                         app:cardCornerRadius="@dimen/space10"
@@ -756,9 +756,10 @@ to the farm"
                         <ImageView
                             android:id="@+id/ivSingleImageBanner3x1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            tools:src="@drawable/ad" />
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/homepageads"
+                             />
 
                     </androidx.cardview.widget.CardView>
 
