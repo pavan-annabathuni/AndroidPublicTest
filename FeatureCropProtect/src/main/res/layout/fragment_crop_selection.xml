@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Our AI-enabled ‘Crop Health’ helps you to understand the health of your crops by uploading or capturing the Images of stems, leaves or roots."
+                    android:text="Our ‘Crop Protection’ feature enables you with complete information to fight against all possible diseases and helps you to maintain healthy crops."
                     android:textColor="@color/textdark"
                     app:layout_constraintBottom_toBottomOf="@+id/materialCardView2"
                     app:layout_constraintEnd_toEndOf="parent"

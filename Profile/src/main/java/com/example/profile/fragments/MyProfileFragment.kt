@@ -139,6 +139,25 @@ class MyProfileFragment : Fragment() {
 //                .withPhoneNumber("123456") // numeric string
 //                .build();
 
+
+//            var jwtAuthenticator =  JwtAuthenticator {
+//                it.onTokenLoaded("eyJpdiI6IjBGN0lWQ1d3N0tQS0lreHRMNWVKV0E9PSIsInZhbHVlIjoib2VsYU5OVjJqdVBNRWZyMkpJcWVyQT09IiwibWFjIjoiYTJmODA4Y2ExOTg1NWRkNjNhNGUwYWJjZTcyYWJmNTNiNjJiN2I2Y2NiZWRkMWEwZjE2ZGY3ODAyZDViYzlkZiIsInRhZyI6IiJ9")
+//                it.onError()
+//                Log.d("JWT", "onClick: $jwtToken")
+//            }
+
+           val jwtAuthenticator =
+                JwtAuthenticator { jwtCompletion -> //Fetch or generate the JWT token at this point
+                    //OnSuccess
+                    jwtCompletion.onTokenLoaded("eyJpdiI6IkdvQ0xTaVd5UDA5aWg3bTlTeGJUdEE9PSIsInZhbHVlIjoicWFPTDdoZjZrS0M2Slpoa3A0bzdXZz09IiwibWFjIjoiMDBhZjIyYjI4NjE2NzVhNGFhNjZjYTlkM2E1NDFmYjA1YTdkZTQ0MjVkMzUxYWU5MmY3YjcwNmE5MDViYmY0ZCIsInRhZyI6IiJ9")
+                    //OnError
+                    jwtCompletion.onError()
+                }
+
+
+
+            Chat.INSTANCE.setIdentity(jwtAuthenticator)
+
             val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
 //                .withVisitorInfo(visitorInfo)
                 .withDepartment("English Language Group")
@@ -146,12 +165,6 @@ class MyProfileFragment : Fragment() {
 
             Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
 
-            val jwtAuthenticator =  JwtAuthenticator {
-                it.onTokenLoaded(jwtToken)
-                it.onError()
-                Log.d("JWT", "onClick: $jwtToken")
-            }
-            Chat.INSTANCE.setIdentity(jwtAuthenticator)
 
 
             MessagingActivity.builder()

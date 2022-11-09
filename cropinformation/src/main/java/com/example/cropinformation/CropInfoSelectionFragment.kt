@@ -19,7 +19,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.cropinformation.adapter.CropListAdapter
-import com.example.cropinformation.databinding.FragmentCropSelectionBinding
+import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
@@ -28,9 +28,9 @@ import com.waycool.featurechat.Contants
 import com.waycool.featurechat.ZendeskChat
 import java.util.*
 
-class CropSelectionFragment : Fragment() {
+class CropInfoSelectionFragment : Fragment() {
     private var selectedCategory: CropCategoryMasterDomain? = null
-    private lateinit var binding: FragmentCropSelectionBinding
+    private lateinit var binding: FragmentCropSelectionInfoBinding
     private val viewModel:TabViewModel by lazy {
         ViewModelProvider(requireActivity())[TabViewModel::class.java]
     }
@@ -49,7 +49,7 @@ class CropSelectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentCropSelectionBinding.inflate(inflater)
+        binding = FragmentCropSelectionInfoBinding.inflate(inflater)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

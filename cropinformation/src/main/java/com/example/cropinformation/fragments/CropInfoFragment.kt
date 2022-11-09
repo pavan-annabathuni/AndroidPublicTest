@@ -194,7 +194,6 @@ class CropInfoFragment : Fragment() {
                        tab.text = data[position].label_name
                         tab.setIcon(R.drawable.img_crop_variety)
                         customView
-
                     }
                     "Soil Type Others" -> {
                         tab.text = data[position].label_name

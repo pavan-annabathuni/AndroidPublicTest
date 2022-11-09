@@ -99,15 +99,16 @@
             app:layout_constraintTop_toBottomOf="@+id/ll_search">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/LightGray"
                 app:cardCornerRadius="20dp">
 
                 <Spinner
                     android:id="@+id/spinner1"
                     style="@style/spinner_style"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
@@ -116,8 +117,9 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/LightGray"
@@ -125,23 +127,26 @@
 
                 <Spinner
                     android:id="@+id/spinner2"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
+                    android:dropDownHeight="300dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
                     tools:listitem="@layout/item_spinner" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/LightGray"
                 app:cardCornerRadius="20dp">
 
                 <Spinner
                     android:id="@+id/spinner3"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
+                    android:dropDownWidth="100dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
                     tools:listitem="@layout/item_spinner" />
@@ -159,11 +164,10 @@
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
@@ -302,22 +306,30 @@
                             android:textSize="20sp" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleViewDis"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="visible"
-                        android:nestedScrollingEnabled="true"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view2"
-                        tools:itemCount="4"
-                        tools:listitem="@layout/item_distance" />
+                        app:layout_constraintTop_toBottomOf="@+id/view2">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleViewDis"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            android:isScrollContainer="false"
+                            android:nestedScrollingEnabled="true"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="4"
+                            tools:listitem="@layout/item_distance" />
+                    </LinearLayout>
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -331,6 +343,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible"
+            tools:visibility = "gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

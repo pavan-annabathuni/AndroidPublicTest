@@ -1,6 +1,7 @@
 package com.waycool.data.repository
 
 import com.waycool.data.Local.Entity.PestDiseaseEntity
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
@@ -338,6 +339,11 @@ object CropsRepository {
             }
         }
 
+    }
+
+    suspend fun getState(): Flow<Resource<StateModel?>> {
+        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+        return NetworkSource.getStateList(map)
     }
 
 }

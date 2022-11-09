@@ -58,7 +58,7 @@ class HomePagesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val mandiAdapter = MandiHomePageAdapter()
+    private lateinit var  mandiAdapter:MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
@@ -77,6 +77,15 @@ class HomePagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener{
+            val args = Bundle()
+            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+            it?.crop?.let { it1 -> args.putString("cropName", it1) }
+            it?.market?.let { it1 -> args.putString("market", it1) }
+            this.findNavController()
+                .navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment2, args)
+        })
         binding.recyclerview.adapter = mandiAdapter
         binding.tvAddFromService.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
@@ -263,6 +272,7 @@ class HomePagesFragment : Fragment() {
             if (it?.data != null) {
                 binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
                 binding.tvWindDegree.text = String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
+                binding.tvHumidityDegree.text = String.format("%.0f", it.data?.current?.humidity) + "%"
                  binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
                 Log.d("Weather", "weather: $it")
              Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)

@@ -20,6 +20,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         val distance = binding.distance
         val imageView = binding.imageViewPrice
+        val source = binding.tvSource
         fun bind(data: MandiDomainRecord?) {
             binding.property = data
             binding.executePendingBindings()
@@ -51,6 +52,13 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
                 holder.imageView.visibility = View.VISIBLE
             }
             else -> holder.imageView.visibility = View.GONE
+        }
+        when(properties?.source){
+            "benchmarker" -> holder.source.visibility = View.INVISIBLE
+            else -> {
+                holder.source.visibility = View.VISIBLE
+                holder.source.text = "Source: ${properties?.source}"
+            }
         }
 
         holder.itemView.setOnClickListener() {

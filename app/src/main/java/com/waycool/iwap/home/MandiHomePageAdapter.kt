@@ -15,13 +15,15 @@ import com.example.soiltesting.databinding.ItemMandiBinding
 import com.example.soiltesting.ui.checksoil.SoilTestingLabsHolder
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 
-class MandiHomePageAdapter: PagingDataAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
+class MandiHomePageAdapter(val onClickListener:OnClickListener):
+    PagingDataAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
 
 
     class MandiHomePageHolder(private val binding: ItemMandiBinding):
         RecyclerView.ViewHolder(binding.root) {
 //        val distance = binding.distance
        val imageView = binding.ivPriceIndex
+        val source = binding.tvSource
          val image = binding.ivMandi
         fun bind(data: MandiDomainRecord?) {
             binding.property = data
@@ -31,20 +33,7 @@ class MandiHomePageAdapter: PagingDataAdapter<MandiDomainRecord, MandiHomePageAd
     }
 
 
-    companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
 
-        override fun areItemsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        class OnClickListener(val clickListener: (data: MandiDomainRecord) -> Unit) {
-            fun onClick(data: MandiDomainRecord) = clickListener(data)
-        }
-    }
 
     override fun onBindViewHolder(holder: MandiHomePageHolder, position: Int) {
         val properties = getItem(position)
@@ -66,10 +55,16 @@ class MandiHomePageAdapter: PagingDataAdapter<MandiDomainRecord, MandiHomePageAd
             }
             else -> holder.imageView.visibility = View.GONE
         }
-
-//        holder.itemView.setOnClickListener() {
-//            onClickListener.clickListener(properties!!)
-//        }
+        when(properties?.source){
+            "benchmarker" -> holder.source.visibility = View.INVISIBLE
+            else -> {
+                holder.source.visibility = View.VISIBLE
+                holder.source.text = "Source: ${properties?.source}"
+            }
+        }
+        holder.itemView.setOnClickListener() {
+            onClickListener.clickListener(properties!!)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MandiHomePageHolder {
@@ -82,7 +77,21 @@ class MandiHomePageAdapter: PagingDataAdapter<MandiDomainRecord, MandiHomePageAd
 
     override fun getItemCount(): Int {
         val size=snapshot().items.size
-        return if(size>=10) 10
+        return if(size>=5) 5
         else size
+    }
+    companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
+
+        override fun areItemsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        class OnClickListener(val clickListener: (data: MandiDomainRecord) -> Unit) {
+            fun onClick(data: MandiDomainRecord) = clickListener(data)
+        }
     }
 }

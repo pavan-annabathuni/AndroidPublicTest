@@ -9,6 +9,14 @@
         android:id="@+id/homePagesFragment"
         android:name="com.waycool.iwap.home.HomePagesFragment"
         android:label="fragment_home_pages"
-        tools:layout="@layout/fragment_home_pages" />
+        tools:layout="@layout/fragment_home_pages" >
+        <action
+            android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
+            app:destination="@id/mandiGraphFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/mandiGraphFragment2"
+        android:name="com.example.mandiprice.fragments.MandiGraphFragment"
+        android:label="MandiGraphFragment" />
 
 </navigation>

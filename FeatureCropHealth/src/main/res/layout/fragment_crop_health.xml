@@ -72,7 +72,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:minLines="4"
-                    android:text="Our AI-enabled ‘Crop Health’ features helps you to understand the health of your crops by uploading or capturing the Images of stems, leaves or roots."
+                    android:text="Our AI-enabled 'Crop Health' feature helps you to understand the health of your crop by capturing and uploading the image of the disease-affected leaf."
                     android:textColor="#505050"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"

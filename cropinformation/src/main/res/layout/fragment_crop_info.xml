@@ -39,7 +39,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center">
@@ -50,39 +50,49 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="8dp"
-                            android:src="@drawable/ic_black_back" />
+                            android:src="@drawable/ic_black_back"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/cropLogo"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ic_ellipse_white"
+                            android:src="@drawable/tomato2"
+                            app:civ_border_color="@color/black"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/top_name"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/top_name"
                             style="@style/Bold"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:padding="8dp"
                             android:text="Tomato"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/back"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="Tomato" />
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/cropLogo"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/ic_ellipse_white"
-                            android:src="@drawable/tomato2"
-                            app:civ_border_color="@color/black"
-                            app:civ_border_width="0dp" />
-                    </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
