@@ -43,10 +43,10 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
         holder.nativeNameTv.setText(languageList.get(position).langNative)
         holder.languageNameTv.setText(languageList.get(position).lang.toString().trim())
 
-        if (selectedPos == -1 && languageList[position].langCode!!.contains("en")) {
-            selectedPos = holder.adapterPosition
-            onItemClick?.invoke(languageList[position])
-        }
+//        if (selectedPos == -1 && languageList[position].langCode!!.contains("en")) {
+//            selectedPos = holder.adapterPosition
+//            onItemClick?.invoke(languageList[position])
+//        }
 
         if (position == selectedPos) {
 //            holder.mLanguageParent.setBackground(context.resources.getDrawable(R.drawable.selector_revamp_language_selected))
@@ -84,9 +84,10 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
         }
         holder.mLanguageParent.setOnClickListener {
             val tempPos: Int = selectedPos
-            selectedPos = holder.adapterPosition
+            selectedPos = holder.layoutPosition
             notifyItemChanged(tempPos)
             notifyItemChanged(selectedPos)
+            onItemClick?.invoke(languageList[position])
         }
     }
 
@@ -100,11 +101,5 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
         val languageNameTv: TextView = binding.languageTvVh
         val mLanguageParent = binding.languageParent
         val tickLayout: ImageView = binding.tickView
-
-        init {
-            mLanguageParent.setOnClickListener {
-                onItemClick?.invoke(languageList[adapterPosition])
-            }
-        }
     }
 }

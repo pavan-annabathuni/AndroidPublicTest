@@ -25,7 +25,7 @@ class NewsFullviewActivity : AppCompatActivity() {
         )
     }
 
-    private val audioNewLayout by lazy { AudioNewLayoutBinding.inflate(layoutInflater) }
+    private lateinit var audioNewLayout: AudioNewLayoutBinding
 
     var title: String? = null
     var desc: String? = null
@@ -43,6 +43,8 @@ class NewsFullviewActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        audioNewLayout = binding.audioLayout
+
         val bundle = intent.extras
         if (bundle != null) {
             title = bundle.getString("title")
@@ -54,9 +56,9 @@ class NewsFullviewActivity : AppCompatActivity() {
         }
         binding.newsHeading.text = "News Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
-        binding.title.text = title?:""
-        binding.desc.text = Html.fromHtml(desc?:"")
-        binding.newsDate.text = AppUtil.changeDateFormat(newsDate?:"")
+        binding.title.text = title ?: ""
+        binding.desc.text = Html.fromHtml(desc ?: "")
+        binding.newsDate.text = AppUtil.changeDateFormat(newsDate ?: "")
         binding.shareBtn.setTextColor(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
 
         if (source != null) {
@@ -64,6 +66,11 @@ class NewsFullviewActivity : AppCompatActivity() {
         } else {
             binding.newsSource.visibility = View.GONE
         }
+
+        if (audioUrl == null) {
+            audioNewLayout.root.visibility = View.GONE
+        } else
+            audioNewLayout.root.visibility = View.VISIBLE
 
 
         //setting colors for textview
@@ -88,7 +95,7 @@ class NewsFullviewActivity : AppCompatActivity() {
                 playAudio(audioUrl!!)
             } else {
                 Toast.makeText(this, "Audio file not found", Toast.LENGTH_SHORT).show()
-                
+
             }
         }
         mediaPlayer = MediaPlayer()

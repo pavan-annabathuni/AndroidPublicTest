@@ -7,6 +7,14 @@ apply plugin:  'org.jetbrains.kotlin.android'
 apply plugin:  'kotlin-kapt'
 apply plugin:  'kotlin-parcelize'
 android {
+    signingConfigs {
+        Release {
+            storeFile file('/Users/pavana/Documents/Outgrow_dev_key.jks')
+            storePassword 'Outgrow@123'
+            keyAlias 'Key0'
+            keyPassword 'Outgrow@123'
+        }
+    }
     compileSdk appCompileSdkVersion
 
     defaultConfig {

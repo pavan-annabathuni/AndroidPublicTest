@@ -81,7 +81,7 @@ class OtpFragment : Fragment() {
         binding = FragmentOtpBinding.inflate(layoutInflater)
 
         if (arguments != null)
-            mobileNumber = arguments?.getString("mobilenumber").toString()
+            mobileNumber = "+91 "+arguments?.getString("mobilenumber").toString()
 
         CoroutineScope(Dispatchers.IO).launch {
             fcmToken = loginViewModel.getFcmToken()

@@ -42,7 +42,7 @@ class LanguageFragment : Fragment() {
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-                        languageSelectionAdapter.setData(it.data?: emptyList())
+                        languageSelectionAdapter.setData(it.data ?: emptyList())
                     }
                     is Resource.Loading -> {
 
@@ -54,8 +54,12 @@ class LanguageFragment : Fragment() {
             }
         }
 
+//        if (selectedLanguage == null) {
+//            binding.doneBtn.isEnabled = false
+//        }
         languageSelectionAdapter.onItemClick = {
             selectedLanguage = it
+//            binding.doneBtn.isEnabled = selectedLanguage != null
         }
 
         binding.doneBtn.setOnClickListener {

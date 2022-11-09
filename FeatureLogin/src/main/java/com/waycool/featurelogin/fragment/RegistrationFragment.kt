@@ -18,6 +18,8 @@ import android.os.Looper
 import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -40,7 +42,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.featurelogin.R
 import com.waycool.featurelogin.adapter.UserProfileKnowServiceAdapter
 import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
@@ -72,7 +73,7 @@ class RegistrationFragment : Fragment() {
     lateinit var premiumAdapter: UserProfilePremiumAdapter
     var mobileNumber: String? = ""
     lateinit var mContext: Context
-    val loginViewModel: LoginViewModel by lazy {
+    val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
     lateinit var query: HashMap<String, String>
@@ -80,6 +81,14 @@ class RegistrationFragment : Fragment() {
     lateinit var audioWife: AudioWife
     lateinit var mediaPlayer: MediaPlayer
 
+    private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
+
+    private val filter: InputFilter =
+        InputFilter { source, start, end, dest, dstart, dend ->
+            if (source != null && blockCharacterSet.contains("" + source)) {
+                ""
+            } else null
+        }
 
     init {
         this.activityResultLauncher = registerForActivityResult(
@@ -111,8 +120,8 @@ class RegistrationFragment : Fragment() {
 
         val toolbarLayoutBinding: ToolbarLayoutBinding =
             ToolbarLayoutBinding.inflate(layoutInflater)
-        binding.toolbar.toolbarTile.text = "Profile"
-        binding.toolbar.backBtn.setOnClickListener {
+        toolbarLayoutBinding.toolbarTile.text = "Profile"
+        toolbarLayoutBinding.backBtn.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
         }
 
@@ -122,6 +131,9 @@ class RegistrationFragment : Fragment() {
 
             binding.nameEt.setText(arguments?.getString("name"))
         }
+
+        binding.nameEt.filters= arrayOf(filter)
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         premiumAdapter = UserProfilePremiumAdapter(
@@ -420,7 +432,7 @@ class RegistrationFragment : Fragment() {
                         .trim() + " " + mobileNumber + " " + latitude + " " + longitutde + " " + pincode + " " + village
                 );
 
-                loginViewModel.getUserData(query).observe(this) {
+                viewModel.getUserData(query).observe(this) {
                     //registerMaster.data.approved
 
                     when (it) {
@@ -460,31 +472,34 @@ class RegistrationFragment : Fragment() {
 
     suspend fun userLogin() {
 
-        loginViewModel.login(
+        viewModel.login(
             mobileNumber!!,
-            loginViewModel.getFcmToken(),
-            loginViewModel.getDeviceModel(),
-            loginViewModel.getDeviceManufacturer()
+            viewModel.getFcmToken(),
+            viewModel.getDeviceModel(),
+            viewModel.getDeviceManufacturer()
         ).observe(this) {
             when (it) {
                 is Resource.Success -> {
                     val loginDataMaster = it.data
                     if (loginDataMaster?.status == true) {
-                        SharedPreferenceUtility.seUserToken(
-                            context,
+                        viewModel.setUserToken(
                             loginDataMaster.data
                         )
-                        SharedPreferenceUtility.setMobileNumber(context, mobileNumber)
-                        SharedPreferenceUtility.setLogin(context, "1")
-
-                        loginViewModel.getUserDetails().observe(requireActivity()) {}
-                        gotoMainActivity()
+                        viewModel.setMobileNumber( mobileNumber.toString())
+                        viewModel.setIsLoggedIn(true)
+                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                            gotoMainActivity()
+                        }
 //                        requireActivity().setResult(RESULT_OK)
 //                        requireActivity().finish()
                     }
                 }
-                is Resource.Loading -> {}
-                is Resource.Error -> {}
+                is Resource.Loading -> {
+
+                }
+                is Resource.Error -> {
+
+                }
             }
 
         }
@@ -498,7 +513,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun userModule() {
-        loginViewModel.getModuleMaster().observe(viewLifecycleOwner) {
+        viewModel.getModuleMaster().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
 

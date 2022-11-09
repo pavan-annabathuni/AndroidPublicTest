@@ -13,9 +13,7 @@ import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.waycool.data.Local.LocalSource
 import com.waycool.data.utils.Resource
-import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
@@ -23,7 +21,6 @@ import com.waycool.featurecrophealth.utils.Constant.TAG
 import com.waycool.featurecrophealth.utils.NetworkUtils.loadUrl
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.flow.collect
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -129,16 +126,12 @@ class CropDetailsCaptureFragment : Fragment() {
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
-                val userId =
-                    SharedPreferenceUtility.getUserDetails(requireContext()).data?.profile?.userId
 
-                if (userId != null) {
-                    postImage(
-                        crop_id!!,
-                        crop_name!!,
-                        profileImageBody
-                    )
-                }
+                postImage(
+                    crop_id!!,
+                    crop_name!!,
+                    profileImageBody
+                )
             }
 
 
@@ -169,9 +162,9 @@ class CropDetailsCaptureFragment : Fragment() {
                         file.name, profileImage
                     )
 
-                Log.d("aidetect",selecteduri.toString())
-                Log.d("aidetect",file.name.toString())
-                Log.d("aidetect",profileImage.toString())
+                Log.d("aidetect", selecteduri.toString())
+                Log.d("aidetect", file.name.toString())
+                Log.d("aidetect", profileImage.toString())
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
@@ -206,25 +199,28 @@ class CropDetailsCaptureFragment : Fragment() {
         }
     }
 
-    private fun postImage(crop_id:Int?, crop_name:String?, profileImageBody:MultipartBody.Part){
+    private fun postImage(crop_id: Int?, crop_name: String?, profileImageBody: MultipartBody.Part) {
         viewModel.postAiImage(
             crop_id!!,
             crop_name!!,
             profileImageBody
-        ).observe(requireActivity()){
-            when(it){
-                is Resource.Success->{
-                    val data=it.data
+        ).observe(requireActivity()) {
+            when (it) {
+                is Resource.Success -> {
+                    val data = it.data
                     data?.diseaseId
-                    val bundle=Bundle()
+                    val bundle = Bundle()
                     data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
-                    findNavController().navigate(R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,bundle)
+                    findNavController().navigate(
+                        R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,
+                        bundle
+                    )
 
                 }
-                is Resource.Error->{
-                    Toast.makeText(requireContext(),"Error Occurred",Toast.LENGTH_SHORT).show()
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
                 }
-                is Resource.Loading->{}
+                is Resource.Loading -> {}
             }
         }
     }
