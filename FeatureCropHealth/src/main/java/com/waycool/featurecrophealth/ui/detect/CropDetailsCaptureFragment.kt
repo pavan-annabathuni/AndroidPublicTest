@@ -151,6 +151,7 @@ class CropDetailsCaptureFragment : Fragment() {
 
             Log.d(TAG, "onActivityResultUri: $uri")
             binding.uploadedImg.setImageURI(uri)
+            binding.closeImage?.visibility=View.VISIBLE
             binding.cardCheckHealth.setOnClickListener {
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
