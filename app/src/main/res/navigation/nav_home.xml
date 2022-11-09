@@ -21,7 +21,9 @@
         tools:layout="@layout/fragment_all_services" >
         <action
             android:id="@+id/action_allServicesFragment_to_homePagesFragment"
-            app:destination="@id/homePagesFragment" />
+            app:destination="@id/homePagesFragment"
+            app:popUpTo="@id/homePagesFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>

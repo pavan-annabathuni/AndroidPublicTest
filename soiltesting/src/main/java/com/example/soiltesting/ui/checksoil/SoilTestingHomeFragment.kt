@@ -441,13 +441,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                                         .show()
 
                                 }
                                 is Resource.Loading -> {
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                    binding.progressBar.isVisible = true
+                                    binding.clProgressBar.visibility = View.VISIBLE
+
+//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+//                                        .show()
 
                                 }
                             }

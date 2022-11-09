@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_pest_right.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_wrong_image.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_bialogical.xml" value="0.3098958333333333" />
@@ -111,7 +113,7 @@
         <entry key="soiltesting/src/main/res/layout/fragment_temp2.xml" value="0.29583333333333334" />
         <entry key="soiltesting/src/main/res/layout/fragment_view_report.xml" value="0.2740740740740741" />
         <entry key="soiltesting/src/main/res/layout/item_labs_sample.xml" value="0.2796296296296296" />
-        <entry key="soiltesting/src/main/res/layout/item_mandi.xml" value="0.9001622517903647" />
+        <entry key="soiltesting/src/main/res/layout/item_mandi.xml" value="0.6658878504672897" />
         <entry key="soiltesting/src/main/res/layout/item_status_tracker.xml" value="0.21481481481481482" />
         <entry key="soiltesting/src/main/res/layout/item_view_report.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/item_viewall_service.xml" value="0.3098958333333333" />

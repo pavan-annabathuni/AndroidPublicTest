@@ -82,6 +82,7 @@
                     app:layout_constraintStart_toEndOf="@+id/ivPlanty"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTopGuide"
                 android:layout_width="match_parent"
@@ -209,8 +210,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -292,165 +291,164 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/takeGuide"-->
-<!--                android:layout_width="match_parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                android:indeterminate="true"-->
-<!--                android:visibility="visible"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/space16"-->
-<!--                android:layout_marginBottom="16dp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clOurAll">-->
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/takeGuide"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                android:indeterminate="true"-->
+            <!--                android:visibility="visible"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/space16"-->
+            <!--                android:layout_marginBottom="16dp"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clOurAll">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/clOur"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/clArrow"-->
-<!--                    app:layout_constraintHorizontal_bias="0.5"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
+            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                    android:id="@+id/clOur"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/clArrow"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/cTakeFlipper"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/ic_leaf"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/cTakeFlipper"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:src="@drawable/ic_leaf"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="@dimen/space20"-->
-<!--                        android:maxLines="2"-->
-<!--                        android:minLines="2"-->
-<!--                        android:text="Take a Picture"-->
-<!--                        android:textColor="#000000"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipper" />-->
+            <!--                    <TextView-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginTop="@dimen/space20"-->
+            <!--                        android:maxLines="2"-->
+            <!--                        android:minLines="2"-->
+            <!--                        android:text="Take a Picture"-->
+            <!--                        android:textColor="#000000"-->
+            <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipper" />-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/clArrow"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/clOurTwo"-->
-<!--                    app:layout_constraintHorizontal_bias="0.5"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/clOur"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
+            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                    android:id="@+id/clArrow"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/clOurTwo"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                    app:layout_constraintStart_toEndOf="@+id/clOur"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/ivArrow"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/ic_farward"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/ivArrow"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:src="@drawable/ic_farward"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/clOurTwo"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/clArrowTwo"-->
-<!--                    app:layout_constraintHorizontal_bias="0.5"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/clArrow"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
+            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                    android:id="@+id/clOurTwo"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/clArrowTwo"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                    app:layout_constraintStart_toEndOf="@+id/clArrow"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/cTakeFlipperTwo"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/ic_search"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/cTakeFlipperTwo"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:src="@drawable/ic_search"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="@dimen/space20"-->
-<!--                        android:maxLines="2"-->
-<!--                        android:minLines="2"-->
-<!--                        android:text="Get diagnose"-->
-<!--                        android:textColor="#000000"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipperTwo" />-->
+            <!--                    <TextView-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginTop="@dimen/space20"-->
+            <!--                        android:maxLines="2"-->
+            <!--                        android:minLines="2"-->
+            <!--                        android:text="Get diagnose"-->
+            <!--                        android:textColor="#000000"-->
+            <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipperTwo" />-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/clArrowTwo"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"-->
-<!--                    app:layout_constraintHorizontal_bias="0.5"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/clOurTwo"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
+            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                    android:id="@+id/clArrowTwo"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                    app:layout_constraintStart_toEndOf="@+id/clOurTwo"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/ivArrowTwo"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/ic_farward"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/ivArrowTwo"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:src="@drawable/ic_farward"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/constraintLayout3"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="0.5"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/clArrowTwo"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
+            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                    android:id="@+id/constraintLayout3"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                    app:layout_constraintStart_toEndOf="@+id/clArrowTwo"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/cTakeFlipperThree"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:src="@drawable/ic_protect"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/cTakeFlipperThree"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:src="@drawable/ic_protect"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="@dimen/space20"-->
-<!--                        android:maxLines="2"-->
-<!--                        android:minLines="2"-->
-<!--                        android:text="Preventive \n Measures"-->
-<!--                        android:textColor="#000000"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipperThree" />-->
+            <!--                    <TextView-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginTop="@dimen/space20"-->
+            <!--                        android:maxLines="2"-->
+            <!--                        android:minLines="2"-->
+            <!--                        android:text="Preventive \n Measures"-->
+            <!--                        android:textColor="#000000"-->
+            <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                        app:layout_constraintStart_toStartOf="parent"-->
+            <!--                        app:layout_constraintTop_toBottomOf="@+id/cTakeFlipperThree" />-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
             <!--        </androidx.cardview.widget.CardView>-->
@@ -490,10 +488,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/txt14"
                     android:background="#F5F5F5"
-                    tools:itemCount="2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvRequest"
+                    tools:itemCount="2"
                     tools:listitem="@layout/viewholder_history" />
 
                 <TextView
@@ -522,61 +520,61 @@
                 app:layout_constraintTop_toBottomOf="@+id/clRequest" />
 
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clVideo"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:visibility="visible"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clRequest">-->
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/clVideo"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:visibility="visible"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clRequest">-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvVideos"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Videos"-->
-<!--                    android:textColor="#111827"-->
-<!--                    android:textSize="@dimen/space20"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/tvVideos"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Videos"-->
+            <!--                    android:textColor="#111827"-->
+            <!--                    android:textSize="@dimen/space20"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvViewAllVideos"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:text="View All"-->
-<!--                    android:textColor="#146133"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAllVideos"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/tvViewAllVideos"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginEnd="5dp"-->
+            <!--                    android:text="View All"-->
+            <!--                    android:textColor="#146133"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAllVideos"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivViewAllVideos"-->
-<!--                    android:layout_width="20dp"-->
-<!--                    android:layout_height="20dp"-->
-<!--                    android:src="@drawable/ic_viewall"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/ivViewAllVideos"-->
+            <!--                    android:layout_width="20dp"-->
+            <!--                    android:layout_height="20dp"-->
+            <!--                    android:src="@drawable/ic_viewall"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/recyclerviewVideo"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/space16"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:visibility="visible"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/tvVideos"-->
-<!--                    tools:listitem="@layout/viewholder_video_generic" />-->
+            <!--                <androidx.recyclerview.widget.RecyclerView-->
+            <!--                    android:id="@+id/recyclerviewVideo"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="@dimen/space16"-->
+            <!--                    android:layout_marginEnd="16dp"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:visibility="visible"-->
+            <!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@+id/tvVideos"-->
+            <!--                    tools:listitem="@layout/viewholder_video_generic" />-->
 
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -592,12 +590,13 @@
     <!--            app:layout_constraintTop_toBottomOf="@+id/clOurAll">-->
     <ImageView
         android:layout_width="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"
-        android:src="@drawable/ic_phone_icon"
-        android:layout_marginBottom="44dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space28"
-        android:layout_height="wrap_content"/>
+        android:layout_marginBottom="44dp"
+        android:src="@drawable/ic_phone_icon"
+        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
