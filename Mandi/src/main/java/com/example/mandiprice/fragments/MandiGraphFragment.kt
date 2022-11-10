@@ -85,7 +85,7 @@ class MandiGraphFragment : Fragment() {
         shareLayout = binding.clShare
         binding.recycleViewDis.adapter = DateAdapter()
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(5, 2464).observe(viewLifecycleOwner) {
+            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) {
                 binding.viewModel = it.data
                 //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
@@ -133,7 +133,7 @@ class MandiGraphFragment : Fragment() {
 
     private fun graph() {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(5, 2464).observe(viewLifecycleOwner) { it ->
+            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) { it ->
 
 
                 listLine = ArrayList()

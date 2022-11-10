@@ -5,10 +5,11 @@
       <map>
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
-        <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.21481481481481482" />
+        <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.375" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_history.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_select.xml" value="0.21481481481481482" />
+        <entry key="FeatureCropHealth/src/main/res/layout/fragment_how_to_click.xml" value="0.2833333333333333" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/layout/activity_crop_protect.xml" value="0.30512820512820515" />
@@ -29,6 +30,7 @@
         <entry key="NewsAndArticles/src/main/res/drawable/ic_share_green.xml" value="0.181" />
         <entry key="NewsAndArticles/src/main/res/layout/activity_news_and_articles.xml" value="0.21481481481481482" />
         <entry key="NewsAndArticles/src/main/res/layout/activity_news_full_layout.xml" value="0.21481481481481482" />
+        <entry key="NewsAndArticles/src/main/res/layout/audio_new_layout.xml" value="0.2833333333333333" />
         <entry key="NewsAndArticles/src/main/res/layout/generic_layout_news_list.xml" value="0.21481481481481482" />
         <entry key="NewsAndArticles/src/main/res/layout/viewholder_news_articles_list.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/drawable/border.xml" value="0.1685" />
