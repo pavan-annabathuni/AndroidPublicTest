@@ -166,6 +166,18 @@
                     app:layout_constraintEnd_toEndOf="@+id/tabLayout"
                     app:layout_constraintTop_toTopOf="@+id/tabLayout" />
 
+                <ImageView
+                    android:id="@+id/imgPrev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:rotation="180"
+                    android:src="@drawable/ic_next"
+                    app:layout_constraintBottom_toTopOf="@+id/view1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"

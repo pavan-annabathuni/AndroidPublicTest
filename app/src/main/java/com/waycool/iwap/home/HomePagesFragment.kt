@@ -134,6 +134,7 @@ class HomePagesFragment : Fragment() {
                    it2
                )
            } }
+           binding.tvAddress.text = it.data?.profile?.districtId
        }
 
 

@@ -434,10 +434,18 @@ class CropInfoFragment : Fragment() {
                 if(position<(size-1)){
                     binding.imgNext.visibility = View.VISIBLE
                 binding.imgNext.setOnClickListener(){
-                    binding.ViewPager.setCurrentItem(position+1)
+                    binding.ViewPager.currentItem = position+1
                 }
                 }else{
                     binding.imgNext.visibility = View.GONE
+                }
+                if(position==0){
+                  binding.imgPrev.visibility = View.GONE
+                }else{
+                    binding.imgPrev.visibility = View.VISIBLE
+                    binding.imgPrev.setOnClickListener {
+                        binding.ViewPager.currentItem = position-1
+                    }
                 }
 
             }

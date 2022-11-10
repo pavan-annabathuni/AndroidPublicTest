@@ -147,6 +147,7 @@ class WeatherFragment : Fragment() {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
             }
+            binding.location.text = it.data?.profile?.districtId
         }
 //
 //        GlobalScope.launch {
