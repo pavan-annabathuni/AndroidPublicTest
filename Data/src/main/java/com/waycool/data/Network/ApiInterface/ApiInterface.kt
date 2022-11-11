@@ -127,7 +127,7 @@ interface ApiInterface {
     @GET("api/v1/soil-test-request/history")
     suspend fun getSoilTestAllHistory(
         @HeaderMap headerMap: Map<String, String>,
-        @Query("account_id") user_id: Int
+        @Query("account_id") account_id: Int
     ): Response<SoilTestHistoryDTO>
 
 

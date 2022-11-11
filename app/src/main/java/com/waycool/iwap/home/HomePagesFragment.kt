@@ -73,6 +73,7 @@ class HomePagesFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
@@ -119,6 +120,9 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
+        binding.tvOurServiceViewAll.setOnClickListener {
+            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
+        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -128,14 +132,6 @@ class HomePagesFragment : Fragment() {
                     calculateScrollPercentage2(binding).toFloat()
             }
         })
-       viewModel.getUserDetails().observe(viewLifecycleOwner){
-           it.data?.profile?.lat?.let { it1 -> it.data?.profile?.long?.let { it2 ->
-               weather(it1,
-                   it2
-               )
-           } }
-           binding.tvAddress.text = it.data?.profile?.districtId
-       }
 
 
         mandiViewModel.viewModelScope.launch {
@@ -155,14 +151,15 @@ class HomePagesFragment : Fragment() {
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
                         Log.d("Profile", userDetails.toString())
-
-
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
+                        binding.tvWelcome.text=userDetails?.profile?.village
+                        binding.tvWelcomeName.text="Welcome,"+it.data?.name
+                        Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
                                 weather(it1, it2)
-                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
 

@@ -22,14 +22,14 @@ class SoilTestHistorySyncer : SyncInterface {
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
-    fun getData(): Flow<Resource<List<SoilTestHistoryEntity>>> {
+    fun getData(account_id: Int): Flow<Resource<List<SoilTestHistoryEntity>>> {
 
         GlobalScope.launch(Dispatchers.IO) {
 
             Log.d("SoilTestSyncer","Sync Status: ${isSyncRequired()}")
 
             if (isSyncRequired()) {
-                makeNetworkCall()
+                makeNetworkCall(account_id)
             }
         }
         return getDataFromLocal()
@@ -47,7 +47,7 @@ class SoilTestHistorySyncer : SyncInterface {
         } ?: emptyFlow()
     }
 
-    private fun makeNetworkCall() {
+    private fun makeNetworkCall(account_id:Int) {
         GlobalScope.launch(Dispatchers.IO) {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 //            val account =
@@ -56,7 +56,7 @@ class SoilTestHistorySyncer : SyncInterface {
 
 
             if (headerMap != null ) {
-                NetworkSource.getSoilTesAllHistory(headerMap, 1)
+                NetworkSource.getSoilTesAllHistory(headerMap,account_id )
                     .collect {
                         when (it) {
                             is Resource.Success -> {

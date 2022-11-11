@@ -1,5 +1,6 @@
 package com.example.soiltesting.ui.checksoil
 
+import android.content.ContentValues
 import android.content.Intent
 
 import android.content.pm.PackageManager
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +28,7 @@ import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
+import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
@@ -44,7 +47,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private val binding get() = _binding!!
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
+    private var accountID: Int? = null
 
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
@@ -71,16 +74,48 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         initViewBackClick()
         expandableView()
         expandableViewTWo()
-        bindObserversSoilTestHistory()
         getVideos()
         fabButton()
-
+        getAllHistory()
     }
+
+    private fun getAllHistory() {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            for (i in it.data!!.account) {
+                if (i.accountType == "outgrow") {
+
+                    accountID = i.id
+                    if (accountID !=null) {
+                        Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
+                        bindObserversSoilTestHistory(accountID!!)
+                    }
+
+                }
+            }
+        }
+    }
+
 
     private fun initViewBackClick() {
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
+        }
+        binding.cardCheckHealth.setOnClickListener {
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+                for (i in it.data!!.account) {
+                    if (i.accountType == "outgrow") {
+                        accountID = i.id
+                        if (accountID !=null) {
+                            Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
+                            isLocationPermissionGranted(accountID!!)
+                        }
+
+                    }
+                }
+            }
         }
     }
 
@@ -96,6 +131,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
         }
     }
+
+
+
     private fun getVideos() {
 
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
@@ -129,6 +167,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         })
     }
+
     fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
         val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
         val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
@@ -176,9 +215,26 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun locationClick() {
         binding.cardCheckHealth.setOnClickListener {
+//            isLocationPermissionGranted(1)
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+                for (i in it.data!!.account) {
+                    if (i.accountType == "outgrow") {
+                        Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:${i.id}")
+                        accountID = i.id
+                        Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:$accountID")
+                        isLocationPermissionGranted(accountID!!)
+
+
+
+                    }
+                }
+            }
 //            Log.d(TAG, "locationClicklatitude: $latitude")
 //            Log.d(TAG, "locationClicklongitude: $longitude")
-            isLocationPermissionGranted()
+
+//            bindObserversCheckSoilTest()
 //            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_newSoilTestFormFragment)
 //            checkSoilTestViewModel.getSoilTest(1, 60.078100, 60.636580)
 //            bindObserversCheckSoilTest()
@@ -187,52 +243,91 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     }
 
-
-
-//    @SuppressLint("ResourceAsColor")
+//
 //    private fun bindObserversCheckSoilTest() {
-//        checkSoilTestViewModel.getCheckSoilTestLab().observe(viewLifecycleOwner, Observer { model ->
-//            when (model) {
-//                is NetworkResult.Success -> {
-//                    binding.progressBar.isVisible = false
-//                    binding.clProgressBar.visibility = View.GONE
-//                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
-//                    if (model.data?.data!!.isNullOrEmpty()) {
+//        checkSoilTestViewModel.getCheckSoilTestLab(1,13.078100, 77.636580)
+//            .observe(viewLifecycleOwner, Observer {
+//                when (it) {
+//                    is Resource.Success -> {
+//                        binding.progressBar.isVisible = false
+//                        binding.clProgressBar.visibility = View.GONE
+//                        Log.d(
+//                            "TAG",
+//                            "bindObserversDataCheckSoilData:" + it.data.toString()
+//                        )
+//                        if (it.data!!.isNullOrEmpty()) {
 ////                        binding.clProgressBar.visibility = View.VISIBLE
 ////                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
+//                            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+//                        } else if (it.data!!.isNotEmpty()) {
+//                            val response = it.data
+//                            Log.d(
+//                                TAG,
+//                                "bindObserversCheckSoilTestModelFJndsj: $response"
+//                            )
+//                            var bundle = Bundle().apply {
+//                                putParcelableArrayList("list", ArrayList<Parcelable>(response))
+//                            }
 //
-//                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-//                    } else if (model.data.data.isNotEmpty()) {
-//                        val response = model.data.data
-//                        var bundle = Bundle().apply {
-//                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+//                            findNavController().navigate(
+//                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+//                                bundle
+//                            )
 //                        }
-//                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
-//                        findNavController().navigate(
-//                            R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-//                            bundle
-//                        )
+//
+//                    }
+//                    is Resource.Error -> {
+//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+//                            .show()
+//
+//                    }
+//                    is Resource.Loading -> {
+//                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+//                            .show()
+//
 //                    }
 //                }
-//                is NetworkResult.Error -> {
-//                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                    binding.progressBar.isVisible = false
-//                    binding.clProgressBar.visibility = View.GONE
-//                }
-//                is NetworkResult.Loading -> {
-//                    binding.clProgressBar.visibility = View.VISIBLE
-//                    binding.progressBar.isVisible = true
+////            when (model) {
+////                is NetworkResult.Success -> {
+////                    binding.progressBar.isVisible = false
+////                    binding.clProgressBar.visibility = View.GONE
+////                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
+////                    if (model.data?.data!!.isNullOrEmpty()) {
+//////                        binding.clProgressBar.visibility = View.VISIBLE
+//////                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
+////
+////                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+////                    } else if (model.data.data.isNotEmpty()) {
+////                        val response = model.data.data
+////                        var bundle = Bundle().apply {
+////                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+////                        }
+////                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
+////                        findNavController().navigate(
+////                            R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+////                            bundle
+////                        )
+////                    }
+////                }
+////                is NetworkResult.Error -> {
+////                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
+////                        .show()
+////                    binding.progressBar.isVisible = false
+////                    binding.clProgressBar.visibility = View.GONE
+////                }
+////                is NetworkResult.Loading -> {
+////                    binding.clProgressBar.visibility = View.VISIBLE
+////                    binding.progressBar.isVisible = true
+////
+////                }
+////            }
 //
-//                }
-//            }
-//
-//        })
+//            })
 //
 //    }
 
-    private fun bindObserversSoilTestHistory() {
-        viewModel.getSoilTestHistory().observe(requireActivity()) {
+    private fun bindObserversSoilTestHistory(account_id: Int) {
+        viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
             if (it.data!!.isEmpty()) {
                 binding.clTopGuide.visibility = View.VISIBLE
             } else
@@ -268,10 +363,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
@@ -284,7 +375,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         )
     }
 
-    private fun isLocationPermissionGranted(): Boolean {
+    private fun isLocationPermissionGranted(account_id:Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -317,7 +408,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
-                        checkSoilTestViewModel.getCheckSoilTestLab(
+                        viewModel.getCheckSoilTestLab(account_id,
                             location.latitude,
                             location.longitude
                         ).observe(requireActivity()) {
@@ -337,9 +428,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         val response = it.data
                                         Log.d(
                                             TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response")
+                                            "bindObserversCheckSoilTestModelFJndsj: $response"
+                                        )
                                         var bundle = Bundle().apply {
-                                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+                                            putParcelableArrayList(
+                                                "list",
+                                                ArrayList<Parcelable>(response)
+                                            )
                                         }
 
                                         findNavController().navigate(
@@ -350,13 +445,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                                         .show()
 
                                 }
                                 is Resource.Loading -> {
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                    binding.progressBar.isVisible = true
+                                    binding.clProgressBar.visibility = View.VISIBLE
+
+//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+//                                        .show()
 
                                 }
                             }
@@ -369,6 +467,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             true
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun fabButton(){
         var isVisible = false
         binding.addFab.setOnClickListener(){

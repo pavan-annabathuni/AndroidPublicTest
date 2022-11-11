@@ -26,4 +26,8 @@ interface SyncInterface {
             SyncManager.syncFailure(getSyncKey())
         }
     }
+
+    suspend fun invalidateSync(){
+        SyncManager.invalidateSync(getSyncKey())
+    }
 }

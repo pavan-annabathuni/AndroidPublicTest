@@ -67,7 +67,6 @@ class CropSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -150,8 +149,7 @@ class CropSelectionFragment : Fragment() {
             chip.isChecked = true
             selectedCategory = category
             getSelectedCategoryCrops(
-                categoryId = category.id,
-                searchQuery = searchCharSequence.toString()
+                categoryId = category.id
             )
         }
 
@@ -160,8 +158,7 @@ class CropSelectionFragment : Fragment() {
             if (b) {
                 selectedCategory = category
                 getSelectedCategoryCrops(
-                    categoryId = category.id,
-                    searchQuery = searchCharSequence.toString()
+                    categoryId = category.id
                 )
             }
         }

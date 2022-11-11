@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="apiStatus"
             type="com.example.mandiprice.utils.Constants.ApiStatus" />
-      <variable
-          name="viewModel"
-          type="com.waycool.data.repository.domainModels.MandiDomain" />
+
+        <variable
+            name="viewModel"
+            type="com.waycool.data.repository.domainModels.MandiDomain" />
     </data>
 
 
@@ -72,8 +75,8 @@
                 android:padding="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/darkGray"
                 android:text="@string/search_crop_or_mandi"
+                android:textColor="@color/darkGray"
                 android:textSize="16sp" />
 
             <ImageView

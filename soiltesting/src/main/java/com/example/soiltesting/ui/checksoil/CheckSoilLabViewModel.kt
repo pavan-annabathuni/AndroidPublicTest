@@ -9,7 +9,7 @@ import com.waycool.data.utils.Resource
 
 class CheckSoilLabViewModel:ViewModel() {
 
-    fun getCheckSoilTestLab(lat:Double,long:Double): LiveData<Resource<List<CheckSoilTestDomain>?>> {
-        return CropsRepository.getSoilTestLab(lat,long).asLiveData()
-    }
+//    fun getCheckSoilTestLab(account_id:Int,lat:Double,long:Double): LiveData<Resource<List<CheckSoilTestDomain>?>> {
+//        return CropsRepository.getSoilTestLab(account_id,lat,long).asLiveData()
+//    }
 }

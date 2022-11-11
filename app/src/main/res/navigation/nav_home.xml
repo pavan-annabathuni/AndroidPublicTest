@@ -11,6 +11,22 @@
         android:label="fragment_home_pages"
         tools:layout="@layout/fragment_home_pages" >
         <action
+            android:id="@+id/action_homePagesFragment_to_allServicesFragment"
+            app:destination="@id/allServicesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allServicesFragment"
+        android:name="com.waycool.iwap.home.AllServicesFragment"
+        android:label="fragment_all_services"
+        tools:layout="@layout/fragment_all_services" >
+        <action
+            android:id="@+id/action_allServicesFragment_to_homePagesFragment"
+            app:destination="@id/homePagesFragment"
+            app:popUpTo="@id/homePagesFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+        tools:layout="@layout/fragment_home_pages" >
+        <action
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
             app:destination="@id/mandiGraphFragment2" />
     </fragment>

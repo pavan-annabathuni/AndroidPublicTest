@@ -94,7 +94,13 @@
         android:id="@+id/sucessFullFragment"
         android:name="com.example.soiltesting.ui.request.SucessFullFragment"
         android:label="fragment_sucess_full"
-        tools:layout="@layout/fragment_sucess_full" />
+        tools:layout="@layout/fragment_sucess_full" >
+        <action
+            android:id="@+id/action_sucessFullFragment_to_soilTestingHomeFragment"
+            app:destination="@id/soilTestingHomeFragment"
+            app:popUpTo="@id/homePageFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <dialog
         android:id="@+id/customeDialogFragment"
         android:name="com.example.soiltesting.ui.checksoil.CustomeDialogFragment"
@@ -102,7 +108,13 @@
         tools:layout="@layout/fragment_custome_dialog" >
         <action
             android:id="@+id/action_customeDialogFragment_to_soilTestingHomeFragment"
-            app:destination="@id/soilTestingHomeFragment" />
+            app:destination="@id/soilTestingHomeFragment"
+            app:popUpTo="@id/soilTestingHomeFragment" />
+        <action
+            android:id="@+id/action_customeDialogFragment_to_allHistoryFragment"
+            app:destination="@id/allHistoryFragment"
+            app:popUpTo="@id/allHistoryFragment"
+            app:popUpToInclusive="true" />
     </dialog>
     <dialog
         android:id="@+id/feedbackFragment"
