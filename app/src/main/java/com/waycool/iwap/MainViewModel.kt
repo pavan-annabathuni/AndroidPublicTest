@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.WeatherRepository
+import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.utils.Resource
@@ -59,4 +60,5 @@ class MainViewModel:ViewModel() {
 
         return WeatherRepository.getWeather(lat, lon, lang).asLiveData()
 }
+    fun getModuleMaster(): LiveData<Resource<List<ModuleMasterDomain>>> = LoginRepository.getModuleMaster().asLiveData()
 }

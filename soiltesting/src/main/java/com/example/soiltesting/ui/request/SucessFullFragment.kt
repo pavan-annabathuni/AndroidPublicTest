@@ -1,5 +1,6 @@
 package com.example.soiltesting.ui.request
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,25 +19,25 @@ class SucessFullFragment : Fragment() {
     private val binding get() = _binding!!
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSucessFullBinding.inflate(inflater, container, false)
-        if (arguments!=null) {
-            var soil_test_number = arguments?.getString("soil_test_number")
-            Log.d(TAG, "onCreateViewSoilTestNumber: $soil_test_number ")
-            binding.tvRequestIDText.text =
-                "Your soil test request for " + soil_test_number.toString()
+//        if (arguments!=null) {
+            val soilTestNumber = arguments?.getString("soil_req_number")
+            Log.d(TAG, "onCreateViewSoilTestNumber: $soilTestNumber ")
+            binding.tvRequestIDText.text = "Your soil test request for $soilTestNumber"
 
             binding.ivClose.setOnClickListener {
-//                activity?.finish()
+                activity?.finish()
 //                findNavController().navigate(R.id.action_sucessFullFragment_to_soilTestingHomeFragment)
 //                val isSuccess = findNavController().navigateUp()
 //                if (!isSuccess) requireActivity().finish()
                 findNavController().navigateUp()
-            }
+//            }
         }
         return binding.root
     }

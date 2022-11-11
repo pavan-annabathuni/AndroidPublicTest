@@ -145,9 +145,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <Spinner
                     android:id="@+id/Acres"
-                    android:layout_width="@dimen/space60"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/space40"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/space4"
@@ -161,6 +161,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!--                <TextView-->
+                <!--                    android:id="@+id/Acres"-->
+                <!--                    android:layout_width="@dimen/space60"-->
+                <!--                    android:layout_height="@dimen/space40"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:layout_margin="@dimen/space4"-->
+                <!--                    android:layout_marginEnd="@dimen/space16"-->
+                <!--                    android:background="@drawable/bg_acres"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:text="Acres"-->
+                <!--                    android:textColor="#000000"-->
+                <!--                    android:textSize="14sp"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,27 +189,29 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clPincodeNumber">
+
                 <TextView
                     android:id="@+id/tvShapeInFarm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/txt16"
                     android:text="Shade in farm"
                     android:textColor="#000000"
                     android:textSize="@dimen/txt16"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:textStyle="bold"
-                    android:layout_marginStart="@dimen/txt16"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/tvOnlyForTea"
                     android:layout_width="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:text="(only for tea and coffee)"
                     android:textColor="#000000"
                     android:textSize="@dimen/txt16"
-                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tvShapeInFarm"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -266,218 +284,218 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            <TextView-->
-<!--                android:id="@+id/tvYearShow"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:text="Crop Year"-->
-<!--                android:textColor="#000000"-->
-<!--                android:textSize="14sp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clCalender" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvYearShow"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="Crop Year"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clCalender" />-->
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clSpinnerYear"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="@dimen/space8"-->
-<!--                android:layout_marginEnd="@dimen/space16"-->
-<!--                android:background="@drawable/bg_plot_edittext"-->
-<!--                android:padding="@dimen/space1"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/tvYearShow">-->
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/clSpinnerYear"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="@dimen/space8"-->
+            <!--                android:layout_marginEnd="@dimen/space16"-->
+            <!--                android:background="@drawable/bg_plot_edittext"-->
+            <!--                android:padding="@dimen/space1"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tvYearShow">-->
 
-<!--                <Spinner-->
-<!--                    android:id="@+id/tvSpinnerYear"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/space50"-->
-<!--                    android:layout_marginStart="@dimen/space16"-->
-<!--                    android:layout_marginEnd="@dimen/space4"-->
-<!--                    android:background="#FFFFFF"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/tvSpinnerYear"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="@dimen/space50"-->
+            <!--                    android:layout_marginStart="@dimen/space16"-->
+            <!--                    android:layout_marginEnd="@dimen/space4"-->
+            <!--                    android:background="#FFFFFF"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivSpinnerYear"-->
-<!--                    android:layout_width="@dimen/txt12"-->
-<!--                    android:layout_height="6dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="@dimen/space20"-->
-<!--                    android:src="@drawable/ic_spinner"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/tvselectIrrigation"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="@dimen/txt32"-->
-<!--                android:text="Select Irrigation "-->
-<!--                android:textColor="#000000"-->
-<!--                android:textSize="14sp"-->
-
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clSpinnerYear" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/City"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:text="Irrigation Type"-->
-<!--                android:textColor="#000000"-->
-<!--                android:textSize="14sp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clSpinner"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="@dimen/space8"-->
-<!--                android:layout_marginEnd="@dimen/space16"-->
-<!--                android:background="@drawable/bg_plot_edittext"-->
-<!--                android:padding="@dimen/space1"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/City">-->
-
-<!--                <Spinner-->
-<!--                    android:id="@+id/tvSpinner"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/space50"-->
-<!--                    android:layout_marginStart="@dimen/space16"-->
-<!--                    android:layout_marginEnd="@dimen/space4"-->
-<!--                    android:background="#FFFFFF"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivSpinner"-->
-<!--                    android:layout_width="@dimen/txt12"-->
-<!--                    android:layout_height="6dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="@dimen/space20"-->
-<!--                    android:src="@drawable/ic_spinner"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/ivSpinnerYear"-->
+            <!--                    android:layout_width="@dimen/txt12"-->
+            <!--                    android:layout_height="6dp"-->
+            <!--                    android:layout_gravity="center"-->
+            <!--                    android:layout_margin="@dimen/space20"-->
+            <!--                    android:src="@drawable/ic_spinner"-->
+            <!--                    android:textColor="#000000"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvselectIrrigation"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="@dimen/txt32"-->
+            <!--                android:text="Select Irrigation "-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="14sp"-->
+
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clSpinnerYear" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/City"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="Irrigation Type"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />-->
+
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/clSpinner"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="@dimen/space8"-->
+            <!--                android:layout_marginEnd="@dimen/space16"-->
+            <!--                android:background="@drawable/bg_plot_edittext"-->
+            <!--                android:padding="@dimen/space1"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/City">-->
+
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/tvSpinner"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="@dimen/space50"-->
+            <!--                    android:layout_marginStart="@dimen/space16"-->
+            <!--                    android:layout_marginEnd="@dimen/space4"-->
+            <!--                    android:background="#FFFFFF"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/ivSpinner"-->
+            <!--                    android:layout_width="@dimen/txt12"-->
+            <!--                    android:layout_height="6dp"-->
+            <!--                    android:layout_gravity="center"-->
+            <!--                    android:layout_margin="@dimen/space20"-->
+            <!--                    android:src="@drawable/ic_spinner"-->
+            <!--                    android:textColor="#000000"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
-<!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:id="@+id/etCity"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/City" />&ndash;&gt;-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/State"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:text="No of Plants Per Acre "-->
-<!--                android:textColor="#000000"-->
-<!--                android:textSize="14sp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clSpinner" />-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clState"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="@dimen/space8"-->
-<!--                android:layout_marginEnd="@dimen/space16"-->
-<!--                android:background="@drawable/bg_plot_edittext"-->
-<!--                android:padding="@dimen/space1"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/State"-->
-
-<!--                >-->
-
-<!--                <EditText-->
-<!--                    android:id="@+id/etState"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/space50"-->
-<!--                    android:layout_marginStart="@dimen/space16"-->
-<!--                    android:layout_marginEnd="@dimen/space4"-->
-<!--                    android:background="#fff"-->
-<!--                    android:hint="e.g 50"-->
-<!--                    android:inputType="number"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="100dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clState" />-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
-<!--            &lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:id="@+id/Mobile"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginTop="24dp"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:text="Mobile"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:textColor="#000000"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:textSize="14sp"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />&ndash;&gt;-->
+            <!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:id="@+id/etCity"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/City" />&ndash;&gt;-->
 
-<!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:id="@+id/etMobile"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
-<!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/Mobile" />&ndash;&gt;-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/State"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="No of Plants Per Acre "-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clSpinner" />-->
+
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/clState"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/space16"-->
+            <!--                android:layout_marginTop="@dimen/space8"-->
+            <!--                android:layout_marginEnd="@dimen/space16"-->
+            <!--                android:background="@drawable/bg_plot_edittext"-->
+            <!--                android:padding="@dimen/space1"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/State"-->
+
+            <!--                >-->
+
+            <!--                <EditText-->
+            <!--                    android:id="@+id/etState"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="@dimen/space50"-->
+            <!--                    android:layout_marginStart="@dimen/space16"-->
+            <!--                    android:layout_marginEnd="@dimen/space4"-->
+            <!--                    android:background="#fff"-->
+            <!--                    android:hint="e.g 50"-->
+            <!--                    android:inputType="number"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="100dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clState" />-->
+
+
+            <!--            &lt;!&ndash;            <TextView&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:id="@+id/Mobile"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginTop="24dp"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:text="Mobile"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:textColor="#000000"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:textSize="14sp"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />&ndash;&gt;-->
+
+            <!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:id="@+id/etMobile"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+            <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/Mobile" />&ndash;&gt;-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

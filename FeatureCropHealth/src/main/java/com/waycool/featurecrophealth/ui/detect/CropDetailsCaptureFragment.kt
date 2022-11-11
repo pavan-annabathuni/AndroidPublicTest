@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -150,6 +151,7 @@ class CropDetailsCaptureFragment : Fragment() {
 
             Log.d(TAG, "onActivityResultUri: $uri")
             binding.uploadedImg.setImageURI(uri)
+            binding.closeImage?.visibility=View.VISIBLE
             binding.cardCheckHealth.setOnClickListener {
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
@@ -214,6 +216,8 @@ class CropDetailsCaptureFragment : Fragment() {
         ).observe(requireActivity()){
             when(it){
                 is Resource.Success->{
+                    binding.progressBar?.isVisible = false
+                    binding.progressBar?.visibility = View.GONE
                     val data=it.data
                     data?.diseaseId
                     val bundle=Bundle()
@@ -224,7 +228,10 @@ class CropDetailsCaptureFragment : Fragment() {
                 is Resource.Error->{
                     Toast.makeText(requireContext(),"Error Occurred",Toast.LENGTH_SHORT).show()
                 }
-                is Resource.Loading->{}
+                is Resource.Loading->{
+                    binding.progressBar?.visibility = View.VISIBLE
+                    binding.progressBar?.isVisible = true
+                }
             }
         }
     }

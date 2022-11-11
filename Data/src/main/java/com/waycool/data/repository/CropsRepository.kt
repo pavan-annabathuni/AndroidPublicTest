@@ -36,12 +36,13 @@ object CropsRepository {
             }
         }
     }
+
     fun getAddCropType(): Flow<Resource<List<AddCropTypeDomain>?>> {
         return AddCropTypeSyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                      AddCropTypeDomainMapper().toDomainList(it.data?: emptyList())
+                        AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
                     )
                 }
                 is Resource.Loading -> {
@@ -53,9 +54,6 @@ object CropsRepository {
             }
         }
     }
-
-
-
 
 
     fun getAllCrops(): Flow<Resource<List<CropMasterDomain>?>> {
@@ -130,12 +128,12 @@ object CropsRepository {
         }
     }
 
-    fun getSoilTestHistory(): Flow<Resource<List<SoilTestHistoryDomain>?>> {
-        return SoilTestHistorySyncer().getData().map {
+    fun getSoilTestHistory(account_id: Int): Flow<Resource<List<SoilTestHistoryDomain>?>> {
+        return SoilTestHistorySyncer().getData(account_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
+                        SoilTestHistoryDomainMapper().toDomainList(it.data ?: emptyList())
                     )
                 }
                 is Resource.Loading -> {
@@ -149,12 +147,19 @@ object CropsRepository {
     }
     //check soil test lab
 
-    fun getSoilTestLab(lat:Double,long:Double): Flow<Resource<List<CheckSoilTestDomain>?>> {
-        return NetworkSource.getSoilTestLab(1,lat,long).map {
+
+    fun getSoilTestLab(
+        account: Int,
+        lat: Double,
+        long: Double
+    ): Flow<Resource<List<CheckSoilTestDomain>?>> {
+        return NetworkSource.getSoilTestLab(account, lat, long).map {
             when (it) {
                 is Resource.Success -> {
+                    SoilTestHistorySyncer().invalidateSync()
                     Resource.Success(
-                        CheckSoilTestLabMapper().toDomainList(it.data?.data?: emptyList())
+                        CheckSoilTestLabMapper().toDomainList(it.data?.data ?: emptyList())
+
 //                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
                     )
                 }
@@ -167,12 +172,13 @@ object CropsRepository {
             }
         }
     }
+
     fun getTracker(soil_test_request_id: Int): Flow<Resource<List<TrackerDemain>?>> {
         return NetworkSource.getTracker(soil_test_request_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        TrackerDomainMapper().toDomainList(it.data?.data?: emptyList())
+                        TrackerDomainMapper().toDomainList(it.data?.data ?: emptyList())
 //                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
                     )
                 }
@@ -206,7 +212,6 @@ object CropsRepository {
 //            }
 //        }
 //    }
-
 
 
     fun getPestAndDiseasesForCrop(cropId: Int): Flow<Resource<List<PestDiseaseDomain>>> {
@@ -245,46 +250,84 @@ object CropsRepository {
             }
         }
     }
-    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String, is_active:Int,sowing_date: String,area:Double) : Flow<Resource<AddCropResponseDTO?>> {
-        return NetworkSource.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area)
-    }
-    fun postNewSoil(account_id: Int,lat: Double,long: Double,org_id:Int,plot_no:String,pincode:String,address:String,state:String,district:String ,number:String): Flow<Resource<SoilTestResponseDTO?>>{
 
-      return  NetworkSource.postNewSoil(account_id,lat,long,org_id,plot_no,pincode,address,state,district,number)
+    fun addCropPassData(
+        crop_id: Int,
+        account_id: Int,
+        plot_nickname: String,
+        is_active: Int,
+        sowing_date: String,
+        area: Double
+    ): Flow<Resource<AddCropResponseDTO?>> {
+        return NetworkSource.addCropPassData(
+            crop_id,
+            account_id,
+            plot_nickname,
+            is_active,
+            sowing_date,
+            area
+        )
     }
 
-     fun postAiCropImage(
+    fun postNewSoil(
+        account_id: Int,
+        lat: Double,
+        long: Double,
+        org_id: Int,
+        plot_no: String,
+        pincode: String,
+        address: String,
+        state: String,
+        district: String,
+        number: String
+    ): Flow<Resource<SoilTestResponseDTO?>> {
+
+        return NetworkSource.postNewSoil(
+            account_id,
+            lat,
+            long,
+            org_id,
+            plot_no,
+            pincode,
+            address,
+            state,
+            district,
+            number
+        )
+    }
+
+    fun postAiCropImage(
         cropId: Int,
         cropName: String,
         image: MultipartBody.Part
     ): Flow<Resource<AiCropDetectionDomain>> {
 
 
-
-            return NetworkSource.detectAiCrop(
-                 cropId, cropName, image)
-                .map {
-                    when (it) {
-                        is Resource.Success -> {
-                            Resource.Success(
-                                AiCropDetectionDomainMapper().mapToDomain(
-                                    it.data?.data ?: AiCropDetectionData()
-                                )
+        return NetworkSource.detectAiCrop(
+            cropId, cropName, image
+        )
+            .map {
+                when (it) {
+                    is Resource.Success -> {
+                        Resource.Success(
+                            AiCropDetectionDomainMapper().mapToDomain(
+                                it.data?.data ?: AiCropDetectionData()
                             )
-                        }
-                        is Resource.Loading -> {
-                            Resource.Loading()
-                        }
-                        is Resource.Error -> {
-                            Resource.Error(it.message)
-                        }
+                        )
+                    }
+                    is Resource.Loading -> {
+                        Resource.Loading()
+                    }
+                    is Resource.Error -> {
+                        Resource.Error(it.message)
                     }
                 }
+            }
 
     }
 
 
-    fun getAiCropHistory():Flow<Resource<List<AiCropHistoryDomain>>>{
+    fun getAiCropHistory(): Flow<Resource<List<AiCropHistoryDomain>>> {
         return AiCropHistorySyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
@@ -302,12 +345,12 @@ object CropsRepository {
         }
     }
 
-    fun getCropInformation(crop_id:Int): Flow<Resource<List<CropInformationDomainData>>> {
+    fun getCropInformation(crop_id: Int): Flow<Resource<List<CropInformationDomainData>>> {
         return CropInformationSyncer().getCropInformation(crop_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        CropInformationDomainMapper().toDomainList(it.data?: emptyList())
+                        CropInformationDomainMapper().toDomainList(it.data ?: emptyList())
                     )
                 }
                 is Resource.Loading -> {
@@ -321,12 +364,12 @@ object CropsRepository {
 
     }
 
-    fun getUpdateProfile(crop_id:Int): Flow<Resource<List<CropInformationDomainData>>> {
+    fun getUpdateProfile(crop_id: Int): Flow<Resource<List<CropInformationDomainData>>> {
         return CropInformationSyncer().getCropInformation(crop_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        CropInformationDomainMapper().toDomainList(it.data?: emptyList())
+                        CropInformationDomainMapper().toDomainList(it.data ?: emptyList())
                     )
                 }
                 is Resource.Loading -> {

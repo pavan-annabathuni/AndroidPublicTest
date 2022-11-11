@@ -37,7 +37,9 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/cardCheckHealth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -388,50 +390,26 @@ Report"
                 android:background="#EBECF2"
                 app:layout_constraintTop_toBottomOf="@+id/clTopGuide" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clBanner"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space16"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/space16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+            <ImageView
+                android:id="@+id/ivSingleImageBanner3x1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space16"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:scaleType="fitXY"
+                android:layout_marginEnd="@dimen/space16"
+                android:src="@drawable/slbanner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPagerImageBanner3x1"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone"
-                    app:layout_constraintDimensionRatio="3:1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </androidx.viewpager2.widget.ViewPager2>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardImageBanner3x1"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/space16"
-                    android:layout_marginEnd="@dimen/space16"
-                    app:cardCornerRadius="@dimen/space10"
-                    app:cardElevation="0dp"
-                    app:layout_constraintDimensionRatio="3:1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewPagerImageBanner3x1"
-                    tools:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/ivSingleImageBanner3x1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        tools:src="@drawable/ad" />
-
-                </androidx.cardview.widget.CardView>
-
+                app:layout_constraintTop_toTopOf="parent"
+                 />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -469,9 +447,10 @@ Report"
                     android:id="@+id/recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/txt14"
+                    android:layout_marginTop="12dp"
                     android:background="#F5F5F5"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvRequest"
                     tools:itemCount="2"
@@ -502,61 +481,61 @@ Report"
                 app:layout_constraintTop_toBottomOf="@+id/clRequest" />
 
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/clVideo"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:visibility="visible"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clRequest">-->
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/clVideo"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:visibility="visible"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clRequest">-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvVideos"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Videos"-->
-<!--                    android:textColor="#111827"-->
-<!--                    android:textSize="@dimen/space20"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/tvVideos"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Videos"-->
+            <!--                    android:textColor="#111827"-->
+            <!--                    android:textSize="@dimen/space20"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvViewAllVideos"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:text="View All"-->
-<!--                    android:textColor="#146133"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAllVideos"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/tvViewAllVideos"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginEnd="5dp"-->
+            <!--                    android:text="View All"-->
+            <!--                    android:textColor="#146133"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAllVideos"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivViewAllVideos"-->
-<!--                    android:layout_width="20dp"-->
-<!--                    android:layout_height="20dp"-->
-<!--                    android:src="@drawable/ic_viewall"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/ivViewAllVideos"-->
+            <!--                    android:layout_width="20dp"-->
+            <!--                    android:layout_height="20dp"-->
+            <!--                    android:src="@drawable/ic_viewall"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/recyclerviewVideo"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/space16"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:visibility="visible"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/tvVideos"-->
-<!--                    tools:listitem="@layout/item_video" />-->
+            <!--                <androidx.recyclerview.widget.RecyclerView-->
+            <!--                    android:id="@+id/recyclerviewVideo"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="@dimen/space16"-->
+            <!--                    android:layout_marginEnd="16dp"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:visibility="visible"-->
+            <!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@+id/tvVideos"-->
+            <!--                    tools:listitem="@layout/item_video" />-->
 
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <TextView
                 android:id="@+id/tvFAQ"
@@ -772,11 +751,10 @@ Report"
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/space25"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -784,27 +762,37 @@ Report"
             android:layout_height="50dp"
             android:background="@drawable/bg_button">
 
-            <ImageView
-                android:id="@+id/ivClick"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_add_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvCheckCrop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check your Soil health"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_add_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCheckCrop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Check your Soil health"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/ivClick"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
