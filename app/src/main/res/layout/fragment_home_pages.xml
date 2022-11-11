@@ -466,13 +466,16 @@ more details."
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvHumidityDegree"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
+                                android:ellipsize="end"
+                                android:maxLines="1"
                                 android:text="66%"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt14"
                                 android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ivHumidity"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -511,13 +514,16 @@ more details."
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvWindDegree"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
+                                android:ellipsize="end"
+                                android:maxLines="1"
                                 android:text="66%"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt14"
                                 android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ivWind"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -556,13 +562,16 @@ more details."
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvRainDegree"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
+                                android:ellipsize="end"
+                                android:maxLines="1"
                                 android:text="66%"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt14"
                                 android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ivRain"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -997,7 +1006,7 @@ to the farm"
                             <ImageView
 
                                 android:id="@+id/imageView11"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="0dp"
                                 android:adjustViewBounds="true"
                                 android:scaleType="centerCrop"

@@ -166,7 +166,7 @@ class HomePagesFragment : Fragment() {
                         Log.d("Profile", userDetails.toString())
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         binding.tvWelcome.text=userDetails?.profile?.village
-                        binding.tvWelcomeName.text="Welcome,"+it.data?.name
+                        binding.tvWelcomeName.text="Welcome, ${it.data?.name}"
                         Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -275,15 +275,14 @@ class HomePagesFragment : Fragment() {
         return scroll.roundToInt()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun weather(lat: String, lon: String) {
         viewModel.getWeather(lat, lon).observe(viewLifecycleOwner) {
 
             if (it?.data != null) {
 
-                binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
+                binding.tvDegree.text = String.format("%.1f", it.data?.current?.temp) + "\u2103"
                 binding.tvWindDegree.text =
-                    String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
+                    String.format("%.1f", it.data?.current?.windSpeed) + "Km/h"
                 if (it.data?.daily?.isNotEmpty() == true)
                     binding.tvRainDegree.text =
                         String.format("%.0f", it.data?.daily?.get(0)?.pop?.times(100)) + "%"

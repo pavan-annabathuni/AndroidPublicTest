@@ -37,6 +37,8 @@ object NetworkSource {
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
 
+    private val geocodeInterface:MapsApiInterface
+
 
     init {
         val internalRetrofit: Retrofit = OutgrowClient.retrofit
@@ -46,6 +48,8 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
+        val geocodeCLient=MapsClient.apiClient
+        geocodeInterface=geocodeCLient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
