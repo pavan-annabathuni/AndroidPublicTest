@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homePagesFragment_to_allServicesFragment"
             app:destination="@id/allServicesFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_mandiGraphFragment22"
+            app:destination="@id/mandiGraphFragment2" />
     </fragment>
     <fragment
         android:id="@+id/allServicesFragment"
@@ -25,14 +28,14 @@
             app:popUpTo="@id/homePagesFragment"
             app:popUpToInclusive="false" />
     </fragment>
-        tools:layout="@layout/fragment_home_pages" >
+    <fragment
+        android:id="@+id/mandiGraphFragment2"
+        android:name="com.example.mandiprice.fragments.MandiGraphFragment"
+        android:label="MandiGraphFragment" >
         <action
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
             app:destination="@id/mandiGraphFragment2" />
     </fragment>
-    <fragment
-        android:id="@+id/mandiGraphFragment2"
-        android:name="com.example.mandiprice.fragments.MandiGraphFragment"
-        android:label="MandiGraphFragment" />
+
 
 </navigation>

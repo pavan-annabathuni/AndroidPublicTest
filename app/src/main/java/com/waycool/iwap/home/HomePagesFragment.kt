@@ -85,7 +85,7 @@ class HomePagesFragment : Fragment() {
             it?.crop?.let { it1 -> args.putString("cropName", it1) }
             it?.market?.let { it1 -> args.putString("market", it1) }
             this.findNavController()
-                .navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment2, args)
+                .navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
         binding.recyclerview.adapter = mandiAdapter
         binding.tvAddFromService.setOnClickListener {

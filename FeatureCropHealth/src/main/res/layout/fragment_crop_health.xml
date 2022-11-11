@@ -588,14 +588,14 @@
     <!--            android:layout_height="wrap_content"-->
     <!--            android:layout_margin="16dp"-->
     <!--            app:layout_constraintTop_toBottomOf="@+id/clOurAll">-->
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/space28"
-        android:layout_marginBottom="44dp"
-        android:src="@drawable/ic_phone_icon"
-        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"
-        app:layout_constraintEnd_toEndOf="parent" />
+<!--    <ImageView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="@dimen/space28"-->
+<!--        android:layout_marginBottom="44dp"-->
+<!--        android:src="@drawable/ic_phone_icon"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
