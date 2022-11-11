@@ -54,8 +54,8 @@ class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.
         val lightYellow = "#FFFAF0"
         val red = "#FF2C23"
         val lightRed = "#FFD7D0"
-        val green = "#08FA12"
-        val lightGreen = "#08FA12"
+        val green = "#000000"
+        val lightGreen = "#b2ffa4"
         when(properties.weather[0].id){
             200-> {holder.alerts.text = properties.weather[0].description
                 holder.alerts.setTextColor(Color.parseColor(yellow))

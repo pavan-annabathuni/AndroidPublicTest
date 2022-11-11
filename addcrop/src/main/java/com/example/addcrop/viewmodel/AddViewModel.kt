@@ -1,5 +1,6 @@
 package com.example.addcrop.viewmodel
 
+import android.widget.EditText
 import androidx.lifecycle.*
 
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO

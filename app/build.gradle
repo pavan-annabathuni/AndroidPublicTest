@@ -9,14 +9,6 @@ apply plugin:  'kotlin-parcelize'
 apply plugin:  'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 android {
-    signingConfigs {
-        Release {
-            storeFile file('/Users/pavana/Documents/Outgrow_dev_key.jks')
-            storePassword 'Outgrow@123'
-            keyAlias 'Key0'
-            keyPassword 'Outgrow@123'
-        }
-    }
     compileSdk appCompileSdkVersion
 
     defaultConfig {
@@ -24,7 +16,7 @@ android {
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
         versionCode 1
-        versionName "2.5.5"
+        versionName "2.5.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,6 +46,9 @@ dependencies {
     implementation project(path: ':FeatureLogin')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':Data')
+    implementation project(path: ':featureChat')
+    implementation project(path: ':Core')
+//    implementation project(path: ':FarmerRegistration')
     implementation project(path: ':FeatureCropProtect')
     implementation project(path: ':Videos')
 

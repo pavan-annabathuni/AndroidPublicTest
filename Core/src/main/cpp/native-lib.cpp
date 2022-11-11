@@ -127,6 +127,18 @@ Java_com_waycool_core_utils_AppSecrets_getYoutubeKey(JNIEnv *env, jobject thiz) 
 }
 extern "C"
 JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getChatAppId(JNIEnv *env, jobject thiz) {
+    std::string base_url = "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getAccountKey(JNIEnv *env, jobject thiz) {
+    std::string base_url = "dt55P5snqpfyOrXfNqz56lwrup8amDdz";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
 Java_com_waycool_core_utils_AppSecrets_getMapsKey(JNIEnv *env, jobject thiz) {
     std::string base_url = "AIzaSyAbYkho0xs5_muW3_tobx43l02p1LsF5vI";
     return env->NewStringUTF(base_url.c_str());

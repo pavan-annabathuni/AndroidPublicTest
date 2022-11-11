@@ -17,6 +17,7 @@ data class UserDetailsData(
     @SerializedName("email") var email: String? = null,
     @SerializedName("approved") var approved: Int? = null,
     @SerializedName("org_code_id") var orgCodeId: String? = null,
+    @SerializedName("encrypted_token") var encryptedToken: String? = null,
     @SerializedName("profile") var profile: ProfileNetwork? = ProfileNetwork(),
     @SerializedName("account") var account: List<AccountNetwork> = arrayListOf()
 

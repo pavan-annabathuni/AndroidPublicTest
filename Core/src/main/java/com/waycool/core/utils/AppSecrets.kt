@@ -18,6 +18,8 @@ object AppSecrets {
 
     external fun getGeoBaseUrl():String
     external fun getYoutubeKey(): String
+    external fun getChatAppId(): String
+    external fun getAccountKey(): String
     external fun getMapsKey():String
 
 

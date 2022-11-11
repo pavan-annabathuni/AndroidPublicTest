@@ -3,6 +3,7 @@ package com.waycool.iwap.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,8 @@ import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.iwap.MainViewModel
@@ -50,12 +53,12 @@ class HomePagesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val mandiAdapter = MandiHomePageAdapter()
+    private lateinit var  mandiAdapter:MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
-    val green = "#08FA12"
+    val green = "#146133"
     val lightGreen = "#DEE9E2"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,10 +68,20 @@ class HomePagesFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener{
+            val args = Bundle()
+            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+            it?.crop?.let { it1 -> args.putString("cropName", it1) }
+            it?.market?.let { it1 -> args.putString("market", it1) }
+            this.findNavController()
+                .navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
+        })
         binding.recyclerview.adapter = mandiAdapter
         binding.soilTestingCv.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
@@ -119,6 +132,9 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
+        binding.tvOurServiceViewAll.setOnClickListener {
+            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
+        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -148,14 +164,15 @@ class HomePagesFragment : Fragment() {
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
                         Log.d("Profile", userDetails.toString())
-
-
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
+                        binding.tvWelcome.text=userDetails?.profile?.village
+                        binding.tvWelcomeName.text="Welcome,"+it.data?.name
+                        Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
                                 weather(it1, it2)
-                                Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
 
@@ -168,9 +185,8 @@ class HomePagesFragment : Fragment() {
         }
         setVideos()
         setNews()
-
+        fabButton()
     }
-
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
         val extent: Int = videosBinding.recyclerview.computeHorizontalScrollExtent()
@@ -294,294 +310,253 @@ class HomePagesFragment : Fragment() {
 
             }
             if (it.data?.current?.weather?.isEmpty() == false)
-                when (it.data?.current?.weather?.get(0)?.id) {
-                    200 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                when(it.data?.current?.weather?.get(0)?.id){
+                    200-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    201 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    201-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    202 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    202-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    210 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    210-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    211 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    211-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    212 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    212-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    221 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    221-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    230 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    230-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    231 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    231-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    232 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    232-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    300 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    300-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    301 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    301-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    302 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    302-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    310 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    310-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    311 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    311-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    312 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    312-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    313 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    313-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    314 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    314-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    321 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    321-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    500 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    500-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    501 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    501-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    502 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    502-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    503 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    503-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    504 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    504-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    511 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    511-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    520 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    520-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    521 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    521-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    522 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    522-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    531 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    531-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(red))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightRed))
                     }
-                    701 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    701-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    711 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    711-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    721 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    721-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    731 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    731-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    741 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    741-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    751 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    751-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    761 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    761-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    800 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    800-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(green))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightGreen))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation,0,0,0)
                     }
-                    801 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    801-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(green))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightGreen))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation,0,0,0)
                     }
-                    802 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    802-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(green))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightGreen))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation,0,0,0)
                     }
-                    803 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    803-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
-                    804 -> {
-                        binding.tvCloudy.text = it?.data?.current!!.weather[0].description
+                    804-> {binding.tvCloudy.text = it?.data?.current!!.weather[0].description
                         binding.tvCloudy.setTextColor(Color.parseColor(yellow))
                         binding.clCloudy.setBackgroundColor(Color.parseColor(lightYellow))
                         binding.tvCloudy.setCompoundDrawablesWithIntrinsicBounds(
-                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                        )
+                            com.waycool.weather.R.drawable.ic_circle_exclamation_brown,0,0,0)
                     }
 
                 }
         }
 
+        }
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
     }
 
 }

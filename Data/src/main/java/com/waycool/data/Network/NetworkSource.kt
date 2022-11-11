@@ -36,7 +36,6 @@ object NetworkSource {
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
-    private val geocodeInterface: MapsApiInterface
 
 
     init {
@@ -47,8 +46,6 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
-        val geocodeClient = MapsClient.apiClient
-        geocodeInterface = geocodeClient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -607,6 +604,24 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.getMandiHistory(headerMap,crop_master_id,mandi_master_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getStateList(
+        headerMap: Map<String, String>
+    ) = flow<Resource<StateModel?>> {
+
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getStateList(headerMap)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))

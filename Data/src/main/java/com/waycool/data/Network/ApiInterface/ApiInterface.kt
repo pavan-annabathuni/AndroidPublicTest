@@ -127,7 +127,7 @@ interface ApiInterface {
     @GET("api/v1/soil-test-request/history")
     suspend fun getSoilTestAllHistory(
         @HeaderMap headerMap: Map<String, String>,
-        @Query("account_id") user_id: Int
+        @Query("account_id") account_id: Int
     ): Response<SoilTestHistoryDTO>
 
 
@@ -222,4 +222,9 @@ interface ApiInterface {
         @Query("crop_master_id") crop_master_id:Int?,
         @Query("mandi_master_id") mandi_master_id:Int?
     ):Response<MandiHistoryDomain>
+
+    @GET("api/v1/india-state-master")
+    suspend fun getStateList(
+        @HeaderMap map: Map<String, String>?,
+    ):Response<StateModel>
 }

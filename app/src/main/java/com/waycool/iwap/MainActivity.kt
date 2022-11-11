@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
         /*if(SharedPreferenceUtility.getLogin(getApplicationContext()).equals("0")) {
             if (SharedPreferenceUtility.getUserFirst(getApplicationContext()).equals("0")) {
-                moveToFragment(new LanguageFragment());
+                moveToFragment(new ProfileLanguageFragment());
             } else {
 
             }

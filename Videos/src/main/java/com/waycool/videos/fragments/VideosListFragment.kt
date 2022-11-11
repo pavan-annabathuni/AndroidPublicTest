@@ -3,6 +3,7 @@ package com.waycool.videos.fragments
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,6 +31,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.videos.R
 import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
@@ -83,6 +86,7 @@ class VideosListFragment : Fragment() {
 
         setBanners()
         getVideoCategories()
+        fabButton()
 
         binding.videosVideoListRv.layoutManager = LinearLayoutManager(requireContext())
         adapterVideo = VideosPagerAdapter(requireContext())
@@ -114,34 +118,34 @@ class VideosListFragment : Fragment() {
 
 
         binding.micBtn.setOnClickListener { speechToText() }
-        binding.cropProtectAddFab.setOnClickListener {
-            if (!isAllFabsVisible) {
-                binding.cropProtectCallFab.visibility = View.VISIBLE
-                binding.cropProtectChatFab.visibility = View.VISIBLE
-                binding.cropProtectAddFab.backgroundTintList =
-                    ColorStateList.valueOf(Color.BLACK)
-                binding.cropProtectAddFab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(), R.drawable.ic_chatcall
-                    )
-                )
-                isAllFabsVisible = true
-            } else {
-                binding.cropProtectCallFab.visibility = View.GONE
-                binding.cropProtectChatFab.visibility = View.GONE
-                binding.cropProtectAddFab.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(), com.waycool.uicomponents.R.color.primaryColor
-                    )
-                )
-                binding.cropProtectAddFab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(), R.drawable.ic_chatcall
-                    )
-                )
-                isAllFabsVisible = false
-            }
-        }
+//        binding.cropProtectAddFab.setOnClickListener {
+//            if (!isAllFabsVisible) {
+//                binding.cropProtectCallFab.visibility = View.VISIBLE
+//                binding.cropProtectChatFab.visibility = View.VISIBLE
+//                binding.cropProtectAddFab.backgroundTintList =
+//                    ColorStateList.valueOf(Color.BLACK)
+//                binding.cropProtectAddFab.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        requireContext(), R.drawable.ic_chatcall
+//                    )
+//                )
+//                isAllFabsVisible = true
+//            } else {
+//                binding.cropProtectCallFab.visibility = View.GONE
+//                binding.cropProtectChatFab.visibility = View.GONE
+//                binding.cropProtectAddFab.backgroundTintList = ColorStateList.valueOf(
+//                    ContextCompat.getColor(
+//                        requireContext(), com.waycool.uicomponents.R.color.primaryColor
+//                    )
+//                )
+//                binding.cropProtectAddFab.setImageDrawable(
+//                    ContextCompat.getDrawable(
+//                        requireContext(), R.drawable.ic_chatcall
+//                    )
+//                )
+//                isAllFabsVisible = false
+//            }
+//        }
 
     }
 
@@ -283,8 +287,34 @@ class VideosListFragment : Fragment() {
             }
         }
     }
-
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
+    }
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
+
 }

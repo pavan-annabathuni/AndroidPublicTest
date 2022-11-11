@@ -1,7 +1,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textView"
     android:layout_width="110dp"
-    android:layout_height="32dp"
+    android:layout_height="wrap_content"
     android:padding="8dp"
    android:text="Vegetable"
     android:gravity="start"

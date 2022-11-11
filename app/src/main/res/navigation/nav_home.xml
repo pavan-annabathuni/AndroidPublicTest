@@ -18,6 +18,12 @@
             android:id="@+id/action_homePagesFragment_to_playVideoFragment4"
             app:destination="@id/playVideoFragment4"
             app:popUpTo="@id/homePagesFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_allServicesFragment"
+            app:destination="@id/allServicesFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_mandiGraphFragment22"
+            app:destination="@id/mandiGraphFragment2" />
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -27,5 +33,25 @@
         android:id="@+id/playVideoFragment4"
         android:name="com.waycool.videos.fragments.PlayVideoFragment"
         android:label="PlayVideoFragment" />
+
+    <fragment
+        android:id="@+id/allServicesFragment"
+        android:name="com.waycool.iwap.home.AllServicesFragment"
+        android:label="fragment_all_services"
+        tools:layout="@layout/fragment_all_services" >
+        <action
+            android:id="@+id/action_allServicesFragment_to_homePagesFragment"
+            app:destination="@id/homePagesFragment"
+            app:popUpTo="@id/homePagesFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/mandiGraphFragment2"
+        android:name="com.example.mandiprice.fragments.MandiGraphFragment"
+        android:label="MandiGraphFragment" >
+        <action
+            android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
+            app:destination="@id/mandiGraphFragment2" />
+    </fragment>
 
 </navigation>
