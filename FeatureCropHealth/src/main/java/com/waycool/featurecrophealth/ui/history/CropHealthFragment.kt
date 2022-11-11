@@ -1,6 +1,7 @@
 package com.waycool.featurecrophealth.ui.history
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHealthBinding
@@ -53,6 +56,7 @@ class CropHealthFragment : Fragment() {
 
         bindObservers()
         getVideos()
+        fabButton()
 
         historyAdapter.onItemClick={
             val bundle=Bundle()
@@ -173,6 +177,31 @@ class CropHealthFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
+    }
 
 }

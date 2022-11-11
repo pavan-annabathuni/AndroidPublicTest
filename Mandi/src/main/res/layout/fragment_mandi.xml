@@ -16,6 +16,7 @@
             type="com.waycool.data.repository.domainModels.MandiDomain" />
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -101,15 +102,16 @@
             app:layout_constraintTop_toBottomOf="@+id/ll_search">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/LightGray"
                 app:cardCornerRadius="20dp">
 
                 <Spinner
                     android:id="@+id/spinner1"
                     style="@style/spinner_style"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
@@ -118,8 +120,9 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/LightGray"
@@ -127,23 +130,26 @@
 
                 <Spinner
                     android:id="@+id/spinner2"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
+                    android:dropDownHeight="300dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
                     tools:listitem="@layout/item_spinner" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/LightGray"
                 app:cardCornerRadius="20dp">
 
                 <Spinner
                     android:id="@+id/spinner3"
-                    android:layout_width="104dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
+                    android:dropDownWidth="100dp"
                     android:backgroundTint="@color/black"
                     android:spinnerMode="dropdown"
                     tools:listitem="@layout/item_spinner" />
@@ -158,22 +164,16 @@
             android:background="@color/LightGray"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="vertical">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -309,27 +309,37 @@
                             android:textSize="20sp" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleViewDis"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:nestedScrollingEnabled="true"
+                        android:layout_marginBottom="82dp"
                         android:orientation="vertical"
-                        android:visibility="visible"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view2"
-                        tools:itemCount="4"
-                        tools:listitem="@layout/item_distance" />
+                        app:layout_constraintTop_toBottomOf="@+id/view2">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleViewDis"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:isScrollContainer="false"
+                            android:nestedScrollingEnabled="true"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            tools:itemCount="4"
+                            tools:listitem="@layout/item_distance" />
+                    </LinearLayout>
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/ll_porgressBar"
@@ -339,6 +349,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible"
+            tools:visibility = "gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -351,6 +362,64 @@
                 android:layout_gravity="center" />
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/add_fab"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/DarkGreen"
+            android:text="Chat"
+            android:textColor="@color/white"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            android:visibility="gone"
+            app:fabSize="normal"
+            android:src="@drawable/ic_fab_call"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/add_chat"
+            app:layout_constraintEnd_toEndOf="@+id/add_chat"
+            app:tint="@color/white"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/add_fab"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/DarkGreen"
+            android:text="Chat"
+            android:textColor="@color/white"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            android:visibility="gone"
+            app:fabSize="normal"
+            android:src="@drawable/ic_fab_chat"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/add_fab"
+            app:layout_constraintEnd_toEndOf="@+id/add_fab"
+            app:tint="@color/white"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/DarkGreen"
+            android:src="@drawable/ic_chat_call"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.waycool.iwap.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,8 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.data.Network.NetworkModels.CropInfo
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.featurecropprotect.R
@@ -55,12 +58,12 @@ class HomePagesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val mandiAdapter = MandiHomePageAdapter()
+    private lateinit var  mandiAdapter:MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
-    val green = "#08FA12"
+    val green = "#146133"
     val lightGreen = "#DEE9E2"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +78,15 @@ class HomePagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener{
+            val args = Bundle()
+            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+            it?.crop?.let { it1 -> args.putString("cropName", it1) }
+            it?.market?.let { it1 -> args.putString("market", it1) }
+            this.findNavController()
+                .navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
+        })
         binding.recyclerview.adapter = mandiAdapter
         binding.tvAddFromService.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
@@ -121,7 +133,6 @@ class HomePagesFragment : Fragment() {
             }
         })
 
-        weather("12.22","78.22")
 
         mandiViewModel.viewModelScope.launch {
             mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
@@ -161,6 +172,7 @@ class HomePagesFragment : Fragment() {
         }
         setVideos()
         setNews()
+        fabButton()
     }
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
@@ -253,14 +265,15 @@ class HomePagesFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun weather(lat: String, lon: String){
         viewModel.getWeather(lat,lon).observe(viewLifecycleOwner) {
-            binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
-            binding.tvWindDegree.text = String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
-//            binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
-            Log.d("Weather", "weather: $it")
-  //           Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)
+
 
             if (it?.data != null) {
-
+                binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
+                binding.tvWindDegree.text = String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
+                binding.tvHumidityDegree.text = String.format("%.0f", it.data?.current?.humidity) + "%"
+                 binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
+                Log.d("Weather", "weather: $it")
+             Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)
                 // binding.weatherMaster = it.data
 
                 if (null != it) {
@@ -499,5 +512,31 @@ class HomePagesFragment : Fragment() {
         }
 
         }
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
+    }
 
     }

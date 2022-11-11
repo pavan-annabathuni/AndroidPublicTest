@@ -97,13 +97,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginStart="8dp"
+                    android:rotation="-90"
+                    android:textStyle="bold"
+                    android:text="Rate / Kg"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintEnd_toStartOf="@+id/lineChart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/lineChart" />
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
-                    android:layout_width="match_parent"
+                    android:layout_width="340dp"
                     android:layout_height="250dp"
+                    android:layout_marginStart="24dp"
                     android:background="@color/white"
                     android:padding="10dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_market" />

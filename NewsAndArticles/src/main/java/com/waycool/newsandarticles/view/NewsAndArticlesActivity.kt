@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextWatcher
 import android.text.Editable
 import android.content.Intent
+import android.net.Uri
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
@@ -20,6 +21,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
@@ -62,6 +65,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         //for slider banner
         setBanners()
         getNewsCategories()
+        fabButton()
 
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -233,6 +237,32 @@ class NewsAndArticlesActivity : AppCompatActivity() {
                 binding.search.setText(searchTag)
 
             }
+        }
+    }
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(this)
         }
     }
 

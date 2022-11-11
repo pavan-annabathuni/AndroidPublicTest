@@ -11,17 +11,17 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.profile.adapter.LanguageAdapter
-import com.example.profile.databinding.FragmentLanguageBinding
+import com.example.profile.databinding.FragmentProfileLanguageBinding
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 
 
-class LanguageFragment : Fragment() {
+class ProfileLanguageFragment : Fragment() {
 
 
-    lateinit var binding: FragmentLanguageBinding
+    lateinit var binding: FragmentProfileLanguageBinding
     private val languageViewModel: LoginViewModel by lazy {
         ViewModelProvider(this).get(LoginViewModel::class.java)
     }
@@ -31,7 +31,7 @@ class LanguageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLanguageBinding.inflate(layoutInflater)
+        binding = FragmentProfileLanguageBinding.inflate(layoutInflater)
         binding.languageRecyclerview.layoutManager = GridLayoutManager(context, 3)
         // binding.languageRecyclerview.setHasFixedSize(true)
         var languageAdapter = LanguageAdapter()
@@ -66,7 +66,7 @@ class LanguageFragment : Fragment() {
                     selectedLanguage!!.id
                 )
                 Navigation.findNavController(binding.root)
-                    .navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
+                    .navigateUp()
             }
         }
         binding.imgBack.setOnClickListener(){

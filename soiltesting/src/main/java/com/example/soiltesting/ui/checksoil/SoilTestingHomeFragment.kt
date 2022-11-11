@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Intent
 
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -32,6 +33,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
@@ -72,6 +75,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         expandableView()
         expandableViewTWo()
         getVideos()
+        fabButton()
         getAllHistory()
     }
 
@@ -468,5 +472,31 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         _binding = null
     }
 
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
+    }
 
 }

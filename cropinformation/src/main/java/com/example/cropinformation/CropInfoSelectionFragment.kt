@@ -1,6 +1,7 @@
 package com.example.cropinformation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,16 +19,18 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.cropinformation.adapter.CropListAdapter
-import com.example.cropinformation.databinding.FragmentCropSelectionBinding
+import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import java.util.*
 
-class CropSelectionFragment : Fragment() {
+class CropInfoSelectionFragment : Fragment() {
     private var selectedCategory: CropCategoryMasterDomain? = null
-    private lateinit var binding: FragmentCropSelectionBinding
+    private lateinit var binding: FragmentCropSelectionInfoBinding
     private val viewModel:TabViewModel by lazy {
         ViewModelProvider(requireActivity())[TabViewModel::class.java]
     }
@@ -46,7 +49,7 @@ class CropSelectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentCropSelectionBinding.inflate(inflater)
+        binding = FragmentCropSelectionInfoBinding.inflate(inflater)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,6 +63,7 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
 
+        fabButton()
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
             Runnable {
@@ -222,6 +226,33 @@ class CropSelectionFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
+    }
+
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(requireContext())
+        }
     }
 
 }

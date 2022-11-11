@@ -612,5 +612,23 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun getStateList(
+        headerMap: Map<String, String>
+    ) = flow<Resource<StateModel?>> {
+
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getStateList(headerMap)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
 

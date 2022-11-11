@@ -14,7 +14,7 @@ android {
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
         versionCode 1
-        versionName "2.5.5"
+        versionName "2.5.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +44,8 @@ dependencies {
     implementation project(path: ':FeatureLogin')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':Data')
+    implementation project(path: ':featureChat')
+    implementation project(path: ':Core')
 //    implementation project(path: ':FarmerRegistration')
     implementation project(path: ':FeatureCropProtect')
     implementation project(path: ':Videos')

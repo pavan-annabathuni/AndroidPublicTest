@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cropinformation">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application>
         <activity
             android:name=".CropInfo"
             android:exported="false"
+            android:autoLink="phone"
             android:theme="@style/AppTheme">
         </activity>
 

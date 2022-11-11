@@ -497,10 +497,14 @@ class SearchFragment : Fragment() {
     }
 
     fun autoComplete() {
+        viewModel.getAllCrops().observe(viewLifecycleOwner){
+            val cropName = it?.data?.map { data ->
+                data.cropName
+            }?: emptyList()
         val text = resources.getStringArray(R.array.autoComplete)
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, text)
+        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete,cropName)
         binding.searchBar.setAdapter(arrayAdapter)
-    }
+    }}
 
     override fun onStart() {
         super.onStart()

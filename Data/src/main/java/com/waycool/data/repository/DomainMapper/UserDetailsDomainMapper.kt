@@ -16,6 +16,7 @@ class UserDetailsDomainMapper : DomainMapper<UserDetailsDomain, UserDetailsEntit
             contact = dto.contact,
             email = dto.email,
             approved = dto.approved,
+            encryptedToken=dto.encryptedToken,
             orgCodeId = dto.orgCodeId,
             profile = ProfileDomainMapper().mapToDomain(dto.profile ?: ProfileEntity()),
             account = AccountDomainMapper().toDomainList(dto.account)
