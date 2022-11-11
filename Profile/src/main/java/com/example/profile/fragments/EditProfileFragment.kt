@@ -138,7 +138,7 @@ class EditProfileFragment : Fragment() {
                         Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
                     }
             }
-            if(selecteduri!=null) {
+            if (selecteduri != null) {
                 val fileDir = context?.filesDir
                 val file: File = File(fileDir, ".png")
                 val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
@@ -183,13 +183,14 @@ class EditProfileFragment : Fragment() {
 //           }
         }
         binding.imgAutoText.setOnClickListener() {
-            val pla: List<Place.Field> =
-                Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS)
-            val i: Intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, pla)
-                .setCountry("In")
-                .setTypeFilter(TypeFilter.ESTABLISHMENT)
-                .build(context)
-            startActivityForResult(i, 101)
+            getLocation()
+//            val pla: List<Place.Field> =
+//                Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS)
+//            val i: Intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, pla)
+//                .setCountry("In")
+//                .setTypeFilter(TypeFilter.ESTABLISHMENT)
+//                .build(context)
+//            startActivityForResult(i, 101)
         }
 //        binding.tvCity.setOnClickListener() {
 //            val pla: List<Place.Field> =
@@ -228,7 +229,26 @@ class EditProfileFragment : Fragment() {
         }
         task.addOnSuccessListener {
             if (it != null) {
-                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+//                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+
+                viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
+                    .observe(viewLifecycleOwner) {
+                        if (it.results.isNotEmpty()) {
+                            val result = it.results[0]
+                            if (result.subLocality != null)
+                                binding.tvAddress2.setText("${result.subLocality}")
+                            else
+                                binding.tvAddress2.setText("${result.locality}")
+                            binding.tvState.append("${result.state}")
+
+                            binding.tvAddress1.setText("${result.formattedAddress ?: ""}")
+                            binding.tvAddress1.setSelection(0)
+                            binding.tvCity.setText("${result.district}")
+
+                            binding.tvPincode.setText(result.pincode ?: "")
+                        }
+                    }
+
             }
 //                val bounds = RectangularBounds.newInstance(
 //                    LatLng(-33.880490, it.latitude),
@@ -257,7 +277,7 @@ class EditProfileFragment : Fragment() {
                     .withAspectRatio(1F, 1F)
                     .withMaxResultSize(1000, 1000)
                     .withOptions(options)
-                    .start(requireContext(),this)
+                    .start(requireContext(), this)
 
         }
 
@@ -327,7 +347,7 @@ class EditProfileFragment : Fragment() {
             //Toast.makeText(context, "Image Uploaded", Toast.LENGTH_LONG).show()
 
 
-        } else if(resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+        } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val uri: Uri? = data?.let { UCrop.getOutput(it) }
             binding.imageView.setImageURI(uri)
             selecteduri = uri

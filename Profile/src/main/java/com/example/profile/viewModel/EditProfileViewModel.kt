@@ -8,9 +8,11 @@ import com.example.profile.apiService.userResponse.Data
 import com.example.profile.apiService.userResponse.Profile
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
 import com.waycool.data.Network.NetworkModels.profilePicModel
+import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.ProfileRepository
+import com.waycool.data.repository.domainModels.GeocodeDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -89,13 +91,13 @@ class EditProfileViewModel:ViewModel() {
 //        }
 //    }
 
-    fun getUserProfile(){
-        viewModelScope.launch {
-            val userData = ProfileApi.retrofitService.getProfile()
-            _response3.value = userData?.data?.profile
-            _status.value = "SUCCESS"
-        }
-    }
+//    fun getUserProfile(){
+//        viewModelScope.launch {
+//            val userData = ProfileApi.retrofitService.getProfile()
+//            _response3.value = userData?.data?.profile
+//            _status.value = "SUCCESS"
+//        }
+//    }
 
 //    fun getUserProfilePic2(file:File){
 //
@@ -110,5 +112,7 @@ class EditProfileViewModel:ViewModel() {
 //            _status.value = "SUCCESS"
 //        }
 //    }
+
+    fun getReverseGeocode(latlon:String):LiveData<GeocodeDomain> = GeocodeRepository.getReverseGeocode(latlon).asLiveData()
 
 }

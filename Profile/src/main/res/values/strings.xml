@@ -9,8 +9,8 @@
     <string name="str_mobile_number">Mobile Number</string>
     <string name="str_farmer_name">Farmer name <font color='#FF0000'>*</font></string>
     <string name="str_address_line_1">Address Line 1 <font color='#FF0000'>*</font></string>
-    <string name="address_line_2">Address Line 2 <font color='#FF0000'>*</font></string>
-    <string name="str_city">City <font color='#FF0000'>*</font></string>
+    <string name="address_line_2">City/Village <font color='#FF0000'>*</font></string>
+    <string name="str_city">District <font color='#FF0000'>*</font></string>
     <string name="str_state">State <font color='#FF0000'>*</font></string>
     <string name="str_pincode">Pincode <font color='#FF0000'>*</font></string>
     <string name="submit">Submit</string>

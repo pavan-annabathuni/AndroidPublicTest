@@ -234,7 +234,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
-                android:text="City "
+                android:text="City/Village "
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"

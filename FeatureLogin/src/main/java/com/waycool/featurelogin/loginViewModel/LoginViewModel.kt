@@ -3,6 +3,7 @@ package com.waycool.featurelogin.loginViewModel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
+import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.utils.Resource
@@ -102,4 +103,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getUserData(query: HashMap<String, String>): LiveData<Resource<RegisterDomain>> = LoginRepository.register(query).asLiveData()
 
+
+    fun getGeocode(address:String):LiveData<GeocodeDomain> = GeocodeRepository.getGeocode(address).asLiveData()
+
+    fun getReverseGeocode(latlon:String):LiveData<GeocodeDomain> = GeocodeRepository.getReverseGeocode(latlon).asLiveData()
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.waycool.core.retrofit.MapsClient
 import com.waycool.core.retrofit.OTPApiCient
 import com.waycool.core.retrofit.OutgrowClient
 import com.waycool.core.retrofit.WeatherClient
@@ -11,6 +12,7 @@ import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
+import com.waycool.data.Network.ApiInterface.MapsApiInterface
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
@@ -34,6 +36,7 @@ object NetworkSource {
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
+    private val geocodeInterface: MapsApiInterface
 
 
     init {
@@ -44,6 +47,8 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
+        val geocodeClient = MapsClient.apiClient
+        geocodeInterface = geocodeClient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -612,5 +617,38 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun getGeocode(address: String
+    ) = flow<GeocodeDTO?> {
+
+        try {
+            val response = geocodeInterface.getGeocode(address,AppSecrets.getMapsKey())
+
+            if (response.isSuccessful)
+                emit(response.body())
+            else {
+//                emit(response.errorBody()?.charStream()?.readText())
+            }
+        } catch (e: Exception) {
+//            emit(e.message)
+        }
+    }
+
+    fun getReverseGeocode(latlon: String
+    ) = flow<GeocodeDTO?> {
+
+        try {
+            val response = geocodeInterface.getReverseGeocode(latlon,AppSecrets.getMapsKey())
+
+            if (response.isSuccessful)
+                emit(response.body())
+            else {
+//                emit(response.errorBody()?.charStream()?.readText())
+            }
+        } catch (e: Exception) {
+//            emit(e.message)
+        }
+    }
+
 }
 

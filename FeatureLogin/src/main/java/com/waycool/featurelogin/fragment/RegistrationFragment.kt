@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -31,14 +30,23 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.waycool.core.utils.AppSecrets
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -58,7 +66,6 @@ class RegistrationFragment : Fragment() {
     lateinit var binding: FragmentRegistrationBinding
     var k: Int = 4
     var dummylist: MutableList<ModuleMasterDomain> = mutableListOf()
-    var name: Array<String> = arrayOf("Mandi", "Crop Health", "Crop Information", "News")
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
     private val REQUEST_CODE_SPEECH_INPUT = 101
@@ -81,6 +88,8 @@ class RegistrationFragment : Fragment() {
     lateinit var audioWife: AudioWife
     lateinit var mediaPlayer: MediaPlayer
 
+    lateinit var placesClient:PlacesClient
+
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
 
     private val filter: InputFilter =
@@ -90,8 +99,8 @@ class RegistrationFragment : Fragment() {
             } else null
         }
 
-    init {
-        this.activityResultLauncher = registerForActivityResult(
+
+      val  requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { result ->
 
@@ -106,17 +115,23 @@ class RegistrationFragment : Fragment() {
                 getLocation()
             }
         }
-    }
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
 
         binding.registerDoneBtn.isEnabled = true
+
+        Places.initialize(requireActivity().applicationContext, AppSecrets.getMapsKey())
+         placesClient = Places.createClient(requireContext())
+
 
         val toolbarLayoutBinding: ToolbarLayoutBinding =
             ToolbarLayoutBinding.inflate(layoutInflater)
@@ -172,6 +187,7 @@ class RegistrationFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {
                 if (binding.nameEt.text.toString().trim().isNotEmpty()) {
+                    //TODO Implement Reverse Geocoder
                     if (binding.locationEt.text.toString().trim().length != 0) {
                         binding.registerDoneBtn.isEnabled = true
                     } else {
@@ -205,7 +221,7 @@ class RegistrationFragment : Fragment() {
         })
         binding.registerDoneBtn.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                AppUtil.Toast(context, "cliked")
+//                AppUtil.Toast(context, "cliked")
                 userCreater()
             }
         })
@@ -310,43 +326,55 @@ class RegistrationFragment : Fragment() {
                 mFusedLocationClient =
                     LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
 
+                binding.locationTextlayout.helperText = "Detecting your location.."
+
                 mFusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
+//                        if (location != null) {
+//                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
+//                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
+//                        }
                         if (location != null) {
-                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
-                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
-                        }
-                        if (location != null) {
 
-                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                            val list: List<Address> =
-                                geocoder.getFromLocation(
-                                    location.latitude,
-                                    location.longitude,
-                                    1
-                                ) as List<Address>
+//                            val token = AutocompleteSessionToken.newInstance()
+//
+//                            val request =
+//                                FindAutocompletePredictionsRequest.builder()
+//                                    .setTypesFilter(listOf( TypeFilter.ADDRESS.toString()))
+//                                    .setSessionToken(token)
+//                                    .setQuery("kottal")
+//                                    .build()
+//                            placesClient.findAutocompletePredictions(request)
+//                                .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
+//                                    for (prediction in response.autocompletePredictions) {
+//                                        Toast.makeText(requireContext(),prediction.placeId,Toast.LENGTH_SHORT).show()
+//                                        Log.i("registration", prediction.placeId)
+//                                        Log.i("registration", prediction.getPrimaryText(null).toString())
+//                                    }
+//                                }.addOnFailureListener { exception: Exception? ->
+//                                    if (exception is ApiException) {
+//                                        Log.e("registration", "Place not found: " + exception.statusCode)
+//                                    }
+//                                }
 
-                            if (list.isNotEmpty()) {
-                                subDistrict = list[0].locality
-                                village = list[0].subLocality
-                                district = list[0].subAdminArea
-                                state = list[0].adminArea
-                                pincode = list[0].postalCode
-                            }
-                            if (village == null || village!!.isEmpty()) {
-                                if (subDistrict.isEmpty()) {
-                                    if (district.isEmpty()) {
 
-                                    } else {
-                                        village = district
+
+                            viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
+                                .observe(viewLifecycleOwner){
+                                    if(it.results.isNotEmpty()){
+                                        val result=it.results[0]
+                                        if(result.subLocality!=null)
+                                            binding.locationEt.append("${result.subLocality},")
+                                        binding.locationEt.append("${result.locality}, ${result.district}")
+                                        binding.locationEt.setSelection(0)
+                                        binding.locationTextlayout.helperText = ""
+                                    }else{
+//                                        binding.locationEt.setText("$village, $district")
+                                        binding.locationTextlayout.helperText = "Could not find your location. Enter Manually."
                                     }
-                                } else {
-                                    village = subDistrict
-                                }
                             }
+
                         }
-                        binding.locationEt.setText("$village, $district")
-                        binding.locationTextlayout.helperText = ""
                     }
             } else {
                 Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
@@ -367,11 +395,11 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
+        if (checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
+            checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -382,14 +410,18 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            permissionId
-        )
+        requestPermissionLauncher.launch(arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ))
+
+//        requestPermissions(
+//            arrayOf(
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ),
+//            permissionId
+//        )
         //requestPermissions(String[] {android.Manifest.permission.READ_CONTACTS}, REQUEST_CONTACT);
     }
 
@@ -462,11 +494,7 @@ class RegistrationFragment : Fragment() {
             }
         } else {
             getLocation();
-            Toast.makeText(
-                activity,
-                "Again Click Submit Button",
-                Toast.LENGTH_SHORT
-            ).show()
+
         }
     }
 
@@ -520,11 +548,11 @@ class RegistrationFragment : Fragment() {
                     dummylist.addAll(it.data as MutableList)
                     knowAdapter.notifyDataSetChanged()
                     premiumAdapter.notifyDataSetChanged()
-                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
 
                 }
                 is Resource.Error -> {
