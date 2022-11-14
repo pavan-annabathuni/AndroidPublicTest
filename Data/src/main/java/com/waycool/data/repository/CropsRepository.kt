@@ -1,5 +1,7 @@
 package com.waycool.data.repository
 
+import android.text.Editable
+import android.widget.EditText
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkModels.*
@@ -252,12 +254,12 @@ object CropsRepository {
     }
 
     fun addCropPassData(
-        crop_id: Int,
-        account_id: Int,
-        plot_nickname: String,
-        is_active: Int,
-        sowing_date: String,
-        area: Double
+        crop_id: Int?,
+        account_id: Int?,
+        plot_nickname: String?,
+        is_active: Int?,
+        sowing_date: String?,
+        area: Editable?
     ): Flow<Resource<AddCropResponseDTO?>> {
         return NetworkSource.addCropPassData(
             crop_id,
@@ -295,6 +297,16 @@ object CropsRepository {
             number
         )
     }
+    fun checkToken(
+        user_id: Int,
+        token: String
+    ): Flow<Resource<CheckTokenResponseDTO?>> {
+
+        return NetworkSource.checkToken(
+          user_id,token
+        )
+    }
+
 
     fun postAiCropImage(
         cropId: Int,

@@ -1,5 +1,7 @@
 package com.waycool.data.Network.ApiInterface
 
+import android.text.Editable
+import android.widget.EditText
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
 import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
@@ -152,12 +154,12 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("api/v1/plots")
     suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
-                                 @Field("crop_id")crop_id:Int,
-                                 @Field("account_no_id")account_no_id:Int,
-                                 @Field("plot_nickname")plot_nickname:String,
-                                 @Field("is_active")is_active:Int,
-                                 @Field("sowing_date")sowing_date:String,
-                                 @Field("area")area:Double
+                                 @Field("crop_id")crop_id:Int?,
+                                 @Field("account_no_id")account_no_id:Int?,
+                                 @Field("plot_nickname")plot_nickname:String?,
+                                 @Field("is_active")is_active:Int?,
+                                 @Field("sowing_date")sowing_date:String?,
+                                 @Field("area")area: Editable?
     )
 //                                 @Body addCropPost: AddCropRequestDomain)
             : Response<AddCropResponseDTO>
@@ -222,4 +224,11 @@ interface ApiInterface {
         @Query("crop_master_id") crop_master_id:Int?,
         @Query("mandi_master_id") mandi_master_id:Int?
     ):Response<MandiHistoryDomain>
+    @FormUrlEncoded
+    @POST("api/v1/check-token")
+    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
+                             @Field("user_id")user_id:Int,
+                             @Field("token")token:String,
+    ): Response<CheckTokenResponseDTO>
+
 }

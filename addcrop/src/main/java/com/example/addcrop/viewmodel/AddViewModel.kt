@@ -1,5 +1,6 @@
 package com.example.addcrop.viewmodel
 
+import android.text.Editable
 import android.widget.EditText
 import androidx.lifecycle.*
 
@@ -16,8 +17,9 @@ class AddViewModel :ViewModel() {
     fun getAddCropType (): LiveData<Resource<List<AddCropTypeDomain>?>> {
         return CropsRepository.getAddCropType().asLiveData()
     }
-    fun addCropPassData(crop_id:Int,account_id:Int,plot_nickname:String,
-                        is_active:Int,sowing_date: String,area:Double
+    fun addCropPassData(
+        crop_id:Int?, account_id:Int?, plot_nickname:String?,
+        is_active:Int?, sowing_date: String?, area: Editable
     ): LiveData<Resource<AddCropResponseDTO?>> =
         CropsRepository.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area).asLiveData()
 

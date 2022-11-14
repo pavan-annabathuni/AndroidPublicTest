@@ -139,11 +139,14 @@
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#FFFFFF"
                     android:hint="e.g 50"
-                    android:inputType="number"
+
+                    android:inputType="numberDecimal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <Spinner
                     android:id="@+id/Acres"
@@ -160,7 +163,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <!--                <TextView-->
                 <!--                    android:id="@+id/Acres"-->
                 <!--                    android:layout_width="@dimen/space60"-->
