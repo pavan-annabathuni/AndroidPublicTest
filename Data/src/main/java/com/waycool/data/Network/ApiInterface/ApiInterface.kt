@@ -229,11 +229,11 @@ interface ApiInterface {
     suspend fun getStateList(
         @HeaderMap map: Map<String, String>?,
     ):Response<StateModel>
-    @FormUrlEncoded
-    @POST("api/v1/check-token")
-    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
-                             @Field("user_id")user_id:Int,
-                             @Field("token")token:String,
-    ): Response<CheckTokenResponseDTO>
+//    @FormUrlEncoded
+//    @POST("api/v1/check-token")
+//    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
+//                             @Field("user_id")user_id:Int,
+//                             @Field("token")token:String,
+//    ): Response<CheckTokenResponseDTO>
 
 }

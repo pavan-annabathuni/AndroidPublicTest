@@ -113,7 +113,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                 Toast.makeText(requireContext(), "PleaseSelect Soil Type", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
+//                findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
             }
 
 

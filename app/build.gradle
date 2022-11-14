@@ -16,7 +16,7 @@ android {
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
         versionCode 1
-        versionName "2.5.9"
+        versionName "2.5.10"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
