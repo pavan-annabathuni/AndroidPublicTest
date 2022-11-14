@@ -20,8 +20,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddViewModel
 import com.waycool.data.utils.Resource
-import java.lang.String.format
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -199,25 +197,51 @@ class AddCropDetailsFragment : Fragment() {
     }
 //format(binding.etAreaNumber.text.toString()).toDouble()
     private fun postAddCrop(crop_id: Int,account_id:Int) {
-        viewModel.addCropPassData(
-            crop_id,account_id, binding.etNickName.text.toString(), 1,
-             binding.etCalender.text.toString(),format(binding.etAreaNumber.text.toString()).toDouble()).observe(requireActivity()) {
-//            Log.d(TAG, "itemClickedData: $myCalendar")
-            when (it) {
-                is Resource.Success -> {
-                    activity?.finish()
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
-                }
-                is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
 
-                }
+        viewModel.addCropPassData(
+        crop_id,account_id, binding.etNickName.text.toString(), 1,
+        binding.etCalender.text.toString(), binding.etAreaNumber.text).observe(requireActivity()) {
+//            Log.d(TAG, "itemClickedData: $myCalendar")
+        when (it) {
+            is Resource.Success -> {
+                activity?.finish()
+            }
+            is Resource.Error -> {
+                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
+            }
+            is Resource.Loading -> {
+                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+
             }
         }
     }
+
+
+//    }
+//    else {
+//        viewModel.addCropPassData(
+//            crop_id,account_id, binding.etNickName.text.toString(), 1,
+//             binding.etCalender.text.toString(),format(binding.etAreaNumber.text.toString()).toDouble()).observe(requireActivity()) {
+////            Log.d(TAG, "itemClickedData: $myCalendar")
+//            when (it) {
+//                is Resource.Success -> {
+//                    activity?.finish()
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
+//                }
+//                is Resource.Loading -> {
+//                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//
+//                }
+//            }
+//        }
+//    }
+    }
+
 
     private fun itemClicked(rop_id: Int) {
         binding.cardCheckHealth.setOnClickListener {
