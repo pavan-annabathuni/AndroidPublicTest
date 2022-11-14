@@ -17,31 +17,13 @@ class CustomeDialogFragment : DialogFragment() {
     private var _binding: FragmentCustomeDialogBinding? = null
     private val binding get() = _binding!!
     companion object {
-
         const val TAG = "SimpleDialog"
-
-        private const val KEY_TITLE = "KEY_TITLE"
-        private const val KEY_SUBTITLE = "KEY_SUBTITLE"
-
-        fun newInstance(title: String, subTitle: String): CustomeDialogFragment {
-            val args = Bundle()
-            args.putString(KEY_TITLE, title)
-            args.putString(KEY_SUBTITLE, subTitle)
+        fun newInstance(): CustomeDialogFragment {
             val fragment = CustomeDialogFragment()
-            fragment.arguments = args
             return fragment
         }
 
     }
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,29 +38,12 @@ class CustomeDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
-//        binding.tvOk.setOnClickListener {
-////            findNavController().navigate(R.id.action_customeDialogFragment_to_soilTestingHomeFragment)
-//            findNavController().popBackStack()
-//            dismiss()
-//        }
     }
     private fun setupClickListeners() {
         binding.tvOk .setOnClickListener {
-            // TODO: Do some task here
             dismiss()
         }
-//        view.btnNegative.setOnClickListener {
-//            // TODO: Do some task here
-//            dismiss()
-//        }
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-//        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-//        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-//    }
 
 
 }
