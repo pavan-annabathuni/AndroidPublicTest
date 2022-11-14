@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
+import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
 import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -341,9 +342,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
+                                        CustomeDialogFragment.newInstance(getString(R.string.app_name), getString(R.string.app_name)).show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
 //                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                  //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
                                         Log.d(
