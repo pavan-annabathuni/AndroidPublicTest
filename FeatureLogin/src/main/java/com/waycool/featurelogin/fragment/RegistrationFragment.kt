@@ -330,34 +330,9 @@ class RegistrationFragment : Fragment() {
 
                 mFusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
-//                        if (location != null) {
-//                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
-//                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
-//                        }
                         if (location != null) {
-
-//                            val token = AutocompleteSessionToken.newInstance()
-//
-//                            val request =
-//                                FindAutocompletePredictionsRequest.builder()
-//                                    .setTypesFilter(listOf( TypeFilter.ADDRESS.toString()))
-//                                    .setSessionToken(token)
-//                                    .setQuery("kottal")
-//                                    .build()
-//                            placesClient.findAutocompletePredictions(request)
-//                                .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
-//                                    for (prediction in response.autocompletePredictions) {
-//                                        Toast.makeText(requireContext(),prediction.placeId,Toast.LENGTH_SHORT).show()
-//                                        Log.i("registration", prediction.placeId)
-//                                        Log.i("registration", prediction.getPrimaryText(null).toString())
-//                                    }
-//                                }.addOnFailureListener { exception: Exception? ->
-//                                    if (exception is ApiException) {
-//                                        Log.e("registration", "Place not found: " + exception.statusCode)
-//                                    }
-//                                }
-
-
+                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
+                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
 
                             viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
                                 .observe(viewLifecycleOwner){
@@ -375,6 +350,14 @@ class RegistrationFragment : Fragment() {
                             }
 
                         }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
+                        Log.d("Registration",""+it.message)
+                    }
+                    .addOnCanceledListener {
+                        Toast.makeText(requireContext(),"Cancelled",Toast.LENGTH_SHORT).show()
+
                     }
             } else {
                 Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
