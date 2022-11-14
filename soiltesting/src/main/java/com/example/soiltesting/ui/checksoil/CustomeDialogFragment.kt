@@ -20,26 +20,26 @@ class CustomeDialogFragment : DialogFragment() {
 
         const val TAG = "SimpleDialog"
 
-        private const val KEY_TITLE = "KEY_TITLE"
-        private const val KEY_SUBTITLE = "KEY_SUBTITLE"
+//        private const val KEY_TITLE = "KEY_TITLE"
+//        private const val KEY_SUBTITLE = "KEY_SUBTITLE"
 
         fun newInstance(title: String, subTitle: String): CustomeDialogFragment {
-            val args = Bundle()
-            args.putString(KEY_TITLE, title)
-            args.putString(KEY_SUBTITLE, subTitle)
+//            val args = Bundle()
+//            args.putString(KEY_TITLE, title)
+//            args.putString(KEY_SUBTITLE, subTitle)
             val fragment = CustomeDialogFragment()
-            fragment.arguments = args
+//            fragment.arguments = args
             return fragment
         }
 
     }
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        dialog?.window?.setLayout(
+//            WindowManager.LayoutParams.WRAP_CONTENT,
+//            WindowManager.LayoutParams.WRAP_CONTENT
+//        )
+//    }
 
 
     override fun onCreateView(
@@ -63,7 +63,7 @@ class CustomeDialogFragment : DialogFragment() {
 //        }
     }
     private fun setupClickListeners() {
-        binding.tvOk .setOnClickListener {
+        binding.tvOk.setOnClickListener {
             // TODO: Do some task here
             dismiss()
         }
