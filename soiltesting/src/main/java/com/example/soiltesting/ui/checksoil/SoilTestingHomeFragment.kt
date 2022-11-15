@@ -409,13 +409,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {
-                                    binding.progressBar.isVisible = false
                                     binding.clProgressBar.visibility = View.GONE
+                                    binding.progressBar.isVisible = false
                                     Log.d(
                                         "TAG",
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
+
                                         CustomeDialogFragment.newInstance().show(
                                             requireActivity().supportFragmentManager,
                                             CustomeDialogFragment.TAG
@@ -455,9 +456,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 is Resource.Loading -> {
                                     binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-
-//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-//                                        .show()
+                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                                        .show()
 
                                 }
                             }
