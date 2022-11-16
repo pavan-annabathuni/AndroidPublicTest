@@ -19,7 +19,8 @@ object SyncRate {
         SyncKey.SOIL_TEST_HISTORY to 30,
         SyncKey.CROPS_CATEGORY_MASTER to 30,
         SyncKey.PEST_DISEASE_MASTER to 30,
-        SyncKey.CROP_INFORMATION_MASTER to 60
+        SyncKey.CROP_INFORMATION_MASTER to 60,
+        SyncKey.MY_CROP_MASTER to 30
     )
 
 

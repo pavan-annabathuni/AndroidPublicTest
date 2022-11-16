@@ -24,6 +24,7 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecropprotect.Adapter.CropListAdapter
+import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentCropSelectionBinding
@@ -35,6 +36,7 @@ class CropSelectionFragment : Fragment() {
     private var selectedCategory: CropCategoryMasterDomain? = null
     private var _binding: FragmentCropSelectionBinding? = null
     private val binding get() = _binding!!
+    private lateinit var myCropAdapter: MyCropsAdapter
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
     }
@@ -62,7 +64,19 @@ class CropSelectionFragment : Fragment() {
         binding.toolbarTitle.text = "Protect Your Crop"
 
         binding.cropsRv.adapter = adapter
+
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener{
+            val args = Bundle()
+            it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
+            it?.cropName?.let { it1 -> args.putString("cropname", it1) }
+            findNavController().navigate(
+                R.id.action_cropSelectionFragment_to_pestDiseaseFragment,
+                args
+            )
+        })
+        binding.rvMyCrops.adapter = myCropAdapter
           fabButton()
+        myCrops()
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
             Runnable {
@@ -247,6 +261,23 @@ class CropSelectionFragment : Fragment() {
         }
         binding.addChat.setOnClickListener(){
             ZendeskChat.zenDesk(requireContext())
+        }
+    }
+    fun myCrops() {
+
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            var accountId = it.data?.account!![0].id!!
+
+            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                myCropAdapter.submitList(it.data)
+                if ((it.data != null)) {
+                    binding.tvCount.text = it.data!!.size.toString()
+                } else {
+                    binding.tvCount.text = "0"
+                }
+                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
+            }
         }
     }
 }

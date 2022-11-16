@@ -24,6 +24,7 @@ import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.launch
 import zendesk.chat.*
+import zendesk.chat.JwtAuthenticator.JwtCompletion
 import zendesk.messaging.MessagingActivity
 
 
@@ -146,17 +147,19 @@ class MyProfileFragment : Fragment() {
 //                Log.d("JWT", "onClick: $jwtToken")
 //            }
 
-           val jwtAuthenticator =
-                JwtAuthenticator { jwtCompletion -> //Fetch or generate the JWT token at this point
-                    //OnSuccess
-                    jwtCompletion.onTokenLoaded("eyJpdiI6IkdvQ0xTaVd5UDA5aWg3bTlTeGJUdEE9PSIsInZhbHVlIjoicWFPTDdoZjZrS0M2Slpoa3A0bzdXZz09IiwibWFjIjoiMDBhZjIyYjI4NjE2NzVhNGFhNjZjYTlkM2E1NDFmYjA1YTdkZTQ0MjVkMzUxYWU5MmY3YjcwNmE5MDViYmY0ZCIsInRhZyI6IiJ9")
-                    //OnError
-                    jwtCompletion.onError()
-                }
+//           val jwtAuthenticator =
+//                JwtAuthenticator { jwtCompletion -> //Fetch or generate the JWT token at this point
+//                    //OnSuccess
+//                    jwtCompletion.onTokenLoaded("")
+//                    //OnError
+//                    jwtCompletion.onError()
+  //              }
 
+                Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),AppSecrets.getChatAppId())
+                val jwtAuth = JwtAuth()
+                Chat.INSTANCE.setIdentity(jwtAuth)
 
-
-            Chat.INSTANCE.setIdentity(jwtAuthenticator)
+         //   Chat.INSTANCE.setIdentity(jwtAuthenticator)
 
             val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
 //                .withVisitorInfo(visitorInfo)
@@ -222,3 +225,28 @@ class MyProfileFragment : Fragment() {
     }
 
    }
+internal class JwtAuth : JwtAuthenticator {
+
+    private fun retrieveToken(callback: JwtCallback) {
+        // request to backend service that returns a JWT Token or an Error
+
+        callback.onSuccess("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NTAsIm5hbWUiOiJTZCIsImNvbnRhY3QiOiI3Njc5OTUyMDUwIiwiZW1haWwiOiI3Njc5OTUyMDUwNjM3MjFmMGNkYmY1YmR1bW15QHdheWNvb2wuaW4iLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiYXBwcm92ZWQiOjEsInNldHRpbmdzIjpudWxsLCJpYXQiOjE2Njg0MjM0MzYsImp0aSI6IjYzNzIxZjBjZGJmODIiLCJwcm9maWxlIjp7ImlkIjozMSwiZ2VuZGVyIjpudWxsLCJhZGRyZXNzIjpudWxsLCJ2aWxsYWdlIjoiQmVsbGFuZHVyIiwicGluY29kZSI6IjU2MDEwMyIsInN0YXRlIjpudWxsLCJkaXN0cmljdCI6bnVsbCwic3ViX2Rpc3RyaWN0IjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJsYXQiOiIxMi45MzAxNDAwMCIsImxvbmciOiI3Ny42ODYyOTAwMCIsInByb2ZpbGVfcGljIjpudWxsLCJ1c2VyX2lkIjo1MCwibGFuZ19pZCI6MX0sImFjY291bnQiOlt7ImlkIjozMCwiYWNjb3VudF9ubyI6IkFITFg3VlNZTVIiLCJhY2NvdW50X3R5cGUiOiJvdXRncm93IiwiaXNfYWN0aXZlIjoxLCJkZWZhdWx0X21vZHVsZXMiOjEsImlzX3ByZW1pdW0iOjB9XX0.y3pY-4UPvfmPjPFIwRbNmABQ8nclvtdjF_Vx91yJQno")
+    }
+
+    override fun getToken(jwtCompletion: JwtCompletion) {
+        retrieveToken(object : JwtCallback {
+            override fun onSuccess(token: String?) {
+                jwtCompletion.onTokenLoaded(token)
+            }
+
+            override fun onError() {
+                jwtCompletion.onError()
+            }
+        })
+    }
+
+    internal interface JwtCallback {
+        fun onSuccess(token: String?)
+        fun onError()
+    }
+}

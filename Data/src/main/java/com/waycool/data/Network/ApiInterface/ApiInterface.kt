@@ -236,4 +236,18 @@ interface ApiInterface {
 //                             @Field("token")token:String,
 //    ): Response<CheckTokenResponseDTO>
 
+
+    @GET("api/v1/my-crops")
+    suspend fun getMyCrops(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_id")account_id:Int
+    ):Response<MyCropsModel>
+
+
+
+    @DELETE("api/v1/plots/{plots}")
+    suspend fun editMyCrops(
+        @HeaderMap map: Map<String, String>?,
+        @Path("plots")plots:Int
+    ):Response<Unit>
 }

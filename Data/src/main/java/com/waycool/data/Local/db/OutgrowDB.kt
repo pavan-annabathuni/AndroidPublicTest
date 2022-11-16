@@ -4,17 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.waycool.data.Local.Entity.CropInformationEntityData
-import com.waycool.data.Local.Entity.AddCropTypeEntity
-import com.waycool.data.Local.Entity.CropMasterEntity
-import com.waycool.data.Local.Entity.PestDiseaseEntity
-import com.waycool.data.Local.Entity.TagsEntity
+import androidx.room.TypeConverters
+import com.waycool.data.Local.Entity.*
+import com.waycool.data.Local.utils.TypeConverter
 import java.lang.Exception
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class], version = 2, exportSchema = false)
- abstract class OutgrowDB : RoomDatabase() {
+@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class,MyCropDataEntity::class], version = 2, exportSchema = false)
+@TypeConverters(TypeConverter::class)
+
+abstract class OutgrowDB : RoomDatabase() {
 
     abstract fun outgrowDao(): OutgrowDao
 
