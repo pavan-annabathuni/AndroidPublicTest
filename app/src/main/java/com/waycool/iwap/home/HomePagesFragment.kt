@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
+import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
@@ -65,6 +66,7 @@ class HomePagesFragment : Fragment() {
     val lightRed = "#FFD7D0"
     val green = "#146133"
     val lightGreen = "#DEE9E2"
+    private lateinit var myCropAdapter:MyCropsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -123,6 +125,13 @@ class HomePagesFragment : Fragment() {
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
         }
+        binding.tvMyCrops.setOnClickListener(){
+            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_editCropFragment)
+        }
+        binding.cvAddCrop.setOnClickListener(){
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -173,6 +182,7 @@ class HomePagesFragment : Fragment() {
         setVideos()
         setNews()
         fabButton()
+        myCrop()
     }
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
@@ -536,6 +546,33 @@ class HomePagesFragment : Fragment() {
         }
         binding.addChat.setOnClickListener(){
             ZendeskChat.zenDesk(requireContext())
+        }
+
+    }
+
+    fun myCrop(){
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener{
+        })
+        binding.rvMyCrops.adapter = myCropAdapter
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if (it.data != null) {
+                var accountId: Int = it.data!!.account[0].id!!
+                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                    myCropAdapter.submitList(it.data)
+                    if ((it.data != null)) {
+                        binding.tvCount.text = it.data!!.size.toString()
+                    } else {
+                        binding.tvCount.text = "0"
+                    }
+                    if (it.data!!.isNotEmpty()) {
+                        binding.cvEditCrop.visibility = View.VISIBLE
+                        binding.cardAddForm.visibility = View.GONE
+                    } else {
+                        binding.cvEditCrop.visibility = View.GONE
+                        binding.cardAddForm.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
     }
 

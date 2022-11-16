@@ -2,14 +2,21 @@ package com.example.addcrop.viewmodel
 
 import android.widget.EditText
 import androidx.lifecycle.*
+import com.waycool.data.Local.LocalSource
 
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
+import com.waycool.data.Network.NetworkModels.MyCropsModel
+import com.waycool.data.Network.NetworkModels.StateModel
+import com.waycool.data.Network.NetworkSource
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.AddCropTypeDomain
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import retrofit2.Call
 
 class AddViewModel :ViewModel() {
 
@@ -23,6 +30,14 @@ class AddViewModel :ViewModel() {
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
+
+    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2(account_id).asLiveData()
+
+    fun getEditMyCrop(id:Int):LiveData<Resource<Unit?>> {
+        return CropsRepository.getEditCrop(id).asLiveData()
+    }
+
 
 //    private val apiClient: ApiService = RetrofitBuilder.getInstance().create(ApiService::class.java)
 //

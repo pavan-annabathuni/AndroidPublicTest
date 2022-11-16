@@ -1,13 +1,17 @@
 package com.waycool.data.Local.utils
 
 import android.util.Log
+import androidx.room.ProvidedTypeConverter
+import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
+import com.waycool.data.Network.NetworkModels.CropModel
 import com.waycool.data.Network.NetworkModels.CropVarietyModel
 import com.waycool.data.repository.domainModels.CropVarityDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 
+@ProvidedTypeConverter
 object TypeConverter {
 
     fun convertLanguageMasterToString(language: List<LanguageMasterEntity>): String {
@@ -115,10 +119,21 @@ object TypeConverter {
         val gson = Gson()
         return gson.toJson(w)
     }
-
     fun convertStringToWeather(s: String): WeatherMasterEntity? {
         Log.d("TypeConverterFrom", s)
         val listType = object : TypeToken<WeatherMasterEntity?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    @TypeConverter
+    fun convertMyCropToString(w:MyCropDataEntity): String {
+        Log.d("TypeConverterTO", w.toString())
+        val gson = Gson()
+        return gson.toJson(w)
+    }
+    @TypeConverter
+    fun convertStringToMyCrop(s: String): MyCropDataEntity? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<MyCropDataEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
 }

@@ -21,9 +21,12 @@ import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import kotlin.Exception
@@ -623,6 +626,56 @@ object NetworkSource {
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun editMyCrop(
+        id:Int)
+    = flow<Resource<Unit?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+                val response = apiInterface.editMyCrops(map,id)
+             if(response.isSuccessful)
+                 emit(Resource.Success(response.body()))
+             else {
+                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+             }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getMyCrop(headerMap: Map<String, String>,account_id: Int,
+    ) = flow<Resource<MyCropsModel?>> {
+
+        try {
+            val response = apiInterface.getMyCrops(headerMap,account_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getMyCrop2(headerMap: Map<String, String>,account_id: Int,
+    ) = flow<Resource<MyCropsModel?>> {
+
+        try {
+            val response = apiInterface.getMyCrops(headerMap,account_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }

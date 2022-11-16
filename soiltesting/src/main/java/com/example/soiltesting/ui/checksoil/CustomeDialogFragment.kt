@@ -31,8 +31,9 @@ class CustomeDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvOk.setOnClickListener {
-            findNavController().navigate(R.id.action_customeDialogFragment_to_soilTestingHomeFragment)
-            dismiss()
+//            findNavController().navigate(R.id.action_customeDialogFragment_to_soilTestingHomeFragment)
+//            dismiss()
+            findNavController().navigateUp()
         }
     }
 

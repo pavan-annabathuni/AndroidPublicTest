@@ -54,4 +54,13 @@ interface OutgrowDao {
     @Query("SELECT * FROM crop_information WHERE crop_id = :cropId")
     fun getCropInformation(cropId: Int): Flow<List<CropInformationEntityData>>
 
+    //MyCrops
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMyCrops(My_crop: List<MyCropDataEntity>)
+
+    @Query("SELECT * FROM My_crop")
+    fun getMyCrops(): Flow<List<MyCropDataEntity>>
+
+    @Query("DELETE FROM My_crop")
+    fun getDeleteMyCrops()
 }

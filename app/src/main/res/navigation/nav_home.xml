@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment22"
             app:destination="@id/mandiGraphFragment2" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_editCropFragment"
+            app:destination="@id/editCropFragment" />
     </fragment>
     <fragment
         android:id="@+id/allServicesFragment"
@@ -36,6 +39,10 @@
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
             app:destination="@id/mandiGraphFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/editCropFragment"
+        android:name="com.example.addcrop.EditCropFragment"
+        android:label="EditCropFragment" />
 
 
 </navigation>

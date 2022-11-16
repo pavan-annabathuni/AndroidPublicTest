@@ -43,7 +43,7 @@
             <!--        app:layout_constraintTop_toTopOf="parent">-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="156dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -131,7 +131,7 @@
                         android:src="@drawable/ic_gray_location" />
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
@@ -140,7 +140,7 @@
                         android:minLines="2"
                         android:text="@{property.market}"
                         android:textColor="#585858"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         tool:text=" Market" />
 
 

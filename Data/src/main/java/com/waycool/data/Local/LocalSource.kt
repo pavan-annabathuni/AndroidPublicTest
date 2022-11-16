@@ -159,4 +159,11 @@ object LocalSource {
 
     fun getCropInformation(crop_id:Int) = outgrowDao.getCropInformation(crop_id)
 
+    fun insertMyCrop(MyCrops: List<MyCropDataEntity>) {
+        outgrowDao.insertMyCrops(MyCrops)
+    }
+    fun getMyCrop() = outgrowDao.getMyCrops()
+
+    suspend fun deleteMyCrop() = outgrowDao.getDeleteMyCrops()
+
 }
