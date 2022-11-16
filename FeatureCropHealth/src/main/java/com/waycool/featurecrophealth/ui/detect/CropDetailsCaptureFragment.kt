@@ -3,6 +3,7 @@ package com.waycool.featurecrophealth.ui.detect
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -105,9 +105,12 @@ class CropDetailsCaptureFragment : Fragment() {
                     .withMaxResultSize(1000, 1000)
                     .withOptions(options)
                     .start(requireActivity())
+            binding.previewImage.visibility = View.VISIBLE
+            binding.closeImage?.visibility = View.VISIBLE
             binding.cardCheckHealth.setOnClickListener {
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
+                binding.closeImage?.visibility = View.GONE
 //            val userRequest = AiCropPostResponse()
                 val file = selecteduri?.toFile()
                 binding.uploadedImg.isEnabled = true
@@ -144,8 +147,10 @@ class CropDetailsCaptureFragment : Fragment() {
 
             Log.d(TAG, "onActivityResultUri: $uri")
             binding.uploadedImg.setImageURI(uri)
-            binding.closeImage?.visibility=View.VISIBLE
+            binding.closeImage?.visibility = View.VISIBLE
+            binding.previewImage.visibility = View.VISIBLE
             binding.cardCheckHealth.setOnClickListener {
+                binding.closeImage?.visibility = View.GONE
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
 //            val userRequest = AiCropPostResponse()
@@ -167,6 +172,8 @@ class CropDetailsCaptureFragment : Fragment() {
                 Log.d("aidetect", selecteduri.toString())
                 Log.d("aidetect", file.name.toString())
                 Log.d("aidetect", profileImage.toString())
+                binding.progressBar?.visibility = View.VISIBLE
+                binding.cardCheckHealth.visibility = View.GONE
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
@@ -201,17 +208,16 @@ class CropDetailsCaptureFragment : Fragment() {
         }
     }
 
-    private fun postImage(crop_id: Int?, crop_name: String?, profileImageBody: MultipartBody.Part) {
+    private fun postImage(crop_id:Int?, crop_name:String?, profileImageBody:MultipartBody.Part){
         viewModel.postAiImage(
             crop_id!!,
             crop_name!!,
             profileImageBody
-        ).observe(requireActivity()){
-            when(it){
-                is Resource.Success->{
-                    binding.progressBar?.isVisible = false
+        ).observe(requireActivity()) {
+            when (it) {
+                is Resource.Success -> {
                     binding.progressBar?.visibility = View.GONE
-                    val data=it.data
+                    val data = it.data
                     data?.diseaseId
                     val bundle = Bundle()
                     data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
@@ -224,9 +230,8 @@ class CropDetailsCaptureFragment : Fragment() {
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
                 }
-                is Resource.Loading->{
+                is Resource.Loading -> {
                     binding.progressBar?.visibility = View.VISIBLE
-                    binding.progressBar?.isVisible = true
                 }
             }
         }

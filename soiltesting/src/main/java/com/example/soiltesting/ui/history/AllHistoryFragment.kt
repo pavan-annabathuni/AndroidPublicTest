@@ -342,7 +342,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
-                                        CustomeDialogFragment.newInstance(getString(R.string.app_name), getString(R.string.app_name)).show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
 //                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                   //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
