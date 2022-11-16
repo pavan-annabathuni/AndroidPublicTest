@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.premium
 
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.R
-import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
 import com.example.addcrop.viewmodel.AddViewModel
@@ -19,6 +17,9 @@ class PlantSpacingFragment : Fragment() {
     private val binding get() = _binding!!
     var area: String? = null
     var date: String? = null
+    var account_id: Int? = null
+    var crop_id: Int? = null
+    var crop_type: Int? = null
     var irrigation_selected: String? = null
     private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
 
@@ -28,13 +29,25 @@ class PlantSpacingFragment : Fragment() {
     ): View? {
         _binding = FragmentPlantSpacingBinding.inflate(inflater, container, false)
         val bundle = Bundle()
-        if (arguments != null)
+        if (arguments != null){
+            account_id = arguments?.getInt("account_id")
+            crop_id=arguments?.getInt("cropid")
+            crop_type=arguments?.getInt("crop_type")
             area = arguments?.getString("area")
-        date = arguments?.getString("date")
-        irrigation_selected = arguments?.getString("irrigation_selected")
-        Log.d("TAG", "onCreateViewGetData: $area")
-        Log.d("TAG", "onCreateViewGetData: $date")
-        Log.d("TAG", "onCreateViewGetData: $irrigation_selected")
+            date = arguments?.getString("date")
+            irrigation_selected = arguments?.getString("irrigation_selected")
+
+            Log.d("TAG", "onCreateViewGetData: $account_id")
+            Log.d("TAG", "onCreateViewGetData: $crop_id")
+            Log.d("TAG", "onCreateViewGetData: $crop_type")
+            Log.d("TAG", "onCreateViewGetData: $area")
+            Log.d("TAG", "onCreateViewGetData: $date")
+            Log.d("TAG", "onCreateViewGetData: $irrigation_selected")
+
+        }
+
+
+
 //        binding.cardCheckHealth.setOnClickListener {
 //            val addCropRequest= AddCropRequest()
 //            viewModel.addCropPassData(addCropRequest)

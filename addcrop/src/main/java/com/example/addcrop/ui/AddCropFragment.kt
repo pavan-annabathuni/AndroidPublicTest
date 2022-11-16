@@ -41,6 +41,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
         bindObserversCategory()
 //        binding.toolbar.setOnClickListener {
@@ -106,20 +107,30 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun clickOnCategory(name: AddCropTypeDomain) {
-        binding.cardCheckHealth.isEnabled = true
-        binding.cardCheckHealth.setOnClickListener {
-            categoryAdapter.upDateList()
-            if (name.isSelected == false) {
-                Toast.makeText(requireContext(), "PleaseSelect Soil Type", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
+        if (arguments != null) {
+            var crop_id_selected = arguments?.getInt("cropid")
+            binding.cardCheckHealth.isEnabled = true
+            binding.cardCheckHealth.setOnClickListener {
+                categoryAdapter.upDateList()
+                if (name.isSelected == false) {
+                    Toast.makeText(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
+                    val bundle = Bundle()
+                    bundle.putInt("soil_type_id", name.id!!)
+                    bundle.putInt("cropid", crop_id_selected!!)
+                    findNavController().navigate(
+                        R.id.action_addCropFragment_to_addCropPremiumFragment,
+                        bundle
+                    )
+                }
+
+
             }
 
 
         }
-
-
     }
 
 //    override fun clickOnCategory(name: AddCropTypeDomain) {

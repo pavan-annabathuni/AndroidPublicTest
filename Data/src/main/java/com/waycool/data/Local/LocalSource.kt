@@ -52,7 +52,6 @@ object LocalSource {
         return null
     }
 
-
     suspend fun insertLanguageMaster(languageList: List<LanguageMasterEntity>) {
         DataStoreManager.insertLanguageMaster(languageList)
     }

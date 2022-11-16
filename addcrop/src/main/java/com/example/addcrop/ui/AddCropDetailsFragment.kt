@@ -143,8 +143,7 @@ class AddCropDetailsFragment : Fragment() {
 //                            binding.etState.error = "Enter Number of Planets"
 //                            return@setOnClickListener
 //                        } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-//                                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT)
-//                                    .show()
+//                                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
 //                                val bundle = Bundle()
 //                                bundle.putString("area", area)
 //                                bundle.putString("date", date)

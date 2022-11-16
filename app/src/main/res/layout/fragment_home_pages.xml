@@ -759,7 +759,7 @@ to the farm"
                             android:layout_height="wrap_content"
                             android:scaleType="fitXY"
                             android:src="@drawable/homepageads"
-                             />
+                            />
 
                     </androidx.cardview.widget.CardView>
 

@@ -270,6 +270,11 @@ object CropsRepository {
             area
         )
     }
+    fun addCropDataPass(
+        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
+    ): Flow<Resource<AddCropResponseDTO?>> {
+        return NetworkSource.addCropDataPass(map)
+    }
 
     fun postNewSoil(
         account_id: Int,

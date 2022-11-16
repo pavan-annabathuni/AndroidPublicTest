@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PlantSpacingFragment">
+    tools:context=".ui.premium.PlantSpacingFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -125,7 +125,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/space4"
-                        android:inputType="number"
                         android:background="@drawable/bg_acres"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -137,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/space16"
                             android:text="mtr"
-                            android:inputType="number"
+
                             android:textColor="#000000"
                             android:textSize="@dimen/txt12"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -337,7 +336,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/space60"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
                     android:layout_marginTop="@dimen/space8"
                     android:layout_marginEnd="@dimen/space16"
@@ -364,9 +363,8 @@
                         android:id="@+id/constraintLayout3WidthDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space4"
                         android:background="@drawable/bg_acres"
-                        app:layout_constraintBottom_toBottomOf="parent"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -374,9 +372,12 @@
                             android:id="@+id/tvMtrWidthDistance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/space16"
-                            android:padding="@dimen/space16"
+                            android:layout_marginStart="@dimen/space16"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginEnd="@dimen/space16"
+                            android:layout_marginBottom="9dp"
                             android:text="LPH"
+                            android:padding="@dimen/space16"
                             android:textColor="#000000"
                             android:textSize="@dimen/txt12"
                             app:layout_constraintBottom_toBottomOf="parent"

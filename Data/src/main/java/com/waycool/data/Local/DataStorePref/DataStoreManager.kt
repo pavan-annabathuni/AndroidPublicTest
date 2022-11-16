@@ -200,6 +200,17 @@ object DataStoreManager {
             }
     }
 
+    suspend fun getUserTokenFlow(): Flow<String?>? {
+        performPrefsSanityCheck()
+        return context?.userPreferences?.data
+            ?.catch { exception ->
+                Log.d("UserPref: ", exception.toString())
+            }
+            ?.map{
+                it[StoreKey.USER_TOKEN]
+            }
+    }
+
     suspend fun setMobileNumber(mobileNo: String) {
         performPrefsSanityCheck()
         context?.userPreferences?.edit {

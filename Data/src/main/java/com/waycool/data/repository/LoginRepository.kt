@@ -260,6 +260,18 @@ object LoginRepository {
             DataStoreManager.saveUserToken(userToken)
         }
     }
+//    fun getSelectedLanguageCode(){
+//        CoroutineScope(Dispatchers.IO).launch {
+//            DataStoreManager.getUserTokenFlow()
+//        }
+//    }
+//    fun getSelectedLanguageCode() :Flow<Resource<String>>{
+//        return DataStoreManager.getUserTokenFlow().map {
+//            it
+//        }
+//    }
+
+
 
     suspend fun getIsLoggedIn() = DataStoreManager.isLoggedIn()
 

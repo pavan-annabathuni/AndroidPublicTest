@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="FeatureCropHealth/src/main/res/drawable/button_background_selected.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/button_state_colors.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/button_text_state_colors.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_close.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_pest_right.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_wrong_image.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/style.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_bialogical.xml" value="0.3098958333333333" />
@@ -22,6 +27,8 @@
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_temp.xml" value="0.2740740740740741" />
         <entry key="FeatureCropProtect/src/main/res/layout/viewholder_crop_protect_child.xml" value="0.2740740740740741" />
         <entry key="FeatureCropProtect/src/main/res/layout/viewholder_crop_protect_parent.xml" value="0.2740740740740741" />
+        <entry key="FeatureLogin/src/main/res/layout/activity_login_main.xml" value="0.3098958333333333" />
+        <entry key="FeatureLogin/src/main/res/layout/fragment_registration.xml" value="0.3098958333333333" />
         <entry key="Mandi/src/main/res/drawable/ic_gray_location.xml" value="0.2455" />
         <entry key="Mandi/src/main/res/drawable/ic_uip.xml" value="0.2455" />
         <entry key="Mandi/src/main/res/layout/fragment_mandi.xml" value="0.25" />
@@ -43,6 +50,9 @@
         <entry key="Profile/src/main/res/layout/fragment_edit_profile.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/layout/fragment_language.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/layout/fragment_my_profile.xml" value="0.21481481481481482" />
+        <entry key="SquareCamera/src/main/res/layout/fragment_capture_image.xml" value="0.3098958333333333" />
+        <entry key="SquareCamera/src/main/res/layout/fragment_dialog.xml" value="0.3098958333333333" />
+        <entry key="SquareCamera/src/main/res/layout/fragment_image_preview.xml" value="0.3098958333333333" />
         <entry key="UiComponents/src/main/res/layout/viewholder_crop.xml" value="0.2675925925925926" />
         <entry key="Videos/src/main/res/drawable/ic_share.xml" value="0.181" />
         <entry key="Videos/src/main/res/drawable/tab_selector.xml" value="0.273" />
@@ -54,12 +64,18 @@
         <entry key="Videos/src/main/res/layout/viewholder_videos_category_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_videos_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_viewpager_slider_layout.xml" value="0.21481481481481482" />
+        <entry key="addcrop/src/main/res/drawable/background_switch.xml" value="0.1645" />
+        <entry key="addcrop/src/main/res/drawable/bg_acres.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_plot_edittext.xml" value="0.2455" />
         <entry key="addcrop/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="addcrop/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="addcrop/src/main/res/layout/fragment_add_crop.xml" value="0.30512820512820515" />
         <entry key="addcrop/src/main/res/layout/fragment_add_crop_details.xml" value="0.2722222222222222" />
+        <entry key="addcrop/src/main/res/layout/fragment_add_crop_premium.xml" value="0.29583333333333334" />
+        <entry key="addcrop/src/main/res/layout/fragment_plant_spacing.xml" value="0.3098958333333333" />
         <entry key="addcrop/src/main/res/layout/fragment_select_add_crop.xml" value="0.30512820512820515" />
+        <entry key="addcrop/src/main/res/layout/fragment_veriaty_crop.xml" value="0.3098958333333333" />
+        <entry key="addcrop/src/main/res/layout/fragment_veriety_crop.xml" value="0.3098958333333333" />
         <entry key="addcrop/src/main/res/layout/item.xml" value="0.2675925925925926" />
         <entry key="addcrop/src/main/res/layout/item_sand.xml" value="0.1296875" />
         <entry key="addcrop/src/main/res/layout/item_select_crop.xml" value="0.2675925925925926" />

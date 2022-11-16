@@ -117,7 +117,8 @@ interface ApiInterface {
         @Part("crop_name") crop_name: String,
         @Part file: MultipartBody.Part
     ): Response<AiCropDetectionDTO>
-    //add crop get api
+
+    //add crop get api categories detail
 
     @GET("api/v1/soil-types")
     suspend fun getAddCropType(
@@ -160,9 +161,15 @@ interface ApiInterface {
                                  @Field("is_active")is_active:Int?,
                                  @Field("sowing_date")sowing_date:String?,
                                  @Field("area")area: Editable?
-    )
+    )   : Response<AddCropResponseDTO>
+
+    @FormUrlEncoded
+    @POST("api/v1/plots")
+    suspend fun addCropDataPass( @HeaderMap map: Map<String, String>,
+                                 @FieldMap bodymap:Map<String,Any>
+    ): Response<AddCropResponseDTO>
 //                                 @Body addCropPost: AddCropRequestDomain)
-            : Response<AddCropResponseDTO>
+
     //New Soil Test Request
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")

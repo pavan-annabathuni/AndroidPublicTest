@@ -224,6 +224,19 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.addCropDataPass(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 
     fun postNewSoil(
         account_id: Int, lat: Double, long: Double, org_id: Int, plot_no: String, pincode: String,
