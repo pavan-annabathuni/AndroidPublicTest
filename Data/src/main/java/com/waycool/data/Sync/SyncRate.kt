@@ -11,7 +11,7 @@ object SyncRate {
         SyncKey.CROPS_MASTER to 60,
         SyncKey.VANS_CATEGORY_MASTER to 60,
         SyncKey.TAGS_MASTER to 60,
-        SyncKey.USER_DETAILS to 0,
+        SyncKey.USER_DETAILS to 1,
         SyncKey.MODULES_MASTER to 60,
         SyncKey.AI_CROP_HISTORY to 30,
         SyncKey.WEATHER to 30,

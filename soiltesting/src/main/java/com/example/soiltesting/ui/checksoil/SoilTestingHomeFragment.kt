@@ -39,6 +39,7 @@ import com.waycool.featurechat.ZendeskChat
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -406,10 +407,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
+
+                      val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                       val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+
                         viewModel.getCheckSoilTestLab(
                             account_id,
-                            location.latitude,
-                            location.longitude
+                            latitude,
+                            longitutde
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {
@@ -440,6 +445,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 ArrayList<Parcelable>(response)
                                             )
                                         }
+
+                                        bundle.putString("lat",latitude)
+                                        bundle.putString("lon",longitutde)
 
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,

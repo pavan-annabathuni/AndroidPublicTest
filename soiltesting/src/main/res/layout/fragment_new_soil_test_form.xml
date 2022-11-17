@@ -215,13 +215,15 @@
                 <EditText
                     android:id="@+id/etAddress"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/space50"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
                     android:layout_marginTop="@dimen/space2"
-
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#F5F5F5"
+                    android:inputType="textPostalAddress|textMultiLine"
+                    android:minLines="3"
+                    android:maxLines="5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -14,6 +14,7 @@ import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
@@ -66,7 +67,8 @@ class CropDetailsCaptureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         clickes()
         binding.tvRequest.text = crop_name
-        binding.cropImg.loadUrl(crop_logo!!)
+        Glide.with(requireContext()).load(crop_logo!!).into(binding.cropImg)
+//        binding.cropImg.loadUrl(crop_logo!!)
         binding.howTo.setOnClickListener {
             findNavController().navigate(R.id.action_cropDetailsCaptureFragment_to_howToClickFragment)
         }
@@ -126,6 +128,8 @@ class CropDetailsCaptureFragment : Fragment() {
                         "image_url",
                         file.name, profileImage
                     )
+                binding.progressBar?.visibility = View.VISIBLE
+                binding.cardCheckHealth.visibility = View.GONE
 
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)

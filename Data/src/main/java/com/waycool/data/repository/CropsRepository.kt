@@ -158,8 +158,8 @@ object CropsRepository {
 
     fun getSoilTestLab(
         account: Int,
-        lat: Double,
-        long: Double
+        lat: String,
+        long: String
     ): Flow<Resource<List<CheckSoilTestDomain>?>> {
         return NetworkSource.getSoilTestLab(account, lat, long).map {
             when (it) {

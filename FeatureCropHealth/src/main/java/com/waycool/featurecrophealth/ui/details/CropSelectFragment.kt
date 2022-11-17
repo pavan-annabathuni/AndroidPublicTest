@@ -23,6 +23,7 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
+import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import java.util.*
 
 
@@ -38,6 +39,8 @@ class CropSelectFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
+    private lateinit var myCropAdapter: MyCropsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +71,37 @@ class CropSelectFragment : Fragment() {
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 bundle
             )
+        }
+
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            val args = Bundle()
+            it?.idd?.let { it1 -> args.putInt("crop_id", it1) }
+            it?.cropName?.let { it1 -> args.putString("name", it1) }
+            it?.cropLogo?.let { it2->args.putString("crop_logo", it2) }
+            findNavController().navigate(
+                R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
+                args
+            )
+        })
+        binding.rvMyCrops.adapter = myCropAdapter
+        myCrops()
+    }
+
+    fun myCrops() {
+
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            var accountId = it.data?.account!![0].id!!
+
+            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                myCropAdapter.submitList(it.data)
+                if ((it.data != null)) {
+                    binding.tvCount.text = it.data!!.size.toString()
+                } else {
+                    binding.tvCount.text = "0"
+                }
+                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
+            }
         }
     }
 

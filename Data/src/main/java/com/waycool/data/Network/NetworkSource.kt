@@ -1,5 +1,6 @@
 package com.waycool.data.Network
 
+import android.text.Editable
 import android.util.Log
 import android.widget.EditText
 import androidx.paging.Pager
@@ -183,7 +184,7 @@ object NetworkSource {
 
     fun getVansFeeder(queryMap: MutableMap<String, String>): Flow<PagingData<VansFeederListNetwork>> {
         return Pager(
-            config = PagingConfig(pageSize = 15, maxSize = 50),
+            config = PagingConfig(pageSize = 15, prefetchDistance = 2),
             pagingSourceFactory = { VansPagingSource(apiInterface, queryMap) }
         ).flow
     }
@@ -500,7 +501,7 @@ object NetworkSource {
             }
         }
 
-    fun getSoilTestLab(account_id: Int, lat: Double, long: Double) =
+    fun getSoilTestLab(account_id: Int, lat: String, long: String) =
         flow<Resource<CheckSoilTestLabDTO?>> {
             try {
 //            val header =
@@ -641,10 +642,10 @@ object NetworkSource {
 //    }
     fun getMandiList(
         lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
-        sortBy: String, orderBy: String?, search: String?
+        sortBy: String?, orderBy: String?, search: String?
     ): Flow<PagingData<MandiDomainRecord>> {
         return Pager(
-            config = PagingConfig(pageSize = 50, maxSize = 150),
+            config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
             pagingSourceFactory = {
                 MandiPagingSource(
                     apiInterface, lat, lon, crop_category,

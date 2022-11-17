@@ -139,8 +139,8 @@ interface ApiInterface {
     suspend fun getSoilTestLab(
         @HeaderMap headerMap: Map<String, String>,
         @Query("account_id") user_id: Int,
-        @Query("lat") lat: Double,
-        @Query("long") long: Double
+        @Query("lat") lat: String,
+        @Query("long") long: String
     ): Response<CheckSoilTestLabDTO>
 
     //Status Tracker Api

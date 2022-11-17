@@ -30,7 +30,7 @@ import zendesk.messaging.MessagingActivity
 
 class MyProfileFragment : Fragment() {
     private lateinit var binding: FragmentMyProfileBinding
-    val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+    private val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
@@ -214,8 +214,9 @@ class MyProfileFragment : Fragment() {
                                 "Successfully Logout",
                                 Toast.LENGTH_LONG
                             ).show()
-                            moveToLogin()
+
                         }
+                    moveToLogin()
                 }
         }
     private fun moveToLogin() {

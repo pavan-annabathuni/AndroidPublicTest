@@ -47,8 +47,8 @@ class NewSoilTestFormFragment : Fragment() {
         _binding = FragmentNewSoilTestFormBinding.inflate(inflater, container, false)
         if (arguments != null) {
             val onp_id = arguments?.getInt("soil_test_number")
-            val lat = arguments?.getDouble("lat")
-            val long = arguments?.getDouble("long")
+            val lat = arguments?.getString("lat")
+            val long = arguments?.getString("long")
 
             Log.d(TAG, "onCreateViewONPID:$onp_id ")
             Log.d(TAG, "onCreateViewONPID:$lat ")
@@ -60,7 +60,7 @@ class NewSoilTestFormFragment : Fragment() {
                     if (it.results.isNotEmpty()) {
                         val result = it.results[0]
                         if (result.subLocality != null)
-                            binding.etCity.append("${result.subLocality},")
+                            binding.etCity.append("${result.subLocality}")
                         else
                             binding.etCity.append("${result.locality}")
                         binding.etState.append("${result.state}")
@@ -269,7 +269,7 @@ class NewSoilTestFormFragment : Fragment() {
 
 
 
-    private fun itemClicked(account_id:Int ,lat:Double,long:Double,onp_number:Int,phoneNumber:String) {
+    private fun itemClicked(account_id:Int ,lat:String,long:String,onp_number:Int,phoneNumber:String) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
             pincode = binding.etPincodeNumber.text.toString().trim()
@@ -301,7 +301,7 @@ class NewSoilTestFormFragment : Fragment() {
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
                 soilViewModel.postNewSoil(
-                    account_id, lat, long,
+                    account_id, lat.toDouble(), long.toDouble(),
                     onp_number,
                     binding.etPlotNumber.text.toString(),
                     binding.etPincodeNumber.text.toString(),

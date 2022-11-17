@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
@@ -21,6 +22,12 @@ class CropHealthViewModel : ViewModel() {
     fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
         return CropsRepository.getCropCategory().asLiveData()
     }
+
+    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2(account_id).asLiveData()
+
+    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
+        LoginRepository.getUserDetails().asLiveData()
 
 
     fun getAiCropHistory(): LiveData<Resource<List<AiCropHistoryDomain>>> {

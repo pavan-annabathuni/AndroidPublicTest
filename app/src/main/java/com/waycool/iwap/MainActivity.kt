@@ -2,6 +2,7 @@ package com.waycool.iwap
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -145,6 +146,31 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.activityMainBottomNavigationView
         bottomNavigationView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.homePagesFragment -> showBottomNav()
+                com.example.profile.R.id.myProfileFragment -> showBottomNav()
+                com.example.mandiprice.R.id.mandiFragment -> showBottomNav()
+                else -> hideBottomNav()
+            }
+        }
+
+    }
+
+    private fun showBottomNav() {
+        binding.activityMainBottomNavigationView.clearAnimation();
+        binding.activityMainBottomNavigationView.animate().translationY(0f).setDuration(300);
+//        binding.activityMainBottomNavigationView.visibility = View.VISIBLE
+
+    }
+
+    private fun hideBottomNav() {
+        binding.activityMainBottomNavigationView.clearAnimation();
+        binding.activityMainBottomNavigationView.animate().translationY(
+            binding.activityMainBottomNavigationView.getHeight()
+                .toFloat()
+        ).setDuration(300);
+//        binding.activityMainBottomNavigationView.visibility = View.GONE
 
     }
 

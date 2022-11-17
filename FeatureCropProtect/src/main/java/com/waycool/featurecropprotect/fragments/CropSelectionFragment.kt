@@ -65,9 +65,9 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
 
-        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener{
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
-            it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
+            it?.idd?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_pestDiseaseFragment,
@@ -75,7 +75,7 @@ class CropSelectionFragment : Fragment() {
             )
         })
         binding.rvMyCrops.adapter = myCropAdapter
-          fabButton()
+        fabButton()
         myCrops()
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
@@ -237,16 +237,16 @@ class CropSelectionFragment : Fragment() {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -254,15 +254,16 @@ class CropSelectionFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             ZendeskChat.zenDesk(requireContext())
         }
     }
+
     fun myCrops() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {

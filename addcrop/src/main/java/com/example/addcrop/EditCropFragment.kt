@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -45,6 +46,17 @@ class EditCropFragment : Fragment() {
             findNavController().navigateUp()
         }
         myCrops()
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                    this@EditCropFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         return binding.root
     }
     fun myCrops() {

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.iwap.MainViewModel
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
