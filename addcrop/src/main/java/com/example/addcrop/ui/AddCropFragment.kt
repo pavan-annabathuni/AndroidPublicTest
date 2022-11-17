@@ -21,13 +21,6 @@ import com.waycool.data.utils.Resource
 class AddCropFragment : Fragment(), AddCropItemClick {
     private var _binding: FragmentAddCropBinding? = null
     private val binding get() = _binding!!
-
-    //    private var categoryAdapter = CategoryAdapter(this)
-//    private var responseDataList = ArrayList<Data>()
-
-    //    private val viewModel: CropProtectViewModel by lazy {
-//        ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
-//    }
     private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
     private var categoryAdapter = CategoryAdapter(this)
     override fun onCreateView(
@@ -41,14 +34,8 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
         bindObserversCategory()
-//        binding.toolbar.setOnClickListener {
-//            findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
-//        }
-//        categoryAdapter.upDateList(responseDataList)
-
     }
 
     private fun initView() {
@@ -83,28 +70,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             }
 
         }
-
-
-//        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                is NetworkResult.Success -> {
-//                    Log.d("TAG", "bindObserversDataCategory:" + it.data?.data.toString())
-//                    val response = it.data?.data as java.util.ArrayList<Data>
-//                    categoryAdapter.setMovieList(response)
-//                }
-//                is NetworkResult.Error -> {
-//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//                is NetworkResult.Loading -> {
-//
-//                }
-//            }
-//        })
-
-
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun clickOnCategory(name: AddCropTypeDomain) {
         if (arguments != null) {
@@ -120,10 +86,9 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                     val bundle = Bundle()
                     bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
+                    Log.d("TAG", "SoilTypeID: ${name.id} ")
                     findNavController().navigate(
-                        R.id.action_addCropFragment_to_addCropPremiumFragment,
-                        bundle
-                    )
+                        R.id.action_addCropFragment_to_addCropPremiumFragment, bundle)
                 }
 
 
@@ -132,8 +97,4 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
         }
     }
-
-//    override fun clickOnCategory(name: AddCropTypeDomain) {
-//        TODO("Not yet implemented")
-//    }
 }

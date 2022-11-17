@@ -152,21 +152,24 @@ interface ApiInterface {
         @Query("soil_test_request_id") soil_test_request_id: Int
     ): Response<TrackerDTO>
 
-    @FormUrlEncoded
-    @POST("api/v1/plots")
-    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
-                                 @Field("crop_id")crop_id:Int?,
-                                 @Field("account_no_id")account_no_id:Int?,
-                                 @Field("plot_nickname")plot_nickname:String?,
-                                 @Field("is_active")is_active:Int?,
-                                 @Field("sowing_date")sowing_date:String?,
-                                 @Field("area")area: Editable?
-    )   : Response<AddCropResponseDTO>
+//    @FormUrlEncoded
+//    @POST("api/v1/plots")
+//    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
+//                                 @Field("crop_id")crop_id:Int?,
+//                                 @Field("account_no_id")account_no_id:Int?,
+//                                 @Field("plot_nickname")plot_nickname:String?,
+//                                 @Field("is_active")is_active:Int?,
+//                                 @Field("sowing_date")sowing_date:String?,
+//                                 @Field("area")area: Editable?
+//    )   : Response<AddCropResponseDTO>
 
     @FormUrlEncoded
     @POST("api/v1/plots")
-    suspend fun addCropDataPass( @HeaderMap map: Map<String, String>,
-                                 @FieldMap bodymap:Map<String,Any>
+    @JvmSuppressWildcards
+    suspend fun addCropDataPass(@HeaderMap map: Map<String, String>,
+//                                @Field("account_no_id")account_no_id:Int?,
+//                                @Field("crop_id")crop_id:Int?,
+                                @FieldMap bodymap:Map<String,Any>
     ): Response<AddCropResponseDTO>
 //                                 @Body addCropPost: AddCropRequestDomain)
 

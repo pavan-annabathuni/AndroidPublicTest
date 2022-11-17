@@ -154,7 +154,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/space4"
                     android:layout_marginEnd="@dimen/space16"
-                    android:background="@drawable/bg_acres"
+                    android:background="@drawable/bg_select_acres"
                     android:gravity="center"
                     android:text="Acres"
                     android:textColor="#000000"
@@ -228,6 +228,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/FirstIrrigationDate"
                 android:layout_width="wrap_content"
@@ -235,12 +236,13 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
-                android:visibility="gone"
                 android:text="First Irrigation of cycle start"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
+
             <TextView
                 android:id="@+id/EnterDateoffruitPruning"
                 android:layout_width="wrap_content"
@@ -249,11 +251,12 @@
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
                 android:text="Enter Date of fruit Pruning"
-                android:visibility="gone"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
+
             <TextView
                 android:id="@+id/Address"
                 android:layout_width="wrap_content"
@@ -262,9 +265,9 @@
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
                 android:text="Sowing Date "
-                android:visibility="visible"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
 
@@ -311,6 +314,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/tvBahar"
                 android:layout_width="wrap_content"
@@ -324,6 +328,7 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clCalender" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clSpinnerYearBahar"
                 android:layout_width="0dp"
@@ -421,6 +426,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clSwitchMulching"
                 android:layout_width="match_parent"
@@ -444,17 +450,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvOnlyForTeaMulching"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="4dp"-->
-<!--                    android:text="(only for tea and coffee)"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="@dimen/txt16"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/tvShapeInFarmMulching"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvOnlyForTeaMulching"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="4dp"-->
+                <!--                    android:text="(only for tea and coffee)"-->
+                <!--                    android:textColor="#000000"-->
+                <!--                    android:textSize="@dimen/txt16"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintStart_toEndOf="@+id/tvShapeInFarmMulching"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
                 <Switch

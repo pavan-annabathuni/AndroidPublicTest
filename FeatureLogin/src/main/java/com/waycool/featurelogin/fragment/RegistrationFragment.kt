@@ -317,7 +317,7 @@ class RegistrationFragment : Fragment() {
                             if (list.isNotEmpty()) {
                                 subDistrict = list[0].locality
                                 village = list[0].subLocality
-                                district = list[0].subAdminArea
+//                                district = list[0].subAdminArea
                                 state = list[0].adminArea
                                 pincode = list[0].postalCode
                             }

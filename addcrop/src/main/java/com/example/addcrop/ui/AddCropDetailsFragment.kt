@@ -198,24 +198,24 @@ class AddCropDetailsFragment : Fragment() {
     private fun postAddCrop(crop_id: Int,account_id:Int) {
 //    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
 
-        viewModel.addCropPassData(
-        crop_id,account_id, binding.etNickName.text.toString(), 1,
-        binding.etCalender.text.toString(), binding.etAreaNumber.text).observe(requireActivity()) {
-//            Log.d(TAG, "itemClickedData: $myCalendar")
-        when (it) {
-            is Resource.Success -> {
-                activity?.finish()
-            }
-            is Resource.Error -> {
-                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
-            }
-            is Resource.Loading -> {
-                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-
-            }
-        }
-    }
+//        viewModel.addCropPassData(
+//        crop_id,account_id, binding.etNickName.text.toString(), 1,
+//        binding.etCalender.text.toString(), binding.etAreaNumber.text).observe(requireActivity()) {
+////            Log.d(TAG, "itemClickedData: $myCalendar")
+//        when (it) {
+//            is Resource.Success -> {
+//                activity?.finish()
+//            }
+//            is Resource.Error -> {
+//                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
+//            }
+//            is Resource.Loading -> {
+//                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//
+//            }
+//        }
+//    }
 
 
 //    }

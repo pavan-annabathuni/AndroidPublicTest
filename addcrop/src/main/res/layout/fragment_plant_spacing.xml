@@ -113,7 +113,7 @@
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
                         android:hint="e.g 50"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -229,9 +229,10 @@
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
                         android:hint="e.g 50"
+                        android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3Width"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -327,7 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:text="Plant to Plant Distance"
+                    android:text="Drip Emitter Rate Per Plant"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -363,9 +364,14 @@
                         android:id="@+id/constraintLayout3WidthDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_acres"
-
+                        android:layout_margin="@dimen/space4"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/bg_select_acres"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -376,8 +382,9 @@
                             android:layout_marginTop="9dp"
                             android:layout_marginEnd="@dimen/space16"
                             android:layout_marginBottom="9dp"
-                            android:text="LPH"
                             android:padding="@dimen/space16"
+
+                            android:text="LPH"
                             android:textColor="#000000"
                             android:textSize="@dimen/txt12"
                             app:layout_constraintBottom_toBottomOf="parent"

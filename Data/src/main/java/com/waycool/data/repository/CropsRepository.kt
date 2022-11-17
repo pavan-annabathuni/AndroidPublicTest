@@ -253,23 +253,23 @@ object CropsRepository {
         }
     }
 
-    fun addCropPassData(
-        crop_id: Int?,
-        account_id: Int?,
-        plot_nickname: String?,
-        is_active: Int?,
-        sowing_date: String?,
-        area: Editable?
-    ): Flow<Resource<AddCropResponseDTO?>> {
-        return NetworkSource.addCropPassData(
-            crop_id,
-            account_id,
-            plot_nickname,
-            is_active,
-            sowing_date,
-            area
-        )
-    }
+//    fun addCropPassData(
+//        crop_id: Int?,
+//        account_id: Int?,
+//        plot_nickname: String?,
+//        is_active: Int?,
+//        sowing_date: String?,
+//        area: Editable?
+//    ): Flow<Resource<AddCropResponseDTO?>> {
+//        return NetworkSource.addCropPassData(
+//            crop_id,
+//            account_id,
+//            plot_nickname,
+//            is_active,
+//            sowing_date,
+//            area
+//        )
+//    }
     fun addCropDataPass(
         map: MutableMap<String, Any> = mutableMapOf<String,Any>()
     ): Flow<Resource<AddCropResponseDTO?>> {

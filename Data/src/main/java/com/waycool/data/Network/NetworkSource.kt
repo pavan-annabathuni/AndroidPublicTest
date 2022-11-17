@@ -196,34 +196,34 @@ object NetworkSource {
             }
         }
 
-    fun addCropPassData(
-        crop_id: Int?,
-        account_id: Int?,
-        plot_nickname: String?,
-        is_active: Int?,
-        sowing_date: String?,
-        area: Editable?
-    ) = flow<Resource<AddCropResponseDTO?>> {
-        try {
-            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.addCropPassData(
-                headerMap!!,
-                crop_id,
-                account_id,
-                plot_nickname,
-                is_active,
-                sowing_date,
-                area
-            )
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()))
-            } else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-            }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message))
-        }
-    }
+//    fun addCropPassData(
+//        crop_id: Int?,
+//        account_id: Int?,
+//        plot_nickname: String?,
+//        is_active: Int?,
+//        sowing_date: String?,
+//        area: Editable?
+//    ) = flow<Resource<AddCropResponseDTO?>> {
+//        try {
+//            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//            val response = apiInterface.addCropPassData(
+//                headerMap!!,
+//                crop_id,
+//                account_id,
+//                plot_nickname,
+//                is_active,
+//                sowing_date,
+//                area
+//            )
+//            if (response.isSuccessful) {
+//                emit(Resource.Success(response.body()))
+//            } else {
+//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+//            }
+//        } catch (e: Exception) {
+//            emit(Resource.Error(e.message))
+//        }
+//    }
     fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()

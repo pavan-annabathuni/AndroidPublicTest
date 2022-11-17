@@ -67,6 +67,7 @@
         <entry key="addcrop/src/main/res/drawable/background_switch.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_acres.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_plot_edittext.xml" value="0.2455" />
+        <entry key="addcrop/src/main/res/drawable/bg_select_acres.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="addcrop/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="addcrop/src/main/res/layout/fragment_add_crop.xml" value="0.30512820512820515" />
