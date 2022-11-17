@@ -90,14 +90,14 @@ class OtpFragment : Fragment() {
 
         }
 
-//        if (arguments?.getString("mobile_number") != null)
+//        if (arguments?.getString("mobile_number") != null)˳˳
 //            mobileNumber = arguments?.getString("mobile_number")!!
 //        if (arguments?.getString("existing_user") != null)
 //            existingUser = arguments?.getString("existing_user")
 //        if (arguments?.getString("fcmToken") != null)
 //            fcmToken = arguments?.getString("fcmToken")
 //        validator = Validator(2)
-        binding.receiveMsgTv.setText(getString(R.string.opt_text2) + " " + mobileNumber)
+        binding.receiveMsgTv.setText(getString(R.string.opt_text2) + " +91- " + mobileNumber)
         //binding.doneBtn.isEnabled=false
         /*  binding.otpPassword.isEnabled  = true
           binding.otpPassword.isClickable = true
@@ -541,7 +541,7 @@ class OtpFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
-        activity?.let {  it.finish()}
+        requireActivity().finish()
     }
 
 

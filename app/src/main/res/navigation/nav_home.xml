@@ -11,12 +11,49 @@
         android:label="fragment_home_pages"
         tools:layout="@layout/fragment_home_pages" >
         <action
+            android:id="@+id/action_homePagesFragment_to_newsFullviewActivity2"
+            app:destination="@id/newsFullviewActivity2"
+            app:popUpTo="@id/homePagesFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_playVideoFragment4"
+            app:destination="@id/playVideoFragment4"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/homePagesFragment" />
+        <action
             android:id="@+id/action_homePagesFragment_to_allServicesFragment"
-            app:destination="@id/allServicesFragment" />
+            app:destination="@id/allServicesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
         <action
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment22"
-            app:destination="@id/mandiGraphFragment2" />
+            app:destination="@id/mandiGraphFragment2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homePagesFragment_to_editCropFragment"
+            app:destination="@id/editCropFragment"
+            app:popUpTo="@id/homePagesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
+    <activity
+        android:id="@+id/newsFullviewActivity2"
+        android:name="com.waycool.newsandarticles.view.NewsFullviewActivity"
+        android:label="NewsFullviewActivity" />
+    <fragment
+        android:id="@+id/playVideoFragment4"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="PlayVideoFragment" />
+
     <fragment
         android:id="@+id/allServicesFragment"
         android:name="com.waycool.iwap.home.AllServicesFragment"
@@ -26,7 +63,11 @@
             android:id="@+id/action_allServicesFragment_to_homePagesFragment"
             app:destination="@id/homePagesFragment"
             app:popUpTo="@id/homePagesFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/mandiGraphFragment2"
@@ -36,6 +77,9 @@
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment2"
             app:destination="@id/mandiGraphFragment2" />
     </fragment>
-
+    <fragment
+        android:id="@+id/editCropFragment"
+        android:name="com.example.addcrop.EditCropFragment"
+        android:label="EditCropFragment" />
 
 </navigation>

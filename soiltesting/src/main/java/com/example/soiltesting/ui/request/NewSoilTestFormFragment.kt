@@ -35,7 +35,7 @@ class NewSoilTestFormFragment : Fragment() {
     var address: String = ""
     var city: String = ""
     var state: String = ""
-    private var accountID: Int? =null
+    private var accountID: Int? = null
     var mobileNumber: String = ""
     var contactNumber:String=""
 
@@ -45,14 +45,35 @@ class NewSoilTestFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentNewSoilTestFormBinding.inflate(inflater, container, false)
-        if (arguments !=null) {
+        if (arguments != null) {
             val onp_id = arguments?.getInt("soil_test_number")
-            val lat = arguments?.getDouble("lat")
-            val long = arguments?.getDouble("long")
+            val lat = arguments?.getString("lat")
+            val long = arguments?.getString("long")
 
             Log.d(TAG, "onCreateViewONPID:$onp_id ")
             Log.d(TAG, "onCreateViewONPID:$lat ")
             Log.d(TAG, "onCreateViewONPID:$long ")
+
+
+            soilViewModel.getReverseGeocode("${lat},${long}")
+                .observe(viewLifecycleOwner) {
+                    if (it.results.isNotEmpty()) {
+                        val result = it.results[0]
+                        if (result.subLocality != null)
+                            binding.etCity.append("${result.subLocality}")
+                        else
+                            binding.etCity.append("${result.locality}")
+                        binding.etState.append("${result.state}")
+
+                        binding.etAddress.setText("${result.formattedAddress ?: ""}")
+                        binding.etAddress.setSelection(0)
+
+                        binding.etPincodeNumber.setText(result.pincode ?: "")
+
+                    }
+                }
+
+
 //            soilViewModel.viewModelScope.launch {
                 soilViewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -76,9 +97,27 @@ class NewSoilTestFormFragment : Fragment() {
                             }
 
                             }
+
+
+//                            if (account!=null){
+//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
+//                            }
                         }
                     }
+
+
             }
+
+//            if (account!=null){
+//                itemClicked(account!!, lat!!, long!!, onp_id!!)
+//            }
+
+
+
+//        binding.cardCheckHealth.setOnClickListener {
+
+
+//        }
         return binding.root
     }
 
@@ -88,7 +127,20 @@ class NewSoilTestFormFragment : Fragment() {
 //        itemClicked()
 //        initView()
         mvvm()
-
+//            initView()
+//            val newSoilTestPost = NewSoilTestPost(
+//                "123456",
+//                ploteNumber.toString(),
+//                pincode.toString(),
+//                "12.9344",
+//                "72.000",
+//                address.toString(),
+//                city.toString(),
+//                state.toString(),
+//                mobileNumber,
+//                "1"
+//            )
+//            viewModel.postNewSoil(newSoilTestPost)
             Log.d(TAG, "onViewCreated: ButtonClicked")
 //            soilViewModel.postNewSoil(
 //                binding.etPlotNumber.toString(),
@@ -217,7 +269,7 @@ class NewSoilTestFormFragment : Fragment() {
 
 
 
-    private fun itemClicked(account_id:Int ,lat:Double,long:Double,onp_number:Int,phoneNumber:String) {
+    private fun itemClicked(account_id:Int ,lat:String,long:String,onp_number:Int,phoneNumber:String) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
             pincode = binding.etPincodeNumber.text.toString().trim()
@@ -228,7 +280,7 @@ class NewSoilTestFormFragment : Fragment() {
             if (ploteNumber.isEmpty()) {
                 binding.etPlotNumber.error = "Plot Number should not be empty"
                 return@setOnClickListener
-            } else if (pincode.isEmpty() && pincode>="6") {
+            } else if (pincode.isEmpty() ) {
                 binding.etPincodeNumber.error = "Enter Pincode "
                 return@setOnClickListener
             }else if (pincode.length!=6){
@@ -249,7 +301,7 @@ class NewSoilTestFormFragment : Fragment() {
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
                 soilViewModel.postNewSoil(
-                    account_id,lat,long,
+                    account_id, lat.toDouble(), long.toDouble(),
                     onp_number,
                     binding.etPlotNumber.text.toString(),
                     binding.etPincodeNumber.text.toString(),
@@ -261,9 +313,9 @@ class NewSoilTestFormFragment : Fragment() {
                     when (it) {
                         is Resource.Success -> {
                             val bundle=Bundle()
-                            bundle.putString("soil_req_number",it.data!!.data.soilTestNumber)
-                            Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber)
-                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
+                            bundle.putString("soil_test_number",it.data?.data.toString())
+                            Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber.toString())
+                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment)
                         }
                         is Resource.Loading -> {
 

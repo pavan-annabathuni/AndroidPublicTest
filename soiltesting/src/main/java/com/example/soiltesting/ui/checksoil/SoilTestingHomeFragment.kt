@@ -1,5 +1,6 @@
 package com.example.soiltesting.ui.checksoil
 
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
 
@@ -38,6 +39,7 @@ import com.waycool.featurechat.ZendeskChat
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -48,6 +50,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
+
 
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
@@ -70,7 +73,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.recyclerview.adapter = soilHistoryAdapter
         initViewClick()
 //        bindObservers()
-        locationClick()
+//        locationClick()
         initViewBackClick()
         expandableView()
         expandableViewTWo()
@@ -85,7 +88,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (i.accountType == "outgrow") {
 
                     accountID = i.id
-                    if (accountID !=null) {
+                    if (accountID != null) {
                         Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
                         bindObserversSoilTestHistory(accountID!!)
                     }
@@ -108,7 +111,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 for (i in it.data!!.account) {
                     if (i.accountType == "outgrow") {
                         accountID = i.id
-                        if (accountID !=null) {
+                        if (accountID != null) {
                             Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                             isLocationPermissionGranted(accountID!!)
                         }
@@ -131,7 +134,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
         }
     }
-
 
 
     private fun getVideos() {
@@ -225,7 +227,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         accountID = i.id
                         Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:$accountID")
                         isLocationPermissionGranted(accountID!!)
-
 
 
                     }
@@ -362,8 +363,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
 
-
-
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
@@ -375,7 +374,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         )
     }
 
-    private fun isLocationPermissionGranted(account_id:Int): Boolean {
+    private fun isLocationPermissionGranted(account_id: Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -408,22 +407,32 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
-                        viewModel.getCheckSoilTestLab(account_id,
-                            location.latitude,
-                            location.longitude
+
+                      val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                       val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+
+                        viewModel.getCheckSoilTestLab(
+                            account_id,
+                            latitude,
+                            longitutde
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {
-                                    binding.progressBar.isVisible = false
                                     binding.clProgressBar.visibility = View.GONE
+                                    binding.progressBar.isVisible = false
                                     Log.d(
                                         "TAG",
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
+
+                                        CustomeDialogFragment.newInstance().show(
+                                            requireActivity().supportFragmentManager,
+                                            CustomeDialogFragment.TAG
+                                        )
 //                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                                        //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
                                         Log.d(
@@ -437,6 +446,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
+                                        bundle.putString("lat",latitude)
+                                        bundle.putString("lon",longitutde)
+
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
                                             bundle
@@ -445,16 +457,19 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        it.message.toString(),
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
 
                                 }
                                 is Resource.Loading -> {
                                     binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-
-//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-//                                        .show()
+                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                                        .show()
 
                                 }
                             }
@@ -467,6 +482,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             true
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

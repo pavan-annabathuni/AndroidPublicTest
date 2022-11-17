@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet"
-    android:paddingRight="10dp"
-    android:paddingBottom="10dp"
     tools:context=".ui.detect.HowToClickFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,14 +17,16 @@
 
         <TextView
             android:id="@+id/how_to_upload"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space16"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:text="How to Click this Image?"
             android:textColor="#000000"
             android:textSize="@dimen/txt16"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/close"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,9 +46,7 @@
         android:id="@+id/cl_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space16"
         android:layout_marginTop="@dimen/space30"
-        android:layout_marginEnd="@dimen/space16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +65,8 @@
             <ImageView
                 android:id="@+id/imageOne"
                 android:layout_width="@dimen/space150"
-                android:layout_height="@dimen/space150"
-                android:layout_marginEnd="@dimen/space16"
+                android:layout_height="150dp"
+                android:adjustViewBounds="true"
                 android:src="@drawable/ic_right_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,13 +74,13 @@
 
             <TextView
                 android:id="@+id/tvRight"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space16"
+                android:gravity="center"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Capture the image\n
-of the leaf"
+                android:text="Capture the image of the leaf"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +94,7 @@ of the leaf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space16"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/clSix"
             app:layout_constraintHorizontal_bias="0.5"
@@ -106,21 +105,20 @@ of the leaf"
                 android:id="@+id/imageTwo"
                 android:layout_width="@dimen/space150"
                 android:layout_height="@dimen/space150"
-                android:layout_marginEnd="@dimen/space16"
-                android:src="@drawable/ic_pest_right"
+                android:src="@drawable/ic_wrong_three"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvWrong"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space16"
+                android:gravity="center"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Do not click a blur image
-"
+                android:text="Do not click a blur image"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -150,16 +148,16 @@ of the leaf"
 
             <TextView
                 android:id="@+id/tvFive"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="@dimen/space16"
+                android:gravity="center"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Do not Capture the\n
-full plant"
+                android:text="Do not Capture the full plant"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageFive" />
 
@@ -170,7 +168,7 @@ full plant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space16"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/clTwo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/clTwo"
@@ -180,24 +178,23 @@ full plant"
                 android:id="@+id/imageSix"
                 android:layout_width="@dimen/space150"
                 android:layout_height="@dimen/space150"
-                android:src="@drawable/ic_wrong_image"
+                android:src="@drawable/ic_wrong_four"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvSix"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="@dimen/space16"
+                android:gravity="center"
                 android:maxLines="2"
                 android:minLines="2"
-                android:text="Do not capture other\n
-objects"
+                android:text="Do not capture other objects"
                 android:textColor="#000000"
                 android:textSize="@dimen/txt14"
-
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageSix" />
 

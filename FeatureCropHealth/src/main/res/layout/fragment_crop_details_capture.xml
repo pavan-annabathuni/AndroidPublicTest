@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.detect.CropDetailsCaptureFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,16 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_height="wrap_content"/>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -197,6 +188,7 @@
                         android:drawablePadding="@dimen/space16"
                         android:paddingLeft="@dimen/space20"
                         android:paddingRight="@dimen/space20"
+                        android:visibility="visible"
                         android:text="Capture Image"
                         android:textAllCaps="false"
                         android:textColor="#171717"
@@ -271,6 +263,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/campture_image_camera"
                             app:layout_constraintTop_toTopOf="parent" />
+
                         <TextView
                             android:id="@+id/campture_image_camera"
                             android:layout_width="wrap_content"
@@ -290,10 +283,11 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/preview_image"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
                         android:layout_marginTop="16dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/space16"
                         android:layout_marginBottom="32dp"
                         android:background="@drawable/camera_corner"
@@ -308,9 +302,11 @@
                             android:layout_height="wrap_content"
                             android:scaleType="fitXY"
                             android:src="@drawable/ic_close"
-                            android:visibility="visible"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/uploaded_img"
+                           app:layout_constraintEnd_toEndOf="parent"
+                             />
 
 
                         <ImageView
@@ -343,13 +339,46 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/clProgressBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="#99656866"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressBar"-->
+<!--            android:layout_width="@dimen/space90"-->
+<!--            android:layout_height="@dimen/space90"-->
+<!--            android:visibility="visible"-->
+<!--            android:indeterminate="true"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space25"
         android:clickable="false"
+        android:visibility="visible"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -368,7 +397,6 @@
                 android:text="Detect"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -376,6 +404,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/cardCheckHealth"-->
+<!--        style="@style/Widget.AppTheme.MaterialButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_margin="24dp"-->
+<!--        android:text="Detect"-->
+<!--        android:textAllCaps="false"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 }
 
@@ -88,6 +89,7 @@ dependencies {
 //    implementation(firebase.crashlytics)
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.8'
 
+    implementation 'com.google.android.libraries.places:places:2.7.0'
 }
 repositories {
     mavenCentral()

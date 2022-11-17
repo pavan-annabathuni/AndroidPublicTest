@@ -20,8 +20,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddViewModel
 import com.waycool.data.utils.Resource
-import java.lang.String.format
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -77,23 +75,35 @@ class AddCropDetailsFragment : Fragment() {
             var crop_id_selected = arguments?.getInt("cropid")
             Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $crop_id_selected")
 //            itemClicked(onp_id!!)
-            binding.cardCheckHealth.setOnClickListener {
-                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                    for (i in it.data!!.account) {
-                        if (i.accountType == "outgrow") {
-                            Log.d(TAG, "onCreateViewAccountID:${i.id}")
-                            accountID = i.id
-                            postAddCrop(crop_id_selected!!,accountID!!)
-                        }
+                for (i in it.data!!.account) {
+                    if (i.accountType == "outgrow") {
+                        Log.d(TAG, "onCreateViewAccountID:${i.id}")
+                        accountID = i.id
+//                        postAddCrop(crop_id_selected!!,accountID!!)
                     }
                 }
+            }
+            binding.cardCheckHealth.setOnClickListener {
+                if (accountID != null)
+                    postAddCrop(crop_id_selected!!, accountID!!)
+
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+////                    account=it.data.account
+//                    for (i in it.data!!.account) {
+//                        if (i.accountType == "outgrow") {
+//                            Log.d(TAG, "onCreateViewAccountID:${i.id}")
+//                            accountID = i.id
+//                            postAddCrop(crop_id_selected!!,accountID!!)
+//                        }
+//                    }
+//                }
 
             }
         }
-
-
 
 
 //        spinner()
@@ -192,23 +202,30 @@ class AddCropDetailsFragment : Fragment() {
                 val item = p0?.selectedItem
                 year_selected = item.toString()
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
         }
     }
-//format(binding.etAreaNumber.text.toString()).toDouble()
-    private fun postAddCrop(crop_id: Int,account_id:Int) {
+
+    //format(binding.etAreaNumber.text.toString()).toDouble()
+    private fun postAddCrop(crop_id: Int, account_id: Int) {
+//    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
+
         viewModel.addCropPassData(
-            crop_id,account_id, binding.etNickName.text.toString(), 1,
-             binding.etCalender.text.toString(),format(binding.etAreaNumber.text.toString()).toDouble()).observe(requireActivity()) {
+            crop_id, account_id, binding.etNickName.text.toString(), 1,
+            binding.etCalender.text.toString(), binding.etAreaNumber.text
+        ).observe(requireActivity()) {
 //            Log.d(TAG, "itemClickedData: $myCalendar")
             when (it) {
                 is Resource.Success -> {
                     activity?.finish()
+                    accountID?.let { it1 -> viewModel.getMyCrop2(it1).observe(viewLifecycleOwner){} }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
                     Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
                 }
                 is Resource.Loading -> {
@@ -217,7 +234,31 @@ class AddCropDetailsFragment : Fragment() {
                 }
             }
         }
+
+
+//    }
+//    else {
+//        viewModel.addCropPassData(
+//            crop_id,account_id, binding.etNickName.text.toString(), 1,
+//             binding.etCalender.text.toString(),format(binding.etAreaNumber.text.toString()).toDouble()).observe(requireActivity()) {
+////            Log.d(TAG, "itemClickedData: $myCalendar")
+//            when (it) {
+//                is Resource.Success -> {
+//                    activity?.finish()
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
+//                }
+//                is Resource.Loading -> {
+//                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//
+//                }
+//            }
+//        }
+//    }
     }
+
 
     private fun itemClicked(rop_id: Int) {
         binding.cardCheckHealth.setOnClickListener {
@@ -304,7 +345,7 @@ class AddCropDetailsFragment : Fragment() {
                 myCalendar.add(Calendar.YEAR, -1);
                 view.setMinDate(myCalendar.timeInMillis)
                 updateLabel(myCalendar)
-                myCalendar.add(Calendar.YEAR,1)
+                myCalendar.add(Calendar.YEAR, 1)
                 view.setMaxDate(myCalendar.timeInMillis)
 
             }

@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
+import com.stfalcon.imageviewer.StfalconImageViewer
+import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.utils.Resource
@@ -85,11 +88,25 @@ class PestDiseaseDetailsFragment : Fragment() {
                         binding.toolbarTitle.text = it.data?.diseaseName
                         binding.cropProtectDiseaseName.text = it.data?.diseaseName
 
-                        adapter.submitList(listOf("", "", "", "", ""))
+                        if (it.data?.imageUrl == null)
+                            adapter.submitList(emptyList())
+                        else adapter.submitList(it.data?.imageUrl)
                         activity?.let { act ->
                             Glide.with(act).load(it.data?.thumb)
                                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                                 .into(binding.cropProtectDiseaseImage)
+                        }
+
+                        binding.cropProtectDiseaseImage.setOnClickListener {view->
+                            StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context, listOf(it.data?.thumb) ,
+                                ImageLoader { imageView: ImageView, image: String? ->
+                                    Glide.with(binding.cropProtectDiseaseImage.context)
+                                        .load(image)
+                                        .into(imageView)
+                                }).allowSwipeToDismiss(true)
+                                .allowZooming(true)
+                                .withTransitionFrom(binding.cropProtectDiseaseImage)
+                                .show(true)
                         }
 
                         if (it.data?.audioUrl != null)

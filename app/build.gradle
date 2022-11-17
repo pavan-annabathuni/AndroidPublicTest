@@ -6,6 +6,8 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin:  'org.jetbrains.kotlin.android'
 apply plugin:  'kotlin-kapt'
 apply plugin:  'kotlin-parcelize'
+apply plugin:  'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
 android {
     compileSdk appCompileSdkVersion
 
@@ -14,7 +16,7 @@ android {
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
         versionCode 1
-        versionName "2.5.9"
+        versionName "2.5.10"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -86,7 +88,8 @@ dependencies {
     //used to load images
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-
+//circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation 'androidx.core:core:1.8.0'
 

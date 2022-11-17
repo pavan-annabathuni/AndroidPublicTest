@@ -43,9 +43,9 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bindObserversCategory()
-        binding.toolbar.setOnClickListener {
-            findNavController().navigate(R.id.action_addCropFragment_to_addCropDetailsFragment)
-        }
+//        binding.toolbar.setOnClickListener {
+//            findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
+//        }
 //        categoryAdapter.upDateList(responseDataList)
 
     }
@@ -113,8 +113,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                 Toast.makeText(requireContext(), "PleaseSelect Soil Type", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                findNavController().navigate(R.id.action_addCropFragment_to_addCropDetailsFragment)
-
+//                findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
             }
 
 

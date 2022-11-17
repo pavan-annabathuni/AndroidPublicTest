@@ -37,7 +37,7 @@ class HistoryViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-    fun getCheckSoilTestLab(account_id:Int,lat:Double,long:Double): LiveData<Resource<List<CheckSoilTestDomain>?>> {
+    fun getCheckSoilTestLab(account_id:Int,lat:String,long:String): LiveData<Resource<List<CheckSoilTestDomain>?>> {
         return CropsRepository.getSoilTestLab(account_id,lat,long).asLiveData()
     }
 

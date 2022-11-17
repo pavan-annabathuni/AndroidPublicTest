@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
@@ -15,8 +16,15 @@ import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
 class CustomeDialogFragment : DialogFragment() {
     private var _binding: FragmentCustomeDialogBinding? = null
     private val binding get() = _binding!!
+    companion object {
+        const val TAG = "SimpleDialog"
+        fun newInstance(): CustomeDialogFragment {
+            val fragment = CustomeDialogFragment()
+//            fragment.arguments = args
+            return fragment
+        }
 
-
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,18 +38,13 @@ class CustomeDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvOk.setOnClickListener {
-            findNavController().navigate(R.id.action_customeDialogFragment_to_soilTestingHomeFragment)
+        setupClickListeners()
+    }
+    private fun setupClickListeners() {
+        binding.tvOk .setOnClickListener {
             dismiss()
         }
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-//        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-//        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-//    }
 
 
 }

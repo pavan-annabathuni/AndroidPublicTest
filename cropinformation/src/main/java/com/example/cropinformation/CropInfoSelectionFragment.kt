@@ -8,6 +8,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +18,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.cropinformation.adapter.CropListAdapter
+import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
@@ -26,6 +29,7 @@ import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.ZendeskChat
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CropInfoSelectionFragment : Fragment() {
@@ -34,9 +38,12 @@ class CropInfoSelectionFragment : Fragment() {
     private val viewModel:TabViewModel by lazy {
         ViewModelProvider(requireActivity())[TabViewModel::class.java]
     }
+    private lateinit var myCropAdapter:MyCropsAdapter
     private val adapter: CropListAdapter by lazy { CropListAdapter() }
+   // private val myCropAdapter: MyCropsAdapter by lazy { MyCropsAdapter() }
 
     private var handler: Handler? = null
+
     private var searchCharSequence: CharSequence? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +69,21 @@ class CropInfoSelectionFragment : Fragment() {
         binding.toolbarTitle.text = "Crop information"
 
         binding.cropsRv.adapter = adapter
+         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener{
+            val args = Bundle()
+            it.idd?.let { it1 -> args.putInt("cropid", it1) }
+            it?.cropName?.let { it1 -> args.putString("cropname", it1) }
+            it?.cropLogo?.let { it1->args.putString("cropLogo",it1) }
+            findNavController().navigate(
+                R.id.action_cropSelectionFragment_to_cropInfoFragment,
+                args
+            )
+        })
+        binding.rvMyCrops.adapter = myCropAdapter
 
         fabButton()
+        myCrops()
+
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
             Runnable {
@@ -255,4 +275,21 @@ class CropInfoSelectionFragment : Fragment() {
         }
     }
 
+    fun myCrops() {
+
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+          var accountId = it.data?.account!![0].id!!
+
+            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                myCropAdapter.submitList(it.data)
+                if ((it.data != null)) {
+                    binding.tvCount.text = it.data!!.size.toString()
+                } else {
+                    binding.tvCount.text = "0"
+                }
+                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
+            }
+        }
+    }
 }

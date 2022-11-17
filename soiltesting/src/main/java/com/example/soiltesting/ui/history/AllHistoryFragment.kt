@@ -21,11 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
+import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
 import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AllHistoryFragment : Fragment(), StatusTrackerListener {
@@ -327,10 +330,13 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
+                        val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+
                         viewModel.getCheckSoilTestLab(
                             account_id,
-                            location.latitude,
-                            location.longitude
+                            latitude,
+                            longitutde
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {
@@ -341,9 +347,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
+                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
 //                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                  //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
                                         Log.d(

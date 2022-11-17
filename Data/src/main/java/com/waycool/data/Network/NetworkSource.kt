@@ -1,16 +1,21 @@
 package com.waycool.data.Network
 
+import android.text.Editable
 import android.util.Log
+import android.widget.EditText
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.waycool.core.retrofit.MapsClient
 import com.waycool.core.retrofit.OTPApiCient
 import com.waycool.core.retrofit.OutgrowClient
 import com.waycool.core.retrofit.WeatherClient
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.Network.ApiInterface.ApiInterface
+import com.waycool.data.Network.ApiInterface.MapsApiInterface
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
@@ -21,19 +26,24 @@ import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import kotlin.Exception
 
 object NetworkSource {
 
-     val apiInterface: ApiInterface
+    val apiInterface: ApiInterface
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
+
+    private val geocodeInterface:MapsApiInterface
 
 
     init {
@@ -44,6 +54,8 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
+        val geocodeCLient=MapsClient.apiClient
+        geocodeInterface=geocodeCLient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -172,7 +184,7 @@ object NetworkSource {
 
     fun getVansFeeder(queryMap: MutableMap<String, String>): Flow<PagingData<VansFeederListNetwork>> {
         return Pager(
-            config = PagingConfig(pageSize = 15, maxSize = 50),
+            config = PagingConfig(pageSize = 15, prefetchDistance = 2),
             pagingSourceFactory = { VansPagingSource(apiInterface, queryMap) }
         ).flow
     }
@@ -194,12 +206,12 @@ object NetworkSource {
         }
 
     fun addCropPassData(
-        crop_id: Int,
-        account_id: Int,
-        plot_nickname: String,
-        is_active: Int,
-        sowing_date: String,
-        area:Double
+        crop_id: Int?,
+        account_id: Int?,
+        plot_nickname: String?,
+        is_active: Int?,
+        sowing_date: String?,
+        area: Editable?
     ) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
@@ -222,13 +234,27 @@ object NetworkSource {
         }
     }
 
-    fun postNewSoil(account_id: Int,lat: Double,long: Double,org_id:Int, plot_no: String, pincode: String,
-                    address: String,state:String,district:String ,number: String) =
+    fun postNewSoil(
+        account_id: Int, lat: Double, long: Double, org_id: Int, plot_no: String, pincode: String,
+        address: String, state: String, district: String, number: String
+    ) =
         flow<Resource<SoilTestResponseDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 val response =
-                    apiInterface.postNewSoil(headerMap!!,account_id,lat,long, org_id,plot_no,pincode, address, state,district,number)
+                    apiInterface.postNewSoil(
+                        headerMap!!,
+                        account_id,
+                        lat,
+                        long,
+                        org_id,
+                        plot_no,
+                        pincode,
+                        address,
+                        state,
+                        district,
+                        number
+                    )
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -240,6 +266,27 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+
+//    fun checkToken(user_id: Int, token: String) =
+//        flow<Resource<CheckTokenResponseDTO?>> {
+//            try {
+//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+//                val response =
+//                    apiInterface.checkToken(headerMap!!, user_id, token)
+//                if (response.isSuccessful) {
+//                    emit(Resource.Success(response.body()))
+//                } else if (response.code() == 404) {
+//                    val error = response.errorBody()?.charStream()?.readText() ?: ""
+//                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
+//                } else {
+//                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
+//                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+//                }
+//            } catch (e: Exception) {
+//                Log.d("Token", "check token:" + e.message)
+//                emit(Resource.Error(e.message))
+//            }
+//        }
 
 
     fun login(
@@ -362,15 +409,19 @@ object NetworkSource {
         image: MultipartBody.Part
     ) = flow<Resource<AiCropDetectionDTO?>> {
 
-            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val userDetailsEntity = LocalSource.getUserDetailsEntity() ?: UserDetailsEntity()
+        val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+        val userDetailsEntity = LocalSource.getUserDetailsEntity() ?: UserDetailsEntity()
 
         try {
             val response =
-                headerMap?.let { userDetailsEntity.id?.let { it1 ->
-                    apiInterface.postAiCrop(it,
-                        it1, cropId, cropName, image)
-                } }
+                headerMap?.let {
+                    userDetailsEntity.id?.let { it1 ->
+                        apiInterface.postAiCrop(
+                            it,
+                            it1, cropId, cropName, image
+                        )
+                    }
+                }
 
             if (response != null) {
                 if (response.isSuccessful)
@@ -405,19 +456,21 @@ object NetworkSource {
             }
         }
 
-    fun getWeatherForecast(lat:String,lon:String,lang:String="en") = flow<Resource<WeatherDTO?>> {
-        try {
-            val response = weatherInterface.getWeather(lat,lon,AppSecrets.getWeatherApiKey(),lang)
-            if (response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-            }
+    fun getWeatherForecast(lat: String, lon: String, lang: String = "en") =
+        flow<Resource<WeatherDTO?>> {
+            try {
+                val response =
+                    weatherInterface.getWeather(lat, lon, AppSecrets.getWeatherApiKey(), lang)
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
 
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
         }
-    }
 
 
     //add crop
@@ -448,7 +501,7 @@ object NetworkSource {
             }
         }
 
-    fun getSoilTestLab(account_id: Int, lat: Double, long: Double) =
+    fun getSoilTestLab(account_id: Int, lat: String, long: String) =
         flow<Resource<CheckSoilTestLabDTO?>> {
             try {
 //            val header =
@@ -567,7 +620,8 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-//    fun getFullMandiList(
+
+    //    fun getFullMandiList(
 //        headerMap: Map<String, String>?,crop_category:String?,state:String?,crop:String?,
 //         sortBy: String, orderBy: String?
 //    ) = flow<Resource<MandiDomain?>> {
@@ -586,22 +640,28 @@ object NetworkSource {
 //            emit(Resource.Error(e.message))
 //        }
 //    }
-    fun getMandiList(lat: String?,lon: String?,crop_category:String?,state:String?,crop:String?,
-                     sortBy: String, orderBy: String?,search:String?): Flow<PagingData<MandiDomainRecord>> {
+    fun getMandiList(
+        lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
+        sortBy: String?, orderBy: String?, search: String?
+    ): Flow<PagingData<MandiDomainRecord>> {
         return Pager(
-            config = PagingConfig(pageSize = 50, maxSize = 150),
-            pagingSourceFactory = { MandiPagingSource(
-                apiInterface,lat,lon,crop_category,
-                state,crop,sortBy,orderBy,search) }
+            config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
+            pagingSourceFactory = {
+                MandiPagingSource(
+                    apiInterface, lat, lon, crop_category,
+                    state, crop, sortBy, orderBy, search
+                )
+            }
         ).flow
     }
+
     fun getMandiHistory(
-        headerMap: Map<String, String>,crop_master_id:Int?,mandi_master_id:Int?
+        headerMap: Map<String, String>, crop_master_id: Int?, mandi_master_id: Int?
     ) = flow<Resource<MandiHistoryDomain?>> {
 
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getMandiHistory(headerMap,crop_master_id,mandi_master_id)
+            val response = apiInterface.getMandiHistory(headerMap, crop_master_id, mandi_master_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -630,5 +690,88 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun editMyCrop(
+        id:Int)
+    = flow<Resource<Unit?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+                val response = apiInterface.editMyCrops(map,id)
+             if(response.isSuccessful)
+                 emit(Resource.Success(response.body()))
+             else {
+                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+             }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getMyCrop(headerMap: Map<String, String>,account_id: Int,
+    ) = flow<Resource<MyCropsModel?>> {
+
+        try {
+            val response = apiInterface.getMyCrops(headerMap,account_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getMyCrop2(headerMap: Map<String, String>,account_id: Int,
+    ) = flow<Resource<MyCropsModel?>> {
+
+        try {
+            val response = apiInterface.getMyCrops(headerMap,account_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getGeocode(address: String
+    ) = flow<GeocodeDTO?> {
+
+        try {
+            val response = geocodeInterface.getGeocode(address,AppSecrets.getMapsKey())
+
+            if (response.isSuccessful)
+                emit(response.body())
+            else {
+//                emit(response.errorBody()?.charStream()?.readText())
+            }
+        } catch (e: Exception) {
+//            emit(e.message)
+        }
+    }
+
+    fun getReverseGeocode(latlon: String
+    ) = flow<GeocodeDTO?> {
+
+        try {
+            val response = geocodeInterface.getReverseGeocode(latlon,AppSecrets.getMapsKey())
+
+            if (response.isSuccessful)
+                emit(response.body())
+            else {
+//                emit(response.errorBody()?.charStream()?.readText())
+            }
+        } catch (e: Exception) {
+//            emit(e.message)
+        }
+    }
+
 }
 

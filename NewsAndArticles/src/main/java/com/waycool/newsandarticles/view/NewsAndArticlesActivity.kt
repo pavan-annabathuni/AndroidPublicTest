@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.text.TextWatcher
 import android.text.Editable
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.net.Uri
 import android.speech.RecognizerIntent
 import android.util.Log
@@ -32,7 +34,9 @@ import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity() {
     private var selectedCategory: String? = null
-    private var searchTag: String? = null
+
+    private var handler: Handler? = null
+    private var searchCharSequence: CharSequence? = null
 
     var bannerImageList: MutableList<AdBannerImage> = ArrayList()
 
@@ -51,7 +55,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        binding.toolbarTitle.text="News & Articles"
+        binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -61,6 +65,11 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         newsAdapter = NewsPagerAdapter(this)
         binding.videosVideoListRv.adapter = newsAdapter
 
+        handler = Handler(Looper.myLooper()!!)
+        val searchRunnable =
+            Runnable {
+                getNews(tags = searchCharSequence.toString())
+            }
 
         //for slider banner
         setBanners()
@@ -70,12 +79,14 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                searchTag = charSequence.toString()
-                if (charSequence.isNotEmpty()) {
-                    binding.micBtn.visibility = View.GONE
-                } else {
-                    binding.micBtn.visibility = View.VISIBLE
-                }
+                searchCharSequence = charSequence
+                handler!!.removeCallbacks(searchRunnable)
+                handler!!.postDelayed(searchRunnable, 150)
+//                if (charSequence.isNotEmpty()) {
+//                    binding.micBtn.visibility = View.GONE
+//                } else {
+//                    binding.micBtn.visibility = View.VISIBLE
+//                }
             }
 
             override fun afterTextChanged(editable: Editable) {}
@@ -233,7 +244,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                searchTag = result?.get(0)
+                val searchTag = result?.get(0)
                 binding.search.setText(searchTag)
 
             }
