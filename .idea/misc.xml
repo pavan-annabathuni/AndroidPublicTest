@@ -64,6 +64,7 @@
         <entry key="Videos/src/main/res/layout/viewholder_videos_category_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_videos_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_viewpager_slider_layout.xml" value="0.21481481481481482" />
+        <entry key="addDevice/src/main/res/layout/fragment_add_device.xml" value="0.3098958333333333" />
         <entry key="addcrop/src/main/res/drawable/background_switch.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_acres.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_plot_edittext.xml" value="0.2455" />

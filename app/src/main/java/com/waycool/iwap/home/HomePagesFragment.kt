@@ -138,6 +138,11 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
+//        binding.IvNotification.setOnClickListener{
+//            val intent = Intent(activity, ::class.java)
+//            startActivity(intent)
+//        }
+
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
         }

@@ -1,0 +1,15 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_mobile">+91 9876543210</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="model_name">Model Name</string>
+    <string name="select_device">Select Device</string>
+    <string name="e_g_50">e.g 50</string>
+    <string name="device_imei_address">Device IMEI Address</string>
+    <string name="sacn_qr_code">Sacn QR code</string>
+    <string name="device_details">Device Details</string>
+    <string name="device_name">Device Name</string>
+    <string name="elevation_802_92">Elevation : 802.92</string>
+    <string name="_12_916866_77_5951989">12.916866,77.5951989</string>
+</resources>
