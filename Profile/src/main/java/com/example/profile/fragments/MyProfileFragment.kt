@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,20 +18,23 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.waycool.core.utils.AppSecrets
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.launch
 import zendesk.chat.*
+import zendesk.chat.JwtAuthenticator.JwtCompletion
 import zendesk.messaging.MessagingActivity
 
 
 class MyProfileFragment : Fragment() {
     private lateinit var binding: FragmentMyProfileBinding
-    val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+    private val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    private var jwtToken:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -50,20 +54,27 @@ class MyProfileFragment : Fragment() {
        // viewModel.getUserDetails()
         onClick()
         observer()
-
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                   this@MyProfileFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         return binding.root
     }
 
      fun observer():Boolean {
-//        viewModel.response2.observe(viewLifecycleOwner){
-//            binding.username.text = it.name
-//            binding.phoneNo.text = "+91 ${it.contact}"
-//
-//        }
+
           viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
+                  jwtToken = it.data?.data?.encryptedToken
               }
           }
 
@@ -96,7 +107,6 @@ class MyProfileFragment : Fragment() {
         binding.rateUs.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
             startActivity(intent)
-            Toast.makeText(context,"Worked",Toast.LENGTH_SHORT).show()
         }
         binding.back.setOnClickListener(){
             this.findNavController().navigateUp()
@@ -118,25 +128,46 @@ class MyProfileFragment : Fragment() {
 //        binding.version.setText("2.5.5")
 
         binding.cvChat.setOnClickListener() {
-            Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
-                "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
+            Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),
+            AppSecrets.getChatAppId())
             val chatConfiguration = ChatConfiguration.builder()
                 .withAgentAvailabilityEnabled(false)
                 .withTranscriptEnabled(false)
-//
                 .build()
-            val visitorInfo: VisitorInfo = VisitorInfo.builder()
-                .withName("Bob")
-                .withEmail("bob@example.com")
-                .withPhoneNumber("123456") // numeric string
-                .build();
+//            val visitorInfo: VisitorInfo = VisitorInfo.builder()
+//                .withName("Bob")
+//                .withEmail("bob@example.com")
+//                .withPhoneNumber("123456") // numeric string
+//                .build();
+
+
+//            var jwtAuthenticator =  JwtAuthenticator {
+//                it.onTokenLoaded("eyJpdiI6IjBGN0lWQ1d3N0tQS0lreHRMNWVKV0E9PSIsInZhbHVlIjoib2VsYU5OVjJqdVBNRWZyMkpJcWVyQT09IiwibWFjIjoiYTJmODA4Y2ExOTg1NWRkNjNhNGUwYWJjZTcyYWJmNTNiNjJiN2I2Y2NiZWRkMWEwZjE2ZGY3ODAyZDViYzlkZiIsInRhZyI6IiJ9")
+//                it.onError()
+//                Log.d("JWT", "onClick: $jwtToken")
+//            }
+
+//           val jwtAuthenticator =
+//                JwtAuthenticator { jwtCompletion -> //Fetch or generate the JWT token at this point
+//                    //OnSuccess
+//                    jwtCompletion.onTokenLoaded("")
+//                    //OnError
+//                    jwtCompletion.onError()
+  //              }
+
+                Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),AppSecrets.getChatAppId())
+                val jwtAuth = JwtAuth()
+                Chat.INSTANCE.setIdentity(jwtAuth)
+
+         //   Chat.INSTANCE.setIdentity(jwtAuthenticator)
 
             val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-                .withVisitorInfo(visitorInfo)
+//                .withVisitorInfo(visitorInfo)
                 .withDepartment("English Language Group")
                 .build()
 
             Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
+
 
 
             MessagingActivity.builder()
@@ -183,8 +214,9 @@ class MyProfileFragment : Fragment() {
                                 "Successfully Logout",
                                 Toast.LENGTH_LONG
                             ).show()
-                            moveToLogin()
+
                         }
+                    moveToLogin()
                 }
         }
     private fun moveToLogin() {
@@ -192,4 +224,30 @@ class MyProfileFragment : Fragment() {
         startActivity(intent)
         activity?.finish()
     }
+
    }
+internal class JwtAuth : JwtAuthenticator {
+
+    private fun retrieveToken(callback: JwtCallback) {
+        // request to backend service that returns a JWT Token or an Error
+
+        callback.onSuccess("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NTAsIm5hbWUiOiJTZCIsImNvbnRhY3QiOiI3Njc5OTUyMDUwIiwiZW1haWwiOiI3Njc5OTUyMDUwNjM3MjFmMGNkYmY1YmR1bW15QHdheWNvb2wuaW4iLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiYXBwcm92ZWQiOjEsInNldHRpbmdzIjpudWxsLCJpYXQiOjE2Njg0MjM0MzYsImp0aSI6IjYzNzIxZjBjZGJmODIiLCJwcm9maWxlIjp7ImlkIjozMSwiZ2VuZGVyIjpudWxsLCJhZGRyZXNzIjpudWxsLCJ2aWxsYWdlIjoiQmVsbGFuZHVyIiwicGluY29kZSI6IjU2MDEwMyIsInN0YXRlIjpudWxsLCJkaXN0cmljdCI6bnVsbCwic3ViX2Rpc3RyaWN0IjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJsYXQiOiIxMi45MzAxNDAwMCIsImxvbmciOiI3Ny42ODYyOTAwMCIsInByb2ZpbGVfcGljIjpudWxsLCJ1c2VyX2lkIjo1MCwibGFuZ19pZCI6MX0sImFjY291bnQiOlt7ImlkIjozMCwiYWNjb3VudF9ubyI6IkFITFg3VlNZTVIiLCJhY2NvdW50X3R5cGUiOiJvdXRncm93IiwiaXNfYWN0aXZlIjoxLCJkZWZhdWx0X21vZHVsZXMiOjEsImlzX3ByZW1pdW0iOjB9XX0.y3pY-4UPvfmPjPFIwRbNmABQ8nclvtdjF_Vx91yJQno")
+    }
+
+    override fun getToken(jwtCompletion: JwtCompletion) {
+        retrieveToken(object : JwtCallback {
+            override fun onSuccess(token: String?) {
+                jwtCompletion.onTokenLoaded(token)
+            }
+
+            override fun onError() {
+                jwtCompletion.onError()
+            }
+        })
+    }
+
+    internal interface JwtCallback {
+        fun onSuccess(token: String?)
+        fun onError()
+    }
+}

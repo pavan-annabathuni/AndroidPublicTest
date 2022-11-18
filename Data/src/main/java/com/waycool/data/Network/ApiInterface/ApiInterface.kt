@@ -140,8 +140,8 @@ interface ApiInterface {
     suspend fun getSoilTestLab(
         @HeaderMap headerMap: Map<String, String>,
         @Query("account_id") user_id: Int,
-        @Query("lat") lat: Double,
-        @Query("long") long: Double
+        @Query("lat") lat: String,
+        @Query("long") long: String
     ): Response<CheckSoilTestLabDTO>
 
     //Status Tracker Api
@@ -234,11 +234,30 @@ interface ApiInterface {
         @Query("crop_master_id") crop_master_id:Int?,
         @Query("mandi_master_id") mandi_master_id:Int?
     ):Response<MandiHistoryDomain>
-    @FormUrlEncoded
-    @POST("api/v1/check-token")
-    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
-                             @Field("user_id")user_id:Int,
-                             @Field("token")token:String,
-    ): Response<CheckTokenResponseDTO>
 
+    @GET("api/v1/india-state-master")
+    suspend fun getStateList(
+        @HeaderMap map: Map<String, String>?,
+    ):Response<StateModel>
+//    @FormUrlEncoded
+//    @POST("api/v1/check-token")
+//    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
+//                             @Field("user_id")user_id:Int,
+//                             @Field("token")token:String,
+//    ): Response<CheckTokenResponseDTO>
+
+
+    @GET("api/v1/my-crops")
+    suspend fun getMyCrops(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_id")account_id:Int
+    ):Response<MyCropsModel>
+
+
+
+    @DELETE("api/v1/plots/{plots}")
+    suspend fun editMyCrops(
+        @HeaderMap map: Map<String, String>?,
+        @Path("plots")plots:Int
+    ):Response<Unit>
 }

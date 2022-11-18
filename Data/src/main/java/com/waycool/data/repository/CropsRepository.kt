@@ -3,6 +3,8 @@ package com.waycool.data.repository
 import android.text.Editable
 import android.widget.EditText
 import com.waycool.data.Local.Entity.PestDiseaseEntity
+import com.waycool.data.Local.LocalSource
+import com.waycool.data.Local.mappers.MyCropEntityMapper
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
@@ -15,9 +17,13 @@ import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import retrofit2.Call
 
 object CropsRepository {
 
@@ -152,8 +158,8 @@ object CropsRepository {
 
     fun getSoilTestLab(
         account: Int,
-        lat: Double,
-        long: Double
+        lat: String,
+        long: String
     ): Flow<Resource<List<CheckSoilTestDomain>?>> {
         return NetworkSource.getSoilTestLab(account, lat, long).map {
             when (it) {
@@ -273,6 +279,9 @@ object CropsRepository {
     fun addCropDataPass(
         map: MutableMap<String, Any> = mutableMapOf<String,Any>()
     ): Flow<Resource<AddCropResponseDTO?>> {
+    GlobalScope.launch {
+        MyCropSyncer().invalidateSync()
+    }
         return NetworkSource.addCropDataPass(map)
     }
 
@@ -400,4 +409,39 @@ object CropsRepository {
 
     }
 
+    suspend fun getState(): Flow<Resource<StateModel?>> {
+        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+        return NetworkSource.getStateList(map)
+    }
+
+
+    fun getMyCrop2(crop_id: Int): Flow<Resource<List<MyCropDataDomain>>> {
+        return MyCropSyncer().getMyCrop(crop_id).map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        MyCropDomainMapper().toDomainList(it.data ?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+
+    }
+     fun getEditCrop(id:Int):Flow<Resource<Unit?>> {
+
+
+         GlobalScope.launch(Dispatchers.IO){
+             LocalSource.deleteMyCrop()
+             MyCropSyncer().invalidateSync()
+         }
+
+        return NetworkSource.editMyCrop(id)
+
+    }
 }

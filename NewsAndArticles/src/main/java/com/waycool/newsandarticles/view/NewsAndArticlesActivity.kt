@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.text.TextWatcher
 import android.text.Editable
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.net.Uri
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
@@ -20,6 +23,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
@@ -29,7 +34,9 @@ import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity() {
     private var selectedCategory: String? = null
-    private var searchTag: String? = null
+
+    private var handler: Handler? = null
+    private var searchCharSequence: CharSequence? = null
 
     var bannerImageList: MutableList<AdBannerImage> = ArrayList()
 
@@ -48,7 +55,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        binding.toolbarTitle.text="News & Articles"
+        binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -58,20 +65,28 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         newsAdapter = NewsPagerAdapter(this)
         binding.videosVideoListRv.adapter = newsAdapter
 
+        handler = Handler(Looper.myLooper()!!)
+        val searchRunnable =
+            Runnable {
+                getNews(tags = searchCharSequence.toString())
+            }
 
         //for slider banner
         setBanners()
         getNewsCategories()
+        fabButton()
 
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                searchTag = charSequence.toString()
-                if (charSequence.isNotEmpty()) {
-                    binding.micBtn.visibility = View.GONE
-                } else {
-                    binding.micBtn.visibility = View.VISIBLE
-                }
+                searchCharSequence = charSequence
+                handler!!.removeCallbacks(searchRunnable)
+                handler!!.postDelayed(searchRunnable, 150)
+//                if (charSequence.isNotEmpty()) {
+//                    binding.micBtn.visibility = View.GONE
+//                } else {
+//                    binding.micBtn.visibility = View.VISIBLE
+//                }
             }
 
             override fun afterTextChanged(editable: Editable) {}
@@ -229,10 +244,36 @@ class NewsAndArticlesActivity : AppCompatActivity() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                searchTag = result?.get(0)
+                val searchTag = result?.get(0)
                 binding.search.setText(searchTag)
 
             }
+        }
+    }
+    private fun fabButton(){
+        var isVisible = false
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            }else{
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener(){
+            ZendeskChat.zenDesk(this)
         }
     }
 

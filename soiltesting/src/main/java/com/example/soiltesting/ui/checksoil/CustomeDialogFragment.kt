@@ -20,6 +20,7 @@ class CustomeDialogFragment : DialogFragment() {
         const val TAG = "SimpleDialog"
         fun newInstance(): CustomeDialogFragment {
             val fragment = CustomeDialogFragment()
+//            fragment.arguments = args
             return fragment
         }
 

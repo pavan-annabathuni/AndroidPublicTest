@@ -1,6 +1,7 @@
 package com.waycool.data.repository.DomainMapper
 
 import com.waycool.data.Local.Entity.PestDiseaseEntity
+import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.util.DomainMapper
 
@@ -12,7 +13,7 @@ class PestDiseaseDomainMapper : DomainMapper<PestDiseaseDomain, PestDiseaseEntit
             diseaseName = dto.diseaseName,
             diseaseId = dto.diseaseId,
             thumb = dto.thumb,
-            imageUrl = dto.imageUrl,
+            imageUrl = TypeConverter.convertStringToStringList(dto.imageUrl),
             audioUrl = dto.audioUrl,
             modeOfInfestation = dto.modeOfInfestation,
             symptoms = dto.symptoms,

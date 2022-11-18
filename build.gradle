@@ -10,6 +10,7 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -20,6 +21,8 @@ buildscript {
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
+
 //        def navigation_version = "2.4.2"
 //        implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
 //        implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
@@ -36,6 +39,14 @@ allprojects {
         maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
         mavenCentral()  // Maven Central repository
     }
+
+//    dependencyResolutionManagement {
+//        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//        repositories {
+//            google()
+//            mavenCentral()
+//        }
+//    }
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

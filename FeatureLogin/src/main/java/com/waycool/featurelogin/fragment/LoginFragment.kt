@@ -269,9 +269,7 @@ class LoginFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
-        activity?.let {
-            it.finish()
-        }
+        requireActivity().finish()
     }
 
 

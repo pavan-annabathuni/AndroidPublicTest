@@ -126,6 +126,7 @@
         android:src="@drawable/ic_phone_icon"
         android:layout_marginBottom="44dp"
         android:layout_marginEnd="@dimen/space28"
+        android:visibility="gone"
         android:layout_height="wrap_content"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
@@ -165,5 +166,62 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_fab"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/DarkGreen"
+        android:text="Chat"
+        android:textColor="@color/white"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        android:visibility="gone"
+        app:fabSize="normal"
+        android:src="@drawable/ic_fab_call"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/add_chat"
+        app:layout_constraintEnd_toEndOf="@+id/add_chat"
+        app:tint="@color/white"
+        tools:visibility="visible" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_fab"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/DarkGreen"
+        android:text="Chat"
+        android:textColor="@color/white"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        android:visibility="gone"
+        app:fabSize="normal"
+        android:src="@drawable/ic_fab_chat"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/add_fab"
+        app:layout_constraintEnd_toEndOf="@+id/add_fab"
+        app:tint="@color/white"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="82dp"
+        android:backgroundTint="@color/DarkGreen"
+        android:src="@drawable/ic_chat_call"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@null" />
 </androidx.constraintlayout.widget.ConstraintLayout>

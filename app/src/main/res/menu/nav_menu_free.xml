@@ -3,10 +3,10 @@
 
     <item
         android:id="@id/nav_home"
-        android:icon="@drawable/home"
+        android:icon="@drawable/ic_home"
         android:title="HOME" />
     <item
-        android:id="@+id/mandiActivity"
+        android:id="@+id/navigation_mandi"
         android:icon="@drawable/ic_mandi_nav"
         android:title="MANDI" />
 

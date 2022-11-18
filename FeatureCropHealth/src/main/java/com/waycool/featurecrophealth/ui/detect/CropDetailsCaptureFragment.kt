@@ -1,6 +1,5 @@
 package com.waycool.featurecrophealth.ui.detect
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,8 +14,8 @@ import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.waycool.data.utils.Resource
-import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
@@ -68,7 +67,8 @@ class CropDetailsCaptureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         clickes()
         binding.tvRequest.text = crop_name
-        binding.cropImg.loadUrl(crop_logo!!)
+        Glide.with(requireContext()).load(crop_logo!!).into(binding.cropImg)
+//        binding.cropImg.loadUrl(crop_logo!!)
         binding.howTo.setOnClickListener {
             findNavController().navigate(R.id.action_cropDetailsCaptureFragment_to_howToClickFragment)
         }
@@ -80,17 +80,6 @@ class CropDetailsCaptureFragment : Fragment() {
             selectImageInAlbum()
         }
     }
-
-//    fun checkImageSelected(selecteduri: Uri){
-//        if (selecteduri != null) {
-//            binding.cardCheckHealth.setOnClickListener {
-//                binding.progressBar?.visibility = View.VISIBLE
-//                Log.d(TAG, "onViewCreatedUriSendData: $selecteduri")
-//            }
-//        }
-//
-//
-//    }
 
     fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -139,20 +128,18 @@ class CropDetailsCaptureFragment : Fragment() {
                         "image_url",
                         file.name, profileImage
                     )
+                binding.progressBar?.visibility = View.VISIBLE
+                binding.cardCheckHealth.visibility = View.GONE
 
 
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
-                val userId =
-                    SharedPreferenceUtility.getUserDetails(requireContext()).data?.profile?.userId
 
-                if (userId != null) {
-                    postImage(
-                        crop_id!!,
-                        crop_name!!,
-                        profileImageBody
-                    )
-                }
+                postImage(
+                    crop_id!!,
+                    crop_name!!,
+                    profileImageBody
+                )
             }
 
 
@@ -225,7 +212,7 @@ class CropDetailsCaptureFragment : Fragment() {
         }
     }
 
-    private fun postImage(crop_id: Int?, crop_name: String?, profileImageBody: MultipartBody.Part) {
+    private fun postImage(crop_id:Int?, crop_name:String?, profileImageBody:MultipartBody.Part){
         viewModel.postAiImage(
             crop_id!!,
             crop_name!!,

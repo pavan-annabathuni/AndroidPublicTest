@@ -109,19 +109,43 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_waycool_core_utils_AppSecrets_getOTPKey(JNIEnv *env, jobject thiz) {
 
-    std::string base_url = "339466As1e7SnWEJ5f3e52efP1";
+    std::string base_url = "329266A6qC0z6ZNgBD5ebfbe1cP1";
     return env->NewStringUTF(base_url.c_str());
 
 }
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_waycool_core_utils_AppSecrets_getOTPTemplateId(JNIEnv *env, jobject thiz) {
-    std::string base_url = "5f71ae22d69188233e3d50e8";
+    std::string base_url = "6335616bd6fc05351b5194a3";
     return env->NewStringUTF(base_url.c_str());
 }
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_waycool_core_utils_AppSecrets_getYoutubeKey(JNIEnv *env, jobject thiz) {
     std::string base_url = "AIzaSyB-6QNre3Dz_Kz-he8zY4ex2kw7PVGHkNg";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getChatAppId(JNIEnv *env, jobject thiz) {
+    std::string base_url = "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getAccountKey(JNIEnv *env, jobject thiz) {
+    std::string base_url = "dt55P5snqpfyOrXfNqz56lwrup8amDdz";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getMapsKey(JNIEnv *env, jobject thiz) {
+    std::string base_url = "AIzaSyAbYkho0xs5_muW3_tobx43l02p1LsF5vI";
+    return env->NewStringUTF(base_url.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getGeoBaseUrl(JNIEnv *env, jobject thiz) {
+    std::string base_url = "https://maps.googleapis.com/";
     return env->NewStringUTF(base_url.c_str());
 }

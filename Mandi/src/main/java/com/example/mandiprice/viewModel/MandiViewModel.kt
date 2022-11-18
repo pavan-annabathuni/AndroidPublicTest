@@ -12,12 +12,13 @@ import com.example.mandiprice.api.stateRespond.Data
 import com.example.mandiprice.api.stateRespond.IndianStates
 import com.example.mandiprice.utils.Constants
 import com.waycool.data.Network.NetworkModels.MandiModel
+import com.waycool.data.Network.NetworkModels.StateData
+import com.waycool.data.Network.NetworkModels.StateModel
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
+import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.MandiRepository
 import com.waycool.data.repository.ProfileRepository
-import com.waycool.data.repository.domainModels.MandiDomain
-import com.waycool.data.repository.domainModels.MandiDomainRecord
-import com.waycool.data.repository.domainModels.MandiHistoryDomain
+import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -41,13 +42,23 @@ class MandiViewModel : ViewModel() {
     val paging: LiveData<PagingData<Record>>
         get() = _paging
 
+    fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
+        return CropsRepository.getCropCategory().asLiveData()
+    }
+    fun getAllCrops():LiveData<Resource<List<CropMasterDomain>?>> {
+        return CropsRepository.getAllCrops().asLiveData()
+    }
+
+    suspend fun getState():LiveData<Resource<StateModel?>> {
+        return CropsRepository.getState().asLiveData()
+    }
 
 
     suspend fun getMandiDetails(crop_category:String?,state:String?,crop:String?,
-                                sortBy: String, orderBy: String?,search:String?
+                                sortBy: String?, orderBy: String?,search:String?
     ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(crop_category,
-            state,crop,sortBy,orderBy,search).asLiveData().cachedIn(viewModelScope)
+            state,crop,sortBy,orderBy,search).cachedIn(viewModelScope).asLiveData()
 
 
     suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?):

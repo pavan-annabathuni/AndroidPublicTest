@@ -45,7 +45,7 @@
         tools:layout="@layout/fragment_add_farm" />
     <fragment
         android:id="@+id/languageFragment3"
-        android:name="com.example.profile.LanguageFragment"
+        android:name="com.example.profile.ProfileLanguageFragment"
         android:label="LanguageFragment" >
         <action
             android:id="@+id/action_languageFragment3_to_myProfileFragment"

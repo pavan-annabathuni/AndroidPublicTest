@@ -3,34 +3,33 @@ package com.waycool.iwap.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
+import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
-import com.example.soiltesting.utils.Constant
-import com.waycool.data.Network.NetworkModels.CropInfo
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.ZendeskChat
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
-import com.waycool.featurecropprotect.R
-import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.MainViewModel
-import com.waycool.iwap.TokenViewModel
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -39,8 +38,6 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.Format
 import java.text.SimpleDateFormat
@@ -63,12 +60,14 @@ class HomePagesFragment : Fragment() {
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
     private val mandiAdapter = MandiHomePageAdapter()
+    private lateinit var mandiAdapter: MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
-    val green = "#08FA12"
+    val green = "#146133"
     val lightGreen = "#DEE9E2"
+    private lateinit var myCropAdapter: MyCropsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +81,18 @@ class HomePagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
+            val args = Bundle()
+            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+            it?.crop?.let { it1 -> args.putString("cropName", it1) }
+            it?.market?.let { it1 -> args.putString("market", it1) }
+            this.findNavController()
+                .navigate(
+                    com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22,
+                    args
+                )
+        })
         binding.recyclerview.adapter = mandiAdapter
 
 //
@@ -106,14 +117,27 @@ class HomePagesFragment : Fragment() {
 //                }
 //            }
 //        }
+        binding.soilTestingCv.setOnClickListener {
+            val intent = Intent(activity, SoilTestActivity::class.java)
+            startActivity(intent)
+        }
         binding.tvAddFromService.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent);
         }
 
+        binding.cardCropHealth.setOnClickListener {
+            val intent = Intent(activity, CropHealthActivity::class.java)
+            startActivity(intent)
+        }
         binding.tvAddFromServiceCropHealth.setOnClickListener {
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent);
+        }
+
+        binding.clCropProtect.setOnClickListener {
+            val intent = Intent(activity, CropProtectActivity::class.java)
+            startActivity(intent)
         }
 
         binding.tvAddFromServiceCropProtect.setOnClickListener {
@@ -121,6 +145,10 @@ class HomePagesFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.clCropInformation.setOnClickListener {
+            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
+            startActivity(intent);
+        }
         binding.clAddFromServiceCropInformation.setOnClickListener {
             val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent);
@@ -138,13 +166,15 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
-//        binding.IvNotification.setOnClickListener{
-//            val intent = Intent(activity, ::class.java)
-//            startActivity(intent)
-//        }
-
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
+        }
+        binding.tvMyCrops.setOnClickListener() {
+            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_editCropFragment)
+        }
+        binding.cvAddCrop.setOnClickListener() {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
         }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
@@ -177,7 +207,7 @@ class HomePagesFragment : Fragment() {
                         Log.d("Profile", userDetails.toString())
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome," + it.data?.name
+                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
                         Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -196,6 +226,8 @@ class HomePagesFragment : Fragment() {
         }
         setVideos()
         setNews()
+        fabButton()
+        myCrop()
     }
 
     //
@@ -230,6 +262,7 @@ class HomePagesFragment : Fragment() {
 //        }
 //
 //    }
+
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
         val extent: Int = videosBinding.recyclerview.computeHorizontalScrollExtent()
@@ -269,7 +302,7 @@ class HomePagesFragment : Fragment() {
             bundle.putString("source", it?.sourceName)
 
             findNavController().navigate(
-                R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
+                com.waycool.iwap.R.id.action_homePagesFragment_to_newsFullviewActivity2,
                 bundle
             )
         }
@@ -293,7 +326,7 @@ class HomePagesFragment : Fragment() {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
-                R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
+                com.waycool.iwap.R.id.action_homePagesFragment_to_playVideoFragment4,
                 bundle
             )
         }
@@ -318,16 +351,23 @@ class HomePagesFragment : Fragment() {
         return scroll.roundToInt()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun weather(lat: String, lon: String) {
         viewModel.getWeather(lat, lon).observe(viewLifecycleOwner) {
-            binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
-            binding.tvWindDegree.text = String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
-//            binding.tvRainDegree.text = String.format("%.0f", it.data!!.daily[0].pop!! * 100) + "%"
-            Log.d("Weather", "weather: $it")
-            //           Glide.with(requireContext()).load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png").into(binding.ivWeather)
 
             if (it?.data != null) {
+
+                binding.tvDegree.text = String.format("%.1f", it.data?.current?.temp) + "\u2103"
+                binding.tvWindDegree.text =
+                    String.format("%.1f", it.data?.current?.windSpeed) + "Km/h"
+                if (it.data?.daily?.isNotEmpty() == true)
+                    binding.tvRainDegree.text =
+                        String.format("%.0f", it.data?.daily?.get(0)?.pop?.times(100)) + "%"
+                Log.d("Weather", "weather: $it")
+                if (it.data?.current?.weather?.isNotEmpty() == true)
+                    Glide.with(requireContext())
+                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
+                        .into(binding.ivWeather)
+
 
                 // binding.weatherMaster = it.data
 
@@ -633,6 +673,69 @@ class HomePagesFragment : Fragment() {
                 }
         }
 
+    }
+
+    private fun fabButton() {
+        var isVisible = false
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            } else {
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener() {
+            ZendeskChat.zenDesk(requireContext())
+        }
+
+    }
+
+    fun myCrop() {
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+        })
+        binding.rvMyCrops.adapter = myCropAdapter
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if (it.data != null) {
+                var accountId: Int? = null
+                for (account in it?.data?.account!!) {
+                    if (account.accountType?.lowercase() == "outgrow") {
+                        accountId = account.id
+                    }
+
+                }
+//                var accountId: Int = it.data!!.account[0].id!!
+                if (accountId != null)
+                    viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                        myCropAdapter.submitList(it.data)
+                        if ((it.data != null)) {
+                            binding.tvCount.text = it.data!!.size.toString()
+                        } else {
+                            binding.tvCount.text = "0"
+                        }
+                        if (it.data!!.isNotEmpty()) {
+                            binding.cvEditCrop.visibility = View.VISIBLE
+                            binding.cardAddForm.visibility = View.GONE
+                        } else {
+                            binding.cvEditCrop.visibility = View.GONE
+                            binding.cardAddForm.visibility = View.VISIBLE
+                        }
+                    }
+            }
+        }
+    }
     }
 
 }

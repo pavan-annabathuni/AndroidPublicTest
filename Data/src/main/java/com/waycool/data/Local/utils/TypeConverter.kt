@@ -1,14 +1,18 @@
 package com.waycool.data.Local.utils
 
 import android.util.Log
+import androidx.room.ProvidedTypeConverter
+import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
+import com.waycool.data.Network.NetworkModels.CropModel
 import com.waycool.data.Network.NetworkModels.CropVarietyModel
 import com.waycool.data.repository.domainModels.CropVarityDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 
+@ProvidedTypeConverter
 object TypeConverter {
 
     fun convertLanguageMasterToString(language: List<LanguageMasterEntity>): String {
@@ -46,11 +50,13 @@ object TypeConverter {
         val listType = object : TypeToken<List<ModuleMasterEntity>?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
     fun convertStringToAddCropType(s: String): List<AddCropTypeEntity>? {
         Log.d("TypeConverterFrom", s)
         val listType = object : TypeToken<List<AddCropTypeEntity>?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
     fun convertStringToAddCropTypeString(language: List<AddCropTypeEntity>): String {
         Log.d("TypeConverterTO", language.toString())
         val gson = Gson()
@@ -62,6 +68,7 @@ object TypeConverter {
         val listType = object : TypeToken<List<SoilTestHistoryEntity>?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
     fun convertSoilTestHistoryString(language: List<SoilTestHistoryEntity>): String {
         Log.d("TypeConverterTO", language.toString())
         val gson = Gson()
@@ -105,6 +112,7 @@ object TypeConverter {
         val listType = object : TypeToken<UserDetailsEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
     fun convertStringToCropVariety(s: String): List<CropVarityDomain>? {
         Log.d("TypeConverterFrom", s)
         val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
@@ -122,6 +130,30 @@ object TypeConverter {
         val listType = object : TypeToken<WeatherMasterEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
+    @TypeConverter
+    fun convertMyCropToString(w: MyCropDataEntity): String {
+        Log.d("TypeConverterTO", w.toString())
+        val gson = Gson()
+        return gson.toJson(w)
+    }
+
+    @TypeConverter
+    fun convertStringToMyCrop(s: String): MyCropDataEntity? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<MyCropDataEntity?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+
+    fun convertStringToStringList(s: String?): List<String> {
+//        Log.d("TypeConverterFrom", s)
+        if (s == null)
+            return emptyList()
+        val listType = object : TypeToken<List<String>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+
+
 
     fun convertStringToCheckToken(s: String): CheckTokenResponseDTO? {
         Log.d("TypeConverterFrom", s)

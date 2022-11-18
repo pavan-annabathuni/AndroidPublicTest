@@ -27,6 +27,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AllHistoryFragment : Fragment(), StatusTrackerListener {
@@ -328,10 +330,13 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
+                        val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+
                         viewModel.getCheckSoilTestLab(
                             account_id,
-                            location.latitude,
-                            location.longitude
+                            latitude,
+                            longitutde
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {

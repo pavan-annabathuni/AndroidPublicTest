@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.Flow
 
 object MandiRepository {
     suspend fun getMandiList(crop_category:String?,state:String?,crop:String?,
-                             sortBy: String, orderBy: String?,search:String?):
+                             sortBy: String?, orderBy: String?,search:String?):
             Flow<PagingData<MandiDomainRecord>> {
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         Log.d("HeaderMap", "getMandiList: $map")
-        return NetworkSource.getMandiList("78.22,","12.22",crop_category,
+        return NetworkSource.getMandiList("12.929842", "77.685520",crop_category,
             state,crop,sortBy,orderBy,search)
     }
 

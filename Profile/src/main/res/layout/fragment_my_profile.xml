@@ -24,14 +24,14 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:background="@drawable/border"
+                android:background="@drawable/profile_border"
+                android:theme="@style/Theme.MaterialComponents.Light"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                style="@style/Bold"
+            <com.waycool.uicomponents.Text.Title1Bold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -82,8 +82,8 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/username"
                             style="@style/Bold"
+                            android:id="@+id/username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -92,8 +92,8 @@
                             android:textSize="18sp" />
 
                         <TextView
+                            style="@style/SemiBold"
                             android:id="@+id/phone_no"
-                            style="@style/Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -252,7 +252,7 @@
                     android:padding="8dp"
                     android:src="@drawable/ic_logo" />
 
-                <TextView
+                <com.waycool.uicomponents.Text.Title3SemiBold
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -327,8 +327,7 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_support" />
 
-                    <TextView
-                        style="@style/SemiBold"
+                    <com.waycool.uicomponents.Text.ParagraphSemiBold
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -370,7 +369,7 @@
                     android:layout_gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.waycool.uicomponents.Text.ParagraphSemiBold
                         style="@style/SemiBold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -433,7 +432,7 @@
                 app:strokeColor="@color/LightGray"
                 app:strokeWidth="1dp">
 
-                <TextView
+                <com.waycool.uicomponents.Text.Title3SemiBold
                     style="@style/SemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -477,7 +476,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="55dp"
-                android:text="App Ver. 2.5.8"
+                android:text="App Ver. 2.5.10"
                 android:textColor="@color/darkGray"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"

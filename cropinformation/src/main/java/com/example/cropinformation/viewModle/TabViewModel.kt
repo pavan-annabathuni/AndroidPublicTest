@@ -11,7 +11,9 @@ import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import com.example.cropinformation.apiservice.response.DataX
 import com.example.cropinformation.apiservice.videoApi
+import com.waycool.data.Network.NetworkModels.MyCropsModel
 import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.CropMasterDomain
@@ -40,12 +42,17 @@ class TabViewModel:ViewModel {
     fun getCropInformationDetails(crop_id:Int): LiveData<Resource<List<CropInformationDomainData>>> =
         CropsRepository.getCropInformation(crop_id).asLiveData()
 
+    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2(account_id).asLiveData()
+
     fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
         return CropsRepository.getCropInfoCrops(searchQuery).asLiveData()
     }
     fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
         return CropsRepository.getCropCategory().asLiveData()
     }
+    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
+        LoginRepository.getUserDetails().asLiveData()
 
     fun getVansVideosList(
         tags: String? = null,

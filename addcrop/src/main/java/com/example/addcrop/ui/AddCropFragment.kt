@@ -36,6 +36,11 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bindObserversCategory()
+//        binding.toolbar.setOnClickListener {
+//            findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
+//        }
+//        categoryAdapter.upDateList(responseDataList)
+
     }
 
     private fun initView() {
