@@ -223,7 +223,7 @@ class MandiFragment : Fragment() {
                 data.categoryName
             } ?: emptyList()) as MutableList<String>
             if (cropCategoryList.isNotEmpty())
-                cropCategoryList[0] = "-Category-"
+                cropCategoryList[0] = "Category"
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, cropCategoryList)
             binding.spinner1.adapter = arrayAdapter
@@ -277,7 +277,7 @@ class MandiFragment : Fragment() {
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.isNotEmpty())
-                            cropNameList[0] = "-Crops-"
+                            cropNameList[0] = "Crops"
 
                         val arrayAdapter2 =
                             ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
@@ -339,7 +339,7 @@ class MandiFragment : Fragment() {
                 stateNameList.sort()
 
                 if (stateNameList.isNotEmpty())
-                    stateNameList[0] = "-State-"
+                    stateNameList[0] = "State"
                 val arrayAdapter3 =
                     ArrayAdapter(requireContext(), R.layout.item_spinner, stateNameList)
                 binding.spinner3.adapter = arrayAdapter3
