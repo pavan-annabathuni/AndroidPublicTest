@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
+import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
@@ -58,8 +59,8 @@ class HomePagesFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
-    private val mandiAdapter = MandiHomePageAdapter()
+//    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+//    private val mandiAdapter = MandiHomePageAdapter()
     private lateinit var mandiAdapter: MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
@@ -174,6 +175,10 @@ class HomePagesFragment : Fragment() {
         }
         binding.cvAddCrop.setOnClickListener() {
             val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+        binding.IvNotification.setOnClickListener{
+            val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
         }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
@@ -738,4 +743,3 @@ class HomePagesFragment : Fragment() {
     }
     }
 
-}

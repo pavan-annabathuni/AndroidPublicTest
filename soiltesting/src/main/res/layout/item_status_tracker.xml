@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space20"
         android:letterSpacing="0.02"
-        android:text="Soil Test Request is Initiated"
+        android:text="@string/soil_test_request_is_initiated"
         android:textColor="#000000"
         android:textSize="@dimen/txt16"
         app:layout_constraintEnd_toEndOf="parent"

@@ -88,24 +88,24 @@ class SelectAddCropFragment : Fragment() {
             it?.cropName?.let { it1 -> args.putString("cropname", it1)
             }
                 Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
-                when (it?.cropId) {
-                    67-> {
-                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
-                    }
-                    2 -> {
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
-                    }
-                    else -> {
-                        Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_addCropFragment, args)
-                    }
-                }
+//                when (it?.cropId) {
+//                    67-> {
+//                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
+//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+//                    }
+//                    2 -> {
+//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+//                    }
+//                    else -> {
+//                        Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
+//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_addCropFragment, args)
+//                    }
+//                }
 
-//            findNavController().navigate(
-//                R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
-//                args
-//            )
+            findNavController().navigate(
+                R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
+                args
+            )
 //            findNavController().navigate(
 //                R.id.action_selectAddCropFragment_to_addCropFragment, args
 //            )

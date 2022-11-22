@@ -1,9 +1,12 @@
 package com.waycool.featurecrophealth.ui.detect
 
+import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +23,6 @@ import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
 import com.waycool.featurecrophealth.utils.Constant.TAG
-import com.waycool.featurecrophealth.utils.NetworkUtils.loadUrl
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -92,6 +94,10 @@ class CropDetailsCaptureFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //     super.onActivityResult(requestCode, resultCode, data)
+        binding.closeImage?.setOnClickListener {
+            binding.previewImage.visibility=View.GONE
+
+        }
 
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
             val selectedImage: Uri? = data?.data

@@ -4,4 +4,23 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="e_g_crop_name">e.g crop name</string>
     <string name="promote">Please Select</string>
+    <string name="add_crop">Add Crop</string>
+    <string name="select_soil_type">Select Soil Type</string>
+    <string name="next">Next</string>
+    <string name="add_crop_information">Add Crop information</string>
+        <string name="crop_nickname">Crop Nickname</string>
+    <string name="crop_area">Crop Area</string>
+    <string name="e_g_50">e.g 50</string>
+    <string name="sowing_date">Sowing Date</string>
+    <string name="select_irrigation">Select Irrigation</string>
+    <string name="irrigation_type">Irrigation Type</string>
+    <string name="save_crop">Save Crop</string>
+    <string name="plant_spacing_details">Plant Spacing Details</string>
+    <string name="plant_to_plant_distance">Plant to Plant Distance</string>
+    <string name="plant_bed_width">Plant Bed width</string>
+    <string name="drip_emitter_rate_per_plant">Drip Emitter Rate Per Plant</string>
+    <string name="save">Save</string>
+    <string name="select_variety">Select variety</string>
+    <string name="mulching">Mulching</string>
+    <string name="no_of_plants_per_acre">No of Plants Per Acre</string>
 </resources>

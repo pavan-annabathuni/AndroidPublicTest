@@ -236,7 +236,22 @@ object NetworkSource {
     fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.addCropDataPass(headerMap!!,map)
+            val response = apiInterface.
+            addCropDataPass(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun activateDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<ActivateDeviceDTO?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.
+            activateDevice(headerMap!!,map)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -280,26 +295,26 @@ object NetworkSource {
             }
         }
 
-//    fun checkToken(user_id: Int, token: String) =
-//        flow<Resource<CheckTokenResponseDTO?>> {
-//            try {
-//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-//                val response =
-//                    apiInterface.checkToken(headerMap!!, user_id, token)
-//                if (response.isSuccessful) {
-//                    emit(Resource.Success(response.body()))
-//                } else if (response.code() == 404) {
-//                    val error = response.errorBody()?.charStream()?.readText() ?: ""
-//                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
-//                } else {
-//                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
-//                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-//                }
-//            } catch (e: Exception) {
-//                Log.d("Token", "check token:" + e.message)
-//                emit(Resource.Error(e.message))
-//            }
-//        }
+    fun checkToken(user_id: Int, token: String) =
+        flow<Resource<CheckTokenResponseDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response =
+                    apiInterface.checkToken(headerMap!!, user_id, token)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else if (response.code() == 404) {
+                    val error = response.errorBody()?.charStream()?.readText() ?: ""
+                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
+                } else {
+                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                Log.d("Token", "check token:" + e.message)
+                emit(Resource.Error(e.message))
+            }
+        }
 
 
     fun login(

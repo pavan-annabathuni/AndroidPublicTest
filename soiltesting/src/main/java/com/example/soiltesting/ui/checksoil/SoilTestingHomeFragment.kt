@@ -113,6 +113,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         accountID = i.id
                         if (accountID != null) {
                             Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
+                            binding.progressBar.isVisible = true
+                            binding.clProgressBar.visibility = View.VISIBLE
+                            binding.cardCheckHealth.isClickable=false
                             isLocationPermissionGranted(accountID!!)
                         }
 
@@ -430,7 +433,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             requireActivity().supportFragmentManager,
                                             CustomeDialogFragment.TAG
                                         )
-//                        binding.clProgressBar.visibility = View.VISIBLE
+                                        binding.cardCheckHealth.isClickable=true
+//                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {

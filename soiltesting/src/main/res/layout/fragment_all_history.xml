@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Soil testing Requests"
+            android:text="@string/soil_testing_requests"
             android:textColor="#171717"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -67,7 +67,7 @@
                     android:layout_marginStart="@dimen/space20"
                     android:background="@drawable/bg_search_icon"
                     android:gravity="start"
-                    android:hint="Crop or Disease"
+                    android:hint="Search "
                     android:padding="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,6 +75,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/textToSpeach"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"

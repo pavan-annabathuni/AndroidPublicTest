@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,6 +45,12 @@ class AllServicesFragment : Fragment() {
         freeUser()
         premiumUser()
         clickes()
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+               findNavController().navigateUp()
+            }
+
+        })
     }
     private fun freeUser() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) {

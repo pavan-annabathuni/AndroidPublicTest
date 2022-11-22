@@ -21,6 +21,8 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
         this.details = movies.toMutableList()
         notifyDataSetChanged()
     }
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+    val formatter = SimpleDateFormat("dd.MM.yyyy ,HH:mm")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatusTrackerHolder {
         val binding =
@@ -33,18 +35,27 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
         val details = details[position]
         if (details.is_approved==null && details.date.toString().isNullOrEmpty()){
             holder.binding.tvTitle.text = details.title
+            val output: String? = formatter.format(parser.parse(details.date?.toString()))
+            holder.binding.tvDate.text = output
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_ellipse_default)
         }
        else if (details.is_approved == 0 && details.date.toString().isNotEmpty()) {
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_pending_status)
             holder.binding.tvTitle.text = details.title
+            val output: String? = formatter.format(parser.parse(details.date?.toString()))
+            holder.binding.tvDate.text = output
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
         } else if (details.is_approved == 1 && details.date.toString().isNotEmpty()) {
             holder.binding.tvTitle.text = details.title
+            val output: String? = formatter.format(parser.parse(details.date?.toString()))
+            holder.binding.tvDate.text = output
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_status_completed)
-        } else if (details.is_approved ==2  && details.date.toString().isNotEmpty()) {
+        }
+        else if (details.is_approved ==2  && details.date.toString().isNotEmpty()) {
             holder.binding.tvTitle.text = details.title
+            val output: String? = formatter.format(parser.parse(details.date?.toString()))
+            holder.binding.tvDate.text = output
             holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_rejected_status)
         }
@@ -55,8 +66,6 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
             }
         }
         holder.binding.tvTitle.text = details.title
-        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
-        val formatter = SimpleDateFormat("dd.MM.yyyy ,HH:mm")
 
 
         if (details.date ==null){
@@ -64,10 +73,10 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
             Log.d(TAG, "onBindViewHolderDate: ${details.date}")
 
         }
-       else  {
-            val output: String? = formatter.format(parser.parse(details.date?.toString()))
-            holder.binding.tvDate.text = output
-        }
+//       else  {
+//            val output: String? = formatter.format(parser.parse(details.date?.toString()))
+//            holder.binding.tvDate.text = output
+//        }
     }
 
     override fun getItemCount(): Int {

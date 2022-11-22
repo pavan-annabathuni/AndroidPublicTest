@@ -2,9 +2,11 @@ package com.example.soiltesting.ui.history
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -36,7 +39,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
-
+    private val REQUEST_CODE_SPEECH_INPUT = 1
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private var soilHistoryAdapter = HistoryDataAdapter(this)
 
@@ -63,6 +66,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         binding.recyclerviewStatusTracker.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewStatusTracker.adapter = soilHistoryAdapter
+        speechToText()
         initViewBackClick()
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -79,8 +83,68 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
 
-        locationClick()
+
 //        clickSearch()
+    }
+    private fun speechToText() {
+        binding.textToSpeach.setOnClickListener() {
+            binding.searchView.text.clear()
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+
+            // on below line we are passing language model
+            // and model free form in our intent
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+            )
+
+            // on below line we are passing our
+            // language as a default language.
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE, "en-IN"
+            )
+
+            // on below line we are specifying a prompt
+            // message as speak to text on below line.
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+
+            // on below line we are specifying a try catch block.
+            // in this block we are calling a start activity
+            // for result method and passing our result code.
+            try {
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+            } catch (e: Exception) {
+                // on below line we are displaying error message in toast
+//                Toast
+//                    .makeText(
+//                        context, " " + e.message,
+//                        Toast.LENGTH_SHORT
+//                    )
+//                    .show()
+            }
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // in this method we are checking request
+        // code with our result code.
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            // on below line we are checking if result code is ok
+            if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+
+                // in that case we are extracting the
+                // data from our array list
+                val res: java.util.ArrayList<String> =
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) as java.util.ArrayList<String>
+
+                // on below line we are setting data
+                // to our output text view.
+                binding.searchView.setText(
+                    Objects.requireNonNull(res)[0]
+                )
+            }
+        }
     }
 
     private fun initViewBackClick() {
@@ -97,6 +161,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:${i.id}")
                         accountID = i.id
                         if (accountID !=null) {
+                            binding.progressBar.isVisible = true
+                            binding.clProgressBar.visibility = View.VISIBLE
+                            binding.cardCheckHealth.isClickable=false
+//                            temp()
                             isLocationPermissionGranted(accountID!!)
                         }
 
@@ -105,126 +173,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
-
-    private fun locationClick() {
-//        checkSoilTestViewModel.getSoilTest(1, 13.078100, 77.636580)
-//        checkSoilTestViewModel.getSoilTest(4,13.22,3.33)
-
-//        binding.cardCheckHealth.setOnClickListener {
-//            isLocationPermissionGranted()
-////            bindObserversCheckSoilTest()
-////            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_newSoilTestFormFragment)
-//        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private fun isLocationPermissionGranted(): Boolean {
-//        return if (ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                requireActivity(),
-//                arrayOf(
-//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-//                ),
-//                100
-//            )
-//            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
-//            false
-//        } else {
-//            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
-//            fusedLocationClient.lastLocation
-//                .addOnSuccessListener { location ->
-//                    if (location != null) {
-//                        // use your location object
-//                        // get latitude , longitude and other info from this
-//                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
-////                        getAddress(location.latitude, location.longitude)
-//                        Log.d(
-//                            Constant.TAG,
-//                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
-//                        )
-//                        Log.d(
-//                            Constant.TAG,
-//                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
-//                        )
-//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
-//                        bindObserversCheckSoilTest()
-//
-//                    }
-//                }
-//            true
-//        }
-//    }
-
-//    private fun bindObserversCheckSoilTest() {
-//        checkSoilTestViewModel.checkSoilTestLiveData.observe(viewLifecycleOwner, Observer { model ->
-//            when (model) {
-//                is NetworkResult.Success -> {
-//
-//                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
-//                    if (model.data?.data!!.isEmpty()) {
-//                        findNavController().navigate(R.id.action_allHistoryFragment_to_customeDialogFragment)
-//                    } else if (model.data.data.isNotEmpty()) {
-//                        val response = model.data.data
-//                        var bundle = Bundle().apply {
-//                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
-//                        }
-//                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
-//                        findNavController().navigate(
-//                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
-//                            bundle
-//                        )
-//                    }
-//                }
-//                is NetworkResult.Error -> {
-//                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                    binding.progressBar.isVisible = false
-//                    binding.clProgressBar.visibility = View.GONE
-//                }
-//                is NetworkResult.Loading -> {
-//                    binding.clProgressBar.visibility = View.VISIBLE
-//                    binding.progressBar.isVisible = true
-//
-//                }
-//            }
-//
-//        })
-//
-//    }
 
     private fun bindObserversSoilTestHistory(account_id: Int) {
         viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
@@ -295,7 +243,57 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         )
 
     }
-    private fun isLocationPermissionGranted(account_id:Int): Boolean {
+    fun temp(){
+        viewModel.getCheckSoilTestLab(
+            11,"18.3603","77.6028").observe(requireActivity()) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progressBar.isVisible = false
+                    binding.clProgressBar.visibility = View.GONE
+                    Log.d(
+                        "TAG",
+                        "bindObserversDataCheckSoilData:" + it.data.toString()
+                    )
+                    if (it.data!!.isNullOrEmpty()) {
+                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+                        binding.cardCheckHealth.isClickable=true
+//                                        binding.clProgressBar.visibility = View.VISIBLE
+//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
+                        //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                    } else if (it.data!!.isNotEmpty()) {
+                        val response = it.data
+                        Log.d(
+                            Constant.TAG,
+                            "bindObserversCheckSoilTestModelFJndsj: $response")
+                        var bundle = Bundle().apply {
+                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+                        }
+
+                        findNavController().navigate(
+                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
+                            bundle
+                        )
+                    }
+
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+                is Resource.Loading -> {
+                    binding.progressBar.isVisible = true
+                    binding.clProgressBar.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+            }
+
+        }
+
+    }
+    private fun isLocationPermissionGranted(account_id: Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -326,10 +324,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
                         Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
 
-
-
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
+
                         val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
@@ -340,25 +337,37 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         ).observe(requireActivity()) {
                             when (it) {
                                 is Resource.Success -> {
-                                    binding.progressBar.isVisible = false
                                     binding.clProgressBar.visibility = View.GONE
+                                    binding.progressBar.isVisible = false
                                     Log.d(
                                         "TAG",
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
                                     if (it.data!!.isNullOrEmpty()) {
-                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
-//                        binding.clProgressBar.visibility = View.VISIBLE
+
+                                        CustomeDialogFragment.newInstance().show(
+                                            requireActivity().supportFragmentManager,
+                                            CustomeDialogFragment.TAG
+                                        )
+                                        binding.cardCheckHealth.isClickable=true
+//                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                  //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+                                        //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
                                         Log.d(
                                             Constant.TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response")
+                                            "bindObserversCheckSoilTestModelFJndsj: $response"
+                                        )
                                         var bundle = Bundle().apply {
-                                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+                                            putParcelableArrayList(
+                                                "list",
+                                                ArrayList<Parcelable>(response)
+                                            )
                                         }
+
+                                        bundle.putString("lat",latitude)
+                                        bundle.putString("lon",longitutde)
 
                                         findNavController().navigate(
                                             R.id.action_allHistoryFragment_to_checkSoilTestFragment,
@@ -368,11 +377,17 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        it.message.toString(),
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
 
                                 }
                                 is Resource.Loading -> {
+                                    binding.progressBar.isVisible = true
+                                    binding.clProgressBar.visibility = View.VISIBLE
                                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
                                         .show()
 
@@ -387,6 +402,102 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             true
         }
     }
+
+//    private fun isLocationPermissionGranted(account_id:Int): Boolean {
+//        return if (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            ActivityCompat.requestPermissions(
+//                requireActivity(),
+//                arrayOf(
+//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+//                ),
+//                100
+//            )
+//            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
+//            false
+//        } else {
+//            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
+//            fusedLocationClient.lastLocation
+//                .addOnSuccessListener { location ->
+//                    if (location != null) {
+//                        // use your location object
+//                        // get latitude , longitude and other info from this
+//                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
+////                        getAddress(location.latitude, location.longitude)
+//                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
+//                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
+//
+//
+//
+////                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
+////                        bindObserversCheckSoilTest()
+//                        val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+//                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+//
+//                        viewModel.getCheckSoilTestLab(
+//                            account_id,
+//                            latitude,
+//                            longitutde
+//                        ).observe(requireActivity()) {
+//                            when (it) {
+//                                is Resource.Success -> {
+//                                    binding.progressBar.isVisible = false
+//                                    binding.clProgressBar.visibility = View.GONE
+//                                    Log.d(
+//                                        "TAG",
+//                                        "bindObserversDataCheckSoilData:" + it.data.toString()
+//                                    )
+//                                    if (it.data!!.isNullOrEmpty()) {
+//                                        binding.cardCheckHealth.isClickable=true
+//                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+////                                        binding.clProgressBar.visibility = View.VISIBLE
+////                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
+//                  //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
+//                                    } else if (it.data!!.isNotEmpty()) {
+//                                        val response = it.data
+//                                        Log.d(
+//                                            Constant.TAG,
+//                                            "bindObserversCheckSoilTestModelFJndsj: $response")
+//                                        var bundle = Bundle().apply {
+//                                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
+//                                        }
+//
+//                                        findNavController().navigate(
+//                                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
+//                                            bundle
+//                                        )
+//                                    }
+//
+//                                }
+//                                is Resource.Error -> {
+//                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+//                                        .show()
+//
+//                                }
+//                                is Resource.Loading -> {
+//                                    binding.progressBar.isVisible = true
+//                                    binding.clProgressBar.visibility = View.VISIBLE
+//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+//                                        .show()
+//
+//                                }
+//                            }
+//
+//                        }
+//
+//
+//                    }
+//                }
+//            true
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

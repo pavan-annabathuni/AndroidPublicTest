@@ -1,5 +1,6 @@
 package com.example.adddevice.fragments
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,27 +10,34 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.adddevice.R
 import com.example.adddevice.databinding.FragmentAddDeviceBinding
+import com.example.adddevice.viewmodel.AddDeviceViewModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.TileOverlay
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.gms.maps.model.TileProvider
 import com.google.android.gms.maps.model.UrlTileProvider
 import com.google.zxing.integration.android.IntentIntegrator
+import com.waycool.data.utils.Resource
 import java.net.MalformedURLException
 import java.net.URL
 
 
 class AddDeviceFragment : Fragment(), OnMapReadyCallback {
-    private lateinit var binding: FragmentAddDeviceBinding
+    private var _binding: FragmentAddDeviceBinding? = null
+    private val binding get() = _binding!!
+//    private lateinit var binding: FragmentAddDeviceBinding
     private lateinit var googleMap: GoogleMap
     private var tileOverlayTransparent: TileOverlay? = null
     var spinner1 = arrayOf("Outgrow GWX")
     var spinner2 = arrayOf("GWX 007","GWX 008")
+    private var accountID: Int? = null
+    var contactNumber:String=""
+    private val viewModel by lazy { ViewModelProvider(this)[AddDeviceViewModel::class.java] }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -41,16 +49,84 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentAddDeviceBinding.inflate(inflater)
-        val mapFragment: SupportMapFragment =
-            childFragmentManager.findFragmentById(R.id.Map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+//        binding = FragmentAddDeviceBinding.inflate(inflater)
+        _binding = FragmentAddDeviceBinding.inflate(inflater, container, false)
+
         spinners()
         binding.topAppBar.setNavigationOnClickListener(){
             this.findNavController().navigateUp()
         }
         scanner()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        val mapFragment: SupportMapFragment = childFragmentManager.findFragmentById(R.id.Map) as SupportMapFragment
+//        mapFragment.getMapAsync(this)
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+            contactNumber= it.data?.contact.toString()
+            binding. mobileNo.text="+91 $contactNumber"
+            for ( i in it.data!!.account){
+                if (i.accountType=="outgrow"){
+//                    Log.d(TAG, "onCreateViewAccountID:${i.id}")
+                    accountID=i.id
+//                            binding.tvContact
+//                            mobileNumber=i.accountNo.toString()
+
+                    if (accountID!=null){
+//                        Log.d(TAG, "onCreateViewAccountID:$accountID")
+//                        itemClicked(accountID!!, lat!!, long!!, onp_id!!,contactNumber)
+                    }
+
+                }
+
+
+//                            if (account!=null){
+//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
+//                            }
+            }
+        }
+        binding.submit.setOnClickListener {
+            activityDevice(11,"867542059649031")
+        }
+    }
+
+    private fun activityDevice(account:Int,serial_no:String) {
+        //867542059649031
+        val map = mutableMapOf<String, Any>()
+        map.put("account_no",1)
+        map.put("device_lat",12.33)
+        map.put("device_long",77.55)
+        map.put("serial_no",serial_no)
+        map.put("device_name","praveen")
+        map.put("device_elevation",68)
+        map.put("device_version","praaf")
+        viewModel.activateDevice(map).observe(requireActivity()) {
+            when (it) {
+                is Resource.Success -> {
+                    activity?.finish()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        it.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        ContentValues.TAG,
+                        "postAddCropExption: ${it.message.toString()}"
+                    )
+                }
+                is Resource.Loading -> {
+                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+            }
+        }
     }
 
     override fun onMapReady(map: GoogleMap?) {
@@ -102,8 +178,12 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private fun scanner(){
         binding.btScanner.setOnClickListener(){
             val intentIntegrator = IntentIntegrator.forSupportFragment(this)
-            intentIntegrator.setPrompt("Scan a barcode or QR Code")
-            intentIntegrator.setOrientationLocked(false)
+            intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+            intentIntegrator.setPrompt("Scan")
+            intentIntegrator.setBeepEnabled(true)
+            intentIntegrator.captureActivity
+
+//            intentIntegrator.setOrientationLocked(false)
             intentIntegrator.initiateScan()
         }
 

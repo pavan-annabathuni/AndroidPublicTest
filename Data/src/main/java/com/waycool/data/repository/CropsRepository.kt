@@ -284,6 +284,14 @@ object CropsRepository {
     }
         return NetworkSource.addCropDataPass(map)
     }
+    fun activateDevice(
+        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
+    ): Flow<Resource<ActivateDeviceDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.activateDevice(map)
+    }
 
     fun postNewSoil(
         account_id: Int,

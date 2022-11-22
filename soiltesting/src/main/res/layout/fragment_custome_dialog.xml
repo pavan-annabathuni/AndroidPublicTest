@@ -25,10 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="@dimen/txt8"
-        android:text="Thank you for showing interest.\n
-Currently, we are not available in your \n
-location, we look forward to serve you \n
-shortly."
+        android:text="@string/thank_you"
 
         android:textColor="#000000"
         android:textSize="@dimen/txt14"

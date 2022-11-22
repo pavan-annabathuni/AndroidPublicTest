@@ -1,20 +1,14 @@
 package com.waycool.data.Network.ApiInterface
 
-import android.text.Editable
-import android.widget.EditText
+
 import com.waycool.data.Network.NetworkModels.*
-import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
-import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
-import retrofit2.http.GET
-import retrofit2.http.HeaderMap
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+
 
 interface ApiInterface {
     @GET("api/v1/language-master")
@@ -163,31 +157,25 @@ interface ApiInterface {
 //                                 @Field("area")area: Editable?
 //    )   : Response<AddCropResponseDTO>
 
-    @FormUrlEncoded
-    @POST("api/v1/plots")
-    @JvmSuppressWildcards
-    suspend fun addCropDataPass(@HeaderMap map: Map<String, String>,
-//                                @Field("account_no_id")account_no_id:Int?,
-//                                @Field("crop_id")crop_id:Int?,
-                                @FieldMap bodymap:Map<String,Any>
-    ): Response<AddCropResponseDTO>
-//                                 @Body addCropPost: AddCropRequestDomain)
+
+
 
     //New Soil Test Request
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")
-    suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
-                             @Field("account_id")account_id:Int,
-                             @Field("lat")lat:Double,
-                             @Field("long")long:Double,
-                             @Field("org_id")org_id:Int?,
-                             @Field("plot_no")plot_no:String?,
-                             @Field("pincode")pincode:String?,
-                             @Field("address")address:String?,
-                             @Field("state")state:String,
-                             @Field("district")district:String,
-                             @Field("number")number:String?,
-                             ): Response<SoilTestResponseDTO>
+    suspend fun postNewSoil(
+        @HeaderMap headerMap: Map<String, String>,
+        @Field("account_id") account_id: Int,
+        @Field("lat") lat: Double,
+        @Field("long") long: Double,
+        @Field("org_id") org_id: Int?,
+        @Field("plot_no") plot_no: String?,
+        @Field("pincode") pincode: String?,
+        @Field("address") address: String?,
+        @Field("state") state: String,
+        @Field("district") district: String,
+        @Field("number") number: String?,
+    ): Response<SoilTestResponseDTO>
 
 
     @GET("api/v1/crop-advisory")
@@ -239,12 +227,14 @@ interface ApiInterface {
     suspend fun getStateList(
         @HeaderMap map: Map<String, String>?,
     ):Response<StateModel>
-//    @FormUrlEncoded
-//    @POST("api/v1/check-token")
-//    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
-//                             @Field("user_id")user_id:Int,
-//                             @Field("token")token:String,
-//    ): Response<CheckTokenResponseDTO>
+
+    @FormUrlEncoded
+    @POST("api/v1/check-token")
+    suspend fun checkToken(
+        @HeaderMap headerMap: Map<String, String>,
+        @Field("user_id") user_id: Int,
+        @Field("token") token: String,
+    ): Response<CheckTokenResponseDTO>
 
 
     @GET("api/v1/my-crops")
@@ -260,4 +250,28 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
         @Path("plots")plots:Int
     ):Response<Unit>
+
+    //Add crop Fro Free And Premium
+    @FormUrlEncoded
+    @POST("api/v1/plots")
+    @JvmSuppressWildcards
+    suspend fun addCropDataPass(@HeaderMap map: Map<String, String>,
+//                                @Field("account_no_id")account_no_id:Int?,
+//                                @Field("crop_id")crop_id:Int?,
+                                @FieldMap bodymap:Map<String,Any>
+    ): Response<AddCropResponseDTO>
+
+    //Activate Device
+
+    @FormUrlEncoded
+    @POST("api/v1/activate-devices")
+    @JvmSuppressWildcards
+    suspend fun activateDevice(
+        @HeaderMap headerMap: Map<String, String>,
+        @FieldMap devicedata:Map<String,Any>
+
+    ):Response<ActivateDeviceDTO>
+
+
+
 }
