@@ -23,6 +23,7 @@ import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 import zendesk.chat.*
 import zendesk.chat.JwtAuthenticator.JwtCompletion
 import zendesk.messaging.MessagingActivity
@@ -42,6 +43,8 @@ class MyProfileFragment : Fragment() {
         }
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +56,6 @@ class MyProfileFragment : Fragment() {
       //viewModel.getUsers()
        // viewModel.getUserDetails()
         onClick()
-        observer()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true)
             {
@@ -65,6 +67,7 @@ class MyProfileFragment : Fragment() {
             requireActivity(),
             callback
         )
+        observer()
         return binding.root
     }
 
@@ -74,17 +77,22 @@ class MyProfileFragment : Fragment() {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
+                  if(it.data?.data?.profile?.profilePic!=null) {
+                      Glide.with(requireContext()).load(it.data?.data?.profile?.profilePic).into(binding.proPic)
+                      Log.d("ProfilePic", "observer: $it")
+
+                  }
                   jwtToken = it.data?.data?.encryptedToken
               }
           }
 
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
-            if(it.data?.profile?.profilePic!=null) {
-               Glide.with(this).load(it.data?.profile?.profilePic).into(binding.proPic)
-            Log.d("ProfilePic", "observer: $it")
-
-        }}
+//        viewModel.getUserDetails().observe(viewLifecycleOwner){
+//            if(it.data?.profile?.profilePic!=null) {
+//               Glide.with(this).load(it.data?.profile?.profilePic).into(binding.proPic)
+//            Log.d("ProfilePic", "observer: $it")
+//
+//        }}
          return true
     }
 

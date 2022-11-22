@@ -16,4 +16,8 @@
         android:name="com.example.mandiprice.MandiActivity"
         android:label="MandiActivity" />
     <include app:graph="@navigation/navigation_mandi" />
+    <activity
+        android:id="@+id/irrigationPlannerActivity"
+        android:name="com.example.irrigationplanner.IrrigationPlannerActivity"
+        android:label="IrrigationPlannerActivity" />
 </navigation>

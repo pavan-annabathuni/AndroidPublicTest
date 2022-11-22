@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/irrigationFragment">
+
+    <fragment
+        android:id="@+id/irrigationFragment"
+        android:name="com.example.irrigationplanner.IrrigationFragment"
+        android:label="fragment_irrigation"
+        tools:layout="@layout/fragment_irrigation" >
+        <action
+            android:id="@+id/action_irrigationFragment_to_cropOverviewFragment"
+            app:destination="@id/cropOverviewFragment" />
+        <action
+            android:id="@+id/action_irrigationFragment_to_sheetHarvestFragment"
+            app:destination="@id/sheetHarvestFragment" />
+        <action
+            android:id="@+id/action_irrigationFragment_to_irrigationHistoryFragment"
+            app:destination="@id/irrigationHistoryFragment" />
+        <action
+            android:id="@+id/action_irrigationFragment_to_diseaseHistoryFragment"
+            app:destination="@id/diseaseHistoryFragment" />
+        <action
+            android:id="@+id/action_irrigationFragment_to_forecastFragment"
+            app:destination="@id/forecastFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/cropOverviewFragment"
+        android:name="com.example.irrigationplanner.CropOverviewFragment"
+        android:label="CropOverviewFragment" />
+    <dialog
+        android:id="@+id/sheetHarvestFragment"
+        android:name="com.example.irrigationplanner.SheetHarvestFragment"
+        android:label="SheetHarvestFragment" />
+    <fragment
+        android:id="@+id/irrigationHistoryFragment"
+        android:name="com.example.irrigationplanner.IrrigationHistoryFragment"
+        android:label="fragment_irrigation_history"
+        tools:layout="@layout/fragment_irrigation_history" />
+    <fragment
+        android:id="@+id/diseaseHistoryFragment"
+        android:name="com.example.irrigationplanner.DiseaseHistoryFragment"
+        android:label="DiseaseHistoryFragment" />
+    <fragment
+        android:id="@+id/forecastFragment"
+        android:name="com.example.irrigationplanner.ForecastFragment"
+        android:label="fragment_forecast"
+        tools:layout="@layout/fragment_forecast" />
+</navigation>

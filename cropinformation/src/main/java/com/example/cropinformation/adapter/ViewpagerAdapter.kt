@@ -221,7 +221,7 @@ class ViewpagerAdapter(fragmentActivity:Fragment, var data: List<CropInformation
                 fragment.arguments = bundle
                 fragment
             }
-           "Sowing_Planting"-> {
+           "Sowing/Planting"-> {
                val bundle=Bundle()
                bundle.putInt("CropId",cropid)
                val  fragment= SowingPlantingFragment()

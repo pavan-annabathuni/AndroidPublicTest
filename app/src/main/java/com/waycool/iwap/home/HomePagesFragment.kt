@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
@@ -159,7 +160,7 @@ class HomePagesFragment : Fragment() {
             }
         })
 
-        weather("12.22", "78.22")
+        //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
             mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
@@ -196,6 +197,7 @@ class HomePagesFragment : Fragment() {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
             }
+            binding.tvAddress.text = it.data?.profile?.village
         }
         setVideos()
         setNews()
@@ -296,9 +298,9 @@ class HomePagesFragment : Fragment() {
 
             if (it?.data != null) {
 
-                binding.tvDegree.text = String.format("%.1f", it.data?.current?.temp) + "\u2103"
+                binding.tvDegree.text = String.format("%.0f", it.data?.current?.temp) + "\u2103"
                 binding.tvWindDegree.text =
-                    String.format("%.1f", it.data?.current?.windSpeed) + "Km/h"
+                    String.format("%.0f", it.data?.current?.windSpeed) + "Km/h"
                 if (it.data?.daily?.isNotEmpty() == true)
                     binding.tvRainDegree.text =
                         String.format("%.0f", it.data?.daily?.get(0)?.pop?.times(100)) + "%"
@@ -307,8 +309,7 @@ class HomePagesFragment : Fragment() {
                     Glide.with(requireContext())
                         .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
                         .into(binding.ivWeather)
-
-
+                 binding.tvHumidityDegree.text =String.format("%.0f",it.data?.current?.humidity)+"%"
                 // binding.weatherMaster = it.data
 
                 if (null != it) {
@@ -643,11 +644,13 @@ class HomePagesFragment : Fragment() {
 
     }
 
-    fun myCrop() {
+    private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId: Int? = null
                 for (account in it?.data?.account!!) {
@@ -672,6 +675,9 @@ class HomePagesFragment : Fragment() {
                             binding.cvEditCrop.visibility = View.GONE
                             binding.cardAddForm.visibility = View.VISIBLE
                         }
+                        if(it.data?.size!! <8){
+                            binding.addLl.visibility = View.VISIBLE
+                        }else binding.addLl.visibility = View.GONE
                     }
             }
         }

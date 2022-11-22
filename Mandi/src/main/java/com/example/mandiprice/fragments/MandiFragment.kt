@@ -73,7 +73,7 @@ class MandiFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiFragment.findNavController().navigateUp()
+                    activity?.finish()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -93,10 +93,10 @@ class MandiFragment : Fragment() {
         }
 
         binding.topAppBar.setNavigationOnClickListener() {
-            activity?.finish()
+            this.findNavController().navigateUp()
         }
 
-
+        setBanners()
         return binding.root
 
     }
@@ -117,7 +117,6 @@ class MandiFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
-        setBanners()
         filterMenu()
         tabs()
         onClick()

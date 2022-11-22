@@ -81,8 +81,8 @@ class MandiGraphFragment : Fragment() {
         binding = FragmentMandiGraphBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.cropName.text = crop_name
-        binding.tvMarket.text = "$market_name Market"
-        shareLayout = binding.clShare
+        binding.tvMarket.text = market_name
+        shareLayout = binding.shareCl2
         binding.recycleViewDis.adapter = DateAdapter()
         viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) {
@@ -90,6 +90,7 @@ class MandiGraphFragment : Fragment() {
                 //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
         }
+
 
         return binding.root
     }
@@ -102,7 +103,8 @@ class MandiGraphFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiGraphFragment.findNavController().navigateUp()
+                    this@MandiGraphFragment.findNavController().
+                    navigateUp()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -119,14 +121,16 @@ class MandiGraphFragment : Fragment() {
         binding.imgBack.setOnClickListener() {
             if (fragment == "one") {
                 this.findNavController()
-                    .navigate(MandiGraphFragmentDirections.actionMandiGraphFragmentToMandiFragment())
+                    .navigate(R.id.action_mandiGraphFragment_to_mandiFragment)
             } else {
                 this.findNavController()
-                    .navigateUp()
+                    .popBackStack()
             }
-        }
-        binding.imgShare.setOnClickListener() {
-            screenShot()
+
+
+            binding.imgShare.setOnClickListener() {
+                screenShot()
+            }
         }
     }
 

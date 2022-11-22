@@ -397,7 +397,7 @@ class CropInfoFragment : Fragment() {
                         tab.setIcon(R.drawable.ci_pro_nextcrop_img)
                         customView
                     }
-                    "Sowing_Planting" -> {
+                    "Sowing/Planting" -> {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ic_sowing_planting_img)
                         customView
