@@ -75,10 +75,11 @@
 
                 <ImageView
                     android:id="@+id/ivPlanty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="88dp"
+                    android:layout_height="82dp"
                     android:layout_marginStart="16dp"
-                    android:src="@drawable/ic_title_soil"
+                    android:src="@drawable/soiltesttop"
+                    android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

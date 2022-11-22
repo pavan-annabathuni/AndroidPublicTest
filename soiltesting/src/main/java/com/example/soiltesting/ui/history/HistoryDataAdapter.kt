@@ -23,22 +23,22 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
 
     override fun onBindViewHolder(holder: HistoryDataHolder, position: Int) {
         val details = details[position]
-        if (details.status == "0"){
+        if (details.approve_status== "0"){
             holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
             holder. binding.tvStatus.text = "Pending"
 //                    binding.ivStatus.setBackground(R.drawable.ic_pending)
             holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
-        }else if (details.status == "1"){
+        }else if (details.approve_status == "1"){
             holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
             holder. binding.tvStatus.text = "Accepted"
             holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
         }
-        else if (details.status == "2"){
+        else if (details.approve_status == "2"){
             //rejected
             holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
             holder. binding.tvStatus.text = "Completed"
             holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
-        }   else if (details.status == "3"){
+        }   else if (details.approve_status == "3"){
             //rejected
             holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
             holder. binding.tvStatus.text = "Rejected"

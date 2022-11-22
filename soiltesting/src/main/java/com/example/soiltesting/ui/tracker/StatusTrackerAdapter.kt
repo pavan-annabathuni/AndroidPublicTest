@@ -56,7 +56,7 @@ class StatusTrackerAdapter(val feedbackListerner: FeedbackListerner) : RecyclerV
             holder.binding.tvTitle.text = details.title
             val output: String? = formatter.format(parser.parse(details.date?.toString()))
             holder.binding.tvDate.text = output
-            holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
+//            holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_rejected_status)
         }
         if (details.title!!.equals("Report Generated")){
