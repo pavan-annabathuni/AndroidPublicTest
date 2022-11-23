@@ -9,24 +9,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
-import com.example.irrigationplanner.IrrigationPlannerActivity
-import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.iwap.MainViewModel
@@ -640,7 +636,7 @@ class HomePagesFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
 
     }

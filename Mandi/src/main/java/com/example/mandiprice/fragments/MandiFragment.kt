@@ -26,9 +26,8 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -563,7 +562,7 @@ class MandiFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
