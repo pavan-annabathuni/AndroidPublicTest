@@ -32,7 +32,7 @@ class GeocodeDomainMapper : DomainMapper<GeocodeDomain, GeocodeDTO> {
                 formattedAddress = dto.formattedAddress,
                 country = getAddressComponent(dto.addressComponents, "country"),
                 state = getAddressComponent(dto.addressComponents, "administrative_area_level_1"),
-                district = getAddressComponent(dto.addressComponents, "administrative_area_level_2"),
+                district = getAddressComponent(dto.addressComponents, "administrative_area_level_2")?:getAddressComponent(dto.addressComponents, "administrative_area_level_3"),
                 locality = getAddressComponent(dto.addressComponents, "locality"),
                 subLocality = getAddressComponent(dto.addressComponents, "sublocality"),
                 pincode = getAddressComponent(dto.addressComponents, "postal_code")

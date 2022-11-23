@@ -52,14 +52,16 @@ class NewsPagerAdapter(
         fun bind(vans: VansFeederListDomain?) {
             itemBinding.newsListDesc.text = vans?.title
             itemBinding.newsListDate.text = AppUtil.changeDateFormat(vans?.startDate)
+
             Glide.with(itemBinding.root).load(vans?.thumbnailUrl)
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(itemBinding.newsListImage)
+
             itemBinding.share.setOnClickListener {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 val sharetext =
-                    """Hi, Checkout the video on ${vans?.title} at ${vans?.contentUrl} . For more videos Download Outgrow App from PlayStore 
+                    """Hi, Checkout the video on ${vans?.title}. For more videos Download Outgrow App from PlayStore 
 https://play.google.com/store/apps/details?id=${it.context.packageName}"""
                 sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
                 sendIntent.type = "text/plain"

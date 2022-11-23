@@ -16,7 +16,7 @@
         </activity>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.waycool.weather.FileProvider"
             android:authorities="com.example.outgrow"
             android:exported="false"
             android:grantUriPermissions="true">

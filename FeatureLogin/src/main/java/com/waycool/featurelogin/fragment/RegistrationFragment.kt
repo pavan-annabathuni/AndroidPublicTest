@@ -88,7 +88,7 @@ class RegistrationFragment : Fragment() {
     lateinit var audioWife: AudioWife
     lateinit var mediaPlayer: MediaPlayer
 
-    lateinit var placesClient:PlacesClient
+    lateinit var placesClient: PlacesClient
 
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
 
@@ -100,22 +100,21 @@ class RegistrationFragment : Fragment() {
         }
 
 
-      val  requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { result ->
+    val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
 
 
-            Log.d("permission", "test" + result)
-            var allAreGranted = true
-            for (b in result.values) {
-                allAreGranted = allAreGranted && b
-            }
-
-            if (allAreGranted) {
-                getLocation()
-            }
+        Log.d("permission", "test" + result)
+        var allAreGranted = true
+        for (b in result.values) {
+            allAreGranted = allAreGranted && b
         }
 
+        if (allAreGranted) {
+            getLocation()
+        }
+    }
 
 
     override fun onCreateView(
@@ -130,11 +129,10 @@ class RegistrationFragment : Fragment() {
         binding.registerDoneBtn.isEnabled = true
 
         Places.initialize(requireActivity().applicationContext, AppSecrets.getMapsKey())
-         placesClient = Places.createClient(requireContext())
+        placesClient = Places.createClient(requireContext())
 
 
-        val toolbarLayoutBinding: ToolbarLayoutBinding =
-            ToolbarLayoutBinding.inflate(layoutInflater)
+        val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
         toolbarLayoutBinding.toolbarTile.text = "Profile"
         toolbarLayoutBinding.backBtn.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
@@ -147,7 +145,7 @@ class RegistrationFragment : Fragment() {
             binding.nameEt.setText(arguments?.getString("name"))
         }
 
-        binding.nameEt.filters= arrayOf(filter)
+        binding.nameEt.filters = arrayOf(filter)
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -335,28 +333,33 @@ class RegistrationFragment : Fragment() {
                             longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
 
                             viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
-                                .observe(viewLifecycleOwner){
-                                    if(it.results.isNotEmpty()){
-                                        val result=it.results[0]
-                                        if(result.subLocality!=null)
+                                .observe(viewLifecycleOwner) {
+                                    binding.locationEt.setText("")
+                                    if (it.results.isNotEmpty()) {
+                                        val result = it.results[0]
+                                        if (result.subLocality != null)
                                             binding.locationEt.append("${result.subLocality},")
-                                        binding.locationEt.append("${result.locality}, ${result.district}")
+                                        if (result.locality != null)
+                                            binding.locationEt.append("${result.locality},")
+                                        if (result.district != null)
+                                            binding.locationEt.append(" ${result.district}")
                                         binding.locationEt.setSelection(0)
                                         binding.locationTextlayout.helperText = ""
-                                    }else{
+                                    } else {
 //                                        binding.locationEt.setText("$village, $district")
-                                        binding.locationTextlayout.helperText = "Could not find your location. Enter Manually."
+                                        binding.locationTextlayout.helperText =
+                                            "Could not find your location. Enter Manually."
                                     }
-                            }
+                                }
 
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
-                        Log.d("Registration",""+it.message)
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        Toast.makeText(requireContext(),"Cancelled",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Cancelled", Toast.LENGTH_SHORT).show()
 
                     }
             } else {
@@ -393,10 +396,12 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun requestPermission() {
-        requestPermissionLauncher.launch(arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ))
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
 
 //        requestPermissions(
 //            arrayOf(
@@ -496,7 +501,7 @@ class RegistrationFragment : Fragment() {
                         viewModel.setUserToken(
                             loginDataMaster.data
                         )
-                        viewModel.setMobileNumber( mobileNumber.toString())
+                        viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
                         viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()

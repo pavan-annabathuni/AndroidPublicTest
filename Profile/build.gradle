@@ -10,9 +10,6 @@ android {
     defaultConfig {
         minSdk appMinSdkVersion
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +30,14 @@ android {
         dataBinding true
         viewBinding true
     }
+
+    def versionName = VERSION_NAME
+    def versionCode = VERSION_CODE
+    buildTypes.all {
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
+        buildConfigField "int", "VERSION_CODE", "$versionCode"
+    }
+
 }
 
 dependencies {

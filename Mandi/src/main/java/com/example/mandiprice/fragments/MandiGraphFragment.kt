@@ -253,7 +253,7 @@ class MandiGraphFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
         outputFile.flush()
         outputFile.close()
-        val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+        val URI = com.example.mandiprice.FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
         val i = Intent()
         i.action = Intent.ACTION_SEND
