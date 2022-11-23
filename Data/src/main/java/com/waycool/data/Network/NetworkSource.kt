@@ -773,5 +773,21 @@ object NetworkSource {
         }
     }
 
+    fun getAdvIrrigation(headerMap: Map<String, String>,account_id: Int,plot_id:Int
+    ) = flow<Resource<AdvIrrigationModel?>> {
+
+        try {
+            val response = apiInterface.advIrrigation(headerMap,account_id,plot_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
 

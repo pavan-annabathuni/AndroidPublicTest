@@ -250,4 +250,11 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
         @Path("plots")plots:Int
     ):Response<Unit>
+
+    @GET("api/v1/adv-irrigation")
+    suspend fun advIrrigation(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_id")accountId:Int,
+        @Query("plot_id")plotId:Int
+    ):Response<AdvIrrigationModel>
 }

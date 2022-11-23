@@ -51,6 +51,7 @@ dependencies {
 //    implementation project(path: ':FarmerRegistration')
     implementation project(path: ':FeatureCropProtect')
     implementation project(path: ':Videos')
+    implementation project(path: ':FeatureIrrigationPlanner')
 
     implementation project(path: ':FeatureCropHealth')
     implementation project(path: ':addcrop')

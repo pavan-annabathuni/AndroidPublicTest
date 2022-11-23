@@ -340,27 +340,26 @@ more details."
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content">
-
                                         <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/rv_myCrops"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:nestedScrollingEnabled="false"
                                             android:orientation="horizontal"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_toEndOf="@+id/add_ll"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintStart_toStartOf="parent"
                                             app:layout_constraintTop_toTopOf="parent"
                                             tools:itemCount="1"
                                             tools:listitem="@layout/item_mycrops" />
-
                                         <LinearLayout
+                                            android:id="@+id/add_ll"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:orientation="vertical"
                                             android:layout_marginStart="8dp"
-                                            android:layout_marginEnd="8dp"
-                                            android:layout_toEndOf="@+id/rv_myCrops"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintEnd_toEndOf="parent"
                                             app:layout_constraintStart_toEndOf="@+id/rv_myCrops"
@@ -396,6 +395,10 @@ more details."
                                                 android:textSize="14sp" />
 
                                         </LinearLayout>
+
+
+
+
                                     </RelativeLayout>
                                 </HorizontalScrollView>
 

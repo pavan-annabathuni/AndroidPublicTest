@@ -170,7 +170,7 @@ class EditProfileFragment : Fragment() {
 
     private fun onClick() {
         binding.topAppBar.setNavigationOnClickListener {
-            this.findNavController().navigateUp()
+            this.findNavController().popBackStack()
         }
         binding.addImage.setOnClickListener {
             mGetContent.launch("image/*")

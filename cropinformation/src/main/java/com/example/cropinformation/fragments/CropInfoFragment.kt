@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -31,8 +31,6 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import zendesk.chat.*
-import zendesk.messaging.MessagingActivity
 import kotlin.math.roundToInt
 
 
@@ -145,32 +143,6 @@ class CropInfoFragment : Fragment() {
         fabButton()
     }
 
-    private fun zenDesk() {
-        Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
-            "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
-        val chatConfiguration = ChatConfiguration.builder()
-            .withAgentAvailabilityEnabled(false)
-            .withTranscriptEnabled(false)
-//
-            .build()
-        val visitorInfo: VisitorInfo = VisitorInfo.builder()
-            .withName("Bob")
-            .withEmail("bob@example.com")
-            .withPhoneNumber("123456") // numeric string
-            .build();
-
-        val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-            .withVisitorInfo(visitorInfo)
-            .withDepartment("English Language Group")
-            .build()
-
-        Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-
-
-        MessagingActivity.builder()
-            .withEngines(ChatEngine.engine())
-            .show(requireContext(), chatConfiguration);
-    }
 
     private fun setTabs() {
 
@@ -397,7 +369,7 @@ class CropInfoFragment : Fragment() {
                         tab.setIcon(R.drawable.ci_pro_nextcrop_img)
                         customView
                     }
-                    "Sowing_Planting" -> {
+                    "Sowing/Planting" -> {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ic_sowing_planting_img)
                         customView
@@ -495,7 +467,7 @@ class CropInfoFragment : Fragment() {
                         startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 

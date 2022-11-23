@@ -26,9 +26,8 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -93,10 +92,10 @@ class MandiFragment : Fragment() {
         }
 
         binding.topAppBar.setNavigationOnClickListener() {
-            activity?.finish()
+            this.findNavController().navigateUp()
         }
 
-
+        setBanners()
         return binding.root
 
     }
@@ -117,7 +116,6 @@ class MandiFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
-        setBanners()
         filterMenu()
         tabs()
         onClick()
@@ -223,7 +221,7 @@ class MandiFragment : Fragment() {
                 data.categoryName
             } ?: emptyList()) as MutableList<String>
             if (cropCategoryList.isNotEmpty())
-                cropCategoryList[0] = "-Category-"
+                cropCategoryList[0] = "Category"
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, cropCategoryList)
             binding.spinner1.adapter = arrayAdapter
@@ -277,7 +275,7 @@ class MandiFragment : Fragment() {
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.isNotEmpty())
-                            cropNameList[0] = "-Crops-"
+                            cropNameList[0] = "Crops"
 
                         val arrayAdapter2 =
                             ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
@@ -339,7 +337,7 @@ class MandiFragment : Fragment() {
                 stateNameList.sort()
 
                 if (stateNameList.isNotEmpty())
-                    stateNameList[0] = "-State-"
+                    stateNameList[0] = "State"
                 val arrayAdapter3 =
                     ArrayAdapter(requireContext(), R.layout.item_spinner, stateNameList)
                 binding.spinner3.adapter = arrayAdapter3
@@ -564,7 +562,7 @@ class MandiFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
