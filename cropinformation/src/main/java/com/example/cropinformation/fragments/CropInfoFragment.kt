@@ -31,8 +31,6 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import zendesk.chat.*
-import zendesk.messaging.MessagingActivity
 import kotlin.math.roundToInt
 
 
@@ -145,32 +143,6 @@ class CropInfoFragment : Fragment() {
         fabButton()
     }
 
-    private fun zenDesk() {
-        Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
-            "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
-        val chatConfiguration = ChatConfiguration.builder()
-            .withAgentAvailabilityEnabled(false)
-            .withTranscriptEnabled(false)
-//
-            .build()
-        val visitorInfo: VisitorInfo = VisitorInfo.builder()
-            .withName("Bob")
-            .withEmail("bob@example.com")
-            .withPhoneNumber("123456") // numeric string
-            .build();
-
-        val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-            .withVisitorInfo(visitorInfo)
-            .withDepartment("English Language Group")
-            .build()
-
-        Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-
-
-        MessagingActivity.builder()
-            .withEngines(ChatEngine.engine())
-            .show(requireContext(), chatConfiguration);
-    }
 
     private fun setTabs() {
 

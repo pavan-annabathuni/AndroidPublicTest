@@ -133,8 +133,9 @@ class HomePagesFragment : Fragment() {
             startActivity(intent)
         }
         binding.tvViewAllMandi.setOnClickListener {
-            val intent = Intent(activity, MandiActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(activity, MandiActivity::class.java)
+//            startActivity(intent)
+            this.findNavController().navigate(R.id.navigation_mandi)
         }
         binding.cvWeather.setOnClickListener() {
             val intent = Intent(activity, WeatherActivity::class.java)
@@ -646,8 +647,8 @@ class HomePagesFragment : Fragment() {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+//            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->

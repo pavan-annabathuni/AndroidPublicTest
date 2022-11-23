@@ -73,7 +73,7 @@ class MandiFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    activity?.finish()
+                    this@MandiFragment.findNavController().navigateUp()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(

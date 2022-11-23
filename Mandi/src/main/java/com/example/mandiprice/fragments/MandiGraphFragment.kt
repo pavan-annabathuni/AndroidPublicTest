@@ -121,7 +121,7 @@ class MandiGraphFragment : Fragment() {
         binding.imgBack.setOnClickListener() {
             if (fragment == "one") {
                 this.findNavController()
-                    .navigate(R.id.action_mandiGraphFragment_to_mandiFragment)
+                    .navigateUp()
             } else {
                 this.findNavController()
                     .popBackStack()
