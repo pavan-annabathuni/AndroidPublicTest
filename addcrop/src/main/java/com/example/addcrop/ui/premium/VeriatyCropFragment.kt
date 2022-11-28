@@ -79,11 +79,11 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
-                    bundle.putInt("soil_type_id", name.id!!)
+//                    bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
+                    bundle.putString("pom",name.name)
                     findNavController().navigate(
-                        R.id.action_veriatyCropFragment_to_addCropFragment,
-                        bundle
+                        R.id.action_veriatyCropFragment_to_addCropFragment, bundle
                     )
                 }
 
