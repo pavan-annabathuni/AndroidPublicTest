@@ -13,7 +13,7 @@ data class UserDetailsData(
 
     @SerializedName("id") var id: Int? = null,
     @SerializedName("name") var name: String? = null,
-    @SerializedName("contact") var contact: String? = null,
+    @SerializedName("phone") var contact: String? = null,
     @SerializedName("email") var email: String? = null,
     @SerializedName("approved") var approved: Int? = null,
     @SerializedName("org_code_id") var orgCodeId: String? = null,

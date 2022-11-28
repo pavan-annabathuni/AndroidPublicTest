@@ -86,11 +86,12 @@ class RegistrationFragment : Fragment() {
     lateinit var query: HashMap<String, String>
     private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
     lateinit var audioWife: AudioWife
-    lateinit var mediaPlayer: MediaPlayer
+    var mediaPlayer: MediaPlayer? = null
 
     lateinit var placesClient:PlacesClient
 
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
+    private var audioUrl: String? = null
 
     private val filter: InputFilter =
         InputFilter { source, start, end, dest, dstart, dend ->
@@ -309,14 +310,14 @@ class RegistrationFragment : Fragment() {
             }
         }
 
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-            Toast.makeText(requireContext(), "completed", Toast.LENGTH_SHORT).show()
-            seekbar!!.setProgress(0)
-            pause!!.setVisibility(View.GONE)
-            play.setVisibility(View.VISIBLE)
-        })
-    }
+//        mediaPlayer = MediaPlayer()
+//        mediaPlayer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
+//            Toast.makeText(requireContext(), "completed", Toast.LENGTH_SHORT).show()
+//            seekbar!!.setProgress(0)
+//            pause!!.setVisibility(View.GONE)
+//            play.setVisibility(View.VISIBLE)
+//        })
+   }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
@@ -602,13 +603,32 @@ class RegistrationFragment : Fragment() {
         totalTime: TextView
     ) {
         Log.d("RecordView", "actiondown2")
-        audioWife = AudioWife.getInstance()
-        audioWife.init(requireContext(), Uri.parse(path))
-            .setPlayView(play)
-            .setPauseView(pause)
-            .setSeekBar(mediaSeekbar)
-            .setRuntimeView(totalTime)
-        //                .setTotalTimeView(mTotalTime);
-        audioWife.play()
+//        audioWife = AudioWife.getInstance()
+//        audioWife.init(requireContext(), Uri.parse(path))
+//            .setPlayView(play)
+//            .setPauseView(pause)
+//            .setSeekBar(mediaSeekbar)
+//            .setRuntimeView(totalTime)
+//        //                .setTotalTimeView(mTotalTime);
+//        audioWife.play()
+
+            mediaPlayer = MediaPlayer();
+            mediaPlayer!!.setOnCompletionListener {
+                mediaSeekbar.progress = 0
+               pause.visibility = View.GONE
+                play.visibility = View.VISIBLE
+            }
+
+            Log.d("Audio", "audioPlayer: $audioUrl")
+            var audio = AudioWife.getInstance()
+                .init(requireContext(), Uri.parse(path))
+                .setPlayView(play)
+                .setPauseView(pause)
+                .setSeekBar(mediaSeekbar)
+                .setRuntimeView(totalTime)
+            // .setTotalTimeView(mTotalTime);
+            audio.play()
+        //else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
+
     }
-}
+    }

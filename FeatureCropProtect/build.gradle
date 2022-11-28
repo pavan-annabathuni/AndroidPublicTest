@@ -71,5 +71,7 @@ dependencies {
 
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 
+    implementation 'net.the4thdimension:audio-wife:1.0.3'
+
 
 }

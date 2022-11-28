@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_palybtn.xml" value="0.124" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_pause.xml" value="0.124" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_play.xml" value="0.124" />
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.375" />
@@ -12,7 +15,12 @@
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_how_to_click.xml" value="0.2833333333333333" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
+        <entry key="FeatureCropProtect/src/main/res/drawable/ic_pause.xml" value="0.124" />
+        <entry key="FeatureCropProtect/src/main/res/drawable/ic_share_protect.xml" value="0.124" />
+        <entry key="FeatureCropProtect/src/main/res/drawable/ic_vector_play.xml" value="0.2235" />
         <entry key="FeatureCropProtect/src/main/res/layout/activity_crop_protect.xml" value="0.30512820512820515" />
+        <entry key="FeatureCropProtect/src/main/res/layout/audio_new_layout.xml" value="0.165" />
+        <entry key="FeatureCropProtect/src/main/res/layout/dailog_information.xml" value="0.165" />
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_crop_selection.xml" value="0.15358361774744028" />
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease.xml" value="0.2833333333333333" />
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease_details.xml" value="0.2212962962962963" />
@@ -21,10 +29,13 @@
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_index.xml" value="0.124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_irrigation.xml" value="0.124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_soil_type.xml" value="0.124" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/dailog_delete.xml" value="0.1175925925925926" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_overview.xml" value="0.2640625" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation.xml" value="0.30062893081761005" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_disease.xml" value="0.375" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_tab.xml" value="0.2640625" />
+        <entry key="FeatureLogin/src/main/res/layout/fragment_registration.xml" value="0.1175925925925926" />
+        <entry key="FeatureLogin/src/main/res/layout/fragmrnt_service_desc_layoutr.xml" value="0.2524238303855614" />
         <entry key="Mandi/src/main/res/drawable/bg_graph.xml" value="0.1685" />
         <entry key="Mandi/src/main/res/layout/fragment_mandi.xml" value="0.375" />
         <entry key="Mandi/src/main/res/layout/fragment_mandi_graph.xml" value="0.21481481481481482" />
@@ -52,6 +63,7 @@
         <entry key="Profile/src/main/res/drawable/ic_support.xml" value="0.1555" />
         <entry key="Profile/src/main/res/drawable/ic_vector.xml" value="0.1555" />
         <entry key="Profile/src/main/res/layout-v21/zui_view_messaging.xml" value="0.2630208333333333" />
+        <entry key="Profile/src/main/res/layout/fragment_about_outgrow.xml" value="0.1175925925925926" />
         <entry key="Profile/src/main/res/layout/fragment_edit_profile.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/layout/fragment_language.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/layout/fragment_my_profile.xml" value="0.21481481481481482" />
@@ -87,6 +99,8 @@
         <entry key="app/src/main/res/drawable/ic_gray_location.xml" value="0.181" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.21759656652360515" />
+        <entry key="app/src/main/res/layout/fragment_spot_light.xml" value="0.1175925925925926" />
+        <entry key="app/src/main/res/layout/item_spotlight.xml" value="0.1175925925925926" />
         <entry key="app/src/main/res/menu/nav_menu_free.xml" value="0.21481481481481482" />
         <entry key="cropinformation/src/main/res/drawable-v24/ic_support.xml" value="0.1555" />
         <entry key="cropinformation/src/main/res/drawable/border.xml" value="0.181" />

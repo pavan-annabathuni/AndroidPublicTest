@@ -40,6 +40,7 @@ object DataStoreManager {
     private val Context.cropCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.CROP_CATEGORY)
     private val Context.aiCropHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.AI_CROP_HISTORY)
     private val Context.weather: DataStore<Preferences> by preferencesDataStore(name = StoreName.WEATHER)
+    private val Context.spotLight: DataStore<Preferences> by preferencesDataStore(name = StoreName.SPOTLIGHT)
 
 
     suspend fun insertLanguageMaster(language: List<LanguageMasterEntity>) {
@@ -404,5 +405,16 @@ object DataStoreManager {
                 string?.let { TypeConverter.convertStringToWeather(string) }
                     ?: WeatherMasterEntity()
             }
+    }
+    suspend fun save(key: String, value: String) {
+        val dataStoreKey = stringPreferencesKey(key)
+        context?.spotLight?.edit { firstTime ->
+            firstTime[dataStoreKey] = value
+        }
+    }
+    suspend fun read(key: String): String? {
+        val dataStoreKey = stringPreferencesKey(key)
+        val preferences = context?.spotLight?.data?.first()
+        return preferences?.get(dataStoreKey)
     }
 }

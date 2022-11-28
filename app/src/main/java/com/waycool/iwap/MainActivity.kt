@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNav() {
         binding.activityMainBottomNavigationView.clearAnimation();
         binding.activityMainBottomNavigationView.animate().translationY(0f).setDuration(300);
-//        binding.activityMainBottomNavigationView.visibility = View.VISIBLE
+        binding.activityMainBottomNavigationView.visibility = View.VISIBLE
 
     }
 
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
             binding.activityMainBottomNavigationView.getHeight()
                 .toFloat()
         ).setDuration(300);
-//        binding.activityMainBottomNavigationView.visibility = View.GONE
+        binding.activityMainBottomNavigationView.visibility = View.GONE
 
     }
 

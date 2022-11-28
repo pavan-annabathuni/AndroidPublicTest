@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
+import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.ZendeskChat
@@ -70,6 +72,12 @@ class HomePagesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
+
+        lifecycleScope.launch {
+            var value:String? = DataStoreManager.read("FirstTime")
+            if(value!="true")
+                findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
+        }
         return binding.root
     }
 
@@ -663,6 +671,7 @@ class HomePagesFragment : Fragment() {
 //                var accountId: Int = it.data!!.account[0].id!!
                 if (accountId != null)
                     viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                        Log.d("MyCrops", "myCrop: ${it.data}")
                         myCropAdapter.submitList(it.data)
                         if ((it.data != null)) {
                             binding.tvCount.text = it.data!!.size.toString()
