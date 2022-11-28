@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -467,7 +467,7 @@ class CropInfoFragment : Fragment() {
                         startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 

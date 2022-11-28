@@ -11,7 +11,6 @@ import android.os.Looper
 import android.net.Uri
 import android.speech.RecognizerIntent
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +23,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
@@ -273,7 +272,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(this)
+            FeatureChat.zenDeskInit(this)
         }
     }
 

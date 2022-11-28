@@ -19,7 +19,7 @@ import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecropprotect.Adapter.BannerAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesParentAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
@@ -158,7 +158,7 @@ class PestDiseaseFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 }
