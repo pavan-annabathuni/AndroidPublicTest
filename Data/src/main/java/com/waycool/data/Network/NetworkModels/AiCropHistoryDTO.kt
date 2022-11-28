@@ -1,5 +1,7 @@
 package com.waycool.data.Network.NetworkModels
 
+import com.google.gson.annotations.SerializedName
+
 data class AiCropHistoryDTO(
     val data: List<AiHistoryData>?,
     val message: String?,
@@ -14,5 +16,10 @@ data class AiHistoryData(
     val prediction: String? = null,
     val probability: Int? = null,
     val updated_at: String? = null,
-    val user_feedback: Any? = null
-)
+    val user_feedback: Any? = null,
+    @SerializedName("crop") var cropdata: CropData?
+    )
+
+  data class  CropData(
+      @SerializedName("crop_name") var name:String?=null
+  )

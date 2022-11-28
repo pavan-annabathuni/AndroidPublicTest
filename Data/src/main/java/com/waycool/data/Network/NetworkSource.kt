@@ -31,9 +31,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
+import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
@@ -252,6 +254,20 @@ object NetworkSource {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             val response = apiInterface.
             activateDevice(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun viewReport(id:Int) = flow<Resource<SoilTestReportMaster?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.viewReport(headerMap!!,id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -556,6 +572,23 @@ object NetworkSource {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
             val response = apiInterface.getTracker(headerMap!!, soil_test_request_id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun pdfDownload(soil_test_request_id: Int) = flow<Resource<ResponseBody?>> {
+        try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.pdfDownload(headerMap!!, soil_test_request_id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {

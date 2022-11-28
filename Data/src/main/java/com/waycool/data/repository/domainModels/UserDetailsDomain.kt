@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class UserDetailsDomain(
     var id: Int? = null,
     var name: String? = null,
-    var contact: String? = null,
+    @SerializedName("phone")var contact: String? = null,
     var email: String? = null,
     var approved: Int? = null,
     @SerializedName("encrypted_token") var encryptedToken: String? = null,

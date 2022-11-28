@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -115,7 +116,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                             binding.progressBar.isVisible = true
                             binding.clProgressBar.visibility = View.VISIBLE
-                            binding.cardCheckHealth.isClickable=false
+                            binding.cardCheckHealth.isClickable = false
                             isLocationPermissionGranted(accountID!!)
                         }
 
@@ -126,6 +127,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun initViewClick() {
+
         binding.tvViewAll.setOnClickListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
@@ -337,19 +339,23 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.clTopGuide.visibility = View.GONE
+//                        binding.clTopGuide.visibility = View.GONE
                         Log.d("TAG", "bindObserversData:" + it.data.toString())
-                        val response = it.data as ArrayList<SoilTestHistoryDomain>
-                        if (response.size <= 2) {
-                            soilHistoryAdapter.setMovieList(response)
+                        if (it.data != null) {
+                            val response = it.data as ArrayList<SoilTestHistoryDomain>
+                            if (response.size <= 2) {
+                                soilHistoryAdapter.setMovieList(response)
 
-                        } else {
-                            val arrayList = ArrayList<SoilTestHistoryDomain>()
-                            arrayList.add(response[0])
-                            arrayList.add(response[1])
-                            soilHistoryAdapter.setMovieList(arrayList)
+                            } else {
+                                val arrayList = ArrayList<SoilTestHistoryDomain>()
+                                arrayList.add(response[0])
+                                arrayList.add(response[1])
+                                soilHistoryAdapter.setMovieList(arrayList)
+
+                            }
 
                         }
+
 
                     }
                     is Resource.Error -> {
@@ -400,7 +406,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-                    if (location != null) {
+                    if (location != null && account_id != null) {
                         // use your location object
                         // get latitude , longitude and other info from this
                         Log.d("checkLocation", "isLocationPermissionGranted: $location")
@@ -411,8 +417,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
 
-                      val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
-                       val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+                        val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
                         viewModel.getCheckSoilTestLab(
                             account_id,
@@ -427,13 +433,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         "TAG",
                                         "bindObserversDataCheckSoilData:" + it.data.toString()
                                     )
-                                    if (it.data!!.isNullOrEmpty()) {
+                                    if (it.data!!.isEmpty()) {
 
                                         CustomeDialogFragment.newInstance().show(
                                             requireActivity().supportFragmentManager,
                                             CustomeDialogFragment.TAG
                                         )
-                                        binding.cardCheckHealth.isClickable=true
+                                        binding.cardCheckHealth.isClickable = true
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
@@ -450,8 +456,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
-                                        bundle.putString("lat",latitude)
-                                        bundle.putString("lon",longitutde)
+                                        bundle.putString("lat", latitude)
+                                        bundle.putString("lon", longitutde)
 
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
@@ -463,10 +469,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 is Resource.Error -> {
                                     Toast.makeText(
                                         requireContext(),
-                                        it.message.toString(),
+                                        "Currently We are Facing Server Error",
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
+                                    binding.clProgressBar.visibility = View.GONE
+
+                                    binding.cardCheckHealth.isClickable = true
 
                                 }
                                 is Resource.Loading -> {
@@ -492,16 +501,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         _binding = null
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -509,12 +518,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             ZendeskChat.zenDesk(requireContext())
         }
     }

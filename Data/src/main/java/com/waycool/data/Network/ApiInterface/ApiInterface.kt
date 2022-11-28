@@ -5,9 +5,11 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
+import java.io.File
 
 
 interface ApiInterface {
@@ -146,6 +148,8 @@ interface ApiInterface {
         @Query("soil_test_request_id") soil_test_request_id: Int
     ): Response<TrackerDTO>
 
+    //download report
+
 //    @FormUrlEncoded
 //    @POST("api/v1/plots")
 //    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
@@ -271,6 +275,23 @@ interface ApiInterface {
         @FieldMap devicedata:Map<String,Any>
 
     ):Response<ActivateDeviceDTO>
+
+    //view report
+
+    @POST("api/v1/soil-test-report-data")
+    suspend fun viewReport(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("id")id:Int
+
+    ):Response<SoilTestReportMaster>
+
+//    @Streaming
+    @GET("api/v1/download-soil-test-report")
+    suspend fun pdfDownload(
+        @HeaderMap map: Map<String, String>?,
+        @Query("id")id:Int
+    ):Response<ResponseBody>
+
 
 
 

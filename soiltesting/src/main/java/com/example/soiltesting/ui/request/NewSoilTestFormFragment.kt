@@ -80,6 +80,7 @@ class NewSoilTestFormFragment : Fragment() {
 //                    account=it.data.account
                     contactNumber= it.data?.contact.toString()
                     binding.tvContact.text=contactNumber
+                    Log.d(TAG, "onCreateViewPhoneNumber:$contactNumber ")
 
 
 

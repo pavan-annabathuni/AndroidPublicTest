@@ -36,9 +36,10 @@
         android:id="@+id/tvOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space35"
+
         android:layout_marginEnd="@dimen/txt32"
         android:text="OK"
+        android:padding="@dimen/space12"
         android:textColor="#146133"
         android:textSize="@dimen/txt16"
         android:textStyle="bold"

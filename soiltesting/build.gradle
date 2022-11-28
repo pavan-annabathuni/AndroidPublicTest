@@ -44,6 +44,7 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':Data')
     implementation project(path: ':UiComponents')
+    implementation project(path: ':Core')
     implementation project(path: ':featureChat')
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -101,6 +102,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.appcompat:appcompat:1.5.1'
+
+    //pdf viewer
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 //        implementation 'com.github.ibrahimsn98:speedometer:1.0.1'
 

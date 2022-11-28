@@ -74,6 +74,7 @@ class AddCropDetailsFragment : Fragment() {
         if (arguments != null) {
             var crop_id_selected = arguments?.getInt("cropid")
             Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $crop_id_selected")
+
 //            itemClicked(onp_id!!)
 //            viewModel.getUserDetails().observe(viewLifecycleOwner) {
 ////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -87,8 +88,10 @@ class AddCropDetailsFragment : Fragment() {
 //                }
 //            }
             binding.cardCheckHealth.setOnClickListener {
+                Log.d(TAG, "onViewCreatedmv dkcx: ")
                 if (accountID != null)
 //                    postAddCrop(crop_id_selected!!, accountID!!)
+                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
                 viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
@@ -96,7 +99,7 @@ class AddCropDetailsFragment : Fragment() {
                         if (i.accountType == "outgrow") {
                             Log.d(TAG, "onCreateViewAccountID:${i.id}")
                             accountID = i.id
-                            postAddCrop(crop_id_selected!!,accountID!!)
+                            postAddCrop(crop_id_selected!!, accountID!!)
                         }
                     }
                 }
@@ -107,7 +110,7 @@ class AddCropDetailsFragment : Fragment() {
 
 //        spinner()
         spinnerYear()
-        binding.tvCalender.setOnClickListener {
+        binding.clCalender.setOnClickListener {
             showCalender()
 //            showDateDailog()
         }
@@ -226,7 +229,9 @@ class AddCropDetailsFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     activity?.finish()
-                    accountID?.let { it1 -> viewModel.getMyCrop2(it1).observe(viewLifecycleOwner){} }
+                    accountID?.let { it1 ->
+                        viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
+                    }
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
@@ -350,7 +355,7 @@ class AddCropDetailsFragment : Fragment() {
                 myCalendar.add(Calendar.YEAR, 0);
                 view.setMinDate(myCalendar.timeInMillis)
                 updateLabel(myCalendar)
-                myCalendar.add(Calendar.YEAR,0)
+                myCalendar.add(Calendar.YEAR, 0)
                 view.setMaxDate(myCalendar.timeInMillis)
 
             }

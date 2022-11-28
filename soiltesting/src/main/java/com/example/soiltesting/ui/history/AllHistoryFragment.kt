@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -82,6 +83,12 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 }
             }
         }
+//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                findNavController().navigateUp()
+//            }
+//
+//        })
 
 
 //        clickSearch()
@@ -293,7 +300,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         }
 
     }
-    private fun isLocationPermissionGranted(account_id: Int): Boolean {
+    private fun isLocationPermissionGranted(account_id: Int?): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -316,7 +323,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-                    if (location != null) {
+                    if (location != null && account_id !=null) {
                         // use your location object
                         // get latitude , longitude and other info from this
                         Log.d("checkLocation", "isLocationPermissionGranted: $location")

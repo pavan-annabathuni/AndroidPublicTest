@@ -47,6 +47,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':Videos')
     implementation project(path: ':Core')
+    implementation project(path: ':soiltesting')
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureCropProtect')
 
