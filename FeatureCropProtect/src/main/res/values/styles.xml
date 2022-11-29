@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Medium">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+    </style>
+    <style name="SemiBold">
+        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+    </style>
+    <style name="Bold">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+
+    <style name="MenuDialog" parent="Platform.MaterialComponents.Light">
+        <!--This attribute removes the shadow-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--This attribute updates the background color of the window-->
+        <item name="android:windowBackground">@android:color/white</item>
+        <!--Optional: This attribute makes the dialog window non-floating-->
+        <item name="android:windowIsFloating">false</item>
+    </style>
+</resources>

@@ -132,6 +132,9 @@ class MyProfileFragment : Fragment() {
             requireActivity().startActivity(intent)
 
         }
+        binding.ll5.setOnClickListener(){
+            this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
+        }
 
 
 

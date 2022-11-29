@@ -1,6 +1,8 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -37,6 +39,7 @@ import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import nl.changer.audiowife.AudioWife
 import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment() {
@@ -49,8 +52,11 @@ class PestDiseaseDetailsFragment : Fragment() {
     //banners
     var bannerImageList: MutableList<AdBannerImage> = ArrayList()
 
+    var mediaPlayer: MediaPlayer? = null
+
     private var diseaseId: Int? = null
     private var diseaseName: String? = null
+    private var audioUrl: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +73,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         arguments?.let {
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
+            audioUrl = it.getString("audioUrl")
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -177,6 +184,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         setVideos()
         setNews()
         setBanners()
+        audioPlayer()
     }
 
     private fun setNews() {
@@ -334,5 +342,27 @@ class PestDiseaseDetailsFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
+      fun audioPlayer(){
+              binding.playPauseLayout.setOnClickListener() {
+                  if(audioUrl!=null) {
+              mediaPlayer = MediaPlayer();
+              mediaPlayer!!.setOnCompletionListener {
+                  binding.mediaSeekbar.progress = 0
+                  binding.pause.visibility = View.GONE
+                  binding.play.visibility = View.VISIBLE
+              }
 
+                  Log.d("Audio", "audioPlayer: $audioUrl")
+                  var audio = AudioWife.getInstance()
+                      .init(requireContext(), Uri.parse(audioUrl))
+                      .setPlayView(binding.play)
+                      .setPauseView(binding.pause)
+                      .setSeekBar(binding.mediaSeekbar)
+                      .setRuntimeView(binding.totalTime)
+                  // .setTotalTimeView(mTotalTime);
+                  audio.play()
+              }
+          else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
+
+      }}
 }

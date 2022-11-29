@@ -1,22 +1,26 @@
 package com.waycool.featurecrophealth.ui.details
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
@@ -40,6 +44,7 @@ class CropSelectFragment : Fragment() {
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
     private lateinit var myCropAdapter: MyCropsAdapter
+
 
 
     override fun onCreateView(
@@ -66,7 +71,6 @@ class CropSelectFragment : Fragment() {
             it?.cropId?.let { it1 -> bundle.putInt("crop_id", it1) }
             bundle.putString("name", it?.cropName)
             bundle.putString("crop_logo", it?.cropLogo)
-
             findNavController().navigate(
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 bundle
@@ -74,14 +78,27 @@ class CropSelectFragment : Fragment() {
         }
 
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            val id = it.cropId
+            var id2 = 0
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("crop_id", it1) }
             it?.cropName?.let { it1 -> args.putString("name", it1) }
-            it?.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
-            findNavController().navigate(
-                R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
-                args
-            )
+            it?.cropLogo?.let { it2->args.putString("crop_logo", it2) }
+            viewModel.getCropMaster().observe(viewLifecycleOwner){
+                for (i in 0 until it.data?.size!!){
+                    Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
+                    if(it.data?.get(i)?.cropId==id) {
+                        id2 = it.data?.get(i)?.cropId!!
+                    }
+                }
+                if(id==id2){
+                    findNavController().navigate(
+                        R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
+                        args)
+                }else  dialog()
+
+            }
+
         })
         binding.rvMyCrops.adapter = myCropAdapter
         myCrops()
@@ -339,5 +356,19 @@ class CropSelectFragment : Fragment() {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
 
+    private fun dialog(){
 
-}
+            val dialog = Dialog(requireContext())
+            //dialog.setCancelable(false)
+            dialog.setContentView(R.layout.dailog_information)
+            // val body = dialog.findViewById(R.id.body) as TextView
+            val yesBtn = dialog.findViewById(R.id.ok) as Button
+            yesBtn.setOnClickListener {
+                dialog.dismiss()
+                Log.d("Dialog", "dialog: Clicked")
+            }
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+    }

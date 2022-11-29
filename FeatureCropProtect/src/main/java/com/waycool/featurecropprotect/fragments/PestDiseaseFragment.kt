@@ -88,6 +88,7 @@ class PestDiseaseFragment : Fragment() {
             val args = Bundle()
             it?.diseaseId?.let { it1 -> args.putInt("diseaseid", it1) }
             it?.diseaseName?.let { it1 -> args.putString("diseasename", it1) }
+            it?.audioUrl?.let { it1 -> args.putString("audioUrl", it1) }
             findNavController().navigate(
                 R.id.action_pestDiseaseFragment_to_pestDiseaseDetailsFragment,
                 args

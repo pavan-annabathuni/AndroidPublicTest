@@ -44,6 +44,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homePagesFragment_to_spotLightFragment"
+            app:destination="@id/spotLightFragment" />
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -81,5 +84,14 @@
         android:id="@+id/editCropFragment"
         android:name="com.example.addcrop.EditCropFragment"
         android:label="EditCropFragment" />
+    <fragment
+        android:id="@+id/spotLightFragment"
+        android:name="com.waycool.iwap.SpotLightFragment"
+        android:label="fragment_spot_light"
+        tools:layout="@layout/fragment_spot_light" >
+        <action
+            android:id="@+id/action_spotLightFragment_to_homePagesFragment"
+            app:destination="@id/homePagesFragment" />
+    </fragment>
 
 </navigation>
