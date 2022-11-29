@@ -1,112 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.request.ViewReportFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/toolbar_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/backBtn"
-            android:layout_width="@dimen/space16"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_back_btn_toolbar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Id: IWAP100214"
-            android:textColor="#171717"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
+    <include
+        android:id="@+id/soilReportHeader_layout"
+        layout="@layout/content_header_back_layout" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        android:layout_below="@+id/soilReportHeader_layout">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/startGuideLine"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/txt16" />
+                android:layout_marginLeft="@dimen/space16"
+                android:layout_marginTop="@dimen/space16"
+                android:layout_marginRight="@dimen/space16"
+                android:background="@drawable/selector_dashboard_corner_border"
+                android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/endGuideLine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/txt16" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clRec"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
-                android:background="@drawable/bg_view_report"
-                app:layout_constraintEnd_toEndOf="@id/endGuideLine"
-                app:layout_constraintStart_toStartOf="@id/startGuideLine"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/recommandation_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFAF0"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_marginLeft="@dimen/space1"
+                    android:layout_marginTop="@dimen/space1"
+                    android:layout_marginRight="@dimen/space1"
+                    android:background="@drawable/selector_top_radius_blank"
+                    android:backgroundTint="@color/light_yellow"
+                    android:padding="@dimen/space16"
+                    android:text="Recommendation :"
+                    android:textColor="@color/black_two" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRec"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space1"
+                    android:background="@color/light_grey" />
+
+                <LinearLayout
+                    android:id="@+id/soil_conditioner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/soil_conditioner_text"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/space65"
-                        android:layout_marginStart="@dimen/txt16"
-                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space16"
+                        android:layout_marginRight="@dimen/space16"
                         android:text="Recommendation :"
-                        android:textColor="#000000"
-                        android:textSize="@dimen/txt18"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:textColor="@color/black_two" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/soilConditionerRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/request_history_text"
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space12"
+                        android:layout_marginRight="@dimen/space16"
+                        android:layout_marginBottom="@dimen/space16">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space1"
+                        android:background="@color/light_grey" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/macronutrient_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/macronutrient_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space16"
+                        android:layout_marginRight="@dimen/space16"
+                        android:text="Recommendation :"
+                        android:textColor="@color/black_two" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/macronutrient_RecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/request_history_text"
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space12"
+                        android:layout_marginRight="@dimen/space16"
+                        android:layout_marginBottom="@dimen/space16">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space1"
+                        android:background="@color/light_grey" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/micronutrient_fertilizer_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/micronutrient_fertilizer_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space16"
+                        android:layout_marginRight="@dimen/space16"
+                        android:text="Recommendation :"
+                        android:textColor="@color/black_two" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/micronutrientFertilizerRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/request_history_text"
+                        android:layout_marginLeft="@dimen/space16"
+                        android:layout_marginTop="@dimen/space12"
+                        android:layout_marginRight="@dimen/space16"
+                        android:layout_marginBottom="@dimen/space16">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="0dp"
+                android:id="@+id/soil_result_RecyclerView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/txt16"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clRec"
-                app:spanCount="2"
-                tools:listitem="@layout/item_view_report" />
+                android:layout_below="@+id/soilReportHeader_layout"
+                android:layout_marginLeft="@dimen/space8"
+                android:layout_marginTop="@dimen/space16"
+                android:layout_marginRight="@dimen/space8"
+                android:layout_marginBottom="@dimen/space16">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <include
+                android:id="@+id/scale_layout"
+                layout="@layout/content_onp_soil_report_scale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space16"
+                android:layout_marginTop="@dimen/space8"
+                android:layout_marginRight="@dimen/space16" />
+
+            <include
+                android:id="@+id/sample_layout"
+                layout="@layout/content_onp_soil_report_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space16"
+                android:layout_marginTop="@dimen/space25"
+                android:layout_marginRight="@dimen/space16" />
+
+            <include
+                android:id="@+id/farmer_layout"
+                layout="@layout/content_onp_soil_report_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space16"
+                android:layout_marginTop="@dimen/space25"
+                android:layout_marginRight="@dimen/space16" />
+
+            <include
+                android:id="@+id/test_center_layout"
+                layout="@layout/content_onp_soil_report_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space16"
+                android:layout_marginTop="@dimen/space25"
+                android:layout_marginRight="@dimen/space16"
+                android:layout_marginBottom="@dimen/space25" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCheckHealth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space25"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_button">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <!--                        <ImageView-->
+                        <!--                            android:id="@+id/ivClick"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginEnd="16dp"-->
+                        <!--                            android:src="@drawable/ic_add_button"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            app:layout_constraintTop_toTopOf="parent" />-->
+
+                        <TextView
+                            android:id="@+id/tvCheckCrop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Download and Share Report"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <include
+        android:id="@+id/loadingScreen"
+        layout="@layout/content_loading_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
+
+

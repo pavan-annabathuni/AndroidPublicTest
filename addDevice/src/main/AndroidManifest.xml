@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.adddevice">
+
+    <uses-feature android:name="android.hardware.camera.autoFocus" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any"
+        android:required="true" />
+    <application
+        android:hardwareAccelerated="true">
+        <activity
+            android:name=".AddDeviceActivity"
+            android:exported="false"
+            />
+<!--        <activity-->
+<!--          android:name="com.journeyapps.barcodescenner.C"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            tools:replace="orientation"-->
+<!--            />-->
+
+    </application>
+
+</manifest>

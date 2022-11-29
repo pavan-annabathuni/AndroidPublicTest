@@ -55,6 +55,12 @@ class AllServicesFragment : Fragment() {
         freeUser()
         premiumUser()
         clickes()
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+               findNavController().navigateUp()
+            }
+
+        })
     }
     private fun freeUser() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) {

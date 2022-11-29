@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/selector_dashboard_corner_border">
+    <TextView
+        android:id="@+id/scale_tittle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_top_radius_blank"
+        android:backgroundTint="@color/light_grey"
+        android:padding="@dimen/space16"
+        android:text="Scale"
+        android:textStyle="bold"
+        android:textSize="@dimen/txt18"
+        android:textColor="@color/black_two"/>
+    <LinearLayout
+        android:id="@+id/scale_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginTop="@dimen/space30">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale1"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scale_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginTop="@dimen/space8">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale2"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scale_layout3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginTop="@dimen/space8">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale3"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scale_layout4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginTop="@dimen/space8">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale4"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scale_layout5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginTop="@dimen/space8">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale5"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scale_layout6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/space45"
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginBottom="@dimen/space30"
+        android:layout_marginTop="@dimen/space8">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_onp_scale6"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/scale_tv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/space16"
+            android:textColor="@color/black_two"/>
+    </LinearLayout>
+
+</LinearLayout>

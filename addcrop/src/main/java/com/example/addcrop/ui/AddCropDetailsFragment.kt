@@ -74,8 +74,25 @@ class AddCropDetailsFragment : Fragment() {
         if (arguments != null) {
             var crop_id_selected = arguments?.getInt("cropid")
             Log.d(TAG, "onCreateViewONPIDPrinteddvsv: $crop_id_selected")
+
 //            itemClicked(onp_id!!)
-            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+////                    account=it.data.account
+//                for (i in it.data!!.account) {
+//                    if (i.accountType == "outgrow") {
+//                        Log.d(TAG, "onCreateViewAccountID:${i.id}")
+//                        accountID = i.id
+//                        postAddCrop(crop_id_selected!!,accountID!!)
+//                    }
+//                }
+//            }
+            binding.cardCheckHealth.setOnClickListener {
+                Log.d(TAG, "onViewCreatedmv dkcx: ")
+                if (accountID != null)
+//                    postAddCrop(crop_id_selected!!, accountID!!)
+                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
+                viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
                         accountID = it.data?.accountId
@@ -104,7 +121,7 @@ class AddCropDetailsFragment : Fragment() {
 
 //        spinner()
         spinnerYear()
-        binding.tvCalender.setOnClickListener {
+        binding.clCalender.setOnClickListener {
             showCalender()
 //            showDateDailog()
         }
@@ -205,19 +222,27 @@ class AddCropDetailsFragment : Fragment() {
         }
     }
 
+
     //format(binding.etAreaNumber.text.toString()).toDouble()
     private fun postAddCrop(crop_id: Int, account_id: Int) {
 //    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
-
-        viewModel.addCropPassData(
-            crop_id, account_id, binding.etNickName.text.toString(), 1,
-            binding.etCalender.text.toString(), binding.etAreaNumber.text
+        val map = mutableMapOf<String, Any>()
+        map.put("account_no_id", account_id)
+        map.put("crop_id", crop_id)
+        map.put("plot_nickname", binding.etNickName.text.toString())
+        map.put("sowing_date", binding.etCalender.text.toString())
+        viewModel.addCropDataPass(
+            map
+//            crop_id, account_id, binding.etNickName.text.toString(), 1,
+//            binding.etCalender.text.toString(), binding.etAreaNumber.text
         ).observe(requireActivity()) {
 //            Log.d(TAG, "itemClickedData: $myCalendar")
             when (it) {
                 is Resource.Success -> {
                     activity?.finish()
-                    accountID?.let { it1 -> viewModel.getMyCrop2(it1).observe(viewLifecycleOwner){} }
+                    accountID?.let { it1 ->
+                        viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
+                    }
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
@@ -232,7 +257,7 @@ class AddCropDetailsFragment : Fragment() {
         }
 
 
-//    }
+    }
 //    else {
 //        viewModel.addCropPassData(
 //            crop_id,account_id, binding.etNickName.text.toString(), 1,
@@ -253,7 +278,7 @@ class AddCropDetailsFragment : Fragment() {
 //            }
 //        }
 //    }
-    }
+//    }
 
 
     private fun itemClicked(rop_id: Int) {
@@ -338,10 +363,10 @@ class AddCropDetailsFragment : Fragment() {
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, -1);
+                myCalendar.add(Calendar.YEAR, 0);
                 view.setMinDate(myCalendar.timeInMillis)
                 updateLabel(myCalendar)
-                myCalendar.add(Calendar.YEAR, 1)
+                myCalendar.add(Calendar.YEAR, 0)
                 view.setMaxDate(myCalendar.timeInMillis)
 
             }

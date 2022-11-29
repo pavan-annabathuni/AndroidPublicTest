@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,9 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
+import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.mandiprice.MandiActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
@@ -44,6 +47,7 @@ import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.launch
+import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -58,9 +62,12 @@ class HomePagesFragment : Fragment() {
     private var crop: String? = null
     private var search: String? = null
     private var sortBy: String = "asc"
+    private var accountID: Int? = null
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
+//    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+//    private val mandiAdapter = MandiHomePageAdapter()
     private lateinit var mandiAdapter: MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
@@ -101,6 +108,29 @@ class HomePagesFragment : Fragment() {
                 )
         })
         binding.recyclerview.adapter = mandiAdapter
+
+//
+//        tokenCheckViewModel.getUserDetails().observe(viewLifecycleOwner) {
+//            for ( i in it.data!!.account){
+//                if (i.accountType=="outgrow"){
+//                    Log.d(Constant.TAG, "onCreateViewAccountID:${i.id}")
+//                    accountID=i.id
+//                    if (accountID!=null){
+//                        Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            Log.d("TAG", "onCreateToken:$accountID")
+//                            Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
+//                            val token:String=tokenCheckViewModel.getUserToken()
+//                            tokenCheckViewModel(accountID!!,token)
+//                            Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
+//
+//                        }
+//
+//                    }
+//
+//                }
+//            }
+//        }
         binding.soilTestingCv.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
@@ -165,6 +195,10 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
+//        binding.IvNotification.setOnClickListener{
+//            val intent = Intent(activity, AddDeviceActivity::class.java)
+//            startActivity(intent)
+//        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -253,6 +287,39 @@ class HomePagesFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
+
+    //
+//    fun tokenCheckViewModel(user_id:Int,token:String){
+//        tokenCheckViewModel.checkToken(user_id,token).observe(viewLifecycleOwner) {
+//            when (it) {
+//                is Resource.Success -> {
+//                    if (it.data?.status==true){
+//                        Log.d("TAG", "tokenCheckViewModelTokenActive:")
+////                        val intent = Intent(this, MainActivity::class.java)
+////                        startActivity(intent);
+//                    }else if (it.data?.status==false){
+//                        Log.d("TAG", "tokenCheckViewModelTokenExpire:")
+//                        val intent = Intent(activity, LoginMainActivity::class.java)
+//                        startActivity(intent);
+//                    }else{
+//                        val intent = Intent(activity, LoginMainActivity::class.java)
+//                        startActivity(intent);
+//                    }
+//                }
+//                is Resource.Loading -> {
+//
+//
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+////                        .show()
+//                }
+//            }
+//
+//
+//        }
+//
+//    }
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
@@ -729,5 +796,5 @@ class HomePagesFragment : Fragment() {
             }
         }
     }
+    }
 
-}

@@ -36,6 +36,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.http.Field
+import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
@@ -45,7 +46,7 @@ object NetworkSource {
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
 
-    private val geocodeInterface: MapsApiInterface
+    private val geocodeInterface:MapsApiInterface
 
 
     init {
@@ -56,8 +57,8 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
-        val geocodeCLient = MapsClient.apiClient
-        geocodeInterface = geocodeCLient.create(MapsApiInterface::class.java)
+        val geocodeCLient=MapsClient.apiClient
+        geocodeInterface=geocodeCLient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -211,25 +212,67 @@ object NetworkSource {
             }
         }
 
-    fun addCropPassData(
-        crop_id: Int?,
-        account_id: Int?,
-        plot_nickname: String?,
-        is_active: Int?,
-        sowing_date: String?,
-        area: Editable?
-    ) = flow<Resource<AddCropResponseDTO?>> {
+//    fun addCropPassData(
+//        crop_id: Int?,
+//        account_id: Int?,
+//        plot_nickname: String?,
+//        is_active: Int?,
+//        sowing_date: String?,
+//        area: Editable?
+//    ) = flow<Resource<AddCropResponseDTO?>> {
+//        try {
+//            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//            val response = apiInterface.addCropPassData(
+//                headerMap!!,
+//                crop_id,
+//                account_id,
+//                plot_nickname,
+//                is_active,
+//                sowing_date,
+//                area
+//            )
+//            if (response.isSuccessful) {
+//                emit(Resource.Success(response.body()))
+//            } else {
+//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+//            }
+//        } catch (e: Exception) {
+//            emit(Resource.Error(e.message))
+//        }
+//    }
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.addCropPassData(
-                headerMap!!,
-                crop_id,
-                account_id,
-                plot_nickname,
-                is_active,
-                sowing_date,
-                area
-            )
+            val response = apiInterface.
+            addCropDataPass(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun activateDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<ActivateDeviceDTO?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.
+            activateDevice(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun viewReport(id:Int) = flow<Resource<SoilTestReportMaster?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.viewReport(headerMap!!,id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -273,26 +316,26 @@ object NetworkSource {
             }
         }
 
-//    fun checkToken(user_id: Int, token: String) =
-//        flow<Resource<CheckTokenResponseDTO?>> {
-//            try {
-//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-//                val response =
-//                    apiInterface.checkToken(headerMap!!, user_id, token)
-//                if (response.isSuccessful) {
-//                    emit(Resource.Success(response.body()))
-//                } else if (response.code() == 404) {
-//                    val error = response.errorBody()?.charStream()?.readText() ?: ""
-//                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
-//                } else {
-//                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
-//                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-//                }
-//            } catch (e: Exception) {
-//                Log.d("Token", "check token:" + e.message)
-//                emit(Resource.Error(e.message))
-//            }
-//        }
+    fun checkToken(user_id: Int, token: String) =
+        flow<Resource<CheckTokenResponseDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response =
+                    apiInterface.checkToken(headerMap!!, user_id, token)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else if (response.code() == 404) {
+                    val error = response.errorBody()?.charStream()?.readText() ?: ""
+                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
+                } else {
+                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                Log.d("Token", "check token:" + e.message)
+                emit(Resource.Error(e.message))
+            }
+        }
 
 
     fun login(
@@ -545,6 +588,23 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+    fun pdfDownload(soil_test_request_id: Int) = flow<Resource<ResponseBody?>> {
+        try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.pdfDownload(headerMap!!, soil_test_request_id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 
 
     fun getCropInformation(
@@ -701,29 +761,27 @@ object NetworkSource {
     }
 
     fun editMyCrop(
-        id: Int
-    ) = flow<Resource<Unit?>> {
-        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        id:Int)
+    = flow<Resource<Unit?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.editMyCrops(map, id)
-            if (response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-            }
+                val response = apiInterface.editMyCrops(map,id)
+             if(response.isSuccessful)
+                 emit(Resource.Success(response.body()))
+             else {
+                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+             }
 
         } catch (e: Exception) {
             //   emit(Resource.Error(e.message))
         }
     }
-
-    fun getMyCrop(
-        headerMap: Map<String, String>, account_id: Int,
+    fun getMyCrop(headerMap: Map<String, String>,account_id: Int,
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap, account_id)
+            val response = apiInterface.getMyCrops(headerMap,account_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -735,15 +793,15 @@ object NetworkSource {
         }
     }
 
-    fun getMyCrop2(
-        headerMap: Map<String, String>, account_id: Int,
+    fun getMyCrop2(headerMap: Map<String, String>,account_id: Int,
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap, account_id)
+            val response = apiInterface.getMyCrops(headerMap,account_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
+
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
@@ -752,12 +810,11 @@ object NetworkSource {
         }
     }
 
-    fun getGeocode(
-        address: String
+    fun getGeocode(address: String
     ) = flow<GeocodeDTO?> {
 
         try {
-            val response = geocodeInterface.getGeocode(address, AppSecrets.getMapsKey())
+            val response = geocodeInterface.getGeocode(address,AppSecrets.getMapsKey())
 
             if (response.isSuccessful)
                 emit(response.body())
@@ -769,12 +826,11 @@ object NetworkSource {
         }
     }
 
-    fun getReverseGeocode(
-        latlon: String
+    fun getReverseGeocode(latlon: String
     ) = flow<GeocodeDTO?> {
 
         try {
-            val response = geocodeInterface.getReverseGeocode(latlon, AppSecrets.getMapsKey())
+            val response = geocodeInterface.getReverseGeocode(latlon,AppSecrets.getMapsKey())
 
             if (response.isSuccessful)
                 emit(response.body())

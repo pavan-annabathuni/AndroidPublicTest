@@ -24,11 +24,15 @@ class AddViewModel :ViewModel() {
     fun getAddCropType (): LiveData<Resource<List<AddCropTypeDomain>?>> {
         return CropsRepository.getAddCropType().asLiveData()
     }
-    fun addCropPassData(
-        crop_id:Int?, account_id:Int?, plot_nickname:String?,
-        is_active:Int?, sowing_date: String?, area: Editable
-    ): LiveData<Resource<AddCropResponseDTO?>> =
-        CropsRepository.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area).asLiveData()
+//    fun addCropPassData(
+//        crop_id:Int?, account_id:Int?, plot_nickname:String?,
+//        is_active:Int?, sowing_date: String?, area: Editable): LiveData<Resource<AddCropResponseDTO?>> =
+//        CropsRepository.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area).asLiveData()
+
+
+
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): LiveData<Resource<AddCropResponseDTO?>> =
+        CropsRepository.addCropDataPass(map).asLiveData()
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()

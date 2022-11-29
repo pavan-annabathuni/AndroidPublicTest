@@ -11,7 +11,10 @@ class SoilTestHistoryMapper : EntityMapper<SoilTestHistoryEntity,SoilTestData> {
             plot_no = dto.plotNo,
             soil_test_number = dto.soilTestNumber,
             status = dto.status,
-            updated_at = dto.updatedAt
+            updated_at = dto.updatedAt,
+            approve_status = dto.approveStatus
+
+
         )
     }
     fun toEntityList(initial: List<SoilTestData>): List<SoilTestHistoryEntity> {
