@@ -78,13 +78,9 @@ class AddCropDetailsFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                for (i in it.data!!.account) {
-                    if (i.accountType == "outgrow") {
-                        Log.d(TAG, "onCreateViewAccountID:${i.id}")
-                        accountID = i.id
+                        accountID = it.data?.accountId
 //                        postAddCrop(crop_id_selected!!,accountID!!)
-                    }
-                }
+
             }
             binding.cardCheckHealth.setOnClickListener {
                 if (accountID != null)

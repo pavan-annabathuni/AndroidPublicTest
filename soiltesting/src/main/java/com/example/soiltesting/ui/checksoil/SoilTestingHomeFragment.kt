@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
 import com.example.soiltesting.ui.history.HistoryDataAdapter
@@ -29,6 +31,8 @@ import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -77,21 +81,51 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         getVideos()
         fabButton()
         getAllHistory()
+        setBanners()
+    }
+
+    private fun setBanners() {
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
+        binding.bannerViewpager.adapter = bannerAdapter
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
+
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
     private fun getAllHistory() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            for (i in it.data!!.account) {
-                if (i.accountType == "outgrow") {
-
-                    accountID = i.id
-                    if (accountID != null) {
-                        Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
-                        bindObserversSoilTestHistory(accountID!!)
-                    }
-
-                }
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
+                bindObserversSoilTestHistory(accountID!!)
             }
+
+
         }
     }
 
@@ -105,15 +139,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                for (i in it.data!!.account) {
-                    if (i.accountType == "outgrow") {
-                        accountID = i.id
-                        if (accountID != null) {
-                            Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
-                            isLocationPermissionGranted(accountID!!)
-                        }
-
-                    }
+                accountID = it.data?.accountId
+                if (accountID != null) {
+                    Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
+                    isLocationPermissionGranted(accountID!!)
                 }
             }
         }
@@ -218,16 +247,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                for (i in it.data!!.account) {
-                    if (i.accountType == "outgrow") {
-                        Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:${i.id}")
-                        accountID = i.id
-                        Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:$accountID")
-                        isLocationPermissionGranted(accountID!!)
 
+                accountID = it.data?.accountId
+                Log.d(ContentValues.TAG, "onCreateViewAccountIDscsv:$accountID")
+                isLocationPermissionGranted(accountID!!)
 
-                    }
-                }
             }
 //            Log.d(TAG, "locationClicklatitude: $latitude")
 //            Log.d(TAG, "locationClicklongitude: $longitude")
@@ -405,8 +429,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
 
-                      val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
-                       val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+                        val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
                         viewModel.getCheckSoilTestLab(
                             account_id,
@@ -443,8 +467,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
-                                        bundle.putString("lat",latitude)
-                                        bundle.putString("lon",longitutde)
+                                        bundle.putString("lat", latitude)
+                                        bundle.putString("lon", longitutde)
 
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
@@ -485,16 +509,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         _binding = null
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -502,12 +526,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

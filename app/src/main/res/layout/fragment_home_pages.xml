@@ -378,7 +378,7 @@ more details."
                                                 app:strokeWidth="1dp">
 
                                                 <ImageView
-                                                    android:id="@+id/imageView"
+                                                    android:id="@+id/check_iv"
                                                     android:layout_width="24dp"
                                                     android:layout_height="24dp"
                                                     android:layout_gravity="center"
@@ -417,6 +417,8 @@ more details."
                     android:layout_marginStart="@dimen/txt16"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="@dimen/txt16"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
                     android:background="@drawable/bg_add_form"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -895,42 +897,38 @@ to the farm"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardAddDevice">
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/viewPagerImageBanner3x1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:visibility="gone"
-                        app:layout_constraintDimensionRatio="3:1"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/banner_indicators"
+                        android:layout_width="120dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Theme.AppCompat"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/banner_viewpager"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/banner_viewpager"
+                        app:tabBackground="@drawable/tab_selector"
+                        app:tabGravity="center"
+                        app:tabIndicator="@null"
+                        app:tabIndicatorHeight="0dp"
+                        app:tabMaxWidth="38dp"
+                        app:tabMode="auto"
+                        app:tabPaddingEnd="8dp"
+                        app:tabPaddingStart="8dp"
+                        app:tabSelectedTextColor="@color/white"
+                        app:tabTextAppearance="@style/TabTextBannerAppearance"
+                        app:tabTextColor="@color/transparent" />
 
-                    </androidx.viewpager2.widget.ViewPager2>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardImageBanner3x1"
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/banner_viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space16"
-                        android:layout_marginEnd="@dimen/space16"
-                        app:cardCornerRadius="@dimen/space10"
-                        app:cardElevation="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio=""
+                        android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/viewPagerImageBanner3x1">
-
-                        <ImageView
-                            android:id="@+id/ivSingleImageBanner3x1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/homepageads"
-                             />
-
-                    </androidx.cardview.widget.CardView>
-
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

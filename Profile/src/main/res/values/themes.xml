@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/darkGray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#022E0E</item>
-        <item name="textColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/noto_sans_medium</item>
         <item name="toolbarStyle">@style/Base_ToolbarStyle2</item>
 <!--        <item name="textColor">@color/black</item>-->
@@ -22,7 +22,7 @@
 
     <style name="textStyle" parent="android:Widget.TextView">
         <item name="fontFamily">@font/noto_sans_bold</item>
-        <item name="textColor">@color/Red</item>
+        <item name="android:textColor">@color/Red</item>
     </style>
 
     <style name="YourLightTheme" parent="Theme.MaterialComponents.NoActionBar">

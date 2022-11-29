@@ -25,6 +25,7 @@ import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.utils.Resource
 import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.weather.R
+import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
@@ -47,12 +48,10 @@ class WeatherFragment : Fragment() {
     val lightRed = "#FFD7D0"
     val green = "#08FA12"
     val lightGreen = "#08FA12"
-    var bannerImageList: MutableList<com.waycool.data.Network.NetworkModels.AdBannerImage> = java.util.ArrayList()
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
 
-    class AdBannerImage(var url: String, var current_page: String, var position: String)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -546,26 +545,23 @@ class WeatherFragment : Fragment() {
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            com.waycool.data.Network.NetworkModels.AdBannerImage(
-                "https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg",
-                "1",
-                "0"
-            )
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = com.waycool.data.Network.NetworkModels.AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

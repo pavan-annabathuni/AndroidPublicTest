@@ -25,7 +25,7 @@ import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.utils.Resource
-import com.waycool.featurecropprotect.Adapter.BannerAdapter
+import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
@@ -302,24 +302,23 @@ class PestDiseaseDetailsFragment : Fragment() {
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
 
-        val bannerAdapter = BannerAdapter(requireActivity())
-        bannerAdapter.submitList(bannerImageList)
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

@@ -22,7 +22,7 @@ class LanguageFragment : Fragment() {
 
     lateinit var binding: FragmentLanguageBinding
     private val languageViewModel: LoginViewModel by lazy {
-        ViewModelProvider(this).get(LoginViewModel::class.java)
+        ViewModelProvider(this)[LoginViewModel::class.java]
     }
     var selectedLanguage: LanguageMasterDomain? = null
 
@@ -68,7 +68,8 @@ class LanguageFragment : Fragment() {
             else {
                 languageViewModel.setSelectedLanguage(
                     selectedLanguage!!.langCode,
-                    selectedLanguage!!.id
+                    selectedLanguage!!.id,
+                    selectedLanguage!!.langNative
                 )
                 Navigation.findNavController(binding.root)
                     .navigate(R.id.action_languageFragment_to_login_nav)

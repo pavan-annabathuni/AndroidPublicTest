@@ -8,6 +8,7 @@ import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -57,23 +58,24 @@ interface ApiInterface {
 
     @GET("api/v1/crop-master")
     suspend fun getCropMaster(
-        @HeaderMap map: Map<String, String>
+        @HeaderMap map: Map<String, String>,@Query("lang")lang:String="en"
     ): Response<CropMasterDTO>
 
     @GET("api/v1/crop-category-master")
     suspend fun getCropCategoryMaster(
-        @HeaderMap map: Map<String, String>
+        @HeaderMap map: Map<String, String>,@Query("lang")lang:String="en"
     ): Response<CropCategoryMasterDTO>
 
     @GET("api/v1/pest-disease-master")
     suspend fun getPestDisease(
         @HeaderMap map: Map<String, String>,
-        @Query("crop_id") id: Int? = null
+        @Query("crop_id") id: Int? = null,
+        @Query("lang")lang:String="en"
     ): Response<PestDiseaseDTO>
 
     //videos category
     @GET("api/v1/vans-category-master")
-    suspend fun getVansCategory(@HeaderMap map: Map<String, String>): Response<VansCategoryDTO?>
+    suspend fun getVansCategory(@HeaderMap map: Map<String, String>,@Query("lang")lang:String="en"): Response<VansCategoryDTO?>
 
     //news list
     @GET("api/v1/vans-feeder")
@@ -153,82 +155,86 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("api/v1/plots")
-    suspend fun addCropPassData( @HeaderMap map: Map<String, String>,
-                                 @Field("crop_id")crop_id:Int?,
-                                 @Field("account_no_id")account_no_id:Int?,
-                                 @Field("plot_nickname")plot_nickname:String?,
-                                 @Field("is_active")is_active:Int?,
-                                 @Field("sowing_date")sowing_date:String?,
-                                 @Field("area")area: Editable?
+    suspend fun addCropPassData(
+        @HeaderMap map: Map<String, String>,
+        @Field("crop_id") crop_id: Int?,
+        @Field("account_no_id") account_no_id: Int?,
+        @Field("plot_nickname") plot_nickname: String?,
+        @Field("is_active") is_active: Int?,
+        @Field("sowing_date") sowing_date: String?,
+        @Field("area") area: Editable?
     )
 //                                 @Body addCropPost: AddCropRequestDomain)
             : Response<AddCropResponseDTO>
+
     //New Soil Test Request
     @FormUrlEncoded
     @POST("api/v1/soil-test-request")
-    suspend fun postNewSoil( @HeaderMap headerMap: Map<String, String>,
-                             @Field("account_id")account_id:Int,
-                             @Field("lat")lat:Double,
-                             @Field("long")long:Double,
-                             @Field("org_id")org_id:Int?,
-                             @Field("plot_no")plot_no:String?,
-                             @Field("pincode")pincode:String?,
-                             @Field("address")address:String?,
-                             @Field("state")state:String,
-                             @Field("district")district:String,
-                             @Field("number")number:String?,
-                             ): Response<SoilTestResponseDTO>
+    suspend fun postNewSoil(
+        @HeaderMap headerMap: Map<String, String>,
+        @Field("account_id") account_id: Int,
+        @Field("lat") lat: Double,
+        @Field("long") long: Double,
+        @Field("org_id") org_id: Int?,
+        @Field("plot_no") plot_no: String?,
+        @Field("pincode") pincode: String?,
+        @Field("address") address: String?,
+        @Field("state") state: String,
+        @Field("district") district: String,
+        @Field("number") number: String?,
+    ): Response<SoilTestResponseDTO>
 
 
     @GET("api/v1/crop-advisory")
     suspend fun getCropInformation(
         @HeaderMap headerMap: Map<String, String>,
-    ):Response<CropInfo>
+        @Query("lang")lang: String="en"
+    ): Response<CropInfo>
 
     @PUT("api/v1/profiles")
     @FormUrlEncoded
     suspend fun updateProfile(
         @HeaderMap map: Map<String, String>,
-        @Field("name")name:String,
-        @Field("address") address:String,
-        @Field("village") village:String,
-        @Field("pincode") pincode:String,
-        @Field("state") state:String,
-        @Field("district")district:String
-    ):Response<profile>
+        @Field("name") name: String,
+        @Field("address") address: String,
+        @Field("village") village: String,
+        @Field("pincode") pincode: String,
+        @Field("state") state: String,
+        @Field("district") district: String
+    ): Response<profile>
 
     @Multipart
     @POST("api/v1/update-profile-picture")
     suspend fun getProfilePic(
         @HeaderMap headerMap: Map<String, String>,
-        @Part file:MultipartBody.Part
-    ):Response<profilePicModel>
+        @Part file: MultipartBody.Part
+    ): Response<profilePicModel>
 
     @GET("api/v1/get-mandi")
     suspend fun getMandiList(
         @HeaderMap map: Map<String, String>?,
-        @Query("lat") lat:String?,
-        @Query("long") long:String?,
-        @Query("crop_category") category:String?,
-        @Query("state") state:String?,
-        @Query("crop") crop:String?,
+        @Query("lat") lat: String?,
+        @Query("long") long: String?,
+        @Query("crop_category") category: String?,
+        @Query("state") state: String?,
+        @Query("crop") crop: String?,
         @Query("page") page: Int,
-        @Query("sort_by") sort_by:String?,
-        @Query("order_by") orderBy:String?,
-        @Query("search") search:String?
-    ):Response<MandiDomain>
+        @Query("sort_by") sort_by: String?,
+        @Query("order_by") orderBy: String?,
+        @Query("search") search: String?
+    ): Response<MandiDomain>
 
     @GET("api/v1/get-mandi-history")
     suspend fun getMandiHistory(
         @HeaderMap map: Map<String, String>?,
-        @Query("crop_master_id") crop_master_id:Int?,
-        @Query("mandi_master_id") mandi_master_id:Int?
-    ):Response<MandiHistoryDomain>
+        @Query("crop_master_id") crop_master_id: Int?,
+        @Query("mandi_master_id") mandi_master_id: Int?
+    ): Response<MandiHistoryDomain>
 
     @GET("api/v1/india-state-master")
     suspend fun getStateList(
         @HeaderMap map: Map<String, String>?,
-    ):Response<StateModel>
+    ): Response<StateModel>
 //    @FormUrlEncoded
 //    @POST("api/v1/check-token")
 //    suspend fun checkToken( @HeaderMap headerMap: Map<String, String>,
@@ -240,21 +246,41 @@ interface ApiInterface {
     @GET("api/v1/my-crops")
     suspend fun getMyCrops(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_id")account_id:Int
-    ):Response<MyCropsModel>
-
+        @Query("account_id") account_id: Int
+    ): Response<MyCropsModel>
 
 
     @DELETE("api/v1/plots/{plots}")
     suspend fun editMyCrops(
         @HeaderMap map: Map<String, String>?,
-        @Path("plots")plots:Int
-    ):Response<Unit>
+        @Path("plots") plots: Int
+    ): Response<Unit>
 
     @GET("api/v1/adv-irrigation")
     suspend fun advIrrigation(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_id")accountId:Int,
-        @Query("plot_id")plotId:Int
-    ):Response<AdvIrrigationModel>
+        @Query("account_id") accountId: Int,
+        @Query("plot_id") plotId: Int
+    ): Response<AdvIrrigationModel>
+
+    @POST("api/v1/farms")
+    @FormUrlEncoded
+    suspend fun addFarm(
+        @HeaderMap map: Map<String, String>?,
+        @Field("account_no_id") accountId: Int,
+        @Field("farm_name") farmName: String,
+        @Field("farm_center") farm_center: String,
+        @Field("farm_area") farm_area: String,
+        @Field("farm_json") farm_json: String,
+        @Field("plot_ids") plot_ids: String?=null,
+        @Field("is_primary") is_primary: Boolean,
+        @Field("farm_water_source")farm_water_source:String?=null,
+        @Field("farm_pump_hp")farm_pump_hp:String?=null,
+        @Field("farm_pump_type")farm_pump_type:String?=null,
+        @Field("farm_pump_depth")farm_pump_depth:String?=null,
+        @Field("farm_pump_pipe_size")farm_pump_pipe_size:String?=null,
+        @Field("farm_pump_flow_rate")farm_pump_flow_rate:String?=null
+    ):Response<ResponseBody>
+
+
 }

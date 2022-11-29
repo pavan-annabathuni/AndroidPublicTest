@@ -40,5 +40,11 @@ class VideoViewModel : ViewModel() {
         return VansRepository.getTagsAndKeywords().asLiveData()
     }
 
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
 
 }

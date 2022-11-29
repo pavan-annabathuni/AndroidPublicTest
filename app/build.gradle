@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin:  'org.jetbrains.kotlin.android'
 apply plugin:  'kotlin-kapt'
 apply plugin:  'kotlin-parcelize'
 apply plugin:  'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
@@ -15,8 +14,8 @@ android {
         applicationId "com.waycool.iwap"
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
-        versionCode properties["VERSION_CODE"]
-        versionName properties["VERSION_NAME"]
+        versionCode VERSION_CODE.toInteger()
+        versionName VERSION_NAME
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +54,7 @@ dependencies {
 
     implementation project(path: ':FeatureCropHealth')
     implementation project(path: ':addcrop')
+    implementation project(path: ':addfarm')
     implementation project(path: ':soiltesting')
     implementation project(path: ':Videos')
 

@@ -149,3 +149,9 @@ Java_com_waycool_core_utils_AppSecrets_getGeoBaseUrl(JNIEnv *env, jobject thiz) 
     std::string base_url = "https://maps.googleapis.com/";
     return env->NewStringUTF(base_url.c_str());
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_waycool_core_utils_AppSecrets_getChatChannelKey(JNIEnv *env, jobject thiz) {
+    std::string base_url = "eyJzZXR0aW5nc191cmwiOiJodHRwczovL3dheWNvb2xpbmRpYS56ZW5kZXNrLmNvbS9tb2JpbGVfc2RrX2FwaS9zZXR0aW5ncy8wMUdIS0E5Njc2MkFKOUVENzRWWUVRSlA5WC5qc29uIn0=";
+    return env->NewStringUTF(base_url.c_str());
+}

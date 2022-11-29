@@ -67,16 +67,12 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-            for (i in it.data!!.account) {
-                if (i.accountType == "outgrow") {
-                    Log.d(ContentValues.TAG, "onCreateViewAccountID:${i.id}")
-                    accountID = i.id
+                 accountID = it.data?.accountId
                     if (accountID !=null) {
                         bindObserversSoilTestHistory(accountID!!)
                     }
 
-                }
-            }
+
         }
 
         locationClick()
@@ -92,16 +88,12 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                for (i in it.data!!.account) {
-                    if (i.accountType == "outgrow") {
-                        Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:${i.id}")
-                        accountID = i.id
+                 accountID = it.data?.accountId
                         if (accountID !=null) {
                             isLocationPermissionGranted(accountID!!)
                         }
 
-                    }
-                }
+
             }
         }
     }

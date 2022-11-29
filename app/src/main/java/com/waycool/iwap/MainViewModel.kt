@@ -66,4 +66,11 @@ class MainViewModel:ViewModel() {
 
     fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
         CropsRepository.getMyCrop2(account_id).asLiveData()
+
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
 }

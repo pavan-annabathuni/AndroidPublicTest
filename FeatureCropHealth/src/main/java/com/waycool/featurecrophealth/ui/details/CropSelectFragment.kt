@@ -77,7 +77,7 @@ class CropSelectFragment : Fragment() {
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("crop_id", it1) }
             it?.cropName?.let { it1 -> args.putString("name", it1) }
-            it?.cropLogo?.let { it2->args.putString("crop_logo", it2) }
+            it?.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
             findNavController().navigate(
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 args
@@ -90,18 +90,19 @@ class CropSelectFragment : Fragment() {
     fun myCrops() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            var accountId = it.data?.account!![0].id!!
+            var accountId = it.data?.accountId
 
-            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                myCropAdapter.submitList(it.data)
-                if ((it.data != null)) {
-                    binding.tvCount.text = it.data!!.size.toString()
-                } else {
-                    binding.tvCount.text = "0"
+            if (accountId != null)
+                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                    myCropAdapter.submitList(it.data)
+                    if ((it.data != null)) {
+                        binding.tvCount.text = it.data!!.size.toString()
+                    } else {
+                        binding.tvCount.text = "0"
+                    }
+                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
                 }
-                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
-            }
         }
     }
 
@@ -205,7 +206,6 @@ class CropSelectFragment : Fragment() {
             }
         }
     }
-
 
 
 //    private fun bindObserversDetails() {

@@ -54,12 +54,12 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/banner_indicators"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="8dp"
-                    android:theme="@style/Theme.AppCompat"
                     android:background="@android:color/transparent"
+                    android:theme="@style/Theme.AppCompat"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/banner_viewpager"
                     app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,6 @@
                 android:id="@+id/diseases_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"

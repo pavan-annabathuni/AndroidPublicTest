@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SaveFarmFragment">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="8dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Base_ToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Toolbar Title"
+                android:textColor="@color/textdark" />
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <fragment
+                        android:id="@+id/map_save_fragment"
+                        android:name="com.google.android.libraries.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_dodgeInsetEdges="bottom"
+                        map:layout_constraintBottom_toBottomOf="parent"
+                        map:layout_constraintEnd_toEndOf="parent"
+                        map:layout_constraintStart_toStartOf="parent"
+                        map:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/addfarmname_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="Farm Name"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_plot_edittext"
+                    android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/addfarmname_title"
+                    app:layout_constraintTop_toBottomOf="@+id/addfarmname_title">
+
+                    <EditText
+                        android:id="@+id/farmname_et_addfarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/cardview_shadow_end_color"
+                        android:hint="Enter Farm Name"
+                        android:inputType="textCapWords"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="7dp"
+                        android:paddingRight="5dp"
+                        android:textSize="14sp" />
+                </androidx.cardview.widget.CardView>
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/addfarmarea_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="Farm Area - in Acre"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/set_primary_farm" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView31"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="3dp"
+                    android:background="@drawable/bg_plot_edittext"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/addfarmname_title"
+                    app:layout_constraintTop_toBottomOf="@+id/addfarmarea_title">
+
+                    <EditText
+                        android:id="@+id/farmarea_et_addfarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/cardview_shadow_end_color"
+                        android:hint="Enter Farm Area"
+                        android:inputType="numberDecimal"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="7dp"
+                        android:paddingRight="5dp"
+                        android:textSize="14sp" />
+                </androidx.cardview.widget.CardView>
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/watersource_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="Water Sources"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView31" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/water_chipGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:chipSpacingHorizontal="6dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/watersource_title"
+                    app:layout_constraintTop_toBottomOf="@+id/watersource_title">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/rain_source"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/chip_bg_selector"
+                        android:checkable="true"
+                        android:text="Rain"
+                        android:textColor="@color/bg_chip_text"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIcon="@drawable/ic_baseline_check"
+                        app:checkedIconEnabled="true"
+                        app:checkedIconTint="@color/bg_chip_text"
+                        app:checkedIconVisible="true"
+                        app:chipEndPadding="16dp"
+                        app:chipStartPadding="16dp"
+                        app:chipStrokeColor="@color/grey300"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/river_source"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/chip_bg_selector"
+                        android:checkable="true"
+                        android:text="River"
+                        android:textColor="@color/bg_chip_text"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIcon="@drawable/ic_baseline_check"
+                        app:checkedIconEnabled="true"
+                        app:checkedIconTint="@color/bg_chip_text"
+                        app:checkedIconVisible="true"
+                        app:chipEndPadding="16dp"
+                        app:chipStartPadding="16dp"
+                        app:chipStrokeColor="@color/grey300"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/borewell_source"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/chip_bg_selector"
+                        android:checkable="true"
+                        android:text="Borewell"
+                        android:textColor="@color/bg_chip_text"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIcon="@drawable/ic_baseline_check"
+                        app:checkedIconEnabled="true"
+                        app:checkedIconTint="@color/bg_chip_text"
+                        app:checkedIconVisible="true"
+                        app:chipEndPadding="16dp"
+                        app:chipStartPadding="16dp"
+                        app:chipStrokeColor="@color/grey300"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/canal_source"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/chip_bg_selector"
+                        android:checkable="true"
+                        android:text="Canal"
+                        android:textColor="@color/bg_chip_text"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIcon="@drawable/ic_baseline_check"
+                        app:checkedIconEnabled="true"
+                        app:checkedIconTint="@color/bg_chip_text"
+                        app:checkedIconVisible="true"
+                        app:chipEndPadding="16dp"
+                        app:chipStartPadding="16dp"
+                        app:chipStrokeColor="@color/grey300"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/lake_source"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/chip_bg_selector"
+                        android:checkable="true"
+                        android:text="Lake/Pond"
+                        android:textColor="@color/bg_chip_text"
+                        app:checkedIcon="@drawable/ic_baseline_check"
+                        app:checkedIconEnabled="true"
+                        app:checkedIconTint="@color/bg_chip_text"
+                        app:checkedIconVisible="true"
+                        app:chipEndPadding="16dp"
+
+                        app:chipStartPadding="16dp"
+                        app:chipStrokeColor="@color/grey300"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/premium_cl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/water_chipGroup"
+                    tools:visibility="gone">
+
+
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/addfarmpumphp_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:paddingTop="7dp"
+                        android:text="Pump HP"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView33"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_plot_edittext"
+                        app:cardCornerRadius="3dp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/addfarmpumphp_title">
+
+                        <Spinner
+                            android:id="@+id/pumphp_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="14sp" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent=".5" />
+
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/addfarmpumptype_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:paddingTop="7dp"
+                        android:text="Pump Type"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@+id/guideline5"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_plot_edittext"
+                        app:cardCornerRadius="3dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/addfarmpumptype_title"
+                        app:layout_constraintTop_toBottomOf="@+id/addfarmpumptype_title">
+
+                        <Spinner
+                            android:id="@+id/pumptype_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="14sp" />
+                    </androidx.cardview.widget.CardView>
+
+
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/addfarmpipesize_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:paddingTop="7dp"
+                        android:text="Pump Size in Inches"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView33" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView34"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_plot_edittext"
+                        app:cardCornerRadius="3dp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/addfarmpipesize_title">
+
+                        <Spinner
+                            android:id="@+id/pipesize_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="14sp" />
+                    </androidx.cardview.widget.CardView>
+
+
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:paddingTop="7dp"
+                        android:text="Pump Height in Mtrs"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@+id/guideline5"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView33" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_plot_edittext"
+                        app:cardCornerRadius="3dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline5"
+                        app:layout_constraintTop_toBottomOf="@+id/addfarmpipesize_title">
+
+                        <Spinner
+                            android:id="@+id/pumpheight_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="14sp" />
+                    </androidx.cardview.widget.CardView>
+
+
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/textView23"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:paddingTop="7dp"
+                        android:text="Pump Flow Rate (LPH)"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView34" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView73"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_plot_edittext"
+                        app:cardCornerRadius="3dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView23">
+
+                        <EditText
+                            android:id="@+id/flowrate_et_addfarm"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/cardview_shadow_end_color"
+                            android:hint="Enter Flow Rate"
+                            android:inputType="numberDecimal"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="7dp"
+                            android:paddingRight="5dp"
+                            android:textSize="14sp" />
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <Button
+                    android:id="@+id/save_farm_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="24dp"
+                    android:backgroundTint="@color/primaryColor"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mycrops_rv" />
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Add Existing Crops to this Farm"
+                    android:textColor="@color/textdark"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_cl" />
+
+                <ProgressBar
+                    android:id="@+id/save_progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/save_farm_btn"
+                    app:layout_constraintEnd_toEndOf="@+id/save_farm_btn"
+                    app:layout_constraintStart_toStartOf="@+id/save_farm_btn"
+                    app:layout_constraintTop_toTopOf="@+id/save_farm_btn" />
+
+                <CheckBox
+                    android:id="@+id/set_primary_farm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set as primary"
+                    app:layout_constraintStart_toStartOf="@+id/cardView1"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView1" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mycrops_rv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView2"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/viewholder_crop_select" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

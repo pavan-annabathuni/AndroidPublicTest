@@ -18,6 +18,7 @@ import com.waycool.data.Network.NetworkModels.UserDetailsDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.MandiRepository
 import com.waycool.data.repository.ProfileRepository
+import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -132,4 +133,10 @@ class MandiViewModel : ViewModel() {
         }
     }
 
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
 }

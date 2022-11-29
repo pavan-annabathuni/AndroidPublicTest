@@ -2,7 +2,10 @@ package com.waycool.featurechat
 
 import android.content.Context
 import android.util.Log
+import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import zendesk.android.Zendesk
 import zendesk.messaging.android.DefaultMessagingFactory
 
@@ -43,42 +46,54 @@ object FeatureChat {
 //    }
 //
 
-         Zendesk.initialize(
+        GlobalScope.launch {
+            val jwt = getJwtToken() ?: ""
+            Zendesk.initialize(
 
-             context = context,
-             channelKey = "eyJzZXR0aW5nc191cmwiOiJodHRwczovL3dheWNvb2xpbmRpYS56ZW5kZXNrLmNvbS9tb2JpbGVfc2RrX2FwaS9zZXR0aW5ncy8wMUdIS0E5Njc2MkFKOUVENzRWWUVRSlA5WC5qc29uIn0=",
-             successCallback = { zendesk ->
-                 Log.i("IntegrationApplication", "Initialization successful")
-                 Zendesk.instance.loginUser(jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6ImFwcF82MzZlNDA3OGJjNjZlMjAxMDNiNTg4MzAifQ.eyJpZCI6NSwibmFtZSI6IlJhaHVsIER1ZGhhcmVqaXlhIiwiZW1haWwiOiJyYWh1bC5jaGFuZHJhQHdheWNvb2wuaW4iLCJwaG9uZSI6IjgwMDA4MDU1NjYiLCJleHRlcm5hbF9pZCI6Ik9HNTgwMDA4MDU1NjYiLCJ0YWdzIjoiRW5nbGlzaCIsInJlbW90ZV9waG90b191cmwiOiIiLCJpYXQiOjE2Njg3NzM2NTcsImp0aSI6MTc0OTgzNjAwNjMzNTUxNSwic2NvcGUiOiJ1c2VyIn0.gBc1qMbCMR7B3g-BN5dbfBXtX0QmHYk7V6Bq9Ak0g78",
-                     successCallback = { user -> Log.d("zendesktest", "zendeskChat: ${user.externalId} ") },
-                     failureCallback = { error -> Log.d("zendesktest", "zendeskChat: ${error.message} ")}
-                 )
-                 Zendesk.instance.messaging.showMessaging(context)
-             },
+                context = context,
+                channelKey = AppSecrets.getChatChannelKey(),
+                successCallback = { zendesk ->
+                    Log.i("IntegrationApplication", "Initialization successful")
+                    Zendesk.instance.loginUser(jwt = jwt,
+                        successCallback = { user ->
+                            Log.d(
+                                "zendesktest",
+                                "zendeskChat: ${user.externalId} "
+                            )
+                        },
+                        failureCallback = { error ->
+                            Log.d(
+                                "zendesktest",
+                                "zendeskChat: ${error.message} "
+                            )
+                        }
+                    )
+                    Zendesk.instance.messaging.showMessaging(context)
+                },
 
-             failureCallback = { error ->
-                 // Tracking the cause of exceptions in your crash reporting dashboard will help to triage any unexpected failures in production
-                 Log.e("IntegrationApplication", "Initialization failed", error)
-             },
+                failureCallback = { error ->
+                    // Tracking the cause of exceptions in your crash reporting dashboard will help to triage any unexpected failures in production
+                    Log.e("IntegrationApplication", "Initialization failed", error)
+                },
 
-             messagingFactory = DefaultMessagingFactory()
+                messagingFactory = DefaultMessagingFactory()
 
-         )
+            )
 
-     }
+        }
+    }
 
-    fun zendeskLogout(){
+    fun zendeskLogout() {
         Zendesk.instance.logoutUser(
             successCallback = { user -> Log.d("zendesktest", "zendeskChat: ${user.toString()} ") },
-            failureCallback = { error -> Log.d("zendesktest", "zendeskChat: ${error.message} ")}
+            failureCallback = { error -> Log.d("zendesktest", "zendeskChat: ${error.message} ") }
         )
     }
 
-    suspend fun getJwtToken():String?{
-        return LocalSource.getUserDetailsEntity()?.encryptedToken
+    private suspend fun getJwtToken(): String? {
+        return LocalSource.getUserDetailsEntity()?.jwt
 
     }
-
 
 
 }

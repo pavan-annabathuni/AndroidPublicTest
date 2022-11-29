@@ -15,11 +15,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
+import com.example.soiltesting.ui.checksoil.AdsAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -147,6 +153,10 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
+        binding.clAddForm.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -200,7 +210,41 @@ class HomePagesFragment : Fragment() {
         setNews()
         fabButton()
         myCrop()
+        setBanners()
     }
+    private fun setBanners() {
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
+        binding.bannerViewpager.adapter = bannerAdapter
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
+
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+    }
+
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
@@ -650,12 +694,9 @@ class HomePagesFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId: Int? = null
-                for (account in it?.data?.account!!) {
-                    if (account.accountType?.lowercase() == "outgrow") {
-                        accountId = account.id
-                    }
 
-                }
+                        accountId = it.data?.accountId
+
 //                var accountId: Int = it.data!!.account[0].id!!
                 if (accountId != null)
                     viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
