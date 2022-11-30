@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_add_farm"
+    app:startDestination="@id/drawFarmFragment">
+
+    <fragment
+        android:id="@+id/drawFarmFragment"
+        android:name="com.waycool.addfarm.fragments.DrawFarmFragment"
+        android:label="fragment_draw_farm"
+        tools:layout="@layout/fragment_draw_farm" >
+        <action
+            android:id="@+id/action_drawFarmFragment_to_saveFarmFragment"
+            app:destination="@id/saveFarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/saveFarmFragment"
+        android:name="com.waycool.addfarm.fragments.SaveFarmFragment"
+        android:label="fragment_save_farm"
+        tools:layout="@layout/fragment_save_farm" />
+</navigation>

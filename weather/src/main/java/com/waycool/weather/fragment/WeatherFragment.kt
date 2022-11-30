@@ -25,6 +25,7 @@ import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.utils.Resource
 import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.weather.R
+import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
@@ -47,12 +48,10 @@ class WeatherFragment : Fragment() {
     val lightRed = "#FFD7D0"
     val green = "#08FA12"
     val lightGreen = "#08FA12"
-    var bannerImageList: MutableList<com.waycool.data.Network.NetworkModels.AdBannerImage> = java.util.ArrayList()
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
 
-    class AdBannerImage(var url: String, var current_page: String, var position: String)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +81,7 @@ class WeatherFragment : Fragment() {
 
         observer()
         setBanners()
-        getWeatherData("12.22", "77.32")
+        //getWeatherData("12.22", "77.32")
 //        ViewModel.getCurrentWeather()
 //        ViewModel.getWeekWeather()
 //        ViewModel.getHourlyWeather()
@@ -147,7 +146,7 @@ class WeatherFragment : Fragment() {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
             }
-            binding.location.text = it.data?.profile?.districtId
+            binding.location.text = it.data?.profile?.village
         }
 //
 //        GlobalScope.launch {
@@ -175,391 +174,394 @@ class WeatherFragment : Fragment() {
 
 
     private fun getWeatherData(lat: String, lon: String) {
-        viewModel.getWeather("12.22", "78.22").observe(requireActivity()) {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            it.data?.profile?.lat?.let { it1 ->
+                it.data?.profile?.long?.let { it2 ->
+                    viewModel.getWeather(it1, it2).observe(requireActivity()) {
 
-            if (it?.data != null) {
+                        if (it?.data != null) {
 
-                binding.weatherMaster = it.data
+                            binding.weatherMaster = it.data
 
-                if (null != it) {
-                    val date: Long? = it.data?.current?.dt?.times(1000L)
-                    val dateTime = Date()
-                    if (date != null) {
-                        dateTime.time = date
+                            if (null != it) {
+                                val date: Long? = it.data?.current?.dt?.times(1000L)
+                                val dateTime = Date()
+                                if (date != null) {
+                                    dateTime.time = date
+                                }
+                                val formatter =
+                                    SimpleDateFormat("EE, d MMMM", Locale.ENGLISH)//or use getDateInstance()
+                                val formatedDate = formatter.format(dateTime)
+                                binding.date.text = formatedDate
+                            }
+                            // binding.icon22.text = it.data?.current?.weather?.get(0)?.description
+                            if (it.data?.current?.weather?.isEmpty() == false)
+                                when (it.data?.current?.weather?.get(0)?.id) {
+                                    200 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon22.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    201 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    202 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    210 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    211 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    212 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    221 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    230 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    231 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    232 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+                                    }
+                                    300 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    301 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    302 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+
+                                    }
+                                    310 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    311 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    312 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_warning, 0, 0, 0
+                                        )
+                                    }
+                                    313 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    314 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    321 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.tvTodayTips.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    500 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    501 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    502 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    503 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    504 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    511 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    520 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    521 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    522 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    531 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(red))
+
+                                    }
+                                    701 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    711 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //  binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    721 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    731 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    741 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    751 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    761 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    800 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(green))
+                                        //
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation, 0, 0, 0
+                                        )
+
+                                    }
+                                    801 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        //binding.icon2.setTextColor(Color.parseColor(green))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation, 0, 0, 0
+                                        )
+                                    }
+                                    802 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(green))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation, 0, 0, 0
+                                        )
+                                    }
+                                    803 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                    804 -> {
+                                        binding.tvTodayTips.text =
+                                            it.data?.current?.weather?.get(0)?.description
+                                        // binding.icon2.setTextColor(Color.parseColor(yellow))
+
+                                        binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+                                        )
+                                    }
+                                }
+                        }
                     }
-                    val formatter =
-                        SimpleDateFormat("EE, d MMMM", Locale.ENGLISH)//or use getDateInstance()
-                    val formatedDate = formatter.format(dateTime)
-                    binding.date.text = formatedDate
                 }
-                // binding.icon22.text = it.data?.current?.weather?.get(0)?.description
-                if (it.data?.current?.weather?.isEmpty() == false)
-                    when (it.data?.current?.weather?.get(0)?.id) {
-                        200 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon22.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        201 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        202 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        210 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        211 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        212 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        221 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                           // binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        230 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        231 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        232 -> {
-                            binding.tvTodayTips.text = it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-                        }
-                        300 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        301 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        302 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-
-                        }
-                        310 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        311 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        312 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_warning, 0, 0, 0
-                            )
-                        }
-                        313 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        314 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        321 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.tvTodayTips.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        500 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        501 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        502 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        503 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        504 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        511 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        520 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        521 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        522 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        531 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(red))
-
-                        }
-                        701 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        711 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                          //  binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        721 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        731 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        741 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        751 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        761 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        800 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(green))
-                            //
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation, 0, 0, 0
-                            )
-
-                        }
-                        801 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            //binding.icon2.setTextColor(Color.parseColor(green))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation, 0, 0, 0
-                            )
-                        }
-                        802 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(green))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation, 0, 0, 0
-                            )
-                        }
-                        803 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                        804 -> {
-                            binding.tvTodayTips.text =
-                                it.data?.current?.weather?.get(0)?.description
-                            // binding.icon2.setTextColor(Color.parseColor(yellow))
-
-                            binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_circle_exclamation_brown, 0, 0, 0
-                            )
-                        }
-                    }
             }
         }
-
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            com.waycool.data.Network.NetworkModels.AdBannerImage(
-                "https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg",
-                "1",
-                "0"
-            )
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = com.waycool.data.Network.NetworkModels.AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

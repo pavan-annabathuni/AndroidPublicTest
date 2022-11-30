@@ -21,8 +21,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         LoginRepository.getLanguageMaster().asLiveData()
 
 
-     fun setSelectedLanguage(langCode: String?, langId: Int?) {
-        LoginRepository.setSelectedLanguageCode(langCode, langId)
+     fun setSelectedLanguage(langCode: String?, langId: Int?,language:String?) {
+        LoginRepository.setSelectedLanguageCode(langCode, langId,language)
     }
 
     fun login(

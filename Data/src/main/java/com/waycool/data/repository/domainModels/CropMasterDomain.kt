@@ -7,6 +7,7 @@ data class CropMasterDomain(
     var cropCategory_id: Int? = null,
     var cropLogo: String? = null,
     var cropType: String? = null,
-    var translation: String? = null
+    var translation: String? = null,
+    var cropNameTag: String? = null
 )
 

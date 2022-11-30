@@ -3,10 +3,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin:  'org.jetbrains.kotlin.android'
-apply plugin:  'kotlin-kapt'
-apply plugin:  'kotlin-parcelize'
-apply plugin:  'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 android {
     compileSdk appCompileSdkVersion
@@ -15,8 +14,8 @@ android {
         applicationId "com.waycool.iwap"
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
-        versionCode 1
-        versionName "2.5.10"
+        versionCode VERSION_CODE.toInteger()
+        versionName VERSION_NAME
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,12 +50,14 @@ dependencies {
 //    implementation project(path: ':FarmerRegistration')
     implementation project(path: ':FeatureCropProtect')
     implementation project(path: ':Videos')
+    implementation project(path: ':FeatureIrrigationPlanner')
 
     implementation project(path: ':FeatureCropHealth')
     implementation project(path: ':addcrop')
+    implementation project(path: ':addfarm')
     implementation project(path: ':soiltesting')
     implementation project(path: ':Videos')
-    implementation project(path:':addDevice')
+    implementation project(path: ':addDevice')
 
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
@@ -112,6 +113,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-iid:21.1.0'
 
 
+    //Maps
+    implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
+    implementation 'com.google.maps.android:android-maps-utils-v3:1.3.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
 
 }

@@ -87,7 +87,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <com.waycool.uicomponents.Text.ParagraphMedium
-                    android:id="@+id/textView"
+                    android:id="@+id/crop_protect_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content">
 
                         <com.waycool.uicomponents.Text.Title3SemiBold
-                            android:id="@+id/title3SemiBold"
+                            android:id="@+id/my_crops_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -149,9 +149,9 @@
                             android:layout_marginStart="8dp"
                             app:cardBackgroundColor="#FFEACE"
                             app:cardCornerRadius="50dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/title3SemiBold"
-                            app:layout_constraintStart_toEndOf="@+id/title3SemiBold"
-                            app:layout_constraintTop_toTopOf="@+id/title3SemiBold">
+                            app:layout_constraintBottom_toBottomOf="@+id/my_crops_title"
+                            app:layout_constraintStart_toEndOf="@+id/my_crops_title"
+                            app:layout_constraintTop_toTopOf="@+id/my_crops_title">
 
                             <TextView
                                 android:id="@+id/tv_count"
@@ -177,7 +177,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/title3SemiBold"
+                            app:layout_constraintTop_toBottomOf="@+id/my_crops_title"
                             tools:listitem="@layout/item_mycrops" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

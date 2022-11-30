@@ -5,11 +5,13 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.repository.DomainMapper.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.Sync.syncer.LanguageSyncer
 import com.waycool.data.Sync.syncer.ModuleMasterSyncer
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,9 +51,11 @@ object LoginRepository {
     }
 
 
-    fun setSelectedLanguageCode(langCode: String?, langId: Int?) {
+    fun setSelectedLanguageCode(langCode: String?, langId: Int?,language:String?) {
         GlobalScope.launch(Dispatchers.IO) {
-            LocalSource.saveSelectedLanguage(langCode!!, langId!!)
+            LocalSource.saveSelectedLanguage(langCode!!, langId!!,language!!)
+            SyncManager.invalidateAll()
+            TranslationsManager().init()
         }
     }
 

@@ -50,7 +50,6 @@ class CropHealthViewModel : ViewModel() {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
-        queryMap["lang_id"] = "1"
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)

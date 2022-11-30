@@ -37,11 +37,11 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
         holder.bind(properties)
-        if (properties?.distance == null) {
-            holder.distance.visibility = View.GONE
-        } else {
-            holder.distance.visibility = View.VISIBLE
-        }
+//        if (properties?.distance == null) {
+//            holder.distance.visibility = View.GONE
+//        } else {
+//            holder.distance.visibility = View.VISIBLE
+//        }
         when (properties?.price_status) {
             1 -> {
                 holder.imageView.setImageResource(R.drawable.ic_uip)

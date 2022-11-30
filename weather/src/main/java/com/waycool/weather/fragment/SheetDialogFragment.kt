@@ -21,7 +21,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
-    val green = "#08FA12"
+    val green = "#146133"
     val lightGreen = "#DEE9E2"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

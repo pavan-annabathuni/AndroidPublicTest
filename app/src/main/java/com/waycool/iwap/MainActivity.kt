@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
-    private var accountID: Int? =null
+    private var accountID: Int? = null
     val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -45,27 +45,22 @@ class MainActivity : AppCompatActivity() {
 
 
         tokenCheckViewModel.getUserDetails().observe(this) {
-            for ( i in it.data!!.account){
-                if (i.accountType=="outgrow"){
-                    Log.d(Constant.TAG, "onCreateViewAccountID:${i.id}")
-                    accountID=i.id
-                    if (accountID!=null){
-                        Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Log.d("TAG", "onCreateToken:$accountID")
-                            Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
-                            val token:String=tokenCheckViewModel.getUserToken()
-                            tokenCheckViewModel(accountID!!,token)
-                            Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
-                        }
 
-                    }
-
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
+                CoroutineScope(Dispatchers.Main).launch {
+                    Log.d("TAG", "onCreateToken:$accountID")
+                    Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
+                    val token: String = tokenCheckViewModel.getUserToken()
+                    tokenCheckViewModel(accountID!!, token)
+                    Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
                 }
+
             }
+
+
         }
-
-
 
 
 //        val navController: NavController = Navigation.findNavController(this, R.id.nav_host_fragment)
@@ -172,18 +167,20 @@ class MainActivity : AppCompatActivity() {
         //
         //    }
     }
-    fun tokenCheckViewModel(user_id:Int,token:String){
-        tokenCheckViewModel.checkToken(user_id,token).observe(this) {
+
+    fun tokenCheckViewModel(user_id: Int, token: String) {
+        tokenCheckViewModel.checkToken(user_id, token).observe(this) {
             when (it) {
                 is Resource.Success -> {
-                    if (it.data?.status==true){
+                    if (it.data?.status == true) {
 //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-                    }else if (it.data?.status==false){
-                        Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT).show()
+                    } else if (it.data?.status == false) {
+                        Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
+                            .show()
                         Log.d("TAG", "tokenCheckViewModelTokenExpire:")
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
-                    }else{
+                    } else {
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     }
@@ -229,7 +226,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNav() {
         binding.activityMainBottomNavigationView.clearAnimation();
         binding.activityMainBottomNavigationView.animate().translationY(0f).setDuration(300);
-//        binding.activityMainBottomNavigationView.visibility = View.VISIBLE
+        binding.activityMainBottomNavigationView.visibility = View.VISIBLE
 
     }
 
@@ -239,7 +236,7 @@ class MainActivity : AppCompatActivity() {
             binding.activityMainBottomNavigationView.getHeight()
                 .toFloat()
         ).setDuration(300);
-//        binding.activityMainBottomNavigationView.visibility = View.GONE
+        binding.activityMainBottomNavigationView.visibility = View.GONE
 
     }
 

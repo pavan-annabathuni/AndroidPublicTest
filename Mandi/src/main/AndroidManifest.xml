@@ -11,7 +11,7 @@
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysVisible"/>
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.example.mandiprice.FileProvider"
             android:authorities="com.example.outgrow"
             android:exported="false"
             android:grantUriPermissions="true">

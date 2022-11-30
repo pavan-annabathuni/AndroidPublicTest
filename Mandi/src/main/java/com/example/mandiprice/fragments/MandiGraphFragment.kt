@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
+import com.example.mandiprice.adapter.AdsAdapter
 import com.example.mandiprice.adapter.DateAdapter
 import com.example.mandiprice.databinding.FragmentMandiGraphBinding
 import com.example.mandiprice.viewModel.MandiViewModel
@@ -49,7 +50,6 @@ class MandiGraphFragment : Fragment() {
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
-    var bannerImageList: MutableList<AdBannerImage> = java.util.ArrayList()
     private var crop_master_id: Int? = null
     private var mandi_master_id: Int? = null
     private var crop_name: String? = null
@@ -81,8 +81,8 @@ class MandiGraphFragment : Fragment() {
         binding = FragmentMandiGraphBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.cropName.text = crop_name
-        binding.tvMarket.text = "$market_name Market"
-        shareLayout = binding.clShare
+        binding.tvMarket.text = market_name
+        shareLayout = binding.shareCl2
         binding.recycleViewDis.adapter = DateAdapter()
         viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) {
@@ -90,6 +90,7 @@ class MandiGraphFragment : Fragment() {
                 //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
         }
+
 
         return binding.root
     }
@@ -102,7 +103,8 @@ class MandiGraphFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiGraphFragment.findNavController().navigateUp()
+                    this@MandiGraphFragment.findNavController().
+                    navigateUp()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -119,14 +121,16 @@ class MandiGraphFragment : Fragment() {
         binding.imgBack.setOnClickListener() {
             if (fragment == "one") {
                 this.findNavController()
-                    .navigate(MandiGraphFragmentDirections.actionMandiGraphFragmentToMandiFragment())
+                    .navigateUp()
             } else {
                 this.findNavController()
-                    .navigateUp()
+                    .popBackStack()
             }
-        }
-        binding.imgShare.setOnClickListener() {
-            screenShot()
+
+
+            binding.imgShare.setOnClickListener() {
+                screenShot()
+            }
         }
     }
 
@@ -209,22 +213,23 @@ class MandiGraphFragment : Fragment() {
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -253,7 +258,7 @@ class MandiGraphFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
         outputFile.flush()
         outputFile.close()
-        val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+        val URI = com.example.mandiprice.FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
         val i = Intent()
         i.action = Intent.ACTION_SEND

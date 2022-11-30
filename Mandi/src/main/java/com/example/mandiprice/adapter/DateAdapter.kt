@@ -33,7 +33,7 @@ class DateAdapter : ListAdapter<MandiHistoryDataDomain, DateAdapter.MyViewHolder
         holder.bind(properties)
         val inputDateFormatter: SimpleDateFormat =
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
         val date:Date = inputDateFormatter.parse(properties.arrivalDate)
 
         holder.arrivalDate.text = outputDateFormatter.format(date)

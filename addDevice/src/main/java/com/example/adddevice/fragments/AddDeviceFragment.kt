@@ -80,6 +80,17 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //        mapFragment.getMapAsync(this)
         isLocationPermissionGranted()
 
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+//                    account=it.data.account
+            contactNumber= it.data?.phone.toString()
+            binding. mobileNo.text="+91 $contactNumber"
+            accountID=it.data?.accountId
+
+        }
+        binding.submit.setOnClickListener {
+            activityDevice(11,"867542059649031")
+        }
     }
 
     private fun activityDevice(map: MutableMap<String, Any> = mutableMapOf<String, Any>()) {

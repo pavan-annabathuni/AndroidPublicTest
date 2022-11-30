@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import com.waycool.data.Network.NetworkModels.ActivateDeviceDTO
 import com.waycool.data.Network.NetworkModels.SoilTestReportMaster
 import com.waycool.data.Network.NetworkModels.SoilTestResponseDTO
-import com.waycool.data.Network.NetworkModels.UserDetailsDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.LoginRepository

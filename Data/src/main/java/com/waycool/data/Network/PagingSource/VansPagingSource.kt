@@ -19,6 +19,7 @@ class VansPagingSource(
 
             val position = params.key ?: 1
             queryMap["page"] = position.toString()
+            queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
             val response = api.getVansFeeder(headerMap, queryMap)
 
             return LoadResult.Page(

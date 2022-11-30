@@ -1,9 +1,7 @@
 package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Local.Entity.AccountEntity
 import com.waycool.data.Local.Entity.ProfileEntity
 import com.waycool.data.Local.Entity.UserDetailsEntity
-import com.waycool.data.repository.domainModels.AccountDomain
 import com.waycool.data.repository.domainModels.ProfileDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.util.DomainMapper
@@ -11,15 +9,20 @@ import com.waycool.data.repository.util.DomainMapper
 class UserDetailsDomainMapper : DomainMapper<UserDetailsDomain, UserDetailsEntity> {
     override fun mapToDomain(dto: UserDetailsEntity): UserDetailsDomain {
         return UserDetailsDomain(
-            id = dto.id,
+            userId = dto.userId,
             name = dto.name,
-            contact = dto.contact,
             email = dto.email,
-            approved = dto.approved,
-            encryptedToken=dto.encryptedToken,
-            orgCodeId = dto.orgCodeId,
+            phone = dto.phone,
+            jwt = dto.jwt,
             profile = ProfileDomainMapper().mapToDomain(dto.profile ?: ProfileEntity()),
-            account = AccountDomainMapper().toDomainList(dto.account)
+            accountId = dto.accountId,
+            accountNo = dto.accountNo,
+            accountType = dto.accountType,
+            accountIsActive = dto.accountIsActive,
+            defaultModules = dto.defaultModules,
+            subscription = dto.subscription,
+            roleTitle = dto.roleTitle,
+            roleId = dto.roleId
         )
     }
 
@@ -27,36 +30,22 @@ class UserDetailsDomainMapper : DomainMapper<UserDetailsDomain, UserDetailsEntit
         override fun mapToDomain(dto: ProfileEntity): ProfileDomain {
             return ProfileDomain(
                 id = dto.id,
-                gender = dto.gender,
-                address = dto.address,
-                village = dto.village,
-                pincode = dto.pincode,
+                remotePhotoUrl = dto.remotePhotoUrl,
+                langId = dto.langId,
+                userId = dto.userId,
                 lat = dto.lat,
                 long = dto.long,
-                profilePic = dto.profilePic,
-                userId = dto.userId,
-                langId = dto.langId,
-                stateId = dto.stateId,
-                districtId = dto.districtId,
-                subDistrictId = dto.subDistrictId
+                pincode = dto.pincode,
+                village = dto.village,
+                address = dto.address,
+                state = dto.state,
+                district = dto.district,
+                subDistrict = dto.subDistrict,
+                langCode = dto.langCode,
+                lang = dto.lang,
             )
         }
 
     }
 
-    class AccountDomainMapper : DomainMapper<AccountDomain, AccountEntity> {
-        override fun mapToDomain(dto: AccountEntity): AccountDomain {
-            return AccountDomain(
-                id = dto.id,
-                accountNo = dto.accountNo,
-                accountType = dto.accountType,
-                isActive = dto.isActive
-            )
-        }
-
-        fun toDomainList(initial: List<AccountEntity>): List<AccountDomain> {
-            return initial.map { mapToDomain(it) }
-        }
-
-    }
 }

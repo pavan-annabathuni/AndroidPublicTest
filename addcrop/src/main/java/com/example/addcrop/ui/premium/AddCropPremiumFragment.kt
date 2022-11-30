@@ -100,14 +100,7 @@ class AddCropPremiumFragment : Fragment() {
             }
 
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                for (i in it.data!!.account) {
-                    if (i.accountType == "outgrow") {
-                        Log.d(ContentValues.TAG, "onCreateViewAccountID:${i.id}")
-                        accountID = i.id
-                        irrigationTypeSpinner(accountID!!, crop_id!!, crop_type!!)
-
-                    }
-                }
+                accountID=it.data?.accountId
             }
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")

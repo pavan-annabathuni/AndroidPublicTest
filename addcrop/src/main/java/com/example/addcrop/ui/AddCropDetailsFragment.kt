@@ -95,35 +95,46 @@ class AddCropDetailsFragment : Fragment() {
                 viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                    for (i in it.data!!.account) {
-                        if (i.accountType == "outgrow") {
-                            Log.d(TAG, "onCreateViewAccountID:${i.id}")
-                            accountID = i.id
-                            postAddCrop(crop_id_selected!!, accountID!!)
-                        }
-                    }
-                }
+                    accountID = it.data?.accountId
+//                        postAddCrop(crop_id_selected!!,accountID!!)
 
+                }
+                binding.cardCheckHealth.setOnClickListener {
+                    if (accountID != null)
+                        postAddCrop(crop_id_selected!!, accountID!!)
+
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+////                    account=it.data.account
+//                    for (i in it.data!!.account) {
+//                        if (i.accountType == "outgrow") {
+//                            Log.d(TAG, "onCreateViewAccountID:${i.id}")
+//                            accountID = i.id
+//                            postAddCrop(crop_id_selected!!,accountID!!)
+//                        }
+//                    }
+//                }
+
+                }
             }
-        }
 
 
 //        spinner()
-        spinnerYear()
-        binding.clCalender.setOnClickListener {
-            showCalender()
+            spinnerYear()
+            binding.clCalender.setOnClickListener {
+                showCalender()
 //            showDateDailog()
-        }
-        binding.backBtn.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
-        }
+            }
+            binding.backBtn.setOnClickListener {
+                val isSuccess = findNavController().navigateUp()
+                if (!isSuccess) requireActivity().onBackPressed()
+            }
 //        if (binding.etNickName.text.toString().isEmpty() || binding.etAreaNumber.text.toString().isEmpty() || binding.etCalender.text.toString().isEmpty()){
 //
 //        }
 
 
-    }
+        }
 
 //    private fun spinner() {
 //        val arrayAdapter =
@@ -194,6 +205,7 @@ class AddCropDetailsFragment : Fragment() {
 //        }
 //
 //    }
+    }
 
     private fun spinnerYear() {
         val arrayAdapter =

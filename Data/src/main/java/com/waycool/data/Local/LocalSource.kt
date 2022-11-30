@@ -3,6 +3,7 @@ package com.waycool.data.Local
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.Local.db.OutgrowDao
 import kotlinx.coroutines.flow.Flow
 
 
@@ -89,9 +90,11 @@ object LocalSource {
     suspend fun insertModuleMaster(moduleMaster: List<ModuleMasterEntity>) {
         DataStoreManager.insertModuleMaster(moduleMaster)
     }
+
     suspend fun insertAddCropType(moduleMaster: List<AddCropTypeEntity>) {
         DataStoreManager.insertAddCropType(moduleMaster)
     }
+
     suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
         DataStoreManager.insertSoilTestHistory(moduleMaster)
     }
@@ -99,9 +102,11 @@ object LocalSource {
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         return DataStoreManager.getModuleMaster()
     }
+
     fun getAddCropType(): Flow<List<AddCropTypeEntity>>? {
         return DataStoreManager.getAddCropType()
     }
+
     fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
         return DataStoreManager.getSoilTestHistory()
     }
@@ -122,15 +127,20 @@ object LocalSource {
         return DataStoreManager.getAiCropHistory()
     }
 
-    suspend fun saveSelectedLanguage(langCode: String, langId: Int) {
-        DataStoreManager.saveSelectedLanguage(langCode, langId)
+    suspend fun saveSelectedLanguage(langCode: String, langId: Int, language: String) {
+        DataStoreManager.saveSelectedLanguage(langCode, langId, language)
     }
+
+    suspend fun getLanguageCode() = DataStoreManager.getSelectedLanguageCode()
+
+    suspend fun getLanguage() = DataStoreManager.getSelectedLanguage()
+    suspend fun getLanguageId() = DataStoreManager.getSelectedLanguageID()
 
     suspend fun insertUserDetails(userDetails: UserDetailsEntity) {
         DataStoreManager.insertUserDetails(userDetails)
     }
 
-     fun getUserDetails(): Flow<UserDetailsEntity>? {
+    fun getUserDetails(): Flow<UserDetailsEntity>? {
         return DataStoreManager.getUserDetails()
     }
 
@@ -146,23 +156,31 @@ object LocalSource {
 
     fun getSelectedDiseasesForCrop(diseaseId: Int) = outgrowDao.getSelectedDisease(diseaseId)
 
-    suspend fun insertWeatherData(weather: WeatherMasterEntity,lat:String,lon:String) {
-        DataStoreManager.insertWeather(weather,lat, lon)
+    suspend fun insertWeatherData(weather: WeatherMasterEntity, lat: String, lon: String) {
+        DataStoreManager.insertWeather(weather, lat, lon)
     }
 
-    fun getWeather(lat:String,lon:String) = DataStoreManager.getWeather(lat,lon)
+    fun getWeather(lat: String, lon: String) = DataStoreManager.getWeather(lat, lon)
 
     fun insertCropInformation(CropInformation: List<CropInformationEntityData>) {
         outgrowDao.insertCropInformation(CropInformation)
     }
 
-    fun getCropInformation(crop_id:Int) = outgrowDao.getCropInformation(crop_id)
+    fun getCropInformation(crop_id: Int) = outgrowDao.getCropInformation(crop_id)
 
     fun insertMyCrop(MyCrops: List<MyCropDataEntity>) {
         outgrowDao.insertMyCrops(MyCrops)
     }
+
     fun getMyCrop() = outgrowDao.getMyCrops()
 
     suspend fun deleteMyCrop() = outgrowDao.getDeleteMyCrops()
 
+    fun insertTranslations(translations:List<AppTranslationsEntity>){
+        outgrowDao.insertTranslations(translations)
+    }
+
+    suspend fun getTranslationForString(appKey:String):AppTranslationsEntity? {
+        return outgrowDao.getTranslation(appKey)
+    }
 }

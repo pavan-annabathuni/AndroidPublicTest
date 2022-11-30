@@ -78,40 +78,27 @@ class NewSoilTestFormFragment : Fragment() {
                 soilViewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                    contactNumber= it.data?.contact.toString()
-                    binding.tvContact.text=contactNumber
-                    Log.d(TAG, "onCreateViewPhoneNumber:$contactNumber ")
+                contactNumber = it.data?.phone.toString()
+                binding.tvContact.text = contactNumber
 
-
-
-                    for ( i in it.data!!.account){
-                        if (i.accountType=="outgrow"){
-                            Log.d(TAG, "onCreateViewAccountID:${i.id}")
-                            accountID=i.id
-//                            binding.tvContact
-//                            mobileNumber=i.accountNo.toString()
-
-                            if (accountID!=null){
-                                Log.d(TAG, "onCreateViewAccountID:$accountID")
-                                itemClicked(accountID!!, lat!!, long!!, onp_id!!,contactNumber)
-                            }
-
-                            }
+                if (it.data?.accountId != null) {
+                    Log.d(TAG, "onCreateViewAccountID:$accountID")
+                    itemClicked(accountID!!, lat!!, long!!, onp_id!!, contactNumber)
+                }
 
 
 //                            if (account!=null){
 //                                itemClicked(account!!, lat!!, long!!, onp_id!!)
 //                            }
-                        }
-                    }
-
 
             }
+
+
+        }
 
 //            if (account!=null){
 //                itemClicked(account!!, lat!!, long!!, onp_id!!)
 //            }
-
 
 
 //        binding.cardCheckHealth.setOnClickListener {
@@ -141,7 +128,7 @@ class NewSoilTestFormFragment : Fragment() {
 //                "1"
 //            )
 //            viewModel.postNewSoil(newSoilTestPost)
-            Log.d(TAG, "onViewCreated: ButtonClicked")
+        Log.d(TAG, "onViewCreated: ButtonClicked")
 //            soilViewModel.postNewSoil(
 //                binding.etPlotNumber.toString(),
 //                binding.etPincodeNumber.toString(),
@@ -233,13 +220,19 @@ class NewSoilTestFormFragment : Fragment() {
         }
     }
 
-    private fun bindObserversSoilTestHistory(account_id:Int ,lat:Double,long:Double,onp_number:Int,phoneNumber:String){
+    private fun bindObserversSoilTestHistory(
+        account_id: Int,
+        lat: Double,
+        long: Double,
+        onp_number: Int,
+        phoneNumber: String
+    ) {
         soilViewModel.postNewSoil(
             account_id,lat,long,
             onp_number,
             binding.etPlotNumber.text.toString(),
             binding.etPincodeNumber.text.toString(),
-            binding.etAddress.text. toString(),
+            binding.etAddress.text.toString(),
             binding.etState.text.toString(),
             binding.etCity.text.toString(),
             phoneNumber
@@ -247,10 +240,13 @@ class NewSoilTestFormFragment : Fragment() {
         ).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    val bundle=Bundle()
-                    bundle.putString("soil_req_number",it.data!!.data.soilTestNumber)
-                    Log.d(TAG, "initViewsendingId: "+it.data!!.data.soilTestNumber)
-                    findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
+                    val bundle = Bundle()
+                    bundle.putString("soil_req_number", it.data!!.data.soilTestNumber)
+                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber)
+                    findNavController().navigate(
+                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
+                        bundle
+                    )
                 }
                 is Resource.Loading -> {
 
@@ -268,8 +264,13 @@ class NewSoilTestFormFragment : Fragment() {
     }
 
 
-
-    private fun itemClicked(account_id:Int ,lat:String,long:String,onp_number:Int,phoneNumber:String) {
+    private fun itemClicked(
+        account_id: Int,
+        lat: String,
+        long: String,
+        onp_number: Int,
+        phoneNumber: String
+    ) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
             pincode = binding.etPincodeNumber.text.toString().trim()

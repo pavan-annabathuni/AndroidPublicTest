@@ -28,7 +28,7 @@ object NetworkUtils {
     fun ImageView.loadUrl(url: String) {
 
         val imageLoader = ImageLoader.Builder(this.context)
-            .componentRegistry { add(SvgDecoder(this@loadUrl.context)) }
+            //.componentRegistry { add(SvgDecoder(this@loadUrl.context)) }
             .build()
 
         val request = ImageRequest.Builder(this.context)

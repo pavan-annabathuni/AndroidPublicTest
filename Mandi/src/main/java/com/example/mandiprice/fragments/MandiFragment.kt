@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
+import com.example.mandiprice.adapter.AdsAdapter
 import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.adapter.DistanceAdapter.*
 import com.example.mandiprice.databinding.FragmentMandiBinding
@@ -26,9 +27,8 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -41,7 +41,6 @@ class MandiFragment : Fragment() {
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
-    var bannerImageList: MutableList<AdBannerImage> = java.util.ArrayList()
     private lateinit var adapterMandi: DistanceAdapter
     private var crops_category =
         arrayOf("Category", "Cereals", "Pulses", "Vegetables", "Fruits", "Spices", "Others")
@@ -93,10 +92,10 @@ class MandiFragment : Fragment() {
         }
 
         binding.topAppBar.setNavigationOnClickListener() {
-            activity?.finish()
+            this.findNavController().navigateUp()
         }
 
-
+        setBanners()
         return binding.root
 
     }
@@ -117,7 +116,6 @@ class MandiFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
-        setBanners()
         filterMenu()
         tabs()
         onClick()
@@ -223,7 +221,7 @@ class MandiFragment : Fragment() {
                 data.categoryName
             } ?: emptyList()) as MutableList<String>
             if (cropCategoryList.isNotEmpty())
-                cropCategoryList[0] = "-Category-"
+                cropCategoryList[0] = "Category"
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, cropCategoryList)
             binding.spinner1.adapter = arrayAdapter
@@ -277,7 +275,7 @@ class MandiFragment : Fragment() {
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.isNotEmpty())
-                            cropNameList[0] = "-Crops-"
+                            cropNameList[0] = "Crops"
 
                         val arrayAdapter2 =
                             ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
@@ -339,7 +337,7 @@ class MandiFragment : Fragment() {
                 stateNameList.sort()
 
                 if (stateNameList.isNotEmpty())
-                    stateNameList[0] = "-State-"
+                    stateNameList[0] = "State"
                 val arrayAdapter3 =
                     ArrayAdapter(requireContext(), R.layout.item_spinner, stateNameList)
                 binding.spinner3.adapter = arrayAdapter3
@@ -510,22 +508,23 @@ class MandiFragment : Fragment() {
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -564,7 +563,7 @@ class MandiFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
