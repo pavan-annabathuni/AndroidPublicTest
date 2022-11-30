@@ -11,7 +11,8 @@ data class CheckSoilTestLabDTO (
         @SerializedName("data"    ) var data: List<CheckSoilTestData> = emptyList()
         )
 @Parcelize
-data class CheckSoilTestData(
+data class
+CheckSoilTestData(
         val onp_address: @RawValue Any? = null,
         val onp_country: @RawValue Any? = null,
         val onp_distance_km: @RawValue Any? = null,

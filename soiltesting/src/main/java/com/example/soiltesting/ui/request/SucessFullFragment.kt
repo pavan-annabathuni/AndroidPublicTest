@@ -32,7 +32,7 @@ class SucessFullFragment : Fragment() {
             binding.tvRequestIDText.text = "Your soil test request for $soilTestNumber"
 
             binding.ivClose.setOnClickListener {
-                activity?.finish()
+               findNavController().navigateUp()
 //                findNavController().navigate(R.id.action_sucessFullFragment_to_soilTestingHomeFragment)
 //                val isSuccess = findNavController().navigateUp()
 //                if (!isSuccess) requireActivity().finish()

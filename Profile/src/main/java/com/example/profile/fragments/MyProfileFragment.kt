@@ -19,14 +19,12 @@ import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.Local.LocalSource
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
-import zendesk.chat.*
-import zendesk.chat.JwtAuthenticator.JwtCompletion
-import zendesk.messaging.MessagingActivity
 
 
 class MyProfileFragment : Fragment() {
@@ -35,7 +33,6 @@ class MyProfileFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
-    private var jwtToken:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,24 +40,28 @@ class MyProfileFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentMyProfileBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-      //viewModel.getUsers()
-       // viewModel.getUserDetails()
+        //viewModel.getUsers()
+        // viewModel.getUserDetails()
+
+
+        binding.version.text = "App Ver ${com.example.profile.BuildConfig.VERSION_NAME}"
+
+        viewModel.viewModelScope.launch {
+            binding.language.text = LocalSource.getLanguage()
+        }
         onClick()
         val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true)
-            {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                   this@MyProfileFragment.findNavController().navigateUp()
+                    this@MyProfileFragment.findNavController().navigateUp()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -71,18 +72,17 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
-     fun observer():Boolean {
+    fun observer(): Boolean {
 
           viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
-                  if(it.data?.data?.profile?.profilePic!=null) {
-                      Glide.with(requireContext()).load(it.data?.data?.profile?.profilePic).into(binding.proPic)
+                  if(it.data?.data?.profile?.remotePhotoUrl!=null) {
+                      Glide.with(requireContext()).load(it.data?.data?.profile?.remotePhotoUrl).into(binding.proPic)
                       Log.d("ProfilePic", "observer: $it")
 
                   }
-                  jwtToken = it.data?.data?.encryptedToken
               }
           }
 
@@ -136,15 +136,17 @@ class MyProfileFragment : Fragment() {
             this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
 
-//        binding.version.setText("2.5.5")
 
-        binding.cvChat.setOnClickListener() {
-            Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),
-            AppSecrets.getChatAppId())
-            val chatConfiguration = ChatConfiguration.builder()
-                .withAgentAvailabilityEnabled(false)
-                .withTranscriptEnabled(false)
-                .build()
+
+
+        binding.cvChat.setOnClickListener {
+            FeatureChat.zenDeskInit(requireContext())
+//            Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),
+//            AppSecrets.getChatAppId())
+//            val chatConfiguration = ChatConfiguration.builder()
+//                .withAgentAvailabilityEnabled(false)
+//                .withTranscriptEnabled(false)
+//                .build()
 //            val visitorInfo: VisitorInfo = VisitorInfo.builder()
 //                .withName("Bob")
 //                .withEmail("bob@example.com")
@@ -166,24 +168,24 @@ class MyProfileFragment : Fragment() {
 //                    jwtCompletion.onError()
   //              }
 
-                Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),AppSecrets.getChatAppId())
-                val jwtAuth = JwtAuth()
-                Chat.INSTANCE.setIdentity(jwtAuth)
-
-         //   Chat.INSTANCE.setIdentity(jwtAuthenticator)
-
-            val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-//                .withVisitorInfo(visitorInfo)
-                .withDepartment("English Language Group")
-                .build()
-
-            Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-
-
-
-            MessagingActivity.builder()
-                .withEngines(ChatEngine.engine())
-                .show(requireContext(), chatConfiguration);
+//                Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),AppSecrets.getChatAppId())
+//                val jwtAuth = JwtAuth()
+//                Chat.INSTANCE.setIdentity(jwtAuth)
+//
+//         //   Chat.INSTANCE.setIdentity(jwtAuthenticator)
+//
+//            val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
+////                .withVisitorInfo(visitorInfo)
+//                .withDepartment("English Language Group")
+//                .build()
+//
+//            Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
+//
+//
+//
+//            MessagingActivity.builder()
+//                .withEngines(ChatEngine.engine())
+//                .show(requireContext(), chatConfiguration);
 
         }
 //        binding.rateUs.setOnClickListener(){
@@ -219,6 +221,7 @@ class MyProfileFragment : Fragment() {
 
                             loginViewModel.setUserToken(null)
                             loginViewModel.setIsLoggedIn(false)
+                            FeatureChat.zendeskLogout()
 
                             Toast.makeText(
                                 context,
@@ -237,28 +240,28 @@ class MyProfileFragment : Fragment() {
     }
 
    }
-internal class JwtAuth : JwtAuthenticator {
-
-    private fun retrieveToken(callback: JwtCallback) {
-        // request to backend service that returns a JWT Token or an Error
-
-        callback.onSuccess("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NTAsIm5hbWUiOiJTZCIsImNvbnRhY3QiOiI3Njc5OTUyMDUwIiwiZW1haWwiOiI3Njc5OTUyMDUwNjM3MjFmMGNkYmY1YmR1bW15QHdheWNvb2wuaW4iLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiYXBwcm92ZWQiOjEsInNldHRpbmdzIjpudWxsLCJpYXQiOjE2Njg0MjM0MzYsImp0aSI6IjYzNzIxZjBjZGJmODIiLCJwcm9maWxlIjp7ImlkIjozMSwiZ2VuZGVyIjpudWxsLCJhZGRyZXNzIjpudWxsLCJ2aWxsYWdlIjoiQmVsbGFuZHVyIiwicGluY29kZSI6IjU2MDEwMyIsInN0YXRlIjpudWxsLCJkaXN0cmljdCI6bnVsbCwic3ViX2Rpc3RyaWN0IjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJsYXQiOiIxMi45MzAxNDAwMCIsImxvbmciOiI3Ny42ODYyOTAwMCIsInByb2ZpbGVfcGljIjpudWxsLCJ1c2VyX2lkIjo1MCwibGFuZ19pZCI6MX0sImFjY291bnQiOlt7ImlkIjozMCwiYWNjb3VudF9ubyI6IkFITFg3VlNZTVIiLCJhY2NvdW50X3R5cGUiOiJvdXRncm93IiwiaXNfYWN0aXZlIjoxLCJkZWZhdWx0X21vZHVsZXMiOjEsImlzX3ByZW1pdW0iOjB9XX0.y3pY-4UPvfmPjPFIwRbNmABQ8nclvtdjF_Vx91yJQno")
-    }
-
-    override fun getToken(jwtCompletion: JwtCompletion) {
-        retrieveToken(object : JwtCallback {
-            override fun onSuccess(token: String?) {
-                jwtCompletion.onTokenLoaded(token)
-            }
-
-            override fun onError() {
-                jwtCompletion.onError()
-            }
-        })
-    }
-
-    internal interface JwtCallback {
-        fun onSuccess(token: String?)
-        fun onError()
-    }
-}
+//internal class JwtAuth : JwtAuthenticator {
+//
+//    private fun retrieveToken(callback: JwtCallback) {
+//        // request to backend service that returns a JWT Token or an Error
+//
+//        callback.onSuccess("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NTAsIm5hbWUiOiJTZCIsImNvbnRhY3QiOiI3Njc5OTUyMDUwIiwiZW1haWwiOiI3Njc5OTUyMDUwNjM3MjFmMGNkYmY1YmR1bW15QHdheWNvb2wuaW4iLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiYXBwcm92ZWQiOjEsInNldHRpbmdzIjpudWxsLCJpYXQiOjE2Njg0MjM0MzYsImp0aSI6IjYzNzIxZjBjZGJmODIiLCJwcm9maWxlIjp7ImlkIjozMSwiZ2VuZGVyIjpudWxsLCJhZGRyZXNzIjpudWxsLCJ2aWxsYWdlIjoiQmVsbGFuZHVyIiwicGluY29kZSI6IjU2MDEwMyIsInN0YXRlIjpudWxsLCJkaXN0cmljdCI6bnVsbCwic3ViX2Rpc3RyaWN0IjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJsYXQiOiIxMi45MzAxNDAwMCIsImxvbmciOiI3Ny42ODYyOTAwMCIsInByb2ZpbGVfcGljIjpudWxsLCJ1c2VyX2lkIjo1MCwibGFuZ19pZCI6MX0sImFjY291bnQiOlt7ImlkIjozMCwiYWNjb3VudF9ubyI6IkFITFg3VlNZTVIiLCJhY2NvdW50X3R5cGUiOiJvdXRncm93IiwiaXNfYWN0aXZlIjoxLCJkZWZhdWx0X21vZHVsZXMiOjEsImlzX3ByZW1pdW0iOjB9XX0.y3pY-4UPvfmPjPFIwRbNmABQ8nclvtdjF_Vx91yJQno")
+//    }
+//
+//    override fun getToken(jwtCompletion: JwtCompletion) {
+//        retrieveToken(object : JwtCallback {
+//            override fun onSuccess(token: String?) {
+//                jwtCompletion.onTokenLoaded(token)
+//            }
+//
+//            override fun onError() {
+//                jwtCompletion.onError()
+//            }
+//        })
+//    }
+//
+//    internal interface JwtCallback {
+//        fun onSuccess(token: String?)
+//        fun onError()
+//    }
+//}

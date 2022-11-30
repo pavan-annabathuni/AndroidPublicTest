@@ -6,5 +6,7 @@ data class AiCropDetectionDomain(
     var prediction: String? = null,
     var probability: String? = null,
     var cropId: String? = null,
-    var diseaseId: Int? = null
+    var diseaseId: Int? = null,
+    var message:String?=null,
+    var status:Boolean?=null
 )

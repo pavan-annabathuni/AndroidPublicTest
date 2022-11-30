@@ -12,7 +12,8 @@ class CropMasterDomainMapper : DomainMapper<CropMasterDomain, CropMasterEntity> 
             cropCategory_id = dto.cropCategory_id,
             cropLogo = dto.cropLogo,
             cropType = dto.cropType,
-            translation = dto.translation
+            translation = dto.translation,
+            cropNameTag = dto.cropNameTag
         )
     }
 

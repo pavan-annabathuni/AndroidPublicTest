@@ -66,11 +66,12 @@ object DataStoreManager {
     }
 
 
-    suspend fun saveSelectedLanguage(languageCode: String, langId: Int) {
+    suspend fun saveSelectedLanguage(languageCode: String, langId: Int,language:String) {
         performPrefsSanityCheck()
         context?.userPreferences?.edit {
             it[StoreKey.LANGUAGE_CODE] = languageCode
             it[StoreKey.LANGUAGE_ID] = langId
+            it[StoreKey.LANGUAGE]=language
         }
     }
 
@@ -82,6 +83,17 @@ object DataStoreManager {
             }
             ?.first().let {
                 it?.get(StoreKey.LANGUAGE_CODE)
+            }
+    }
+
+    suspend fun getSelectedLanguage(): String? {
+        performPrefsSanityCheck()
+        return context?.userPreferences?.data
+            ?.catch { exception ->
+                Log.d("UserPref: ", exception.toString())
+            }
+            ?.first().let {
+                it?.get(StoreKey.LANGUAGE)
             }
     }
 
@@ -198,6 +210,17 @@ object DataStoreManager {
             }
             ?.first().let {
                 it?.get(StoreKey.USER_TOKEN)
+            }
+    }
+
+    suspend fun getUserTokenFlow(): Flow<String?>? {
+        performPrefsSanityCheck()
+        return context?.userPreferences?.data
+            ?.catch { exception ->
+                Log.d("UserPref: ", exception.toString())
+            }
+            ?.map{
+                it[StoreKey.USER_TOKEN]
             }
     }
 

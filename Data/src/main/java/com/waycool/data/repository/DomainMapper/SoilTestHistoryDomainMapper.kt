@@ -11,7 +11,9 @@ class SoilTestHistoryDomainMapper : DomainMapper<SoilTestHistoryDomain, SoilTest
             plot_no = dto.plot_no,
             soil_test_number = dto.soil_test_number,
             status = dto.status,
-            updated_at = dto.updated_at
+            updated_at = dto.updated_at,
+            approve_status = dto.approve_status
+
         )
     }
     fun toDomainList(initial: List<SoilTestHistoryEntity>): List<SoilTestHistoryDomain> {

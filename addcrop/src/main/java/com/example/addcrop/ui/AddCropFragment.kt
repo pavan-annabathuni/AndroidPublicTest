@@ -21,15 +21,10 @@ import com.waycool.data.utils.Resource
 class AddCropFragment : Fragment(), AddCropItemClick {
     private var _binding: FragmentAddCropBinding? = null
     private val binding get() = _binding!!
-
-    //    private var categoryAdapter = CategoryAdapter(this)
-//    private var responseDataList = ArrayList<Data>()
-
-    //    private val viewModel: CropProtectViewModel by lazy {
-//        ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
-//    }
     private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
     private var categoryAdapter = CategoryAdapter(this)
+    var crop_id_selected:Int?=null
+    var pomo:String?=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,47 +77,34 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             }
 
         }
-
-
-//        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                is NetworkResult.Success -> {
-//                    Log.d("TAG", "bindObserversDataCategory:" + it.data?.data.toString())
-//                    val response = it.data?.data as java.util.ArrayList<Data>
-//                    categoryAdapter.setMovieList(response)
-//                }
-//                is NetworkResult.Error -> {
-//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//                is NetworkResult.Loading -> {
-//
-//                }
-//            }
-//        })
-
-
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun clickOnCategory(name: AddCropTypeDomain) {
-        binding.cardCheckHealth.isEnabled = true
-        binding.cardCheckHealth.setOnClickListener {
-            categoryAdapter.upDateList()
-            if (name.isSelected == false) {
-                Toast.makeText(requireContext(), "PleaseSelect Soil Type", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-//                findNavController().navigate(R.id.action_addCropFragment_to_addCropPremiumFragment)
+        if (arguments != null) {
+            crop_id_selected = arguments?.getInt("cropid")
+            pomo= arguments?.getString("pom")
+            Log.d("TAG", "clickOnCategoryJCNjsnjcv: $pomo")
+            binding.cardCheckHealth.isEnabled = true
+            binding.cardCheckHealth.setOnClickListener {
+                categoryAdapter.upDateList()
+                if (name.isSelected == false) {
+                    Toast.makeText(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
+                    val bundle = Bundle()
+                    bundle.putInt("soil_type_id", name.id!!)
+                    bundle.putInt("cropid", crop_id_selected!!)
+                    bundle.putString("pom",pomo)
+                    Log.d("TAG", "SoilTypeID: ${name.id} ")
+                    findNavController().navigate(
+                        R.id.action_addCropFragment_to_addCropPremiumFragment, bundle)
+                }
+
+
             }
 
 
         }
-
-
     }
-
-//    override fun clickOnCategory(name: AddCropTypeDomain) {
-//        TODO("Not yet implemented")
-//    }
 }

@@ -12,12 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.core.content.FileProvider;
+
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.waycool.newsandarticles.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,6 +71,7 @@ public class AppUtil {
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("*/*");
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 i.putExtra(Intent.EXTRA_STREAM, getImageUri(context, getBitmapFromView(imageView)));
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_TEXT, content);
@@ -109,8 +116,21 @@ public class AppUtil {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
-        return Uri.parse(path);
+        File fileName = new File(inContext.getExternalCacheDir(),"newspic.jpg");
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(String.valueOf(fileName));
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return FileProvider.getUriForFile(inContext,inContext.getApplicationContext().getPackageName() + ".provider",fileName);
+//        return Uri.parse(path);
     }
 
     public static String changeDateFormat(String givenDate) {

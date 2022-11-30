@@ -26,11 +26,6 @@ import com.example.profile.databinding.FragmentEditProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -68,7 +63,6 @@ class EditProfileFragment : Fragment() {
         binding.lifecycleOwner = this
         // viewModel.getUserProfile()
         //viewModel.getUsers()
-        Places.initialize(context, "AIzaSyAbYkho0xs5_muW3_tobx43l02p1LsF5vI")
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -97,13 +91,13 @@ class EditProfileFragment : Fragment() {
                 binding.tvAddress1.setText(it.data?.data?.profile?.address)
                 binding.tvAddress2.setText(it.data?.data?.profile?.village)
                 binding.tvPincode.setText(it.data?.data?.profile?.pincode)
-                binding.tvState.setText(it.data?.data?.profile?.stateId)
-                binding.tvCity.setText(it.data?.data?.profile?.districtId)
+                binding.tvState.setText(it.data?.data?.profile?.state)
+                binding.tvCity.setText(it.data?.data?.profile?.district)
             }
         }
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            if (it.data?.profile?.profilePic != null && selecteduri == null) {
-                Glide.with(this).load(it.data?.profile?.profilePic).into(binding.imageView)
+            if (it.data?.profile?.remotePhotoUrl != null && selecteduri == null) {
+                Glide.with(this).load(it.data?.profile?.remotePhotoUrl).into(binding.imageView)
             }
         }
 
@@ -287,28 +281,29 @@ class EditProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 101 && resultCode == RESULT_OK) {
-            val place: Place = Autocomplete.getPlaceFromIntent(data)
-            val value = place.address
-            val lstValues: List<String> = value.split(",").map { it -> it.trim() }
-            val size = lstValues.size - 2
-            binding.tvAddress1.setText("${place.name},${lstValues[0]},${lstValues[1]}")
-            binding.tvAddress2.setText(lstValues[2])
-            val strState = lstValues[size].replace("[0-9]".toRegex(), "");
-            binding.tvState.setText(strState)
-
-            binding.tvCity.setText(lstValues[size - 1])
-            val str = lstValues[size].replace("[^\\d.]".toRegex(), "");
-            binding.tvPincode.setText(str)
-        } else if (requestCode == 102 && resultCode == RESULT_OK) {
-            val place: Place = Autocomplete.getPlaceFromIntent(data)
-            val values = place.address
-
-            val lstValues: List<String> = values.split(",").map { it -> it.trim() }
-            binding.tvCity.setText(lstValues[0])
-            binding.tvState.setText(lstValues[1])
-
-        } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId) {
+//        if (requestCode == 101 && resultCode == RESULT_OK) {
+//            val place: Place = Autocomplete.getPlaceFromIntent(data)
+//            val value = place.address
+//            val lstValues: List<String> = value.split(",").map { it -> it.trim() }
+//            val size = lstValues.size - 2
+//            binding.tvAddress1.setText("${place.name},${lstValues[0]},${lstValues[1]}")
+//            binding.tvAddress2.setText(lstValues[2])
+//            val strState = lstValues[size].replace("[0-9]".toRegex(), "");
+//            binding.tvState.setText(strState)
+//
+//            binding.tvCity.setText(lstValues[size - 1])
+//            val str = lstValues[size].replace("[^\\d.]".toRegex(), "");
+//            binding.tvPincode.setText(str)
+//        } else if (requestCode == 102 && resultCode == RESULT_OK) {
+//            val place: Place = Autocomplete.getPlaceFromIntent(data)
+//            val values = place.address
+//
+//            val lstValues: List<String> = values.split(",").map { it -> it.trim() }
+//            binding.tvCity.setText(lstValues[0])
+//            binding.tvState.setText(lstValues[1])
+//
+//        } else
+            if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId) {
             // Toast.makeText(context, "$requestCode", Toast.LENGTH_SHORT).show()
 //            val selectedImage: Uri? = data?.data// handle chosen image
 //            val pic = File(requireContext().cacheDir, "pic")

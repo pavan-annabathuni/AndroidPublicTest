@@ -10,9 +10,6 @@ android {
     defaultConfig {
         minSdk appMinSdkVersion
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +30,14 @@ android {
         dataBinding true
         viewBinding true
     }
+
+    def versionName = VERSION_NAME
+    def versionCode = VERSION_CODE
+    buildTypes.all {
+        buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
+        buildConfigField "int", "VERSION_CODE", "$versionCode"
+    }
+
 }
 
 dependencies {
@@ -44,6 +49,7 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':FeatureLogin')
+    implementation project(path: ':featureChat')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
@@ -79,18 +85,18 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
 
-    api group: 'com.zendesk', name: 'support', version: '5.1.0'
-    api group: 'com.zendesk', name: 'answerbot', version: '3.0.9'
-//    api group: 'com.zendesk', name: 'chat', version: '3.3.6'
-
-    implementation group: 'com.zendesk', name: 'chat', version: '3.3.6'
+//    api group: 'com.zendesk', name: 'support', version: '5.1.0'
+//    api group: 'com.zendesk', name: 'answerbot', version: '3.0.9'
+////    api group: 'com.zendesk', name: 'chat', version: '3.3.6'
+//
+//    implementation group: 'com.zendesk', name: 'chat', version: '3.3.6'
 
     implementation 'com.github.yalantis:ucrop:2.2.8-native'
 
-    implementation 'com.google.android.libraries.places:places:2.6.0'
+    implementation 'com.google.maps.android:places-ktx:2.0.0'
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.google.android.play:core-ktx:1.8.1'
     testImplementation 'junit:junit:4.13.2'

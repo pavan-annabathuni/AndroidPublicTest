@@ -41,6 +41,12 @@ class HistoryViewModel : ViewModel() {
         return CropsRepository.getSoilTestLab(account_id,lat,long).asLiveData()
     }
 
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
 
 //    private val repository = SoilTestingRepository(apiService)
 //    val historyLiveData get() = repository.historyLiveData

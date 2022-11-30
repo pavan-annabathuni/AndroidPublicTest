@@ -5,5 +5,7 @@ data class SoilTestHistoryEntity (
     val plot_no: String?=null,
     val soil_test_number: String?=null,
     val status: String?=null,
-    val updated_at: String?=null
+    val updated_at: String?=null,
+    val approve_status:String?=null
+
 )

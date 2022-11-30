@@ -139,7 +139,6 @@
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#FFFFFF"
                     android:hint="e.g 50"
-
                     android:inputType="numberDecimal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -158,6 +157,18 @@
                     android:background="@drawable/bg_acres"
                     android:gravity="center"
                     android:text="Acres"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ivSpinner"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/ivSpinner"
+                    android:layout_width="@dimen/txt12"
+                    android:layout_height="6dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/space20"
+                    android:src="@drawable/ic_spinner"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"

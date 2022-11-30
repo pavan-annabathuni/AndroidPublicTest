@@ -1,0 +1,11 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView"
+    android:layout_width="330dp"
+    android:layout_height="48dp"
+    android:padding="8dp"
+   android:text="Outgrow GWX"
+    android:gravity="start"
+    android:textColor="@color/black"
+    android:textSize="14sp"
+    style="@style/Medium"
+    />

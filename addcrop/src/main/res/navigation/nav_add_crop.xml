@@ -10,23 +10,20 @@
         android:name="com.example.addcrop.ui.AddCropFragment"
         android:label="fragment_add_crop"
         tools:layout="@layout/fragment_add_crop" >
+
         <action
-            android:id="@+id/action_addCropFragment_to_addCropDetailsFragment"
-            app:destination="@id/addCropDetailsFragment" />
+            android:id="@+id/action_addCropFragment_to_addCropPremiumFragment"
+            app:destination="@id/addCropPremiumFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCropDetailsFragment"
         android:name="com.example.addcrop.ui.AddCropDetailsFragment"
         android:label="fragment_add_crop_details"
         tools:layout="@layout/fragment_add_crop_details" >
-        <action
-            android:id="@+id/action_addCropDetailsFragment_to_plantSpacingFragment"
-            app:destination="@id/plantSpacingFragment"
-             />
     </fragment>
     <fragment
         android:id="@+id/plantSpacingFragment"
-        android:name="com.example.addcrop.ui.PlantSpacingFragment"
+        android:name="com.example.addcrop.ui.premium.PlantSpacingFragment"
         android:label="fragment_plant_spacing"
         tools:layout="@layout/fragment_plant_spacing" >
 
@@ -39,5 +36,29 @@
         <action
             android:id="@+id/action_selectAddCropFragment_to_addCropDetailsFragment2"
             app:destination="@id/addCropDetailsFragment" />
+        <action
+            android:id="@+id/action_selectAddCropFragment_to_addCropFragment"
+            app:destination="@id/addCropFragment" />
+        <action
+            android:id="@+id/action_selectAddCropFragment_to_veriatyCropFragment"
+            app:destination="@id/veriatyCropFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCropPremiumFragment"
+        android:name="com.example.addcrop.ui.premium.AddCropPremiumFragment"
+        android:label="fragment_add_crop_premium"
+        tools:layout="@layout/fragment_add_crop_premium" >
+        <action
+            android:id="@+id/action_addCropPremiumFragment_to_plantSpacingFragment"
+            app:destination="@id/plantSpacingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/veriatyCropFragment"
+        android:name="com.example.addcrop.ui.premium.VeriatyCropFragment"
+        android:label="fragment_veriaty_crop"
+        tools:layout="@layout/fragment_veriaty_crop" >
+        <action
+            android:id="@+id/action_veriatyCropFragment_to_addCropFragment"
+            app:destination="@id/addCropFragment" />
     </fragment>
 </navigation>

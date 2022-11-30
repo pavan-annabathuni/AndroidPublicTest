@@ -35,6 +35,7 @@ import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentVideosListBinding
 import com.waycool.videos.VideoViewModel
+import com.waycool.videos.adapter.AdsAdapter
 import java.util.*
 
 
@@ -48,8 +49,6 @@ class VideosListFragment : Fragment() {
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
 
-    //banners
-    var bannerImageList: MutableList<AdBannerImage> = ArrayList()
 
     var searchTag = ""
     var tagsAndKeywordsList = ArrayList<String>()
@@ -210,26 +209,23 @@ class VideosListFragment : Fragment() {
     }
 
     private fun setBanners() {
-        bannerImageList.clear()
 
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
+        val bannerAdapter = AdsAdapter()
+        videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-        bannerImageList.add(adBannerImage2)
-
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

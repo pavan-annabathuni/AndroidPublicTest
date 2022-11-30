@@ -1,10 +1,14 @@
 package com.waycool.weather.viewModel
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.repository.LoginRepository
+import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.WeatherRepository
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.repository.domainModels.weather.DailyDomain
 import com.waycool.data.utils.Resource
 import com.waycool.weather.utils.Constants
@@ -102,5 +106,12 @@ class WeatherViewModel : ViewModel() {
 
     fun displayPropertyDetailsCompleteHourly() {
         _navigateToSelectedHourly.value = null
+    }
+
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 }

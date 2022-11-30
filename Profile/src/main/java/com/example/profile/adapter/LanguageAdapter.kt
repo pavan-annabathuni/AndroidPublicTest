@@ -13,7 +13,7 @@ import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.featurelogin.databinding.ViewholderLanguageCardviewBinding
 import com.waycool.featurelogin.support.LanguageDiffCallback
 
-class LanguageAdapter: RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
+class LanguageAdapter(val langCode: String?) : RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
 
     private val languageList: MutableList<LanguageMasterDomain> = mutableListOf()
 
@@ -42,8 +42,8 @@ class LanguageAdapter: RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
         holder.nativeNameTv.setText(languageList.get(position).langNative)
         holder.languageNameTv.setText(languageList.get(position).lang.toString().trim())
 
-        if (selectedPos == -1 && languageList[position].langCode!!.contains("en")) {
-            selectedPos = holder.adapterPosition
+        if (selectedPos == -1 && langCode != null && languageList[position].langCode!! == langCode) {
+            selectedPos = holder.layoutPosition
             onItemClick?.invoke(languageList[position])
         }
 
@@ -72,7 +72,7 @@ class LanguageAdapter: RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
             holder.mLanguageParent.backgroundTintList =
                 ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.white)
 
-            holder.tickLayout.setVisibility(View.GONE)
+            holder.tickLayout.visibility = View.GONE
             holder.nativeNameTv.setTextColor(
                 ContextCompat.getColor(
                     context,
@@ -88,7 +88,8 @@ class LanguageAdapter: RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
         }
         holder.mLanguageParent.setOnClickListener {
             val tempPos: Int = selectedPos
-            selectedPos = holder.adapterPosition
+            selectedPos = holder.layoutPosition
+            onItemClick?.invoke(languageList[position])
             notifyItemChanged(tempPos)
             notifyItemChanged(selectedPos)
         }
@@ -104,11 +105,5 @@ class LanguageAdapter: RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
         val languageNameTv: TextView = binding.languageTvVh
         val mLanguageParent = binding.languageParent
         val tickLayout: ImageView = binding.tickView
-
-        init {
-            mLanguageParent.setOnClickListener {
-                onItemClick?.invoke(languageList[adapterPosition])
-            }
-        }
     }
 }

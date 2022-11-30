@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.cropinformation.R
+import com.example.cropinformation.adapter.AdsAdapter
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
@@ -41,7 +42,6 @@ class CropInfoFragment : Fragment() {
     }
     private val viewModel by lazy { ViewModelProvider(this)[NewsAndArticlesViewModel::class.java] }
 
-    var bannerImageList: MutableList<AdBannerImage> = java.util.ArrayList()
     private var cropId: Int? = null
     private var cropName: String? = null
     private var cropLogo:String? = null
@@ -160,7 +160,7 @@ class CropInfoFragment : Fragment() {
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
                 val customView = tab.setCustomView(R.layout.item_tab_crop)
 
-                when (data[position].label_name) {
+                when (data[position].labelNameTag?:data[position].label_name) {
 
                     "Crop Variety" -> {
                        tab.text = data[position].label_name
@@ -556,22 +556,23 @@ class CropInfoFragment : Fragment() {
         return scroll.roundToInt()
     }
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

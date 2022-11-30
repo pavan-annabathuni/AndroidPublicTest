@@ -30,7 +30,7 @@ class CustomeDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        getDialog()!!.getWindow()?.setBackgroundDrawableResource(R.drawable.bg_custome_dialog);
+        dialog!!.window?.setBackgroundDrawableResource(R.drawable.bg_custome_dialog);
         _binding = FragmentCustomeDialogBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -45,6 +45,11 @@ class CustomeDialogFragment : DialogFragment() {
             dismiss()
         }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//       dialog?.dismiss()
+//    }
 
 
 }

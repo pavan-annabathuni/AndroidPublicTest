@@ -5,10 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,12 +19,24 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
+import com.example.soiltesting.ui.checksoil.AdsAdapter
+import com.google.android.libraries.maps.CameraUpdateFactory
+import com.google.android.libraries.maps.GoogleMap
+import com.google.android.libraries.maps.SupportMapFragment
+import com.google.android.libraries.maps.model.*
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -45,6 +60,8 @@ import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment() {
 
+    private var polygon: Polygon? = null
+    private var mMap: GoogleMap? = null
     private var _binding: FragmentHomePagesBinding? = null
     private val binding get() = _binding!!
     private var orderBy: String = "distance"
@@ -53,9 +70,15 @@ class HomePagesFragment : Fragment() {
     private var crop: String? = null
     private var search: String? = null
     private var sortBy: String = "asc"
+    private var accountID: Int? = null
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
+    private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
+    private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
+
+    //    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+//    private val mandiAdapter = MandiHomePageAdapter()
     private lateinit var mandiAdapter: MandiHomePageAdapter
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
@@ -71,8 +94,8 @@ class HomePagesFragment : Fragment() {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
 
         lifecycleScope.launch {
-            var value:String? = DataStoreManager.read("FirstTime")
-            if(value!="true")
+            var value: String? = DataStoreManager.read("FirstTime")
+            if (value != "true")
                 findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
         }
         return binding.root
@@ -95,7 +118,33 @@ class HomePagesFragment : Fragment() {
                     args
                 )
         })
+
         binding.recyclerview.adapter = mandiAdapter
+        binding.farmsRv.adapter = farmsAdapter
+        binding.cropFarmRv.adapter = farmsCropsAdapter
+
+//
+//        tokenCheckViewModel.getUserDetails().observe(viewLifecycleOwner) {
+//            for ( i in it.data!!.account){
+//                if (i.accountType=="outgrow"){
+//                    Log.d(Constant.TAG, "onCreateViewAccountID:${i.id}")
+//                    accountID=i.id
+//                    if (accountID!=null){
+//                        Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            Log.d("TAG", "onCreateToken:$accountID")
+//                            Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
+//                            val token:String=tokenCheckViewModel.getUserToken()
+//                            tokenCheckViewModel(accountID!!,token)
+//                            Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
+//
+//                        }
+//
+//                    }
+//
+//                }
+//            }
+//        }
         binding.soilTestingCv.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
@@ -142,9 +191,12 @@ class HomePagesFragment : Fragment() {
 //            startActivity(intent)
             this.findNavController().navigate(R.id.navigation_mandi)
         }
-        binding.cvWeather.setOnClickListener() {
+        binding.weatherCl.setOnClickListener() {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
+        }
+        binding.farmsDetailsCl.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment)
         }
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
@@ -156,6 +208,20 @@ class HomePagesFragment : Fragment() {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
+        binding.clAddForm.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvOurAddFormData.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+
+//        binding.IvNotification.setOnClickListener{
+//            val intent = Intent(activity, AddDeviceActivity::class.java)
+//            startActivity(intent)
+//        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -182,6 +248,7 @@ class HomePagesFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
 
+                    accountID = it.data?.accountId
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
                         Log.d("Profile", userDetails.toString())
@@ -205,11 +272,185 @@ class HomePagesFragment : Fragment() {
             }
             binding.tvAddress.text = it.data?.profile?.village
         }
+
+//        getFarms()
         setVideos()
         setNews()
         fabButton()
         myCrop()
+        setBanners()
+
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
+
+        mapFragment!!.requireView().isClickable = false
+        mapFragment.getMapAsync { googleMap: GoogleMap ->
+            mMap = googleMap
+            mMap?.uiSettings?.setAllGesturesEnabled(false)
+            mMap?.uiSettings?.isMapToolbarEnabled = false
+            getFarms()
+        }
     }
+
+    private fun getFarms() {
+
+        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
+            if (it.data != null) {
+                var accountId: Int? = null
+
+                accountId = it.data?.accountId
+
+                if (accountId != null)
+                    viewModel.getMyFarms(accountID!!).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Success -> {
+                                if (it.data != null)
+                                    if (it.data!!.isNotEmpty()) {
+                                        binding.clAddForm.visibility = View.GONE
+                                        binding.clMyForm.visibility = View.VISIBLE
+                                        binding.farmsDetailsCl.visibility = View.VISIBLE
+                                        binding.tvAddress.visibility=View.INVISIBLE
+
+                                        farmsAdapter.submitList(it.data)
+
+                                        farmsAdapter.onItemClick = { farm ->
+                                            binding.farmnameHome.text = farm?.farmName
+                                            loadFarm(farm?.farmJson)
+
+                                            val center = convertStringToLatLnList(farm?.farmCenter)?.get(0)
+                                            weather(center?.latitude.toString(),center?.longitude.toString())
+
+                                            viewModel.getMyCrop2(accountId)
+                                                .observe(viewLifecycleOwner) { crops ->
+                                                    val croplist =
+                                                        crops.data?.filter { filter ->
+                                                            filter.farmId == farm?.id
+                                                        }
+                                                    if (croplist?.isEmpty() == true) {
+
+                                                    }
+                                                    farmsCropsAdapter.submitList(croplist)
+                                                }
+                                        }
+                                    } else {
+                                        binding.clAddForm.visibility = View.VISIBLE
+                                        binding.clMyForm.visibility = View.GONE
+                                        binding.farmsDetailsCl.visibility = View.GONE
+                                        binding.tvAddress.visibility=View.VISIBLE
+
+                                    }
+                            }
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun loadFarm(farmJson: String?) {
+        if (farmJson != null) {
+            val points = convertStringToLatLnList(farmJson)
+            if (points != null) {
+                if (polygon != null)
+                    polygon!!.remove()
+                polygon = null
+                if (points.size >= 3) {
+                    polygon = mMap?.addPolygon(
+                        PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                            .strokeColor(
+                                Color.argb(255, 255, 255, 255)
+                            )
+                    )
+
+                    mMap?.animateCamera(
+                        CameraUpdateFactory.newLatLngBounds(
+                            getLatLnBounds(points), 10
+                        )
+                    )
+                } else {
+                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(points[0], 16f))
+                }
+            }
+        }
+    }
+
+    fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
+        val builder = LatLngBounds.builder()
+        for (ll in points) {
+            builder.include(ll)
+        }
+        return builder.build()
+    }
+
+    private fun setBanners() {
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
+        binding.bannerViewpager.adapter = bannerAdapter
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
+
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+    }
+
+
+    //
+//    fun tokenCheckViewModel(user_id:Int,token:String){
+//        tokenCheckViewModel.checkToken(user_id,token).observe(viewLifecycleOwner) {
+//            when (it) {
+//                is Resource.Success -> {
+//                    if (it.data?.status==true){
+//                        Log.d("TAG", "tokenCheckViewModelTokenActive:")
+////                        val intent = Intent(this, MainActivity::class.java)
+////                        startActivity(intent);
+//                    }else if (it.data?.status==false){
+//                        Log.d("TAG", "tokenCheckViewModelTokenExpire:")
+//                        val intent = Intent(activity, LoginMainActivity::class.java)
+//                        startActivity(intent);
+//                    }else{
+//                        val intent = Intent(activity, LoginMainActivity::class.java)
+//                        startActivity(intent);
+//                    }
+//                }
+//                is Resource.Loading -> {
+//
+//
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+////                        .show()
+//                }
+//            }
+//
+//
+//        }
+//
+//    }
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
         val offset: Int = videosBinding.recyclerview.computeHorizontalScrollOffset()
@@ -315,7 +556,8 @@ class HomePagesFragment : Fragment() {
                     Glide.with(requireContext())
                         .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
                         .into(binding.ivWeather)
-                 binding.tvHumidityDegree.text =String.format("%.0f",it.data?.current?.humidity)+"%"
+                binding.tvHumidityDegree.text =
+                    String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
                 if (null != it) {
@@ -659,12 +901,9 @@ class HomePagesFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId: Int? = null
-                for (account in it?.data?.account!!) {
-                    if (account.accountType?.lowercase() == "outgrow") {
-                        accountId = account.id
-                    }
 
-                }
+                accountId = it.data?.accountId
+
 //                var accountId: Int = it.data!!.account[0].id!!
                 if (accountId != null)
                     viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
@@ -682,12 +921,17 @@ class HomePagesFragment : Fragment() {
                             binding.cvEditCrop.visibility = View.GONE
                             binding.cardAddForm.visibility = View.VISIBLE
                         }
-                        if(it.data?.size!! <8){
+                        if (it.data?.size!! < 8) {
                             binding.addLl.visibility = View.VISIBLE
-                        }else binding.addLl.visibility = View.GONE
+                        } else binding.addLl.visibility = View.GONE
                     }
             }
         }
     }
 
+    fun convertStringToLatLnList(s: String?): List<LatLng?>? {
+        val listType = object : TypeToken<List<LatLng?>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
 }
+

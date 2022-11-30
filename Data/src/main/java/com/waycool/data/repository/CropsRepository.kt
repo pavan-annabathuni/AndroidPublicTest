@@ -8,6 +8,7 @@ import com.waycool.data.Local.mappers.MyCropEntityMapper
 import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
+import com.waycool.data.Sync.SyncManager.invalidateSync
 import com.waycool.data.Sync.syncer.AiCropHistorySyncer
 import com.waycool.data.repository.DomainMapper.*
 import com.waycool.data.repository.domainModels.*
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 
 object CropsRepository {
@@ -140,6 +142,7 @@ object CropsRepository {
         return SoilTestHistorySyncer().getData(account_id).map {
             when (it) {
                 is Resource.Success -> {
+                    SoilTestHistorySyncer().invalidateSync()
                     Resource.Success(
                         SoilTestHistoryDomainMapper().toDomainList(it.data ?: emptyList())
                     )
@@ -198,6 +201,9 @@ object CropsRepository {
                 }
             }
         }
+    }
+    fun pdfDownload(soil_test_request_id: Int): Flow<Resource<ResponseBody?>> {
+        return NetworkSource.pdfDownload(soil_test_request_id)
     }
 
     //check soil test lab
@@ -259,25 +265,44 @@ object CropsRepository {
         }
     }
 
-    fun addCropPassData(
-        crop_id: Int?,
-        account_id: Int?,
-        plot_nickname: String?,
-        is_active: Int?,
-        sowing_date: String?,
-        area: Editable?
+//    fun addCropPassData(
+//        crop_id: Int?,
+//        account_id: Int?,
+//        plot_nickname: String?,
+//        is_active: Int?,
+//        sowing_date: String?,
+//        area: Editable?
+//    ): Flow<Resource<AddCropResponseDTO?>> {
+//        return NetworkSource.addCropPassData(
+//            crop_id,
+//            account_id,
+//            plot_nickname,
+//            is_active,
+//            sowing_date,
+//            area
+//        )
+//    }
+    fun addCropDataPass(
+        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
     ): Flow<Resource<AddCropResponseDTO?>> {
+    GlobalScope.launch {
+        MyCropSyncer().invalidateSync()
+    }
+        return NetworkSource.addCropDataPass(map)
+    }
+    fun activateDevice(
+        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
+    ): Flow<Resource<ActivateDeviceDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
-        return NetworkSource.addCropPassData(
-            crop_id,
-            account_id,
-            plot_nickname,
-            is_active,
-            sowing_date,
-            area
-        )
+        return NetworkSource.activateDevice(map)
+    }
+    fun viewReport(id:Int): Flow<Resource<SoilTestReportMaster?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.viewReport(id)
     }
 
     fun postNewSoil(
@@ -306,15 +331,15 @@ object CropsRepository {
             number
         )
     }
-//    fun checkToken(
-//        user_id: Int,
-//        token: String
-//    ): Flow<Resource<CheckTokenResponseDTO?>> {
-//
-//        return NetworkSource.checkToken(
-//          user_id,token
-//        )
-//    }
+    fun checkToken(
+        user_id: Int,
+        token: String
+    ): Flow<Resource<CheckTokenResponseDTO?>> {
+
+        return NetworkSource.checkToken(
+          user_id,token
+        )
+    }
 
 
     fun postAiCropImage(
@@ -332,7 +357,7 @@ object CropsRepository {
                     is Resource.Success -> {
                         Resource.Success(
                             AiCropDetectionDomainMapper().mapToDomain(
-                                it.data?.data ?: AiCropDetectionData()
+                                it.data?: AiCropDetectionDTO()
                             )
                         )
                     }
@@ -352,6 +377,7 @@ object CropsRepository {
         return AiCropHistorySyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
+                    AiCropHistorySyncer().invalidateSync()
                     Resource.Success(
                         AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
                     )

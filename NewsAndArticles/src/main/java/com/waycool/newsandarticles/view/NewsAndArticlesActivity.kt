@@ -25,6 +25,7 @@ import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.Util.AppUtil
+import com.waycool.newsandarticles.adapter.AdsAdapter
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
@@ -37,7 +38,6 @@ class NewsAndArticlesActivity : AppCompatActivity() {
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
 
-    var bannerImageList: MutableList<AdBannerImage> = ArrayList()
 
 
     private lateinit var newsAdapter: NewsPagerAdapter
@@ -178,22 +178,23 @@ class NewsAndArticlesActivity : AppCompatActivity() {
     }
 
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(this, bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(this) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

@@ -13,7 +13,8 @@ class AiCropHistoryEntityMapper : EntityMapper<AiCropHistoryEntity, AiHistoryDat
             image_url = entity.image_url,
             prediction = entity.prediction,
             probability = entity.probability,
-            user_feedback = entity.user_feedback
+            user_feedback = entity.user_feedback,
+           cropdata = entity.cropdata
         )
     }
 
@@ -25,7 +26,8 @@ class AiCropHistoryEntityMapper : EntityMapper<AiCropHistoryEntity, AiHistoryDat
             image_url = dto.image_url,
             prediction = dto.prediction,
             probability = dto.probability,
-            user_feedback = dto.user_feedback
+            user_feedback = dto.user_feedback,
+            cropdata = dto.cropdata
         )
     }
 

@@ -15,38 +15,57 @@ data class UserDetailsData(
     @SerializedName("name") var name: String? = null,
     @SerializedName("phone") var contact: String? = null,
     @SerializedName("email") var email: String? = null,
-    @SerializedName("approved") var approved: Int? = null,
-    @SerializedName("org_code_id") var orgCodeId: String? = null,
-    @SerializedName("encrypted_token") var encryptedToken: String? = null,
+    @SerializedName("jwt"     ) var jwt     : String?            = null,
     @SerializedName("profile") var profile: ProfileNetwork? = ProfileNetwork(),
-    @SerializedName("account") var account: List<AccountNetwork> = arrayListOf()
+    @SerializedName("account") var account: List<AccountNetwork> = arrayListOf(),
+    @SerializedName("roles"   ) var roles   : ArrayList<RolesNetwork>   = arrayListOf()
+
+)
+
+data class RolesNetwork (
+
+    @SerializedName("title" ) var title : String? = null,
+    @SerializedName("pivot" ) var pivot : PivotNetwork?  = PivotNetwork()
+
+)
+data class PivotNetwork (
+
+    @SerializedName("user_id" ) var userId : Int? = null,
+    @SerializedName("role_id" ) var roleId : Int? = null
 
 )
 
 data class AccountNetwork(
 
-    @SerializedName("id") var id: Int? = null,
-    @SerializedName("account_no") var accountNo: String? = null,
-    @SerializedName("account_type") var accountType: String? = null,
-    @SerializedName("is_active") var isActive: Int? = null
-
+    @SerializedName("id"              ) var id             : Int?    = null,
+    @SerializedName("account_no"      ) var accountNo      : String? = null,
+    @SerializedName("account_type"    ) var accountType    : String? = null,
+    @SerializedName("is_active"       ) var isActive       : Int?    = null,
+    @SerializedName("default_modules" ) var defaultModules : Int?    = null,
+    @SerializedName("subscription"    ) var subscription   : Int?    = null
 )
 
 
 data class ProfileNetwork(
+    @SerializedName("id"               ) var id             : Int?    = null,
+    @SerializedName("remote_photo_url" ) var remotePhotoUrl : String? = null,
+    @SerializedName("lang_id"          ) var langId         : Int?    = null,
+    @SerializedName("user_id"          ) var userId         : Int?    = null,
+    @SerializedName("lat"              ) var lat            : String? = null,
+    @SerializedName("long"             ) var long           : String? = null,
+    @SerializedName("pincode"          ) var pincode        : String? = null,
+    @SerializedName("village"          ) var village        : String? = null,
+    @SerializedName("address"          ) var address        : String? = null,
+    @SerializedName("state"            ) var state          : String? = null,
+    @SerializedName("district"         ) var district       : String? = null,
+    @SerializedName("sub_district"     ) var subDistrict    : String? = null,
+    @SerializedName("lang"             ) var lang           : Lang?   = Lang()
 
-    @SerializedName("id") var id: Int? = null,
-    @SerializedName("gender") var gender: String? = null,
-    @SerializedName("address") var address: String? = null,
-    @SerializedName("village") var village: String? = null,
-    @SerializedName("pincode") var pincode: String? = null,
-    @SerializedName("lat") var lat: String? = null,
-    @SerializedName("long") var long: String? = null,
-    @SerializedName("profile_pic") var profilePic: String? = null,
-    @SerializedName("user_id") var userId: Int? = null,
-    @SerializedName("lang_id") var langId: Int? = null,
-    @SerializedName("state") var stateId: String? = null,
-    @SerializedName("district") var districtId: String? = null,
-    @SerializedName("sub_district_id") var subDistrictId: String? = null
+)
+data class Lang (
+
+    @SerializedName("id"        ) var id       : Int?    = null,
+    @SerializedName("lang_code" ) var langCode : String? = null,
+    @SerializedName("lang"      ) var lang     : String? = null
 
 )
