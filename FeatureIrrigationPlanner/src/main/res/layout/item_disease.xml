@@ -37,7 +37,7 @@
 
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/dis_name"
             style="@style/Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:text="Low Risk"
             android:textColor="@color/darkGray"
-            app:layout_constraintStart_toStartOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            app:layout_constraintStart_toStartOf="@+id/dis_name"
+            app:layout_constraintTop_toBottomOf="@+id/dis_name" />
 
         <ImageView
             android:id="@+id/imageView10"
@@ -78,8 +78,10 @@
             android:enabled="false"
             app:haloColor="@color/white"
             app:haloRadius="1dp"
+            android:valueFrom="0"
+            android:valueTo="100"
             app:layout_constraintStart_toEndOf="@+id/cv_img"
-            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/dis_name"
             app:thumbColor="#EC4544"
             app:thumbRadius="10dp"
             app:trackColor="#00000000"

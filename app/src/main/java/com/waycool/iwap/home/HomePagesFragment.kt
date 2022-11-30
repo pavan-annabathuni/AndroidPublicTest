@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
@@ -651,8 +652,8 @@ class HomePagesFragment : Fragment() {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-//            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->

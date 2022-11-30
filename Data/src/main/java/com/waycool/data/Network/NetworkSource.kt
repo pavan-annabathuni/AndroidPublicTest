@@ -789,5 +789,40 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun updateHarvest(
+        id:Int,harvest_date:String,actual_yield:Int)
+            = flow<Resource<HarvestDateModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.harvestDate(map,id,harvest_date, actual_yield)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateIrrigation(
+        id:Int,irrigation:Int)
+            = flow<Resource<IrrigationPerDay?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.irrigationPerDay(map,id,irrigation,"PUT")
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
 }
 

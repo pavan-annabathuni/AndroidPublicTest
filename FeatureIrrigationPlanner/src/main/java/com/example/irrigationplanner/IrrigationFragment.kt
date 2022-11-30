@@ -4,22 +4,33 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.DiseaseAdapter
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
+import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.launch
 
 class IrrigationFragment : Fragment() {
      private lateinit var binding: FragmentIrrigationBinding
+    private val viewModel: IrrigationViewModel by lazy {
+        ViewModelProvider(this)[IrrigationViewModel::class.java]
+    }
+    private lateinit var mHistoryAdapter: HistoryAdapter
+    private lateinit var mDiseaseAdapter: DiseaseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -38,8 +49,16 @@ class IrrigationFragment : Fragment() {
         binding.tvCropInfo.setOnClickListener(){
             this.findNavController().navigate(IrrigationFragmentDirections.actionIrrigationFragmentToCropOverviewFragment())
         }
+       // binding.recycleViewHis.adapter = mHistoryAdapter
         tabs()
-        dialog()
+        binding.irrigationYes.setOnClickListener(){
+            dialog()
+        }
+        binding.tvEdit.setOnClickListener(){
+            binding.perDay.visibility = View.VISIBLE
+            dialog()
+        }
+
         onClick()
 
         return binding.root
@@ -55,16 +74,16 @@ class IrrigationFragment : Fragment() {
             binding.dailyIrrigation.visibility = View.GONE
             binding.perDay.visibility = View.VISIBLE
         }
-        binding.tvEdit.setOnClickListener(){
-            binding.perDay.visibility = View.VISIBLE
-            val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
-            dialog.setContentView(R.layout.irrigation_pre_day)
-            val close = dialog.findViewById<ImageView>(R.id.close)
-            close!!.setOnClickListener(){
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
+//        binding.tvEdit.setOnClickListener(){
+//            binding.perDay.visibility = View.VISIBLE
+//            val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
+//            dialog.setContentView(R.layout.irrigation_pre_day)
+//            val close = dialog.findViewById<ImageView>(R.id.close)
+//            close!!.setOnClickListener(){
+//                dialog.dismiss()
+//            }
+//            dialog.show()
+//        }
 
         binding.btHistory.setOnClickListener(){
             this.findNavController().navigate(IrrigationFragmentDirections.
@@ -80,12 +99,36 @@ class IrrigationFragment : Fragment() {
         }
     }
 
-    private fun setAdapter(){
+    private fun setAdapter() {
         binding.recycleViewDis.adapter = WeeklyAdapter()
-        binding.recycleViewHis.adapter = HistoryAdapter(HistoryAdapter.OnClickListener {
+
+        mHistoryAdapter = HistoryAdapter(HistoryAdapter.DiffCallback.OnClickListener {
 
         })
-        binding.rvDis.adapter = DiseaseAdapter()
+        binding.recycleViewHis.adapter = mHistoryAdapter
+        viewModel.viewModelScope.launch {
+            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner) {
+                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
+                Log.d("hostry", "setAdapter: ${it.message}")
+                binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation
+                if(it.data?.data?.irrigation?.historicData?.get(0)?.irrigation!=null){
+                    binding.dailyIrrigation.visibility = View.GONE
+                    binding.perDay.visibility = View.VISIBLE
+                }
+
+
+            }
+        }
+        mDiseaseAdapter = DiseaseAdapter()
+
+        binding.rvDis.adapter = mDiseaseAdapter
+        viewModel.viewModelScope.launch {
+            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner) {
+                mDiseaseAdapter.submitList(it.data?.data?.disease)
+
+                Log.d("hostry", "setAdapter: ${it.message}")
+            }
+        }
     }
 
     private fun tabs() {
@@ -115,17 +158,26 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun dialog(){
-        binding.irrigationYes.setOnClickListener(){
-            binding.dailyIrrigation.visibility = View.GONE
-            binding.perDay.visibility = View.VISIBLE
+
             val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
             dialog.setContentView(R.layout.irrigation_pre_day)
            val close = dialog.findViewById<ImageView>(R.id.close)
+            val save = dialog.findViewById<Button>(R.id.savePreDay)
+            val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
             close!!.setOnClickListener(){
                 dialog.dismiss()
             }
+            save?.setOnClickListener(){
+
+                    val value = irrigation?.text.toString().toInt()
+                    viewModel.updateIrrigation(1, value).observe(viewLifecycleOwner) {
+                        Log.d("ok", "dialog: ${it.message} ")
+                }
+                dialog.dismiss()
+            }
+
             dialog.show()
-        }
+
 
         binding.btExit.setOnClickListener(){
             val dialog = Dialog(requireContext())
@@ -136,7 +188,7 @@ class IrrigationFragment : Fragment() {
             val yesBtn = dialog.findViewById(R.id.cancel) as Button
             val noBtn = dialog.findViewById(R.id.delete) as Button
             yesBtn.setOnClickListener {
-                dialog.dismiss()
+
             }
             noBtn.setOnClickListener { dialog.dismiss() }
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

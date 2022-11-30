@@ -11,7 +11,7 @@ data class AdvIrrigationModel(
 data class AdvIrrigationData (
 
     @SerializedName("irrigation" ) var irrigation : Irrigation?       = Irrigation(),
-    @SerializedName("disease"    ) var disease    : ArrayList<String> = arrayListOf(),
+    @SerializedName("disease"    ) var disease    : ArrayList<Disease> = arrayListOf(),
     @SerializedName("gdd"        ) var gdd        : Gdd?              = Gdd()
 
 )
@@ -36,6 +36,21 @@ data class HistoricData (
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null,
     @SerializedName("deleted_at"        ) var deletedAt        : String? = null
+
+)
+data class Disease (
+
+    @SerializedName("id"               ) var id              : Int?    = null,
+    @SerializedName("probability"      ) var probability     : Double? = null,
+    @SerializedName("input_parameters" ) var inputParameters : String? = null,
+    @SerializedName("translation"      ) var translation     : String? = null,
+    @SerializedName("created_at"       ) var createdAt       : String? = null,
+    @SerializedName("updated_at"       ) var updatedAt       : String? = null,
+    @SerializedName("deleted_at"       ) var deletedAt       : String? = null,
+    @SerializedName("crop_id"          ) var cropId          : Int?    = null,
+    @SerializedName("disease_id"       ) var diseaseId       : Int?    = null,
+    @SerializedName("account_no_id"    ) var accountNoId     : Int?    = null,
+    @SerializedName("plot_id"          ) var plotId          : Int?    = null
 
 )
 data class Gdd (

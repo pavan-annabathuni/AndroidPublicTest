@@ -251,10 +251,30 @@ interface ApiInterface {
         @Path("plots")plots:Int
     ):Response<Unit>
 
-    @GET("api/v1/adv-irrigation")
+    @GET("api/v1/view-crop")
     suspend fun advIrrigation(
         @HeaderMap map: Map<String, String>?,
         @Query("account_id")accountId:Int,
         @Query("plot_id")plotId:Int
     ):Response<AdvIrrigationModel>
+
+    @PUT("api/v1/plots/{plot}")
+    @FormUrlEncoded
+    suspend fun harvestDate(
+        @HeaderMap map: Map<String, String>?,
+        @Path("plot")plots: Int,
+        @Field("actual_harvest_date")actual_harvest_date:String,
+        @Field("actual_yield")actual_yield:Int
+    ):Response<HarvestDateModel>
+
+    @POST("api/v1/irrigation-forecasts/{irrigation_forecast}")
+    @FormUrlEncoded
+    suspend fun irrigationPerDay(
+        @HeaderMap map: Map<String, String>?,
+        @Path("irrigation_forecast")irrigationId: Int,
+        @Field("irrigation")irrigation:Int,
+        @Field("_method")method:String
+    ):Response<IrrigationPerDay>
+
+
 }
