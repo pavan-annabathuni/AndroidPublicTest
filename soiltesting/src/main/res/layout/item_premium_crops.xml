@@ -21,28 +21,43 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_ans"
             app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:id="@+id/ivAddDeviceEnd"
-                android:layout_width="@dimen/space100"
-                android:layout_height="@dimen/space75"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clImage"
+                android:layout_width="64dp"
                 android:layout_marginStart="@dimen/space12"
-                android:layout_marginTop="12dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/adddevice"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_ans"
+                android:layout_height="64dp">
+
+                <ImageView
+                    android:id="@+id/ivAddDeviceEnd"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_margin="@dimen/space8"
+
+                    android:scaleType="fitXY"
+                    android:src="@drawable/adddevice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvAddDeviceStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="12dp"
-                android:text="Krishna farm plot 1"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="19dp"
+                android:text="Beetroot"
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
+                app:layout_constraintStart_toEndOf="@+id/clImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
 <!--            <androidx.appcompat.widget.AppCompatTextView-->
@@ -66,19 +81,21 @@
                 android:text="GWX Farm 1"
                 android:textColor="#585858"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/space50"
+                />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvEnableAddDevice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                android:text=" Total Area: 5 Acre"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:text="Krishna farm"
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
+                app:layout_constraintStart_toEndOf="@+id/clImage"
                 app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCloudyNoDisease"
@@ -130,7 +147,7 @@
                 android:background="@drawable/bg_no_disease"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivAddDeviceEnd">
+                app:layout_constraintTop_toBottomOf="@+id/clImage">
 
                 <ImageView
                     android:id="@+id/ivCloudy"

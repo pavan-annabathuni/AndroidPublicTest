@@ -84,10 +84,10 @@ class HomePagesFragment : Fragment() {
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
-            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            it?.crop?.let { it1 -> args.putString("cropName", it1) }
-            it?.market?.let { it1 -> args.putString("market", it1) }
+            it.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+            it.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+            it.crop?.let { it1 -> args.putString("cropName", it1) }
+            it.market?.let { it1 -> args.putString("market", it1) }
             this.findNavController()
                 .navigate(
                     com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22,
@@ -176,6 +176,9 @@ class HomePagesFragment : Fragment() {
         binding.cvAddCrop.setOnClickListener() {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
+        }
+        binding.tvGoodMorning.setOnClickListener{
+            findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
         }
         binding.IvNotification.setOnClickListener{
             val intent = Intent(activity, AddDeviceActivity::class.java)

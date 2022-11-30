@@ -4,6 +4,11 @@
     package="com.example.adddevice">
 
     <uses-feature android:name="android.hardware.camera.autoFocus" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.any"
@@ -14,6 +19,10 @@
             android:name=".AddDeviceActivity"
             android:exported="false"
             />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
 <!--        <activity-->
 <!--          android:name="com.journeyapps.barcodescenner.C"-->
 <!--            android:screenOrientation="portrait"-->

@@ -91,7 +91,6 @@ class NewSoilTestFormFragment : Fragment() {
 //                            binding.tvContact
 //                            mobileNumber=i.accountNo.toString()
 
-
                             if (accountID!=null){
                                 Log.d(TAG, "onCreateViewAccountID:$accountID")
                                 itemClicked(accountID!!, lat!!, long!!, onp_id!!,contactNumber)

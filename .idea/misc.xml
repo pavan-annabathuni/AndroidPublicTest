@@ -71,7 +71,7 @@
         <entry key="Videos/src/main/res/layout/viewholder_videos_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_viewpager_slider_layout.xml" value="0.21481481481481482" />
         <entry key="addDevice/src/main/res/layout/activity_add_device.xml" value="0.15885416666666666" />
-        <entry key="addDevice/src/main/res/layout/fragment_add_device.xml" value="0.18043202033036848" />
+        <entry key="addDevice/src/main/res/layout/fragment_add_device.xml" value="0.2844311377245509" />
         <entry key="addDevice/src/main/res/layout/item_spinner.xml" value="0.14010416666666667" />
         <entry key="addcrop/src/main/res/drawable/background_switch.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_acres.xml" value="0.1645" />
@@ -94,8 +94,14 @@
         <entry key="addcrop/src/main/res/layout/item_select_crop.xml" value="0.2675925925925926" />
         <entry key="addcrop/src/main/res/layout/item_selected_crop.xml" value="0.2675925925925926" />
         <entry key="addcrop/src/main/res/layout/item_selected_crop_list.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/drawable/add_crop.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/bg_my_crop.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/crop_health_.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_gray_location.xml" value="0.181" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/layout/fragment_all_services.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.2553648068669528" />
         <entry key="app/src/main/res/menu/nav_menu_free.xml" value="0.21481481481481482" />
         <entry key="cropinformation/src/main/res/drawable-v24/ic_support.xml" value="0.1555" />
@@ -170,6 +176,7 @@
         <entry key="soiltesting/src/main/res/layout/item_labs_sample.xml" value="0.2796296296296296" />
         <entry key="soiltesting/src/main/res/layout/item_mandi.xml" value="0.624765625" />
         <entry key="soiltesting/src/main/res/layout/item_premium_add_farm.xml" value="0.2947916666666667" />
+        <entry key="soiltesting/src/main/res/layout/item_premium_crops.xml" value="0.45" />
         <entry key="soiltesting/src/main/res/layout/item_soil_history.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/item_status_tracker.xml" value="0.7677017777054398" />
         <entry key="soiltesting/src/main/res/layout/item_weather.xml" value="0.21481481481481482" />

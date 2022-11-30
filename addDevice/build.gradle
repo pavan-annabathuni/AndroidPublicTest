@@ -38,6 +38,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':UiComponents')
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -75,7 +76,7 @@ dependencies {
 //
 //    implementation 'com.jjoe64:graphview:4.2.2'
 //
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 //
 //    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 //    implementation 'com.github.ar-android:AndroidSvgLoader:1.0.2'

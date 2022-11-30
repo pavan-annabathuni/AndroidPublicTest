@@ -276,6 +276,8 @@ interface ApiInterface {
 
     ):Response<ActivateDeviceDTO>
 
+
+
     //view report
 
     @POST("api/v1/soil-test-report-data")
@@ -292,6 +294,12 @@ interface ApiInterface {
         @Query("id")id:Int
     ):Response<ResponseBody>
 
+    @GET("api/v1/view-devices")
+    suspend fun getIotDevice(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("serial_no_id") account_id: Int,
+        @Query("device_model_id")device_model_id:Int
+    ): Response<SoilTestHistoryDTO>
 
 
 
