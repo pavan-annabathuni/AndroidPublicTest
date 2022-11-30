@@ -1,9 +1,11 @@
 package com.waycool.featurecrophealth.ui.detect
 
+import android.content.DialogInterface
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +17,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
 import com.waycool.featurecrophealth.utils.Constant.TAG
-import com.waycool.featurecrophealth.utils.NetworkUtils.loadUrl
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -92,6 +96,10 @@ class CropDetailsCaptureFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //     super.onActivityResult(requestCode, resultCode, data)
+        binding.closeImage?.setOnClickListener {
+            binding.previewImage.visibility=View.GONE
+
+        }
 
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
             val selectedImage: Uri? = data?.data
@@ -223,22 +231,57 @@ class CropDetailsCaptureFragment : Fragment() {
                     binding.progressBar?.visibility = View.GONE
                     val data = it.data
                     data?.diseaseId
-                    val bundle = Bundle()
-                    data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
-                    findNavController().navigate(
-                        R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,
-                        bundle
-                    )
+                    if (data?.diseaseId==null){
+//                        Toast.makeText(requireContext(),data?.message.toString() , Toast.LENGTH_SHORT).show()
+                        MaterialAlertDialogBuilder(requireContext()).setTitle("AI Crop Health Image")
+                            .setMessage(data?.message.toString())
+//                            .setNeutralButton("Remder later") { dialog, which ->
+//                                showSnackbar("")
+//                            }
+                            .setNegativeButton("No") { dialog, which ->
+                                showSnackbar("")
+                            }
+                            .setPositiveButton("Yes") { dialog, which ->
+                                showSnackbar("")
+                            }.show()
+//                            .setNeutralButton("later"){dialog,which->
+//                                showSneak
+//
+//                            }
+//                        val bundle=Bundle()
+//                        bundle.putString("message",data?.message.toString())
+//                        CustomeDialogFragment.newInstance().show(
+//                            requireActivity().supportFragmentManager,
+//                            CustomeDialogFragment.TAG,bundle
+//                        )
+
+                        binding.progressBar?.visibility = View.GONE
+                        binding.cardCheckHealth.visibility=View.VISIBLE
+                    }else{
+                        val bundle = Bundle()
+                        data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
+                        findNavController().navigate(
+                            R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,
+                            bundle
+                        )
+                    }
+
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Currently We are Facing Server Error", Toast.LENGTH_SHORT).show()
+                    binding.progressBar?.visibility = View.GONE
+                    binding.cardCheckHealth.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
                     binding.progressBar?.visibility = View.VISIBLE
                 }
             }
         }
+    }
+    private fun showSnackbar(msg:String) {
+
+
     }
 
     fun clickes() {

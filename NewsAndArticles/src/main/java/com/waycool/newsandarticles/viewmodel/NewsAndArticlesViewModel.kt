@@ -30,6 +30,13 @@ class NewsAndArticlesViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
+
 
 //    fun getVansVideosCat(): LiveData<Resource<List<VansCategoryDomain>>> {
 //        return VansRepository.getVansCategoryList().asLiveData()

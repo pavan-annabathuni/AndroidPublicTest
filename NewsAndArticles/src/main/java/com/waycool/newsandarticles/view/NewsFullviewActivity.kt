@@ -117,15 +117,21 @@ class NewsFullviewActivity : AppCompatActivity() {
 
     private fun playAudio(path: String) {
         Log.d("RecordView", "actiondown2")
-        audioWife = AudioWife.getInstance()
-        audioWife?.init(this@NewsFullviewActivity, Uri.parse(path))
-            ?.setPlayView(audioNewLayout.play)
-            ?.setPauseView(audioNewLayout.pause)
-            ?.setSeekBar(audioNewLayout.mediaSeekbar)
-            ?.setRuntimeView(audioNewLayout.totalTime)
-        //                .setTotalTimeView(mTotalTime);
-        audioWife?.play()
-    }
+        mediaPlayer = MediaPlayer();
+        mediaPlayer!!.setOnCompletionListener {
+            audioNewLayout.mediaSeekbar.progress = 0
+            audioNewLayout.pause.visibility = View.GONE
+            audioNewLayout.play.visibility = View.VISIBLE
+        }
+            audioWife = AudioWife.getInstance()
+            audioWife?.init(this@NewsFullviewActivity, Uri.parse(path))
+                ?.setPlayView(audioNewLayout.play)
+                ?.setPauseView(audioNewLayout.pause)
+                ?.setSeekBar(audioNewLayout.mediaSeekbar)
+                ?.setRuntimeView(audioNewLayout.totalTime)
+            //                .setTotalTimeView(mTotalTime);
+            audioWife?.play()
+        }
 
     //back button pressed method
     override fun onBackPressed() {

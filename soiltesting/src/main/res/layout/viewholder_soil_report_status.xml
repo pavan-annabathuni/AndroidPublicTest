@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/space16"
+    android:layout_marginTop="@dimen/space8"
+    android:layout_marginBottom="@dimen/space8"
+    android:layout_marginRight="@dimen/space8"
+    android:layout_marginLeft="@dimen/space8"
+    android:background="@drawable/selector_dashboard_corner_border">
+<RelativeLayout
+    android:id="@+id/range_layout"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentTop="true"
+    >
+    <ImageView
+        android:id="@+id/status_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space16"
+         />
+
+    <TextView
+        android:id="@+id/status_value"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space8"
+        android:layout_marginRight="@dimen/space16"
+        android:layout_toRightOf="@+id/status_icon"
+        android:text="> 100"
+        android:textColor="@color/black_two" />
+    <TextView
+        android:id="@+id/compost_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="@dimen/space16"
+        android:text="> 100"
+        android:layout_below="@+id/status_icon"
+
+        />
+    <TextView
+        android:id="@+id/compost_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="@dimen/space16"
+        android:layout_marginBottom="@dimen/space4"
+        android:text="> 100"
+        android:layout_below="@+id/compost_name"
+        android:textColor="@color/black_two"/>
+</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/recommendation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/range_layout"
+
+        android:layout_marginLeft="@dimen/space1"
+        android:layout_marginRight="@dimen/space1"
+        android:layout_marginBottom="@dimen/space1"
+        android:background="@drawable/selector_bottom_radius_blank"
+
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space1"
+            />
+
+        <TextView
+            android:id="@+id/recommendation_tv"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compost_name"
+            android:layout_margin="@dimen/space12"
+            android:text=""
+            android:textColor="@color/black_two" />
+
+    </LinearLayout>
+</RelativeLayout>

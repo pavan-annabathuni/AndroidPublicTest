@@ -12,9 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHealthBinding
@@ -127,24 +128,24 @@ class CropHealthFragment : Fragment() {
             } else
                 when (it) {
                     is Resource.Success -> {
-//                        Log.d(TAG, "bindObserversData:" + model.data.toString())
-                        historyAdapter.submitList(it.data)
+                        binding.takeGuide.visibility = View.GONE
 
-//                        val response = it.data
-//
-//                        if (response?.size!! <=2) {
-//
+//                        Log.d(TAG, "bindObserversData:" + model.data.toString())
+//                        historyAdapter.submitList(it.data)
+
+                        val response = it.data
+                        if (response?.size!! <=2) {
+                            historyAdapter.submitList(response)
 //                            historyAdapter.submitList(response)
-//
-//                        }
-//                        else{
-//                            val arrayList = ArrayList<Data>()
-//                            arrayList.add(response[0])
-//                            arrayList.add(response[1])
-//
-//                            historyAdapter.submitList(arrayList)
-//
-//                        }
+
+                        }
+                        else{
+                            val arrayList = ArrayList<AiCropHistoryDomain>()
+                            arrayList.add(response[0])
+                            arrayList.add(response[1])
+                            historyAdapter.submitList(arrayList)
+
+                        }
 //                        else if (response.size==2){
 //                            historyAdapter = NoteAdapter(2)
 //                            historyAdapter.submitList(response)
@@ -200,7 +201,7 @@ class CropHealthFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 

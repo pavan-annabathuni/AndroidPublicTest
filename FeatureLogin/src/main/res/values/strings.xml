@@ -14,7 +14,7 @@
     <string name="opt_text5">Resend OTP</string>
     <string name="otp_btn">Continue</string>
 <!--    <string name="partnerKey">HYHB759ca24742a654d4b9fee1ffdecab5880</string>-->
-    <string name="partnerKey">DmucH58c353c252ec4515b94d878ff3be264d</string>
+    <string name="partnerKey" translatable="false">PUizod7af284f5f924170a2bed6c4446fdd2f</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Welcome Outgrow</string>

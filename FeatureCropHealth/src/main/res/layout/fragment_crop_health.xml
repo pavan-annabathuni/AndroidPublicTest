@@ -56,16 +56,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
                 <ImageView
                     android:id="@+id/ivPlanty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="88dp"
+                    android:layout_height="82dp"
                     android:layout_marginStart="16dp"
-                    android:src="@drawable/plant"
+                    android:src="@drawable/aicrop"
+                    android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivPlanty"-->
+                <!--                    android:layout_width="88dp"-->
+                <!--                    android:layout_height="82dp"-->
+                <!--                    android:layout_marginStart="16dp"-->
+                <!--                    -->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <TextView
                     android:id="@+id/tvOurAll"
@@ -74,7 +83,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:minLines="4"
-                    android:text="Our AI-enabled 'Crop Health' feature helps you to understand the health of your crop by capturing and uploading the image of the disease-affected leaf."
+                    android:text="Upload the images of the leaves of your crop to understand the health of your crop using our AI crop health feature"
                     android:textColor="#505050"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -460,7 +469,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/clTopGuide">
 
                 <TextView
@@ -588,14 +597,14 @@
     <!--            android:layout_height="wrap_content"-->
     <!--            android:layout_margin="16dp"-->
     <!--            app:layout_constraintTop_toBottomOf="@+id/clOurAll">-->
-<!--    <ImageView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="@dimen/space28"-->
-<!--        android:layout_marginBottom="44dp"-->
-<!--        android:src="@drawable/ic_phone_icon"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+    <!--    <ImageView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="@dimen/space28"-->
+    <!--        android:layout_marginBottom="44dp"-->
+    <!--        android:src="@drawable/ic_phone_icon"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"

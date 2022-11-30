@@ -63,4 +63,12 @@ interface OutgrowDao {
 
     @Query("DELETE FROM My_crop")
     fun getDeleteMyCrops()
+
+    //Translations
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTranslations(translations: List<AppTranslationsEntity>)
+
+    @Query("SELECT * FROM app_translations WHERE appKey = :appkey")
+    suspend fun getTranslation(appkey: String): AppTranslationsEntity?
+
 }

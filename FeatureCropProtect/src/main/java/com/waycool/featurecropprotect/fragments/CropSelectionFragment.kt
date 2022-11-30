@@ -20,9 +20,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecropprotect.Adapter.CropListAdapter
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
@@ -61,7 +62,12 @@ class CropSelectionFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = "Protect Your Crop"
+        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
+        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
+        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
+
+
+//        binding.toolbarTitle.text = "Protect Your Crop"
 
         binding.cropsRv.adapter = adapter
 
@@ -260,25 +266,26 @@ class CropSelectionFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
     fun myCrops() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            var accountId = it.data?.account!![0].id!!
+            var accountId = it.data?.accountId
 
-            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                myCropAdapter.submitList(it.data)
-                if ((it.data != null)) {
-                    binding.tvCount.text = it.data!!.size.toString()
-                } else {
-                    binding.tvCount.text = "0"
+            if (accountId != null)
+                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                    myCropAdapter.submitList(it.data)
+                    if ((it.data != null)) {
+                        binding.tvCount.text = it.data!!.size.toString()
+                    } else {
+                        binding.tvCount.text = "0"
+                    }
+                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
                 }
-                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
-            }
         }
     }
 }

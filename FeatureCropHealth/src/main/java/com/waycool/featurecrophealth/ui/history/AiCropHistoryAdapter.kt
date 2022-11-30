@@ -32,18 +32,19 @@ class AiCropHistoryAdapter(private val context: Context) :
 
     override fun getItemCount(): Int {
 
-        return if (currentList.size >= 3) 3
-        else currentList.size
+        return currentList.size
+//        else currentList.size
     }
 
     inner class NoteViewHolder(private val binding: ViewholderHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(note: AiCropHistoryDomain) {
-            binding.tvCropID.text = note.crop_id.toString()
-            binding.tvRequest.text = note.prediction
+            binding.tvCropID.text ="id : "+ note.crop_id.toString()
+//            binding.tvRequest.text = note.prediction
             binding.tvDesiessName.text = note.disease_id.toString()
             binding.tvDate.text = note.updated_at
+            binding.tvRequest.text=note.cropdata?.name.toString()
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()

@@ -38,12 +38,19 @@ class CropProtectViewModel : ViewModel() {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
-        queryMap["lang_id"] = "1"
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
+        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+    }
+
+
+    //Ad Banners
+    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+        val queryMap = mutableMapOf<String, String>()
+        queryMap["vans_type"] = "banners"
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
@@ -59,7 +66,6 @@ class CropProtectViewModel : ViewModel() {
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
-        queryMap["lang_id"] = "1"
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()

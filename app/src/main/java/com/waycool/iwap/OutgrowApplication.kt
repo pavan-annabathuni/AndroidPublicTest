@@ -5,6 +5,7 @@ import com.facebook.stetho.Stetho
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.translations.TranslationsManager
 
 class OutgrowApplication : Application() {
     override fun onCreate() {
@@ -15,6 +16,6 @@ class OutgrowApplication : Application() {
         DataStoreManager.init(applicationContext)
         SyncManager.init(applicationContext)
         OutgrowDB.init(applicationContext)
-
+        TranslationsManager().init()
     }
 }

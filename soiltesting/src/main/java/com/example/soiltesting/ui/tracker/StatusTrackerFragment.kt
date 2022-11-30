@@ -9,9 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentStatusTrackerBinding
 import com.waycool.data.repository.domainModels.TrackerDemain
 import com.waycool.data.utils.Resource
@@ -42,19 +45,22 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
         binding.tvID.text = "Id:" + soil_test_number.toString()
 
 
-        viewModel.getTracker(id!!).observe(requireActivity()){
+        viewModel.getTracker(id!!).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    binding.progressBar.visibility=View.GONE
                     Log.d("TAG", "bindObserversDataStatusTracker:" + it.data.toString())
                     val response = it.data as ArrayList<TrackerDemain>
                     statusTrackerAdapter.setMovieList(response)
 
                 }
                 is Resource.Error -> {
+                    binding.progressBar.visibility=View.GONE
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
 
                 }
                 is Resource.Loading -> {
+                    binding.progressBar.visibility=View.VISIBLE
                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
 
                 }
@@ -79,6 +85,19 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
+//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                findNavController().navigateUp()
+//            }
+//
+//        })
+
+//        binding.toolbar.setOnClickListener {
+//            val bundle=Bundle()
+//            bundle.putInt("id",1)
+//            findNavController().navigate(R.id.action_statusTrackerFragment_to_viewReportFragment)
+//        }
+
     }
 
 //    private fun bindObservers() {
@@ -107,9 +126,27 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
         _binding = null
     }
 
+
     override fun feedbackApiListener(dataX: TrackerDemain) {
-        binding.btnViewReport. visibility=View.VISIBLE
-//        findNavController().navigate(R.id.action_statusTrackerFragment_to_feedbackFragment)
+        if (arguments != null) {
+            val soil_test_number: String? = arguments?.getString("soil_test_number")
+            binding.btnViewReport.visibility = View.VISIBLE
+//        binding.btnViewReport.isVisible = true
+            binding.btnViewReport.setOnClickListener {
+                val bundle = Bundle()
+                if (dataX.id != null) {
+                    bundle.putString("soil_test_number",soil_test_number)
+                    bundle.putInt("id", dataX.id!!.toInt())
+                    findNavController().navigate(
+                        R.id.action_statusTrackerFragment_to_viewReportFragment,
+                        bundle
+                    )
+                }
+//        }
+
+
+            }
+        }
     }
 
 

@@ -49,7 +49,7 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
                val date: Int? = it.dt
                val formatter = SimpleDateFormat("hh:mm a")//or use getDateInstance()
                val formatedDate = formatter.format(date?.times(1000L))
-               binding.date.text = formatedDate
+               binding.date.text = formatedDate+" Today"
            }
 
        }

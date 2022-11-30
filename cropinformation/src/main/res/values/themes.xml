@@ -12,20 +12,20 @@
         <item name="listPopupWindowStyle">@style/myListPopupWindow</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#022E0E</item>
-        <item name="textColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
         <!-- Customize your theme here. -->
 <!--        <item name="android:textStyle">@style/T</item>-->
     </style>
     <style name="Theme.Design.Light" parent="Widget.AppCompat.TextView">
-        <item name="textColor">@color/Red</item>
+        <item name="android:textColor">@color/Red</item>
         <item name="fontFamily">@font/noto_sans_bold</item>
     </style>
-   <style name="Theme.Design.Light." parent="ZendeskSdkTheme.Light">
-       <item name="colorPrimary">@color/black</item>
-       <item name="colorPrimaryDark">@color/black</item>
-       <item name="colorAccent">@color/DarkGreen</item>
+<!--   <style name="Theme.Design.Light." parent="ZendeskSdkTheme.Light">-->
+<!--       <item name="colorPrimary">@color/black</item>-->
+<!--       <item name="colorPrimaryDark">@color/black</item>-->
+<!--       <item name="colorAccent">@color/DarkGreen</item>-->
 
-   </style>
+<!--   </style>-->
 
 
 

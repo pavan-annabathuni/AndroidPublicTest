@@ -8,7 +8,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.cropinformation.adapter.CropListAdapter
 import com.example.cropinformation.adapter.MyCropsAdapter
@@ -28,19 +26,18 @@ import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
-import kotlinx.coroutines.launch
+import com.waycool.featurechat.FeatureChat
 import java.util.*
 
 class CropInfoSelectionFragment : Fragment() {
     private var selectedCategory: CropCategoryMasterDomain? = null
     private lateinit var binding: FragmentCropSelectionInfoBinding
-    private val viewModel:TabViewModel by lazy {
+    private val viewModel: TabViewModel by lazy {
         ViewModelProvider(requireActivity())[TabViewModel::class.java]
     }
-    private lateinit var myCropAdapter:MyCropsAdapter
+    private lateinit var myCropAdapter: MyCropsAdapter
     private val adapter: CropListAdapter by lazy { CropListAdapter() }
-   // private val myCropAdapter: MyCropsAdapter by lazy { MyCropsAdapter() }
+    // private val myCropAdapter: MyCropsAdapter by lazy { MyCropsAdapter() }
 
     private var handler: Handler? = null
 
@@ -59,6 +56,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -69,11 +67,11 @@ class CropInfoSelectionFragment : Fragment() {
         binding.toolbarTitle.text = "Crop information"
 
         binding.cropsRv.adapter = adapter
-         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener{
+        myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it.idd?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
-            it?.cropLogo?.let { it1->args.putString("cropLogo",it1) }
+            it?.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_cropInfoFragment,
                 args
@@ -108,7 +106,7 @@ class CropInfoSelectionFragment : Fragment() {
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
-            it?.cropLogo?.let { it1->args.putString("cropLogo",it1) }
+            it?.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_cropInfoFragment,
                 args
@@ -248,16 +246,16 @@ class CropInfoSelectionFragment : Fragment() {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -265,31 +263,32 @@ class CropInfoSelectionFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+        binding.addChat.setOnClickListener() {
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
     fun myCrops() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-          var accountId = it.data?.account!![0].id!!
+            var accountId = it.data?.accountId
 
-            viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                myCropAdapter.submitList(it.data)
-                if ((it.data != null)) {
-                    binding.tvCount.text = it.data!!.size.toString()
-                } else {
-                    binding.tvCount.text = "0"
+            if (accountId != null)
+                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+                    myCropAdapter.submitList(it.data)
+                    if ((it.data != null)) {
+                        binding.tvCount.text = it.data!!.size.toString()
+                    } else {
+                        binding.tvCount.text = "0"
+                    }
+                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
                 }
-                // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
-            }
         }
     }
 }

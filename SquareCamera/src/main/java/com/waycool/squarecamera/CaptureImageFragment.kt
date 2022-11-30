@@ -57,7 +57,6 @@ class CaptureImageFragment : Fragment() {
             findNavController().navigate(R.id.action_captureImageFragment_to_dialogFragment)
         }
 
-
         binding.viewFinder.layoutParams.height =
             Resources.getSystem().displayMetrics.widthPixels
 
@@ -72,7 +71,9 @@ class CaptureImageFragment : Fragment() {
         }
 
         // Set up the listeners for take photo and video capture buttons
-        binding.imageCaptureButton.setOnClickListener { takePhoto() }
+        binding.imageCaptureButton.setOnClickListener {
+            takePhoto()
+        }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         binding.imageViewFrame.visibility = View.INVISIBLE;

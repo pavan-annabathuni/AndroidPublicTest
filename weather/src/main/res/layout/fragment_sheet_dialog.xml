@@ -133,170 +133,200 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/LightGray"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
+            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv">
+            app:layout_constraintTop_toBottomOf="@+id/cv"
+            app:strokeColor="@color/LightGray"
+            app:strokeWidth="1dp">
 
-            <GridLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:columnCount="3"
-                android:background="@color/white"
-                android:lineSpacingExtra="2dp"
-                android:padding="@dimen/tv16"
-                android:rowCount="2">
+                android:background="@color/white">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
                     android:background="@color/white"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{String.valueOf(viewModel.selectedProperty.humidity)+'%'}"
                         android:textColor="@color/black"
-                        style="@style/Bold"
                         android:textSize="20sp"
                         tools:text="30%" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Humidity"
-                        style="@style/Medium"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="1dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <LinearLayout
+                    android:id="@+id/linearLayout5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toEndOf="@+id/view4"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.pop*100)+"%"}'
                         android:textColor="@color/black"
-                        style="@style/Bold"
                         android:textSize="20sp"
                         tools:text="60%" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str_chance_of_rain"
-                        style="@style/Medium"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="1dp"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <LinearLayout
+                    android:id="@+id/linearLayout7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toEndOf="@+id/view5"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.uvi)}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        style="@style/Bold"
                         tools:text="5" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="UV Index"
-                        style="@style/Medium"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+                    tools:layout_editor_absoluteX="48dp" />
+
                 <LinearLayout
+                    android:id="@+id/linearLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/view4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view6">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{String.valueOf(viewModel.selectedProperty.rain)+"mm"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        style="@style/Bold"
                         tools:text="5" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rain Intensity"
-                        style="@style/Medium"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linearLayout6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLayout5"
+                    app:layout_constraintStart_toStartOf="@+id/linearLayout5"
+                    app:layout_constraintTop_toBottomOf="@+id/view6">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.windSpeed)+" Km/h"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        style="@style/Bold"
                         tools:text="60 km/h" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wind Speed"
-                        style="@style/Medium"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
@@ -306,32 +336,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="@+id/linearLayout7"
+                    app:layout_constraintTop_toBottomOf="@+id/view6">
 
                     <TextView
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.windGust)}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        tools:text="3"
-                        style="@style/Bold"/>
+                        tools:text="3" />
 
                     <TextView
+                        style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Visibility"
                         android:textColor="@color/darkGray"
-                        android:textSize="12sp"
-                        style="@style/Medium"/>
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-            </GridLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView

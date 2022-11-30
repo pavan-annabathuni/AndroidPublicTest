@@ -3,30 +3,35 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHistoryBinding
 
 import com.waycool.featurecrophealth.utils.Constant
 import com.waycool.featurecrophealth.utils.NetworkResult
+import java.util.*
 
 
 class CropHistoryFragment : Fragment() {
     private var _binding: FragmentCropHistoryBinding? = null
     private val binding get() = _binding!!
+    private val REQUEST_CODE_SPEECH_INPUT = 1
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
 
@@ -46,7 +51,7 @@ class CropHistoryFragment : Fragment() {
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = historyAdapter
-
+        speechToText()
         bindObservers()
         onclick()
         fabButton()
@@ -58,6 +63,66 @@ class CropHistoryFragment : Fragment() {
 //            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
             findNavController().navigate(R.id.action_cropHistoryFragment_to_pestDiseaseDetailsFragment2,bundle)
 
+        }
+    }
+    private fun speechToText() {
+        binding.textToSpeach.setOnClickListener() {
+            binding.searchView.text.clear()
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+
+            // on below line we are passing language model
+            // and model free form in our intent
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+            )
+
+            // on below line we are passing our
+            // language as a default language.
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE, "en-IN"
+            )
+
+            // on below line we are specifying a prompt
+            // message as speak to text on below line.
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+
+            // on below line we are specifying a try catch block.
+            // in this block we are calling a start activity
+            // for result method and passing our result code.
+            try {
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+            } catch (e: Exception) {
+                // on below line we are displaying error message in toast
+//                Toast
+//                    .makeText(
+//                        context, " " + e.message,
+//                        Toast.LENGTH_SHORT
+//                    )
+//                    .show()
+            }
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // in this method we are checking request
+        // code with our result code.
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            // on below line we are checking if result code is ok
+            if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+
+                // in that case we are extracting the
+                // data from our array list
+                val res: java.util.ArrayList<String> =
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) as java.util.ArrayList<String>
+
+                // on below line we are setting data
+                // to our output text view.
+                binding.searchView.setText(
+                    Objects.requireNonNull(res)[0]
+                )
+            }
         }
     }
 
@@ -160,7 +225,7 @@ class CropHistoryFragment : Fragment() {
             startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 

@@ -25,4 +25,7 @@ object StoreName {
 
     //Weather
     const val WEATHER = "weather"
+
+    //SpotLight
+    const val SPOTLIGHT = "SpotLight"
 }

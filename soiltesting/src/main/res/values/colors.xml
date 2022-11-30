@@ -10,4 +10,7 @@
     <color name="pending">#FFC24C</color>
     <color name="background_dialog">#99656866</color>
     <color name="view_line">#1FB04B</color>
+    <color name="light_grey">#EBECF2</color>
+    <color name="light_yellow">#FFFAF0</color>
+    <!--    <color name="light_grey">#EBECF2</color>-->
 </resources>

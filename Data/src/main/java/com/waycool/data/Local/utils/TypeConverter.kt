@@ -6,6 +6,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
+import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
 import com.waycool.data.Network.NetworkModels.CropModel
 import com.waycool.data.Network.NetworkModels.CropVarietyModel
 import com.waycool.data.repository.domainModels.CropVarityDomain
@@ -73,6 +74,7 @@ object TypeConverter {
         val gson = Gson()
         return gson.toJson(language)
     }
+
 
 
     fun convertCropCategoryToString(language: List<CropCategoryEntity>): String {
@@ -152,4 +154,10 @@ object TypeConverter {
     }
 
 
+
+    fun convertStringToCheckToken(s: String): CheckTokenResponseDTO? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<CheckTokenResponseDTO?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
 }

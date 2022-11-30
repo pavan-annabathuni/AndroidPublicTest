@@ -31,14 +31,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
+import retrofit2.http.Field
+import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
 
-    val apiInterface: ApiInterface
+    private val apiInterface: ApiInterface
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
@@ -102,7 +105,8 @@ object NetworkSource {
 
     fun getCropMaster(headerMap: Map<String, String>) = flow<Resource<CropMasterDTO?>> {
         try {
-            val response = apiInterface.getCropMaster(headerMap)
+            val langCode=LocalSource.getLanguageCode()?:"en"
+            val response = apiInterface.getCropMaster(headerMap, lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -116,7 +120,9 @@ object NetworkSource {
 
     fun getVansCategory(headerMap: Map<String, String>) = flow<Resource<VansCategoryDTO?>> {
         try {
-            val response = apiInterface.getVansCategory(headerMap)
+            val langCode=LocalSource.getLanguageCode()?:"en"
+
+            val response = apiInterface.getVansCategory(headerMap, lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -194,7 +200,8 @@ object NetworkSource {
         flow<Resource<CropCategoryMasterDTO?>> {
 
             try {
-                val response = apiInterface.getCropCategoryMaster(headerMap)
+                val langCode=LocalSource.getLanguageCode()?:"en"
+                val response = apiInterface.getCropCategoryMaster(headerMap, lang = langCode)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -205,25 +212,67 @@ object NetworkSource {
             }
         }
 
-    fun addCropPassData(
-        crop_id: Int?,
-        account_id: Int?,
-        plot_nickname: String?,
-        is_active: Int?,
-        sowing_date: String?,
-        area: Editable?
-    ) = flow<Resource<AddCropResponseDTO?>> {
+//    fun addCropPassData(
+//        crop_id: Int?,
+//        account_id: Int?,
+//        plot_nickname: String?,
+//        is_active: Int?,
+//        sowing_date: String?,
+//        area: Editable?
+//    ) = flow<Resource<AddCropResponseDTO?>> {
+//        try {
+//            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//            val response = apiInterface.addCropPassData(
+//                headerMap!!,
+//                crop_id,
+//                account_id,
+//                plot_nickname,
+//                is_active,
+//                sowing_date,
+//                area
+//            )
+//            if (response.isSuccessful) {
+//                emit(Resource.Success(response.body()))
+//            } else {
+//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+//            }
+//        } catch (e: Exception) {
+//            emit(Resource.Error(e.message))
+//        }
+//    }
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.addCropPassData(
-                headerMap!!,
-                crop_id,
-                account_id,
-                plot_nickname,
-                is_active,
-                sowing_date,
-                area
-            )
+            val response = apiInterface.
+            addCropDataPass(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun activateDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<ActivateDeviceDTO?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.
+            activateDevice(headerMap!!,map)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+    fun viewReport(id:Int) = flow<Resource<SoilTestReportMaster?>> {
+        try {
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.viewReport(headerMap!!,id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -267,26 +316,26 @@ object NetworkSource {
             }
         }
 
-//    fun checkToken(user_id: Int, token: String) =
-//        flow<Resource<CheckTokenResponseDTO?>> {
-//            try {
-//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-//                val response =
-//                    apiInterface.checkToken(headerMap!!, user_id, token)
-//                if (response.isSuccessful) {
-//                    emit(Resource.Success(response.body()))
-//                } else if (response.code() == 404) {
-//                    val error = response.errorBody()?.charStream()?.readText() ?: ""
-//                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
-//                } else {
-//                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
-//                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-//                }
-//            } catch (e: Exception) {
-//                Log.d("Token", "check token:" + e.message)
-//                emit(Resource.Error(e.message))
-//            }
-//        }
+    fun checkToken(user_id: Int, token: String) =
+        flow<Resource<CheckTokenResponseDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response =
+                    apiInterface.checkToken(headerMap!!, user_id, token)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else if (response.code() == 404) {
+                    val error = response.errorBody()?.charStream()?.readText() ?: ""
+                    emit(Resource.Success(TypeConverter.convertStringToCheckToken(error)))
+                } else {
+                    Log.d("Token", "check token: " + response.errorBody()?.charStream()?.readText())
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                Log.d("Token", "check token:" + e.message)
+                emit(Resource.Error(e.message))
+            }
+        }
 
 
     fun login(
@@ -415,7 +464,7 @@ object NetworkSource {
         try {
             val response =
                 headerMap?.let {
-                    userDetailsEntity.id?.let { it1 ->
+                    userDetailsEntity.userId?.let { it1 ->
                         apiInterface.postAiCrop(
                             it,
                             it1, cropId, cropName, image
@@ -439,9 +488,11 @@ object NetworkSource {
         flow<Resource<PestDiseaseDTO?>> {
             emit(Resource.Loading())
             try {
+                val langCode=LocalSource.getLanguageCode()?:"en"
+
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 if (headerMap != null) {
-                    val response = apiInterface.getPestDisease(headerMap, cropId)
+                    val response = apiInterface.getPestDisease(headerMap, cropId, lang = langCode)
 
                     if (response.isSuccessful)
                         emit(Resource.Success(response.body()))
@@ -537,6 +588,23 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+    fun pdfDownload(soil_test_request_id: Int) = flow<Resource<ResponseBody?>> {
+        try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+            val response = apiInterface.pdfDownload(headerMap!!, soil_test_request_id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 
 
     fun getCropInformation(
@@ -545,7 +613,8 @@ object NetworkSource {
 
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getCropInformation(headerMap)
+            val langCode=LocalSource.getLanguageCode()?:"en"
+            val response = apiInterface.getCropInformation(headerMap, lang = langCode)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -773,5 +842,101 @@ object NetworkSource {
         }
     }
 
+    fun getAdvIrrigation(
+        headerMap: Map<String, String>, account_id: Int, plot_id: Int
+    ) = flow<Resource<AdvIrrigationModel?>> {
+
+        try {
+            val response = apiInterface.advIrrigation(headerMap, account_id, plot_id)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun addFarm(
+        accountId: Int,
+        farmName: String,
+        farm_center: String,
+        farm_area: String,
+        farm_json: String,
+        plot_ids: String?,
+        is_primary: Boolean,
+        farm_water_source: String?,
+        farm_pump_hp: String?,
+        farm_pump_type: String?,
+        farm_pump_depth: String?,
+        farm_pump_pipe_size: String?,
+        farm_pump_flow_rate: String?
+    ) = flow<Resource<ResponseBody?>> {
+
+        try {
+            val headerMap = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.addFarm(
+                headerMap,
+                accountId,
+                farmName,
+                farm_center,
+                farm_area,
+                farm_json,
+                plot_ids,
+                is_primary,
+                farm_water_source,
+                farm_pump_hp,
+                farm_pump_type,
+                farm_pump_depth,
+                farm_pump_pipe_size,
+                farm_pump_flow_rate
+            )
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getMyFarms(accountId: Int) = flow<Resource<MyFarmsDTO?>> {
+
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
+
+        try {
+            val response = apiInterface.getMyFarms(map,accountIdLocal)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getAppTranslations()= flow<Resource<AppTranlationsDTO?>> {
+        try {
+            val langCode=LocalSource.getLanguageCode()?:"en"
+            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+            val response = apiInterface.getTranslations(headerMap, lang = langCode)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
 

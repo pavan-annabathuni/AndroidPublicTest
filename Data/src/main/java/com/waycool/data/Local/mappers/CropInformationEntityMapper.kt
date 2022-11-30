@@ -5,21 +5,15 @@ import com.waycool.data.Local.utils.EntityMapper
 import com.waycool.data.Network.NetworkModels.CropInfoData
 
 class CropInformationEntityMapper: EntityMapper<CropInformationEntityData,CropInfoData> {
-    fun mapFromEntity(entity: CropInformationEntityData): CropInfoData {
-        return CropInfoData(
-            crop_id = entity.crop_id,
-            id = entity.id,
-            label_name = entity.label_name,
-            label_value = entity.label_value
-        )
-    }
 
     override fun mapToEntity(dto: CropInfoData): CropInformationEntityData {
         return CropInformationEntityData(
-            crop_id = dto.crop_id,
+            crop_id = dto.cropId,
             id = dto.id,
-            label_name = dto.label_name,
-            label_value = dto.label_value
+            label_name = dto.labelName,
+            label_value = dto.labelValue,
+            labelNameTag = dto.labelNameTag,
+            labelValueTag = dto.labelValueTag
         )
     }
 

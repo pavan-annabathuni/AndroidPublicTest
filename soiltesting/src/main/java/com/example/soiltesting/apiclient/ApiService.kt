@@ -6,6 +6,8 @@ import com.example.soiltesting.model.history.SoilHistory
 import com.example.soiltesting.model.postsoil.NewSoilResponse
 import com.example.soiltesting.model.postsoil.NewSoilTestPost
 import com.example.soiltesting.model.tracker.TrackerResponseX
+
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -47,6 +49,16 @@ interface ApiService {
 
     @POST("api/v1/feedback-recorder")
     suspend fun postFeedback(@Body feedbackRequest: FeedbackRequest): Response<FeedbackRequest>
+
+
+    //report
+//    @POST("soil_test/reports")
+//    @FormUrlEncoded
+//    suspend fun getSoilReport(
+//        @HeaderMap headerMap: Map<String?, String?>?,
+//        @Field("language") contact: String?,
+//        @Field("id") id: String?
+//    ): Call<SoilTestReportMaster?>?
 
 
 }

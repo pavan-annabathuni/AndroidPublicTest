@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PlantSpacingFragment">
+    tools:context=".ui.premium.PlantSpacingFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -51,7 +51,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="@dimen/txt32"
-                android:text="Plant Spacing Details"
+                android:text="@string/plant_spacing_details"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:text="Plant to Plant Distance"
+                    android:text="@string/plant_to_plant_distance"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -113,7 +113,7 @@
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
                         android:hint="e.g 50"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -125,7 +125,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/space4"
-                        android:inputType="number"
                         android:background="@drawable/bg_acres"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -137,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/space16"
                             android:text="mtr"
-                            android:inputType="number"
+
                             android:textColor="#000000"
                             android:textSize="@dimen/txt12"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -204,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:text="Plant Bed width"
+                    android:text="@string/plant_bed_width"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -230,9 +229,10 @@
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
                         android:hint="e.g 50"
+                        android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3Width"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -328,7 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:text="Plant to Plant Distance"
+                    android:text="@string/drip_emitter_rate_per_plant"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -337,7 +337,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/space60"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
                     android:layout_marginTop="@dimen/space8"
                     android:layout_marginEnd="@dimen/space16"
@@ -365,17 +365,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/space4"
-                        android:background="@drawable/bg_acres"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/bg_select_acres"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/tvMtrWidthDistance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/space16"
+                            android:layout_marginStart="@dimen/space16"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginEnd="@dimen/space16"
+                            android:layout_marginBottom="9dp"
                             android:padding="@dimen/space16"
+
                             android:text="LPH"
                             android:textColor="#000000"
                             android:textSize="@dimen/txt12"
@@ -425,7 +433,7 @@
                 android:id="@+id/tvCheckCrop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"

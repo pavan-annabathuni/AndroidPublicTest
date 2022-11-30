@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space2"
         android:background="@drawable/card_image"
-        android:elevation="8dp"
+        android:elevation="4dp"
         app:cardCornerRadius="@dimen/space8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

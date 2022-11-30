@@ -17,26 +17,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class CropInformationSyncer:SyncInterface {
+class CropInformationSyncer : SyncInterface {
 
-    override fun getSyncKey():  Preferences.Key<String> = SyncKey.CROP_INFORMATION_MASTER
+    override fun getSyncKey(): Preferences.Key<String> = SyncKey.CROP_INFORMATION_MASTER
 
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
     fun getCropInformation(crop_id: Int): Flow<Resource<List<CropInformationEntityData>>> {
         GlobalScope.launch(Dispatchers.IO) {
             if (isSyncRequired()) {
-makeNetworkCall()
+                makeNetworkCall()
             }
         }
         return getSelectedCropInformation(crop_id)
     }
 
-    fun getSelectedCropInformation(crop_id:Int): Flow<Resource<List<CropInformationEntityData>>> {
+    fun getSelectedCropInformation(crop_id: Int): Flow<Resource<List<CropInformationEntityData>>> {
         return LocalSource.getCropInformation(crop_id).map {
             Resource.Success(it)
         }
     }
+
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -47,7 +48,7 @@ makeNetworkCall()
                         when (it) {
                             is Resource.Success -> {
                                 LocalSource.insertCropInformation(
-                                   CropInformationEntityMapper().toEntityList(it.data?.data!!)
+                                    CropInformationEntityMapper().toEntityList(it.data?.data!!)
                                 )
 
                                 setSyncStatus(true)

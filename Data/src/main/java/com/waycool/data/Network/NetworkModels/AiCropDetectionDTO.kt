@@ -18,4 +18,5 @@ data class AiCropDetectionData(
     @SerializedName("disease_id") var diseaseId: Int? = null,
     @SerializedName("updated_at") var updatedAt: String? = null
 
+
 )

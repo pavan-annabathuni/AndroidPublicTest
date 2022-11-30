@@ -13,6 +13,7 @@ object StoreKey {
     //UserPrefs
     val LANGUAGE_CODE = stringPreferencesKey("languageCode")
     val LANGUAGE_ID = intPreferencesKey("languageId")
+    val LANGUAGE = stringPreferencesKey("language")
     val IS_FIRST_TIME = booleanPreferencesKey("isFirstTimeUser")
     val IS_LOGGED_IN = booleanPreferencesKey("isLoggedIn")
     val FCM_TOKEN = stringPreferencesKey("fcmToken")

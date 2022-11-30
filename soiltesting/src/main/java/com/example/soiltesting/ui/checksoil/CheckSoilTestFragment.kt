@@ -45,7 +45,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
 //            bundle.putString("onp_id",your_list[0].onp_name.toString())
 //            Log.d(Constant.TAG, "initViewsendingId: "+your_list[0].onp_name.toString())
 //
-//            findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)
+//            findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)x
 //
 //        }
         }

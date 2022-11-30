@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.cropinformation.R
+import com.example.cropinformation.adapter.AdsAdapter
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
@@ -22,7 +23,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
-import com.waycool.featurechat.ZendeskChat
+import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -31,8 +32,6 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import zendesk.chat.*
-import zendesk.messaging.MessagingActivity
 import kotlin.math.roundToInt
 
 
@@ -43,7 +42,6 @@ class CropInfoFragment : Fragment() {
     }
     private val viewModel by lazy { ViewModelProvider(this)[NewsAndArticlesViewModel::class.java] }
 
-    var bannerImageList: MutableList<AdBannerImage> = java.util.ArrayList()
     private var cropId: Int? = null
     private var cropName: String? = null
     private var cropLogo:String? = null
@@ -145,32 +143,6 @@ class CropInfoFragment : Fragment() {
         fabButton()
     }
 
-    private fun zenDesk() {
-        Chat.INSTANCE.init(requireContext(), "dt55P5snqpfyOrXfNqz56lwrup8amDdz",
-            "73015859e3bdae57c168235eb6c96f25c46e747c24bb5e8")
-        val chatConfiguration = ChatConfiguration.builder()
-            .withAgentAvailabilityEnabled(false)
-            .withTranscriptEnabled(false)
-//
-            .build()
-        val visitorInfo: VisitorInfo = VisitorInfo.builder()
-            .withName("Bob")
-            .withEmail("bob@example.com")
-            .withPhoneNumber("123456") // numeric string
-            .build();
-
-        val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-            .withVisitorInfo(visitorInfo)
-            .withDepartment("English Language Group")
-            .build()
-
-        Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-
-
-        MessagingActivity.builder()
-            .withEngines(ChatEngine.engine())
-            .show(requireContext(), chatConfiguration);
-    }
 
     private fun setTabs() {
 
@@ -188,7 +160,7 @@ class CropInfoFragment : Fragment() {
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
                 val customView = tab.setCustomView(R.layout.item_tab_crop)
 
-                when (data[position].label_name) {
+                when (data[position].labelNameTag?:data[position].label_name) {
 
                     "Crop Variety" -> {
                        tab.text = data[position].label_name
@@ -397,7 +369,7 @@ class CropInfoFragment : Fragment() {
                         tab.setIcon(R.drawable.ci_pro_nextcrop_img)
                         customView
                     }
-                    "Sowing_Planting" -> {
+                    "Sowing/Planting" -> {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ic_sowing_planting_img)
                         customView
@@ -495,7 +467,7 @@ class CropInfoFragment : Fragment() {
                         startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
-            ZendeskChat.zenDesk(requireContext())
+            FeatureChat.zenDeskInit(requireContext())
         }
     }
 
@@ -584,22 +556,23 @@ class CropInfoFragment : Fragment() {
         return scroll.roundToInt()
     }
     private fun setBanners() {
-        val adBannerImage =
-            AdBannerImage("https://www.digitrac.in/pub/media/magefan_blog/Wheat_crop.jpg", "1", "0")
-        bannerImageList.add(adBannerImage)
-        val adBannerImage2 = AdBannerImage(
-            "https://cdn.telanganatoday.com/wp-content/uploads/2020/10/Paddy.jpg",
-            "2",
-            "1"
-        )
-        bannerImageList.add(adBannerImage2)
-        val bannerAdapter = BannerAdapter(requireContext(), bannerImageList)
+
+        val bannerAdapter = AdsAdapter()
+        ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
         binding.bannerViewpager.adapter = bannerAdapter
-        TabLayoutMediator(
-            binding.bannerIndicators, binding.bannerViewpager
-        ) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "${position + 1} / ${bannerImageList.size}"
-        }.attach()
+//        TabLayoutMediator(
+//            binding.bannerIndicators, binding.bannerViewpager
+//        ) { tab: TabLayout.Tab, position: Int ->
+//            tab.text = "${position + 1} / ${bannerImageList.size}"
+//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false

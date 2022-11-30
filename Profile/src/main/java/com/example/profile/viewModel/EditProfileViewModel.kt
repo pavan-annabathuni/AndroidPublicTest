@@ -49,7 +49,6 @@ class EditProfileViewModel:ViewModel() {
         ProfileRepository.getUserProfileDet().asLiveData()
 
     suspend fun getUserProfilePic(file:MultipartBody.Part):LiveData<Resource<profilePicModel?>> =
-
         ProfileRepository.getUserProfilePic(file).asLiveData()
 
     fun getProfile(name:String,

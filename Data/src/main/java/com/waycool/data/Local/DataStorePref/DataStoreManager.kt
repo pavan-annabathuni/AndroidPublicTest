@@ -40,6 +40,7 @@ object DataStoreManager {
     private val Context.cropCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.CROP_CATEGORY)
     private val Context.aiCropHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.AI_CROP_HISTORY)
     private val Context.weather: DataStore<Preferences> by preferencesDataStore(name = StoreName.WEATHER)
+    private val Context.spotLight: DataStore<Preferences> by preferencesDataStore(name = StoreName.SPOTLIGHT)
 
 
     suspend fun insertLanguageMaster(language: List<LanguageMasterEntity>) {
@@ -65,11 +66,12 @@ object DataStoreManager {
     }
 
 
-    suspend fun saveSelectedLanguage(languageCode: String, langId: Int) {
+    suspend fun saveSelectedLanguage(languageCode: String, langId: Int,language:String) {
         performPrefsSanityCheck()
         context?.userPreferences?.edit {
             it[StoreKey.LANGUAGE_CODE] = languageCode
             it[StoreKey.LANGUAGE_ID] = langId
+            it[StoreKey.LANGUAGE]=language
         }
     }
 
@@ -81,6 +83,17 @@ object DataStoreManager {
             }
             ?.first().let {
                 it?.get(StoreKey.LANGUAGE_CODE)
+            }
+    }
+
+    suspend fun getSelectedLanguage(): String? {
+        performPrefsSanityCheck()
+        return context?.userPreferences?.data
+            ?.catch { exception ->
+                Log.d("UserPref: ", exception.toString())
+            }
+            ?.first().let {
+                it?.get(StoreKey.LANGUAGE)
             }
     }
 
@@ -197,6 +210,17 @@ object DataStoreManager {
             }
             ?.first().let {
                 it?.get(StoreKey.USER_TOKEN)
+            }
+    }
+
+    suspend fun getUserTokenFlow(): Flow<String?>? {
+        performPrefsSanityCheck()
+        return context?.userPreferences?.data
+            ?.catch { exception ->
+                Log.d("UserPref: ", exception.toString())
+            }
+            ?.map{
+                it[StoreKey.USER_TOKEN]
             }
     }
 
@@ -404,5 +428,16 @@ object DataStoreManager {
                 string?.let { TypeConverter.convertStringToWeather(string) }
                     ?: WeatherMasterEntity()
             }
+    }
+    suspend fun save(key: String, value: String) {
+        val dataStoreKey = stringPreferencesKey(key)
+        context?.spotLight?.edit { firstTime ->
+            firstTime[dataStoreKey] = value
+        }
+    }
+    suspend fun read(key: String): String? {
+        val dataStoreKey = stringPreferencesKey(key)
+        val preferences = context?.spotLight?.data?.first()
+        return preferences?.get(dataStoreKey)
     }
 }
