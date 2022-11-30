@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.ViewholderCropProtectParentBinding
 
@@ -41,6 +42,8 @@ class DiseasesParentAdapter() :
 
         fun bind(item: PestDiseaseDomain) {
             binding.cropProtectDiseaseName.text = item.diseaseName
+            TranslationsManager().loadString("related_images",binding.cropProtectRelatedImageTv)
+            TranslationsManager().loadString("view_more",binding.viewmoreTv)
             Glide.with(binding.cropProtectDiseaseImage).load(item.thumb)
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(binding.cropProtectDiseaseImage)

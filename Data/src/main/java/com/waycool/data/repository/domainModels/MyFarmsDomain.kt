@@ -1,0 +1,21 @@
+package com.waycool.data.repository.domainModels
+
+import com.google.gson.annotations.SerializedName
+
+data class MyFarmsDomain (
+   var id               : Int?    = null,
+   var farmName         : String? = null,
+   var farmCenter       : String? = null,
+   var farmArea         : String? = null,
+   var farmJson         : String? = null,
+   var farmWaterSource  : String? = null,
+   var farmPumpHp       : String? = null,
+   var farmPumpType     : String? = null,
+   var farmPumpDepth    : String? = null,
+   var farmPumpPipeSize : String? = null,
+   var farmPumpFlowRate : String? = null,
+   var isPrimary        : Int?    = null,
+   var updatedAt        : String? = null,
+   var accountNoId      : Int?    = null
+
+)

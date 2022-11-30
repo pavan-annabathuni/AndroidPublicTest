@@ -47,6 +47,10 @@
         <action
             android:id="@+id/action_homePagesFragment_to_spotLightFragment"
             app:destination="@id/spotLightFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_farmDetailsFragment"
+            app:destination="@id/farmDetailsFragment"
+            app:popUpTo="@id/homePagesFragment" />
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -59,7 +63,7 @@
 
     <fragment
         android:id="@+id/allServicesFragment"
-        android:name="com.waycool.iwap.home.AllServicesFragment"
+        android:name="com.waycool.iwap.allservices.AllServicesFragment"
         android:label="fragment_all_services"
         tools:layout="@layout/fragment_all_services" >
         <action
@@ -86,12 +90,16 @@
         android:label="EditCropFragment" />
     <fragment
         android:id="@+id/spotLightFragment"
-        android:name="com.waycool.iwap.SpotLightFragment"
+        android:name="com.waycool.iwap.spotlight.SpotLightFragment"
         android:label="fragment_spot_light"
         tools:layout="@layout/fragment_spot_light" >
         <action
             android:id="@+id/action_spotLightFragment_to_homePagesFragment"
             app:destination="@id/homePagesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/farmDetailsFragment"
+        android:name="com.example.soiltesting.premium.FarmDetailsFragment"
+        android:label="FarmDetailsFragment" />
 
 </navigation>

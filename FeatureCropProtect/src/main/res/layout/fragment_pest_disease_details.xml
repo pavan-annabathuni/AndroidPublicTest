@@ -161,7 +161,7 @@
                     android:layout_height="match_parent">
 
                     <com.waycool.uicomponents.Text.Title2Bold
-                        android:id="@+id/title2Bold"
+                        android:id="@+id/symptoms_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -183,7 +183,7 @@
                         android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/title2Bold">
+                        app:layout_constraintTop_toBottomOf="@+id/symptoms_title">
                         <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -343,7 +343,7 @@
                     android:layout_height="match_parent">
 
                     <com.waycool.uicomponents.Text.Title2Bold
-                        android:id="@+id/textView3"
+                        android:id="@+id/control_measures_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -363,7 +363,7 @@
                         android:theme="@style/Theme.AppCompat"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3"
+                        app:layout_constraintTop_toBottomOf="@+id/control_measures_title"
                         app:tabIndicator="@color/primaryColor"
                         app:tabIndicatorColor="@color/primaryColor"
                         app:tabIndicatorHeight="4dp"

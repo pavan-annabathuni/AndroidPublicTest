@@ -1,11 +1,16 @@
 package com.waycool.data.repository
 
+import android.util.Log
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.syncer.MyCropSyncer
+import com.waycool.data.repository.DomainMapper.LanguageMasterDomainMapper
+import com.waycool.data.repository.DomainMapper.MyFarmsDomainMapper
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 
@@ -44,5 +49,22 @@ object FarmsRepository {
             farm_pump_pipe_size,
             farm_pump_flow_rate
         )
+    }
+
+
+    fun getMyFarms(accountId: Int): Flow<Resource<List<MyFarmsDomain>>> {
+        return NetworkSource.getMyFarms(accountId).map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(MyFarmsDomainMapper().toDomainList(it.data?.data ?: emptyList()))
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
     }
 }

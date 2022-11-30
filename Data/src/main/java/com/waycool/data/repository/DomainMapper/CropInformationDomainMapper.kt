@@ -11,7 +11,9 @@ class CropInformationDomainMapper:
             crop_id = dto.crop_id,
             id = dto.id,
             label_name = dto.label_name,
-            label_value = dto.label_value
+            label_value = dto.label_value,
+            labelNameTag = dto.labelNameTag,
+            labelValueTag = dto.labelValueTag
         )
     }
 //    class CropInformationDataDomainMapper: DomainMapper<CropInformationDomainData, CropInformationEntityData> {

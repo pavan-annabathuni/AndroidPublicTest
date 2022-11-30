@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -26,6 +27,7 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
@@ -39,11 +41,13 @@ import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment() {
 
+    private var audio: AudioWife? = null
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
 
     private val viewModel: CropProtectViewModel by lazy { ViewModelProvider(requireActivity())[CropProtectViewModel::class.java] }
@@ -82,6 +86,15 @@ class PestDiseaseDetailsFragment : Fragment() {
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
+        TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
+        TranslationsManager().loadString("symptoms", binding.symptomsTitle)
+        TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)
+
+        var chemical = "Chemical"
+        viewModel.viewModelScope.launch {
+            chemical = TranslationsManager().getString("related_images")
+        }
+
         val audioNewLayoutBinding: AudioNewLayoutBinding =
             AudioNewLayoutBinding.inflate(layoutInflater)
 
@@ -104,8 +117,9 @@ class PestDiseaseDetailsFragment : Fragment() {
                                 .into(binding.cropProtectDiseaseImage)
                         }
 
-                        binding.cropProtectDiseaseImage.setOnClickListener {view->
-                            StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context, listOf(it.data?.thumb) ,
+                        binding.cropProtectDiseaseImage.setOnClickListener { view ->
+                            StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context,
+                                listOf(it.data?.thumb),
                                 ImageLoader { imageView: ImageView, image: String? ->
                                     Glide.with(binding.cropProtectDiseaseImage.context)
                                         .load(image)
@@ -154,7 +168,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                         })
 
                         if (it.data != null && it.data!!.chemical != null) {
-                            addTab("Chemical")
+                            addTab(chemical)
                         }
 
                         if (it.data != null && it.data!!.biological != null) {
@@ -196,7 +210,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         }
 
         newsBinding.viewAllNews.setOnClickListener {
-            val intent=Intent(requireActivity(),NewsAndArticlesActivity::class.java)
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
 
@@ -226,7 +240,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         }
 
         videosBinding.viewAllVideos.setOnClickListener {
-            val intent =Intent(requireActivity(),VideoActivity::class.java)
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
 
@@ -342,27 +356,32 @@ class PestDiseaseDetailsFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
-      fun audioPlayer(){
-              binding.playPauseLayout.setOnClickListener() {
-                  if(audioUrl!=null) {
-              mediaPlayer = MediaPlayer();
-              mediaPlayer!!.setOnCompletionListener {
-                  binding.mediaSeekbar.progress = 0
-                  binding.pause.visibility = View.GONE
-                  binding.play.visibility = View.VISIBLE
-              }
+    private fun audioPlayer() {
+        binding.playPauseLayout.setOnClickListener() {
+            if (audioUrl != null) {
+                mediaPlayer = MediaPlayer();
+                mediaPlayer!!.setOnCompletionListener {
+                    binding.mediaSeekbar.progress = 0
+                    binding.pause.visibility = View.GONE
+                    binding.play.visibility = View.VISIBLE
+                }
 
-                  Log.d("Audio", "audioPlayer: $audioUrl")
-                  var audio = AudioWife.getInstance()
-                      .init(requireContext(), Uri.parse(audioUrl))
-                      .setPlayView(binding.play)
-                      .setPauseView(binding.pause)
-                      .setSeekBar(binding.mediaSeekbar)
-                      .setRuntimeView(binding.totalTime)
-                  // .setTotalTimeView(mTotalTime);
-                  audio.play()
-              }
-          else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
+                Log.d("Audio", "audioPlayer: $audioUrl")
+                audio = AudioWife.getInstance()
+                    .init(requireContext(), Uri.parse(audioUrl))
+                    .setPlayView(binding.play)
+                    .setPauseView(binding.pause)
+                    .setSeekBar(binding.mediaSeekbar)
+                    .setRuntimeView(binding.totalTime)
+                // .setTotalTimeView(mTotalTime);
+                audio?.play()
+            } else Toast.makeText(requireContext(), "Audio is not there", Toast.LENGTH_SHORT).show()
 
-      }}
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        audio?.release()
+    }
 }

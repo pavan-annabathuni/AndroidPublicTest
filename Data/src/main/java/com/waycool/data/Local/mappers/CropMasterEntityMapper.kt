@@ -36,6 +36,7 @@ class CropMasterEntityMapper : EntityMapper<CropMasterEntity, CropMasterData> {
             diseasePrediction = dto.isDiseasePrediction,
             gdd = dto.isGdd,
             translation = dto.translation,
+            cropNameTag = dto.cropNameTag
         )
     }
 

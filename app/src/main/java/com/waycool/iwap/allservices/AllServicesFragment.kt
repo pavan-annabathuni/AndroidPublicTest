@@ -1,4 +1,4 @@
-package com.waycool.iwap.home
+package com.waycool.iwap.allservices
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,21 +9,16 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.soiltesting.R
-import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
-import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.databinding.FragmentAllServicesBinding
-import com.waycool.iwap.databinding.FragmentHomePagesBinding
 
 
 class AllServicesFragment : Fragment() {
     private var _binding: FragmentAllServicesBinding? = null
     private val binding get() = _binding!!
-    lateinit var allServiceAdapter:SoilTestingLabsAdapter
+    lateinit var allServiceAdapter: SoilTestingLabsAdapter
 //    private var allServiceAdapter=SoilTestingLabsAdapter(requireContext())
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     override fun onCreateView(
@@ -47,7 +42,7 @@ class AllServicesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        allServiceAdapter=SoilTestingLabsAdapter(requireContext())
+        allServiceAdapter= SoilTestingLabsAdapter(requireContext())
 //        binding.recyclerviewService.layoutManager =
 //            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewService.adapter = allServiceAdapter

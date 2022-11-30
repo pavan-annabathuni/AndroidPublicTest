@@ -3,6 +3,7 @@ package com.waycool.data.Local
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.Local.db.OutgrowDao
 import kotlinx.coroutines.flow.Flow
 
 
@@ -175,4 +176,11 @@ object LocalSource {
 
     suspend fun deleteMyCrop() = outgrowDao.getDeleteMyCrops()
 
+    fun insertTranslations(translations:List<AppTranslationsEntity>){
+        outgrowDao.insertTranslations(translations)
+    }
+
+    suspend fun getTranslationForString(appKey:String):AppTranslationsEntity? {
+        return outgrowDao.getTranslation(appKey)
+    }
 }

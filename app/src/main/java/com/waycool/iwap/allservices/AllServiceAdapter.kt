@@ -1,13 +1,10 @@
-package com.waycool.iwap.home
+package com.waycool.iwap.allservices
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.soiltesting.databinding.ItemLabsSampleBinding
-import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemViewallServiceBinding

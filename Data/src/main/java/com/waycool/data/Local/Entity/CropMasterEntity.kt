@@ -22,4 +22,5 @@ data class CropMasterEntity(
     @ColumnInfo(name = "disease_prediction") var diseasePrediction: Int? = 0,
     @ColumnInfo(name = "gdd") var gdd: Int? = 0,
     @ColumnInfo(name = "translation") var translation: String? = null,
+    @ColumnInfo(name = "crop_name_tag") var cropNameTag: String? = null
 )

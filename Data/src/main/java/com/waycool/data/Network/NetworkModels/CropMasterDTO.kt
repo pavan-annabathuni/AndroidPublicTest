@@ -22,4 +22,6 @@ data class CropMasterData(
     @SerializedName("is_gdd") var isGdd: Int? = null,
     @SerializedName("translation") var translation: String? = null,
     @SerializedName("updated_at") var updated_at: String? = null,
+    @SerializedName("crop_name_tag") var cropNameTag: String? = null,
+
 )

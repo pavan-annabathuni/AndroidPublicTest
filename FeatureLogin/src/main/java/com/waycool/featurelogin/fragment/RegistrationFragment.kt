@@ -289,6 +289,7 @@ class RegistrationFragment : Fragment() {
         close!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 bottomSheetDialog.dismiss()
+                audioWife.release()
             }
         })
         audioWife = AudioWife.getInstance()
@@ -296,6 +297,9 @@ class RegistrationFragment : Fragment() {
             //                audioWife.release();
         })
 
+        bottomSheetDialog.setOnDismissListener {
+            audioWife.release()
+        }
         play!!.setOnClickListener { view ->
             if (url != null) {
                 playAudio(url, play, pause!!, seekbar!!, totalTime!!)

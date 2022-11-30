@@ -1,4 +1,4 @@
-package com.waycool.iwap
+package com.waycool.iwap.spotlight
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ class SpotLightAdapter(val context: Context, val imageList: List<Int>) : Recycle
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemSpotlightBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SpotLightAdapter.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

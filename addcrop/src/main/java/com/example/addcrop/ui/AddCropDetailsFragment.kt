@@ -95,13 +95,13 @@ class AddCropDetailsFragment : Fragment() {
                 viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                        accountID = it.data?.accountId
+                    accountID = it.data?.accountId
 //                        postAddCrop(crop_id_selected!!,accountID!!)
 
-            }
-            binding.cardCheckHealth.setOnClickListener {
-                if (accountID != null)
-                    postAddCrop(crop_id_selected!!, accountID!!)
+                }
+                binding.cardCheckHealth.setOnClickListener {
+                    if (accountID != null)
+                        postAddCrop(crop_id_selected!!, accountID!!)
 
 //                viewModel.getUserDetails().observe(viewLifecycleOwner) {
 ////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -115,26 +115,26 @@ class AddCropDetailsFragment : Fragment() {
 //                    }
 //                }
 
+                }
             }
-        }
 
 
 //        spinner()
-        spinnerYear()
-        binding.clCalender.setOnClickListener {
-            showCalender()
+            spinnerYear()
+            binding.clCalender.setOnClickListener {
+                showCalender()
 //            showDateDailog()
-        }
-        binding.backBtn.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
-        }
+            }
+            binding.backBtn.setOnClickListener {
+                val isSuccess = findNavController().navigateUp()
+                if (!isSuccess) requireActivity().onBackPressed()
+            }
 //        if (binding.etNickName.text.toString().isEmpty() || binding.etAreaNumber.text.toString().isEmpty() || binding.etCalender.text.toString().isEmpty()){
 //
 //        }
 
 
-    }
+        }
 
 //    private fun spinner() {
 //        val arrayAdapter =
@@ -205,6 +205,7 @@ class AddCropDetailsFragment : Fragment() {
 //        }
 //
 //    }
+    }
 
     private fun spinnerYear() {
         val arrayAdapter =

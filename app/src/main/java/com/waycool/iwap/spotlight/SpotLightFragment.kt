@@ -1,16 +1,15 @@
-package com.waycool.iwap
+package com.waycool.iwap.spotlight
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentSpotLightBinding
 import kotlinx.coroutines.launch
 

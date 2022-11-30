@@ -11,6 +11,7 @@ import com.waycool.data.repository.domainModels.*
 import com.waycool.data.Sync.syncer.LanguageSyncer
 import com.waycool.data.Sync.syncer.ModuleMasterSyncer
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +55,7 @@ object LoginRepository {
         GlobalScope.launch(Dispatchers.IO) {
             LocalSource.saveSelectedLanguage(langCode!!, langId!!,language!!)
             SyncManager.invalidateAll()
+            TranslationsManager().init()
         }
     }
 

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginEnd="@dimen/space8"
-    android:background="@drawable/bd_flex"
     android:id="@+id/clTop"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/space8"
+    android:background="@drawable/bd_flex">
 
-    android:layout_height="wrap_content">
     <TextView
         android:id="@+id/skillName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#111827"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="@dimen/space12"
-        android:layout_marginEnd="@dimen/space12"
         android:layout_marginTop="@dimen/space5"
+        android:layout_marginEnd="@dimen/space12"
         android:layout_marginBottom="@dimen/space5"
         android:text="@string/krishna_farm_plot"
+        android:textColor="@color/textdark"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

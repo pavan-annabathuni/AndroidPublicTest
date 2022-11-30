@@ -67,27 +67,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-            contactNumber= it.data?.contact.toString()
+            contactNumber= it.data?.phone.toString()
             binding. mobileNo.text="+91 $contactNumber"
-            for ( i in it.data!!.account){
-                if (i.accountType=="outgrow"){
-//                    Log.d(TAG, "onCreateViewAccountID:${i.id}")
-                    accountID=i.id
-//                            binding.tvContact
-//                            mobileNumber=i.accountNo.toString()
+            accountID=it.data?.accountId
 
-                    if (accountID!=null){
-//                        Log.d(TAG, "onCreateViewAccountID:$accountID")
-//                        itemClicked(accountID!!, lat!!, long!!, onp_id!!,contactNumber)
-                    }
-
-                }
-
-
-//                            if (account!=null){
-//                                itemClicked(account!!, lat!!, long!!, onp_id!!)
-//                            }
-            }
         }
         binding.submit.setOnClickListener {
             activityDevice(11,"867542059649031")

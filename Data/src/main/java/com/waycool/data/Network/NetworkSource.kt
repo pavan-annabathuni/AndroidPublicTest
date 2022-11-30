@@ -903,5 +903,40 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun getMyFarms(accountId: Int) = flow<Resource<MyFarmsDTO?>> {
+
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
+
+        try {
+            val response = apiInterface.getMyFarms(map,accountIdLocal)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getAppTranslations()= flow<Resource<AppTranlationsDTO?>> {
+        try {
+            val langCode=LocalSource.getLanguageCode()?:"en"
+            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+            val response = apiInterface.getTranslations(headerMap, lang = langCode)
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
 }
 

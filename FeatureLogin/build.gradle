@@ -31,8 +31,12 @@ android {
     }
     buildTypes {
         release {
+            manifestPlaceholders = [TRUECALLER_API_KEY: TRUECALLER_RELEASE]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            manifestPlaceholders = [TRUECALLER_API_KEY: TRUECALLER_DEBUG]
         }
     }
     compileOptions {

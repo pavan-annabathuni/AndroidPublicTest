@@ -160,7 +160,7 @@ class CropInfoFragment : Fragment() {
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
                 val customView = tab.setCustomView(R.layout.item_tab_crop)
 
-                when (data[position].label_name) {
+                when (data[position].labelNameTag?:data[position].label_name) {
 
                     "Crop Variety" -> {
                        tab.text = data[position].label_name

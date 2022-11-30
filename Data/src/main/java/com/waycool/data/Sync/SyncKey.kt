@@ -45,4 +45,7 @@ object SyncKey {
     val MY_CROP_MASTER = stringPreferencesKey("my_crop")
 
     val MANDI_PRICE = stringPreferencesKey("mandi_price")
+
+    val APP_TRANSLATIONS = stringPreferencesKey("app_translations")
+
 }
