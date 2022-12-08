@@ -15,10 +15,7 @@ import com.waycool.data.Network.NetworkModels.MandiModel
 import com.waycool.data.Network.NetworkModels.StateData
 import com.waycool.data.Network.NetworkModels.StateModel
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
-import com.waycool.data.repository.CropsRepository
-import com.waycool.data.repository.MandiRepository
-import com.waycool.data.repository.ProfileRepository
-import com.waycool.data.repository.VansRepository
+import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -55,10 +52,10 @@ class MandiViewModel : ViewModel() {
     }
 
 
-    suspend fun getMandiDetails(crop_category:String?,state:String?,crop:String?,
+    suspend fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
                                 sortBy: String?, orderBy: String?,search:String?
     ): LiveData<PagingData<MandiDomainRecord>> =
-        MandiRepository.getMandiList(crop_category,
+        MandiRepository.getMandiList(lat,long,crop_category,
             state,crop,sortBy,orderBy,search).cachedIn(viewModelScope).asLiveData()
 
 
@@ -67,7 +64,8 @@ class MandiViewModel : ViewModel() {
         MandiRepository.getMandiHistory(crop_master_id,mandi_master_id).asLiveData()
 
 
-
+    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
+        LoginRepository.getUserDetails().asLiveData()
 
 
     init {

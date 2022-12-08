@@ -3,25 +3,23 @@ package com.example.mandiprice.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
@@ -45,6 +43,8 @@ class SearchFragment : Fragment() {
     private var cropCategory: String? = null
     private var state: String? = null
     private var crop: String? = null
+    private var lat= "12.22"
+    private var long= "78.22"
     private val REQUEST_CODE_SPEECH_INPUT = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,12 +60,25 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = this
-
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            lat = it.data?.profile?.lat.toString()
+            long = it.data?.profile?.long.toString()
+        }
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController()
-                .navigate(SearchFragmentDirections.actionSearchFragmentToMandiFragment())
+                .navigateUp()
         }
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        binding.searchBar.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Log.d("search", "onEditorAction: Working")
+                    callingData()
+                    return true
+                }
+                return false
+            }
+        })
         return binding.root
     }
 
@@ -83,7 +96,7 @@ class SearchFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
+            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     // binding.viewModel = it
                     adapterMandi.submitData(lifecycle, it)
@@ -92,7 +105,7 @@ class SearchFragment : Fragment() {
         }
         filterMenu()
         tabs()
-        searchView()
+        //searchView()
         autoComplete()
         speechToText()
         showKeypad(binding.searchBar)
@@ -178,72 +191,16 @@ class SearchFragment : Fragment() {
                             orderBy = "distance"
                             sortBy = "asc"
                             if (search.isNullOrEmpty()) {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             } else {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                               submitAdapter()
                             }
                         } else {
                             orderBy = "distance"
                             if (search.isNullOrEmpty()) {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             } else {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             }
                         }
 
@@ -254,72 +211,17 @@ class SearchFragment : Fragment() {
                             orderBy = "price"
                             sortBy = "desc"
                             if (search.isNullOrEmpty()) {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             } else {
                                 binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             }
                         } else {
                             orderBy = "price"
                             if (search.isNullOrEmpty()) {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             } else {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.viewModelScope.launch {
-                                    viewModel.getMandiDetails(
-                                        cropCategory,
-                                        state,
-                                        crop,
-                                        sortBy,
-                                        orderBy,
-                                        search
-                                    ).observe(viewLifecycleOwner) {
-                                        // binding.viewModel = it
-                                        adapterMandi.submitData(lifecycle, it)
-                                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                                submitAdapter()
                             }
                         }
 
@@ -344,41 +246,11 @@ class SearchFragment : Fragment() {
                 search = binding.searchBar.text.toString()
                 if (i2 > 2) {
                     //binding.filter.text = "Sort By"
-                    Handler().postDelayed({
-                        if (!search.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                        viewModel.viewModelScope.launch {
-                            viewModel.getMandiDetails(
-                                cropCategory,
-                                state,
-                                crop,
-                                sortBy,
-                                orderBy,
-                                search
-                            ).observe(viewLifecycleOwner) {
-                                // binding.viewModel = it
-                                adapterMandi.submitData(lifecycle, it)
-                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        if (binding.searchBar.text.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                        viewModel.viewModelScope.launch {
-                            viewModel.getMandiDetails(
-                                cropCategory,
-                                state,
-                                crop,
-                                sortBy,
-                                orderBy,
-                                search
-                            ).observe(viewLifecycleOwner) {
-                                // binding.viewModel = it
-                                adapterMandi.submitData(lifecycle, it)
-                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }, 1500)
-                }
+                    if (!search.isNullOrEmpty())
+                       submitAdapter()
+                    }
+                    if (binding.searchBar.text.isNullOrEmpty())
+                      submitAdapter()
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -398,74 +270,29 @@ class SearchFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_crick -> {
-                        if(item.isChecked){ item.setChecked(false)}
-                        else {item.setChecked(true)}
+                        if (item.isChecked) {
+                            item.setChecked(false)
+                        } else {
+                            item.setChecked(true)
+                        }
                         sortBy = "asc"
                         binding.filter.text = "Low to High"
                         if (search == null) {
-                            binding.recycleViewDis.adapter = adapterMandi
-                            viewModel.viewModelScope.launch {
-                                viewModel.getMandiDetails(
-                                    cropCategory,
-                                    state,
-                                    crop,
-                                    sortBy,
-                                    orderBy,
-                                    search
-                                ).observe(viewLifecycleOwner) {
-                                    adapterMandi.submitData(lifecycle, it)
-                                }
-                            }
+                            submitAdapter()
                         } else {
-                            binding.recycleViewDis.adapter = adapterMandi
-                            viewModel.viewModelScope.launch {
-                                viewModel.getMandiDetails(
-                                    cropCategory,
-                                    state,
-                                    crop,
-                                    sortBy,
-                                    orderBy,
-                                    search
-                                ).observe(viewLifecycleOwner) {
-                                    adapterMandi.submitData(lifecycle, it)
-                                }
-                            }
+                            submitAdapter()
                         }
 
                     }
                     R.id.action_ftbal -> {
-                        if(item.isChecked) item.setChecked(false)
+                        if (item.isChecked) item.setChecked(false)
                         else item.setChecked(true)
                         item.isChecked = true
                         sortBy = "desc"
                         if (search == null) {
-                            binding.recycleViewDis.adapter = adapterMandi
-                            viewModel.viewModelScope.launch {
-                                viewModel.getMandiDetails(
-                                    cropCategory,
-                                    state,
-                                    crop,
-                                    sortBy,
-                                    orderBy,
-                                    search
-                                ).observe(viewLifecycleOwner) {
-                                    adapterMandi.submitData(lifecycle, it)
-                                }
-                            }
+                            submitAdapter()
                         } else {
-                            viewModel.viewModelScope.launch {
-                                binding.recycleViewDis.adapter = adapterMandi
-                                viewModel.getMandiDetails(
-                                    cropCategory,
-                                    state,
-                                    crop,
-                                    sortBy,
-                                    orderBy,
-                                    search
-                                ).observe(viewLifecycleOwner) {
-                                    adapterMandi.submitData(lifecycle, it)
-                                }
-                            }
+                            submitAdapter()
                         }
                         binding.filter.text = "High to Low"
 
@@ -478,90 +305,116 @@ class SearchFragment : Fragment() {
     }
 
     private fun notFound() {
-        viewModel.status.observe(viewLifecycleOwner) {
-            when (it) {
-                "true" -> {
-                    binding.llNotFound.visibility = View.GONE
-                    binding.recycleViewDis.visibility = View.VISIBLE
-                }
-                "Failed" -> {
-                    binding.llNotFound.visibility = View.VISIBLE
-                    binding.recycleViewDis.visibility = View.GONE
-                }
-            }
-            //Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-            Log.d("status", "onClick:$it ")
+
+        if (adapterMandi.itemCount < 1) {
+
+            binding.llNotFound.visibility = View.GONE
+            binding.recycleViewDis.visibility = View.VISIBLE
+        } else {
+            binding.llNotFound.visibility = View.VISIBLE
+            binding.recycleViewDis.visibility = View.GONE
         }
+        //Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         binding.textView2.text = "Today $sdf"
+
     }
 
+
     fun autoComplete() {
-        viewModel.getAllCrops().observe(viewLifecycleOwner){
+        viewModel.getAllCrops().observe(viewLifecycleOwner) {
             val cropName = it?.data?.map { data ->
                 data.cropName
-            }?: emptyList()
-        val text = resources.getStringArray(R.array.autoComplete)
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete,cropName)
-        binding.searchBar.setAdapter(arrayAdapter)
-    }}
+            } ?: emptyList()
+            val text = resources.getStringArray(R.array.autoComplete)
+            val arrayAdapter =
+                ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, cropName)
+            binding.searchBar.setAdapter(arrayAdapter)
+        }
+    }
 
     override fun onStart() {
         super.onStart()
-        binding.searchBar.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                search = binding.searchBar.text.toString()
-                if (i2 > 2) {
-                    //binding.filter.text = "Sort By"
-                    Handler().postDelayed({
-                        if (!search.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                        viewModel.viewModelScope.launch {
-                            viewModel.getMandiDetails(
-                                cropCategory,
-                                state,
-                                crop,
-                                sortBy,
-                                orderBy,
-                                search
-                            ).observe(viewLifecycleOwner) {
-                                // binding.viewModel = it
-                                adapterMandi.submitData(lifecycle, it)
-                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        if (binding.searchBar.text.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                        viewModel.viewModelScope.launch {
-                            viewModel.getMandiDetails(
-                                cropCategory,
-                                state,
-                                crop,
-                                sortBy,
-                                orderBy,
-                                search
-                            ).observe(viewLifecycleOwner) {
-                                // binding.viewModel = it
-                                adapterMandi.submitData(lifecycle, it)
-                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }, 1500)
-                }
-            }
-
-            override fun afterTextChanged(editable: Editable) {
-                //after the change calling the method and passing the search input
-                // viewModel.getSearch(editable.toString())
-
-            }
-        })
+//        binding.searchBar.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+//            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+//                search = binding.searchBar.text.toString()
+//                    //binding.filter.text = "Sort By"
+//                        if (!search.isNullOrEmpty())
+//                            binding.recycleViewDis.adapter = adapterMandi
+//                        viewModel.viewModelScope.launch {
+//                            viewModel.getMandiDetails(
+//                                cropCategory,
+//                                state,
+//                                crop,
+//                                sortBy,
+//                                orderBy,
+//                                search
+//                            ).observe(viewLifecycleOwner) {
+//                                // binding.viewModel = it
+//                                adapterMandi.submitData(lifecycle, it)
+//                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                        if (binding.searchBar.text.isNullOrEmpty())
+//                            binding.recycleViewDis.adapter = adapterMandi
+//                        viewModel.viewModelScope.launch {
+//                            viewModel.getMandiDetails(
+//                                cropCategory,
+//                                state,
+//                                crop,
+//                                sortBy,
+//                                orderBy,
+//                                search
+//                            ).observe(viewLifecycleOwner) {
+//                                // binding.viewModel = it
+//                                adapterMandi.submitData(lifecycle, it)
+//                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+//                            }
+//                }
+//            }
+//
+//            override fun afterTextChanged(editable: Editable) {
+//                //after the change calling the method and passing the search input
+//                // viewModel.getSearch(editable.toString())
+//
+//            }
+//        })
+//
+        callingData()
     }
 
-    private fun showKeypad(editText: EditText){
-   val imm:InputMethodManager= context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(editText.rootView,InputMethodManager.SHOW_IMPLICIT)
+    private fun showKeypad(editText: EditText) {
+        val imm: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(editText.rootView, InputMethodManager.SHOW_IMPLICIT)
         editText.requestFocus()
+    }
+
+    fun callingData() {
+        search = binding.searchBar.text.toString()
+        //binding.filter.text = "Sort By"
+        if (!search.isNullOrEmpty())
+            submitAdapter()
+    }
+
+    fun submitAdapter() {
+        binding.recycleViewDis.adapter = adapterMandi
+        viewModel.viewModelScope.launch {
+            viewModel.getMandiDetails(
+                lat,
+                long,cropCategory,
+                state,
+                crop,
+                sortBy,
+                orderBy,
+                search
+            ).observe(viewLifecycleOwner) {
+                // binding.viewModel = it
+                adapterMandi.submitData(lifecycle, it)
+                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

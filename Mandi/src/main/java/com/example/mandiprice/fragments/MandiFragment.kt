@@ -27,6 +27,7 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
@@ -53,6 +54,10 @@ class MandiFragment : Fragment() {
     private var search: String? = null
     private var crop_category_id: Int? = 1
     private var count = 0
+    private var lat= "12.22"
+    private var long= "78.22"
+    var distance = "Distance"
+    var price = "Price"
 
     val arrayCat = ArrayList<String>()
 
@@ -114,12 +119,17 @@ class MandiFragment : Fragment() {
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         })
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            lat = it.data?.profile?.lat.toString()
+            long = it.data?.profile?.long.toString()
+        }
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
         filterMenu()
         tabs()
         onClick()
         fabButton()
+        //translation()
 
         binding.recycleViewDis.isNestedScrollingEnabled = true
 
@@ -388,10 +398,10 @@ class MandiFragment : Fragment() {
     private fun tabs() {
 
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Distance").setCustomView(R.layout.item_tab)
+            binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
         )
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Price").setCustomView(R.layout.item_tab)
+            binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
         )
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -576,7 +586,7 @@ class MandiFragment : Fragment() {
         search: String? = null
     ) {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
+            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
@@ -587,5 +597,19 @@ class MandiFragment : Fragment() {
                     // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
         }
+    }
+
+    private fun translation(){
+        var mandi = "Mandi Price"
+        viewModel.viewModelScope.launch {
+            mandi = TranslationsManager().getString("mandi_price")
+            distance = TranslationsManager().getString("distance")
+            price = TranslationsManager().getString("distance")
+        }
+        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
+        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
+        TranslationsManager().loadString("str_Weather",binding.filter)
+        TranslationsManager().loadString("sort_by",binding.filter)
+
     }
 }

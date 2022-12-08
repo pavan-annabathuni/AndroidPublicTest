@@ -3,11 +3,16 @@ package com.example.irrigationplanner.adapter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemWeeklyIrrgationBinding
+import com.waycool.data.Network.NetworkModels.HistoricData
+import com.waycool.data.Network.NetworkModels.IrrigationForecast
+import com.waycool.data.Network.NetworkModels.IrrigationPerDay
 
-class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
+class WeeklyAdapter: ListAdapter<IrrigationForecast,WeeklyAdapter.MyViewHolder>(DiffCallback) {
     var index:Int = 0
     class MyViewHolder(private val binding: ItemWeeklyIrrgationBinding): RecyclerView.ViewHolder(binding.root) {
         val x = binding.tvTime
@@ -24,6 +29,8 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
         holder.itemView.setOnClickListener() {
             index = position
         }
+        val properties = getItem(position)
+        holder.x.text = properties.days[position]
 
 
         if(index == position) {
@@ -37,7 +44,20 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     }
 
 
-    override fun getItemCount(): Int {
-        return 8
-    }
-}
+    companion object DiffCallback : DiffUtil.ItemCallback<IrrigationForecast>() {
+
+        override fun areItemsTheSame(
+            oldItem: IrrigationForecast,
+            newItem: IrrigationForecast
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: IrrigationForecast,
+            newItem: IrrigationForecast
+        ): Boolean {
+            return oldItem.days == newItem.days
+        }
+}}
+

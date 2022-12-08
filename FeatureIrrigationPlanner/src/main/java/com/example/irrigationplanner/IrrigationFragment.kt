@@ -31,6 +31,7 @@ class IrrigationFragment : Fragment() {
     }
     private lateinit var mHistoryAdapter: HistoryAdapter
     private lateinit var mDiseaseAdapter: DiseaseAdapter
+    private lateinit var mWeeklyAdapter: WeeklyAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -51,6 +52,7 @@ class IrrigationFragment : Fragment() {
         }
        // binding.recycleViewHis.adapter = mHistoryAdapter
         tabs()
+        exitDialog()
         binding.irrigationYes.setOnClickListener(){
             dialog()
         }
@@ -97,10 +99,19 @@ class IrrigationFragment : Fragment() {
             this.findNavController().navigate(IrrigationFragmentDirections.
             actionIrrigationFragmentToForecastFragment())
         }
+        binding.cropStage.setOnClickListener(){
+            this.findNavController().navigate(IrrigationFragmentDirections.actionIrrigationFragmentToCropStageFragment())
+        }
     }
 
     private fun setAdapter() {
-        binding.recycleViewDis.adapter = WeeklyAdapter()
+        mWeeklyAdapter = WeeklyAdapter()
+        binding.recycleViewDis.adapter = mWeeklyAdapter
+        viewModel.viewModelScope.launch {
+            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner){
+
+            }
+        }
 
         mHistoryAdapter = HistoryAdapter(HistoryAdapter.DiffCallback.OnClickListener {
 
@@ -157,40 +168,44 @@ class IrrigationFragment : Fragment() {
     })
     }
 
-    private fun dialog(){
+    private fun dialog() {
 
-            val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
-            dialog.setContentView(R.layout.irrigation_pre_day)
-           val close = dialog.findViewById<ImageView>(R.id.close)
-            val save = dialog.findViewById<Button>(R.id.savePreDay)
-            val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
-            close!!.setOnClickListener(){
-                dialog.dismiss()
+        val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
+        dialog.setContentView(R.layout.irrigation_pre_day)
+        val close = dialog.findViewById<ImageView>(R.id.close)
+        val save = dialog.findViewById<Button>(R.id.savePreDay)
+        val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
+        close!!.setOnClickListener() {
+            dialog.dismiss()
+        }
+        save?.setOnClickListener() {
+
+            val value = irrigation?.text.toString().toInt()
+            viewModel.updateIrrigation(1, value).observe(viewLifecycleOwner) {
+                binding.textViewL.text = value.toString()
+                Log.d("ok", "dialog: ${it.message} ")
             }
-            save?.setOnClickListener(){
+            dialog.dismiss()
+        }
 
-                    val value = irrigation?.text.toString().toInt()
-                    viewModel.updateIrrigation(1, value).observe(viewLifecycleOwner) {
-                        Log.d("ok", "dialog: ${it.message} ")
-                }
-                dialog.dismiss()
-            }
+        dialog.show()
 
-            dialog.show()
-
-
+    }
+    fun exitDialog(){
         binding.btExit.setOnClickListener(){
             val dialog = Dialog(requireContext())
 
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.dailog_delete)
             // val body = dialog.findViewById(R.id.body) as TextView
-            val yesBtn = dialog.findViewById(R.id.cancel) as Button
-            val noBtn = dialog.findViewById(R.id.delete) as Button
-            yesBtn.setOnClickListener {
-
+            val cancel = dialog.findViewById(R.id.cancel) as Button
+            val delete = dialog.findViewById(R.id.delete) as Button
+            delete.setOnClickListener {
+             viewModel.getEditMyCrop(1).observe(viewLifecycleOwner){
+             }
+                dialog.dismiss()
             }
-            noBtn.setOnClickListener { dialog.dismiss() }
+            cancel.setOnClickListener { dialog.dismiss() }
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
         }

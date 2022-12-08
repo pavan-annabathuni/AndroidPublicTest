@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.weather.DailyDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R
 import com.waycool.weather.databinding.ItemDailyBinding
 import java.text.SimpleDateFormat
@@ -24,6 +25,7 @@ class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.
         val x = binding.tvDays
         val cv = binding.cardView3
         val alerts = binding.tvTextAlert
+        val rain = binding.tvCondition
 
     }
 
@@ -38,6 +40,7 @@ class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.
          val properties = getItem(position)
         holder.bind(properties)
         holder.bind(properties)
+        TranslationsManager().loadString("str_rain",holder.rain)
         val date = properties.dt?.times(1000L)
         val dateTime=Date()
         if (date != null) {

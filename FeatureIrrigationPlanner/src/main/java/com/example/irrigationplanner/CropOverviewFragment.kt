@@ -44,7 +44,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                 else tvDate.text = "NA"
 
                 // if(it.data?.get(0)?.expectedHarvestDate!=null)
-                tvSoil.text = ""
+                tvSoil.text = "NA"
 
                 if (it.data?.get(0)?.irrigationType != null)
                     tvDrip.text = it.data?.get(0)?.irrigationType

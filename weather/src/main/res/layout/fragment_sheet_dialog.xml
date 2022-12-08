@@ -170,6 +170,7 @@
                         tools:text="30%" />
 
                     <TextView
+                        android:id="@+id/label_humidity"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -210,6 +211,7 @@
                         tools:text="60%" />
 
                     <TextView
+                        android:id="@+id/label_rain"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -250,6 +252,7 @@
                         tools:text="5" />
 
                     <TextView
+                        android:id="@+id/label_uv"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -292,6 +295,7 @@
                         tools:text="5" />
 
                     <TextView
+                        android:id="@+id/label_rainInt"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -323,6 +327,7 @@
                         tools:text="60 km/h" />
 
                     <TextView
+                        android:id="@+id/lable_wind"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -352,6 +357,7 @@
                         tools:text="3" />
 
                     <TextView
+                        android:id="@+id/label_visiblity"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -403,6 +409,7 @@
                         android:textSize="@dimen/tv20" />
 
                     <TextView
+                        android:id="@+id/label_sunrise"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -439,6 +446,7 @@
                         android:textSize="@dimen/tv20" />
 
                     <TextView
+                        android:id="@+id/label_sunset"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

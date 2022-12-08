@@ -46,13 +46,13 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             var yield_tone = binding.editText.text.toString().toInt()
             var date  = binding.editText2.text.toString()
 
-            viewModel.updateHarvest(18,date,yield_tone).observe(viewLifecycleOwner){
+            viewModel.updateHarvest(2,date,yield_tone).observe(viewLifecycleOwner){
                 Log.d("Harvest", "onCreateView: ${it.message}")
             }
             Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
          this.dismiss()
         }
-        binding.editText2.setOnClickListener(){
+        binding.cal.setOnClickListener(){
             showCalender()
         }
         return binding.root

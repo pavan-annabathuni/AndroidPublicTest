@@ -2,16 +2,18 @@ package com.example.ndvi
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.ndvi.adapter.DateAdapter
 import com.example.ndvi.databinding.FragmentNdviBinding
+import com.example.ndvi.viewModel.NdviViewModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -29,6 +31,9 @@ import java.util.*
 
 class NdviFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentNdviBinding
+    private val viewModel: NdviViewModel by lazy {
+        ViewModelProvider(this)[NdviViewModel::class.java]
+    }
     private lateinit var googleMap: GoogleMap
     var languages = arrayOf("23/8/22", "24/8/22", "25/8/22", "26/8/22", "27/8/22", "28/8/22")
     val NEW_SPINNER_ID = 1
@@ -64,6 +69,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
         onClicks()
         tabs()
+        observer()
         val dateSetListener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
                                    dayOfMonth: Int) {
@@ -128,52 +134,66 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         })
     }
     override fun onMapReady(map: GoogleMap?) {
-        map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
-        map.let {
-            googleMap = it!!
+        viewModel.getNdvi(1, 1).observe(viewLifecycleOwner) {
+           // val url = it.data?.data?.get(0)?.truecolorTile
+            var url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120637eb400/634b7093176fe62ecc43f143?appid=248c44ddf25114728e9aceff0f59b219"
+            url = (it.data?.data?.get(0)?.ndwiTile+"&paletteid=4")
+            map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
+            map.let {
+                googleMap = it!!
 
-            var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-                override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+                var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
 
-                    /* Define the URL pattern for the tile images */
-                    val url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120637eb400/634b7093176fe62ecc43f143?appid=248c44ddf25114728e9aceff0f59b219"
-                    url.replace("{z}","${zoom}")
-                    return if (!checkTileExists(x, y, zoom)) {
-                        null
-                    } else try {
-                        URL(url)
-                    } catch (e: MalformedURLException) {
-                        throw AssertionError(e)
+                        /* Define the URL pattern for the tile images */
+//                        http://api.agromonitoring.com/tile/1.0/17/93851/60792/120638be300/634b7030e8d9ac678e1722d4?appid=248c44ddf25114728e9aceff0f59b219&paletteid=40
+
+                        url?.replace("{z}", "${zoom}")
+                        url?.replace("{x}", "${x}")
+                        url?.replace("{y}", "${y}")
+                        Log.d("g56", "NDVI Url: $url")
+                        try {
+                            return URL(url)
+                        } catch (e: MalformedURLException) {
+                            throw AssertionError(e)
+                        }
                     }
-                }
 
-                /*
+                    /*
                  * Check that the tile server supports the requested x, y and zoom.
                  * Complete this stub according to the tile range you support.
                  * If you support a limited range of tiles at different zoom levels, then you
                  * need to define the supported x, y range at each zoom level.
                  */
-                private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
-                    val minZoom = 12
-                    val maxZoom = 16
-                    return zoom in minZoom..maxZoom
+                    private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
+                        val minZoom = 12
+                        val maxZoom = 16
+                        return zoom in minZoom..maxZoom
+                    }
+
                 }
 
+                tileOverlayTransparent = googleMap.addTileOverlay(
+                    TileOverlayOptions()
+                        .tileProvider(tileProvider)
+                )
+
+                // tileOverlayTransparent.remove()
             }
-
-            tileOverlayTransparent= googleMap.addTileOverlay(
-                TileOverlayOptions()
-                    .tileProvider(tileProvider)
-            )
-
-           // tileOverlayTransparent.remove()
         }
-        }
-
-    private fun updateDateInView() {
-        val myFormat = "dd/MM/yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale.ENGLISH)
-       // binding.date.text = sdf.format(cal.getTime())
     }
 
-}
+        private fun updateDateInView() {
+            val myFormat = "dd/MM/yyyy" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.ENGLISH)
+            // binding.date.text = sdf.format(cal.getTime())
+        }
+
+        fun observer() {
+            viewModel.getNdvi(1, 1).observe(viewLifecycleOwner) {
+                binding.slider.value = it.data?.data?.get(0)?.meanNdvi?.toFloat() ?: 0.0.toFloat()
+                Log.d("Ndvi", "observer: ${it.data.toString()}")
+                binding.ndviMean.text = it.data?.data?.get(0)?.meanNdvi?.toString()
+            }
+        }
+    }

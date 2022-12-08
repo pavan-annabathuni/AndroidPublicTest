@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemDiseaseHistoryBinding
 import com.example.irrigationplanner.databinding.ItemHistoryBinding
 import com.waycool.data.Network.NetworkModels.Disease
@@ -28,12 +29,18 @@ class DiseaseHistoryAdapter: ListAdapter<Disease,DiseaseHistoryAdapter.MyViewHol
         holder.date.text = properties.createdAt
         holder.slider2.value = properties.probability?.toFloat() ?: 0.0.toFloat()
 
-        if(properties.probability!!<50.00)
-        holder.risk.text = "Low Risk"
-        else if (properties.probability!!>50.00&&properties.probability!!<75.00)
+        if(properties.probability!!<50.00) {
+            holder.risk.text = "Low Risk"
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
+        }
+        else if (properties.probability!!>50.00&&properties.probability!!<75.00){
             holder.risk.text = "Medium Risk"
-        else
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
+        }
+        else {
             holder.risk.text = "High Risk"
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
+        }
     }
 
 

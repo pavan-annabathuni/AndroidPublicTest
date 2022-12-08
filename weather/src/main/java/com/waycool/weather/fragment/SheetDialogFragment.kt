@@ -10,6 +10,7 @@ import com.waycool.weather.viewModel.DailyvViewModel
 import com.waycool.weather.viewModel.DetailViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R
 import com.waycool.weather.databinding.FragmentSheetDialogBinding
 import java.text.SimpleDateFormat
@@ -46,6 +47,8 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
 
         observer()
         onClick()
+        translation()
+
         return binding.root
     }
     fun observer(){
@@ -297,5 +300,18 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     }
     override fun getTheme(): Int {
         return R.style.BottomSheetDialog
+    }
+
+    fun translation(){
+        TranslationsManager().loadString("str_daily_weather",binding.textView2)
+        TranslationsManager().loadString("str_humidity",binding.labelHumidity)
+        TranslationsManager().loadString("str_vsibility",binding.labelVisiblity)
+        TranslationsManager().loadString("str_wind",binding.lableWind)
+        TranslationsManager().loadString("str_rain",binding.labelRain)
+        TranslationsManager().loadString("str_hourly",binding.labelUv)
+        TranslationsManager().loadString("str_rain_intensity",binding.labelRainInt)
+        TranslationsManager().loadString("str_sunrise",binding.labelSunrise)
+        TranslationsManager().loadString("str_sunset",binding.labelSunset)
+
     }
 }

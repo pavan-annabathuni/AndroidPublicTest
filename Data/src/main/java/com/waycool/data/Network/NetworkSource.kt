@@ -945,7 +945,7 @@ object NetworkSource {
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.harvestDate(map,id,harvest_date, actual_yield)
+            val response = apiInterface.harvestDate(map,id,harvest_date, actual_yield,"PUT")
             if(response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
@@ -963,6 +963,59 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.irrigationPerDay(map,id,irrigation,"PUT")
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateCropStage(
+        id:Int,farmId:Int,plotId:Int,value1:String?,value2:String?,value3:String?,value4:String?,value5:String?,value6:String?,
+        value7:String?,value8:String?,value9:String?,value10:String?,value11:String?,value12:String?,value13:String?,value14:String?,
+        value15:String?)
+            = flow<Resource<CropStageModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateCropStage(map,id,farmId,plotId,value1,value2,value3,value4,value5,value7,value7,value8,value9,
+                value10,value11,value12,value13,value14,value15)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getCropStage()
+            = flow<Resource<GetCropStage?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getCropStage(map)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getNdvi(farmId: Int,accountId: Int)
+            = flow<Resource<NdviModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getNdvi(map,farmId,accountId)
             if(response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

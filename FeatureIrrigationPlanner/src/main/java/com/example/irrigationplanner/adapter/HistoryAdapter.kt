@@ -32,8 +32,9 @@ class HistoryAdapter(val onClickListener:OnClickListener):ListAdapter<HistoricDa
         val properties = getItem(position)
         holder.bind(properties)
         holder.itemView.setOnClickListener() {
-            index = position
             onClickListener.clickListener(properties!!)
+            index = position
+            notifyDataSetChanged()
         }
         val inputDateFormatter: SimpleDateFormat =
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)

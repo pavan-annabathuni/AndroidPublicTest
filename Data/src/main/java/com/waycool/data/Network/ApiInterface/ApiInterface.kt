@@ -225,7 +225,7 @@ interface ApiInterface {
         @Query("page") page: Int,
         @Query("sort_by") sort_by: String?,
         @Query("order_by") orderBy: String?,
-        @Query("search") search: String?
+        @Query("crop") search: String?
     ): Response<MandiDomain>
 
     @GET("api/v1/get-mandi-history")
@@ -335,10 +335,9 @@ interface ApiInterface {
     ): Response<MyFarmsDTO>
 
     @GET("api/v1/app-translations")
-    suspend fun getTranslations(@HeaderMap map: Map<String, String>, @Query("lang") lang: String):Response<AppTranlationsDTO>
-        @Query("account_id")accountId:Int,
-        @Query("plot_id")plotId:Int
-    ):Response<AdvIrrigationModel>
+    suspend fun getTranslations(@HeaderMap map: Map<String, String>,
+                                @Query("lang") lang: String):Response<AppTranlationsDTO>
+
 
     @PUT("api/v1/plots/{plot}")
     @FormUrlEncoded
@@ -346,7 +345,8 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
         @Path("plot")plots: Int,
         @Field("actual_harvest_date")actual_harvest_date:String,
-        @Field("actual_yield")actual_yield:Int
+        @Field("actual_yield")actual_yield:Int,
+        @Field("_method")method:String
     ):Response<HarvestDateModel>
 
     @POST("api/v1/irrigation-forecasts/{irrigation_forecast}")
@@ -358,5 +358,49 @@ interface ApiInterface {
         @Field("_method")method:String
     ):Response<IrrigationPerDay>
 
+    @POST("api/v1/plot-stage-calender")
+    @FormUrlEncoded
+    suspend fun updateCropStage(
+        @HeaderMap map: Map<String, String>?,
+        @Field("account_no_id")accountId: Int,
+        @Field("farm_id")farmId:Int,
+        @Field("plot_id")plotId:Int,
+        @Field("fruit_pruning_fruit_pruning")fruit_pruning:String?,
+        @Field("fruit_pruning_bud_break")bud_break:String?,
+        @Field("fruit_pruning_removal_of_excessive")fruit_removal:String?,
+        @Field("fruit_pruning_shoot_development")fruit_development:String?,
+        @Field("fruit_pruning_flowering")fruit_flowering:String?,
+        @Field("fruit_pruning_fruit_set")fruit_set:String?,
+        @Field("fruit_pruning_berry_development")fruit_berry:String?,
+        @Field("fruit_pruning_beginning_of_veraison")fruit_version:String?,
+        @Field("fruit_pruning_harvest")fruit_harvest:String?,
+        @Field("fruit_pruning_rest_period")fruit_rest:String?,
+        @Field("foundation_pruning_foundation_pruning")foundation_pruning:String?,
+        @Field("foundation_pruning_bud_break")foundation_pruning_bud_break:String?,
+        @Field("foundation_pruning_cane_thinning")foundation_sub_cane_thinning:String?,
+        @Field("foundation_pruning_sub_cane")foundation_sub_cane:String?,
+        @Field("foundation_pruning_topping")foundation_topping:String?,
+        ):Response<CropStageModel>
+
+    @GET("api/v1/plot-stage-calender")
+    suspend fun getCropStage(
+    @HeaderMap map: Map<String, String>?,
+    ):Response<GetCropStage>
+
+    @POST("api/v1/add-farm-support")
+    suspend fun updateFarmSupport(
+        @HeaderMap map: Map<String, String>?,
+        @Field("name")name: String,
+        @Field("contact")contact: Int,
+        @Field("lat")lat:Int,
+        @Field("long")long: Int,
+        @Field("lang")lang: Int
+    )
+    @GET("api/v1/get-user-ndvi-history")
+    suspend fun getNdvi(
+        @HeaderMap map: Map<String, String>?,
+        @Query("farm_id")farmId: Int,
+        @Query("account_no_id")account_no_id: Int
+    ):Response<NdviModel>
 
 }

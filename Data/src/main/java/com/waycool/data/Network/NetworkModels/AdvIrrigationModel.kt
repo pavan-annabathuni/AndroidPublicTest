@@ -19,7 +19,16 @@ data class AdvIrrigationData (
 data class Irrigation (
 
     @SerializedName("historic_data"       ) var historicData       : ArrayList<HistoricData> = arrayListOf(),
-    @SerializedName("irrigation_forecast" ) var irrigationForecast : String?                 = null
+    @SerializedName("irrigation_forecast" ) var irrigationForecast : IrrigationForecast?     = IrrigationForecast()
+
+)
+data class IrrigationForecast (
+
+    @SerializedName("mad"         ) var mad        : ArrayList<Double> = arrayListOf(),
+    @SerializedName("etc"         ) var etc        : ArrayList<String> = arrayListOf(),
+    @SerializedName("days"        ) var days       : ArrayList<String> = arrayListOf(),
+    @SerializedName("rain_precip" ) var rainPrecip : ArrayList<String> = arrayListOf(),
+    @SerializedName("depletion"   ) var depletion  : ArrayList<String> = arrayListOf()
 
 )
 data class HistoricData (

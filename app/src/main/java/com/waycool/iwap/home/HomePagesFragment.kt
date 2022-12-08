@@ -26,6 +26,7 @@ import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
+import com.example.ndvi.MainActivityNdvi
 import com.example.soiltesting.SoilTestActivity
 import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
@@ -71,6 +72,8 @@ class HomePagesFragment : Fragment() {
     private var search: String? = null
     private var sortBy: String = "asc"
     private var accountID: Int? = null
+    private var lat:String = ""
+    private var long:String = ""
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
@@ -235,7 +238,7 @@ class HomePagesFragment : Fragment() {
         //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
+            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
                     // binding.viewModel = it
@@ -260,6 +263,8 @@ class HomePagesFragment : Fragment() {
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
                                 weather(it1, it2)
+                                lat = it.data?.profile?.lat.toString()
+                                long = it.data?.profile?.long.toString()
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -894,7 +899,7 @@ class HomePagesFragment : Fragment() {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+            val intent = Intent(activity, MainActivityNdvi::class.java)
             startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter

@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     app:cardUseCompatPadding="true"
+    android:theme="@style/Theme.MaterialComponents.Light"
     app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,6 +64,7 @@
             android:drawablePadding="4dp"
             android:gravity="center"
             android:text="@string/edit"
+            android:visibility="invisible"
             android:textColor="@color/DarkGreen"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"

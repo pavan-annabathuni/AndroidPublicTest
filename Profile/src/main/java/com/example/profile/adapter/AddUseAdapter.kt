@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.profile.R
 import com.example.profile.databinding.ItemSupportBinding
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 
-class AddUseAdapter(private val context:Context): RecyclerView.Adapter<AddUseAdapter.ViewHolder>() {
+class AddUseAdapter(val onClickListener: OnClickListener): RecyclerView.Adapter<AddUseAdapter.ViewHolder>() {
     class ViewHolder(private val binding:ItemSupportBinding):
         RecyclerView.ViewHolder(binding.root) {
      val delete = binding.delete
@@ -28,24 +29,30 @@ class AddUseAdapter(private val context:Context): RecyclerView.Adapter<AddUseAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val properties = getItemId(position)
    holder.delete.setOnClickListener(){
-       val dialog = Dialog(context)
+       onClickListener.clickListener()
+//       val dialog = Dialog(context)
+//
+//       dialog.setCancelable(false)
+//       dialog.setContentView(R.layout.dailog_delete)
+//      // val body = dialog.findViewById(R.id.body) as TextView
+//       val yesBtn = dialog.findViewById(R.id.cancel) as Button
+//       val noBtn = dialog.findViewById(R.id.delete) as Button
+//       yesBtn.setOnClickListener {
+//           dialog.dismiss()
+//       }
+//       noBtn.setOnClickListener { dialog.dismiss() }
+//       dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//       dialog.show()
 
-       dialog.setCancelable(false)
-       dialog.setContentView(R.layout.dailog_delete)
-      // val body = dialog.findViewById(R.id.body) as TextView
-       val yesBtn = dialog.findViewById(R.id.cancel) as Button
-       val noBtn = dialog.findViewById(R.id.delete) as Button
-       yesBtn.setOnClickListener {
-           dialog.dismiss()
-       }
-       noBtn.setOnClickListener { dialog.dismiss() }
-       dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-       dialog.show()
    }
     }
 
     override fun getItemCount(): Int {
         return 4
+    }
+    class OnClickListener(val clickListener: () -> Unit) {
+        fun onClick() = clickListener()
     }
 }

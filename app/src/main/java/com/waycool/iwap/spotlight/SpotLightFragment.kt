@@ -1,5 +1,6 @@
 package com.waycool.iwap.spotlight
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.addcrop.AddCropActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentSpotLightBinding
@@ -59,10 +61,10 @@ class SpotLightFragment : Fragment() {
                         binding.next.setOnClickListener() {
                           lifecycleScope.launch(){
                               DataStoreManager.save("FirstTime","true")
-                          }
+
                             this@SpotLightFragment.findNavController()
                                 .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-                        }
+                        }}
 
 
                     }
@@ -73,10 +75,10 @@ class SpotLightFragment : Fragment() {
 
                             lifecycleScope.launch(){
                                 DataStoreManager.save("FirstTime","true")
-                            }
+
                             this@SpotLightFragment.findNavController()
                                 .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-                        }
+                        }}
                 }
         }
         binding.idViewPager.registerOnPageChangeCallback(myPageChangeCallback)

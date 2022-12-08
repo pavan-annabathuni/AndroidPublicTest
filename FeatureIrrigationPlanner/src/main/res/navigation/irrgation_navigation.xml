@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_irrigationFragment_to_forecastFragment"
             app:destination="@id/forecastFragment" />
+        <action
+            android:id="@+id/action_irrigationFragment_to_cropStageFragment"
+            app:destination="@id/cropStageFragment" />
     </fragment>
     <dialog
         android:id="@+id/cropOverviewFragment"
@@ -48,4 +51,13 @@
         android:name="com.example.irrigationplanner.ForecastFragment"
         android:label="fragment_forecast"
         tools:layout="@layout/fragment_forecast" />
+    <fragment
+        android:id="@+id/cropStageFragment"
+        android:name="com.example.irrigationplanner.CropStageFragment"
+        android:label="fragment_crop_stage"
+        tools:layout="@layout/fragment_crop_stage" >
+        <action
+            android:id="@+id/action_cropStageFragment_self"
+            app:destination="@id/cropStageFragment" />
+    </fragment>
 </navigation>
