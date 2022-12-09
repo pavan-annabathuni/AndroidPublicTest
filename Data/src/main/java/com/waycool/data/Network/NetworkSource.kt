@@ -1,8 +1,6 @@
 package com.waycool.data.Network
 
-import android.text.Editable
 import android.util.Log
-import android.widget.EditText
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -21,22 +19,15 @@ import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
-import com.waycool.data.repository.DomainMapper.MandiDomainMapper
-import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import retrofit2.http.Field
-import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
@@ -866,7 +857,7 @@ object NetworkSource {
         farm_area: String,
         farm_json: String,
         plot_ids: String?,
-        is_primary: Boolean,
+        is_primary: Int?,
         farm_water_source: String?,
         farm_pump_hp: String?,
         farm_pump_type: String?,
@@ -911,7 +902,6 @@ object NetworkSource {
 
         try {
             val response = apiInterface.getMyFarms(map,accountIdLocal)
-
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

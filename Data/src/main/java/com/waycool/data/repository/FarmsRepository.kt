@@ -23,7 +23,7 @@ object FarmsRepository {
         farm_area: String,
         farm_json: String,
         plot_ids: String?,
-        is_primary: Boolean,
+        is_primary: Int?=null,
         farm_water_source: String?,
         farm_pump_hp: String?,
         farm_pump_type: String?,
@@ -56,6 +56,7 @@ object FarmsRepository {
         return NetworkSource.getMyFarms(accountId).map {
             when (it) {
                 is Resource.Success -> {
+                    Log.d("farm", "step8 ${it}")
                     Resource.Success(MyFarmsDomainMapper().toDomainList(it.data?.data ?: emptyList()))
                 }
                 is Resource.Loading -> {

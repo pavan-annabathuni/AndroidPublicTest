@@ -452,7 +452,6 @@ more details."
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clMyForm"
                     android:layout_width="match_parent"
@@ -464,7 +463,7 @@ more details."
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clAddForm"
-                    tools:visibility="visible">
+                    >
 
                     <TextView
                         android:id="@+id/tvMyform"
@@ -516,6 +515,7 @@ more details."
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_ans"
                     android:elevation="6dp"
+                    android:visibility="gone"
                     app:cardCornerRadius="@dimen/txt10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -558,6 +558,7 @@ more details."
                                     map:liteMode="true" />
                             </androidx.cardview.widget.CardView>
 
+
                             <View
                                 android:id="@+id/divider3"
                                 android:layout_width="match_parent"
@@ -585,13 +586,26 @@ more details."
                                 android:id="@+id/crop_farm_rv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
                                 android:orientation="horizontal"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 app:layout_constraintStart_toStartOf="@+id/farmname_home"
                                 app:layout_constraintTop_toBottomOf="@+id/farmname_home"
+                                app:layout_constraintBottom_toTopOf="@id/tvCityName"
                                 tools:itemCount="5"
                                 tools:listitem="@layout/viewholder_farm_crops" />
+                            <TextView
+                                android:id="@+id/tvCityName"
+                                android:layout_width="0dp"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/noto_sans_semibold"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:textColor="#5D6571"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cardView7"
+                                app:layout_constraintBottom_toBottomOf="@id/cardView7"
+                                tools:text="Bangalore" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -860,6 +874,8 @@ more details."
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
+
+
                 <!--            <androidx.recyclerview.widget.RecyclerView-->
                 <!--                android:id="@+id/recyclerview_weather"-->
                 <!--                android:layout_width="match_parent"-->
@@ -894,8 +910,7 @@ more details."
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="@dimen/txt16"
-                            android:text="Add your device \n
-to the farm"
+                            android:text="Add your device \nto the farm"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
                             android:textStyle="bold"

@@ -14,6 +14,8 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
     RecyclerView.ViewHolder(binding.root) {
      val cropImg = binding.imageView
         val cropName = binding.tvCrops
+        val closeIcon = binding.close
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -28,7 +30,7 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
         val properties = getItem(position)
         Glide.with(holder.itemView.context).load(properties.cropLogo).into(holder.cropImg)
         holder.cropName.text = properties.cropName
-        holder.itemView.setOnClickListener() {
+        holder.closeIcon.setOnClickListener() {
             onClickListener.clickListener(properties!!)
         }
     }

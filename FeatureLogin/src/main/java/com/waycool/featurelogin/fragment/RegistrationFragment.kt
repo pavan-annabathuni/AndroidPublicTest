@@ -353,7 +353,8 @@ class RegistrationFragment : Fragment() {
                                     } else {
 //                                        binding.locationEt.setText("$village, $district")
                                         binding.locationTextlayout.helperText =
-                                            "Could not find your location. Enter Manually."
+                                            "Could not find your location. " +
+                                                    "Enter Manually."
                                     }
                                 }
 

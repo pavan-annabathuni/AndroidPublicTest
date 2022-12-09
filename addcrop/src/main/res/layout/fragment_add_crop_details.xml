@@ -147,33 +147,29 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/space40"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_acres"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" >
                 <Spinner
                     android:id="@+id/Acres"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/space40"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/space4"
-                    android:layout_marginEnd="@dimen/space16"
-                    android:background="@drawable/bg_acres"
                     android:gravity="center"
                     android:text="Acres"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivSpinner"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <ImageView
-                    android:id="@+id/ivSpinner"
-                    android:layout_width="@dimen/txt12"
-                    android:layout_height="6dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/space20"
-                    android:src="@drawable/ic_spinner"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <!--                <TextView-->
                 <!--                    android:id="@+id/Acres"-->
                 <!--                    android:layout_width="@dimen/space60"-->
@@ -517,14 +513,15 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:visibility="visible"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -545,7 +542,7 @@
                 android:id="@+id/tvCheckCrop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save Crop"
+                android:text="Submit"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -555,6 +552,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_margin="@dimen/space16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

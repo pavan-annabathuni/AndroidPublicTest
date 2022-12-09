@@ -1,5 +1,6 @@
 package com.waycool.data.Network.NetworkModels
 
+import com.google.android.libraries.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 
 data class MyFarmsDTO(
@@ -9,12 +10,11 @@ data class MyFarmsDTO(
 )
 
 data class MyFarmsData (
-
     @SerializedName("id"                  ) var id               : Int?    = null,
     @SerializedName("farm_name"           ) var farmName         : String? = null,
-    @SerializedName("farm_center"         ) var farmCenter       : String? = null,
+    @SerializedName("farm_center"         ) var farmCenter       : ArrayList<LatLng>? = null,
     @SerializedName("farm_area"           ) var farmArea         : String? = null,
-    @SerializedName("farm_json"           ) var farmJson         : String? = null,
+    @SerializedName("farm_json"           ) var farmJson          :ArrayList<LatLng>? = null,
     @SerializedName("farm_water_source"   ) var farmWaterSource  : String? = null,
     @SerializedName("farm_pump_hp"        ) var farmPumpHp       : String? = null,
     @SerializedName("farm_pump_type"      ) var farmPumpType     : String? = null,
