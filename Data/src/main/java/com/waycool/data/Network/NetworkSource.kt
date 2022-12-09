@@ -554,7 +554,8 @@ object NetworkSource {
     fun dashBoard() =
         flow<Resource<DashBoardModel?>> {
             try {
-                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
                 val response = apiInterface.dashBoard(headerMap)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))

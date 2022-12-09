@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -205,7 +206,14 @@ class MainActivity : AppCompatActivity() {
         tokenCheckViewModel.getDasBoard().observe(this) {
             when (it) {
                 is Resource.Success -> {
-
+                    navController = findNavController(R.id.nav_host_fragment_main)
+                    val graph = navController.navInflater.inflate(R.navigation.nav_home)
+                    if (it.data?.data?.isPremium==true) {
+                        graph.setStartDestination(R.id.homePagesFragment)
+                    } else {
+                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+                    }
+                    navController.graph = graph
 
                 }
                 is Resource.Loading -> {
@@ -227,8 +235,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationBar() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_main
-        ) as NavHostFragment
+            R.id.nav_host_fragment_main) as NavHostFragment
         navController = navHostFragment.navController
 
         // Setup the bottom navigation view with navController

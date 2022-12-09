@@ -85,6 +85,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
                 when (it) {
                     is Resource.Success -> {
                         if (it.data?.data != null) {
+                            binding.cardAddDevice.visibility = View.GONE
                         val response = it.data!!.data as ArrayList<ViewDeviceData>
                         binding.deviceFarm.adapter = viewDeviceListAdapter
                         viewDeviceListAdapter.setMovieList(response)
@@ -382,6 +383,24 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
             it.tvLastUpdateRefresh.setOnClickListener {
 
 
+            }
+            it.clTemp.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+            }
+            it.clWindSpeed.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+            }
+            it.clHumidity.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+            }
+            it.clWindSpeed.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+            }
+            it.clLeafWetness.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+            }
+            it.clPressure.setOnClickListener {
+                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
             }
         }
 
