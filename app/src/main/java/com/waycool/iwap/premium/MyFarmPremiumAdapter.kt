@@ -6,11 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemPremiumAddFarmBinding
 import com.example.soiltesting.databinding.ItemPremiumCropsBinding
 import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import java.util.ArrayList
 
 class MyFarmPremiumAdapter :  RecyclerView.Adapter<MyFarmPremiumViewHolder>() {
-    var details = mutableListOf<MyCropDataDomain>()
-    fun setMovieList(movies: ArrayList<MyCropDataDomain>?) {
+    var details = mutableListOf<MyFarmsDomain>()
+    fun setMovieList(movies: ArrayList<MyFarmsDomain>?) {
         if (movies != null) {
             this.details = movies.toMutableList()
         }
@@ -24,6 +25,7 @@ class MyFarmPremiumAdapter :  RecyclerView.Adapter<MyFarmPremiumViewHolder>() {
 
     override fun onBindViewHolder(holder: MyFarmPremiumViewHolder, position: Int) {
         val details = details[position]
+        holder.binding.tvAddDeviceStart.text=details.farmName
 
     }
 

@@ -4,6 +4,7 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
 import com.waycool.data.Local.db.OutgrowDao
+import com.waycool.data.Network.NetworkModels.DashBoardModel
 import kotlinx.coroutines.flow.Flow
 
 
@@ -98,6 +99,9 @@ object LocalSource {
     suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
         DataStoreManager.insertSoilTestHistory(moduleMaster)
     }
+    suspend fun insertDashboard(moduleMaster: List<DashBoardModel>) {
+        DataStoreManager.insertDashboard(moduleMaster)
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         return DataStoreManager.getModuleMaster()
@@ -110,6 +114,10 @@ object LocalSource {
     fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
         return DataStoreManager.getSoilTestHistory()
     }
+    fun getDashBoard(): Flow<List<DashBoardModel>>? {
+        return DataStoreManager.getDashBoard()
+    }
+
 
     suspend fun insertCropCategoryMaster(cropCategory: List<CropCategoryEntity>) {
         DataStoreManager.insertCropCategory(cropCategory)

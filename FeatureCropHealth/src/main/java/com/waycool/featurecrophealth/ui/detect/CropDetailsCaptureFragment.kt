@@ -233,15 +233,15 @@ class CropDetailsCaptureFragment : Fragment() {
                     data?.diseaseId
                     if (data?.diseaseId==null){
 //                        Toast.makeText(requireContext(),data?.message.toString() , Toast.LENGTH_SHORT).show()
-                        MaterialAlertDialogBuilder(requireContext()).setTitle("AI Crop Health Image")
-                            .setMessage(data?.message.toString())
+                        MaterialAlertDialogBuilder(requireContext()).setTitle(" Alert ")
+                            .setMessage(it.data?.message)
 //                            .setNeutralButton("Remder later") { dialog, which ->
 //                                showSnackbar("")
 //                            }
-                            .setNegativeButton("No") { dialog, which ->
-                                showSnackbar("")
-                            }
-                            .setPositiveButton("Yes") { dialog, which ->
+//                            .setNegativeButton("No") { dialog, which ->
+//                                showSnackbar("")
+//                            }
+                            .setPositiveButton("Ok") { dialog, which ->
                                 showSnackbar("")
                             }.show()
 //                            .setNeutralButton("later"){dialog,which->

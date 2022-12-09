@@ -144,7 +144,6 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                     accountId?.let { it1 ->
                         viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
                     }
-
                     Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
                     activity?.finish()
                 }

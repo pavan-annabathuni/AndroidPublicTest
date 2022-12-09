@@ -1,6 +1,7 @@
 package com.waycool.data.repository.domainModels
 
-import com.google.gson.annotations.SerializedName
+import com.google.android.libraries.maps.model.LatLng
+
 
 data class MyFarmsDomain (
    var id               : Int?    = null,

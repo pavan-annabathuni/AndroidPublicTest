@@ -9,7 +9,7 @@ import com.example.soiltesting.databinding.ItemPremiumCropsBinding
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.iwap.databinding.ItemViewallServiceBinding
-import com.waycool.iwap.home.SoilTestingLabsHolder
+
 import java.util.ArrayList
 
 class MyCropPremiumAdapter  :  RecyclerView.Adapter<MyCropPremiumViewHolder>(){

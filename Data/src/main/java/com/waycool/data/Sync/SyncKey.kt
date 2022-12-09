@@ -28,6 +28,9 @@ object SyncKey {
     //Modules Master
     val SOIL_TEST_HISTORY = stringPreferencesKey("soil_type_history")
 
+    //Modules Master
+    val DASH_BOARD = stringPreferencesKey("dash_board")
+
     //AI crop Health History
     val AI_CROP_HISTORY = stringPreferencesKey("ai_crop_history")
 

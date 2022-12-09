@@ -108,6 +108,23 @@
         android:id="@+id/homePagePremiumFragment2"
         android:name="com.waycool.iwap.premium.HomePagePremiumFragment"
         android:label="fragment_home_page_premium"
-        tools:layout="@layout/fragment_home_page_premium" />
+        tools:layout="@layout/fragment_home_page_premium" >
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment2"
+            app:destination="@id/farmDetailsFragment2" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_deviceFragmentOne"
+            app:destination="@id/deviceFragmentOne" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmDetailsFragment2"
+        android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
+        android:label="fragment_farm_details"
+        tools:layout="@layout/fragment_farm_details" />
+    <fragment
+        android:id="@+id/deviceFragmentOne"
+        android:name="com.waycool.iwap.premium.DeviceFragmentOne"
+        android:label="fragment_device_one"
+        tools:layout="@layout/fragment_device_one" />
 
 </navigation>

@@ -42,7 +42,7 @@ class AiCropHistoryAdapter(private val context: Context) :
         fun bind(note: AiCropHistoryDomain) {
             binding.tvCropID.text ="id : "+ note.crop_id.toString()
 //            binding.tvRequest.text = note.prediction
-            binding.tvDesiessName.text = note.disease_id.toString()
+//            binding.tvDesiessName.text = note.disease_id.toString()
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text=note.cropdata?.name.toString()
             Glide.with(context)

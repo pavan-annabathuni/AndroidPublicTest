@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNavigationBar()
-
+        getDashBoard()
 
         tokenCheckViewModel.getUserDetails().observe(this) {
 
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
 
 
 //        val navController: NavController = Navigation.findNavController(this, R.id.nav_host_fragment)
@@ -184,6 +185,28 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     }
+                }
+                is Resource.Loading -> {
+
+
+                }
+                is Resource.Error -> {
+//                    Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+//                        .show()
+                }
+            }
+
+
+        }
+
+    }
+    fun getDashBoard() {
+        tokenCheckViewModel.getDasBoard().observe(this) {
+            when (it) {
+                is Resource.Success -> {
+
+
                 }
                 is Resource.Loading -> {
 

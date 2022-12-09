@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
+import com.waycool.data.Network.NetworkModels.DashBoardModel
 import com.waycool.data.Network.NetworkModels.SoilTestResponseDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
@@ -16,6 +17,9 @@ class TokenViewModel : ViewModel() {
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
+
+    fun getDasBoard(): LiveData<Resource<DashBoardModel?>> =
+     CropsRepository.getDashBoard().asLiveData()
 
     suspend fun getUserToken():String = LoginRepository.getUserToken()!!
 

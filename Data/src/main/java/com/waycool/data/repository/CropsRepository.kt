@@ -184,6 +184,44 @@ object CropsRepository {
         }
     }
 
+//    fun getIotDevice(
+//        account: Int,device_model_id:Int
+//    ): Flow<Resource<List<ViewDeviceDTO>?>> {
+//        return NetworkSource.getIotDevice().map {
+//            when (it) {
+//                is Resource.Success -> {
+////                    SoilTestHistorySyncer().invalidateSync()
+//                    Resource.Success(
+//
+//
+////                        CheckSoilTestLabMapper().toDomainList(it.data?.data ?: emptyList())
+//
+////                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
+//                    )
+//                }
+//                is Resource.Loading -> {
+//                    Resource.Loading()
+//                }
+//                is Resource.Error -> {
+//                    Resource.Error(it.message)
+//                }
+//            }
+//        }
+//    }
+    fun getIotDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): Flow<Resource<ViewDeviceDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.getIotDevice(map)
+    }
+    fun getDashBoard(): Flow<Resource<DashBoardModel?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.dashBoard()
+    }
+
+
     fun getTracker(soil_test_request_id: Int): Flow<Resource<List<TrackerDemain>?>> {
         return NetworkSource.getTracker(soil_test_request_id).map {
             when (it) {

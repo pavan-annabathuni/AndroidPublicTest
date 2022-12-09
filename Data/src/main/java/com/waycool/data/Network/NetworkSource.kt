@@ -340,7 +340,7 @@ object NetworkSource {
 
     fun login(
         contact: String,
-        password: String,
+//        password: String,
         fcm_token: String,
         mobile_model: String,
         mobile_manufacturer: String
@@ -350,7 +350,7 @@ object NetworkSource {
             val response = apiInterface.login(
                 headerMapPublic,
                 contact,
-                password,
+//                password,
                 fcm_token,
                 mobile_model,
                 mobile_manufacturer
@@ -551,6 +551,20 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+    fun dashBoard() =
+        flow<Resource<DashBoardModel?>> {
+            try {
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+                val response = apiInterface.dashBoard(headerMap)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
 
     fun getSoilTestLab(account_id: Int, lat: String, long: String) =
         flow<Resource<CheckSoilTestLabDTO?>> {
@@ -561,6 +575,24 @@ object NetworkSource {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
                 val response = apiInterface.getSoilTestLab(headerMap!!, account_id, lat, long)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
+    fun getIotDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) =
+        flow<Resource<ViewDeviceDTO?>> {
+            try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+                val response = apiInterface.getIotDevice(headerMap!!,map)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {

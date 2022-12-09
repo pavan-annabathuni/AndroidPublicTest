@@ -187,7 +187,6 @@ class LoginFragment : Fragment() {
 
             if (!isTruecallerVerified) {
                 moveToOtp(mobileNo)
-
             } else {
                 loginViewModel.login(mobileNo, fcmToken!!, deviceModel!!, deviceManufacturer!!)
                     .observe(

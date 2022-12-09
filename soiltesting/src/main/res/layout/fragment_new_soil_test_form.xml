@@ -222,8 +222,8 @@
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#F5F5F5"
                     android:inputType="textPostalAddress|textMultiLine"
-                    android:minLines="3"
                     android:maxLines="5"
+                    android:minLines="3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -399,17 +399,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                   android:id="@+id/tvContact"
+                    android:id="@+id/tvContact"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/space50"
                     android:layout_marginTop="@dimen/space2"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
                     android:background="#F5F5F5"
-                    android:text="6343567837"
-                    android:textSize="@dimen/txt14"
                     android:gravity="center_vertical"
+                    android:text="6343567837"
                     android:textColor="#000000"
+                    android:textSize="@dimen/txt14"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/number"
@@ -418,6 +419,7 @@
 
 
             <View
+                android:id="@+id/view2"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space200"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -429,12 +431,25 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:clickable="true"
+        android:visibility="visible"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

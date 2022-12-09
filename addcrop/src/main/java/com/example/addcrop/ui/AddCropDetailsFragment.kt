@@ -87,21 +87,20 @@ class AddCropDetailsFragment : Fragment() {
 //                    }
 //                }
 //            }
-            binding.cardCheckHealth.setOnClickListener {
-                Log.d(TAG, "onViewCreatedmv dkcx: ")
-                if (accountID != null)
+
+            Log.d(TAG, "onViewCreatedmv dkcx: ")
+
 //                    postAddCrop(crop_id_selected!!, accountID!!)
-                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
-                viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
-                    accountID = it.data?.accountId
+            Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                accountID = it.data?.accountId
+                if (accountID != null) {
+                    binding.cardCheckHealth.setOnClickListener {
+                        postAddCrop(crop_id_selected!!, accountID!!)
+                    }
+                }
 //                        postAddCrop(crop_id_selected!!,accountID!!)
 
-                }
-                binding.cardCheckHealth.setOnClickListener {
-                    if (accountID != null)
-                        postAddCrop(crop_id_selected!!, accountID!!)
 
 //                viewModel.getUserDetails().observe(viewLifecycleOwner) {
 ////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
@@ -115,7 +114,7 @@ class AddCropDetailsFragment : Fragment() {
 //                    }
 //                }
 
-                }
+
             }
 
 

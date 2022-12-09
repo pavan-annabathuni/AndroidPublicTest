@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
+import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
@@ -55,6 +56,7 @@ import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment() {
@@ -117,6 +119,7 @@ class HomePagesFragment : Fragment() {
                     args
                 )
         })
+        getFarms()
 
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
@@ -210,8 +213,9 @@ class HomePagesFragment : Fragment() {
         binding.tvGoodMorning.setOnClickListener{
             findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
         }
-        binding.IvNotification.setOnClickListener{
-            val intent = Intent(activity, AddDeviceActivity::class.java)
+//        binding.IvNotification.setOnClickListener {
+//            val intent = Intent(activity, AddDeviceActivity::class.java)
+//        }
         binding.clAddForm.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
@@ -252,14 +256,20 @@ class HomePagesFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
 
-                    accountID = it.data?.accountId
+
+
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
                         Log.d("Profile", userDetails.toString())
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
-                        binding.tvWelcome.text = userDetails?.profile?.village
+                        if (userDetails?.profile?.village==null){
+                            binding.tvWelcome.text = "Bellandur"
+                        }else{
+                            binding.tvWelcome.text = userDetails?.profile?.village
+                        }
                         binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
                         Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
+                        Log.d("TAG", "onViewCreatedProfileUserVillage: $userDetails?.profile?.village")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
@@ -277,7 +287,7 @@ class HomePagesFragment : Fragment() {
             binding.tvAddress.text = it.data?.profile?.village
         }
 
-//        getFarms()
+
         setVideos()
         setNews()
         fabButton()
@@ -299,13 +309,14 @@ class HomePagesFragment : Fragment() {
     private fun getFarms() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-            if (it.data != null) {
-                var accountId: Int? = null
-
-                accountId = it.data?.accountId
+//            if (it.data != null) {
+//                var accountId: Int? = null
+//                accountId = it.data?.accountId
+                var accountId = it.data?.accountId
+                Log.d("TAG", "getFarmsAccount: $accountId ")
 
                 if (accountId != null)
-                    viewModel.getMyFarms(accountID!!).observe(viewLifecycleOwner) {
+                    viewModel.getMyFarms(accountId).observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
                                 if (it.data != null)
@@ -352,7 +363,7 @@ class HomePagesFragment : Fragment() {
                     }
             }
         }
-    }
+
 
     private fun loadFarm(farmJson: String?) {
         if (farmJson != null) {

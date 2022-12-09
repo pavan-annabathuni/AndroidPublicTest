@@ -29,7 +29,7 @@ interface ApiInterface {
     suspend fun login(
         @HeaderMap map: Map<String, String>,
         @Field("contact") contact: String,
-        @Field("password") password: String,
+//        @Field("password") password: String,
         @Field("fcm_token") fcm_token: String,
         @Field("mobile_model") mobile_model: String,
         @Field("mobile_manufacturer") mobile_manufacturer: String,
@@ -332,15 +332,23 @@ interface ApiInterface {
     @GET("api/v1/view-devices")
     suspend fun getIotDevice(
         @HeaderMap headerMap: Map<String, String>,
-        @Query("serial_no_id") account_id: Int,
-        @Query("device_model_id")device_model_id:Int
-    ): Response<SoilTestHistoryDTO>
+        @FieldMap bodymap: Map<String, Any>
 
+//        @Query("serial_no_id") account_id: Int,
+//        @Query("device_model_id")device_model_id:Int
+    ): Response<ViewDeviceDTO>
+
+//    @FormUrlEncoded
     @GET("api/v1/farm/my-farm")
     suspend fun getMyFarms(
         @HeaderMap map: Map<String, String>?,
         @Query("account_no_id") account_no_id: Int
     ): Response<MyFarmsDTO>
+
+    @GET("api/v1/dashboard")
+    suspend fun dashBoard(
+        @HeaderMap map: Map<String, String>?
+    ): Response<DashBoardModel>
 
     @GET("api/v1/app-translations")
     suspend fun getTranslations(@HeaderMap map: Map<String, String>, @Query("lang") lang: String):Response<AppTranlationsDTO>

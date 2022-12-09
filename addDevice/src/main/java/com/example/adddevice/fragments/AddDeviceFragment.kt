@@ -48,7 +48,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var tileOverlayTransparent: TileOverlay? = null
     var spinner1 = arrayOf("Outgrow GWX")
     var spinner2 = arrayOf("GWX 007", "GWX 008")
-    private var accountID: Int? = null
     var contactNumber: String = ""
     private val viewModel by lazy { ViewModelProvider(this)[AddDeviceViewModel::class.java] }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,16 +79,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //        mapFragment.getMapAsync(this)
         isLocationPermissionGranted()
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
-            contactNumber= it.data?.phone.toString()
-            binding. mobileNo.text="+91 $contactNumber"
-            accountID=it.data?.accountId
-
-        }
+//        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+////                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
+////                    account=it.data.account
+//            contactNumber= it.data?.phone.toString()
+////            binding.mobileNo.text="+91 $contactNumber"
+//            accountID=it.data?.accountId
+//
+//        }
         binding.submit.setOnClickListener {
-            activityDevice(11,"867542059649031")
+//            activityDevice(11,"867542059649031")
         }
     }
 
@@ -98,8 +97,13 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+//                    val sharedPreference =  getSharedPreferences("PREFERENCE_NAME",Context.MODE_PRIVATE)
+//                    var editor = sharedPreference.edit()
+//                    editor.putString("username","Anupam")
+//                    editor.putLong("l",100L)
+//                    editor.commit()
                     activity?.finish()
-                    findNavController().navigateUp()
+//                    findNavController().navigateUp()
                     Toast.makeText(requireContext(), "Device is Created", Toast.LENGTH_SHORT).show()
 
                 }
@@ -165,22 +169,21 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 // the content and format of scan message
                 Toast.makeText(context, "Scanned ${intentResult.contents}", Toast.LENGTH_SHORT)
                     .show()
+                Log.d(TAG, "onActivityResultGSCg: ${intentResult.contents} ")
 //                messageText.setText(intentResult.contents)
 //                messageFormat.setText(intentResult.formatName)
                 viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                    contactNumber = it.data?.contact.toString()
-                    for (i in it.data!!.account) {
-                        if (i.accountType == "outgrow") {
-                            accountID = i.id
-                            Log.d(TAG, "onViewCreatedjbdvjb: $accountID")
-                            if (accountID != null) {
+                    var accountId = it.data?.accountId
+                            Log.d(TAG, "onViewCreatedjbdvjb: $accountId")
+                            if (accountId != null) {
                                 var serial_no = intentResult.contents
                                 Log.d(TAG, "onActivityResultjgdsvfdhjs: $serial_no")
                                 val map = mutableMapOf<String, Any>()
-                                map.put("account_no", accountID!!)
-                                map.put("device_name", "praveen")
-                                map.put("device_lat", binding.latitude.text)
-                                map.put("device_long", binding.longitude.text)
+                                map.put("account_no", accountId)
+                                map.put("device_name", binding.device1.text)
+                                map.put("farm_id",8)
+                                map.put("device_lat",12.930220)
+                                map.put("device_long",77.686267)
                                 Log.d(TAG, "onActivityResultLatitude: $binding.latitude.text")
                                 map.put("device_number", serial_no)
                                 map.put("device_version", "praaf")
@@ -214,8 +217,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                                 }
                             }
 
-                        }
-                    }
+
+
                 }
 
             }

@@ -67,7 +67,7 @@ object LoginRepository {
     ): Flow<Resource<LoginDomain>> {
         return NetworkSource.login(
             mobile_no,
-            password = "outgrow_$mobile_no",
+//            password = "outgrow_$mobile_no",
             fcmToken,
             deviceModel,
             deviceMan

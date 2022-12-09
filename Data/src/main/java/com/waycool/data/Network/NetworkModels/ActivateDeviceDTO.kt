@@ -16,10 +16,29 @@ data class ActivateResponseData(
 //    @SerializedName("device_version"   ) var deviceVersion   : String? = null,
     @SerializedName("device_lat"       ) var deviceLat       : Int?    = null,
     @SerializedName("device_long"      ) var deviceLong      : Int?    = null,
-//    @SerializedName("device_elevation" ) var deviceElevation : Int?    = null,
+    @SerializedName("device_elevation" ) var deviceElevation : Int?    = null,
     @SerializedName("farm_id"          ) var farmId          : Int?    = null,
     @SerializedName("plot_id"          ) var plotId          : Int?    = null,
     @SerializedName("updated_at"       ) var updatedAt       : String? = null,
     @SerializedName("created_at"       ) var createdAt       : String? = null,
     @SerializedName("id"               ) var id              : Int?    = null
 )
+//{
+//    "status": true,
+//    "message": "Success",
+//    "data": {
+//    "account_no_id": 2,
+//    "serial_no_id": 1,
+//    "device_name": "Lindsey Harvey",
+//    "device_model_id": 3,
+//    "is_approved": 1,
+//    "device_lat": "12.844847",
+//    "device_long": "77.587458",
+//    "device_elevation": 930,
+//    "farm_id": 1,
+//    "plot_id": 4,
+//    "updated_at": "2022-12-02 12:50:19",
+//    "created_at": "2022-12-02 12:50:19",
+//    "id": 24
+//}
+//}

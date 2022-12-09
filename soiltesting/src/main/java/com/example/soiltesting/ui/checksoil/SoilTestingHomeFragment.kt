@@ -466,7 +466,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                                    } else if (it.data!!.isNotEmpty()) {
+                                    } else if (it.data?.isNotEmpty() == true) {
                                         val response = it.data
                                         Log.d(
                                             TAG,
