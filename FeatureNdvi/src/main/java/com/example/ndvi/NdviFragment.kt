@@ -137,7 +137,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         viewModel.getNdvi(1, 1).observe(viewLifecycleOwner) {
            // val url = it.data?.data?.get(0)?.truecolorTile
             var url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120637eb400/634b7093176fe62ecc43f143?appid=248c44ddf25114728e9aceff0f59b219"
-            url = (it.data?.data?.get(0)?.ndwiTile+"&paletteid=4")
+            url = (it.data?.data?.get(0)?.ndviTile+"&paletteid=4")
             map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
             map.let {
                 googleMap = it!!

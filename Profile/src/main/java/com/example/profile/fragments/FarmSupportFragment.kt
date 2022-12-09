@@ -30,6 +30,7 @@ class FarmSupportFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    private lateinit var mAddUseAdapter: AddUseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,21 +44,13 @@ class FarmSupportFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFarmSupportBinding.inflate(inflater)
-        binding.recycleView.adapter = AddUseAdapter(AddUseAdapter.OnClickListener {
-                   val dialog = Dialog(requireContext())
-
-       dialog.setCancelable(false)
-       dialog.setContentView(R.layout.dailog_delete)
-      // val body = dialog.findViewById(R.id.body) as TextView
-       val yesBtn = dialog.findViewById(R.id.cancel) as Button
-       val noBtn = dialog.findViewById(R.id.delete) as Button
-       yesBtn.setOnClickListener {
-           dialog.dismiss()
-       }
-       noBtn.setOnClickListener { dialog.dismiss() }
-       dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-       dialog.show()
+        mAddUseAdapter = AddUseAdapter(AddUseAdapter.OnClickListener {
+            it.id?.let { it1 -> deleteDialog(it1) }
         })
+        binding.recycleView.adapter = mAddUseAdapter
+        viewModel.getFarmSupport(477).observe(viewLifecycleOwner){
+            mAddUseAdapter.submitList(it.data?.data)
+        }
         Log.d("Clicked", "onCreateView: ciclked")
         onClick()
         return binding.root
@@ -70,5 +63,27 @@ class FarmSupportFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener(){
             this.findNavController().navigateUp()
         }
+    }
+    private fun deleteDialog(id:Int){
+        val dialog = Dialog(requireContext())
+
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dailog_delete)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val cancel = dialog.findViewById(R.id.cancel) as Button
+        val delete = dialog.findViewById(R.id.delete) as Button
+        delete.setOnClickListener {
+            viewModel.deleteFarmSupport(id).observe(viewLifecycleOwner) {
+           // Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show()
+            }
+            viewModel.getFarmSupport(477).observe(viewLifecycleOwner){
+                mAddUseAdapter.submitList(it.data?.data)
+            }
+            dialog.dismiss()
+
+        }
+        cancel.setOnClickListener { dialog.dismiss() }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
     }
     }

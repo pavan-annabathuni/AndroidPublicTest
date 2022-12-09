@@ -6,14 +6,15 @@ import com.example.profile.apiService.profilePic.profile_pic
 import com.example.profile.apiService.response.profile
 import com.example.profile.apiService.userResponse.Data
 import com.example.profile.apiService.userResponse.Profile
-import com.waycool.data.Network.NetworkModels.UserDetailsDTO
-import com.waycool.data.Network.NetworkModels.profilePicModel
+import com.waycool.data.Network.NetworkModels.*
+import com.waycool.data.Network.NetworkSource
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.ProfileRepository
 import com.waycool.data.repository.domainModels.GeocodeDomain
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
@@ -51,67 +52,19 @@ class EditProfileViewModel:ViewModel() {
     suspend fun getUserProfilePic(file:MultipartBody.Part):LiveData<Resource<profilePicModel?>> =
         ProfileRepository.getUserProfilePic(file).asLiveData()
 
-    fun getProfile(name:String,
-        address:String,village:String,pincode:String,state:String,district:String){
-        val filter = HashMap<String,String>()
-        filter.put("name",name)
-        filter.put("address",address)
-        filter.put(("village"),village)
-        filter.put("pincode",pincode)
-        filter.put("state",state)
-        filter.put("district",district)
-        filter.put("_method","PUT")
-       // filter.put(("profile_pic"),data.toString())
-
-//        val file = File(data)
-//        val request:RequestBody = RequestBody.create(
-//        ("multipart/form-data".toMediaTypeOrNull()),file)
-//        val body: MultipartBody.Part = MultipartBody.Part.createFormData(
-//            "profile_pic",file.name,request)
-        viewModelScope.launch {
-
-            try {
-                val videoData = ProfileApi.retrofitService.updateProfile(filter)
-                _response.value = videoData
-              //  _status.value = "SUCCESS"
-            } catch (e: Exception) {
-                _status.value = "FAILED$e"
-            }
-        }
-
-
-    }
-
-//    fun getUsers(){
-//        viewModelScope.launch {
-//            val userData = ProfileApi.retrofitService.getProfile()
-//            _response2.value = userData?.data
-//            //_status.value = "SUCCESS"
-//        }
-//    }
-
-//    fun getUserProfile(){
-//        viewModelScope.launch {
-//            val userData = ProfileApi.retrofitService.getProfile()
-//            _response3.value = userData?.data?.profile
-//            _status.value = "SUCCESS"
-//        }
-//    }
-
-//    fun getUserProfilePic2(file:File){
-//
-//                val file = File(data)
-//        val request:RequestBody = RequestBody.create(
-//        ("multipart/form-data".toMediaTypeOrNull()),file)
-//        val body: MultipartBody.Part = MultipartBody.Part.createFormData(
-//            "profile_pic",file.name,request)
-//        viewModelScope.launch {
-//            val userData = ProfileApi.retrofitService.getProfilePic(body)
-//            _responsePic.value = userData
-//            _status.value = "SUCCESS"
-//        }
-//    }
-
     fun getReverseGeocode(latlon:String):LiveData<GeocodeDomain> = GeocodeRepository.getReverseGeocode(latlon).asLiveData()
+
+    fun updateFarmSupport(name: String,contact:Long,
+    lat:Double,lon:Double, roleId:Int,
+    pincode:Int,village: String,address: String,
+    state: String,district: String):LiveData<Resource<FarmSupportModel?>> =
+        ProfileRepository.updateFarmSupport(name,contact,lat,lon,roleId,pincode,
+            village,address,state,district).asLiveData()
+
+    fun getFarmSupport(accountId:Int): LiveData<Resource<GetFarmSupport?>> =
+         ProfileRepository.getFarmSupport(accountId).asLiveData()
+
+    fun deleteFarmSupport(userId:Int):LiveData<Resource<DeleteFarmSupport?>> =
+        ProfileRepository.deleteFarmSupport(userId).asLiveData()
 
 }

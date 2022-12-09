@@ -1026,5 +1026,59 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
+    fun updateFarmSupport(name: String,contact:Long,
+                          lat:Double,lon:Double, roleId:Int,
+                          pincode:Int,village: String,address: String,
+    state: String,district: String)
+            = flow<Resource<FarmSupportModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateFarmSupport(map,name,contact,lat,lon,roleId,pincode,
+           village,address,state,district)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getFarmSupport(accountId: Int)
+            = flow<Resource<GetFarmSupport?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getFarmSupportUser(map,accountId)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun deleteFarmSupport(
+        id:Int)
+            = flow<Resource<DeleteFarmSupport?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.deleteFarmSupport(map,id)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
 }
 

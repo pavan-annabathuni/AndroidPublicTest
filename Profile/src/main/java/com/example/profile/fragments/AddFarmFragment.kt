@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,10 +22,18 @@ import com.google.android.gms.location.LocationServices
 
 class AddFarmFragment : Fragment() {
   private lateinit var binding: FragmentAddFarmBinding
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    var lat = 12.22
+    var long = 78.22
+    var pinCode = 1
+    var village = ""
+    var address = ""
+    var state = ""
+    var district = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -41,11 +50,13 @@ class AddFarmFragment : Fragment() {
         onClick()
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
+        location()
         return binding.root
 
             }
 
     private fun onClick() {
+        var roleid = 30
         binding.topAppBar.setNavigationOnClickListener(){
             this.findNavController().navigateUp()
         }
@@ -54,16 +65,31 @@ class AddFarmFragment : Fragment() {
             binding.mandiBench.setBackgroundColor(resources.getColor(R.color.white))
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
+            roleid = 30
         }
         binding.mandiBench.setOnClickListener(){
             binding.mandiBench.background = resources.getDrawable(R.drawable.text_border)
             binding.farmManger.setBackgroundColor(resources.getColor(R.color.white))
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
+            roleid = 31
         }
         binding.submit.setOnClickListener(){
-            location()
-            findNavController().navigateUp()
+            val name = binding.tvName.text.toString()
+            var contact = binding.tvFarmId.text.toString().toLong()
+            val lat2  = binding.tvLat.text
+            var long2 = binding.tvLong.text
+            if(name.isNullOrEmpty()||lat2.isNullOrEmpty()||long2.isNullOrEmpty()) {
+                Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                    viewModel.updateFarmSupport(name,contact,lat,long,roleid,pinCode,
+                        village,address,state,district).observe(viewLifecycleOwner){
+                        Log.d("update", "onClick: ${it.data?.data?.name}")
+                        findNavController().navigateUp()
+                    }
+            }
+           // findNavController().navigateUp()
         }
     }
     private fun location(){
@@ -88,12 +114,21 @@ class AddFarmFragment : Fragment() {
         }
         task.addOnSuccessListener {
             if (it != null) {
-                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+//                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+                lat = String.format("%.6f",it.latitude).toDouble()
+                long = String.format("%.6f",it.longitude).toDouble()
+                binding.tvLat.setText(lat.toString())
+                binding.tvLong.setText(long.toString())
 
                 viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
                     .observe(viewLifecycleOwner) {
                         if (it.results.isNotEmpty()) {
                             val result = it.results[0]
+                            address = result.formattedAddress.toString()
+                            village = result.subLocality.toString()
+                            pinCode = result.pincode.toString().toInt()
+                            state = result.state.toString()
+                            district = result.district.toString()
                         }
                     }
 

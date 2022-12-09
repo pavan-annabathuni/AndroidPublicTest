@@ -388,19 +388,39 @@ interface ApiInterface {
     ):Response<GetCropStage>
 
     @POST("api/v1/add-farm-support")
+    @FormUrlEncoded
     suspend fun updateFarmSupport(
         @HeaderMap map: Map<String, String>?,
         @Field("name")name: String,
-        @Field("contact")contact: Int,
-        @Field("lat")lat:Int,
-        @Field("long")long: Int,
-        @Field("lang")lang: Int
-    )
+        @Field("contact")contact: Long,
+        @Field("lat")lat:Double,
+        @Field("long")long:Double,
+        @Field("role_id")roleId: Int,
+        @Field("pincode")pincode: Int?,
+        @Field("village")village: String?,
+        @Field("address")address: String?,
+        @Field("state")state: String?,
+        @Field("district")district: String
+    ):Response<FarmSupportModel>
+    @GET("api/v1/get-farm-support-users")
+    suspend fun getFarmSupportUser(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_id")accountId: Int
+    ):Response<GetFarmSupport>
+
+    @DELETE("api/v1/delete-farm-support/{id}")
+    suspend fun deleteFarmSupport(
+        @HeaderMap map: Map<String, String>?,
+        @Path("id") id: Int
+    ): Response<DeleteFarmSupport>
+
     @GET("api/v1/get-user-ndvi-history")
     suspend fun getNdvi(
         @HeaderMap map: Map<String, String>?,
         @Query("farm_id")farmId: Int,
         @Query("account_no_id")account_no_id: Int
     ):Response<NdviModel>
+
+
 
 }
