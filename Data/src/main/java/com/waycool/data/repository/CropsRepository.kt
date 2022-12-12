@@ -208,11 +208,17 @@ object CropsRepository {
 //            }
 //        }
 //    }
-    fun getIotDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): Flow<Resource<ViewDeviceDTO?>> {
+    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
-        return NetworkSource.getIotDevice(map)
+        return NetworkSource.getIotDevice()
+    }
+    fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?): Flow<Resource<GraphsViewDataDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.getGraphsViewDevice(serial_no_id,device_model_id,value)
     }
     fun getDashBoard(): Flow<Resource<DashBoardModel?>> {
         GlobalScope.launch {
@@ -220,6 +226,13 @@ object CropsRepository {
         }
         return NetworkSource.dashBoard()
     }
+    fun getFarmDetails(): Flow<Resource<FarmDetailsDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.farmDetails()
+    }
+
 
 
     fun getTracker(soil_test_request_id: Int): Flow<Resource<List<TrackerDemain>?>> {

@@ -123,27 +123,41 @@
         <entry key="app/src/main/res/drawable/bg_device_shape.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/bg_green_rect.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/bg_my_crop.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/bg_progress_bar_cl.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/bg_selected_item.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/crop_health_.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/crop_information_.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/crop_protection_.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/home.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/horizantal_progress_bar.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/ic_add_home.xml" value="0.114" />
         <entry key="app/src/main/res/drawable/ic_gray_location.xml" value="0.181" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_humidity_p.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_lux.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_pressure_p.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/ic_rain.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_rainfall.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_temp_p.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/ic_tempearatrue_premium.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/ic_weather_device.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/pb_circular_determinative.xml" value="0.201" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/banner_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_all_services.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/fragment_device_one.xml" value="0.2982982982982983" />
         <entry key="app/src/main/res/layout/fragment_farm_details.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.2947916666666667" />
-        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.2548721313476563" />
-        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.2151120751988431" />
+        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.15946985891406584" />
+        <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
+        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.2181884855152182" />
+        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.18993288590604027" />
+        <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_spot_light.xml" value="0.1175925925925926" />
+        <entry key="app/src/main/res/layout/item_delta_progress_bar.xml" value="0.22150139017608897" />
         <entry key="app/src/main/res/layout/item_spotlight.xml" value="0.1175925925925926" />
+        <entry key="app/src/main/res/layout/speedview.xml" value="0.3322530110677084" />
         <entry key="app/src/main/res/layout/temp.xml" value="0.36534881591796875" />
         <entry key="app/src/main/res/layout/viewholder_farm_crops.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/nav_menu_free.xml" value="0.21481481481481482" />

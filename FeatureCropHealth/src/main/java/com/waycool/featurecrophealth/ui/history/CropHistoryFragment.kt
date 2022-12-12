@@ -194,7 +194,7 @@ class CropHistoryFragment : Fragment() {
 //                    }
 //
 //                }
-//                historyAdapter.upDateList(filteredList)
+//                historyAdapter.upDateList()
 ////                binding.etSearchItem.getText().clear();
 //            }
 //

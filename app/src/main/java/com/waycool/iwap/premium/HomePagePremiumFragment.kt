@@ -34,7 +34,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private var myCropPremiumAdapter = MyCropPremiumAdapter()
     private var myFarmPremiumAdapter = MyFarmPremiumAdapter()
-    var viewDeviceListAdapter = ViewDeviceListAdapter( this)
+    var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     var deviceDataAdapter = DeviceDataAdapter()
 
     //    private var accountID: Int? = null
@@ -55,6 +55,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
         initMyCropObserve()
         initObserveMYFarm()
         initObserveDevice()
+        progressColor()
         initViewPager()
         val fragment: ArrayList<Fragment> = arrayListOf(
             DeviceFragmentOne(),
@@ -63,8 +64,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
         )
 
         val map = mutableMapOf<String, Any>()
-        map.put("serial_no_id",1)
-        map.put("device_model_id",2)
+        map.put("serial_no_id", 1)
+        map.put("device_model_id", 2)
         val adapter = ViewPagerAdapter(fragment, requireParentFragment())
 //        binding.idViewPager.adapter=adapter
     }
@@ -86,9 +87,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
                     is Resource.Success -> {
                         if (it.data?.data != null) {
                             binding.cardAddDevice.visibility = View.GONE
-                        val response = it.data!!.data as ArrayList<ViewDeviceData>
-                        binding.deviceFarm.adapter = viewDeviceListAdapter
-                        viewDeviceListAdapter.setMovieList(response)
+                            binding.cardMYDevice.visibility = View.VISIBLE
+                            val response = it.data!!.data as ArrayList<ViewDeviceData>
+                            binding.deviceFarm.adapter = viewDeviceListAdapter
+                            viewDeviceListAdapter.setMovieList(response)
                         }
 
                     }
@@ -172,6 +174,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
         binding.MyDevice.setOnClickListener {
             val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
+        }
+        binding.tvGoodMorning.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
         }
 
     }
@@ -363,7 +368,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
         return scroll.roundToInt()
     }
 
+    fun progressColor() {
+        binding.soilMoistureOne.progress = 60
+
+    }
+
     override fun viewDevice(data: ViewDeviceData) {
+//        viewDeviceListAdapter.upDateList()
 //        viewDeviceListAdapter.notifyDataSetChanged()
         binding.let {
             it.totalAreea.text = data.iotDevicesData?.battery.toString()
@@ -377,30 +388,87 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
             it.ivSoilDegree.text = data.soilTemperature1.toString() + "C"
             it.ivSoilDegreeOne.text = data.soilTemperature2.toString() + "C"
             it.tvLastUpdate.text = data.dataTimestamp.toString()
-            it.tubeSpeedometer.maxSpeed = 100f
-            it.tubeSpeedometer.speedTo(140f)
-            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
+            binding.soilMoistureOne.progress = 60
+            binding.soilMoistureTwo.progress = 70
+
+//            it.tubeSpeedometer.maxSpeed = 100f
+//            it.tubeSpeedometer.speedTo(140f)
+//            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
             it.tvLastUpdateRefresh.setOnClickListener {
-
-
+                viewDeviceListAdapter.upDateList()
             }
             it.clTemp.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+
             }
             it.clWindSpeed.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "pressure")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
             }
             it.clHumidity.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
             }
             it.clWindSpeed.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
             }
             it.clLeafWetness.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
             }
             it.clPressure.setOnClickListener {
-                findNavController().navigate(R.id.action_homePagePremiumFragment2_to_graphsFragment)
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
             }
         }
 

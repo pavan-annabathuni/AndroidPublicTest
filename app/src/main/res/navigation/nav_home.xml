@@ -118,6 +118,9 @@
         <action
             android:id="@+id/action_homePagePremiumFragment2_to_graphsFragment"
             app:destination="@id/graphsFragment" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment3"
+            app:destination="@id/farmDetailsFragment3" />
     </fragment>
     <fragment
         android:id="@+id/farmDetailsFragment2"
@@ -134,5 +137,10 @@
         android:name="com.waycool.iwap.premium.GraphsFragment"
         android:label="fragment_graphs"
         tools:layout="@layout/fragment_graphs" />
+    <fragment
+        android:id="@+id/farmDetailsFragment3"
+        android:name="com.waycool.iwap.premium.FarmDetailsFragment"
+        android:label="fragment_farm_details"
+        tools:layout="@layout/fragment_farm_details" />
 
 </navigation>

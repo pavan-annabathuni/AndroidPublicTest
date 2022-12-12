@@ -16,7 +16,7 @@ import com.waycool.iwap.R
 
 
 class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) : RecyclerView.Adapter<ViewDeviceListViewHolder>()  {
-    private var row_index = -1
+    private var row_index = 0
     var itemsList = mutableListOf<ViewDeviceData>()
     private var selectedPosition = 0
     fun setMovieList(movies: ArrayList<ViewDeviceData>) {
@@ -35,25 +35,27 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
     override fun onBindViewHolder(holder: ViewDeviceListViewHolder, position: Int) {
         val details = itemsList[position]
         holder.binding.skillName.text=details.model?.modelName
-        if (position==0){
-            viewDeviceFlexListener.viewDevice(details)
-            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
-        }
-//        holder.binding.skillName.setOnClickListener {
+//        if (position==0){
+//            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
 //            viewDeviceFlexListener.viewDevice(details)
+//        }
         if (row_index == position) {
             holder.binding.clTop.setBackgroundResource(com.waycool.featurecrophealth.R.drawable.btn_background)
             holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
+            viewDeviceFlexListener.viewDevice(details)
+
         }
         else {
             holder.binding.skillName.setTextColor(Color.parseColor("#111827"))
             holder.binding.clTop.setBackgroundResource(com.example.soiltesting.R.drawable.bd_flex)
+
         }
-        holder.itemView.setOnClickListener {
+        holder.binding.skillName.setOnClickListener {
             row_index=position
             notifyDataSetChanged()
             viewDeviceFlexListener.viewDevice(details)
         }
+
 //        }
 //        holder.binding.skillName.setOnClickListener { view ->
 //            if (selectedPosition == position) {
@@ -67,6 +69,12 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
 //        }
 //        val checkItem = holder.binding.ivCheck
 
+
+    }
+    fun upDateList() {
+        selectedPosition=-1
+        this.itemsList = itemsList
+        notifyDataSetChanged()
 
     }
 

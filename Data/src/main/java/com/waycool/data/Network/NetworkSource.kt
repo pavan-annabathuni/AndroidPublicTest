@@ -1,8 +1,6 @@
 package com.waycool.data.Network
 
-import android.text.Editable
 import android.util.Log
-import android.widget.EditText
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -21,22 +19,15 @@ import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
-import com.waycool.data.repository.DomainMapper.MandiDomainMapper
-import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import retrofit2.http.Field
-import java.io.File
 import kotlin.Exception
 
 object NetworkSource {
@@ -554,9 +545,24 @@ object NetworkSource {
     fun dashBoard() =
         flow<Resource<DashBoardModel?>> {
             try {
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+                val response = apiInterface.dashBoard(headerMap)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
+    fun farmDetails() =
+        flow<Resource<FarmDetailsDTO?>> {
+            try {
 //                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-                val response = apiInterface.dashBoard(headerMap)
+                val response = apiInterface.farmDetails(headerMap)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -585,7 +591,7 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
-    fun getIotDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) =
+    fun getIotDevice() =
         flow<Resource<ViewDeviceDTO?>> {
             try {
 //            val header =
@@ -593,7 +599,25 @@ object NetworkSource {
 //                    ?.firstOrNull { it.accountType == "outgrow" }
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-                val response = apiInterface.getIotDevice(headerMap!!,map)
+                val response = apiInterface.getIotDevice(headerMap!!)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
+    fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?) =
+        flow<Resource<GraphsViewDataDTO?>> {
+            try {
+//            val header =
+//                LocalSource.getUserDetailsEntity()?.account
+//                    ?.firstOrNull { it.accountType == "outgrow" }
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+
+                val response = apiInterface.getGraphsViewDevice(headerMap!!,serial_no_id,device_model_id,value)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -943,7 +967,8 @@ object NetworkSource {
         val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
 
         try {
-            val response = apiInterface.getMyFarms(map,accountIdLocal)
+            val response = apiInterface.
+            getMyFarms(map,accountIdLocal)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))

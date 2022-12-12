@@ -181,7 +181,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                                 val map = mutableMapOf<String, Any>()
                                 map.put("account_no", accountId)
                                 map.put("device_name", binding.device1.text)
-                                map.put("farm_id",8)
+                                map.put("farm_id",25)
                                 map.put("device_lat",12.930220)
                                 map.put("device_long",77.686267)
                                 Log.d(TAG, "onActivityResultLatitude: $binding.latitude.text")

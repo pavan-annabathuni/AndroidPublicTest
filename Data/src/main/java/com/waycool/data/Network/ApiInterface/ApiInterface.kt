@@ -312,7 +312,6 @@ interface ApiInterface {
     ): Response<ActivateDeviceDTO>
 
 
-
     //view report
 
     @POST("api/v1/soil-test-report-data")
@@ -332,13 +331,18 @@ interface ApiInterface {
     @GET("api/v1/view-devices")
     suspend fun getIotDevice(
         @HeaderMap headerMap: Map<String, String>,
-        @FieldMap bodymap: Map<String, Any>
-
-//        @Query("serial_no_id") account_id: Int,
-//        @Query("device_model_id")device_model_id:Int
     ): Response<ViewDeviceDTO>
 
-//    @FormUrlEncoded
+    @GET("api/v1/view-devices")
+    suspend fun getGraphsViewDevice(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("serial_no_id") serial_no_id: Int?,
+        @Query("device_model_id") device_model_id: Int?,
+        @Query("value") value: String?
+    ): Response<GraphsViewDataDTO>
+
+
+    //    @FormUrlEncoded
     @GET("api/v1/farm/my-farm")
     suspend fun getMyFarms(
         @HeaderMap map: Map<String, String>?,
@@ -347,9 +351,21 @@ interface ApiInterface {
 
     @GET("api/v1/dashboard")
     suspend fun dashBoard(
-        @HeaderMap map: Map<String, String>?
+        @HeaderMap map: Map<String, String>?,
+
+//        @Query("")
     ): Response<DashBoardModel>
 
+    @GET("api/v1/get-delta-t-data")
+    suspend fun farmDetails(
+        @HeaderMap map: Map<String, String>?,
+//        @Query("")
+    ): Response<FarmDetailsDTO>
+
     @GET("api/v1/app-translations")
-    suspend fun getTranslations(@HeaderMap map: Map<String, String>, @Query("lang") lang: String):Response<AppTranlationsDTO>
+    suspend fun getTranslations(
+        @HeaderMap map: Map<String, String>,
+        @Query("lang") lang: String
+    ): Response<AppTranlationsDTO>
+
 }
