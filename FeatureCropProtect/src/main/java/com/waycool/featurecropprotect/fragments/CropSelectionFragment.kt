@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.addcrop.AddCropActivity
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -45,7 +46,10 @@ class CropSelectionFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,18 +62,23 @@ class CropSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbarTitle.text="Protect your Crop"
 
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
-        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
-        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
+//        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
+//        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
+//        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
 
 
 //        binding.toolbarTitle.text = "Protect Your Crop"
 
         binding.cropsRv.adapter = adapter
+        binding.tvAddFrom.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
 
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
@@ -80,7 +89,7 @@ class CropSelectionFragment : Fragment() {
                 args
             )
         })
-        binding.rvMyCrops.adapter = myCropAdapter
+//        binding.rvMyCrops.adapter = myCropAdapter
         fabButton()
         myCrops()
         handler = Handler(Looper.myLooper()!!)
@@ -111,7 +120,6 @@ class CropSelectionFragment : Fragment() {
                 args
             )
         }
-
         binding.micBtn.setOnClickListener {
             speechToText()
         }
@@ -172,7 +180,6 @@ class CropSelectionFragment : Fragment() {
                 categoryId = category.id
             )
         }
-
 
         chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
             if (b) {
@@ -271,20 +278,19 @@ class CropSelectionFragment : Fragment() {
     }
 
     fun myCrops() {
-
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             var accountId = it.data?.accountId
-
             if (accountId != null)
                 viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
                     myCropAdapter.submitList(it.data)
-                    if ((it.data != null)) {
+                    if ((it.data?.size!=0)) {
+                        binding.cvMyCrops.visibility=View.VISIBLE
+                        binding.cvAddCrop.visibility=View.GONE
                         binding.tvCount.text = it.data!!.size.toString()
                     } else {
-                        binding.tvCount.text = "0"
+                        binding.cvAddCrop.visibility=View.GONE
+                        binding.cvMyCrops.visibility=View.GONE
                     }
-                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
                 }
         }
     }

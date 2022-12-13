@@ -154,6 +154,7 @@ class CropHistoryFragment : Fragment() {
                 is Resource.Loading -> {
 
                 }
+                else -> {}
             }
         })
 
@@ -163,20 +164,16 @@ class CropHistoryFragment : Fragment() {
 //    private fun onNoteClicked(noteResponse: Data) {
 //
 //    }
-//    private fun clickSearch() {
-//
+    private fun clickSearch() {
 //        binding.searchView.addTextChangedListener(object : TextWatcher {
-//
 //            override fun beforeTextChanged(
 //                charSequence: CharSequence,
 //                i: Int,
 //                i1: Int,
 //                i2: Int
-//
 //            ) {
 //
 //            }
-//
 //            override fun onTextChanged(
 //                charSequence: CharSequence,
 //                i: Int,
@@ -200,7 +197,7 @@ class CropHistoryFragment : Fragment() {
 //
 //            override fun afterTextChanged(editable: Editable) {}
 //        })
-//    }
+    }
 
     private fun fabButton(){
         var isVisible = false

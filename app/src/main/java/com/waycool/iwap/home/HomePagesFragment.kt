@@ -56,13 +56,12 @@ import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
-    private var district: String?=null
-    private var jsonString: String?=null
+    private var district: String? = null
+    private var jsonString: String? = null
     private var polygon: Polygon? = null
     private var mMap: GoogleMap? = null
     private var _binding: FragmentHomePagesBinding? = null
@@ -123,6 +122,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     args
                 )
         })
+        val c = Calendar.getInstance()
+        val timeOfDay = c.get(Calendar.HOUR_OF_DAY)
+        if (timeOfDay in (1..11)) {
+            binding.tvGoodMorning.text = "Hello"
+        } else if (timeOfDay in 12..15) {
+            binding.tvGoodMorning.text = "Good Afternoon!"
+        } else if (timeOfDay in 16..20) {
+            binding.tvGoodMorning.text = "Good Evening!"
+        } else if (timeOfDay in 21..23) {
+            binding.tvGoodMorning.text = "Good Night!"
+        }
+        else{
+            binding.tvGoodMorning.text="Namaste"
+        }
 
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
@@ -230,7 +243,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    val account=it.data?.accountId
+                    val account = it.data?.accountId
                     accountID = it.data?.accountId
                     it.data.let { userDetails ->
                         binding.tvWelcome.text = userDetails?.profile?.district
@@ -238,9 +251,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 weather(it1, it2)
-//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+
                         getFarms(account!!)
                     }
                 }
@@ -248,12 +261,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                 is Resource.Loading -> {}
                 else -> {}
             }
-            binding.tvAddress.text = it.data?.profile?.village
+            binding.tvAddress.text = it.data?.profile?.district
         }
 
-if(accountID!=null){
-    getFarms(accountID!!)
-}
+        if (accountID != null) {
+            getFarms(accountID!!)
+        }
         setVideos()
         setNews()
         fabButton()
@@ -271,92 +284,82 @@ if(accountID!=null){
         }
     }
 
-       private fun getFarms(account: Int) {
-                viewModel.getMyFarms(account!!).observe(viewLifecycleOwner) {
-                        when (it) {
-                            is Resource.Success -> {
-                                Log.d("farm", "step3")
-                                if (!it.data.isNullOrEmpty()) {
-                                    Log.d("farm", "step9 ${it.data}")
-                                        binding.clAddForm.visibility = View.GONE
-                                        binding.clMyForm.visibility = View.VISIBLE
-                                        binding.farmsDetailsCl.visibility = View.VISIBLE
-                                        binding.tvAddress.visibility=View.INVISIBLE
-                                        binding.cvWeather.visibility=View.VISIBLE
 
-                                        farmsAdapter.submitList(it.data)
-                                        farmsAdapter.onItemClick = { farm ->
-                                            binding.farmnameHome.text = farm?.farmName
-                                            loadFarm(farm?.farmJson)
-                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
-                                            (farm?.farmCenter)?.get(0)?.latitude?.let { lat ->
-                                                (farm?.farmCenter)?.get(0)?.longitude?.let { lng ->
-                                                    getFarmLocation(
-                                                        lat, lng
-                                                    )
-                                                }
-                                            }
-                                            binding.tvCityName.text=district
-                                            viewModel.getMyCrop2(account!!)
-                                                .observe(viewLifecycleOwner) { crops ->
-                                                    val croplist =
-                                                        crops.data?.filter { filter ->
-                                                            filter.farmId == farm?.id
-                                                        }
-                                                    if (croplist?.isEmpty() == true) {
 
-                                                    }
-                                                    farmsCropsAdapter.submitList(croplist)
-                                                }
-                                        }
-                                    } else {
-                                        binding.clAddForm.visibility = View.VISIBLE
-                                        binding.clMyForm.visibility = View.GONE
-                                        binding.cvWeather.visibility=View.GONE
-                                        binding.farmsDetailsCl.visibility = View.GONE
-                                        binding.tvAddress.visibility=View.VISIBLE
-
+    private fun getFarms(account: Int) {
+        viewModel.getMyFarms(account!!).observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("farm", "step3")
+                    if (!it.data.isNullOrEmpty()) {
+                        Log.d("farm", "step9 ${it.data}")
+                        binding.clAddForm.visibility = View.GONE
+                        binding.clMyForm.visibility = View.VISIBLE
+                        binding.farmsDetailsCl.visibility = View.VISIBLE
+                        farmsAdapter.submitList(it.data)
+                        farmsAdapter.onItemClick = { farm ->
+                            binding.farmnameHome.text = farm?.farmName
+                            loadFarm(farm?.farmJson)
+//                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
+                            (farm?.farmCenter)?.get(0)?.latitude?.let { lat ->
+                                (farm?.farmCenter)?.get(0)?.longitude?.let { lng ->
+                                    getFarmLocation(
+                                        lat, lng
+                                    )
                                 }
-                                Toast.makeText(context, "Farm Api called Succesfully", Toast.LENGTH_SHORT).show()
                             }
-                            is Resource.Loading -> {
-                                Log.d("farm", "step5")
-                            }
-                            is Resource.Error -> {
-                                Toast.makeText(context, "Farm Api called Error ${it.message}", Toast.LENGTH_SHORT).show()
+                            binding.tvCityName.text = district
+                            viewModel.getMyCrop2(account!!)
+                                .observe(viewLifecycleOwner) { crops ->
+                                    val croplist =
+                                        crops.data?.filter { filter ->
+                                            filter.farmId == farm?.id
+                                        }
+                                    if (croplist?.isEmpty() == true) {
 
-                                Log.d("farm", "step6 " + it.message)
-                            }
-                            else -> {
-                                Log.d("farm", "step7")
-
-                            }
+                                    }
+                                    farmsCropsAdapter.submitList(croplist)
+                                }
                         }
+                    } else {
+                        binding.clAddForm.visibility = View.VISIBLE
+                        binding.clMyForm.visibility = View.GONE
+                        binding.farmsDetailsCl.visibility = View.GONE
+
+
+                    }
+                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                is Resource.Loading -> {
+                    Log.d("farm", "step5")
+                }
+                is Resource.Error -> {
+                    Toast.makeText(
+                        context,
+                        "Farm Api called Error ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    Log.d("farm", "step6 " + it.message)
+                }
+                else -> {
+                    Log.d("farm", "step7")
+
+                }
+            }
         }
     }
 
-    fun getFarmLocation(lat: Double, lng: Double) {
+    private fun getFarmLocation(lat: Double, lng: Double) {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val list: List<Address> =
-            geocoder.getFromLocation(lat,lng, 1) as List<Address>
-        district = list[0].locality +","+list[0].adminArea
-
-//        if (addresses.isNotEmpty()) {
-//            address = addresses[0]
-//            fulladdress = address.getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex
-//            var city = address.getLocality();
-//            var state = address.getAdminArea();
-//            var country = address.getCountryName();
-//            var postalCode = address.getPostalCode();
-//            var knownName = address.getFeatureName(); // Only if available else return NULL
-//        } else{
-//            fulladdress = "Location not found"
-//        }
+            geocoder.getFromLocation(lat, lng, 1) as List<Address>
+        district = list[0].locality + "," + list[0].adminArea
     }
 
-    private fun loadFarm(farmJson:ArrayList<LatLng>?) {
-        mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
-
+    private fun loadFarm(farmJson: ArrayList<LatLng>?) {
+        mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmJson != null) {
             val points = farmJson
             if (points != null) {
@@ -417,7 +420,6 @@ if(accountID!=null){
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
-
 
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagesBinding): Int {
@@ -891,13 +893,14 @@ if(accountID!=null){
         }
     }
 
+
     fun convertStringToLatLnList(s: String?): List<LatLng?>? {
         val listType = object : TypeToken<List<LatLng?>?>() {}.type
         return Gson().fromJson(s, listType)
     }
 
     override fun onMapReady(mMap: GoogleMap?) {
-        mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
+        mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmjson != null) {
             val points = convertStringToLatLnList(farmjson)
             if (points != null) {
@@ -928,7 +931,6 @@ if(accountID!=null){
             }
         }
     }
-
 
 
 }
