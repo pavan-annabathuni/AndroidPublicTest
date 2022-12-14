@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
 //        val navController: NavController = Navigation.findNavController(this, R.id.nav_host_fragment)
 //        val bottomNavigationView: BottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view)
 //        setupWithNavController(bottomNavigationView, navController)
@@ -202,18 +201,46 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     fun getDashBoard() {
         tokenCheckViewModel.getDasBoard().observe(this) {
             when (it) {
                 is Resource.Success -> {
-                    navController = findNavController(R.id.nav_host_fragment_main)
-                    val graph = navController.navInflater.inflate(R.navigation.nav_home)
-                    if (it.data?.data?.isPremium==true) {
+//                    navController = findNavController(R.id.nav_host_fragment_main)
+//                    val graph = navController.navInflater.inflate(R.navigation.nav_home)
+//                    if (it.data?.data?.isPremium==true) {
+//                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+//                    } else {
+//                        graph.setStartDestination(R.id.homePagesFragment)
+//                    }
+//                    navController.graph = graph
+                    val navHostFragment =
+                        (supportFragmentManager.findFragmentById(R.id.nav_main) as NavHostFragment)
+                    val inflater = navHostFragment.navController.navInflater
+                    val graph = inflater.inflate(R.navigation.nav_main)
+//graph.addArgument("argument", NavArgument)
+                    if (it.data?.data?.isPremium == false) {
                         graph.setStartDestination(R.id.homePagesFragment)
-                    } else {
+                    } else
                         graph.setStartDestination(R.id.homePagePremiumFragment2)
-                    }
-                    navController.graph = graph
+//or
+//graph.setStartDestination(R.id.fragment2)
+
+
+                    navHostFragment.navController.graph = graph
+
+//                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment
+//                    val inflater = navHostFragment.navController.navInflater
+//                    val graph = inflater.inflate(R.navigation.nav_home)
+//
+//                    if (it.data?.data?.isPremium==true){
+//                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+//                    }else {
+//                        graph.setStartDestination(R.id.homePagesFragment)
+//                    }
+//
+//                    val navController = navHostFragment.navController
+//                    navController.setGraph(graph, intent.extras)
 
                 }
                 is Resource.Loading -> {
@@ -235,7 +262,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationBar() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_main) as NavHostFragment
+            R.id.nav_host_fragment_main
+        ) as NavHostFragment
         navController = navHostFragment.navController
 
         // Setup the bottom navigation view with navController

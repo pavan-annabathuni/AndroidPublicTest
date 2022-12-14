@@ -40,7 +40,7 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
 //            viewDeviceFlexListener.viewDevice(details)
 //        }
         if (row_index == position) {
-            holder.binding.clTop.setBackgroundResource(com.waycool.featurecrophealth.R.drawable.btn_background)
+            holder.binding.clTop.setBackgroundResource(R.drawable.bg_selected_item)
             holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
             viewDeviceFlexListener.viewDevice(details)
 

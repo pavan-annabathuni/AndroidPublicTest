@@ -226,11 +226,11 @@ object CropsRepository {
         }
         return NetworkSource.dashBoard()
     }
-    fun getFarmDetails(): Flow<Resource<FarmDetailsDTO?>> {
+    fun farmDetailsDelta(): Flow<Resource<FarmDetailsDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
-        return NetworkSource.farmDetails()
+        return NetworkSource.farmDetailsDelta()
     }
 
 

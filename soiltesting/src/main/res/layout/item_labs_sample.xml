@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
+    android:layout_marginStart="@dimen/space1"
+    android:layout_marginEnd="@dimen/space1"
+
     android:background="@drawable/bg_ans">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,13 +48,15 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space16"
+            android:layout_marginStart="@dimen/space40"
             android:layout_marginTop="@dimen/space16"
             android:text="@string/b_mudhuganapalli_n_village_devaripalli_post_talk_hosur_n_tamilnadu_pin_635124"
             android:textColor=" #828699"
+            android:layout_marginEnd="@dimen/space16"
             android:textSize="@dimen/space16"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_Check"
             app:layout_constraintTop_toBottomOf="@+id/tvLabTitle" />
 

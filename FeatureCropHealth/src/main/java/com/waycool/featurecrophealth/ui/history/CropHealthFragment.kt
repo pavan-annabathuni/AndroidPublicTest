@@ -73,7 +73,6 @@ class CropHealthFragment : Fragment() {
     }
 
     private fun getVideos() {
-
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
@@ -124,17 +123,19 @@ class CropHealthFragment : Fragment() {
 
         viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
-                binding.takeGuide.visibility = View.VISIBLE
+                binding.clTopGuide.visibility = View.VISIBLE
+                binding.clRequest.visibility=View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.takeGuide.visibility = View.GONE
-
+                        binding.clTopGuide.visibility = View.GONE
+                        binding.clRequest.visibility=View.VISIBLE
+//                        binding.clTopGuide.visibility = View.GONE
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())
 //                        historyAdapter.submitList(it.data)
-
                         val response = it.data
                         if (response?.size!! <=2) {
+
                             historyAdapter.submitList(response)
 //                            historyAdapter.submitList(response)
 

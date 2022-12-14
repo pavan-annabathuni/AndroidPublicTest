@@ -381,9 +381,16 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
             it.tvAddDeviceStart.text = data.model?.modelName.toString()
             it.tvTempDegree.text = data.temperature.toString()
             it.tvWindDegree.text = data.rainfall.toString()
+
             it.tvHumidityDegree.text = data.humidity.toString()
             it.tvWindSpeedDegree.text = data.windspeed.toString()
-            it.tvLeafWetnessDegree.text = data.leafWetness.toString()
+            if (data.leafWetness!! .equals(1)){
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            }else{
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
             it.tvPressureDegree.text = data.pressure.toString()
             it.ivSoilDegree.text = data.soilTemperature1.toString() + "C"
             it.ivSoilDegreeOne.text = data.soilTemperature2.toString() + "C"

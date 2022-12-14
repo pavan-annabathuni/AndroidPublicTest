@@ -10,11 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.addcrop.AddCropActivity
+import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
-import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
 import com.waycool.iwap.utils.Constant.TAG
 
@@ -27,7 +27,6 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private lateinit var myCropAdapter: MyCropsAdapter
     private var myFarmPremiumAdapter = MyFarmPremiumAdapter()
-    private var  deltaAdapter=DeltaAdapter()
     var viewDeviceListAdapter = ViewDeviceListAdapter( this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +80,7 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> {
                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
@@ -92,12 +91,20 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
     }
 
     private fun initiFarmDeltT() {
-        binding.recyclerviewDelta.adapter = deltaAdapter
-        viewDevice.getFarmDetails().observe(viewLifecycleOwner){
+         var  deltaAdapter=DeltaAdapter(requireContext())
+        var  deltaTomAdapter=DeltaTomAdapter(requireContext())
+        binding.sparayingRv.adapter = deltaAdapter
+        binding.sparayingRv2.adapter = deltaTomAdapter
+        viewDevice.farmDetailsDelta().observe(viewLifecycleOwner){
             when (it) {
                 is Resource.Success -> {
-                    if (it.data?.data.isNullOrEmpty()){
+                    if (it.data?.data!!.isNotEmpty()){
                         deltaAdapter.setMovieList(it.data?.data)
+                        binding.soilMoistureOne.progress=60
+//                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
+//                        deltaAdapter.notifyDataSetChanged()
+                        deltaTomAdapter.setMovieList(it.data?.data)
+//                        deltaAdapter.update(getSprayingItems(sprayingTime.getToday()))
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data[0].Today} ")
 
                     }
@@ -222,6 +229,11 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
         binding.tvMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
+        }
+        binding.MyDevice.setOnClickListener {
+            val intent = Intent(activity, AddDeviceActivity::class.java)
+            startActivity(intent)
+
         }
 
     }

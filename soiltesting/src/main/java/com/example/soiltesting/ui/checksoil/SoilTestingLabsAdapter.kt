@@ -31,9 +31,10 @@ class SoilTestingLabsAdapter(private val checkSoilTestListener: CheckSoilTestLis
         val details = details[position]
         holder.binding.tvLabTitle.text = details.onp_name.toString()
         holder.binding.tvName.text = details.onp_address.toString()
-        holder.binding.tvCheckCrop.text = details.onp_distance_km.toString()
+        holder.binding.tvCheckCrop.text = details.onp_distance_km.toString() + " from your location"
         holder.binding.pinCode.text = details.onp_pincode.toString()
-        if (position==0){
+//        holder.binding.ivCheck.isEnabled == false
+        if (position == 0 && holder.binding.ivCheck.isChecked == true) {
             checkSoilTestListener.checkBoxSoilTest(details)
         }
 //        holder.itemView.set
@@ -52,7 +53,7 @@ class SoilTestingLabsAdapter(private val checkSoilTestListener: CheckSoilTestLis
     }
 
     fun upDateList() {
-        selectedPosition=-1
+        selectedPosition = -1
         this.details = details
         notifyDataSetChanged()
 

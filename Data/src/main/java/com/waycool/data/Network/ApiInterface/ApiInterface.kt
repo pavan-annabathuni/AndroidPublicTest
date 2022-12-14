@@ -357,7 +357,7 @@ interface ApiInterface {
     ): Response<DashBoardModel>
 
     @GET("api/v1/get-delta-t-data")
-    suspend fun farmDetails(
+    suspend fun farmDetailsDelta(
         @HeaderMap map: Map<String, String>?,
 //        @Query("")
     ): Response<FarmDetailsDTO>

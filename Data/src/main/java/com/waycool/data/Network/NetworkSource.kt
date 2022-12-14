@@ -557,12 +557,12 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
-    fun farmDetails() =
+    fun farmDetailsDelta() =
         flow<Resource<FarmDetailsDTO?>> {
             try {
-//                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-                val response = apiInterface.farmDetails(headerMap)
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response = apiInterface.farmDetailsDelta(headerMap)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {

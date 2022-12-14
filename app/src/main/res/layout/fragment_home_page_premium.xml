@@ -1312,7 +1312,7 @@ more details."
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="16dp"
                                         android:padding="2dp"
-                                        android:text="66%"
+                                        android:text="Wet"
                                         android:textColor="#171717"
                                         android:textSize="16sp"
                                         android:textStyle="bold"
@@ -1396,7 +1396,7 @@ more details."
                             app:cardCornerRadius="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+                            app:layout_constraintTop_toBottomOf="@+id/cl_Temp">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_speed_meter"
@@ -1584,14 +1584,14 @@ more details."
                             android:background="@drawable/bg_ans"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/card_speed_meter">
+                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
 
                             <ImageView
                                 android:id="@+id/iv_lux"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:src="@drawable/ic_lux"
+                                android:src="@drawable/ic_soil_tempuretur_icon"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

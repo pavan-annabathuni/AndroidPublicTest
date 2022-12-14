@@ -43,8 +43,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private val REQUEST_CODE_SPEECH_INPUT = 1
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private var soilHistoryAdapter = HistoryDataAdapter(this)
+    var objectListNew = java.util.ArrayList<SoilTestHistoryDomain>()
 
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+
 
     private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
     val filteredList = java.util.ArrayList<SoilTestHistoryDomain>()
@@ -69,6 +71,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         binding.recyclerviewStatusTracker.adapter = soilHistoryAdapter
         speechToText()
         initViewBackClick()
+//        initSearchView()
+//        clickSearch()
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
@@ -89,6 +93,37 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
 //        clickSearch()
     }
+
+//    private fun initSearchView() {
+//        binding.searchView.addTextChangedListener(object :TextWatcher{
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//
+//            }
+//
+//            override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                objectListNew.clear()
+//                Log.d("TAG", "::::str " + charSequence.toString())
+//                for (j in filteredList.indices) {
+//                    if (filteredList[0].soil_test_number .lowercase().contains(
+//                            charSequence.toString().lowercase(
+//                            )
+//                        )
+//                    ) {
+//                        objectListNew.add(filteredList.)
+//
+//                    }
+//                }
+////                areaAdapter.upDateList(objectListNew)
+//                soilHistoryAdapter.upDateList(filteredList)
+//            }
+//
+//            override fun afterTextChanged(p0: Editable?) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        })
+//    }
+
     private fun speechToText() {
         binding.textToSpeach.setOnClickListener() {
             binding.searchView.text.clear()
