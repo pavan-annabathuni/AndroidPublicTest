@@ -27,8 +27,7 @@ import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.irrigationplanner.ForecastFragment
 import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
-import com.example.ndvi.MainActivityNdvi
-import com.example.ndvi.NdviFragment
+
 import com.example.soiltesting.SoilTestActivity
 import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
@@ -304,7 +303,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun getFarms(account: Int) {
-        viewModel.getMyFarms(account!!).observe(viewLifecycleOwner) {
+        viewModel.getMyFarms(account!!,null).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     Log.d("farm", "step3")
@@ -875,8 +874,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            val intent = Intent(activity,MainActivityNdvi::class.java)
-            startActivity(intent)
+//            val intent = Intent(activity,MainActivityNdvi::class.java)
+//            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
