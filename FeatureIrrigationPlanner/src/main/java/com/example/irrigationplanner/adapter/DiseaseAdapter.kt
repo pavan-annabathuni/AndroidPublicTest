@@ -23,12 +23,11 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
         val slider2 = binding.slider
         val risk = binding.textView27
         val image = binding.disImg
+        val name = binding.disName
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemDiseaseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-
         return DiseaseAdapter.MyViewHolder(binding)
     }
 
@@ -36,11 +35,15 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
         val properties = getItem(position)
        // holder.disName.text = properties.
         holder.slider2.value = properties.probability!!.toFloat()
-        if(properties.probability!!<50.00) {
+        if(properties.probability!!>=16.00&&properties.probability!!<=43) {
             holder.risk.text = "Low Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
         }
-        else if (properties.probability!!>50.00&&properties.probability!!<75.00){
+        else if (properties.probability!!<=15.00&&properties.probability!!<=43.50){
+            holder.risk.text = "NIll"
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
+        }
+        else if (properties.probability!!>=44&&properties.probability!!<=72.00){
             holder.risk.text = "Medium Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
         }
@@ -48,6 +51,7 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
             holder.risk.text = "High Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
         }
+        Glide.with(holder.itemView.context).load(properties.disease.diseaseImg).into(holder.image)
         holder.image.setOnClickListener() {
             val dialog = Dialog(holder.itemView.context)
 
@@ -56,11 +60,14 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
             // val body = dialog.findViewById(R.id.body) as TextView
             val close = dialog.findViewById(R.id.closeImage) as ImageView
             val image = dialog.findViewById(R.id.large_image) as ImageView
+            Glide.with(holder.itemView.context).load(properties.disease.diseaseImg).into(image)
             close.setOnClickListener { dialog.dismiss() }
             dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
             dialog.show()
 
     }
+        holder.name.text = properties.disease.diseaseName
+
     }
 
 //    override fun getItemCount(): Int {
@@ -85,11 +92,11 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
     }
 }
 
-//    override fun getItemCount(): Int {
-//        if(currentList.size>=7)
-//            return 7
-//        else
-//            return currentList.size
-//
-//    }
+    override fun getItemCount(): Int {
+        if(currentList.size>=7)
+            return 7
+        else
+            return currentList.size
+
+    }
 }

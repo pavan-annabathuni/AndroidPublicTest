@@ -6,7 +6,7 @@
     tools:context=".VegIndexFragment">
 
     <fragment
-    android:id="@+id/Map"
+    android:id="@+id/map_vege"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="400dp"/>

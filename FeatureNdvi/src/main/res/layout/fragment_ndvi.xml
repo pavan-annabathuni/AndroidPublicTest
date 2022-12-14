@@ -131,10 +131,14 @@
 
 
                     <fragment
-                        android:id="@+id/Map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:id="@+id/map_ndvi"
+                        android:name="com.google.android.libraries.maps.SupportMapFragment"
+                        android:layout_width="0dp"
+                        android:layout_height="328dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/floating_action_button1"
@@ -142,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_location"
+                        android:src="@drawable/ic_location_ndvi"
                         app:fabSize="mini"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -336,7 +340,7 @@
                         android:clickable="false"
                         android:contentDescription="slider"
                         android:theme="@style/MyMaterialTheme"
-                        android:value="0"
+                        android:value="100"
                         android:valueTo="100"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

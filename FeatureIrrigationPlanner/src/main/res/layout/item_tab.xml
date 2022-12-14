@@ -9,10 +9,11 @@
     android:orientation="vertical"
     tools:text = "HELLO">
     <TextView
-        android:layout_width="146dp"
+        style="@style/Medium"
+        android:layout_width="136dp"
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAlignment="center"
         android:layout_marginBottom="8dp"
         android:textColor="@color/black"

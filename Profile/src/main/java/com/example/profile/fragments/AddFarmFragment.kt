@@ -51,6 +51,9 @@ class AddFarmFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         location()
+        binding.imgLocation.setOnClickListener(){
+            location()
+        }
         return binding.root
 
             }
@@ -61,35 +64,46 @@ class AddFarmFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.farmManger.setOnClickListener(){
-            binding.farmManger.background = resources.getDrawable(R.drawable.text_border)
-            binding.mandiBench.setBackgroundColor(resources.getColor(R.color.white))
+            binding.farmManger.background = resources.getDrawable(R.drawable.text_border_gray)
+            binding.mandiBench.background = resources.getDrawable(R.drawable.text_border)
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
             roleid = 30
         }
         binding.mandiBench.setOnClickListener(){
-            binding.mandiBench.background = resources.getDrawable(R.drawable.text_border)
-            binding.farmManger.setBackgroundColor(resources.getColor(R.color.white))
+            binding.mandiBench.background = resources.getDrawable(R.drawable.text_border_gray)
+            binding.farmManger.background = resources.getDrawable(R.drawable.text_border)
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
             roleid = 31
         }
-        binding.submit.setOnClickListener(){
+        binding.submit.setOnClickListener() {
+
             val name = binding.tvName.text.toString()
-            var contact = binding.tvFarmId.text.toString().toLong()
-            val lat2  = binding.tvLat.text
+            var contact = binding.mobilenoEt.text.toString().toLong()
+            val lat2 = binding.tvLat.text
             var long2 = binding.tvLong.text
-            if(name.isNullOrEmpty()||lat2.isNullOrEmpty()||long2.isNullOrEmpty()) {
+
+            if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
                 Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
             }
-            else{
-                    viewModel.updateFarmSupport(name,contact,lat,long,roleid,pinCode,
-                        village,address,state,district).observe(viewLifecycleOwner){
-                        Log.d("update", "onClick: ${it.data?.data?.name}")
-                        findNavController().navigateUp()
-                    }
+            else if(binding.mobilenoEt.text.toString()
+                    .isEmpty() || binding.mobilenoEt.text.toString().length != 10){
+                binding.mobileNo.error = "Enter Valid Mobile Number"
             }
-           // findNavController().navigateUp()
+                else {
+                viewModel.updateFarmSupport(
+                    name, contact, lat, long, roleid, pinCode,
+                    village, address, state, district
+                ).observe(viewLifecycleOwner) {
+                    if(it.data?.status.toString()!="true") {
+                        Toast.makeText(context, "Number already taken", Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                    findNavController().navigateUp()
+                }
+                // findNavController().navigateUp()
+            }
         }
     }
     private fun location(){

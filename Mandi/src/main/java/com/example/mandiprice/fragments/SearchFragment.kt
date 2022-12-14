@@ -109,7 +109,7 @@ class SearchFragment : Fragment() {
         autoComplete()
         speechToText()
         showKeypad(binding.searchBar)
-        //notFound()
+        notFound()
     }
 
     private fun speechToText() {
@@ -305,17 +305,35 @@ class SearchFragment : Fragment() {
     }
 
     private fun notFound() {
+ //      viewModel.viewModelScope.launch {
 
-        if (adapterMandi.itemCount < 1) {
 
-            binding.llNotFound.visibility = View.GONE
-            binding.recycleViewDis.visibility = View.VISIBLE
-        } else {
-            binding.llNotFound.visibility = View.VISIBLE
-            binding.recycleViewDis.visibility = View.GONE
-        }
-        //Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-
+//        viewModel.getMandiDetails(lat,
+//            long,cropCategory,
+//            state,
+//            crop,
+//            sortBy,
+//            orderBy,
+//            search).observe(viewLifecycleOwner){
+//            Log.d("mandi", "notFound: $it")
+//        if (it!=null) {
+//            binding.llNotFound.visibility = View.GONE
+//            binding.recycleViewDis.visibility = View.VISIBLE
+//        } else {
+//            binding.llNotFound.visibility = View.VISIBLE
+//            binding.recycleViewDis.visibility = View.GONE
+//        }
+//        //Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+//       }}
+       adapterMandi.addLoadStateListener { loadState->
+           if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
+               binding.llNotFound.visibility = View.VISIBLE
+               binding.recycleViewDis.visibility = View.GONE
+           }else{
+               binding.llNotFound.visibility = View.GONE
+           binding.recycleViewDis.visibility = View.VISIBLE
+           }
+       }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         binding.textView2.text = "Today $sdf"
 

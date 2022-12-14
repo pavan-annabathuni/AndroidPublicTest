@@ -65,6 +65,9 @@ class CropStageFragment : Fragment() {
 
 
     fun onClick() {
+        binding.topAppBar.setOnClickListener(){
+            findNavController().navigateUp()
+        }
         date1 = binding.cal1.text.toString()
         date2 = binding.cal2.text.toString()
         date3 = binding.cal3.text.toString()
@@ -373,7 +376,7 @@ class CropStageFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 Log.d("CropStage", "onClick: ${it.message}")
             }
-            refreshFragment()
+            getCropStage()
         }
     }
 
@@ -564,8 +567,4 @@ class CropStageFragment : Fragment() {
         }
 
         }
-    fun refreshFragment(){
-
-         //this.findNavController().navigate(R.id.action_cropStageFragment_self)
-            }
         }

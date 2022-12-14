@@ -225,7 +225,7 @@ interface ApiInterface {
         @Query("page") page: Int,
         @Query("sort_by") sort_by: String?,
         @Query("order_by") orderBy: String?,
-        @Query("crop") search: String?
+        @Query("search") search: String?
     ): Response<MandiDomain>
 
     @GET("api/v1/get-mandi-history")
@@ -421,6 +421,17 @@ interface ApiInterface {
         @Query("account_no_id")account_no_id: Int
     ):Response<NdviModel>
 
+    @GET("api/v1/user-notifications")
+    suspend fun getNotification(
+        @HeaderMap map: Map<String, String>?,
+    ):Response<NotificationModel>
+
+    @PUT("api/v1/update-user-notification")
+    @FormUrlEncoded
+    suspend fun updateNotification(
+        @HeaderMap map: Map<String, String>?,
+        @Field("notification_id")Nid: Int
+    )
 
 
 }

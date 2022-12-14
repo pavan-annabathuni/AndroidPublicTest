@@ -18,6 +18,7 @@ class HistoryAdapter(val onClickListener:OnClickListener):ListAdapter<HistoricDa
     class MyViewHolder(private val binding: ItemHistoryBinding): RecyclerView.ViewHolder(binding.root) {
         val x = binding.tvTime
         val ll = binding.llHourly
+        val image = binding.hisImg
         fun bind(data: HistoricData?) {
         }
     }
@@ -43,10 +44,12 @@ class HistoryAdapter(val onClickListener:OnClickListener):ListAdapter<HistoricDa
 
         holder.x.text = outputDateFormatter.format(date)
 
-            if (index == position) {
+            if (properties.irrigation?.toFloat()!!>0) {
+                holder.image.setImageResource(R.drawable.ic_irrigation_2)
                 holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
                 holder.x.setTextColor(Color.parseColor("#146133"))
             } else {
+                holder.image.setImageResource(R.drawable.ic_irrigation_his2)
                 holder.ll.setBackgroundResource(R.drawable.border_irrigation)
                 holder.x.setTextColor(Color.parseColor("#000000"))
             }

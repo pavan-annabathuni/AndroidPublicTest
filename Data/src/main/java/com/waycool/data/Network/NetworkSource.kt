@@ -1080,5 +1080,22 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
+
+    fun getNotification()
+            = flow<Resource<NotificationModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getNotification(map)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
 }
 

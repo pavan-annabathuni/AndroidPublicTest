@@ -1,6 +1,7 @@
 package com.example.irrigationplanner.adapter
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,16 +9,26 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemWeeklyIrrgationBinding
-import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
-import com.waycool.data.Network.NetworkModels.IrrigationPerDay
+import java.text.SimpleDateFormat
+import java.util.*
 
-class WeeklyAdapter: ListAdapter<IrrigationForecast,WeeklyAdapter.MyViewHolder>(DiffCallback) {
+
+class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     var index:Int = 0
+    var i = 0
+    private var selectedPosition = 0
+
     class MyViewHolder(private val binding: ItemWeeklyIrrgationBinding): RecyclerView.ViewHolder(binding.root) {
         val x = binding.tvTime
         val ll = binding.llHourly
+        val  image = binding.image
 
+    }
+    private var details =IrrigationForecast()
+    fun setList(listData: IrrigationForecast) {
+        this.details = listData
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -29,35 +40,32 @@ class WeeklyAdapter: ListAdapter<IrrigationForecast,WeeklyAdapter.MyViewHolder>(
         holder.itemView.setOnClickListener() {
             index = position
         }
-        val properties = getItem(position)
-        holder.x.text = properties.days[position]
+        val properties = details
 
+//        val inputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd-MM-yy", Locale.ENGLISH)
+//        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("EEE", Locale.ENGLISH)
+//        val date: Date = inputDateFormatter.parse(properties.days[position])
 
-        if(index == position) {
+//        for(i in properties.days.indices){
+
+            holder.x.text = properties.days[position]
+
+        val level = (properties.mad[position].toFloat()) - (properties.depletion[position].toFloat())
+        if(level>=0) {
+            holder.image.setImageResource(R.drawable.ic_irrigation_2)
             holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
             holder.x.setTextColor(Color.parseColor("#146133"))
         }
         else{
             holder.ll.setBackgroundResource(R.drawable.border_irrigation)
             holder.x.setTextColor(Color.parseColor("#000000"))
+            holder.image.setImageResource(R.drawable.ic_irrigation_his2)
         }
     }
 
+    override fun getItemCount(): Int {
+        return details.days.size
+    }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<IrrigationForecast>() {
-
-        override fun areItemsTheSame(
-            oldItem: IrrigationForecast,
-            newItem: IrrigationForecast
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: IrrigationForecast,
-            newItem: IrrigationForecast
-        ): Boolean {
-            return oldItem.days == newItem.days
-        }
-}}
+}
 

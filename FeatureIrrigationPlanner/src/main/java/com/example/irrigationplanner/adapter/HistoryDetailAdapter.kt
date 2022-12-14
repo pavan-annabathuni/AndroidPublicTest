@@ -17,6 +17,8 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
     class MyViewHolder(private val binding: ItemHistoryDetailsBinding): RecyclerView.ViewHolder(binding.root) {
         val date = binding.textView16
         val irrigation = binding.irrigation
+        val image = binding.imageView9
+        val view = binding.sideView
         val eto = binding.eto
         val etc = binding.textView2
     }
@@ -38,6 +40,17 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         holder.irrigation.text = "Irrigated ${properties.irrigation}L"
         holder.eto.text = properties.etoCurrent.toString()
         holder.etc.text = properties.etc.toString()
+
+        if (properties.irrigation?.toFloat()!!>0) {
+            holder.view.setBackgroundResource(R.color.DarkGreen)
+            holder.image.setImageResource(R.drawable.ic_holo_green)
+            holder.date.setTextColor(Color.parseColor("#146133"))
+        } else {
+            holder.image.setImageResource(R.drawable.ic_irrigation_his2)
+            holder.view.setBackgroundResource(R.color.LightGray)
+            holder.image.setImageResource(R.drawable.ic_holo_gray)
+            holder.date.setTextColor(Color.parseColor("#070D09"))
+        }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<HistoricData>() {

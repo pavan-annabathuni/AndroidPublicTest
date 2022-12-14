@@ -51,6 +51,9 @@
             android:id="@+id/action_homePagesFragment_to_farmDetailsFragment"
             app:destination="@id/farmDetailsFragment"
             app:popUpTo="@id/homePagesFragment" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -101,5 +104,10 @@
         android:id="@+id/farmDetailsFragment"
         android:name="com.example.soiltesting.premium.FarmDetailsFragment"
         android:label="FarmDetailsFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.waycool.iwap.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
 
 </navigation>

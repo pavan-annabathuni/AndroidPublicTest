@@ -41,7 +41,7 @@ class IrrigationHistoryFragment : Fragment() {
         })
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner) {
+            viewModel.getIrrigationHis(477,1).observe(viewLifecycleOwner) {
                 mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
             }
         }

@@ -24,9 +24,11 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.irrigationplanner.ForecastFragment
 import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.ndvi.MainActivityNdvi
+import com.example.ndvi.NdviFragment
 import com.example.soiltesting.SoilTestActivity
 import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
@@ -219,6 +221,10 @@ class HomePagesFragment : Fragment() {
         binding.tvOurAddFormData.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.IvNotification.setOnClickListener(){
+            this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
         }
 
 //        binding.IvNotification.setOnClickListener{
@@ -899,7 +905,7 @@ class HomePagesFragment : Fragment() {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            val intent = Intent(activity, MainActivityNdvi::class.java)
+            val intent = Intent(activity,MainActivityNdvi::class.java)
             startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter

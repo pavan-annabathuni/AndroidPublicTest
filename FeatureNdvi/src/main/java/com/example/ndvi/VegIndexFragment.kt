@@ -1,12 +1,10 @@
 package com.example.ndvi
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.ndvi.databinding.FragmentNdviBinding
 import com.example.ndvi.databinding.FragmentVegIndexBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -44,7 +42,7 @@ class VegIndexFragment : Fragment(),OnMapReadyCallback{
         googleMap?.mapType = GoogleMap.MAP_TYPE_TERRAIN
         googleMap.let {
          googleMap = it
-            val mapFragment:SupportMapFragment = childFragmentManager.findFragmentById(R.id.Map) as SupportMapFragment
+            val mapFragment:SupportMapFragment = childFragmentManager.findFragmentById(R.id.map_ndvi) as SupportMapFragment
             mapFragment.getMapAsync(this)
             var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                 override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {

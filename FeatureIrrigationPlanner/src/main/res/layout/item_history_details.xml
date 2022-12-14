@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <View
+        android:id="@+id/side_view"
         android:layout_width="4dp"
         android:layout_height="194dp"
         android:layout_marginStart="24dp"

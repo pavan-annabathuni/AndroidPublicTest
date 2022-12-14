@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -139,20 +140,15 @@ class MandiFragment : Fragment() {
     }
 
     private fun onClick() {
-//        viewModel.status.observe(viewLifecycleOwner) {
-//            when (it) {
-//                "true" -> {
-//                    binding.llNotFound.visibility = View.GONE
-//                    binding.recycleViewDis.visibility = View.VISIBLE
-//                }
-//                "Failed" -> {
-//                    binding.llNotFound.visibility = View.VISIBLE
-//                    binding.recycleViewDis.visibility = View.GONE
-//                }
-
-        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-        // Log.d("status", "onClick:$it ")
-        // }
+        adapterMandi.addLoadStateListener { loadState->
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
+                binding.llNotFound.visibility = View.VISIBLE
+                binding.recycleViewDis.visibility = View.GONE
+            }else{
+                binding.llNotFound.visibility = View.GONE
+                binding.recycleViewDis.visibility = View.VISIBLE
+            }
+        }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         binding.textView2.text = "Today $sdf"
     }
@@ -367,6 +363,7 @@ class MandiFragment : Fragment() {
                 val text = binding.spinner3.selectedItem.toString()
                 if (position > 0) {
                     state = text
+                    getMandiData(cropCategory, state, crop, sortBy, orderBy)
                 } else {
                     if (state != null) {
                         state = ""

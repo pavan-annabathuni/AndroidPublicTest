@@ -6,7 +6,9 @@ import androidx.lifecycle.asLiveData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.repository.AdvIrrigationRepository
 import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
 
 class IrrigationViewModel:ViewModel() {
@@ -34,5 +36,8 @@ class IrrigationViewModel:ViewModel() {
     fun getCropStage():LiveData<Resource<GetCropStage?>> {
         return AdvIrrigationRepository.getCropStage().asLiveData()
     }
+
+    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
+        LoginRepository.getUserDetails().asLiveData()
 
 }

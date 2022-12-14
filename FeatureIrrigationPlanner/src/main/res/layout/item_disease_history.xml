@@ -56,16 +56,15 @@
 
                     <ImageView
                         android:id="@+id/dis_img2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="72dp"
                         android:layout_height="86dp"
-
                         android:scaleType="fitXY"
                         android:src="@drawable/image" />
                 </androidx.cardview.widget.CardView>
 
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/tv_disName"
                     style="@style/Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,8 +82,8 @@
                     android:layout_height="wrap_content"
                     android:text="Low Risk"
                     android:textColor="@color/darkGray"
-                    app:layout_constraintStart_toStartOf="@+id/textView11"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                    app:layout_constraintStart_toStartOf="@+id/tv_disName"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_disName" />
 
                 <ImageView
                     android:id="@+id/imageView11"
@@ -109,7 +108,7 @@
                     android:valueTo="99.99"
                     app:haloRadius="1dp"
                     app:layout_constraintStart_toEndOf="@+id/cv_img2"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_disName"
                     app:thumbColor="#EC4544"
                     app:thumbRadius="10dp"
                     app:trackColor="#00000000"

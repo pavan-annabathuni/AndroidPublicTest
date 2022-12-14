@@ -32,6 +32,7 @@ class IrrigationFragment : Fragment() {
     private lateinit var mHistoryAdapter: HistoryAdapter
     private lateinit var mDiseaseAdapter: DiseaseAdapter
     private lateinit var mWeeklyAdapter: WeeklyAdapter
+    private var accountId:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,12 +46,28 @@ class IrrigationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentIrrigationBinding.inflate(inflater)
-        setAdapter()
-
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            accountId = it.data?.accountId!!
+            setAdapter()
+        }
         binding.tvCropInfo.setOnClickListener(){
             this.findNavController().navigate(IrrigationFragmentDirections.actionIrrigationFragmentToCropOverviewFragment())
         }
        // binding.recycleViewHis.adapter = mHistoryAdapter
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.viewModelScope.launch {
+            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner){
+                if(it.data?.data?.irrigation?.currentData?.irrigation !=0)
+                binding.irrigationReq.text = "Irrigation Not Required"
+                else binding.irrigationReq.text = "Irrigation Required"
+            }
+        }
         tabs()
         exitDialog()
         binding.irrigationYes.setOnClickListener(){
@@ -63,7 +80,6 @@ class IrrigationFragment : Fragment() {
 
         onClick()
 
-        return binding.root
     }
 
     private fun onClick() {
@@ -108,8 +124,12 @@ class IrrigationFragment : Fragment() {
         mWeeklyAdapter = WeeklyAdapter()
         binding.recycleViewDis.adapter = mWeeklyAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner){
-
+            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner){
+                it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
+                    mWeeklyAdapter.setList(
+                        it1
+                    )
+                }
             }
         }
 
@@ -118,7 +138,7 @@ class IrrigationFragment : Fragment() {
         })
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner) {
+            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner) {
                 mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
                 Log.d("hostry", "setAdapter: ${it.message}")
                 binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation
@@ -131,13 +151,17 @@ class IrrigationFragment : Fragment() {
             }
         }
         mDiseaseAdapter = DiseaseAdapter()
-
         binding.rvDis.adapter = mDiseaseAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(1,1).observe(viewLifecycleOwner) {
-                mDiseaseAdapter.submitList(it.data?.data?.disease)
-
+            viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
+//                        val i = it.data?.data?.disease?.size?.minus(1)
+//                        while (i!=0) {
+                val data = it.data?.data?.disease?.filter { itt ->
+                    itt.disease.diseaseType == "Disease"
+                }
+                mDiseaseAdapter.submitList(data)
                 Log.d("hostry", "setAdapter: ${it.message}")
+//                        }
             }
         }
     }
@@ -155,9 +179,45 @@ class IrrigationFragment : Fragment() {
         )
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(binding.tabLayout.selectedTabPosition) {
+                   0->viewModel.viewModelScope.launch {
+                        viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
+//                        val i = it.data?.data?.disease?.size?.minus(1)
+//                        while (i!=0) {
+                            val data = it.data?.data?.disease?.filter { itt ->
+                                itt.disease.diseaseType == "Disease"
+                            }
+                            mDiseaseAdapter.submitList(data)
+                            Log.d("hostry", "setAdapter: ${it.message}")
+//                        }
+                        }
+                    }
+                    1->{viewModel.viewModelScope.launch {
+                        viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
+//                        val i = it.data?.data?.disease?.size?.minus(1)
+//                        while (i!=0) {
+                            val data = it.data?.data?.disease?.filter { itt ->
+                                itt.disease.diseaseType == "Pest"
+                            }
+                            mDiseaseAdapter.submitList(data)
+                            Log.d("hostry", "setAdapter: ${it.message}")
+//                        }
+                        }
+                    }}
+                    2->{viewModel.viewModelScope.launch {
+                        viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
+//                        val i = it.data?.data?.disease?.size?.minus(1)
+//                        while (i!=0) {
+                            val data = it.data?.data?.disease?.filter { itt ->
+                                itt.disease.diseaseType == "Deficiency"
+                            }
+                            mDiseaseAdapter.submitList(data)
+                            Log.d("hostry", "setAdapter: ${it.message}")
+//                        }
+                        }
+                    }}
 
-
-            }
+            }}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
@@ -181,7 +241,7 @@ class IrrigationFragment : Fragment() {
         save?.setOnClickListener() {
 
             val value = irrigation?.text.toString().toInt()
-            viewModel.updateIrrigation(1, value).observe(viewLifecycleOwner) {
+            viewModel.updateIrrigation(4, value).observe(viewLifecycleOwner) {
                 binding.textViewL.text = value.toString()
                 Log.d("ok", "dialog: ${it.message} ")
             }
@@ -196,7 +256,7 @@ class IrrigationFragment : Fragment() {
             val dialog = Dialog(requireContext())
 
             dialog.setCancelable(false)
-            dialog.setContentView(R.layout.dailog_delete)
+            dialog.setContentView(R.layout.dailog_delete_irrigartion)
             // val body = dialog.findViewById(R.id.body) as TextView
             val cancel = dialog.findViewById(R.id.cancel) as Button
             val delete = dialog.findViewById(R.id.delete) as Button

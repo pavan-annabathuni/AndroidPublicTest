@@ -33,7 +33,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
     }
 
     fun information() {
-        viewModel.getMyCrop2(1).observe(viewLifecycleOwner) {
+        viewModel.getMyCrop2(477).observe(viewLifecycleOwner) {
             binding.apply {
                 if (it.data?.get(0)?.area != null)
                     tvAce.text = it.data?.get(0)?.area
