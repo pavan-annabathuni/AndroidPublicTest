@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="@string/choose_text"
+        android:text="Select your language"
         android:textColor="@color/textdark"
         app:layout_constraintEnd_toEndOf="@+id/hello_tv"
         app:layout_constraintStart_toStartOf="@+id/hello_tv"

@@ -24,7 +24,11 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.irrigationplanner.ForecastFragment
+import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
+import com.example.ndvi.MainActivityNdvi
+import com.example.ndvi.NdviFragment
 import com.example.soiltesting.SoilTestActivity
 import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
@@ -76,6 +80,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private var accountID: Int? = null
     private var farmjson: String? = null
     private var farmCentroid: String? = null
+    private var lat:String = ""
+    private var long:String = ""
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
@@ -218,6 +224,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
 
+        binding.IvNotification.setOnClickListener(){
+            this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
+        }
+
 //        binding.IvNotification.setOnClickListener{
 //            val intent = Intent(activity, AddDeviceActivity::class.java)
 //            startActivity(intent)
@@ -235,7 +245,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
+            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
                     // binding.viewModel = it
@@ -255,6 +265,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 weather(it1, it2)
+                                lat = it.data?.profile?.lat.toString()
+                                long = it.data?.profile?.long.toString()
+//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
 
@@ -862,8 +875,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-//            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(activity,MainActivityNdvi::class.java)
+            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->

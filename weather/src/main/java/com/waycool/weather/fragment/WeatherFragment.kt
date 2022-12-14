@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -22,6 +23,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.weather.R
@@ -68,6 +70,7 @@ class WeatherFragment : Fragment() {
 
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        //translation()
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
             screenShot()
@@ -121,7 +124,11 @@ class WeatherFragment : Fragment() {
     }
 
     private fun observer() {
-
+        viewModel.viewModelScope.launch {
+            viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
+                binding.location.text = it.data?.data?.profile?.village
+            }
+        }
 
         viewModel.getUserDetails().observe(requireActivity()) {
             when (it) {
@@ -146,7 +153,7 @@ class WeatherFragment : Fragment() {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
             }
-            binding.location.text = it.data?.profile?.village
+//            binding.location.text = it.data?.profile?.village
         }
 //
 //        GlobalScope.launch {
@@ -575,5 +582,18 @@ class WeatherFragment : Fragment() {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+    }
+    fun translation(){
+        TranslationsManager().loadString("str_Weather",binding.textView)
+        TranslationsManager().loadString("str_share",binding.imgShare)
+        TranslationsManager().loadString("str_today",binding.icon2)
+        TranslationsManager().loadString("str_today",binding.today)
+        TranslationsManager().loadString("str_humidity",binding.lableHumidity)
+        TranslationsManager().loadString("str_vsibility",binding.lableVisibility)
+        TranslationsManager().loadString("str_wind",binding.lableWind)
+        TranslationsManager().loadString("str_rain",binding.lableRain)
+        TranslationsManager().loadString("str_hourly",binding.tvHouly)
+        TranslationsManager().loadString("str_next",binding.tvDaily)
+
     }
 }

@@ -17,6 +17,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="170dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
@@ -69,8 +70,10 @@
                     android:gravity="center"
                     android:text="@{property.crop}"
                     android:textColor="#374151"
-                    android:textSize="@dimen/txt14"
-                    android:fontFamily="@font/notosans_bold"
+
+                    android:textSize="@dimen/txt18"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivMandi"
                     tool:text="Mango Banganapalli" />
@@ -81,15 +84,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@+id/tvMango"
                     app:layout_constraintTop_toBottomOf="@+id/tvMango"
-                    tool:text="Source"
-                    android:textSize="@dimen/space10"/>
+                    tool:text="Source" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_source">
@@ -123,11 +125,11 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/linearLayout3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     android:orientation="horizontal"
@@ -136,15 +138,11 @@
                     app:layout_constraintStart_toStartOf="@+id/tvMango"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-                    <ImageView
-                        android:id="@+id/ivLoc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_location"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:src="@drawable/ic_location" />-->
 
                     <TextView
                         android:layout_width="0dp"
@@ -152,20 +150,19 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="start"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="8dp"
+                        android:drawableStart="@drawable/ic_location"
                         android:maxLines="2"
                         android:minLines="2"
                         android:text="@{property.market}"
                         android:textColor="#585858"
-                        android:textSize="12sp"
-                        tool:text="Krishnarajapuram Market"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/ivLoc"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tool:text="Krishnarajapuram" />
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

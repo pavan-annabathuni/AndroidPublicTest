@@ -9,11 +9,13 @@ import com.waycool.weather.databinding.FragmentSheetHourlyBinding
 import com.waycool.weather.viewModel.HourlyViewModel
 import com.waycool.weather.viewModel.HourlyViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.translations.TranslationsManager
 import java.text.SimpleDateFormat
 
 
 class SheetHourlyFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSheetHourlyBinding
+    lateinit var today:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -38,6 +40,7 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
 
         observer()
         onClick()
+        translation()
         return binding.root
     }
 
@@ -61,5 +64,11 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
     }
     override fun getTheme(): Int {
         return com.waycool.weather.R.style.BottomSheetDialog
+    }
+    fun translation() {
+        TranslationsManager().loadString("str_hourly_weatherr", binding.textView2)
+//       today = TranslationsManager().loadString("str_today", binding.imgShare).toString()
+        TranslationsManager().loadString("str_humidity", binding.labelHumidity)
+        TranslationsManager().loadString("str_rain", binding.labelRain)
     }
 }

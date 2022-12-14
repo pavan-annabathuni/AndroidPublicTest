@@ -105,6 +105,7 @@
                         tools:src="@drawable/ic_rain" />
 
                     <TextView
+                        android:id="@+id/today"
                         style="@style/SemiBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -271,6 +272,7 @@
                                     tools:text="33%" />
 
                                 <TextView
+                                    android:id="@+id/lable_humidity"
                                     style="@style/Medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -331,6 +333,7 @@
                                     tools:text="3 Km" />
 
                                 <TextView
+                                    android:id="@+id/lable_visibility"
                                     style="@style/Medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -377,6 +380,7 @@
 
                                 <TextView
                                     style="@style/Medium"
+                                    android:id="@+id/lable_rain"
                                     android:layout_width="70dp"
                                     android:layout_height="wrap_content"
                                     android:text="@string/str_chances_of_rain"
@@ -421,6 +425,7 @@
                                     tools:text="@string/_7_km_h" />
 
                                 <TextView
+                                    android:id="@+id/lable_wind"
                                     style="@style/Medium"
                                     android:layout_width="62dp"
                                     android:layout_height="wrap_content"

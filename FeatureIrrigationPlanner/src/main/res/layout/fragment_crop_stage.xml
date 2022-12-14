@@ -1,0 +1,1235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CropStageFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:elevation="0dp"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="Crop Stage(Grapes)"
+            app:titleCentered="true"
+            app:titleTextColor="@color/black" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:fillViewport="true"
+            android:stackFromBottom="true"
+            android:transcriptMode="alwaysScroll">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view9"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_holo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/view9"
+                    app:layout_constraintEnd_toEndOf="@+id/view9"
+                    app:layout_constraintStart_toStartOf="@+id/view9"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView3"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_shoot_developement"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView7"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Fruit Pruning"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView12"
+                            app:layout_constraintStart_toEndOf="@+id/imageView12"
+                            app:layout_constraintTop_toTopOf="@+id/imageView12" />
+
+                        <TextView
+                            android:id="@+id/cal1"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView7"
+                            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view9" />
+
+                <ImageView
+                    android:id="@+id/img_holo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view2"
+                    app:layout_constraintEnd_toEndOf="@+id/view2"
+                    app:layout_constraintStart_toStartOf="@+id/view2"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo1" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView4"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView3"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_bud_break"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Bud Break"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                            app:layout_constraintStart_toEndOf="@+id/imageView2"
+                            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+                        <TextView
+                            android:id="@+id/cal2"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView2"
+                            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+                <ImageView
+                    android:id="@+id/img_holo3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view3"
+                    app:layout_constraintEnd_toEndOf="@+id/view3"
+                    app:layout_constraintStart_toStartOf="@+id/view3"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo2" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView5"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView4"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_beginning_of_veraison"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Removal of Excessive"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                            app:layout_constraintStart_toEndOf="@+id/imageView3"
+                            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+                        <TextView
+                            android:id="@+id/cal3"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView3"
+                            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                <ImageView
+                    android:id="@+id/img_holo4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view4"
+                    app:layout_constraintEnd_toEndOf="@+id/view4"
+                    app:layout_constraintStart_toStartOf="@+id/view4"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo3" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView6"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView5"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_shoot_developement"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Shoot Development"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                            app:layout_constraintStart_toEndOf="@+id/imageView4"
+                            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+                        <TextView
+                            android:id="@+id/cal4"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView4"
+                            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+                <ImageView
+                    android:id="@+id/img_holo5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view5"
+                    app:layout_constraintEnd_toEndOf="@+id/view5"
+                    app:layout_constraintStart_toStartOf="@+id/view5"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo4" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView7"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView6"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_flowering"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Flowering"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+                            app:layout_constraintStart_toEndOf="@+id/imageView5"
+                            app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+                        <TextView
+                            android:id="@+id/cal5"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView5"
+                            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+                <ImageView
+                    android:id="@+id/img_holo6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view6"
+                    app:layout_constraintEnd_toEndOf="@+id/view6"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo5" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView8"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView7"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_fruit_set"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Fruit Set"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+                            app:layout_constraintStart_toEndOf="@+id/imageView6"
+                            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+                        <TextView
+                            android:id="@+id/cal6"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView6"
+                            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view7"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+                <ImageView
+                    android:id="@+id/img_holo7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view7"
+                    app:layout_constraintEnd_toEndOf="@+id/view7"
+                    app:layout_constraintStart_toStartOf="@+id/view7"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo6" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView9"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view9"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView8"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_berry_development"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Berry Development"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+                            app:layout_constraintStart_toEndOf="@+id/imageView7"
+                            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+
+                        <TextView
+                            android:id="@+id/cal7"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView8"
+                            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view8"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+                <ImageView
+                    android:id="@+id/img_holo8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view8"
+                    app:layout_constraintEnd_toEndOf="@+id/view8"
+                    app:layout_constraintStart_toStartOf="@+id/view8"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo7" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView10"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view8"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView9"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_beginning_of_veraison"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Beginning of Veraison"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+                            app:layout_constraintStart_toEndOf="@+id/imageView8"
+                            app:layout_constraintTop_toTopOf="@+id/imageView8" />
+
+                        <TextView
+                            android:id="@+id/cal8"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView9"
+                            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view10"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+                <ImageView
+                    android:id="@+id/img_holo9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view10"
+                    app:layout_constraintEnd_toEndOf="@+id/view10"
+                    app:layout_constraintStart_toStartOf="@+id/view10"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo8" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView11"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view10"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView10"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_harvest_cropstage"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Harvest"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                            app:layout_constraintStart_toEndOf="@+id/imageView9"
+                            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+                        <TextView
+                            android:id="@+id/cal9"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView10"
+                            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view11"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+                <ImageView
+                    android:id="@+id/img_holo10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="32dp"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view11"
+                    app:layout_constraintEnd_toEndOf="@+id/view11"
+                    app:layout_constraintStart_toStartOf="@+id/view11"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo9" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView12"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view11"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView11"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_resting_period"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Resting Period"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+                            app:layout_constraintStart_toEndOf="@+id/imageView10"
+                            app:layout_constraintTop_toTopOf="@+id/imageView10" />
+
+                        <TextView
+                            android:id="@+id/cal10"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView11"
+                            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view12"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view11" />
+
+                <ImageView
+                    android:id="@+id/img_holo11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view12"
+                    app:layout_constraintEnd_toEndOf="@+id/view12"
+                    app:layout_constraintStart_toStartOf="@+id/view12"
+                    app:layout_constraintTop_toTopOf="@+id/img_holo10" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView13"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view12"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView12"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_beginning_of_veraison"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView12"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Founding Pruning"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+                            app:layout_constraintStart_toEndOf="@+id/imageView11"
+                            app:layout_constraintTop_toTopOf="@+id/imageView11" />
+
+                        <TextView
+                            android:id="@+id/cal11"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView12"
+                            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view13"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/LightGray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view12" />
+
+                <ImageView
+                    android:id="@+id/img_holo12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="32dp"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view13"
+                    app:layout_constraintEnd_toEndOf="@+id/view13"
+                    app:layout_constraintStart_toStartOf="@+id/view13"
+                    app:layout_constraintTop_toTopOf="@+id/img_holo11" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView14"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view13"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView13"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_bud_break"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Bud Break"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView13"
+                            app:layout_constraintStart_toEndOf="@+id/imageView13"
+                            app:layout_constraintTop_toTopOf="@+id/imageView13" />
+
+                        <TextView
+                            android:id="@+id/cal12"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView13"
+                            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view14"
+                    android:layout_width="4dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/darkGray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+                <ImageView
+                    android:id="@+id/img_holo13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="32dp"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view14"
+                    app:layout_constraintEnd_toEndOf="@+id/view14"
+                    app:layout_constraintStart_toStartOf="@+id/view14"
+                    app:layout_constraintTop_toTopOf="@+id/img_holo12" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView15"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view14"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView14"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_cane_thinning"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Cane Thinning"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView14"
+                            app:layout_constraintStart_toEndOf="@+id/imageView14"
+                            app:layout_constraintTop_toTopOf="@+id/imageView14" />
+
+                        <TextView
+                            android:id="@+id/cal13"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView14"
+                            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view15"
+                    android:layout_width="4dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+                <ImageView
+                    android:id="@+id/img_holo15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view15"
+                    app:layout_constraintEnd_toEndOf="@+id/view15"
+                    app:layout_constraintStart_toStartOf="@+id/view15"
+                    app:layout_constraintTop_toBottomOf="@+id/img_holo13" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView16"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view15"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView15"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_sub_caning"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView15"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Sub cane"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView15"
+                            app:layout_constraintStart_toEndOf="@+id/imageView15"
+                            app:layout_constraintTop_toTopOf="@+id/imageView15" />
+
+                        <TextView
+                            android:id="@+id/cal14"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView15"
+                            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view16"
+                    android:layout_width="4dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@color/DarkGreen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+                <ImageView
+                    android:id="@+id/img_holo16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_holo_green"
+                    app:layout_constraintBottom_toBottomOf="@+id/view16"
+                    app:layout_constraintEnd_toEndOf="@+id/view16"
+                    app:layout_constraintStart_toStartOf="@+id/view16" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView17"
+                    android:layout_width="300dp"
+                    android:layout_height="110dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view16"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView16"
+                    app:strokeColor="@color/LightGray"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_topping"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView16"
+                            style="@style/Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Topping"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView16"
+                            app:layout_constraintStart_toEndOf="@+id/imageView16"
+                            app:layout_constraintTop_toTopOf="@+id/imageView16" />
+
+                        <TextView
+                            android:id="@+id/cal15"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:drawableStart="@drawable/ic_cal"
+                            android:drawablePadding="8dp"
+                            android:text="Select Date"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="13sp"
+                            app:layout_constraintStart_toStartOf="@+id/textView16"
+                            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="150dp"
+                       app:layout_constraintStart_toStartOf="parent"
+                       app:layout_constraintTop_toBottomOf="@+id/materialCardView17"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:elevation="8dp"
+        app:cardElevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveCropStage"
+            style="@style/Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/DarkGreen"
+            android:text="Update"
+            android:textColor="@color/white"
+            app:cornerRadius="12dp" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

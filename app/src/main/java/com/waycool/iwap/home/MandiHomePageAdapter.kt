@@ -56,7 +56,7 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
             else -> holder.imageView.visibility = View.GONE
         }
         when(properties?.source){
-            "benchmarker" -> holder.source.visibility = View.INVISIBLE
+            "benchmarker" -> holder.source.visibility = View.GONE
             else -> {
                 holder.source.visibility = View.VISIBLE
                 holder.source.text = "Source: ${properties?.source}"

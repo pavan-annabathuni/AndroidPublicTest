@@ -144,6 +144,7 @@
                         tools:text="30%" />
 
                     <TextView
+                        android:id="@+id/label_humidity"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -186,6 +187,7 @@
                         tools:text="20%" />
 
                     <TextView
+                        android:id="@+id/label_rain"
                         style="@style/Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

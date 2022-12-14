@@ -233,7 +233,7 @@ class EditProfileFragment : Fragment() {
                                 binding.tvAddress2.setText("${result.subLocality}")
                             else
                                 binding.tvAddress2.setText("${result.locality}")
-                            binding.tvState.append("${result.state}")
+                            binding.tvState.setText("${result.state}")
 
                             binding.tvAddress1.setText("${result.formattedAddress ?: ""}")
                             binding.tvAddress1.setSelection(0)

@@ -34,11 +34,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import java.io.File
 import java.io.FileOutputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MandiGraphFragment : Fragment() {
@@ -47,6 +49,7 @@ class MandiGraphFragment : Fragment() {
     lateinit var lineDataSet: LineDataSet
     lateinit var lineData: LineData
     private lateinit var shareLayout: ConstraintLayout
+    private lateinit var mDateAdapter: DateAdapter
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
@@ -83,10 +86,16 @@ class MandiGraphFragment : Fragment() {
         binding.cropName.text = crop_name
         binding.tvMarket.text = market_name
         shareLayout = binding.shareCl2
-        binding.recycleViewDis.adapter = DateAdapter()
+        mDateAdapter = DateAdapter()
+        binding.recycleViewDis.adapter = mDateAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) {
-                binding.viewModel = it.data
+            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) { it2 ->
+//                 val data2 = (it2.data?.data?.map { data ->
+//                         data.arrivalDate
+//                     } ?: emptyList()).toMutableList()
+//                data2.sort()
+
+               mDateAdapter.submitList(it2.data?.data)
                 //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
         }
@@ -126,12 +135,12 @@ class MandiGraphFragment : Fragment() {
                 this.findNavController()
                     .popBackStack()
             }
-
+        }
 
             binding.imgShare.setOnClickListener() {
                 screenShot()
+                Log.d("toast", "onClick: Working")
             }
-        }
     }
 
 
@@ -162,16 +171,16 @@ class MandiGraphFragment : Fragment() {
 //        listLine.add(Entry(60f,12f))
 
                 lineDataSet = LineDataSet(listLine, "")
-
-                val datesList = it.data?.data?.map { mandi ->
-                    try {
-                        val date: Date = inputDateFormatter.parse(mandi.arrivalDate)
-                        outputDateFormatter.format(date)
-                    } catch (e: ParseException) {
-                        Log.d("Mandi Graphs",e.message.toString())
-                        ""
+                    val datesList = it.data?.data?.map { mandi ->
+                        try {
+                            val date: Date = inputDateFormatter.parse(mandi.arrivalDate)
+                            outputDateFormatter.format(date)
+                        } catch (e: ParseException) {
+                            Log.d("Mandi Graphs", e.message.toString())
+                            ""
+                        }
                     }
-                }
+
                 val valueFormatter2 = IndexAxisValueFormatter()
 
                 var xAxis2 = datesList?.toTypedArray()
@@ -195,7 +204,7 @@ class MandiGraphFragment : Fragment() {
                 binding.lineChart.setDrawGridBackground(false)
                 binding.lineChart.setDrawBorders(true)
                 binding.lineChart.setBorderColor(R.color.LightGray)
-                binding.lineChart.setBorderWidth(1f)
+                binding.lineChart.setBorderWidth(2f)
                 binding.lineChart.axisRight.setDrawGridLines(false)
                 binding.lineChart.axisLeft.setDrawGridLines(false)
                 //binding.lineChart.xAxis.setDrawGridLines(false)
@@ -203,10 +212,17 @@ class MandiGraphFragment : Fragment() {
                 binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                 binding.lineChart.axisRight.isEnabled = false
                 lineDataSet.fillDrawable = resources.getDrawable(R.drawable.bg_graph)
-                binding.lineChart.xAxis.spaceMax = 1f
+               // binding.lineChart.xAxis.spaceMax = 1f
                 binding.lineChart.fitScreen()
+                binding.lineChart.setScaleEnabled(false)
+                binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                 // binding.lineChart.axisLeft.isEnabled = false;
                 binding.lineChart.isScaleXEnabled = false
+                binding.lineChart.getLegend().setEnabled(false);
+               binding.lineChart.xAxis.setCenterAxisLabels(false);
+                binding.lineChart.xAxis.setGranularity(1f);
+               // binding.lineChart.setVisibleXRangeMaximum(3f);
+
             }
         }
 

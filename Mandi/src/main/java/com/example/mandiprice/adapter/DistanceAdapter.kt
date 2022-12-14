@@ -11,6 +11,7 @@ import com.example.mandiprice.R
 import com.example.mandiprice.databinding.ItemDistanceBinding
 import com.waycool.data.Network.NetworkModels.MandiRecord
 import com.waycool.data.repository.domainModels.MandiDomainRecord
+import com.waycool.data.translations.TranslationsManager
 
 class DistanceAdapter(val onClickListener: OnClickListener) :
     PagingDataAdapter<MandiDomainRecord, DistanceAdapter.MyViewHolder>(DiffCallback) {
@@ -21,6 +22,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         val distance = binding.distance
         val imageView = binding.imageViewPrice
         val source = binding.tvSource
+        val kg = binding.tvKg
         fun bind(data: MandiDomainRecord?) {
             binding.property = data
             binding.executePendingBindings()
@@ -64,7 +66,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties!!)
         }
-
+         // TranslationsManager().loadString("Rate / Kg",holder.kg)
     }
 
 

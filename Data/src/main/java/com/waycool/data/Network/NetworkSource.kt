@@ -994,5 +994,164 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
+    fun updateHarvest(
+        id:Int,harvest_date:String,actual_yield:Int)
+            = flow<Resource<HarvestDateModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.harvestDate(map,id,harvest_date, actual_yield,"PUT")
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateIrrigation(
+        id:Int,irrigation:Int)
+            = flow<Resource<IrrigationPerDay?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.irrigationPerDay(map,id,irrigation,"PUT")
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateCropStage(
+        id:Int,farmId:Int,plotId:Int,value1:String?,value2:String?,value3:String?,value4:String?,value5:String?,value6:String?,
+        value7:String?,value8:String?,value9:String?,value10:String?,value11:String?,value12:String?,value13:String?,value14:String?,
+        value15:String?)
+            = flow<Resource<CropStageModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateCropStage(map,id,farmId,plotId,value1,value2,value3,value4,value5,value7,value7,value8,value9,
+                value10,value11,value12,value13,value14,value15)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getCropStage()
+            = flow<Resource<GetCropStage?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getCropStage(map)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getNdvi(farmId: Int,accountId: Int)
+            = flow<Resource<NdviModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getNdvi(map,farmId,accountId)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateFarmSupport(name: String,contact:Long,
+                          lat:Double,lon:Double, roleId:Int,
+                          pincode:Int,village: String,address: String,
+    state: String,district: String)
+            = flow<Resource<FarmSupportModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateFarmSupport(map,name,contact,lat,lon,roleId,pincode,
+           village,address,state,district)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getFarmSupport(accountId: Int)
+            = flow<Resource<GetFarmSupport?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getFarmSupportUser(map,accountId)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun deleteFarmSupport(
+        id:Int)
+            = flow<Resource<DeleteFarmSupport?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.deleteFarmSupport(map,id)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getNotification()
+            = flow<Resource<NotificationModel?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getNotification(map)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
 }
 

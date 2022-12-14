@@ -113,12 +113,15 @@
                     app:layout_constraintEnd_toStartOf="@+id/lineChart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/lineChart" />
+
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
-                    android:layout_width="340dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="250dp"
                     android:layout_marginStart="24dp"
+                    android:layout_marginEnd="4dp"
                     android:background="@color/white"
+                    android:minWidth="330dp"
                     android:padding="10dp"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -217,21 +220,21 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleViewDis"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        historyListData="@{viewModel.data}"
-                        android:nestedScrollingEnabled="true"
-                        android:orientation="vertical"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView7"
-                        tools:itemCount="4"
-                        tools:listitem="@layout/item_date" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleViewDis"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:orientation="vertical"
+                    app:reverseLayout="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_date" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
