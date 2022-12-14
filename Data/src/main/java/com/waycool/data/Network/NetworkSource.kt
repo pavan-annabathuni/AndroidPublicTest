@@ -923,7 +923,7 @@ object NetworkSource {
         farm_area: String,
         farm_json: String,
         plot_ids: String?,
-        is_primary: Boolean,
+        is_primary: Int?,
         farm_water_source: String?,
         farm_pump_hp: String?,
         farm_pump_type: String?,
@@ -961,15 +961,13 @@ object NetworkSource {
         }
     }
 
-    fun getMyFarms(accountId: Int) = flow<Resource<MyFarmsDTO?>> {
+    fun getMyFarms(accountId: Int,farm_id:Int?) = flow<Resource<MyFarmsDTO?>> {
 
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
 
         try {
-            val response = apiInterface.
-            getMyFarms(map,accountIdLocal)
-
+            val response = apiInterface.getMyFarms(map,accountIdLocal,farm_id)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

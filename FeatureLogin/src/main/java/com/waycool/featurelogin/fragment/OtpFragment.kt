@@ -316,7 +316,7 @@ class OtpFragment : Fragment() {
         val matcher = pattern.matcher(message)
         if (matcher.find()) {
             countDownTimer!!.cancel()
-            binding.doneBtn.isEnabled == true
+            binding.doneBtn.isEnabled
             binding.progressCircular.visibility = View.GONE
             binding.otpResendLayout.visibility = View.GONE
             binding.otpCallLayout.visibility = View.GONE

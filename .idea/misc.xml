@@ -152,8 +152,8 @@
         <entry key="app/src/main/res/layout/fragment_farm_details.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.29947089947089944" />
         <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
-        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.2181884855152182" />
-        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.37271728515624997" />
+        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.4647430419921875" />
         <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_spot_light.xml" value="0.1175925925925926" />
         <entry key="app/src/main/res/layout/item_delta_progress_bar.xml" value="0.22150139017608897" />
@@ -197,6 +197,7 @@
         <entry key="featureChat/src/main/res/layout/chat_layout.xml" value="0.2640625" />
         <entry key="featureChat/src/main/res/layout/zui_layout_navbar.xml" value="0.25893769152196117" />
         <entry key="soiltesting/src/main/res/drawable/bd_flex.xml" value="0.1645" />
+        <entry key="soiltesting/src/main/res/drawable/bg_add_form.xml" value="0.1495" />
         <entry key="soiltesting/src/main/res/drawable/bg_ans.xml" value="0.181" />
         <entry key="soiltesting/src/main/res/drawable/bg_button.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/bg_custome_dialog.xml" value="0.1645" />
@@ -245,7 +246,7 @@
         <entry key="soiltesting/src/main/res/layout/item_labs_sample.xml" value="0.2796296296296296" />
         <entry key="soiltesting/src/main/res/layout/item_mandi.xml" value="0.624765625" />
         <entry key="soiltesting/src/main/res/layout/item_premium_add_farm.xml" value="0.2947916666666667" />
-        <entry key="soiltesting/src/main/res/layout/item_premium_crops.xml" value="0.45" />
+        <entry key="soiltesting/src/main/res/layout/item_premium_crops.xml" value="0.18927764892578125" />
         <entry key="soiltesting/src/main/res/layout/item_premium_weather.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/item_soil_history.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/item_status_tracker.xml" value="0.7677017777054398" />

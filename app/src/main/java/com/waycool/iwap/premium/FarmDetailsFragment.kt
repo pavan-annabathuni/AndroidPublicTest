@@ -26,7 +26,7 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private lateinit var myCropAdapter: MyCropsAdapter
-    private var myFarmPremiumAdapter = MyFarmPremiumAdapter()
+//    private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
     var viewDeviceListAdapter = ViewDeviceListAdapter( this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,12 +44,15 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
         myCrop()
         initiFarmDeltT()
             viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-                var accountId = it.data?.accountId
-                Log.d("TAG", "getFarmsAccount: $accountId ")
-                if (accountId !=null){
-                    farmDetailsObserve(accountId)
-                }
+                if (arguments != null) {
+                    val farm_id = arguments?.getInt("farm_id")
+                    var accountId = it.data?.accountId
+                    Log.d("TAG", "getFarmsAccount: $accountId ")
+                    if (accountId != null) {
+                        farmDetailsObserve(accountId,farm_id)
+                    }
 
+                }
             }
 
 //        val progressbar: ProgressBar = findViewById(R.id.progressbar) as ProgressBar
@@ -61,8 +64,8 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 
     }
 
-    private fun farmDetailsObserve(account:Int) {
-        viewModel.getMyFarms(account).observe(viewLifecycleOwner){it->
+    private fun farmDetailsObserve(account:Int,farm_id:Int?) {
+        viewModel.getMyFarms(account,farm_id).observe(viewLifecycleOwner){it->
             when (it) {
                 is Resource.Success -> {
                     val response=it.data

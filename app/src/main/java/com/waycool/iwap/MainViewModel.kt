@@ -72,7 +72,7 @@ class MainViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-    fun getMyFarms(account_id: Int): LiveData<Resource<List<MyFarmsDomain>>> =
-        FarmsRepository.getMyFarms(account_id).asLiveData()
+    fun getMyFarms(account_id: Int,farm_id:Int?): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms(account_id,farm_id).asLiveData()
 
 }

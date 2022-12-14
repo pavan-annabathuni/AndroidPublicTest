@@ -9,8 +9,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="0dp"
         app:cardBackgroundColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +25,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:text="Videos"
+                android:textSize="20sp"
+                android:fontFamily="@font/notosans_bold"
                 android:textColor="@color/textdark"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +42,9 @@
                 android:drawablePadding="8dp"
                 android:padding="4dp"
                 android:text="View all"
+                android:textSize="14sp"
+                android:textColor="@color/primaryColor"
+                android:fontFamily="@font/notosans_bold"
                 app:layout_constraintBottom_toBottomOf="@+id/videos_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/videos_title" />

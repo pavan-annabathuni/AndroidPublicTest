@@ -27,13 +27,13 @@ import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import kotlin.math.roundToInt
 
 
-class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
+class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailslistener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private var myCropPremiumAdapter = MyCropPremiumAdapter()
-    private var myFarmPremiumAdapter = MyFarmPremiumAdapter()
+    private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     var deviceDataAdapter = DeviceDataAdapter()
 
@@ -175,9 +175,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
             val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
         }
-        binding.tvGoodMorning.setOnClickListener {
-            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
-        }
+//        binding.tvGoodMorning.setOnClickListener {
+//            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
+//        }
 
     }
 
@@ -279,7 +279,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
                 Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
                 if (accountId != null)
-                    viewModel.getMyFarms(accountId).observe(viewLifecycleOwner) {
+                    viewModel.getMyFarms(accountId,null).observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
                                 if (it.data == null) {
@@ -481,6 +481,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener {
 
 
 //        deviceDataAdapter.notifyDataSetChanged()
+    }
+
+    override fun farmDetails(data: MyFarmsDomain) {
+        val bundle=Bundle()
+        bundle.putInt("farm_id",data.id!!)
+        findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3,bundle)
+
     }
 
 

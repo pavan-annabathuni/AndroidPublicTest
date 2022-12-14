@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
+    private var isPrimary: Int?=null
     private var waterSourcesSelected: MutableList<String> = mutableListOf()
     private var farmjson: String? = null
     private var farmCentroid: String? = null
@@ -63,9 +64,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         binding.toolbarTitle.text = "Farm Details"
         binding.toolbar.setNavigationOnClickListener { activity?.finish() }
 
-        (childFragmentManager.findFragmentById(R.id.map_save_fragment) as SupportMapFragment?)?.getMapAsync(
-            this
-        )
+        (childFragmentManager.findFragmentById(R.id.map_save_fragment) as SupportMapFragment?)?.getMapAsync(this)
 
         if (arguments != null) {
             farmjson = arguments?.getString("farm_json")
@@ -107,13 +106,14 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 waterSourcesSelected?.add("Borewell")
             } else if (!b) waterSourcesSelected?.remove("Borewell")
         }
-
+        isPrimary = if(binding.setPrimaryFarm.isChecked){
+            1
+        }else{
+            0
+        }
 
         binding.saveFarmBtn.setOnClickListener {
             if (accountId != null) {
-                binding.saveProgressBar.visibility = View.VISIBLE
-                binding.saveFarmBtn.visibility = View.INVISIBLE
-
                 var checkedcrops: String? = null
                 if (checkedCropList != null && checkedCropList!!.isNotEmpty()) {
                     val plotIdsList:MutableList<String> = mutableListOf()
@@ -128,25 +128,36 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                     watersources=Gson().toJson(waterSourcesSelected)
                 }else watersources=null
 
-                viewModel.addFarm(
-                    accountId!!,
-                    binding.farmnameEtAddfarm.text.toString(),
-                    farmCentroid!!,
-                    binding.farmareaEtAddfarm.text.toString(),
-                    farmjson!!,
-                   checkedcrops,
-                    binding.setPrimaryFarm.isChecked,
-                    watersources
-                ).observe(viewLifecycleOwner) {
-                    binding.saveProgressBar.visibility = View.INVISIBLE
-                    binding.saveFarmBtn.visibility = View.VISIBLE
+                if(binding.farmnameEtAddfarm.text.toString().isEmpty()){
+                    Toast.makeText(context, "Farm name is mandatory", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    binding.saveProgressBar.visibility = View.VISIBLE
+                    binding.saveFarmBtn.visibility = View.INVISIBLE
+                    viewModel.addFarm(
+                        accountId!!,
+                        binding.farmnameEtAddfarm.text.toString(),
+                        farmCentroid!!,
+                        binding.farmareaEtAddfarm.text.toString(),
+                        farmjson!!,
+                        checkedcrops,
+                        isPrimary,
+                        watersources
+                    ).observe(viewLifecycleOwner) {
+                        accountId?.let { it1 ->
+                            viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
+                        }
 
-                    accountId?.let { it1 ->
-                        viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
+                        accountId?.let { it1 ->
+                            viewModel.getFarms(it1,null).observe(viewLifecycleOwner) {}
+                        }
+                        Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
+                        activity?.finish()
                     }
                     Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
                     activity?.finish()
-                }
+}
+
             }
         }
 

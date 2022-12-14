@@ -25,6 +25,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableMap.OnMapChangedCallback
 import androidx.fragment.app.Fragment
@@ -52,16 +53,19 @@ import com.waycool.core.utils.AppSecrets
 import com.waycool.data.utils.PlacesSearchEventError
 import com.waycool.data.utils.PlacesSearchEventFound
 import com.waycool.data.utils.PlacesSearchEventLoading
+import kotlinx.coroutines.flow.merge
 import java.util.*
 
 
 class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
+
     private var isLocationFabPressed: Boolean = false
     private var currentMarker: Marker? = null
     private var searchLocationMarker: Marker? = null
-    private var mMap:GoogleMap? = null
+    private var mMap: GoogleMap? = null
     private var points: MutableList<LatLng> = mutableListOf()
+
     private var markerList: MutableList<Marker> = mutableListOf()
     private var polygon: Polygon? = null
     private var polyline: Polyline? = null
@@ -193,6 +197,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     binding.areaCard.setVisibility(View.GONE)
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
+
                 if (polygon != null) {
                     polygon!!.points = points
                     addCenterMarkersToPolygon(polygon)
@@ -322,6 +327,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     binding.placesResultsCv.visibility = View.VISIBLE
                     adapter.submitList(event.places)
                 }
+                else -> {}
             }
         }
 
@@ -352,6 +358,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 }
         }
 
+
         binding.savemapBtn.setOnClickListener {
             if (points.isEmpty() && searchLocationMarker == null) {
                 Toast.makeText(
@@ -359,7 +366,14 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     "Please Mark your Farm or nearest location of your farm.",
                     Toast.LENGTH_LONG
                 ).show()
-            } else {
+            } else if(points.size<3){
+                Toast.makeText(
+                    requireContext(),
+                    "Please Mark more than 2 points to plot your Farm or nearest location of your farm.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }else {
                 val bundle = Bundle()
                 if (points.isNotEmpty()) {
                     if (points[points.size - 1].latitude != points[0].latitude || points[points.size - 1].longitude != points[0].longitude)
@@ -384,12 +398,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
         mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
 
         getLocation()
-
         mMap!!.setOnMapClickListener { latLng ->
             if (!isMarkerSelected && !isPolygonDraw) {
                 if (markerList == null) {
@@ -408,7 +422,23 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                             ).flat(true).anchor(.5f, .5f)
                     )
                 )
+
                 points.add(latLng)
+                if (points != null) {
+                    if (points.size>=3) {
+                        binding.savemapBtn.background.setTint(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.primaryColor)))
+                        binding.savemapBtn.setTextColor(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.white)))
+
+                  /*      mMap?.addPolygon(
+                            PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                                .strokeColor(
+                                    Color.argb(255, 255, 255, 255)
+                                )
+                        )*/
+                        showAreaCard()
+
+                    }
+                }
                 val state = MapState()
                 state.isPolygonDrawn = isPolygonDraw
                 state.copyArrayList(points)
@@ -424,7 +454,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         .color(-0x44000001).geodesic(true).pattern(dashedPattern)
                 )
                 addCenterMarkersToPolyline(polyline)
-                binding.areaCard.setVisibility(View.GONE)
+//                binding.areaCard.setVisibility(View.GONE)
                 //binding.savemapBtn.setVisibility(View.GONE)
             } else if (isMarkerSelected) {
                 isMarkerSelected = false
@@ -443,7 +473,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 if (polyline != null) {
                     polyline!!.points = points
                     addCenterMarkersToPolyline(polyline)
-                    binding.areaCard.setVisibility(View.GONE)
+//                    binding.areaCard.setVisibility(View.GONE)
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
                 if (polygon != null) {
@@ -476,6 +506,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     binding.areaCard.setVisibility(View.GONE)
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
+
                 if (polygon != null) {
                     polygon!!.points = points
                     addCenterMarkersToPolygon(polygon)
@@ -495,7 +526,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 if (polyline != null) {
                     polyline!!.points = points
                     addCenterMarkersToPolyline(polyline)
-                    binding.areaCard.setVisibility(View.GONE)
+//                    binding.areaCard.setVisibility(View.GONE)
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
                 if (polygon != null) {
@@ -546,10 +577,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-
                 val mFusedLocationClient =
                     LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-
                 mFusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
@@ -671,7 +700,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         val centerPOintsList = java.util.ArrayList<LatLng>()
         var builder: LatLngBounds.Builder
         for (i in 0 until polyline.points.size - 1) {
-            builder =LatLngBounds.builder()
+            builder = LatLngBounds.builder()
             builder.include(polyline.points[i])
             builder.include(polyline.points[i + 1])
             centerPOintsList.add(builder.build().center)
@@ -927,7 +956,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     private fun speechToText() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
@@ -979,5 +1007,19 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         return LatLng(latitude / n, longitude / n)
     }
 
+    private fun getLatLong(points: List<LatLng>): LatLng? {
+        var latitude = 0.0
+        var longitude = 0.0
+        val n = points.size
+        for (point in points) {
+            if (n <= 1) {
+                latitude += point.latitude
+                longitude += point.longitude
+            }
+        }
+        return LatLng(latitude, longitude)
+    }
 
 }
+
+

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginBottom="@dimen/space20"
+   android:layout_marginEnd="@dimen/space16"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
@@ -111,6 +111,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view_farm_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space16"
@@ -161,6 +162,15 @@
                 android:src="@drawable/adddevice"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+<!--            <fragment-->
+<!--                android:id="@+id/map_farms_home"-->
+<!--                android:name="com.google.android.libraries.maps.SupportMapFragment"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                map:layout_constraintEnd_toEndOf="parent"-->
+<!--                map:layout_constraintStart_toStartOf="parent"-->
+<!--                map:layout_constraintTop_toTopOf="parent"-->
+<!--                map:liteMode="true" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -279,7 +279,7 @@ interface ApiInterface {
         @Field("farm_area") farm_area: String,
         @Field("farm_json") farm_json: String,
         @Field("plot_ids") plot_ids: String? = null,
-        @Field("is_primary") is_primary: Boolean,
+        @Field("is_primary") is_primary: Int?=null,
         @Field("farm_water_source") farm_water_source: String? = null,
         @Field("farm_pump_hp") farm_pump_hp: String? = null,
         @Field("farm_pump_type") farm_pump_type: String? = null,
@@ -346,7 +346,9 @@ interface ApiInterface {
     @GET("api/v1/farm/my-farm")
     suspend fun getMyFarms(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_no_id") account_no_id: Int
+        @Query("account_no_id") account_no_id: Int,
+        @Query("farm_id") farm_id:Int?
+
     ): Response<MyFarmsDTO>
 
     @GET("api/v1/dashboard")
