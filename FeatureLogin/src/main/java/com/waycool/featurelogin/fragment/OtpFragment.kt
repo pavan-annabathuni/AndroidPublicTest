@@ -121,9 +121,9 @@ class OtpFragment : Fragment() {
             showTimer()
         }
 
-        binding.doneBtn.setOnClickListener {
-            getOTPValidate()
-        }
+//        binding.doneBtn.setOnClickListener {
+//            getOTPValidate()
+//        }
 
         binding.resendMsgBtn.setOnClickListener {
             retryOtp("text")
@@ -171,6 +171,9 @@ class OtpFragment : Fragment() {
                 otpValue = it
                 OTP = it
                 Log.d("Actual Value", otpValue)
+                if(OTP.length==4){
+                    getOTPValidate()
+                }
             },
             type = OTP_VIEW_TYPE_BORDER,
             password = false,
@@ -295,7 +298,6 @@ class OtpFragment : Fragment() {
                 //  Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 // System.out.println(String.format("%s - %s", "Received Message", message)+"otptestedmsg");
                 getOtpFromMessage(message)
-                binding.doneBtn.isEnabled = true
             } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
                 //binding.doneBtn.isEnabled = false
                 getCancelResult()
@@ -305,9 +307,9 @@ class OtpFragment : Fragment() {
 
     private fun getCancelResult() {
         countDownTimer!!.cancel()
-        binding.progressCircular.setVisibility(View.GONE)
-        binding.otpResendLayout.setVisibility(View.VISIBLE)
-        binding.otpCallLayout.setVisibility(View.VISIBLE)
+        binding.progressCircular.visibility = View.GONE
+        binding.otpResendLayout.visibility = View.VISIBLE
+        binding.otpCallLayout.visibility = View.VISIBLE
     }
 
     private fun getOtpFromMessage(message: String?) {
@@ -316,7 +318,6 @@ class OtpFragment : Fragment() {
         val matcher = pattern.matcher(message)
         if (matcher.find()) {
             countDownTimer!!.cancel()
-            binding.doneBtn.isEnabled
             binding.progressCircular.visibility = View.GONE
             binding.otpResendLayout.visibility = View.GONE
             binding.otpCallLayout.visibility = View.GONE
@@ -373,10 +374,9 @@ class OtpFragment : Fragment() {
             }
 
             override fun onFinish() {
-                binding.progressCircular.setVisibility(View.GONE)
-                binding.otpResendLayout.setVisibility(View.VISIBLE)
-                binding.otpCallLayout.setVisibility(View.VISIBLE)
-                binding.doneBtn.isEnabled = true
+                binding.progressCircular.visibility = View.GONE
+                binding.otpResendLayout.visibility = View.VISIBLE
+                binding.otpCallLayout.visibility = View.VISIBLE
             }
         }
         (countDownTimer as CountDownTimer).start()

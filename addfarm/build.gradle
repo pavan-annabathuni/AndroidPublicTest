@@ -46,6 +46,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':Core')
 
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
@@ -69,5 +70,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     implementation(libraries.glide)
+
+    //ShowCaseView
+    implementation 'com.github.mreram:showcaseview:1.4.1'
+    implementation 'com.github.iammert:MaterialIntroView:1.6.0'
 
 }

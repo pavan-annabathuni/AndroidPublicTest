@@ -1176,7 +1176,7 @@
                             android:text="Soil Testing"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
-                            android:fontFamily="@font/bold"
+                            app:fontFamily="@font/bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1188,10 +1188,10 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:gravity="start"
-                            android:fontFamily="@font/regular"
-                            android:text="Enables you with an informations of soil and yield! "
+                            android:text="Helps you assess and recommend the nutrition of your soil"
                             android:textColor="@color/textlight"
-                            android:textSize="@dimen/txt14"
+                            android:textSize="@dimen/txt12"
+                            android:fontFamily="@font/regular"
                             app:layout_constraintEnd_toStartOf="@+id/imageView11"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvService" />
@@ -1207,7 +1207,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvEnable">
 
-
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvAddFromService"
                                 android:layout_width="wrap_content"
@@ -1216,7 +1215,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1236,7 +1235,6 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <ImageView
-
                             android:id="@+id/imageView11"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -1245,7 +1243,6 @@
                             android:src="@drawable/soil_testing_"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="@+id/guideline2"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1254,7 +1251,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent=".6" />
+                            app:layout_constraintGuide_percent=".7" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -1285,10 +1282,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="@dimen/txt16"
-                            android:text="Crop Health"
+                            android:text="Crop Health Detection"
                             android:textColor="#111827"
-                            android:fontFamily="@font/bold"
                             android:textSize="@dimen/txt16"
+                            app:fontFamily="@font/bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1299,10 +1296,10 @@
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:text="Explore about our AI enable feature."
+                            android:text="Helps you detect crop’s health using Artificial Intelligence"
                             android:textColor="@color/textlight"
-                            android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
+                            android:textSize="@dimen/txt12"
+                            app:fontFamily="@font/regular"
                             app:layout_constraintEnd_toStartOf="@+id/imageView12"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvCropHealth" />
@@ -1327,7 +1324,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1362,7 +1359,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent=".6" />
+                            app:layout_constraintGuide_percent=".7" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -1393,10 +1390,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="@dimen/txt16"
-                            android:text="Crop Information"
+                            android:text="Crop Info."
                             android:textColor="#111827"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/bold"
+                            android:textSize="@dimen/txt16"
+                            app:fontFamily="@font/bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1407,11 +1404,11 @@
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:text="Understand the complete information about your crops"
+                            android:text="Gives you end to end  information about your crop."
                             android:textColor="#585858"
-                            android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
-                            app:layout_constraintEnd_toStartOf="@+id/imageView13"
+                            android:textSize="@dimen/txt12"
+                            app:fontFamily="@font/regular"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline4"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvInfoCrop" />
 
@@ -1436,7 +1433,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                app:fontFamily="@font/regular"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1471,7 +1468,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent=".6" />
+                            app:layout_constraintGuide_percent=".7" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -1507,7 +1504,7 @@
                             android:text="Crop Protection"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
-                            android:fontFamily="@font/bold"
+                            app:fontFamily="@font/bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1519,11 +1516,11 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:gravity="start"
-                            android:text="Complete information to fight against all the possible diseases."
+                            android:text="Gives you pests &amp; diseases information to protect your crop"
                             android:textColor="#585858"
-                            android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
-                            app:layout_constraintEnd_toStartOf="@+id/imageView14"
+                            android:textSize="@dimen/txt12"
+                            app:fontFamily="@font/regular"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvCropProtect" />
 
@@ -1547,7 +1544,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1582,7 +1579,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent=".6" />
+                            app:layout_constraintGuide_percent=".7" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

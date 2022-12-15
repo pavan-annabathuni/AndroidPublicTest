@@ -70,6 +70,7 @@ https://play.google.com/store/apps/details?id=${it.context.packageName}"""
 
             itemBinding.newsCv.setOnClickListener {
                 onItemClick?.invoke(getItem(absoluteAdapterPosition))
+
             }
 
         }

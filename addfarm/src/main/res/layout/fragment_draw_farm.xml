@@ -100,8 +100,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/micBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible"
-                    app:tint="@color/textdark"/>
+                    app:tint="@color/textdark"
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,6 +138,40 @@
                     map:layout_constraintStart_toStartOf="parent"
                     map:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/pointA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="150dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    map:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/pointB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="70dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/pointA"
+                    map:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/pointC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="100dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pointA" />
+
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/reset_fab"
                     android:layout_width="wrap_content"
@@ -152,6 +186,21 @@
                     map:fabSize="mini"
                     map:layout_constraintBottom_toBottomOf="parent"
                     map:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <ImageView
+                    android:id="@+id/tutorial"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:src="@drawable/info"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:backgroundTint="#ffffff"
+                    app:layout_constraintBottom_toTopOf="@+id/gps_fab"
+                    app:layout_constraintEnd_toEndOf="@id/gps_fab"
+                    app:layout_constraintStart_toStartOf="@id/gps_fab"
+                    map:fabSize="mini"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton

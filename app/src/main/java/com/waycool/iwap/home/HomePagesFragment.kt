@@ -328,18 +328,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
                     }
-                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
+//                        .show()
                 }
                 is Resource.Loading -> {
                     Log.d("farm", "step5")
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
+                /*    Toast.makeText(
                         context,
                         "Farm Api called Error ${it.message}",
                         Toast.LENGTH_SHORT
-                    ).show()
+                    ).show()*/
 
                     Log.d("farm", "step6 " + it.message)
                 }
@@ -355,7 +355,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val list: List<Address> =
             geocoder.getFromLocation(lat, lng, 1) as List<Address>
-        district = list[0].locality + "," + list[0].adminArea
+        district = list[0].adminArea
     }
 
     private fun loadFarm(farmJson: ArrayList<LatLng>?) {

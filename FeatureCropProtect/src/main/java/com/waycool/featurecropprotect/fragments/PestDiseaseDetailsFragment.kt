@@ -1,6 +1,8 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -11,7 +13,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -43,12 +48,17 @@ import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment() {
 
     private var audio: AudioWife? = null
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
+    private lateinit var shareLayout: ConstraintLayout
 
     private val viewModel: CropProtectViewModel by lazy { ViewModelProvider(requireActivity())[CropProtectViewModel::class.java] }
     private val adapter: DiseasesChildAdapter by lazy { DiseasesChildAdapter() }
@@ -78,6 +88,11 @@ class PestDiseaseDetailsFragment : Fragment() {
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
+        }
+
+        shareLayout=binding.shareScreen
+        binding.imgShare.setOnClickListener() {
+            screenShot()
         }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -200,6 +215,29 @@ class PestDiseaseDetailsFragment : Fragment() {
         setBanners()
         audioPlayer()
     }
+
+    fun screenShot() {
+        val now = Date()
+        android.text.format.DateFormat.format("", now)
+        val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
+        val bitmap =
+            Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
+        shareLayout.draw(canvas)
+        val imageFile = File(path)
+        val outputFile = FileOutputStream(imageFile)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
+        outputFile.flush()
+        outputFile.close()
+        val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+
+        val i = Intent()
+        i.action = Intent.ACTION_SEND
+        i.putExtra(Intent.EXTRA_STREAM, URI)
+        i.type = "text/plain"
+        startActivity(i)
+    }
+
 
     private fun setNews() {
         val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews

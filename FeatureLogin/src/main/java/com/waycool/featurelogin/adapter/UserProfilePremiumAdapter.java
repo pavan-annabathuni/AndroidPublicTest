@@ -16,6 +16,7 @@ import com.waycool.featurelogin.R;
 import com.waycool.featurelogin.fragment.RegistrationFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfilePremiumAdapter.TilesVh> {
     List<ModuleMasterDomain> listItem;
@@ -58,7 +59,7 @@ public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfileP
         }
         @Override
         public void onClick(View view) {
-            fragment.replaceFragmentwithoutbackstack(listItem.get(getAdapterPosition()).getTittle(),listItem.get(getAdapterPosition()).getModuleDesc(),listItem.get(getAdapterPosition()).getAudioURl(), String.valueOf(listItem.get(getAdapterPosition()).getPremium()),context);
+            fragment.replaceFragmentwithoutbackstack(Objects.requireNonNull(listItem.get(getAdapterPosition()).getTittle()), Objects.requireNonNull(listItem.get(getAdapterPosition()).getModuleDesc()),listItem.get(getAdapterPosition()).getAudioURl(), String.valueOf(listItem.get(getAdapterPosition()).getPremium()),context);
         }
     }
 }

@@ -33,6 +33,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="Welcome to Outgrow"
                 android:textColor="@color/textdark"
+                android:fontFamily="@font/bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
+                android:fontFamily="@font/notosans_medium"
                 android:text="The following details will help us to personalize your Outgrow app experience."
                 android:textColor="@color/textdark"
                 app:layout_constraintEnd_toEndOf="@id/title_tv"
@@ -101,16 +103,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="8dp"
-                android:src="@drawable/ic_mic"
+                android:src="@drawable/mic"
                 app:layout_constraintBottom_toBottomOf="@+id/name_textlayout"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@+id/name_textlayout"
                 app:layout_constraintTop_toTopOf="@+id/name_textlayout"
-                app:tint="@color/textdark"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -164,7 +164,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="8dp"
@@ -173,7 +172,6 @@
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@+id/location_textlayout"
                 app:layout_constraintTop_toTopOf="@+id/location_textlayout"
-                app:tint="@color/textdark"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <!--            <com.waycool.uicomponents.Text.ParagraphMedium-->

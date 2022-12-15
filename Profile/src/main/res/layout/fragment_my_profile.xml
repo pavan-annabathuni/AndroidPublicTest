@@ -146,7 +146,7 @@
                     android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_vector"
                     android:drawablePadding="8dp"
-                    android:text="Farmer Profile"
+                    android:text="My Profile"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
