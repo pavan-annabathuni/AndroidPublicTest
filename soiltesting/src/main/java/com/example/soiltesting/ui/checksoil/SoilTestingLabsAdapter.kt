@@ -12,7 +12,7 @@ import java.util.ArrayList
 class SoilTestingLabsAdapter(private val checkSoilTestListener: CheckSoilTestListener) :
     RecyclerView.Adapter<SoilTestingLabsHolder>() {
     private var selectedPosition = 0
-    var details = mutableListOf<CheckSoilTestDomain>()
+        var details = mutableListOf<CheckSoilTestDomain>()
     fun setMovieList(movies: ArrayList<CheckSoilTestDomain>?) {
         if (movies != null) {
             this.details = movies.toMutableList()

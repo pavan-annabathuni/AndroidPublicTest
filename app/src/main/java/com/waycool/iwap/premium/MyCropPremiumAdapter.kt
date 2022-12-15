@@ -12,7 +12,7 @@ import com.waycool.iwap.databinding.ItemViewallServiceBinding
 
 import java.util.ArrayList
 
-class MyCropPremiumAdapter  :  RecyclerView.Adapter<MyCropPremiumViewHolder>(){
+class MyCropPremiumAdapter (val myCropListener: myCropListener) :  RecyclerView.Adapter<MyCropPremiumViewHolder>(){
     var details = mutableListOf<MyCropDataDomain>()
     fun setMovieList(movies: ArrayList<MyCropDataDomain>?) {
         if (movies != null) {
@@ -33,6 +33,9 @@ class MyCropPremiumAdapter  :  RecyclerView.Adapter<MyCropPremiumViewHolder>(){
         holder.binding.tvCloudy.text=details.area.toString()
         Glide.with(holder.itemView.context).load(details.cropLogo).into(holder.binding.ivAddDeviceEnd)
 //        holder.binding.tvCloudy.text=details.
+        holder.binding.cardAddDevice .setOnClickListener {
+            myCropListener.myCropListener(details)
+        }
 
     }
 

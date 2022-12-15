@@ -59,14 +59,23 @@ class CropHealthFragment : Fragment() {
         getVideos()
         fabButton()
 
-        historyAdapter.onItemClick={
-            val bundle=Bundle()
-            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+        historyAdapter.onItemClick = {
+            if (it?.disease_id==null) {
+                Toast.makeText(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                val bundle = Bundle()
+                it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
 //            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
-            findNavController().navigate(R.id.action_cropHealthFragment_to_pestDiseaseDetailsFragment2,bundle)
+                findNavController().navigate(
+                    R.id.action_cropHealthFragment_to_pestDiseaseDetailsFragment2,
+                    bundle
+                )
+            }
+
         }
 
-        binding.backBtn.setOnClickListener(){
+        binding.backBtn.setOnClickListener() {
             activity?.finish()
         }
 
@@ -104,6 +113,7 @@ class CropHealthFragment : Fragment() {
             }
         })
     }
+
     fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
         val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
         val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
@@ -124,23 +134,22 @@ class CropHealthFragment : Fragment() {
         viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
                 binding.clTopGuide.visibility = View.VISIBLE
-                binding.clRequest.visibility=View.GONE
+                binding.clRequest.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
                         binding.clTopGuide.visibility = View.GONE
-                        binding.clRequest.visibility=View.VISIBLE
+                        binding.clRequest.visibility = View.VISIBLE
 //                        binding.clTopGuide.visibility = View.GONE
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())
 //                        historyAdapter.submitList(it.data)
                         val response = it.data
-                        if (response?.size!! <=2) {
+                        if (response?.size!! <= 2) {
 
                             historyAdapter.submitList(response)
 //                            historyAdapter.submitList(response)
 
-                        }
-                        else{
+                        } else {
                             val arrayList = ArrayList<AiCropHistoryDomain>()
                             arrayList.add(response[0])
                             arrayList.add(response[1])
@@ -179,16 +188,17 @@ class CropHealthFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun fabButton(){
+
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -196,12 +206,12 @@ class CropHealthFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

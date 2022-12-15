@@ -88,7 +88,9 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         return details.size
     }
     fun upDateList(list: ArrayList<SoilTestHistoryDomain>) {
-        details.clear()
+//        details.clear()
+//        details.addAll(list)
+//        details.clear()
         details.addAll(list)
         notifyDataSetChanged()
 

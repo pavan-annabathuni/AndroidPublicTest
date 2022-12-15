@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
+import com.example.ndvi.MainActivityNdvi
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -70,16 +71,23 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
                 is Resource.Success -> {
                     val response=it.data
                     if (it.data?.isNullOrEmpty() == true){
-                        Log.d(TAG, "initiFarmDeltT:")
-                        binding.tvPempDate.text=response!![0].farmPumpHp
-                        binding.tvRiver.text= response[0].farmWaterSource
+                       response?.forEach {
+                            binding.tvPempDate.text=it.farmPumpHp
+                            binding.tvRiver.text= it.farmWaterSource
 //                        binding.totalFormDate.text=response!![0].
-                        binding.totalFormDate.text= response[0].farmPumpType
-                        binding.totalHeightInches.text= response[0].farmPumpPipeSize
-                        binding.tvPumpFlowRateNUmber.text= response[0].farmPumpFlowRate
+                            binding.totalFormDate.text= it.farmPumpType
+                            binding.totalHeightInches.text= it.farmPumpPipeSize
+                            binding.tvPumpFlowRateNUmber.text=it.farmPumpFlowRate
+                        }
+//                        Log.d(TAG, "initiFarmDeltT:")
+//                        binding.tvPempDate.text=it.farmPumpHp
+//                        binding.tvRiver.text= response[0].farmWaterSource
+////                        binding.totalFormDate.text=response!![0].
+//                        binding.totalFormDate.text= response[0].farmPumpType
+//                        binding.totalHeightInches.text= response[0].farmPumpPipeSize
+//                        binding.tvPumpFlowRateNUmber.text= response[0].farmPumpFlowRate
 
                     }
-
 
                 }
                 is Resource.Error -> {
@@ -236,7 +244,10 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
         binding.MyDevice.setOnClickListener {
             val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
-
+        }
+        binding.tvNdviBanner.setOnClickListener {
+            val intent = Intent(activity, MainActivityNdvi::class.java)
+            startActivity(intent)
         }
 
     }

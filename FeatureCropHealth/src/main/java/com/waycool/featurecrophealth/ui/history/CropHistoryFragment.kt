@@ -37,7 +37,7 @@ class CropHistoryFragment : Fragment() {
     private val REQUEST_CODE_SPEECH_INPUT = 1
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
-    var filteredList=ArrayList<AiCropHistoryDomain>()
+    var filteredList = ArrayList<AiCropHistoryDomain>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,14 +61,24 @@ class CropHistoryFragment : Fragment() {
         fabButton()
 //        clickSearch()
 
-        historyAdapter.onItemClick={
-            val bundle=Bundle()
-            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+        historyAdapter.onItemClick = {
+            if (it?.disease_id == null) {
+                Toast.makeText(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                val bundle = Bundle()
+                it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
 //            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
-            findNavController().navigate(R.id.action_cropHistoryFragment_to_pestDiseaseDetailsFragment2,bundle)
+                findNavController().navigate(
+                    R.id.action_cropHistoryFragment_to_pestDiseaseDetailsFragment2,
+                    bundle
+                )
+            }
+
 
         }
     }
+
     private fun speechToText() {
         binding.textToSpeach.setOnClickListener() {
             binding.searchView.text.clear()
@@ -107,6 +117,7 @@ class CropHistoryFragment : Fragment() {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -165,7 +176,7 @@ class CropHistoryFragment : Fragment() {
     }
 
 
-//    private fun onNoteClicked(noteResponse: Data) {
+    //    private fun onNoteClicked(noteResponse: Data) {
 //
 //    }
     private fun clickSearch() {
@@ -203,16 +214,16 @@ class CropHistoryFragment : Fragment() {
 //        })
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -220,12 +231,12 @@ class CropHistoryFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

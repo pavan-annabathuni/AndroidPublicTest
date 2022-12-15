@@ -41,6 +41,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
     private val REQUEST_CODE_SPEECH_INPUT = 1
+
     //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     var objectListNew = java.util.ArrayList<SoilTestHistoryDomain>()
@@ -49,7 +50,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
 
     private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
-    val filteredList = java.util.ArrayList<SoilTestHistoryDomain>()
+    val filteredList = ArrayList<SoilTestHistoryDomain>()
 //    lateinit var cropDetailsList: SoilHistory
 
 
@@ -72,14 +73,14 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         speechToText()
         initViewBackClick()
 //        initSearchView()
-//        clickSearch()
+        clickSearch()
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                 accountID = it.data?.accountId
-                    if (accountID !=null) {
-                        bindObserversSoilTestHistory(accountID!!)
-                    }
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                bindObserversSoilTestHistory(accountID!!)
+            }
 
 
         }
@@ -162,6 +163,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -194,14 +196,14 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
 //                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
 //                    account=it.data.account
-                 accountID = it.data?.accountId
-                        if (accountID !=null) {
-                            binding.progressBar.isVisible = true
-                            binding.clProgressBar.visibility = View.VISIBLE
-                            binding.cardCheckHealth.isClickable=false
+                accountID = it.data?.accountId
+                if (accountID != null) {
+                    binding.progressBar.isVisible = true
+                    binding.clProgressBar.visibility = View.VISIBLE
+                    binding.cardCheckHealth.isClickable = false
 //                            temp()
-                            isLocationPermissionGranted(accountID!!)
-                        }
+                    isLocationPermissionGranted(accountID!!)
+                }
 
 
             }
@@ -228,9 +230,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun clickSearch() {
-
         binding.searchView.addTextChangedListener(object : TextWatcher {
-
             override fun beforeTextChanged(
                 charSequence: CharSequence,
                 i: Int,
@@ -246,22 +246,40 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 i1: Int,
                 i2: Int
             ) {
-                filteredList.clear()
-//                Log.d("TAG", "::::str $charSequence")
-                for (item in filteredList[0].soil_test_number!!.indices) {
-                    Log.d("TAG", "::::stderr $charSequence")
-                    if (filteredList[0].soil_test_number!!.lowercase()
-                            .startsWith(charSequence.toString().lowercase())
-                    ) {
-//                        filteredList.add(filteredList)
-                        Log.d(TAG, "onTextChangedList:$filteredList")
-                        Log.d("TAG", "::::::::stderr $charSequence")
-                    }
+                val temp= ArrayList<SoilTestHistoryDomain>()
+                temp.addAll(filteredList)
+//                filteredList.clear()
+               val searchlist= temp.filter {
+//                    Log.d("TAG", "::::stderr $charSequence")
+                    it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())
 
+
+//                    filteredList.addAll(temp)
                 }
-                soilHistoryAdapter.upDateList(filteredList)
+
+                soilHistoryAdapter.upDateList(searchlist as ArrayList<SoilTestHistoryDomain>)
+                Log.d("TAG", "::::stderr $charSequence")
+                }
+//                filteredList.forEach {
+//                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
+//                     filteredList.add(filteredList)
+//                 }
+//                }
+
+//                for (item in filteredList[].soil_test_number!!.indices) {
+//                    Log.d("TAG", "::::stderr $charSequence")
+//                    if (filteredList[0].soil_test_number!!.lowercase()
+//                            .startsWith(charSequence.toString().lowercase())
+//                    ) {
+////                        filteredList.add(filteredList)
+//                        Log.d(TAG, "onTextChangedList:$filteredList")
+//                        Log.d("TAG", "::::::::stderr $charSequence")
+//                    }
+//
+//                }
+
 //                binding.etSearchItem.getText().clear();
-            }
+//            }
 
             override fun afterTextChanged(editable: Editable) {}
         })
@@ -277,9 +295,11 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         )
 
     }
-    fun temp(){
+
+    fun temp() {
         viewModel.getCheckSoilTestLab(
-            11,"18.3603","77.6028").observe(requireActivity()) {
+            11, "18.3603", "77.6028"
+        ).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
                     binding.progressBar.isVisible = false
@@ -289,8 +309,11 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         "bindObserversDataCheckSoilData:" + it.data.toString()
                     )
                     if (it.data!!.isNullOrEmpty()) {
-                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
-                        binding.cardCheckHealth.isClickable=true
+                        CustomeDialogFragment.newInstance().show(
+                            requireActivity().supportFragmentManager,
+                            CustomeDialogFragment.TAG
+                        )
+                        binding.cardCheckHealth.isClickable = true
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                         //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
@@ -298,7 +321,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         val response = it.data
                         Log.d(
                             Constant.TAG,
-                            "bindObserversCheckSoilTestModelFJndsj: $response")
+                            "bindObserversCheckSoilTestModelFJndsj: $response"
+                        )
                         var bundle = Bundle().apply {
                             putParcelableArrayList("list", ArrayList<Parcelable>(response))
                         }
@@ -327,6 +351,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         }
 
     }
+
     private fun isLocationPermissionGranted(account_id: Int?): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -350,18 +375,24 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-                    if (location != null && account_id !=null) {
+                    if (location != null && account_id != null) {
                         // use your location object
                         // get latitude , longitude and other info from this
                         Log.d("checkLocation", "isLocationPermissionGranted: $location")
 //                        getAddress(location.latitude, location.longitude)
-                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
-                        Log.d(Constant.TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
+                        Log.d(
+                            Constant.TAG,
+                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
+                        )
+                        Log.d(
+                            Constant.TAG,
+                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
+                        )
 
 //                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
 //                        bindObserversCheckSoilTest()
 
-                        val  latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+                        val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
                         viewModel.getCheckSoilTestLab(
@@ -383,7 +414,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                             requireActivity().supportFragmentManager,
                                             CustomeDialogFragment.TAG
                                         )
-                                        binding.cardCheckHealth.isClickable=true
+                                        binding.cardCheckHealth.isClickable = true
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
@@ -400,8 +431,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
-                                        bundle.putString("lat",latitude)
-                                        bundle.putString("lon",longitutde)
+                                        bundle.putString("lat", latitude)
+                                        bundle.putString("lon", longitutde)
 
                                         findNavController().navigate(
                                             R.id.action_allHistoryFragment_to_checkSoilTestFragment,

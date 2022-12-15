@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
+import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.repository.domainModels.MyCropDataDomain
@@ -27,12 +28,12 @@ import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import kotlin.math.roundToInt
 
 
-class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailslistener {
+class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailslistener,myCropListener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
-    private var myCropPremiumAdapter = MyCropPremiumAdapter()
+    private var myCropPremiumAdapter = MyCropPremiumAdapter(this)
     private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     var deviceDataAdapter = DeviceDataAdapter()
@@ -374,6 +375,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
     }
 
     override fun viewDevice(data: ViewDeviceData) {
+
 //        viewDeviceListAdapter.upDateList()
 //        viewDeviceListAdapter.notifyDataSetChanged()
         binding.let {
@@ -487,7 +489,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
         val bundle=Bundle()
         bundle.putInt("farm_id",data.id!!)
         findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3,bundle)
-
+    }
+    override fun myCropListener(data: MyCropDataDomain) {
+                val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+                startActivity(intent)
     }
 
 

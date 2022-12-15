@@ -573,7 +573,7 @@ object NetworkSource {
             }
         }
 
-    fun getSoilTestLab(account_id: Int, lat: String, long: String) =
+    fun getSoilTestLab(account_id: Int, lat: String?, long: String?) =
         flow<Resource<CheckSoilTestLabDTO?>> {
             try {
 //            val header =
