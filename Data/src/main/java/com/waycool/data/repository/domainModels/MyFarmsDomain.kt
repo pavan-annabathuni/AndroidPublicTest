@@ -1,13 +1,14 @@
 package com.waycool.data.repository.domainModels
 
-import com.google.gson.annotations.SerializedName
+import com.google.android.libraries.maps.model.LatLng
+
 
 data class MyFarmsDomain (
    var id               : Int?    = null,
    var farmName         : String? = null,
-   var farmCenter       : String? = null,
+   var farmCenter       : ArrayList<LatLng>?= null,
    var farmArea         : String? = null,
-   var farmJson         : String? = null,
+   var farmJson         : ArrayList<LatLng>?= null,
    var farmWaterSource  : String? = null,
    var farmPumpHp       : String? = null,
    var farmPumpType     : String? = null,
@@ -19,3 +20,4 @@ data class MyFarmsDomain (
    var accountNoId      : Int?    = null
 
 )
+

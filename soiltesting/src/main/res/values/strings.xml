@@ -4,10 +4,10 @@
     <string name="add_farm">Add Farm</string>
     <string name="soil_testing">Soil testing</string>
     <string name="our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield">Our ‘Soil testing’ service enables you with a better understanding of your soil health and helps you to get a better yield.</string>
-    <string name="raise_the_n_request">Raise the \n Request</string>
-    <string name="soil_sample_n_collection">Soil Sample \n Collection</string>
-    <string name="lab_n_testing">Lab\n Testing</string>
-    <string name="detailed_n_report">Detailed \n Report</string>
+    <string name="raise_the_n_request">Raise the\nRequest</string>
+    <string name="soil_sample_n_collection">Soil Sample\nCollection</string>
+    <string name="lab_n_testing">Lab\nTesting</string>
+    <string name="detailed_n_report">Detailed\nReport</string>
     <string name="request_history">Request History</string>
     <string name="faq_s">FAQ’s</string>
     <string name="_1_why_should_i_soil_test">1. Why should I soil test?</string>
@@ -35,5 +35,8 @@
     <string name="your_soil_test_request_for">Your soil Test Request for</string>
     <string name="successfully_completed">Successfully Completed</string>
     <string name="krishna_farm_plot">Krishna farm plot</string>
+    <string name="regular_testing_helps_develop_and_maintain_more_productive_soils_for_farming_soil_tests_indicate_whether_crop_nutrients_are_deficient_and_if_so_what_amounts_are_needed_for_optimum_growth_it_helps_to_identify_problems_related_to_imbalances_in_nutrients_ph_salts_and_organic_matter_on_the_basis_of_the_test_report_recommendations_will_be_provided_that_help_increase_productivity_and_profits">Regular testing helps develop and maintain more productive soils for farming. Soil tests indicate whether crop nutrients are deficient and, if so, what amounts are needed for optimum growth. It helps to identify problems related to imbalances in nutrients, pH, salts, and organic matter. On the basis of the test report, recommendations will be provided that help increase productivity and profits.</string>
+    <string name="soil_samples_are_taken_anytime_throughout_the_year_after_harvesting_kharif_and_rabi_crops_is_a_good_time_for_most_of_the_crops_or_when_there_is_no_standing_crop_in_the_field">Soil Samples are taken anytime throughout the year, after harvesting Kharif and Rabi crops is a good time for most of the crops, or when there is no standing crop in the field.</string>
+    <string name="sampling_soil_once_a_year_is_ideal_to_recommend_soil_nutrient_application_the_frequency_of_soil_testing_also_depends_on_the_crops_grown_for_annuals_such_as_corn_mustard_lettuce_wheat_maize_and_rice_the_soil_should_be_tested_once_every_year_for_perennial_plants_such_as_grapes_lemons_bananas_figs_asparagus_and_papayas_the_soil_should_be_tested_prior_to_planting_and_once_every_two_to_three_years_however_frequent_soil_testing_helps_to_decide_whether_the_current_management_is_affecting_future_productivity_and_farm_profitability">Sampling soil once a year is ideal to recommend soil nutrient application. The frequency of soil testing also depends on the crops grown. For annuals such as Corn, Mustard, Lettuce, Wheat, Maize, and Rice the soil should be tested once every year. For perennial plants such as Grapes, Lemons, Bananas, Figs, Asparagus, and Papayas the soil should be tested prior to planting and once every two to three years. However frequent soil testing helps to decide whether the current management is affecting future productivity and farm profitability.</string>
 
 </resources>

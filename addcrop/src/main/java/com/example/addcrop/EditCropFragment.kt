@@ -35,7 +35,6 @@ class EditCropFragment : Fragment() {
         binding = FragmentEditCropBinding.inflate(inflater)
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
-                 Log.d("Plots", "onCreateView: $it")
                  Toast.makeText(context,"Crop Deleted",Toast.LENGTH_SHORT).show()
                  myCrops()
              }
@@ -69,8 +68,6 @@ class EditCropFragment : Fragment() {
                     myCropAdapter.submitList(it.data)
                     if ((it.data != null)) {
                         binding.tvCount.text = it.data!!.size.toString()
-                    } else {
-                        binding.tvCount.text = "0"
                     }
                     // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 

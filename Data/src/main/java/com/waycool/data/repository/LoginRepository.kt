@@ -67,7 +67,7 @@ object LoginRepository {
     ): Flow<Resource<LoginDomain>> {
         return NetworkSource.login(
             mobile_no,
-            password = "outgrow_$mobile_no",
+//            password = "outgrow_$mobile_no",
             fcmToken,
             deviceModel,
             deviceMan
@@ -178,8 +178,11 @@ object LoginRepository {
         return UserDetailsSyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
+                    UserDetailsSyncer().invalidateSync()
+
                     Log.d("TAG", "getUserDetailsAccountID:${it.data} ")
                     Resource.Success(
+
                         UserDetailsDomainMapper().mapToDomain(it.data!!)
 
                     )

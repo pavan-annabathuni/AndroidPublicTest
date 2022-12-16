@@ -6,6 +6,7 @@ import com.google.android.libraries.places.ktx.api.net.awaitFindAutocompletePred
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.FarmsRepository
 import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.*
 import kotlinx.coroutines.*
 
@@ -54,7 +55,7 @@ class FarmsViewModel : ViewModel() {
         farm_area: String,
         farm_json: String,
         plot_ids: String?,
-        is_primary: Boolean,
+        is_primary: Int?=null,
         farm_water_source: String?=null,
         farm_pump_hp: String?=null,
         farm_pump_type: String?=null,
@@ -79,7 +80,11 @@ class FarmsViewModel : ViewModel() {
         ).asLiveData()
 
     fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData()
+        CropsRepository.getMyCrop2(account_id).asLiveData(
+
+        )
+    fun getFarms(account_id: Int,farm_id:Int?): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms(account_id,farm_id).asLiveData()
 
 
 }

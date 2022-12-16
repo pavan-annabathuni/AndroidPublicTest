@@ -1,14 +1,9 @@
 package com.waycool.data.repository
 
-import android.text.Editable
-import android.widget.EditText
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.Local.mappers.MyCropEntityMapper
-import com.waycool.data.Network.NetworkModels.AiCropDetectionData
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
-import com.waycool.data.Sync.SyncManager.invalidateSync
 import com.waycool.data.Sync.syncer.AiCropHistorySyncer
 import com.waycool.data.repository.DomainMapper.*
 import com.waycool.data.repository.domainModels.*
@@ -25,7 +20,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 
 object CropsRepository {
 
@@ -161,8 +155,8 @@ object CropsRepository {
 
     fun getSoilTestLab(
         account: Int,
-        lat: String,
-        long: String
+        lat: String?,
+        long: String?
     ): Flow<Resource<List<CheckSoilTestDomain>?>> {
         return NetworkSource.getSoilTestLab(account, lat, long).map {
             when (it) {
@@ -183,6 +177,57 @@ object CropsRepository {
             }
         }
     }
+
+//    fun getIotDevice(
+//        account: Int,device_model_id:Int
+//    ): Flow<Resource<List<ViewDeviceDTO>?>> {
+//        return NetworkSource.getIotDevice().map {
+//            when (it) {
+//                is Resource.Success -> {
+////                    SoilTestHistorySyncer().invalidateSync()
+//                    Resource.Success(
+//
+//
+////                        CheckSoilTestLabMapper().toDomainList(it.data?.data ?: emptyList())
+//
+////                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
+//                    )
+//                }
+//                is Resource.Loading -> {
+//                    Resource.Loading()
+//                }
+//                is Resource.Error -> {
+//                    Resource.Error(it.message)
+//                }
+//            }
+//        }
+//    }
+    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.getIotDevice()
+    }
+    fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?): Flow<Resource<GraphsViewDataDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.getGraphsViewDevice(serial_no_id,device_model_id,value)
+    }
+    fun getDashBoard(): Flow<Resource<DashBoardModel?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.dashBoard()
+    }
+    fun farmDetailsDelta(): Flow<Resource<FarmDetailsDTO?>> {
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.farmDetailsDelta()
+    }
+
+
 
     fun getTracker(soil_test_request_id: Int): Flow<Resource<List<TrackerDemain>?>> {
         return NetworkSource.getTracker(soil_test_request_id).map {
@@ -455,14 +500,10 @@ object CropsRepository {
 
     }
      fun getEditCrop(id:Int):Flow<Resource<Unit?>> {
-
-
-         GlobalScope.launch(Dispatchers.IO){
-             LocalSource.deleteMyCrop()
+         GlobalScope.launch(Dispatchers.IO){ LocalSource.deleteMyCrop(id)
              MyCropSyncer().invalidateSync()
          }
-
-        return NetworkSource.editMyCrop(id)
+         return NetworkSource.editMyCrop(id)
 
     }
 }

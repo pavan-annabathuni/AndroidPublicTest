@@ -27,7 +27,7 @@ class SucessFullFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSucessFullBinding.inflate(inflater, container, false)
 //        if (arguments!=null) {
-            val soilTestNumber = arguments?.getString("soil_req_number")
+            val soilTestNumber = arguments?.getString("soil_test_number")
             Log.d(TAG, "onCreateViewSoilTestNumber: $soilTestNumber ")
             binding.tvRequestIDText.text = "Your soil test request for $soilTestNumber"
 

@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.waycool.data.Local.Entity.*
-import com.waycool.data.Local.Entity.AddCropTypeEntity
 import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.Entity.TagsEntity
@@ -71,8 +70,8 @@ interface OutgrowDao {
     @Query("SELECT * FROM My_crop")
     fun getMyCrops(): Flow<List<MyCropDataEntity>>
 
-    @Query("DELETE FROM My_crop")
-    fun getDeleteMyCrops()
+    @Query("DELETE FROM My_crop WHERE id=:id")
+    fun getDeleteMyCrops(id: Int)
 
     //Translations
     @Insert(onConflict = OnConflictStrategy.REPLACE)

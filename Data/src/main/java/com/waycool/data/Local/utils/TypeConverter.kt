@@ -9,6 +9,7 @@ import com.waycool.data.Local.Entity.*
 import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
 import com.waycool.data.Network.NetworkModels.CropModel
 import com.waycool.data.Network.NetworkModels.CropVarietyModel
+import com.waycool.data.Network.NetworkModels.DashBoardModel
 import com.waycool.data.repository.domainModels.CropVarityDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 
@@ -70,6 +71,16 @@ object TypeConverter {
     }
 
     fun convertSoilTestHistoryString(language: List<SoilTestHistoryEntity>): String {
+        Log.d("TypeConverterTO", language.toString())
+        val gson = Gson()
+        return gson.toJson(language)
+    }
+    fun convertStringDashboard(s: String): List<DashBoardModel>? {
+        Log.d("TypeConverterFrom", s)
+        val listType = object : TypeToken<List<DashBoardModel>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+    fun convertDashBoardString(language: List<DashBoardModel>): String {
         Log.d("TypeConverterTO", language.toString())
         val gson = Gson()
         return gson.toJson(language)

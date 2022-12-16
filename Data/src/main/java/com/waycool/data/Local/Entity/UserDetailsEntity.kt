@@ -20,7 +20,6 @@ data class UserDetailsEntity(
 
 
 data class ProfileEntity(
-
     var id             : Int?    = null,
     var remotePhotoUrl : String? = null,
     var langId         : Int?    = null,

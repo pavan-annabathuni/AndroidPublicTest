@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.utils.TypeConverter
+import com.waycool.data.Network.NetworkModels.DashBoardModel
 import kotlinx.coroutines.flow.*
 
 @SuppressLint("StaticFieldLeak")
@@ -37,6 +38,7 @@ object DataStoreManager {
     private val Context.moduleMaster: DataStore<Preferences> by preferencesDataStore(name = StoreName.MODULE_MASTER)
     private val Context.addCropType: DataStore<Preferences> by preferencesDataStore(name = StoreName.ADD_CROP_TYPE)
     private val Context.soilTestHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.SOIL_TEST_HISTORY)
+    private val Context.dashBoard: DataStore<Preferences> by preferencesDataStore(name = StoreName.DASH_BOARD)
     private val Context.cropCategory: DataStore<Preferences> by preferencesDataStore(name = StoreName.CROP_CATEGORY)
     private val Context.aiCropHistory: DataStore<Preferences> by preferencesDataStore(name = StoreName.AI_CROP_HISTORY)
     private val Context.weather: DataStore<Preferences> by preferencesDataStore(name = StoreName.WEATHER)
@@ -287,6 +289,14 @@ object DataStoreManager {
             Log.d("Languaga", "SavedLanguaga")
         }
     }
+    suspend fun insertDashboard(moduleMaster: List<DashBoardModel>) {
+        performPrefsSanityCheck()
+        context?.dashBoard?.edit {
+            it[StoreKey.DASH_BOARD] =
+                TypeConverter.convertDashBoardString(moduleMaster)
+            Log.d("Languaga", "SavedLanguaga")
+        }
+    }
 
     fun getModuleMaster(): Flow<List<ModuleMasterEntity>>? {
         performPrefsSanityCheck()
@@ -323,6 +333,19 @@ object DataStoreManager {
                 val string = it[StoreKey.SOIL_TEST_HISTORY]
                 string?.let {
                     TypeConverter.convertStringSoilTestHistory(string) } ?: emptyList()
+            }
+
+    }
+    fun getDashBoard(): Flow<List<DashBoardModel>>? {
+        performPrefsSanityCheck()
+        return context?.soilTestHistory?.data
+            ?.catch { exception ->
+                Log.d("languageDataStore: ", exception.toString())
+            }
+            ?.map {
+                val string = it[StoreKey.DASH_BOARD]
+                string?.let {
+                    TypeConverter.convertStringDashboard(string) } ?: emptyList()
             }
 
     }

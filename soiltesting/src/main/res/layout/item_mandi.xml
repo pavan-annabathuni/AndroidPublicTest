@@ -67,8 +67,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     android:ellipsize="end"
-                    android:maxLines="2"
-                    android:minLines="2"
+                    android:gravity="center"
                     android:text="@{property.crop}"
                     android:textColor="#374151"
 

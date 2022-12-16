@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNavigationBar()
-
+        getDashBoard()
 
         tokenCheckViewModel.getUserDetails().observe(this) {
 
@@ -184,6 +185,63 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     }
+                }
+                is Resource.Loading -> {
+
+
+                }
+                is Resource.Error -> {
+//                    Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+//                        .show()
+                }
+            }
+
+
+        }
+
+    }
+
+    fun getDashBoard() {
+        tokenCheckViewModel.getDasBoard().observe(this) {
+            when (it) {
+                is Resource.Success -> {
+//                    navController = findNavController(R.id.nav_host_fragment_main)
+//                    val graph = navController.navInflater.inflate(R.navigation.nav_home)
+//                    if (it.data?.data?.isPremium==true) {
+//                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+//                    } else {
+//                        graph.setStartDestination(R.id.homePagesFragment)
+//                    }
+//                    navController.graph = graph
+                    val navHostFragment =
+                        (supportFragmentManager.findFragmentById(R.id.nav_main) as NavHostFragment)
+                    val inflater = navHostFragment.navController.navInflater
+                    val graph = inflater.inflate(R.navigation.nav_main)
+//graph.addArgument("argument", NavArgument)
+                    if (it.data?.data?.isPremium == false) {
+                        graph.setStartDestination(R.id.homePagesFragment)
+                    } else
+                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+//or
+//graph.setStartDestination(R.id.fragment2)
+
+
+                    navHostFragment.navController.graph = graph
+
+//                    val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment
+//                    val inflater = navHostFragment.navController.navInflater
+//                    val graph = inflater.inflate(R.navigation.nav_home)
+//
+//                    if (it.data?.data?.isPremium==true){
+//                        graph.setStartDestination(R.id.homePagePremiumFragment2)
+//                    }else {
+//                        graph.setStartDestination(R.id.homePagesFragment)
+//                    }
+//
+//                    val navController = navHostFragment.navController
+//                    navController.setGraph(graph, intent.extras)
+
                 }
                 is Resource.Loading -> {
 

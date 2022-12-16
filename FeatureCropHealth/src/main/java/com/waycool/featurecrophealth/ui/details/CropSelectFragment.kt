@@ -58,7 +58,6 @@ class CropSelectFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.recyclerviewDetails.adapter = adapter
         bindObserversCategory()
 //        bindObserversDetails()

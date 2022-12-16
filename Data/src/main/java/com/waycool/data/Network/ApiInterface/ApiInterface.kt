@@ -29,7 +29,7 @@ interface ApiInterface {
     suspend fun login(
         @HeaderMap map: Map<String, String>,
         @Field("contact") contact: String,
-        @Field("password") password: String,
+//        @Field("password") password: String,
         @Field("fcm_token") fcm_token: String,
         @Field("mobile_model") mobile_model: String,
         @Field("mobile_manufacturer") mobile_manufacturer: String,
@@ -145,8 +145,8 @@ interface ApiInterface {
     suspend fun getSoilTestLab(
         @HeaderMap headerMap: Map<String, String>,
         @Query("account_id") user_id: Int,
-        @Query("lat") lat: String,
-        @Query("long") long: String
+        @Query("lat") lat: String?,
+        @Query("long") long: String?
     ): Response<CheckSoilTestLabDTO>
 
     //Status Tracker Api
@@ -279,7 +279,7 @@ interface ApiInterface {
         @Field("farm_area") farm_area: String,
         @Field("farm_json") farm_json: String,
         @Field("plot_ids") plot_ids: String? = null,
-        @Field("is_primary") is_primary: Boolean,
+        @Field("is_primary") is_primary: Int? = null,
         @Field("farm_water_source") farm_water_source: String? = null,
         @Field("farm_pump_hp") farm_pump_hp: String? = null,
         @Field("farm_pump_type") farm_pump_type: String? = null,
@@ -311,6 +311,7 @@ interface ApiInterface {
 
     ): Response<ActivateDeviceDTO>
 
+
     //view report
 
     @POST("api/v1/soil-test-report-data")
@@ -327,18 +328,52 @@ interface ApiInterface {
         @Query("id") id: Int
     ): Response<ResponseBody>
 
+    @GET("api/v1/view-devices")
+    suspend fun getIotDevice(
+        @HeaderMap headerMap: Map<String, String>,
+    ): Response<ViewDeviceDTO>
 
+    @GET("api/v1/view-devices")
+    suspend fun getGraphsViewDevice(
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("serial_no_id") serial_no_id: Int?,
+        @Query("device_model_id") device_model_id: Int?,
+        @Query("value") value: String?
+    ): Response<GraphsViewDataDTO>
+
+
+    //    @FormUrlEncoded
     @GET("api/v1/farm/my-farm")
     suspend fun getMyFarms(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_no_id") account_no_id: Int
+        @Query("account_no_id") account_no_id: Int,
+        @Query("farm_id") farm_id: Int?
+
     ): Response<MyFarmsDTO>
+
+    @GET("api/v1/dashboard")
+    suspend fun dashBoard(
+        @HeaderMap map: Map<String, String>?,
+
+//        @Query("")
+    ): Response<DashBoardModel>
+
+    @GET("api/v1/get-delta-t-data")
+    suspend fun farmDetailsDelta(
+        @HeaderMap map: Map<String, String>?,
+//        @Query("")
+    ): Response<FarmDetailsDTO>
 
     @GET("api/v1/app-translations")
     suspend fun getTranslations(
         @HeaderMap map: Map<String, String>,
         @Query("lang") lang: String
     ): Response<AppTranlationsDTO>
+
+//    suspend fun getTranslations(
+//        @HeaderMap map: Map<String, String>,
+//        @Query("lang") lang: String
+//    ): Response<AppTranlationsDTO>
 
 
     @PUT("api/v1/plots/{plot}")

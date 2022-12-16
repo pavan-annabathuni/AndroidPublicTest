@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-     <variable
-         name="viewModel"
-         type="com.waycool.data.repository.domainModels.MandiHistoryDomain" />
+        <variable
+            name="viewModel"
+            type="com.waycool.data.repository.domainModels.MandiHistoryDomain" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

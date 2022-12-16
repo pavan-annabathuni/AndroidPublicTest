@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="90dp"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/status_view_spraying_vh"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/red"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/time_tv_spraying_vh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_view_spraying_vh"
+        tools:text="6 pm" />
+
+    <TextView
+        android:id="@+id/now_tv_spraying_vh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Now"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_view_spraying_vh" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/cl_one_progress"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/bg_progress_bar_cl"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--       app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/Today"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginTop="@dimen/space12"-->
+<!--            android:text="Today"-->
+<!--            android:textColor="#171717"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+<!--        &lt;!&ndash;                                    <ProgressBar&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:id="@+id/ProgressBar"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        style="?android:attr/progressBarStyleHorizontal"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_width="fill_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:indeterminate="false"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:maxHeight="10dip"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:minHeight="10dip"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:progress="50"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:progressDrawable="@drawable/greenprogress" />&ndash;&gt;-->
+
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressBar1"-->
+<!--            style="@android:style/Widget.ProgressBar.Horizontal"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:indeterminate="false"-->
+<!--            android:padding="10dp"-->
+<!--            android:progress="0"-->
+<!--            android:progressDrawable="@drawable/horizantal_progress_bar"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/Today" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_one"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_two"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_two"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_three"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_one"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_three"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_four"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_two"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_four"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_three"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1" />-->
+
+<!--        &lt;!&ndash;                                    <ProgressBar&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:id="@+id/pro"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_marginTop="12dp"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        app:layout_constraintTop_toBottomOf="@+id/Today"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_height="wrap_content"/>&ndash;&gt;-->
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/cl_progress_two"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/bg_progress_bar_cl"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/cl_one_progress">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/Tomorrow"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginTop="@dimen/space12"-->
+<!--            android:text="Tomorrow"-->
+<!--            android:textColor="#171717"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressBar1_Tomorrow"-->
+<!--            style="@android:style/Widget.ProgressBar.Horizontal"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:progress="0"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/Tomorrow" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_Tomorrow_one"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_Tomorrow_two"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1_Tomorrow" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_Tomorrow_two"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_Tomorrow_three"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_Tomorrow_one"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1_Tomorrow" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_Tomorrow_three"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/space16"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/time_Tomorrow_four"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_Tomorrow_two"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1_Tomorrow" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/time_Tomorrow_four"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="@dimen/space12"-->
+<!--            android:text="03 PM"-->
+<!--            android:textColor="#585858"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/time_Tomorrow_three"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/progressBar1_Tomorrow" />-->
+
+<!--        &lt;!&ndash;                                    <ProgressBar&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:id="@+id/pro"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_marginTop="12dp"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        app:layout_constraintTop_toBottomOf="@+id/Today"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;                                        android:layout_height="wrap_content"/>&ndash;&gt;-->
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
