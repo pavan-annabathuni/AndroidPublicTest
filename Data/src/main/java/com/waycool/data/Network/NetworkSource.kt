@@ -925,7 +925,7 @@ object NetworkSource {
     fun getAppTranslations()= flow<Resource<AppTranlationsDTO?>> {
         try {
             val langCode=LocalSource.getLanguageCode()?:"en"
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()?: emptyMap()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 
