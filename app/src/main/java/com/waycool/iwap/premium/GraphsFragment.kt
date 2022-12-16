@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.utils.Constant
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -60,7 +61,7 @@ class GraphsFragment : Fragment() {
             Log.d(Constant.TAG, "onCreateViewONPID:$serial_no ")
             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
-//            graphApiData(serial_no, device_model_id, value)
+            graphApiData(serial_no, device_model_id, value)
 //            binding.today.text=
 
 //            binding.tvToolbar.
@@ -75,12 +76,12 @@ class GraphsFragment : Fragment() {
 
     private fun initClicks() {
         binding.backBtn.setOnClickListener{
-
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
         }
     }
 
     private fun tabs() {
-
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Today")
                 .setCustomView(com.example.mandiprice.R.layout.item_tab)
@@ -104,7 +105,7 @@ class GraphsFragment : Fragment() {
                             Log.d(Constant.TAG, "onCreateViewONPID:$serial_no ")
                             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
                             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
-//                            graphApiData(serial_no, device_model_id, value)
+                            graphApiData(serial_no, device_model_id, value)
 //                            initObserveGraphs(serial_no,device_model_id,value)
 //                            initObserveGraphs(serial_no, device_model_id, value)
                         }
@@ -129,105 +130,101 @@ class GraphsFragment : Fragment() {
         })
     }
 
-//    private fun graphApiData(serialNo: Int?, deviceModelId: Int?, value: String?) {
-//        viewDevice.viewModelScope.launch {
-//            viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
-//                .observe(requireActivity()) {
-//                    when (it) {
-//                        is Resource.Success -> {
-//                            if (it.data?.data != null) {
-//                                Log.d(TAG, "dataGraDataPoints: ${it.data?.data}")
-//                                listLine = ArrayList()
-////                                val list = ArrayList<LastTodayData>()
-//                                if (it.data?.data != null) {
-//                                    for (i in list.iterator()) {
-////                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
-////                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
-////                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
-////                val formateDate = outputDate.format(date)
-////                Log.d("DATE", "graph: $formateDate ")
-//                                        val xAxis: XAxis = binding.lineChart.getXAxis()
-//                                        listLine.add(
-//                                            Entry(
-//                                                i.eighet!!.toFloat(),
-//                                                it.data!!.data?.LastTodayData.toString().toFloat()
-//                                            )
-//                                        )
+    private fun graphApiData(serialNo: Int?, deviceModelId: Int?, value: String?) {
+        viewDevice.viewModelScope.launch {
+            viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
+                .observe(requireActivity()) {
+                    when (it) {
+                        is Resource.Success -> {
+                            if (it.data?.data != null) {
+                                Log.d(TAG, "dataGraDataPoints: ${it.data?.data}")
+                                listLine = ArrayList()
+
+                                if (it.data?.data != null) {
+                                    for (i in it.data?.data?.LastTodayData?.keys!!.indices) {
+//                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
+//                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
+//                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
+//                val formateDate = outputDate.format(date)
+//                Log.d("DATE", "graph: $formateDate ")
+                                        val xAxis: XAxis = binding.lineChart.getXAxis()
+                                        listLine.add(
+                                            Entry(
+                                                i.toFloat(),
+                                                it.data!!.data?.LastTodayData?.values!!.toList()[i].toFloat()
+                                            )
+                                        )
+                                    }
+                                }
+
+
+                                lineDataSet = LineDataSet(listLine, "")
+
+                                val datesList = it.data?.data?.LastTodayData?.keys
+//                                val datesList = it.data?.data?.LastTodayData?.one?.map { date ->
+//                                    try {
+//                                        val date: Date =
+//                                            inputDateFormatter.parse(it.data?.data?.LastTodayData?.one.toString())
+//                                        outputDateFormatter.format(date)
+//                                    } catch (e: ParseException) {
+//                                        Log.d("Graphs", e.message.toString())
+//                                        ""
 //                                    }
 //                                }
-////        listLine.add(Entry(20f,13f))
-////        listLine.add(Entry(30f,11f))
-////        listLine.add(Entry(40f,13f))
-////        listLine.add(Entry(60f,12f))
-//
-//                                lineDataSet = LineDataSet(listLine, "")
-//
-//                                val datesList = it.data?.data?.LastTodayData?.keys
-////                                val datesList = it.data?.data?.LastTodayData?.one?.map { date ->
-////                                    try {
-////                                        val date: Date =
-////                                            inputDateFormatter.parse(it.data?.data?.LastTodayData?.one.toString())
-////                                        outputDateFormatter.format(date)
-////                                    } catch (e: ParseException) {
-////                                        Log.d("Graphs", e.message.toString())
-////                                        ""
-////                                    }
-////                                }
-//                                val valueFormatter2 = IndexAxisValueFormatter()
-//
-//                                var xAxis2 = datesList?.toTypedArray()
-//                                valueFormatter2.values = xAxis2
-//                                binding.lineChart.xAxis.valueFormatter = valueFormatter2
-//                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-////                binding.lineChart.xAxis.labelRotationAngle = -45f
-//
-//                                binding.lineChart.axisLeft.axisMinimum = 0f
-//
-//                                lineData = LineData(lineDataSet)
-//                                lineDataSet.color =
-//                                    resources.getColor(com.example.mandiprice.R.color.WoodBrown)
-//                                binding.lineChart.data = lineData
-//                                lineDataSet.setCircleColor(Color.WHITE)
-//                                lineDataSet.circleHoleColor =
-//                                    resources.getColor(com.example.mandiprice.R.color.DarkGreen)
-//                                lineDataSet.circleRadius = 6f
-//                                lineDataSet.mode = LineDataSet.Mode.LINEAR
-//
-//                                lineDataSet.setDrawFilled(true)
-//                                binding.lineChart.setDrawGridBackground(false)
-//                                binding.lineChart.setDrawBorders(true)
-//                                binding.lineChart.setBorderColor(com.example.mandiprice.R.color.LightGray)
-//                                binding.lineChart.setBorderWidth(1f)
-//                                binding.lineChart.axisRight.setDrawGridLines(false)
-//                                binding.lineChart.axisLeft.setDrawGridLines(false)
-//                                //binding.lineChart.xAxis.setDrawGridLines(false)
-//                                binding.lineChart.description.isEnabled = false
-//                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-//                                binding.lineChart.axisRight.isEnabled = false
-//                                lineDataSet.fillDrawable =
-//                                    resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
-//                                binding.lineChart.xAxis.spaceMax = 1f
-//                                binding.lineChart.fitScreen()
-//                                // binding.lineChart.axisLeft.isEnabled = false;
-//                                binding.lineChart.isScaleXEnabled = false
-//
-//
-//                            }
-//
-//                        }
-//                        is Resource.Error -> {
-//                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-//                        }
-//                        is Resource.Loading -> {
-//                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-//
-//                        }
-//                    }
-//
-//                }
-//
-//        }
-//    }
+                                val valueFormatter2 = IndexAxisValueFormatter()
+
+                                var xAxis2 = datesList?.toTypedArray()
+                                valueFormatter2.values = xAxis2
+                                binding.lineChart.xAxis.valueFormatter = valueFormatter2
+                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+//                binding.lineChart.xAxis.labelRotationAngle = -45f
+
+                                binding.lineChart.axisLeft.axisMinimum = 0f
+
+                                lineData = LineData(lineDataSet)
+                                lineDataSet.color =
+                                    resources.getColor(com.example.mandiprice.R.color.WoodBrown)
+                                binding.lineChart.data = lineData
+                                lineDataSet.setCircleColor(Color.WHITE)
+                                lineDataSet.circleHoleColor =
+                                    resources.getColor(com.example.mandiprice.R.color.DarkGreen)
+                                lineDataSet.circleRadius = 6f
+                                lineDataSet.mode = LineDataSet.Mode.LINEAR
+                                lineDataSet.setDrawFilled(true)
+                                binding.lineChart.setDrawGridBackground(false)
+                                binding.lineChart.setDrawBorders(true)
+                                binding.lineChart.setBorderColor(com.example.mandiprice.R.color.LightGray)
+                                binding.lineChart.setBorderWidth(1f)
+                                binding.lineChart.axisRight.setDrawGridLines(false)
+                                binding.lineChart.axisLeft.setDrawGridLines(false)
+                                //binding.lineChart.xAxis.setDrawGridLines(false)
+                                binding.lineChart.description.isEnabled = false
+                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+                                binding.lineChart.axisRight.isEnabled = false
+                                lineDataSet.fillDrawable =
+                                    resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+                                binding.lineChart.xAxis.spaceMax = 1f
+                                binding.lineChart.fitScreen()
+                                // binding.lineChart.axisLeft.isEnabled = false;
+                                binding.lineChart.isScaleXEnabled = false
+
+
+                            }
+
+                        }
+                        is Resource.Error -> {
+                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Loading -> {
+                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+
+                }
+
+        }
+    }
 }
 
 

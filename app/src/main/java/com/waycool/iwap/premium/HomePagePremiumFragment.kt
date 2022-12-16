@@ -426,7 +426,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
             range2.to = 40.0
 
             val range3 = Range()
-            range3.color = Color.parseColor("#FFFF00")
+            range3.color = Color.parseColor("#F3C461")
             range3.from = 40.0
             range3.to = 80.0
             val range4 = Range()

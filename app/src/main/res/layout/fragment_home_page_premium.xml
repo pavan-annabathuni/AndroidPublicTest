@@ -1466,7 +1466,7 @@ more details."
 <!--                                        />-->
                                     <com.ekn.gruzer.gaugelibrary.HalfGauge
                                         android:id="@+id/soil_moisture_one"
-                                        android:layout_width="150dp"
+                                        android:layout_width="100dp"
                                         android:layout_height="100dp"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -1552,7 +1552,7 @@ more details."
 <!--                                        />-->
                                     <com.ekn.gruzer.gaugelibrary.HalfGauge
                                         android:id="@+id/soil_moisture_two"
-                                        android:layout_width="150dp"
+                                        android:layout_width="100dp"
                                         android:layout_height="100dp"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
