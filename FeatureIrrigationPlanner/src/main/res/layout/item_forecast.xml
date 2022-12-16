@@ -18,7 +18,7 @@
         app:progressView_colorBackground="@color/LightGray"
         app:progressView_colorProgress="@color/Skybule"
         app:progressView_max="100"
-        app:progressView_min="15"
+        app:progressView_min="0"
         app:progressView_orientation="vertical"
         app:progressView_progress="80"
         app:progressView_radius="8dp" />

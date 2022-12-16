@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".fragments.AddFarmFragment">
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -37,6 +37,7 @@
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,8 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="First Name"
+                android:layout_marginTop="16dp"
+                android:text="Farmer Name"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,42 +68,43 @@
                 android:background="@drawable/text_border"
                 android:lines="1"
                 android:paddingStart="16dp"
-                android:text="Krishna AgriFarm"
+                android:hint="Enter Full Name"
+                android:textColorHint="#828699"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="Last Name"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:text="Last Name"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="14sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_name" />-->
 
-            <EditText
-                android:id="@+id/tv_last_name"
-                style="@style/SemiBold"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
-                android:lines="1"
-                android:paddingStart="16dp"
-                android:text="Krishna AgriFarm"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+<!--            <EditText-->
+<!--                android:id="@+id/tv_last_name"-->
+<!--                style="@style/SemiBold"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:background="@drawable/text_border"-->
+<!--                android:lines="1"-->
+<!--                android:paddingStart="16dp"-->
+<!--                android:text="Krishna AgriFarm"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="14sp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
 
             <TextView
                 android:id="@+id/textView3"
@@ -110,11 +112,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Account Type"
+                android:text="@string/role_type"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_last_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <LinearLayout
                 android:id="@+id/farm_manger"
@@ -124,7 +126,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/text_border_gray"
-                android:drawableEnd="@drawable/ic_tick"
+                android:drawableEnd="@drawable/ic_tick_profile"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
@@ -138,13 +140,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Farm Manager"
+                    android:text="Farmer"
                     android:textColor="@color/black" />
 
                 <ImageView
+                    android:id="@+id/image1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick" />
+                    android:src="@drawable/ic_tick_profile"
+                    android:visibility="visible"/>
             </LinearLayout>
 
             <LinearLayout
@@ -155,7 +159,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="16dp"
                 android:background="@color/white"
-                android:drawableEnd="@drawable/ic_tick"
+                android:drawableEnd="@drawable/ic_tick_profile"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingEnd="16dp"
@@ -169,13 +173,14 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingStart="16dp"
-                    android:text="Mandi Benchmarking "
+                    android:text="Farmer Support"
                     android:textColor="@color/black" />
 
                 <ImageView
+                    android:id="@+id/image2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick"
+                    android:src="@drawable/ic_tick_profile"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -185,29 +190,75 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Farm ID"
+                android:text="Mobile No *"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mandi_bench" />
-
-            <EditText
-                android:id="@+id/tv_farm_id"
-                style="@style/SemiBold"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mobile_no"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
+                android:theme="@style/Theme.MaterialComponents.Light"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
-                android:lines="1"
-                android:paddingStart="16dp"
-                android:text="234324324 "
-                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeErrorColor="@color/red"
+                app:boxStrokeWidth="2dp"
+                app:hintEnabled="false"
                 android:textSize="14sp"
+                app:prefixText="+91"
+                app:prefixTextColor="@color/textdark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mobileno_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:hint="Mobile Number"
+                    android:padding="12dp"
+                    android:background="@drawable/text_border"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+
+                    android:textColor="@color/black"
+                    android:textColorHint="#828699"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+<!--            <EditText-->
+<!--                android:id="@+id/tv_farm_id"-->
+<!--                style="@style/SemiBold"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:background="@drawable/text_border"-->
+<!--                android:lines="1"-->
+<!--                android:inputType="number"-->
+<!--                android:paddingStart="16dp"-->
+<!--                android:hint="Enter Mobile Number"-->
+<!--                android:maxLength="10"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="14sp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView4" />-->
 
             <TextView
                 android:id="@+id/textView5"
@@ -219,47 +270,63 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_farm_id" />
+                app:layout_constraintTop_toBottomOf="@+id/mobile_no" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5">
 
                 <EditText
                     android:id="@+id/tv_lat"
                     style="@style/SemiBold"
-                    android:layout_width="160dp"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
                     android:background="@drawable/text_border"
+                    android:inputType="number"
                     android:lines="1"
+                    android:hint="Latitude"
+                    android:textColorHint="#828699"
                     android:paddingStart="16dp"
-                    android:text="234324324 "
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/tv_long"
                     style="@style/SemiBold"
-                    android:layout_width="160dp"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
                     android:background="@drawable/text_border"
+                    android:inputType="number"
                     android:lines="1"
+                    android:hint="Longitude"
+                    android:textColorHint="#828699"
                     android:paddingStart="16dp"
-                    android:text="234324324 "
                     android:textColor="@color/black"
                     android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/img_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_profile_location"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -270,6 +337,7 @@
         android:layout_height="80dp"
         app:cardBackgroundColor="@color/white"
         app:cardElevation="24dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -277,15 +345,16 @@
         app:strokeWidth="1dp">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_margin="16dp"
             android:backgroundTint="@color/DarkGreen"
-            android:text="Submit"
+            android:text="@string/submit2"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:theme="@style/button"
             app:cornerRadius="8dp" />
     </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -3,9 +3,11 @@ package com.waycool.weather.viewModel
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.Network.NetworkModels.UserDetailsDTO
 import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.repository.LoginRepository
+import com.waycool.data.repository.ProfileRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.WeatherRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -44,7 +46,8 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
-
+    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
+        ProfileRepository.getUserProfileDet().asLiveData()
 
      fun getWeather(
         lat: String,

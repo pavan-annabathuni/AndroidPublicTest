@@ -42,8 +42,8 @@ class DiseasesParentAdapter() :
 
         fun bind(item: PestDiseaseDomain) {
             binding.cropProtectDiseaseName.text = item.diseaseName
-            TranslationsManager().loadString("related_images",binding.cropProtectRelatedImageTv)
-            TranslationsManager().loadString("view_more",binding.viewmoreTv)
+//            TranslationsManager().loadString("related_images",binding.cropProtectRelatedImageTv)
+//            TranslationsManager().loadString("view_more",binding.viewmoreTv)
             Glide.with(binding.cropProtectDiseaseImage).load(item.thumb)
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(binding.cropProtectDiseaseImage)
@@ -66,9 +66,14 @@ class DiseasesParentAdapter() :
             }
             val adapter = DiseasesChildAdapter()
             binding.subRecycler.adapter = adapter
-            if (item.imageUrl == null)
+            if (item.imageUrl == null){
                 adapter.submitList(emptyList())
-            else adapter.submitList(item.imageUrl)
+
+
+            }
+            else adapter.submitList(item.imageUrl){
+
+            }
         }
     }
 

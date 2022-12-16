@@ -40,11 +40,11 @@ class AiCropHistoryAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(note: AiCropHistoryDomain) {
-            binding.tvCropID.text ="id : "+ note.crop_id.toString()
+            binding.tvCropID.text = "id : " + note.crop_id.toString()
 //            binding.tvRequest.text = note.prediction
-            binding.tvDesiessName.text = note.disease_id.toString()
+//            binding.tvDesiessName.text = note.disease_id.toString()
             binding.tvDate.text = note.updated_at
-            binding.tvRequest.text=note.cropdata?.name.toString()
+            binding.tvRequest.text = note.cropdata?.name.toString()
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()
@@ -59,13 +59,13 @@ class AiCropHistoryAdapter(private val context: Context) :
         }
 
     }
-//    fun upDateList(list: ArrayList<Data>) {
 //
-//        details.clear()
-//        details.addAll(list)
-//        notifyDataSetChanged()
-//
-//    }
+    fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
+        list.clear()
+        list.addAll(list)
+        notifyDataSetChanged()
+
+    }
 
     class ComparatorDiffUtil : DiffUtil.ItemCallback<AiCropHistoryDomain>() {
         override fun areItemsTheSame(

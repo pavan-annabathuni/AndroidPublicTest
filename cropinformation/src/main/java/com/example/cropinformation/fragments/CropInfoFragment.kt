@@ -44,9 +44,8 @@ class CropInfoFragment : Fragment() {
 
     private var cropId: Int? = null
     private var cropName: String? = null
-    private var cropLogo:String? = null
-    private var size:Int = 0
-
+    private var cropLogo: String? = null
+    private var size: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +65,7 @@ class CropInfoFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCropInfoBinding.inflate(inflater)
 
-       setBanners()
+        setBanners()
 
 
 //        Zendesk.INSTANCE.init(this.requireContext(), zendeskUrl, appId, oauthClientId);
@@ -88,7 +87,7 @@ class CropInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.topName.text = cropName
-        binding.back.setOnClickListener(){
+        binding.back.setOnClickListener() {
             findNavController().popBackStack()
         }
 //        binding.addFab.setOnClickListener(){
@@ -150,8 +149,8 @@ class CropInfoFragment : Fragment() {
             val data = it.data!!
             size = it.data!!.size
 
-                //data.sortedBy { it.id }
-            binding.ViewPager.adapter = ViewpagerAdapter(this,it.data, data.size,cropId!!)
+            //data.sortedBy { it.id }
+            binding.ViewPager.adapter = ViewpagerAdapter(this, it.data, data.size, cropId!!)
             binding.tvTotalItem.text = "/${data.size}"
 
 
@@ -160,10 +159,10 @@ class CropInfoFragment : Fragment() {
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
                 val customView = tab.setCustomView(R.layout.item_tab_crop)
 
-                when (data[position].labelNameTag?:data[position].label_name) {
+                when (data[position].labelNameTag ?: data[position].label_name) {
 
                     "Crop Variety" -> {
-                       tab.text = data[position].label_name
+                        tab.text = data[position].label_name
                         tab.setIcon(R.drawable.img_crop_variety)
                         customView
                     }
@@ -202,13 +201,13 @@ class CropInfoFragment : Fragment() {
                     }
                     "Seed Rate (Pit Sowing)" -> {
                         tab.text = data[position].label_name
-                       tab.setIcon(R.drawable.ci_seed_pit)
+                        tab.setIcon(R.drawable.ci_seed_pit)
                         customView
 
                     }
                     "Planting Material" -> {
                         tab.text = data[position].label_name
-                       tab.setIcon(R.drawable.ci_planting_material)
+                        tab.setIcon(R.drawable.ci_planting_material)
                         customView
 
                     }
@@ -249,7 +248,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Spacing between Row to Row" -> {
                         tab.text = data[position].label_name
-                       tab.setIcon(R.drawable.img_spacing)
+                        tab.setIcon(R.drawable.img_spacing)
                         customView
 
                     }
@@ -276,7 +275,7 @@ class CropInfoFragment : Fragment() {
                         tab.setIcon(R.drawable.ci_staking)
                         customView
                     }
-                    "Distance between stakes"->{
+                    "Distance between stakes" -> {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ci_staking)
                         customView
@@ -356,7 +355,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Yield-Harvest" -> {
                         tab.text = data[position].label_name
-                     //   tab.setIcon(R.drawable.ci_yield_image)
+                        //   tab.setIcon(R.drawable.ci_yield_image)
                         customView
                     }
                     "Post Harvesting" -> {
@@ -381,7 +380,7 @@ class CropInfoFragment : Fragment() {
                     }
                     "Ratooning" -> {
                         tab.text = data[position].label_name
-                       tab.setIcon(R.drawable.ci_ratooning_image)
+                        tab.setIcon(R.drawable.ci_ratooning_image)
                         customView
                     }
                     "Planting Material Others" -> {
@@ -389,8 +388,8 @@ class CropInfoFragment : Fragment() {
                         tab.setIcon(R.drawable.planting_others)
                         customView
                     }
-                    else->{
-                      //  tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
+                    else -> {
+                        //  tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
 
 
                     }
@@ -403,20 +402,20 @@ class CropInfoFragment : Fragment() {
         var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.tvCount.text = (position + 1).toString()
-                if(position<(size-1)){
+                if (position < (size - 1)) {
                     binding.imgNext.visibility = View.VISIBLE
-                binding.imgNext.setOnClickListener(){
-                    binding.ViewPager.currentItem = position+1
-                }
-                }else{
+                    binding.imgNext.setOnClickListener() {
+                        binding.ViewPager.currentItem = position + 1
+                    }
+                } else {
                     binding.imgNext.visibility = View.GONE
                 }
-                if(position==0){
-                  binding.imgPrev.visibility = View.GONE
-                }else{
+                if (position == 0) {
+                    binding.imgPrev.visibility = View.GONE
+                } else {
                     binding.imgPrev.visibility = View.VISIBLE
                     binding.imgPrev.setOnClickListener {
-                        binding.ViewPager.currentItem = position-1
+                        binding.ViewPager.currentItem = position - 1
                     }
                 }
 
@@ -444,16 +443,16 @@ class CropInfoFragment : Fragment() {
     }
 
     //Zendesk Chat and Calling Function
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -461,16 +460,15 @@ class CropInfoFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
-                        intent.data = Uri.parse(CALL_NUMBER)
-                        startActivity(intent)
+            intent.data = Uri.parse(CALL_NUMBER)
+            startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }
-
 
 
     private fun updatePagerHeightForChild(view: View, pager: ViewPager2) {
@@ -493,7 +491,7 @@ class CropInfoFragment : Fragment() {
         }
 
         newsBinding.viewAllNews.setOnClickListener {
-            val intent=Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
 
@@ -555,6 +553,7 @@ class CropInfoFragment : Fragment() {
             return 0
         return scroll.roundToInt()
     }
+
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter()

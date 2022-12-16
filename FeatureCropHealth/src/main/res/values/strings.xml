@@ -13,4 +13,9 @@
     <string name="movie_fragment">Cultural</string>
     <string name="powdery_mildew">Powdery mildew</string>
 
+    <string name="click_only_the_image_of_the_leaf">Click only the Image of the Leaf</string>
+    <string name="do_not_capture_the_full_plant">Do not Capture the full Plant.</string>
+    <string name="do_not_click_a_nblur_image">Do not Click a \nBlur Image</string>
+    <string name="do_not_capture_other_objects">Do not Capture other objects</string>
+
 </resources>

@@ -17,4 +17,6 @@
     <string name="zui_toolbar_title">Chat and Support</string>
     <string name="str_plz">Please let us know how can we help you. You can ask any question about your crop or field</string>
     <string name="str_about_outGrow"><![CDATA[Outgrow is an Easy & Intuitive App made in 6 Languages that help us connect with the Indian farmers locally across the 5 States viz. Karnataka, Tamil Nadu, Andhra Pradesh, Telangana & Maharashtra. With a host of services like, Automated Soil Labs, Microclimatic Weather, Artificial Intelligence, Regenerative Farming & a larger Farmer Service Network, this app will aid farmers to improve their productivity & reduce losses in the crop lifecycle management. We are in the pursuit of revolutionizing the agricultural landscape in India.]]></string>
+    <string name="submit2">Submit</string>
+    <string name="role_type">Role Type</string>
 </resources>

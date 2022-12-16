@@ -14,6 +14,9 @@ object StoreName {
     const val MODULE_MASTER = "modulemaster"
     //soil test history
     const val SOIL_TEST_HISTORY = "soiltesthisory"
+
+    //soil test history
+    const val DASH_BOARD = "bashboard"
     //add crop
     const val ADD_CROP_TYPE = "addcroptype"
 

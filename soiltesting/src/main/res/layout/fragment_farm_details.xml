@@ -116,6 +116,7 @@
             <!--                app:layout_constraintTop_toBottomOf="@+id/clBanner"-->
             <!--                android:layout_marginTop="@dimen/space16"-->
             <!--                android:layout_marginStart="@dimen/space16" />-->
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clMyForm"
                 android:layout_width="match_parent"
@@ -186,6 +187,7 @@
                 <!--                    tools:listitem="@layout/item_flex_box_add_form" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <View
                 android:id="@+id/view"

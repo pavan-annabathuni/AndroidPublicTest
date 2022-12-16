@@ -41,6 +41,7 @@ class DateAdapter : ListAdapter<MandiHistoryDataDomain, DateAdapter.MyViewHolder
         var s:Float = properties.avgPrice!!.toFloat()
        val price  = "%.2f".format(s)
         holder.avgPrice.text = "\u20B9$price"
+
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<MandiHistoryDataDomain>() {
@@ -63,5 +64,13 @@ class DateAdapter : ListAdapter<MandiHistoryDataDomain, DateAdapter.MyViewHolder
             fun onClick(data: MandiHistoryDataDomain) = clickListener(data)
         }
     }
+
+//    override fun getItemCount(): Int {
+//        if(currentList.size>=7)
+//            return 7
+//        else
+//            return currentList.size
+//
+//    }
 
 }

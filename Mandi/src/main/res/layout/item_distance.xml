@@ -88,6 +88,7 @@
                     tools:text="₹140" />
 
                 <TextView
+                    android:id="@+id/tv_kg"
                     style="@style/Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

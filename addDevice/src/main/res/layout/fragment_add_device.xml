@@ -68,40 +68,73 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="290dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         app:cardCornerRadius="12dp">
-
-<!--                        <fragment-->
-<!--                            android:id="@+id/Map"-->
-<!--                            android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent" />-->
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:src="@drawable/ndvi_pic"
+                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"/>
+                        <!--                        <fragment-->
+                        <!--                            android:id="@+id/Map"-->
+                        <!--                            android:name="com.google.android.gms.maps.SupportMapFragment"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="match_parent" />-->
                     </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        style="@style/SemiBold"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16sp"
                         android:layout_marginTop="16sp"
-                        android:text="@string/_12_916866_77_5951989"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        style="@style/SemiBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_marginStart="16sp"
-                        android:layout_marginTop="8sp"
-                        android:text="@string/elevation_802_92"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/latitude"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12.93"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/camma"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" , "
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/latitude"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/longitude"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" 77.23"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/camma"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    <!--                    <TextView-->
+                    <!--                        style="@style/SemiBold"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="16sp"-->
+                    <!--                        android:layout_marginTop="8sp"-->
+                    <!--                        android:text="@string/elevation_802_92"-->
+                    <!--                        android:textColor="@color/black"-->
+                    <!--                        android:textSize="14sp" />-->
 
 
                 </LinearLayout>
@@ -173,147 +206,152 @@
                     android:padding="8dp"
                     android:text="@string/sacn_qr_code"
                     android:textColor="@color/DarkGreen" />
+
             </LinearLayout>
+            <!--            <EditText-->
+            <!--                android:id="@+id/etLocatioOne"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"/>-->
 
-            <TextView
-                android:id="@+id/textView3"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="@string/device_imei_address"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bt_scanner" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView3"-->
+            <!--                style="@style/Medium"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="32dp"-->
+            <!--                android:text="@string/device_imei_address"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/bt_scanner" />-->
 
-            <EditText
-                android:id="@+id/imeiAddress"
-                style="@style/SemiBold"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
-                android:hint="@string/e_g_50"
-                android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/darkGray"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            <!--            <EditText-->
+            <!--                android:id="@+id/imeiAddress"-->
+            <!--                style="@style/SemiBold"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="48dp"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:background="@drawable/text_border"-->
+            <!--                android:hint="@string/e_g_50"-->
+            <!--                android:paddingStart="16dp"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textColorHint="@color/darkGray"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
 
-            <TextView
-                android:id="@+id/textView4"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/select_device"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imeiAddress" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView4"-->
+            <!--                style="@style/Medium"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="@string/select_device"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/imeiAddress" />-->
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/linearLayout2"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:background="@drawable/text_border"-->
+            <!--                android:gravity="center"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/textView4">-->
 
-                <Spinner
-                    android:id="@+id/spinner1"
-                    style="@style/spinner_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:dropDownWidth="match_parent"
-                    android:dropDownVerticalOffset="50dp"
-                    android:backgroundTint="@color/black"
-                    android:spinnerMode="dropdown"
-                    tools:listitem="@layout/item_spinner" />
-            </LinearLayout>
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/spinner1"-->
+            <!--                    style="@style/spinner_style"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="48dp"-->
+            <!--                    android:dropDownWidth="match_parent"-->
+            <!--                    android:dropDownVerticalOffset="50dp"-->
+            <!--                    android:backgroundTint="@color/black"-->
+            <!--                    android:spinnerMode="dropdown"-->
+            <!--                    tools:listitem="@layout/item_spinner" />-->
+            <!--            </LinearLayout>-->
 
-            <TextView
-                android:id="@+id/textView5"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/model_name"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView5"-->
+            <!--                style="@style/Medium"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="@string/model_name"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />-->
 
-            <LinearLayout
-                android:id="@+id/linearLayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5">
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/linearLayout3"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:background="@drawable/text_border"-->
+            <!--                android:gravity="center"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/textView5">-->
 
-                <Spinner
-                    android:id="@+id/spinner3"
-                    style="@style/spinner_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:dropDownWidth="match_parent"
-                    android:dropDownVerticalOffset="50dp"
-                    android:backgroundTint="@color/black"
-                    android:spinnerMode="dropdown"
-                    tools:listitem="@layout/item_spinner" />
-            </LinearLayout>
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/spinner3"-->
+            <!--                    style="@style/spinner_style"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="48dp"-->
+            <!--                    android:dropDownWidth="match_parent"-->
+            <!--                    android:dropDownVerticalOffset="50dp"-->
+            <!--                    android:backgroundTint="@color/black"-->
+            <!--                    android:spinnerMode="dropdown"-->
+            <!--                    tools:listitem="@layout/item_spinner" />-->
+            <!--            </LinearLayout>-->
 
-            <TextView
-                android:id="@+id/textView6"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/mobile_number"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView6"-->
+            <!--                style="@style/Medium"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:text="@string/mobile_number"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />-->
 
-            <TextView
-                android:id="@+id/mobile_no"
-                style="@style/SemiBold"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/text_border"
-                android:hint="@string/str_mobile"
-                android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/darkGray"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/mobile_no"-->
+            <!--                style="@style/SemiBold"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="48dp"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:layout_marginBottom="8dp"-->
+            <!--                android:background="@drawable/text_border"-->
+            <!--                android:hint="@string/str_mobile"-->
+            <!--                android:paddingStart="16dp"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textColorHint="@color/darkGray"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/textView6" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
     <FrameLayout

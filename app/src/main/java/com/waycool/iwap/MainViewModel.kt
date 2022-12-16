@@ -6,6 +6,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.Network.NetworkModels.Notification
+import com.waycool.data.Network.NetworkModels.NotificationModel
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
@@ -72,7 +74,11 @@ class MainViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-    fun getMyFarms(account_id: Int): LiveData<Resource<List<MyFarmsDomain>>> =
-        FarmsRepository.getMyFarms(account_id).asLiveData()
+    fun getMyFarms(account_id: Int,farm_id:Int?): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms(account_id,farm_id).asLiveData()
+
+    fun getNotification():LiveData<Resource<NotificationModel?>>{
+        return NotificationRepository.getNotification().asLiveData()
+    }
 
 }

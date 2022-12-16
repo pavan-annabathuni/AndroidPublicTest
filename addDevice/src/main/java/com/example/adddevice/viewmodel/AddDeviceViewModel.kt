@@ -14,6 +14,9 @@ import com.waycool.data.utils.Resource
 class AddDeviceViewModel : ViewModel()  {
     fun activateDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): LiveData<Resource<ActivateDeviceDTO?>> =
         CropsRepository.activateDevice(map).asLiveData()
+
+
+
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
 }

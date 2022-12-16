@@ -81,6 +81,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         initViewBackClick()
         expandableView()
         expandableViewTWo()
+        expandableViewThree()
         getVideos()
         fabButton()
         getAllHistory()
@@ -230,6 +231,22 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+    private fun expandableViewThree() {
+        binding.clFAQAnsThree.setOnClickListener {
+            if (binding.clExpandebleThree.visibility == View.GONE) {
+                TransitionManager.beginDelayedTransition(binding.cardDataThree, AutoTransition())
+                binding.clExpandebleThree.visibility = View.VISIBLE
+                binding.ivSoilThree.setBackgroundResource(R.drawable.ic_arrow_up)
+
+            } else {
+                TransitionManager.beginDelayedTransition(binding.cardDataTwo, AutoTransition())
+                binding.clExpandebleThree.visibility = View.GONE
+                binding.ivSoilThree.setBackgroundResource(R.drawable.ic_down_arrpw)
+
+
+            }
+        }
+    }
 
     private fun expandableViewTWo() {
         binding.clFAQAnsTwo.setOnClickListener {
@@ -359,10 +376,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
             if (it.data!!.isEmpty()) {
                 binding.clTopGuide.visibility = View.VISIBLE
+                binding.clRequest.visibility=View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
-//                        binding.clTopGuide.visibility = View.GONE
+                        binding.clTopGuide.visibility = View.GONE
+                        binding.clRequest.visibility=View.VISIBLE
+
                         Log.d("TAG", "bindObserversData:" + it.data.toString())
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
@@ -423,6 +443,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 ),
                 100
             )
+            // use your location object
             Log.d("checkLocation", "isLocationPermissionGranted:1 ")
             false
         } else {
@@ -430,7 +451,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
-                        // use your location object
                         // get latitude , longitude and other info from this
                         Log.d("checkLocation", "isLocationPermissionGranted: $location")
 //                        getAddress(location.latitude, location.longitude)
@@ -466,7 +486,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                                    } else if (it.data!!.isNotEmpty()) {
+                                    } else if (it.data?.isNotEmpty() == true) {
                                         val response = it.data
                                         Log.d(
                                             TAG,

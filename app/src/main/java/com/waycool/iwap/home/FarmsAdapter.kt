@@ -31,7 +31,6 @@ class FarmsAdapter(val context: Context) :
 
         holder.bind(getItem(position))
 
-
     }
 
 

@@ -109,7 +109,7 @@ class LoginFragment : Fragment() {
             if (binding.mobilenoEt.text.toString()
                     .isEmpty() || binding.mobilenoEt.text.toString().length != 10
             ) {
-                binding.mobileNoTextlayout.error = "Enter Mobile Number"
+                binding.mobileNoTextlayout.error = "Please enter valid mobile number"
             } else {
 
                 loginViewModel.setMobileNumber(binding.mobilenoEt.text.toString())
@@ -187,7 +187,6 @@ class LoginFragment : Fragment() {
 
             if (!isTruecallerVerified) {
                 moveToOtp(mobileNo)
-
             } else {
                 loginViewModel.login(mobileNo, fcmToken!!, deviceModel!!, deviceManufacturer!!)
                     .observe(

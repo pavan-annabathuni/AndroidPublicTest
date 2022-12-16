@@ -219,7 +219,7 @@ class MyProfileFragment : Fragment() {
                     loginViewModel.logout(mobileno)
                         .observe(viewLifecycleOwner) {
 
-                            loginViewModel.setUserToken(null)
+                           // loginViewModel.setUserToken(null)
                             loginViewModel.setIsLoggedIn(false)
                             FeatureChat.zendeskLogout()
 

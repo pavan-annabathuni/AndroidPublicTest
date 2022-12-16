@@ -250,7 +250,7 @@ more details."
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/txt16"
                 android:background="@drawable/bg_add_form"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clBack">

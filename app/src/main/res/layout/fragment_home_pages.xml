@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
@@ -36,8 +37,7 @@
                     android:background="#FFFAF0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/backBanner"
@@ -65,9 +65,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/txt8"
                         android:layout_marginTop="@dimen/space30"
+                        android:fontFamily="@font/regular"
                         android:text="Bangalore"
                         android:textColor="#111827"
-                        android:textSize="@dimen/space13"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@+id/ivLocation"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,6 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/regular"
                         android:text="Welcome, Krishna Kumar"
                         android:textColor="#111827"
                         android:textSize="@dimen/space13"
@@ -99,9 +101,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
+                        android:fontFamily="@font/playfair_reg"
                         android:text="Namaste"
                         android:textColor="#111827"
-                        android:textSize="@dimen/txt20"
+                        android:textSize="26sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
@@ -123,11 +126,10 @@
                             android:id="@+id/cardAddForm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/space4"
                             android:layout_marginTop="24dp"
                             android:elevation="15dp"
-                            android:layout_margin="@dimen/space4"
-                            app:cardCornerRadius="@dimen/txt10"
-                            tools:visibility="gone">
+                            app:cardCornerRadius="@dimen/txt10">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
@@ -142,33 +144,30 @@
                                     android:layout_marginStart="@dimen/txt16"
                                     android:layout_marginTop="@dimen/txt16"
                                     android:layout_marginEnd="8dp"
-                                    android:text="Add your Crop and get \n
-more details."
+                                    android:fontFamily="@font/bold"
+                                    android:text="Add your Crop and get more details."
                                     android:textColor="#111827"
                                     android:textSize="@dimen/txt18"
-                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toStartOf="@+id/imageView10"
-
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="110dp"
+                                    android:layout_height="35dp"
                                     android:layout_marginStart="@dimen/txt16"
                                     android:layout_marginTop="16dp"
                                     android:layout_marginBottom="16dp"
                                     android:background="@drawable/bg_add_form"
-
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
 
                                     <ImageView
                                         android:id="@+id/ivAdd"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_margin="@dimen/txt8"
-                                        android:src="@drawable/ic_add"
+                                        android:src="@drawable/add"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
@@ -180,10 +179,10 @@ more details."
                                         android:layout_marginTop="6dp"
                                         android:layout_marginEnd="6dp"
                                         android:layout_marginBottom="@dimen/space6"
+                                        android:fontFamily="@font/bold"
                                         android:text="Add crops"
                                         android:textColor="#146133"
-                                        android:textSize="@dimen/txt18"
-                                        android:textStyle="bold"
+                                        android:textSize="@dimen/txt14"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/ivAdd"
@@ -250,19 +249,6 @@ more details."
                                     app:layout_constraintEnd_toStartOf="@+id/ivMyForm"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <!--                        <androidx.recyclerview.widget.RecyclerView-->
-                                <!--                            android:id="@+id/recyclerviewCategory"-->
-                                <!--                            android:layout_width="wrap_content"-->
-                                <!--                            android:layout_height="wrap_content"-->
-                                <!--                            android:background="#FFFFFF"-->
-                                <!--                            android:orientation="horizontal"-->
-                                <!--                            android:layout_marginTop="30dp"-->
-                                <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-                                <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                                <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                                <!--                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"-->
-                                <!--                            tools:listitem="@layout/item_flex_box_add_form" />-->
-
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
@@ -271,8 +257,8 @@ more details."
                             android:id="@+id/cvEditCrop"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:layout_margin="@dimen/space4"
+                            android:visibility="gone"
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="12dp"
                             tools:visibility="visible">
@@ -346,22 +332,23 @@ more details."
                                             android:id="@+id/rv_myCrops"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:nestedScrollingEnabled="false"
-                                            android:orientation="horizontal"
                                             android:layout_marginEnd="8dp"
                                             android:layout_toEndOf="@+id/add_ll"
+                                            android:nestedScrollingEnabled="false"
+                                            android:orientation="horizontal"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintStart_toStartOf="parent"
                                             app:layout_constraintTop_toTopOf="parent"
                                             tools:itemCount="1"
                                             tools:listitem="@layout/item_mycrops" />
+
                                         <LinearLayout
                                             android:id="@+id/add_ll"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:orientation="vertical"
                                             android:layout_marginStart="8dp"
+                                            android:orientation="vertical"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintEnd_toEndOf="parent"
                                             app:layout_constraintStart_toEndOf="@+id/rv_myCrops"
@@ -372,8 +359,8 @@ more details."
                                                 android:layout_width="64dp"
                                                 android:layout_height="64dp"
                                                 android:layout_gravity="center"
-                                                android:gravity="center"
                                                 android:layout_marginTop="8dp"
+                                                android:gravity="center"
                                                 app:cardCornerRadius="100dp"
                                                 app:cardElevation="0dp"
                                                 app:strokeColor="#E5E7EB"
@@ -399,8 +386,6 @@ more details."
                                         </LinearLayout>
 
 
-
-
                                     </RelativeLayout>
                                 </HorizontalScrollView>
 
@@ -413,98 +398,219 @@ more details."
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clAddForm"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space40"
-                    android:layout_marginStart="@dimen/txt16"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="@dimen/txt16"
-                    android:background="@drawable/bg_add_form"
-                    android:clickable="true"
-                    android:foreground="?android:selectableItemBackground"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clBack">
-
-                    <ImageView
-                        android:id="@+id/ivAddOne"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_margin="@dimen/txt8"
-                        android:src="@drawable/ic_add"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tvAddFromOne"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvAddFromOne"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/txt8"
-                        android:text="Add your farm"
-                        android:textColor="#146133"
-                        android:textSize="@dimen/txt18"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clMyForm"
+                    android:id="@+id/clAddYourFarm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/txt16"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/txt16"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clAddForm"
-                    tools:visibility="visible">
+                    app:layout_constraintTop_toBottomOf="@id/clBack">
 
-                    <TextView
-                        android:id="@+id/tvMyform"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="My Farm"
-                        android:textColor="#111827"
-                        android:textSize="@dimen/space20"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <TextView
-                        android:id="@+id/tvOurAddFormData"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_viewall"
-                        android:drawablePadding="8dp"
-                        android:padding="4dp"
-                        android:text="Add Farm"
-                        android:textColor="#146133"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clAddForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space40"
+                        android:background="@drawable/bg_add_form"
+                        android:clickable="true"
+                        android:foreground="?android:selectableItemBackground"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/farms_rv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="#FFFFFF"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvMyform"
-                        tools:listitem="@layout/item_flex_box_add_form" />
+                        app:layout_constraintTop_toTopOf="parent">
 
+                        <ImageView
+                            android:id="@+id/ivAddOne"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="@dimen/txt8"
+                            android:src="@drawable/add"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/tvAddFromOne"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvAddFromOne"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/txt8"
+                            android:fontFamily="@font/bold"
+                            android:text="Add your farm"
+                            android:textColor="#146133"
+                            android:textSize="@dimen/txt18"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clMyForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tvMyform"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/bold"
+                            android:text="My Farm"
+                            android:textColor="#111827"
+                            android:textSize="@dimen/space20"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvOurAddFormData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/add"
+                            android:drawablePadding="8dp"
+                            android:fontFamily="@font/regular"
+                            android:padding="4dp"
+                            android:text="Add Farm"
+                            android:textColor="#146133"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/farms_rv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:background="#FFFFFF"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"
+                            tools:listitem="@layout/item_flex_box_add_form" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/farms_details_cl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/bg_ans"
+                        android:visibility="gone"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/clMyForm">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView7"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            app:cardCornerRadius="12dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <fragment
+                                android:id="@+id/map_farms_home"
+                                android:name="com.google.android.libraries.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                map:layout_constraintEnd_toEndOf="parent"
+                                map:layout_constraintStart_toStartOf="parent"
+                                map:layout_constraintTop_toTopOf="parent"
+                                map:liteMode="true" />
+                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/farmname_home"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/bold"
+                            android:textColor="@color/textdark"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/cardView7"
+                            app:layout_constraintTop_toTopOf="@+id/cardView7"
+                            tools:text="Krishna Farm Plot 1" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/crop_farm_rv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toTopOf="@+id/tvCityName"
+                            app:layout_constraintStart_toStartOf="@+id/farmname_home"
+                            app:layout_constraintTop_toBottomOf="@+id/farmname_home"
+                            tools:itemCount="5"
+                            tools:listitem="@layout/viewholder_farm_crops" />
+
+                        <TextView
+                            android:id="@+id/tvCityName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/regular"
+                            android:textColor="#5D6571"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/cardView7"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/cardView7"
+                            tools:text="Bangalore" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clViewFarmDetails"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space16"
+                            android:layout_marginTop="@dimen/space16"
+                            android:layout_marginEnd="@dimen/space12"
+                            android:layout_marginBottom="@dimen/space16"
+                            android:background="@drawable/bg_add_form"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cardView7">
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvViewFarmDetails"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/txt8"
+                                android:text="View Farm Details"
+                                android:textColor="#146133"
+                                android:textSize="@dimen/txt18"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/txt8"
+                                android:layout_marginEnd="@dimen/txt8"
+                                android:src="@drawable/ic_know_more"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/tvViewFarmDetails"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.cardview.widget.CardView
@@ -512,96 +618,32 @@ more details."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_ans"
                     android:elevation="6dp"
+                    android:visibility="visible"
                     app:cardCornerRadius="@dimen/txt10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clMyForm">
+                    app:layout_constraintTop_toBottomOf="@+id/clAddYourFarm">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/farms_details_cl"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:visibility="visible">
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/cardView7"
-                                android:layout_width="72dp"
-                                android:layout_height="72dp"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="16dp"
-                                android:layout_marginBottom="16dp"
-                                app:cardCornerRadius="12dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <fragment
-                                    android:id="@+id/map_farms_home"
-                                    android:name="com.google.android.libraries.maps.SupportMapFragment"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    map:layout_constraintEnd_toEndOf="parent"
-                                    map:layout_constraintStart_toStartOf="parent"
-                                    map:layout_constraintTop_toTopOf="parent"
-                                    map:liteMode="true" />
-                            </androidx.cardview.widget.CardView>
-
-                            <View
-                                android:id="@+id/divider3"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="?android:attr/listDivider"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
-                            <TextView
-                                android:id="@+id/farmname_home"
-                                android:layout_width="0dp"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/noto_sans_semibold"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:textColor="@color/textdark"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cardView7"
-                                app:layout_constraintTop_toTopOf="@+id/cardView7"
-                                tools:text="Krishna Farm Plot 1" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/crop_farm_rv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:orientation="horizontal"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:layout_constraintStart_toStartOf="@+id/farmname_home"
-                                app:layout_constraintTop_toBottomOf="@+id/farmname_home"
-                                tools:itemCount="5"
-                                tools:listitem="@layout/viewholder_farm_crops" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/weather_cl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/farms_details_cl">
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <ImageView
                                 android:id="@+id/ivWeather"
@@ -617,10 +659,10 @@ more details."
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
+                                android:fontFamily="@font/bold"
                                 android:text="28°C"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt20"
-                                android:textStyle="bold"
                                 app:layout_constraintStart_toEndOf="@+id/ivWeather"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -630,7 +672,8 @@ more details."
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/space2"
-                                android:text="Temprature"
+                                android:fontFamily="@font/regular"
+                                android:text="Temperature"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintStart_toEndOf="@+id/ivWeather"
@@ -641,10 +684,10 @@ more details."
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
+                                android:fontFamily="@font/bold"
                                 android:text="Bengaluru"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt14"
-                                android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -654,12 +697,13 @@ more details."
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:layout_marginEnd="@dimen/txt16"
+                                android:fontFamily="@font/regular"
                                 android:text="Today Tue 26, Jul"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
-                                android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvDegree" />
+                                app:layout_constraintTop_toTopOf="@+id/tvTemp"
+                                app:layout_constraintBottom_toBottomOf="@+id/tvTemp"/>
 
                             <View
                                 android:id="@+id/ViewOne"
@@ -697,11 +741,11 @@ more details."
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
                                     android:ellipsize="end"
+                                    android:fontFamily="@font/bold"
                                     android:maxLines="1"
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/ivHumidity"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -712,6 +756,7 @@ more details."
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginBottom="@dimen/txt10"
+                                    android:fontFamily="@font/regular"
                                     android:text="Humidity"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -744,10 +789,10 @@ more details."
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
+                                    android:fontFamily="@font/bold"
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
                                     app:layout_constraintStart_toEndOf="@+id/ivWind"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -757,6 +802,7 @@ more details."
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginBottom="@dimen/txt10"
+                                    android:fontFamily="@font/regular"
                                     android:text="Wind"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -790,11 +836,11 @@ more details."
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
                                     android:ellipsize="end"
+                                    android:fontFamily="@font/bold"
                                     android:maxLines="1"
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/ivRain"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -806,6 +852,7 @@ more details."
                                     android:layout_marginTop="4dp"
                                     android:layout_marginEnd="12dp"
                                     android:layout_marginBottom="@dimen/txt10"
+                                    android:fontFamily="@font/regular"
                                     android:text="Chance of rain"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -824,18 +871,6 @@ more details."
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/clRain">
 
-                                <!--                            <ImageView-->
-                                <!--                                android:id="@+id/ivCloudy"-->
-                                <!--                                android:layout_width="wrap_content"-->
-                                <!--                                android:layout_height="wrap_content"-->
-                                <!--                                android:layout_marginStart="@dimen/txt16"-->
-                                <!--                                android:layout_marginTop="8dp"-->
-                                <!--                                android:layout_marginBottom="@dimen/txt8"-->
-                                <!--                                android:src="@drawable/ic_cloudy_deng"-->
-                                <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
-                                <!--                                app:layout_constraintStart_toStartOf="parent"-->
-                                <!--                                app:layout_constraintTop_toTopOf="parent" />-->
-
                                 <TextView
                                     android:id="@+id/tvCloudy"
                                     android:layout_width="wrap_content"
@@ -845,6 +880,7 @@ more details."
                                     android:layout_marginBottom="8dp"
                                     android:drawableStart="@drawable/ic_cloudy_deng"
                                     android:drawablePadding="8dp"
+                                    android:fontFamily="@font/regular"
                                     android:text="Cloudy with a thunderstorm this afternoon"
                                     android:textColor="#FF2C23"
                                     android:textSize="@dimen/txt12"
@@ -860,21 +896,12 @@ more details."
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
-                <!--            <androidx.recyclerview.widget.RecyclerView-->
-                <!--                android:id="@+id/recyclerview_weather"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_marginTop="36dp"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/clAddForm"-->
-                <!--                tools:itemCount="1"-->
-                <!--                tools:listitem="@layout/item_weather" />-->
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardAddDevice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="24dp"
                     android:elevation="10dp"
                     android:visibility="gone"
@@ -894,8 +921,7 @@ more details."
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="@dimen/txt16"
-                            android:text="Add your device \n
-to the farm"
+                            android:text="Add your device \nto the farm"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
                             android:textStyle="bold"
@@ -904,54 +930,55 @@ to the farm"
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvEnableAddDevice"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
-                            android:layout_marginTop="@dimen/txt16"
-                            android:text="Enables you with an \n informations of soil and yield! "
+                            android:text="Enables you with an informations of soil and yield! "
                             android:textColor="#585858"
                             android:textSize="@dimen/txt14"
+                            app:layout_constraintEnd_toStartOf="@id/ivAddDeviceEnd"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="110dp"
+                            android:layout_height="35dp"
                             android:layout_marginStart="@dimen/txt16"
-                            android:layout_marginTop="@dimen/txt16"
-                            android:layout_marginBottom="@dimen/txt15"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
                             android:background="@drawable/bg_add_form"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvEnableAddDevice">
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvAddDevice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/txt8"
-                                android:text="Know more"
-                                android:textColor="#146133"
-                                android:textSize="@dimen/txt18"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/tvEnableAddDevice">
 
                             <ImageView
                                 android:id="@+id/ivAddDevice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt8"
-                                android:layout_marginEnd="@dimen/txt8"
-                                android:src="@drawable/ic_know_more"
+                                android:src="@drawable/add"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvAddDevice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="6dp"
+                                android:layout_marginBottom="@dimen/space6"
+                                android:text="Add Device"
+                                android:textColor="#146133"
+                                android:textSize="@dimen/txt14"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/tvAddDevice"
+                                app:layout_constraintStart_toEndOf="@+id/ivAddDevice"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                         <ImageView
                             android:id="@+id/ivAddDeviceEnd"
@@ -966,11 +993,11 @@ to the farm"
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clBanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -1027,7 +1054,7 @@ to the farm"
                         android:text="Mandi Prices"
                         android:textColor="#111827"
                         android:textSize="@dimen/space20"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -1075,7 +1102,7 @@ to the farm"
                         android:text="View All"
                         android:textColor="#146133"
                         android:textSize="14sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1112,14 +1139,14 @@ to the farm"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/ivOurService"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_viewall"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/ivOurService"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_viewall"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvOurServiceViewAll"
@@ -1132,7 +1159,7 @@ to the farm"
                         android:text="View All"
                         android:textColor="#146133"
                         android:textSize="14sp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/bold"
                         app:layout_constraintBottom_toBottomOf="@+id/tvOurService"
                         app:layout_constraintEnd_toStartOf="@+id/ivOurService"
                         app:layout_constraintTop_toTopOf="@+id/tvOurService" />
@@ -1144,8 +1171,8 @@ to the farm"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
-                        android:elevation="10dp"
                         android:clickable="true"
+                        android:elevation="10dp"
                         android:foreground="?android:selectableItemBackground"
                         app:cardCornerRadius="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -1166,7 +1193,7 @@ to the farm"
                                 android:text="Soil Testing"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                                android:textStyle="bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1177,10 +1204,11 @@ to the farm"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="Enables you with an informations of soil and yield! "
-                                android:textColor="@color/textlight"
                                 android:gravity="start"
-                                android:textSize="@dimen/txt14"
+                                android:text="Helps you assess and recommend the nutrition of your soil"
+                                android:textColor="@color/textlight"
+                                android:textSize="@dimen/txt12"
+                                android:fontFamily="@font/regular"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView11"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvService" />
@@ -1196,7 +1224,6 @@ to the farm"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvEnable">
 
-
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvAddFromService"
                                     android:layout_width="wrap_content"
@@ -1205,7 +1232,7 @@ to the farm"
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
+                                   app:fontFamily="@font/bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1255,10 +1282,10 @@ to the farm"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:elevation="10dp"
-                        app:cardCornerRadius="12dp"
                         android:clickable="true"
+                        android:elevation="10dp"
                         android:foreground="?android:selectableItemBackground"
+                        app:cardCornerRadius="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/soil_testing_cv">
@@ -1274,10 +1301,10 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Crop Health"
+                                android:text="Crop Health Detection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                                android:textStyle="bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1288,9 +1315,10 @@ to the farm"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="Explore about our AI enable feature."
+                                android:text="Helps you detect crop’s health using Artificial Intelligence"
                                 android:textColor="@color/textlight"
-                                android:textSize="@dimen/txt14"
+                                android:textSize="@dimen/txt12"
+                                app:fontFamily="@font/regular"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView12"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCropHealth" />
@@ -1315,7 +1343,7 @@ to the farm"
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
+                                  app:fontFamily="@font/bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1362,8 +1390,8 @@ to the farm"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:elevation="10dp"
                         android:clickable="true"
+                        android:elevation="10dp"
                         android:foreground="?android:selectableItemBackground"
                         app:cardCornerRadius="@dimen/txt10"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -1381,10 +1409,10 @@ to the farm"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
-                                android:text="Crop Information"
+                                android:text="Crop Info."
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt14"
-                                android:textStyle="bold"
+                                app:fontFamily="@font/bold"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1395,9 +1423,10 @@ to the farm"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="Understand the complete information about your crops"
+                                android:text="Gives you end to end  information about your crop."
                                 android:textColor="#585858"
-                                android:textSize="@dimen/txt14"
+                                android:textSize="@dimen/txt12"
+                                app:fontFamily="@font/regular"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView13"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvInfoCrop" />
@@ -1423,7 +1452,7 @@ to the farm"
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
+                                    app:fontFamily="@font/regular"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1471,8 +1500,8 @@ to the farm"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:elevation="10dp"
                         android:clickable="true"
+                        android:elevation="10dp"
                         android:foreground="?android:selectableItemBackground"
                         app:cardCornerRadius="@dimen/txt10"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -1494,7 +1523,7 @@ to the farm"
                                 android:text="Crop Protection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                                android:textStyle="bold"
+                              app:fontFamily="@font/bold"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1506,9 +1535,10 @@ to the farm"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:gravity="start"
-                                android:text="Complete information to fight against all the possible diseases."
+                                android:text="Gives you pests &amp; diseases information to protect your crop"
                                 android:textColor="#585858"
-                                android:textSize="@dimen/txt14"
+                                android:textSize="@dimen/txt12"
+                                app:fontFamily="@font/regular"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView14"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCropProtect" />
@@ -1533,7 +1563,7 @@ to the farm"
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    android:textStyle="bold"
+                                    app:fontFamily="@font/bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1581,7 +1611,6 @@ to the farm"
                     layout="@layout/generic_layout_videos_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clCardBackground" />
@@ -1597,10 +1626,10 @@ to the farm"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </androidx.core.widget.NestedScrollView>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_call"
@@ -1611,12 +1640,12 @@ to the farm"
             android:layout_gravity="end"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/DarkGreen"
+            android:src="@drawable/ic_fab_call"
             android:text="Chat"
             android:textColor="@color/white"
             android:theme="@style/Theme.MaterialComponents.Light"
             android:visibility="gone"
             app:fabSize="normal"
-            android:src="@drawable/ic_fab_call"
             app:iconTint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/add_chat"
             app:layout_constraintEnd_toEndOf="@+id/add_chat"
@@ -1632,12 +1661,12 @@ to the farm"
             android:layout_gravity="end"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/DarkGreen"
+            android:src="@drawable/ic_fab_chat"
             android:text="Chat"
             android:textColor="@color/white"
             android:theme="@style/Theme.MaterialComponents.Light"
             android:visibility="gone"
             app:fabSize="normal"
-            android:src="@drawable/ic_fab_chat"
             app:iconTint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/add_fab"
             app:layout_constraintEnd_toEndOf="@+id/add_fab"
@@ -1659,7 +1688,7 @@ to the farm"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white"/>
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

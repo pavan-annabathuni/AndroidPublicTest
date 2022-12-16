@@ -1,0 +1,1774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".premium.HomePagePremiumFragment">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFAF0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/backBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/illustration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivLocation"
+                    android:layout_width="@dimen/txt12"
+                    android:layout_height="@dimen/txt15"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="@dimen/space30"
+                    android:src="@drawable/ic_vlocation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvWelcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/txt8"
+                    android:layout_marginTop="@dimen/space30"
+                    android:text="Bangalore"
+                    android:textColor="#111827"
+                    android:textSize="@dimen/space13"
+                    app:layout_constraintStart_toEndOf="@+id/ivLocation"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/IvNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/txt20"
+                    android:layout_marginEnd="@dimen/txt10"
+                    android:src="@drawable/ic_notification"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvWelcomeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Welcome, Krishna Kumar"
+                    android:textColor="#111827"
+                    android:textSize="@dimen/space13"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvGoodMorning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:text="Namaste"
+                    android:textColor="#111827"
+                    android:textSize="@dimen/txt20"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="90dp"
+                    android:layout_marginEnd="16dp"
+                    android:elevation="15dp"
+                    android:orientation="vertical"
+                    app:cardCornerRadius="@dimen/txt10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGoodMorning">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardAddForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space4"
+                        android:layout_marginTop="24dp"
+                        android:elevation="15dp"
+                        app:cardCornerRadius="@dimen/txt10"
+                        tools:visibility="visible">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvYourForm"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/txt16"
+                                android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
+                                android:text="Add your Crop and get \n
+more details."
+                                android:textColor="#111827"
+                                android:textSize="@dimen/txt18"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView10"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clAddCropData"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/txt16"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:background="@drawable/bg_add_form"
+
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
+
+                                <ImageView
+                                    android:id="@+id/ivAdd"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/txt8"
+                                    android:src="@drawable/ic_add"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvAddFrom"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_marginEnd="6dp"
+                                    android:layout_marginBottom="@dimen/space6"
+                                    android:text="Add crops"
+                                    android:textColor="#146133"
+                                    android:textSize="@dimen/txt18"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/ivAdd"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <ImageView
+                                android:id="@+id/imageView10"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/add_crop"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent=".6" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/tvMyCrop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/space16"
+                                android:text="My Crop"
+                                android:textColor="#111827"
+                                android:textSize="@dimen/txt14"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/ivMyForm"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_margin="@dimen/space16"
+                                android:src="@drawable/ic_add"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvMyForm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space16"
+                                android:layout_marginEnd="5dp"
+                                android:text="Add Farm"
+                                android:textColor="#146133"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toStartOf="@+id/ivMyForm"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!--                        <androidx.recyclerview.widget.RecyclerView-->
+                            <!--                            android:id="@+id/recyclerviewCategory"-->
+                            <!--                            android:layout_width="wrap_content"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:background="#FFFFFF"-->
+                            <!--                            android:orientation="horizontal"-->
+                            <!--                            android:layout_marginTop="30dp"-->
+                            <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+                            <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+                            <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                            <!--                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"-->
+                            <!--                            tools:listitem="@layout/item_flex_box_add_form" />-->
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvEditCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:visibility="visible"
+
+                        >
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/title3SemiBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="16dp"
+                                android:text="My Crops"
+                                android:textColor="@color/textdark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!--                            <androidx.cardview.widget.CardView-->
+                            <!--                                android:id="@+id/cardView6"-->
+                            <!--                                android:layout_width="23dp"-->
+                            <!--                                android:layout_height="22dp"-->
+                            <!--                                android:layout_marginStart="8dp"-->
+                            <!--                                app:cardBackgroundColor="#FFEACE"-->
+                            <!--                                app:cardCornerRadius="50dp"-->
+                            <!--                                app:layout_constraintBottom_toBottomOf="@+id/title3SemiBold"-->
+                            <!--                                app:layout_constraintStart_toEndOf="@+id/title3SemiBold"-->
+                            <!--                                app:layout_constraintTop_toTopOf="@+id/title3SemiBold">-->
+
+                            <!--                                <TextView-->
+                            <!--                                    android:id="@+id/tv_count"-->
+                            <!--                                    android:layout_width="wrap_content"-->
+                            <!--                                    android:layout_height="wrap_content"-->
+                            <!--                                    android:layout_gravity="center"-->
+                            <!--                                    android:text="2"-->
+                            <!--                                    android:textColor="@color/black"-->
+                            <!--                                    android:textSize="14sp" />-->
+                            <!--                            </androidx.cardview.widget.CardView>-->
+
+                            <TextView
+                                android:id="@+id/tv_myCrops"
+                                style="@style/SemiBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:drawablePadding="4dip"
+                                android:text="Add Crop"
+                                android:textColor="@color/primaryColor"
+                                android:textSize="14sp"
+                                app:drawableEndCompat="@drawable/ic_add"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/title3SemiBold">
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_myCrops"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="16dp"
+                                    android:nestedScrollingEnabled="false"
+                                    android:orientation="horizontal"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:itemCount="1"
+                                    tools:listitem="@layout/item_premium_crops" />
+
+                                <com.google.android.material.slider.Slider
+                                    android:id="@+id/videos_scroll"
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="false"
+                                    android:theme="@style/Theme.MaterialComponents"
+                                    android:valueFrom="0"
+                                    android:valueTo="100"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/rv_myCrops"
+                                    app:thumbColor="@color/brown500"
+                                    app:trackColor="#F2F2F2"
+                                    app:trackColorActive="@color/strokegrey"
+                                    app:trackHeight="6dp"
+                                    tools:ignore="SpeakableTextPresentCheck" />
+
+                                <!--                                    <LinearLayout-->
+                                <!--                                        android:layout_width="wrap_content"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        android:orientation="vertical"-->
+                                <!--                                        android:layout_marginStart="8dp"-->
+                                <!--                                        android:layout_marginEnd="8dp"-->
+                                <!--                                        android:layout_toEndOf="@+id/rv_myCrops"-->
+                                <!--                                        app:layout_constraintBottom_toBottomOf="parent"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toEndOf="@+id/rv_myCrops"-->
+                                <!--                                        app:layout_constraintTop_toTopOf="parent">-->
+
+                                <!--                                        <com.google.android.material.card.MaterialCardView-->
+                                <!--                                            android:id="@+id/cv_addCrop"-->
+                                <!--                                            android:layout_width="64dp"-->
+                                <!--                                            android:layout_height="64dp"-->
+                                <!--                                            android:layout_gravity="center"-->
+                                <!--                                            android:gravity="center"-->
+                                <!--                                            android:layout_marginTop="8dp"-->
+                                <!--                                            app:cardCornerRadius="100dp"-->
+                                <!--                                            app:cardElevation="0dp"-->
+                                <!--                                            app:strokeColor="#E5E7EB"-->
+                                <!--                                            app:strokeWidth="1dp">-->
+
+                                <!--                                            <ImageView-->
+                                <!--                                                android:id="@+id/imageView"-->
+                                <!--                                                android:layout_width="24dp"-->
+                                <!--                                                android:layout_height="24dp"-->
+                                <!--                                                android:layout_gravity="center"-->
+                                <!--                                                android:src="@drawable/ic_add_home" />-->
+                                <!--                                        </com.google.android.material.card.MaterialCardView>-->
+
+                                <!--                                        <TextView-->
+                                <!--                                            style="@style/SemiBold"-->
+                                <!--                                            android:layout_width="wrap_content"-->
+                                <!--                                            android:layout_height="wrap_content"-->
+                                <!--                                            android:layout_marginTop="8dp"-->
+                                <!--                                            android:text="Add Crop"-->
+                                <!--                                            android:textColor="#146133"-->
+                                <!--                                            android:textSize="14sp" />-->
+
+                                <!--                                    </LinearLayout>-->
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/linearmyFarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="15dp"
+                android:orientation="vertical"
+                app:cardCornerRadius="@dimen/txt10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clBack">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clAddForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space40"
+                    android:background="@drawable/bg_add_form"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clBack">
+
+                    <ImageView
+                        android:id="@+id/ivAddOne"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="@dimen/txt8"
+                        android:src="@drawable/ic_add"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvAddFromOne"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAddFromOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/txt8"
+                        android:text="Add your farm"
+                        android:textColor="#146133"
+                        android:textSize="@dimen/txt18"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardMYFarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space4"
+                    android:visibility="gone"
+
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="12dp"
+                    tools:visibility="visible">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/titleMyFarm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="My Farm"
+                            android:textColor="@color/textdark"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!--                            <androidx.cardview.widget.CardView-->
+                        <!--                                android:id="@+id/cardView6"-->
+                        <!--                                android:layout_width="23dp"-->
+                        <!--                                android:layout_height="22dp"-->
+                        <!--                                android:layout_marginStart="8dp"-->
+                        <!--                                app:cardBackgroundColor="#FFEACE"-->
+                        <!--                                app:cardCornerRadius="50dp"-->
+                        <!--                                app:layout_constraintBottom_toBottomOf="@+id/title3SemiBold"-->
+                        <!--                                app:layout_constraintStart_toEndOf="@+id/title3SemiBold"-->
+                        <!--                                app:layout_constraintTop_toTopOf="@+id/title3SemiBold">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/tv_count"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:layout_gravity="center"-->
+                        <!--                                    android:text="2"-->
+                        <!--                                    android:textColor="@color/black"-->
+                        <!--                                    android:textSize="14sp" />-->
+                        <!--                            </androidx.cardview.widget.CardView>-->
+
+                        <TextView
+                            android:id="@+id/MyFarm"
+                            style="@style/SemiBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:drawablePadding="4dip"
+                            android:text="Add Crop"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="14sp"
+                            app:drawableEndCompat="@drawable/ic_add"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/titleMyFarm">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvMyFarm"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:itemCount="1"
+                                tools:listitem="@layout/item_premium_add_farm" />
+
+                            <com.google.android.material.slider.Slider
+                                android:id="@+id/videos_scroll_myFarm"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:theme="@style/Theme.MaterialComponents"
+                                android:valueFrom="0"
+                                android:valueTo="100"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/rvMyFarm"
+                                app:thumbColor="@color/brown500"
+                                app:trackColor="#F2F2F2"
+                                app:trackColorActive="@color/strokegrey"
+                                app:trackHeight="6dp"
+                                tools:ignore="SpeakableTextPresentCheck" />
+
+                            <!--                                    <LinearLayout-->
+                            <!--                                        android:layout_width="wrap_content"-->
+                            <!--                                        android:layout_height="wrap_content"-->
+                            <!--                                        android:orientation="vertical"-->
+                            <!--                                        android:layout_marginStart="8dp"-->
+                            <!--                                        android:layout_marginEnd="8dp"-->
+                            <!--                                        android:layout_toEndOf="@+id/rv_myCrops"-->
+                            <!--                                        app:layout_constraintBottom_toBottomOf="parent"-->
+                            <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--                                        app:layout_constraintStart_toEndOf="@+id/rv_myCrops"-->
+                            <!--                                        app:layout_constraintTop_toTopOf="parent">-->
+
+                            <!--                                        <com.google.android.material.card.MaterialCardView-->
+                            <!--                                            android:id="@+id/cv_addCrop"-->
+                            <!--                                            android:layout_width="64dp"-->
+                            <!--                                            android:layout_height="64dp"-->
+                            <!--                                            android:layout_gravity="center"-->
+                            <!--                                            android:gravity="center"-->
+                            <!--                                            android:layout_marginTop="8dp"-->
+                            <!--                                            app:cardCornerRadius="100dp"-->
+                            <!--                                            app:cardElevation="0dp"-->
+                            <!--                                            app:strokeColor="#E5E7EB"-->
+                            <!--                                            app:strokeWidth="1dp">-->
+
+                            <!--                                            <ImageView-->
+                            <!--                                                android:id="@+id/imageView"-->
+                            <!--                                                android:layout_width="24dp"-->
+                            <!--                                                android:layout_height="24dp"-->
+                            <!--                                                android:layout_gravity="center"-->
+                            <!--                                                android:src="@drawable/ic_add_home" />-->
+                            <!--                                        </com.google.android.material.card.MaterialCardView>-->
+
+                            <!--                                        <TextView-->
+                            <!--                                            style="@style/SemiBold"-->
+                            <!--                                            android:layout_width="wrap_content"-->
+                            <!--                                            android:layout_height="wrap_content"-->
+                            <!--                                            android:layout_marginTop="8dp"-->
+                            <!--                                            android:text="Add Crop"-->
+                            <!--                                            android:textColor="#146133"-->
+                            <!--                                            android:textSize="14sp" />-->
+
+                            <!--                                    </LinearLayout>-->
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearmyDevice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="15dp"
+                android:orientation="vertical"
+                app:cardCornerRadius="@dimen/txt10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearmyFarm">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAddDevice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:elevation="10dp"
+                    android:visibility="visible"
+                    app:cardCornerRadius="@dimen/txt10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:visibility="visible">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvAddDevice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/txt16"
+                            android:layout_marginTop="@dimen/txt16"
+                            android:layout_marginEnd="8dp"
+                            android:text="Add your Crop and get \n
+more details."
+                            android:textColor="#111827"
+                            android:textSize="@dimen/txt18"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/imageViewDevice"
+
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/txt16"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/bg_add_form"
+
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvAddDevice">
+
+                            <ImageView
+                                android:id="@+id/ivAddDevice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/txt8"
+                                android:src="@drawable/ic_add"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvAddDeviceData"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="6dp"
+                                android:layout_marginBottom="@dimen/space6"
+                                android:text="Add crops"
+                                android:textColor="#146133"
+                                android:textSize="@dimen/txt18"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/ivAddDevice"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <ImageView
+                            android:id="@+id/imageViewDevice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/adddevice"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline6Device"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline6Device"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent=".6" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tvMyCropDevice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/space16"
+                            android:text="My Crop"
+                            android:textColor="#111827"
+                            android:textSize="@dimen/txt14"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/ivMyFormDevice"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="@dimen/space16"
+                            android:src="@drawable/ic_add"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvMyFormDevice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space16"
+                            android:layout_marginEnd="5dp"
+                            android:text="Add Farm"
+                            android:textColor="#146133"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toStartOf="@+id/ivMyFormDevice"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
+                        <!--                            android:id="@+id/recyclerviewCategory"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:background="#FFFFFF"-->
+                        <!--                            android:orientation="horizontal"-->
+                        <!--                            android:layout_marginTop="30dp"-->
+                        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+                        <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"-->
+                        <!--                            tools:listitem="@layout/item_flex_box_add_form" />-->
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:id="@+id/cardMYDevice"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_margin="@dimen/space4"-->
+                <!--                    android:visibility="visible"-->
+                <!--                    app:cardBackgroundColor="@color/white"-->
+                <!--                    app:cardCornerRadius="12dp"-->
+                <!--                    tools:visibility="visible"-->
+
+                <!--                    >-->
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cardMYDevice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="12dp"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/titleMyDevice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Devices"
+                        android:textColor="@color/textdark"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--                            <androidx.cardview.widget.CardView-->
+                    <!--                                android:id="@+id/cardView6"-->
+                    <!--                                android:layout_width="23dp"-->
+                    <!--                                android:layout_height="22dp"-->
+                    <!--                                android:layout_marginStart="8dp"-->
+                    <!--                                app:cardBackgroundColor="#FFEACE"-->
+                    <!--                                app:cardCornerRadius="50dp"-->
+                    <!--                                app:layout_constraintBottom_toBottomOf="@+id/title3SemiBold"-->
+                    <!--                                app:layout_constraintStart_toEndOf="@+id/title3SemiBold"-->
+                    <!--                                app:layout_constraintTop_toTopOf="@+id/title3SemiBold">-->
+
+                    <!--                                <TextView-->
+                    <!--                                    android:id="@+id/tv_count"-->
+                    <!--                                    android:layout_width="wrap_content"-->
+                    <!--                                    android:layout_height="wrap_content"-->
+                    <!--                                    android:layout_gravity="center"-->
+                    <!--                                    android:text="2"-->
+                    <!--                                    android:textColor="@color/black"-->
+                    <!--                                    android:textSize="14sp" />-->
+                    <!--                            </androidx.cardview.widget.CardView>-->
+
+                    <TextView
+                        android:id="@+id/MyDevice"
+                        style="@style/SemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:drawablePadding="4dip"
+                        android:text="Add Device"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="14sp"
+                        app:drawableEndCompat="@drawable/ic_add"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/device_farm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal"
+                        tools:itemCount="2"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/MyDevice"
+                        tools:listitem="@layout/item_flex_box_add_form" />
+                    <!--                        <androidx.viewpager2.widget.ViewPager2-->
+                    <!--                            android:id="@+id/id_view_pager"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                            android:orientation="horizontal"-->
+                    <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                            app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"-->
+                    <!--                            android:layout_height="300dp"/>-->
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/device_farm">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardAddDevice_One"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:elevation="8dp"
+                            android:visibility="visible"
+                            app:cardCornerRadius="@dimen/txt10"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:background="@drawable/bg_ans"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvAddDeviceStart"
+                                    style="@style/SemiBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginTop="12dp"
+                                    android:text="Device 1 : GWX G555 "
+                                    android:textColor="#111827"
+                                    android:textSize="@dimen/txt16"
+                                    app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/ivAddDeviceEnd"
+                                    android:layout_width="@dimen/space100"
+                                    android:layout_height="@dimen/space75"
+                                    android:layout_marginStart="@dimen/space12"
+                                    android:layout_marginTop="12dp"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/ic_weather_device"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clBattery"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    app:layout_constraintEnd_toStartOf="@+id/view"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+
+                                    <ImageView
+                                        android:id="@+id/battery"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/space12"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/ic_battery"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvEnableAddDevice"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text="Battery"
+                                        android:textColor="#5D6571"
+                                        android:textSize="@dimen/txt14"
+                                        app:layout_constraintStart_toEndOf="@+id/battery"
+                                        app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalAreea"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text=" 85%"
+                                        android:textColor="#111827"
+                                        android:textSize="@dimen/txt16"
+                                        android:textStyle="bold"
+                                        app:layout_constraintStart_toEndOf="@+id/battery"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clBatteryTwo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/view"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+
+                                    <ImageView
+                                        android:id="@+id/batteryTwo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/space12"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/ic_icon_awesome_mountain"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvEnableAddDeviceTwo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text="Elevation"
+                                        android:textColor="#5D6571"
+                                        android:textSize="@dimen/txt14"
+                                        app:layout_constraintStart_toEndOf="@+id/batteryTwo"
+                                        app:layout_constraintTop_toBottomOf="@+id/totalAreeaTwo" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/totalAreeaTwo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text="761m"
+                                        android:textColor="#111827"
+                                        android:textSize="@dimen/txt16"
+                                        android:textStyle="bold"
+                                        app:layout_constraintStart_toEndOf="@+id/batteryTwo"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                                <View
+                                    android:id="@+id/view"
+                                    android:layout_width="2dp"
+                                    android:layout_height="32dp"
+                                    android:background="#EBECF2"
+                                    app:layout_constraintBottom_toTopOf="@+id/belowBattery"
+                                    app:layout_constraintEnd_toStartOf="@+id/clBatteryTwo"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/clBattery"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
+
+                                <View
+                                    android:id="@+id/belowBattery"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0.5dp"
+                                    android:layout_marginTop="@dimen/space12"
+                                    android:background="#EDEDED"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/clBattery" />
+
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvLastUpdate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:layout_marginTop="@dimen/space12"
+                                    android:layout_marginBottom="@dimen/space12"
+                                    android:text="Last Updated: Today Tue 26, Jul"
+                                    android:textColor="#5D6571"
+                                    android:textSize="@dimen/txt12"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                                <ImageView
+                                    android:id="@+id/ivUpdate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/space12"
+                                    android:layout_marginEnd="14dp"
+                                    android:src="@drawable/ic_update_refresh"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvLastUpdateRefresh"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:text="Update"
+                                    android:textColor="#146133"
+                                    android:textSize="@dimen/txt12"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/ivUpdate"
+                                    app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_top_Parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:elevation="8dp"
+                            app:cardCornerRadius="10dp"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cardAddDevice_One">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/top_Parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_ans"
+                                app:layout_constraintEnd_toStartOf="@+id/clWind"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ViewOne">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clTemp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+                                    app:layout_constraintEnd_toStartOf="@+id/clWind"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <ImageView
+                                        android:id="@+id/ivTemp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_tempearatrue_premium"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvTempDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvTempDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="66%"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvTemp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Temprature"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvTempDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvTempDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clWind"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/clTemp"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <ImageView
+                                        android:id="@+id/ivWind"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_rainfall"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvWindDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvWindDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="66%"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvWind"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Rainfall"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvWindDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvWindDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clHumidity"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+
+                                    app:layout_constraintEnd_toStartOf="@+id/clWind"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/clTemp">
+
+                                    <ImageView
+                                        android:id="@+id/ivHumidity"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_humidity_p"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvHumidityDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvHumidityDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="66%"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvHumidity"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Humidity"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvHumidityDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvHumidityDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clWindSpeed"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/clHumidity"
+                                    app:layout_constraintTop_toBottomOf="@+id/clWind">
+
+                                    <ImageView
+                                        android:id="@+id/ivWindSpeed"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_wind"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvWindSpeedDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvWindSpeedDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="66%"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvWindSpeed"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Wind Speed"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvWindSpeedDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvWindSpeedDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clLeafWetness"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/clWind"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/clHumidity">
+
+                                    <ImageView
+                                        android:id="@+id/ivLeafWetness"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_leaf_wetness"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvLeafWetnessDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvLeafWetnessDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="Wet"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvLeafWetness"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Leaf wetness"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvLeafWetnessDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvLeafWetnessDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clPressure"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_weather_card"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/clHumidity"
+                                    app:layout_constraintTop_toBottomOf="@+id/clWindSpeed">
+
+                                    <ImageView
+                                        android:id="@+id/ivPressure"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:src="@drawable/ic_pressure_p"
+                                        app:layout_constraintEnd_toStartOf="@+id/tvPressureDegree"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvPressureDegree"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16dp"
+                                        android:padding="2dp"
+                                        android:text="66%"
+                                        android:textColor="#171717"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/tvPressure"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="@dimen/txt10"
+                                        android:text="Pressure"
+                                        android:textColor="#585858"
+                                        android:textSize="@dimen/txt12"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="@+id/tvPressureDegree"
+                                        app:layout_constraintTop_toBottomOf="@+id/tvPressureDegree" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_speed_meter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_ans"
+                            android:elevation="8dp"
+                            app:cardCornerRadius="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_Temp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/cl_speed_meter"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_ans"
+                                app:layout_constraintEnd_toStartOf="@+id/clWind"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+
+                                <TextView
+                                    android:id="@+id/Soil_moisture"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/space16"
+                                    android:layout_marginTop="@dimen/space16"
+                                    android:text="Soil Moisture"
+                                    android:textColor="#000000"
+                                    android:textSize="@dimen/txt18"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/cl_top"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintEnd_toStartOf="@+id/bottom_top"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
+
+                                    <TextView
+                                        android:id="@+id/tv_top"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Top"
+                                        android:textColor="#070D09"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+                                    <!--                                    <com.github.anastr.speedviewlib.SpeedView-->
+                                    <!--                                        android:id="@+id/speedView"-->
+                                    <!--                                        android:layout_width="wrap_content"-->
+                                    <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                    <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                    <!--                                        android:layout_height="wrap_content"-->
+                                    <!--                                        />-->
+
+                                    <ProgressBar
+                                        android:id="@+id/soil_moisture_one"
+                                        android:layout_width="100dp"
+                                        android:layout_height="100dp"
+                                        android:indeterminateOnly="false"
+                                        android:max="140"
+                                        android:progressDrawable="@drawable/pb_circular_determinative"
+                                        android:rotation="-120"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"
+                                        />
+                                    <View
+                                        android:layout_width="100dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        android:layout_marginTop="70dp"
+                                        android:background="#ffffff"
+
+                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"
+                                        android:layout_height="20dp"/>
+
+                                    <TextView
+                                        android:id="@+id/kpa_one"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/space20"
+                                        android:text="100 KPa"
+                                        android:textColor="#171717"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one" />
+                                    <!--                                    <ProgressBar-->
+                                    <!--                                        style="@android:style/Widget.ProgressBar.Horizontal"-->
+                                    <!--                                        android:id="@+id/progressBar1"-->
+                                    <!--                                        android:layout_width="match_parent"-->
+                                    <!--                                        android:layout_height="wrap_content"-->
+                                    <!--                                        android:padding="10dp"-->
+                                    <!--                                        android:progress="0"/>-->
+
+                                    <!--                                    <com.github.anastr.speedviewlib.TubeSpeedometer-->
+                                    <!--                                        android:id="@+id/tubeSpeedometer"-->
+                                    <!--                                        android:layout_width="80dp"-->
+                                    <!--                                        android:layout_height="80dp"-->
+                                    <!--                                        android:layout_marginTop="8dp"-->
+                                    <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                    <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top" />-->
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/bottom_top"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/cl_top"
+                                    app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
+
+                                    <TextView
+                                        android:id="@+id/tv_bottom"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Bottom"
+                                        android:textColor="#070D09"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <ProgressBar
+                                        android:id="@+id/soil_moisture_two"
+                                        android:layout_width="100dp"
+                                        android:layout_height="100dp"
+                                        android:indeterminateOnly="false"
+                                        android:max="140"
+                                        android:progressDrawable="@drawable/pb_circular_determinative"
+                                        android:rotation="-120"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom" />
+                                    <View
+                                        android:layout_width="100dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        android:layout_marginTop="70dp"
+                                        android:background="#ffffff"
+                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom"
+                                        android:layout_height="20dp"/>
+
+                                    <TextView
+                                        android:id="@+id/kpa_Two"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="100 KPa"
+                                        android:textColor="#171717"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginBottom="@dimen/space20"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_two" />
+
+                                    <!--                                    <com.github.anastr.speedviewlib.TubeSpeedometer-->
+                                    <!--                                        android:id="@+id/tubeSpeedometerTwo"-->
+                                    <!--                                        android:layout_width="80dp"-->
+                                    <!--                                        android:layout_height="80dp"-->
+                                    <!--                                        android:layout_marginTop="8dp"-->
+                                    <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                    <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom" />-->
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_soil_temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:background="@drawable/bg_ans"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+
+                            <ImageView
+                                android:id="@+id/iv_lux"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:src="@drawable/ic_soil_tempuretur_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/iv_soil_temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:text="Soil Temperature"
+                                android:textColor="#585858"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iv_lux"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/iv_soil_degree"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="20 C"
+                                android:textColor="#171717"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_Temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:visibility="visible"
+                            android:background="@drawable/bg_ans"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_soil_temp">
+
+                            <ImageView
+                                android:id="@+id/iv_lux_one"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:src="@drawable/ic_lux"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/iv_soil_temp_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:text="Light Intensity"
+                                android:textColor="#585858"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iv_lux_one"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/iv_soil_degree_one"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="20 C"
+                                android:textColor="#171717"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
+                        <!--                            android:id="@+id/cl_view_device"-->
+                        <!--                            app:layout_constraintTop_toTopOf="parent"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="wrap_content">-->
+                        <!--                            -->
+                        <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
+                        <!--                            android:id="@+id/rvMyDevice"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="16dp"-->
+                        <!--                            android:orientation="horizontal"-->
+                        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            app:layout_constraintTop_toBottomOf="@+id/device_farm"-->
+                        <!--                            tools:itemCount="1"-->
+                        <!--                            tools:listitem="@layout/temp" />-->
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <!--                            &lt;!&ndash;                                    <LinearLayout&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:orientation="vertical"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:layout_marginStart="8dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:layout_marginEnd="8dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        android:layout_toEndOf="@+id/rv_myCrops"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        app:layout_constraintStart_toEndOf="@+id/rv_myCrops"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        app:layout_constraintTop_toTopOf="parent">&ndash;&gt;-->
+
+                    <!--                            &lt;!&ndash;                                        <com.google.android.material.card.MaterialCardView&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:id="@+id/cv_addCrop"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_width="64dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_height="64dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_gravity="center"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:gravity="center"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_marginTop="8dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            app:cardCornerRadius="100dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            app:cardElevation="0dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            app:strokeColor="#E5E7EB"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            app:strokeWidth="1dp">&ndash;&gt;-->
+
+                    <!--                            &lt;!&ndash;                                            <ImageView&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                                android:id="@+id/imageView"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                                android:layout_width="24dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                                android:layout_height="24dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                                android:layout_gravity="center"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                                android:src="@drawable/ic_add_home" />&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                        </com.google.android.material.card.MaterialCardView>&ndash;&gt;-->
+
+                    <!--                            &lt;!&ndash;                                        <TextView&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            style="@style/SemiBold"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:layout_marginTop="8dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:text="Add Crop"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:textColor="#146133"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                                            android:textSize="14sp" />&ndash;&gt;-->
+
+                    <!--                            &lt;!&ndash;                                    </LinearLayout>&ndash;&gt;-->
+
+                    <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/bottom_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ads"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearmyDevice" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
