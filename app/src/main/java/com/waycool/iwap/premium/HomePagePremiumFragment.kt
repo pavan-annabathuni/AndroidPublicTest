@@ -2,6 +2,7 @@ package com.waycool.iwap.premium
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +14,13 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.ekn.gruzer.gaugelibrary.Range
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.irrigationplanner.IrrigationPlannerActivity
+import com.google.android.libraries.maps.GoogleMap
+import com.google.android.libraries.maps.SupportMapFragment
+import com.google.android.libraries.maps.model.Polygon
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.repository.domainModels.MyCropDataDomain
@@ -28,13 +33,16 @@ import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import kotlin.math.roundToInt
 
 
-class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailslistener,myCropListener {
+class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailslistener,
+    myCropListener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
+    private var polygon: Polygon? = null
+    private var mMap: GoogleMap? = null
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private var myCropPremiumAdapter = MyCropPremiumAdapter(this)
-    private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
+
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     var deviceDataAdapter = DeviceDataAdapter()
 
@@ -265,6 +273,15 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
     }
 
     private fun initObserveMYFarm() {
+        var myFarmPremiumAdapter = MyFarmPremiumAdapter( this)
+//        val mapFragment = childFragmentManager
+//            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
+//        mapFragment!!.requireView().isClickable = false
+//        mapFragment.getMapAsync { googleMap: GoogleMap ->
+//            mMap = googleMap
+//            mMap?.uiSettings?.setAllGesturesEnabled(false)
+//            mMap?.uiSettings?.isMapToolbarEnabled = false
+//        }
         binding.rvMyFarm.adapter = myFarmPremiumAdapter
         binding.videosScrollMyFarm.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
         binding.rvMyFarm.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -280,7 +297,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                 Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
                 if (accountId != null)
-                    viewModel.getMyFarms(accountId,null).observe(viewLifecycleOwner) {
+                    viewModel.getMyFarms(accountId, null).observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
                                 if (it.data == null) {
@@ -370,7 +387,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
     }
 
     fun progressColor() {
-        binding.soilMoistureOne.progress = 60
+//        binding.soilMoistureOne.progress = 60
 
     }
 
@@ -386,19 +403,68 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
 
             it.tvHumidityDegree.text = data.humidity.toString()
             it.tvWindSpeedDegree.text = data.windspeed.toString()
-            if (data.leafWetness!! .equals(1)){
+            if (data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
-            }else{
+            } else {
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
             }
             it.tvPressureDegree.text = data.pressure.toString()
-            it.ivSoilDegree.text = data.soilTemperature1.toString() + "C"
-            it.ivSoilDegreeOne.text = data.soilTemperature2.toString() + "C"
+            it.ivSoilDegree.text = data.soilTemperature1.toString() + " C"
+            it.ivSoilDegreeOne.text = data.lux .toString() + " Lux"
             it.tvLastUpdate.text = data.dataTimestamp.toString()
-            binding.soilMoistureOne.progress = 60
-            binding.soilMoistureTwo.progress = 70
+
+            val range = Range()
+            range.color = Color.parseColor("#EC4544")
+            range.from = 0.0
+            range.to = 10.0
+
+            val range2 = Range()
+            range2.color = Color.parseColor("#1FB04B")
+            range2.from = 10.0
+            range2.to = 40.0
+
+            val range3 = Range()
+            range3.color = Color.parseColor("#FFFF00")
+            range3.from = 40.0
+            range3.to = 80.0
+            val range4 = Range()
+            range4.color = Color.parseColor("#EC4544")
+            range4.from = 80.0
+            range4.to = 100.0
+            //add color ranges to gauge
+            binding.soilMoistureOne.addRange(range)
+            binding.soilMoistureOne.addRange(range2)
+            binding.soilMoistureOne.addRange(range3)
+            binding.soilMoistureOne.addRange(range4)
+
+            binding.soilMoistureTwo.addRange(range)
+            binding.soilMoistureTwo.addRange(range2)
+            binding.soilMoistureTwo.addRange(range3)
+            binding.soilMoistureTwo.addRange(range4)
+
+            //set min max and current value
+            binding.soilMoistureOne.minValue = 0.0
+            binding.soilMoistureOne.maxValue = 100.0
+            binding.soilMoistureOne.value = data.soilMoisture1!!.toDouble()
+
+            binding.soilMoistureTwo.minValue = 0.0
+            binding.soilMoistureTwo.maxValue = 100.0
+            binding.soilMoistureTwo.value = data.soilMoisture1!!.toDouble()
+
+//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
+//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
+//
+//            if (data.soilMoisture1?.toInt()!! < 30){
+//                binding.soilMoistureOne.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+//            }else if (data.soilMoisture1?.toInt()!! < 30)
+//                if (data.soilMoisture2?.toInt()!! < 30){
+//                    binding.soilMoistureTwo.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+//
+//                }
+//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
+//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
 
 //            it.tubeSpeedometer.maxSpeed = 100f
 //            it.tubeSpeedometer.speedTo(140f)
@@ -412,31 +478,49 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "temperature")
+                    bundle.putString("temp_value",data.temperature)
+                    bundle.putString("date_time",data.dataTimestamp)
+
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
                     )
                 }
-
             }
-            it.clWindSpeed.setOnClickListener {
+            it.clWind.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "pressure")
+                    bundle.putString("value", "rainfall")
+                    bundle.putString("temp_value",data.rainfall)
+                    bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
                     )
                 }
             }
+//            it.clWindSpeed.setOnClickListener {
+//                val bundle = Bundle()
+//                if (data.serialNoId != null && data.modelId != null) {
+//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+//                    bundle.putString("value", "pressure")
+//                    findNavController().navigate(
+//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+//                        bundle
+//                    )
+//                }
+//            }
             it.clHumidity.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "temperature")
+                    bundle.putString("value", "humidity")
+                    bundle.putString("temp_value",data.humidity)
+                    bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -448,7 +532,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "temperature")
+                    bundle.putString("value", "windspeed")
+                    bundle.putString("temp_value",data.windspeed)
+                    bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -460,7 +546,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "temperature")
+                    bundle.putString("value", "leadwetnes")
+                    bundle.putString("temp_value",data.rainfall)
+                    bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -472,7 +560,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "temperature")
+                    bundle.putString("value", "pressure")
+                    bundle.putString("temp_value",data.pressure)
+                    bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -486,13 +576,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
     }
 
     override fun farmDetails(data: MyFarmsDomain) {
-        val bundle=Bundle()
-        bundle.putInt("farm_id",data.id!!)
-        findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3,bundle)
+        val bundle = Bundle()
+        bundle.putInt("farm_id", data.id!!)
+        findNavController().navigate(
+            R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3,
+            bundle
+        )
     }
+
     override fun myCropListener(data: MyCropDataDomain) {
-                val intent = Intent(activity, IrrigationPlannerActivity::class.java)
-                startActivity(intent)
+        val intent = Intent(activity, IrrigationPlannerActivity::class.java)
+        startActivity(intent)
     }
 
 

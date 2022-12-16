@@ -163,14 +163,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 <!--            <fragment-->
-<!--                android:id="@+id/map_farms_home"-->
+<!--                android:id="@+id/ivAddDeviceEnd"-->
 <!--                android:name="com.google.android.libraries.maps.SupportMapFragment"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                map:layout_constraintEnd_toEndOf="parent"-->
-<!--                map:layout_constraintStart_toStartOf="parent"-->
-<!--                map:layout_constraintTop_toTopOf="parent"-->
-<!--                map:liteMode="true" />-->
+<!--                android:layout_width="@dimen/space100"-->
+<!--                android:layout_height="@dimen/space75"-->
+<!--                android:layout_marginStart="@dimen/space12"-->
+<!--                android:layout_marginTop="12dp"-->
+<!--                android:scaleType="fitXY"-->
+<!--                android:src="@drawable/adddevice"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

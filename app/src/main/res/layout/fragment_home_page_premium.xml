@@ -471,7 +471,6 @@ more details."
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/space4"
                     android:visibility="gone"
-
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="12dp"
                     tools:visibility="visible">
@@ -523,7 +522,7 @@ more details."
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
                             android:drawablePadding="4dip"
-                            android:text="Add Crop"
+                            android:text="Add Farm"
                             android:textColor="@color/primaryColor"
                             android:textSize="14sp"
                             app:drawableEndCompat="@drawable/ic_add"
@@ -659,7 +658,7 @@ more details."
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="@dimen/txt16"
                             android:layout_marginEnd="8dp"
-                            android:text="Add your Crop and get \n
+                            android:text="Add your Device and get \n
 more details."
                             android:textColor="#111827"
                             android:textSize="@dimen/txt18"
@@ -697,7 +696,7 @@ more details."
                                 android:layout_marginTop="6dp"
                                 android:layout_marginEnd="6dp"
                                 android:layout_marginBottom="@dimen/space6"
-                                android:text="Add crops"
+                                android:text="Add Device"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt18"
                                 android:textStyle="bold"
@@ -1453,27 +1452,36 @@ more details."
                                     <!--                                        android:layout_height="wrap_content"-->
                                     <!--                                        />-->
 
-                                    <ProgressBar
+<!--                                    <ProgressBar-->
+<!--                                        android:id="@+id/soil_moisture_one"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        android:layout_height="100dp"-->
+<!--                                        android:indeterminateOnly="false"-->
+<!--                                        android:max="240"-->
+<!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
+<!--                                        android:rotation="-120"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+<!--                                        />-->
+                                    <com.ekn.gruzer.gaugelibrary.HalfGauge
                                         android:id="@+id/soil_moisture_one"
-                                        android:layout_width="100dp"
+                                        android:layout_width="150dp"
                                         android:layout_height="100dp"
-                                        android:indeterminateOnly="false"
-                                        android:max="140"
-                                        android:progressDrawable="@drawable/pb_circular_determinative"
-                                        android:rotation="-120"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/tv_top"
                                         />
-                                    <View
-                                        android:layout_width="100dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        android:layout_marginTop="70dp"
-                                        android:background="#ffffff"
 
-                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"
-                                        android:layout_height="20dp"/>
+
+<!--                                    <View-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        android:layout_marginTop="70dp"-->
+<!--                                        android:background="#ffffff"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+<!--                                        android:layout_height="20dp"/>-->
 
                                     <TextView
                                         android:id="@+id/kpa_one"
@@ -1530,25 +1538,34 @@ more details."
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
 
-                                    <ProgressBar
+<!--                                    <ProgressBar-->
+<!--                                        android:id="@+id/soil_moisture_two"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        android:layout_height="100dp"-->
+<!--                                        android:indeterminateOnly="false"-->
+<!--                                        android:max="140"-->
+<!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
+<!--                                        android:rotation="-120"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom"-->
+<!--                                        />-->
+                                    <com.ekn.gruzer.gaugelibrary.HalfGauge
                                         android:id="@+id/soil_moisture_two"
-                                        android:layout_width="100dp"
+                                        android:layout_width="150dp"
                                         android:layout_height="100dp"
-                                        android:indeterminateOnly="false"
-                                        android:max="140"
-                                        android:progressDrawable="@drawable/pb_circular_determinative"
-                                        android:rotation="-120"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom" />
-                                    <View
-                                        android:layout_width="100dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        android:layout_marginTop="70dp"
-                                        android:background="#ffffff"
                                         app:layout_constraintTop_toBottomOf="@+id/tv_bottom"
-                                        android:layout_height="20dp"/>
+                                        />
+<!--                                    <View-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        android:layout_marginTop="70dp"-->
+<!--                                        android:background="#ffffff"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom"-->
+<!--                                        android:layout_height="20dp"/>-->
 
                                     <TextView
                                         android:id="@+id/kpa_Two"
@@ -1578,7 +1595,6 @@ more details."
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </androidx.cardview.widget.CardView>
-
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_soil_temp"
                             android:layout_width="match_parent"
@@ -1587,7 +1603,7 @@ more details."
                             android:background="@drawable/bg_ans"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+                            app:layout_constraintTop_toBottomOf="@+id/card_speed_meter">
 
                             <ImageView
                                 android:id="@+id/iv_lux"
@@ -1627,6 +1643,8 @@ more details."
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_Temp"
                             android:layout_width="match_parent"
@@ -1636,7 +1654,7 @@ more details."
                             android:background="@drawable/bg_ans"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/cl_soil_temp">
+                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
 
                             <ImageView
                                 android:id="@+id/iv_lux_one"

@@ -17,16 +17,17 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
-import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.utils.Resource
-import com.waycool.iwap.R
+
 import com.waycool.iwap.databinding.FragmentGraphsBinding
-import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
+
 import com.waycool.iwap.utils.Constant.TAG
 import kotlinx.coroutines.launch
 import java.text.ParseException
+
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GraphsFragment : Fragment() {
@@ -54,29 +55,48 @@ class GraphsFragment : Fragment() {
             val serial_no = arguments?.getInt("serial_no")
             val device_model_id = arguments?.getInt("device_model_id")
             val value = arguments?.getString("value")
+            val data_degree=arguments?.getString("temp_value")
+//            val
             Log.d(Constant.TAG, "onCreateViewONPID:$serial_no ")
             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
-//            initObserveGraphs(serial_no,device_model_id,value)
+//            graphApiData(serial_no, device_model_id, value)
+//            binding.today.text=
+
+//            binding.tvToolbar.
+//            graphApiData(serial_no, device_model_id, value)
+
         }
+        initClicks()
+
         tabs()
 
     }
+
+    private fun initClicks() {
+        binding.backBtn.setOnClickListener{
+
+        }
+    }
+
     private fun tabs() {
 
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Today").setCustomView(com.example.mandiprice.R.layout.item_tab)
+            binding.tabLayout.newTab().setText("Today")
+                .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Last 7 Days").setCustomView(com.example.mandiprice.R.layout.item_tab)
+            binding.tabLayout.newTab().setText("Last 7 Days")
+                .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("1 Month").setCustomView(com.example.mandiprice.R.layout.item_tab)
+            binding.tabLayout.newTab().setText("1 Month")
+                .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(binding.tabLayout.selectedTabPosition) {
-                    0->{
+                when (binding.tabLayout.selectedTabPosition) {
+                    0 -> {
                         if (arguments != null) {
                             val serial_no = arguments?.getInt("serial_no")
                             val device_model_id = arguments?.getInt("device_model_id")
@@ -84,49 +104,142 @@ class GraphsFragment : Fragment() {
                             Log.d(Constant.TAG, "onCreateViewONPID:$serial_no ")
                             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
                             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
+//                            graphApiData(serial_no, device_model_id, value)
 //                            initObserveGraphs(serial_no,device_model_id,value)
-//                            initObserveGraphs(serial_no,device_model_id,value)
+//                            initObserveGraphs(serial_no, device_model_id, value)
                         }
                     }
-                    1->{
+                    1 -> {
 
                     }
-                    2->{
+                    2 -> {
 
                     }
 
                 }
-                }
+            }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {
 
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
-                }
+            }
         })
     }
 
+//    private fun graphApiData(serialNo: Int?, deviceModelId: Int?, value: String?) {
+//        viewDevice.viewModelScope.launch {
+//            viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
+//                .observe(requireActivity()) {
+//                    when (it) {
+//                        is Resource.Success -> {
+//                            if (it.data?.data != null) {
+//                                Log.d(TAG, "dataGraDataPoints: ${it.data?.data}")
+//                                listLine = ArrayList()
+////                                val list = ArrayList<LastTodayData>()
+//                                if (it.data?.data != null) {
+//                                    for (i in list.iterator()) {
+////                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
+////                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
+////                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
+////                val formateDate = outputDate.format(date)
+////                Log.d("DATE", "graph: $formateDate ")
+//                                        val xAxis: XAxis = binding.lineChart.getXAxis()
+//                                        listLine.add(
+//                                            Entry(
+//                                                i.eighet!!.toFloat(),
+//                                                it.data!!.data?.LastTodayData.toString().toFloat()
+//                                            )
+//                                        )
+//                                    }
+//                                }
+////        listLine.add(Entry(20f,13f))
+////        listLine.add(Entry(30f,11f))
+////        listLine.add(Entry(40f,13f))
+////        listLine.add(Entry(60f,12f))
+//
+//                                lineDataSet = LineDataSet(listLine, "")
+//
+//                                val datesList = it.data?.data?.LastTodayData?.keys
+////                                val datesList = it.data?.data?.LastTodayData?.one?.map { date ->
+////                                    try {
+////                                        val date: Date =
+////                                            inputDateFormatter.parse(it.data?.data?.LastTodayData?.one.toString())
+////                                        outputDateFormatter.format(date)
+////                                    } catch (e: ParseException) {
+////                                        Log.d("Graphs", e.message.toString())
+////                                        ""
+////                                    }
+////                                }
+//                                val valueFormatter2 = IndexAxisValueFormatter()
+//
+//                                var xAxis2 = datesList?.toTypedArray()
+//                                valueFormatter2.values = xAxis2
+//                                binding.lineChart.xAxis.valueFormatter = valueFormatter2
+//                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+////                binding.lineChart.xAxis.labelRotationAngle = -45f
+//
+//                                binding.lineChart.axisLeft.axisMinimum = 0f
+//
+//                                lineData = LineData(lineDataSet)
+//                                lineDataSet.color =
+//                                    resources.getColor(com.example.mandiprice.R.color.WoodBrown)
+//                                binding.lineChart.data = lineData
+//                                lineDataSet.setCircleColor(Color.WHITE)
+//                                lineDataSet.circleHoleColor =
+//                                    resources.getColor(com.example.mandiprice.R.color.DarkGreen)
+//                                lineDataSet.circleRadius = 6f
+//                                lineDataSet.mode = LineDataSet.Mode.LINEAR
+//
+//                                lineDataSet.setDrawFilled(true)
+//                                binding.lineChart.setDrawGridBackground(false)
+//                                binding.lineChart.setDrawBorders(true)
+//                                binding.lineChart.setBorderColor(com.example.mandiprice.R.color.LightGray)
+//                                binding.lineChart.setBorderWidth(1f)
+//                                binding.lineChart.axisRight.setDrawGridLines(false)
+//                                binding.lineChart.axisLeft.setDrawGridLines(false)
+//                                //binding.lineChart.xAxis.setDrawGridLines(false)
+//                                binding.lineChart.description.isEnabled = false
+//                                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+//                                binding.lineChart.axisRight.isEnabled = false
+//                                lineDataSet.fillDrawable =
+//                                    resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+//                                binding.lineChart.xAxis.spaceMax = 1f
+//                                binding.lineChart.fitScreen()
+//                                // binding.lineChart.axisLeft.isEnabled = false;
+//                                binding.lineChart.isScaleXEnabled = false
+//
+//
+//                            }
+//
+//                        }
+//                        is Resource.Error -> {
+//                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+//                        }
+//                        is Resource.Loading -> {
+//                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//
+//                        }
+//                    }
+//
+//                }
+//
+//        }
+//    }
+}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//    private fun initObserveGraphs(serialNo: Int?, deviceModelId: Int?,value:String?) {
-//        viewDevice.getGraphsViewDevice(serialNo,deviceModelId,value).observe(viewLifecycleOwner) { it ->
-//             listLine = ArrayList()
+//    private fun initObserveGraphs(serialNo: Int?, deviceModelId: Int?, value: String?) {
+//        viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
+//            .observe(viewLifecycleOwner) { it ->
+//                listLine = ArrayList()
+//                val list = ArrayList<LastTodayData>()
 //                if (it.data?.data != null) {
-//                    for (i in it.data?.data!!.LastTodayData !!.indices) {
+//                    for (i in list.iterator()) {
 ////                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
 ////                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
 ////                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
@@ -135,7 +248,8 @@ class GraphsFragment : Fragment() {
 //                        val xAxis: XAxis = binding.lineChart.getXAxis()
 //                        listLine.add(
 //                            Entry(
-//                                i.toFloat(),it.data!!.data?.LastTodayData?.dataTimestamp  .toString().toFloat()
+//                                i.toFloat(),
+//                                it.data!!.data?.LastTodayData?.dataTimestamp.toString().toFloat()
 //                            )
 //                        )
 //                    }
@@ -147,12 +261,13 @@ class GraphsFragment : Fragment() {
 //
 //                lineDataSet = LineDataSet(listLine, "")
 //
-//                val datesList = it.data?.data?.LastTodayData?.dataTimestamp?. map { date ->
+//                val datesList = it.data?.data?.LastTodayData?.one ?.map { date ->
 //                    try {
-//                        val date: Date = inputDateFormatter.parse(it.data?.data?.LastTodayData?.dataTimestamp.toString())
+//                        val date: Date =
+//                            inputDateFormatter.parse(it.data?.data?.LastTodayData?.one.toString())
 //                        outputDateFormatter.format(date)
 //                    } catch (e: ParseException) {
-//                        Log.d("Mandi Graphs",e.message.toString())
+//                        Log.d("Mandi Graphs", e.message.toString())
 //                        ""
 //                    }
 //                }
@@ -170,7 +285,8 @@ class GraphsFragment : Fragment() {
 //                lineDataSet.color = resources.getColor(com.example.mandiprice.R.color.WoodBrown)
 //                binding.lineChart.data = lineData
 //                lineDataSet.setCircleColor(Color.WHITE)
-//                lineDataSet.circleHoleColor = resources.getColor(com.example.mandiprice.R.color.DarkGreen)
+//                lineDataSet.circleHoleColor =
+//                    resources.getColor(com.example.mandiprice.R.color.DarkGreen)
 //                lineDataSet.circleRadius = 6f
 //                lineDataSet.mode = LineDataSet.Mode.LINEAR
 //
@@ -185,28 +301,33 @@ class GraphsFragment : Fragment() {
 //                binding.lineChart.description.isEnabled = false
 //                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 //                binding.lineChart.axisRight.isEnabled = false
-//                lineDataSet.fillDrawable = resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+//                lineDataSet.fillDrawable =
+//                    resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
 //                binding.lineChart.xAxis.spaceMax = 1f
 //                binding.lineChart.fitScreen()
 //                // binding.lineChart.axisLeft.isEnabled = false;
 //                binding.lineChart.isScaleXEnabled = false
 //            }
+//////
+//////////            when (it) {
+//////////                    is Resource.Success -> {
+//////////                        Log.d(TAG, "initObserveGraphs: ${it.data?.data}")
+//////////                    }
+//////////                    is Resource.Error -> {
+//////////                        Toast.makeText(requireContext(), it.data?.message.toString(), Toast.LENGTH_SHORT).show()
+//////////                    }
+//////////                    is Resource.Loading -> {
+//////////                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+//////////
+//////////                    }
+//////////                }
+////////
+////////        }
+//////    }
+////    }
 //
-////            when (it) {
-////                    is Resource.Success -> {
-////                        Log.d(TAG, "initObserveGraphs: ${it.data?.data}")
-////                    }
-////                    is Resource.Error -> {
-////                        Toast.makeText(requireContext(), it.data?.message.toString(), Toast.LENGTH_SHORT).show()
-////                    }
-////                    is Resource.Loading -> {
-////                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-////
-////                    }
-////                }
 //
-//        }
-    }
+//}
 
 
 //

@@ -35,7 +35,7 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
             binding.recyclerviewStatusLab.layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             binding.recyclerviewStatusLab.adapter = soilTestingLabsAdapter
-            soilTestingLabsAdapter.setMovieList(your_list!!)
+            soilTestingLabsAdapter.setMovieList(your_list)
             soilTestingLabsAdapter.notifyDataSetChanged()
 
             latitude=arguments?.getString("lat")
