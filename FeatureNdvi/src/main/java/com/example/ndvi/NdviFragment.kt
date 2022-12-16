@@ -62,7 +62,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map_ndvi) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        viewModel.getNdvi(3, 3).observe(viewLifecycleOwner) {
+        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
             Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
              ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
              trueColor = it.data?.data?.get(0)?.truecolorTile.toString()
@@ -136,13 +136,13 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
                         var url: String?
-                        //   url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/1206393cc00/634b70b6176fe6885343f144?appid=248c44ddf25114728e9aceff0f59b219&paletteid=4"
-                        if(selectedTileType == TileType.NDVI) {
-                           // url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120636aed80/6391d44c50d9ff43ef5568a1?appid=071e58db72985a51f8f5da4ab1969561&paletteid=4"
-                            url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/1206393cc00/634b70b6176fe6885343f144?appid=248c44ddf25114728e9aceff0f59b219&paletteid=4"
-                        }else{
-                           url = trueColor
-                       }
+                        url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
+//                        if(selectedTileType == TileType.NDVI) {
+//                           // url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120636aed80/6391d44c50d9ff43ef5568a1?appid=071e58db72985a51f8f5da4ab1969561&paletteid=4"
+//                         //   url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
+//                        }else{
+//                           url = trueColor
+//                       }
                        url= url?.replace("{z}", "${zoom}")
                         url=url?.replace("{x}", "${x}")
                         url=url?.replace("{y}", "${y}")
@@ -178,14 +178,14 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
 
         fun observer() {
-            viewModel.getNdvi(3, 3).observe(viewLifecycleOwner) {
+            viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
                // binding.slider.value = it.data?.data?.get(0)?.meanNdvi?.toFloat() ?: 0.0.toFloat()
                 Log.d("Ndvi", "observer: ${it.data.toString()}")
                 binding.ndviMean.text = it.data?.data?.get(0)?.meanNdvi?.toString()
             }
         }
             private fun spinner(){
-                viewModel.getNdvi(3, 3).observe(viewLifecycleOwner) {
+                viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
                 val list: MutableList<String?> = (it?.data?.data
                     ?.filter { ndviData -> ndviData.tileDate!=null }
                     ?.map { data -> data.tileDate }?: mutableListOf()) as MutableList<String?>
@@ -210,7 +210,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             }}
 
     fun polyGone(mMap: GoogleMap?){
-        farmjson = "[{\"latitude\":20.13548870253035,\"longitude\":74.05694760382175},{\"latitude\":20.136933556503628,\"longitude\":74.05710987746716},{\"latitude\":20.137414856745288,\"longitude\":74.05718564987183},{\"latitude\":20.137414856745288,\"longitude\":74.05754171311855},{\"latitude\":20.137073949009807,\"longitude\":74.05756786465645},{\"latitude\":20.136801977762257,\"longitude\":74.05752763152122},{\"latitude\":20.136450366084365,\"longitude\":74.05747465789318},{\"latitude\":20.135871165176347,\"longitude\":74.05748907476664},{\"latitude\":20.13552112532596,\"longitude\":74.05743677169085},{\"latitude\":20.134875186421276,\"longitude\":74.05727550387383},{\"latitude\":20.134367121488765,\"longitude\":74.05725672841072},{\"latitude\":20.133880775256966,\"longitude\":74.05717693269253},{\"latitude\":20.133956639073013,\"longitude\":74.0565100684762},{\"latitude\":20.13527874115715,\"longitude\":74.05658517032862},{\"latitude\":20.13548870253035,\"longitude\":74.05694760382175}]"
+        farmjson = "[{\"latitude\":12.949531401598282,\"longitude\":77.58231740444899},{\"latitude\":12.948163298404053,\"longitude\":77.58753832429647},{\"latitude\":12.944272315664866,\"longitude\":77.58126463741064},{\"latitude\":12.947535935459252,\"longitude\":77.58129380643368},{\"latitude\":12.949531401598282,\"longitude\":77.58231740444899}]"
         if (farmjson != null) {
             val points = convertStringToLatLnList(farmjson)
             if (points != null) {

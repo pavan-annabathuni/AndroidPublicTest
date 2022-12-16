@@ -33,6 +33,7 @@ class IrrigationFragment : Fragment() {
     private lateinit var mDiseaseAdapter: DiseaseAdapter
     private lateinit var mWeeklyAdapter: WeeklyAdapter
     private var accountId:Int = 0
+     var dificiency:String = "noData"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -118,52 +119,86 @@ class IrrigationFragment : Fragment() {
         binding.cropStage.setOnClickListener(){
             this.findNavController().navigate(IrrigationFragmentDirections.actionIrrigationFragmentToCropStageFragment())
         }
+        binding.topAppBar.setOnClickListener(){
+            activity?.finish()
+        }
     }
 
     private fun setAdapter() {
         mWeeklyAdapter = WeeklyAdapter()
         binding.recycleViewDis.adapter = mWeeklyAdapter
-        viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner){
-                it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
-                    mWeeklyAdapter.setList(
-                        it1
-                    )
-                }
-            }
-        }
-
         mHistoryAdapter = HistoryAdapter(HistoryAdapter.DiffCallback.OnClickListener {
 
         })
         binding.recycleViewHis.adapter = mHistoryAdapter
+        mDiseaseAdapter = DiseaseAdapter()
+        binding.rvDis.adapter = mDiseaseAdapter
+
+
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner) {
+            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner){
+                //weekly
+                it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
+                    mWeeklyAdapter.setList(
+                        it1
+                    ) }
+                //history
                 mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
                 Log.d("hostry", "setAdapter: ${it.message}")
-                binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation
+                binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
                 if(it.data?.data?.irrigation?.historicData?.get(0)?.irrigation!=null){
                     binding.dailyIrrigation.visibility = View.GONE
                     binding.perDay.visibility = View.VISIBLE
                 }
 
-
-            }
-        }
-        mDiseaseAdapter = DiseaseAdapter()
-        binding.rvDis.adapter = mDiseaseAdapter
-        viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
-//                        val i = it.data?.data?.disease?.size?.minus(1)
-//                        while (i!=0) {
+                //disease
                 val data = it.data?.data?.disease?.filter { itt ->
                     itt.disease.diseaseType == "Disease"
                 }
                 mDiseaseAdapter.submitList(data)
                 Log.d("hostry", "setAdapter: ${it.message}")
-//                        }
+                val data2 = it.data?.data?.disease?.filter { itt ->
+                    itt.disease.diseaseType == "Deficiency"
+                }
+                if(data2!=null) dificiency = "dif"
+                else dificiency = "noData"
             }
         }
+
+
+//        binding.recycleViewHis.adapter = mHistoryAdapter
+//        viewModel.viewModelScope.launch {
+//            viewModel.getIrrigationHis(accountId,1).observe(viewLifecycleOwner) {
+//                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
+//                Log.d("hostry", "setAdapter: ${it.message}")
+//                binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation
+//                if(it.data?.data?.irrigation?.historicData?.get(0)?.irrigation!=null){
+//                    binding.dailyIrrigation.visibility = View.GONE
+//                    binding.perDay.visibility = View.VISIBLE
+//                }
+//
+//
+//            }
+//        }
+//
+//        viewModel.viewModelScope.launch {
+//            viewModel.getIrrigationHis(accountId, 1).observe(viewLifecycleOwner) {
+////                        val i = it.data?.data?.disease?.size?.minus(1)
+////                        while (i!=0) {
+//                val data = it.data?.data?.disease?.filter { itt ->
+//                    itt.disease.diseaseType == "Disease"
+//                }
+//                mDiseaseAdapter.submitList(data)
+//                Log.d("hostry", "setAdapter: ${it.message}")
+//
+//
+//                val data2 = it.data?.data?.disease?.filter { itt ->
+//                    itt.disease.diseaseType == "Deficiency"
+//                }
+//                if(data2!=null) dificiency = "dif"
+//                else dificiency = "noData"
+//            }
+//        }
     }
 
     private fun tabs() {
@@ -174,9 +209,10 @@ class IrrigationFragment : Fragment() {
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Pest").setCustomView(R.layout.item_tab)
         )
+        if(dificiency == "diff"){
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Deficiency").setCustomView(R.layout.item_tab)
-        )
+        )}
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(binding.tabLayout.selectedTabPosition) {

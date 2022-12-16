@@ -33,13 +33,16 @@ class DiseaseHistoryAdapter: ListAdapter<Disease,DiseaseHistoryAdapter.MyViewHol
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
         holder.date.text = properties.createdAt
-        holder.slider2.value = properties.probability?.toFloat() ?: 0.0.toFloat()
-
-        if(properties.probability!!<50.00) {
+        holder.slider2.value = properties.probability!!.toFloat()
+        if(properties.probability!!>=15.99&&properties.probability!!<=43.99) {
             holder.risk.text = "Low Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
         }
-        else if (properties.probability!!>50.00&&properties.probability!!<75.00){
+        else if (properties.probability!!<=15.00){
+            holder.risk.text = "NIll"
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_gray)
+        }
+        else if (properties.probability!!>=44&&properties.probability!!<=72.99){
             holder.risk.text = "Medium Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
         }

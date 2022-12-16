@@ -53,10 +53,10 @@ class MandiViewModel : ViewModel() {
 
 
     suspend fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
-                                sortBy: String?, orderBy: String?,search:String?
+                                sortBy: String?, orderBy: String?,search:String?,accountId:Int
     ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(lat,long,crop_category,
-            state,crop,sortBy,orderBy,search).cachedIn(viewModelScope).asLiveData()
+            state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
 
 
     suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?):

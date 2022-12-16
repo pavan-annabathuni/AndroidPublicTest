@@ -51,7 +51,7 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
             holder.x.text = properties.days[position]
 
         val level = (properties.mad[position].toFloat()) - (properties.depletion[position].toFloat())
-        if(level>=0) {
+        if(level<=0) {
             holder.image.setImageResource(R.drawable.ic_irrigation_2)
             holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
             holder.x.setTextColor(Color.parseColor("#146133"))

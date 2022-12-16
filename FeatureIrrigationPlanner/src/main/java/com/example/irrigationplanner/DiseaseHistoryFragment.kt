@@ -22,6 +22,7 @@ class DiseaseHistoryFragment : Fragment() {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
     private lateinit var mHistoryAdapter: DiseaseHistoryAdapter
+    var dificiency:String = "noData"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,12 @@ class DiseaseHistoryFragment : Fragment() {
                 }
                 mHistoryAdapter.submitList(data)
                 Log.d("hostry", "setAdapter: ${it.message}")
+
+                val data2 = it.data?.data?.disease?.filter { itt ->
+                    itt.disease.diseaseType == "Deficiency"
+                }
+                if(data2!=null) dificiency = "dif"
+                else dificiency = "noData"
 //                        }
             }
         }
@@ -66,9 +73,10 @@ class DiseaseHistoryFragment : Fragment() {
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Pest").setCustomView(R.layout.item_tab)
         )
+        if(dificiency == "diff"){
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Deficiency").setCustomView(R.layout.item_tab)
-        )
+        )}
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(binding.tabLayout.selectedTabPosition) {

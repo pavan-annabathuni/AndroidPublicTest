@@ -59,6 +59,7 @@ class MandiFragment : Fragment() {
     private var long= "78.22"
     var distance = "Distance"
     var price = "Price"
+    var accountID = 0
 
     val arrayCat = ArrayList<String>()
 
@@ -123,6 +124,7 @@ class MandiFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner){
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
+            accountID = it.data?.accountId!!
         }
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
@@ -583,7 +585,7 @@ class MandiFragment : Fragment() {
         search: String? = null
     ) {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
+            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountID)
                 .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({

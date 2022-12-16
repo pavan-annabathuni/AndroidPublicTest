@@ -21,6 +21,9 @@ interface OutgrowDao {
     @Query("SELECT * FROM tags")
     fun getTags(): Flow<List<TagsEntity>?>
 
+    @Query("DELETE FROM tags")
+    fun deleteTags()
+
     //Crop Master
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCropMaster(crops: List<CropMasterEntity>)
@@ -37,6 +40,8 @@ interface OutgrowDao {
     @Query("SELECT * FROM crop_master WHERE crop_info = 1 AND crop_name LIKE '%' || :searchQuery || '%' ORDER BY crop_name Asc")
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?>
 
+    @Query("DELETE FROM crop_master")
+    fun deleteCropMaster()
     //Pest Diseases
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPestDiseases(crops: List<PestDiseaseEntity>)
@@ -47,12 +52,17 @@ interface OutgrowDao {
     @Query("SELECT * FROM pest_disease WHERE disease_id = :diseaseId ORDER BY disease_name Asc")
     fun getSelectedDisease(diseaseId: Int): Flow<PestDiseaseEntity>
 
+    @Query("DELETE FROM pest_disease")
+    fun deletePestDiseases()
+
     //cropInformation
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCropInformation(crops_information: List<CropInformationEntityData>)
 
     @Query("SELECT * FROM crop_information WHERE crop_id = :cropId")
     fun getCropInformation(cropId: Int): Flow<List<CropInformationEntityData>>
+    @Query("DELETE FROM crop_information")
+    fun deleteCropInformation()
 
     //MyCrops
     @Insert(onConflict = OnConflictStrategy.REPLACE)

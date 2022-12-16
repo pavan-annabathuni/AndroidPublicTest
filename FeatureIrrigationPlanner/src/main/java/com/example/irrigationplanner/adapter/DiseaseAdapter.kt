@@ -35,15 +35,15 @@ class DiseaseAdapter:ListAdapter<Disease,DiseaseAdapter.MyViewHolder>(DiffCallba
         val properties = getItem(position)
        // holder.disName.text = properties.
         holder.slider2.value = properties.probability!!.toFloat()
-        if(properties.probability!!>=16.00&&properties.probability!!<=43) {
+        if(properties.probability!!>15.00&&properties.probability!!<=43.99) {
             holder.risk.text = "Low Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
         }
-        else if (properties.probability!!<=15.00&&properties.probability!!<=43.50){
-            holder.risk.text = "NIll"
-            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
+        else if (properties.probability!!<=15.00){
+            holder.risk.text = "Nill"
+            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_gray)
         }
-        else if (properties.probability!!>=44&&properties.probability!!<=72.00){
+        else if (properties.probability!!>=44&&properties.probability!!<=72.99){
             holder.risk.text = "Medium Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
         }

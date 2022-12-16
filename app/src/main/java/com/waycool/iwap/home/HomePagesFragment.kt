@@ -244,7 +244,7 @@ class HomePagesFragment : Fragment() {
         //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
+            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,0)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
                     // binding.viewModel = it

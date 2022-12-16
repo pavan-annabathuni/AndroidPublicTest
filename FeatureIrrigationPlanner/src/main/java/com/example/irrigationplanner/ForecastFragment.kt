@@ -97,12 +97,12 @@ class ForecastFragment : Fragment() {
         var area:Int =0
         var areaPerPlant:Float = 0.00f
         viewModel.getMyCrop2(477).observe(viewLifecycleOwner){
-            area = it.data?.get(0)?.area?.toInt() ?: 0
-            val lenght = it.data?.get(0)?.lenDrip?.toFloat()
-            val width = it.data?.get(0)?.widthDrip?.toFloat()?:0f
-            if (lenght != null) {
-                areaPerPlant = lenght * width
-            }
+           // area = it.data?.get(0)?.area?.toInt() ?: 0
+//            val lenght = it.data?.get(0)?.lenDrip?.toFloat()
+//            val width = it.data?.get(0)?.widthDrip?.toFloat()?:0f
+//            if (lenght != null) {
+//                areaPerPlant = lenght * width
+//            }
         }
         viewModel.viewModelScope.launch(){
             viewModel.getIrrigationHis(477,1).observe(viewLifecycleOwner){
@@ -116,7 +116,7 @@ class ForecastFragment : Fragment() {
                     binding.textView25.visibility = View.INVISIBLE
                 }
                 else {
-                    binding.tvPerPlant.text = areaPerPlant.toString()
+                    binding.tvPerPlant.text = (areaPerPlant*dep).toString()
                     binding.tvPerPlant.visibility = View.VISIBLE
                     binding.textView25.visibility = View.INVISIBLE
                 }

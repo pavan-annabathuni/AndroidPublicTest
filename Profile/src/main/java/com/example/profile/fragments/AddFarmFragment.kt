@@ -96,11 +96,12 @@ class AddFarmFragment : Fragment() {
                     name, contact, lat, long, roleid, pinCode,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
-                    if(it.data?.status.toString()!="true") {
-                        Toast.makeText(context, "Number already taken", Toast.LENGTH_SHORT).show()
+                    if(it.data?.status==false) {
+                        Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
                     }
-                    else
-                    findNavController().navigateUp()
+                    else if(it.data?.status==true) {
+                        findNavController().navigateUp()
+                    }
                 }
                 // findNavController().navigateUp()
             }

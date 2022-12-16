@@ -47,7 +47,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
 
         observer()
         onClick()
-        translation()
+        //translation()
 
         return binding.root
     }

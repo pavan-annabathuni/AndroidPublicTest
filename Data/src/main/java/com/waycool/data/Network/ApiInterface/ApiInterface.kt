@@ -335,78 +335,81 @@ interface ApiInterface {
     ): Response<MyFarmsDTO>
 
     @GET("api/v1/app-translations")
-    suspend fun getTranslations(@HeaderMap map: Map<String, String>,
-                                @Query("lang") lang: String):Response<AppTranlationsDTO>
+    suspend fun getTranslations(
+        @HeaderMap map: Map<String, String>,
+        @Query("lang") lang: String
+    ): Response<AppTranlationsDTO>
 
 
     @PUT("api/v1/plots/{plot}")
     @FormUrlEncoded
     suspend fun harvestDate(
         @HeaderMap map: Map<String, String>?,
-        @Path("plot")plots: Int,
-        @Field("actual_harvest_date")actual_harvest_date:String,
-        @Field("actual_yield")actual_yield:Int,
-        @Field("_method")method:String
-    ):Response<HarvestDateModel>
+        @Path("plot") plots: Int,
+        @Field("actual_harvest_date") actual_harvest_date: String,
+        @Field("actual_yield") actual_yield: Int,
+        @Field("_method") method: String
+    ): Response<HarvestDateModel>
 
     @POST("api/v1/irrigation-forecasts/{irrigation_forecast}")
     @FormUrlEncoded
     suspend fun irrigationPerDay(
         @HeaderMap map: Map<String, String>?,
-        @Path("irrigation_forecast")irrigationId: Int,
-        @Field("irrigation")irrigation:Int,
-        @Field("_method")method:String
-    ):Response<IrrigationPerDay>
+        @Path("irrigation_forecast") irrigationId: Int,
+        @Field("irrigation") irrigation: Int,
+        @Field("_method") method: String
+    ): Response<IrrigationPerDay>
 
     @POST("api/v1/plot-stage-calender")
     @FormUrlEncoded
     suspend fun updateCropStage(
         @HeaderMap map: Map<String, String>?,
-        @Field("account_no_id")accountId: Int,
-        @Field("farm_id")farmId:Int,
-        @Field("plot_id")plotId:Int,
-        @Field("fruit_pruning_fruit_pruning")fruit_pruning:String?,
-        @Field("fruit_pruning_bud_break")bud_break:String?,
-        @Field("fruit_pruning_removal_of_excessive")fruit_removal:String?,
-        @Field("fruit_pruning_shoot_development")fruit_development:String?,
-        @Field("fruit_pruning_flowering")fruit_flowering:String?,
-        @Field("fruit_pruning_fruit_set")fruit_set:String?,
-        @Field("fruit_pruning_berry_development")fruit_berry:String?,
-        @Field("fruit_pruning_beginning_of_veraison")fruit_version:String?,
-        @Field("fruit_pruning_harvest")fruit_harvest:String?,
-        @Field("fruit_pruning_rest_period")fruit_rest:String?,
-        @Field("foundation_pruning_foundation_pruning")foundation_pruning:String?,
-        @Field("foundation_pruning_bud_break")foundation_pruning_bud_break:String?,
-        @Field("foundation_pruning_cane_thinning")foundation_sub_cane_thinning:String?,
-        @Field("foundation_pruning_sub_cane")foundation_sub_cane:String?,
-        @Field("foundation_pruning_topping")foundation_topping:String?,
-        ):Response<CropStageModel>
+        @Field("account_no_id") accountId: Int,
+        @Field("farm_id") farmId: Int,
+        @Field("plot_id") plotId: Int,
+        @Field("fruit_pruning_fruit_pruning") fruit_pruning: String?,
+        @Field("fruit_pruning_bud_break") bud_break: String?,
+        @Field("fruit_pruning_removal_of_excessive") fruit_removal: String?,
+        @Field("fruit_pruning_shoot_development") fruit_development: String?,
+        @Field("fruit_pruning_flowering") fruit_flowering: String?,
+        @Field("fruit_pruning_fruit_set") fruit_set: String?,
+        @Field("fruit_pruning_berry_development") fruit_berry: String?,
+        @Field("fruit_pruning_beginning_of_veraison") fruit_version: String?,
+        @Field("fruit_pruning_harvest") fruit_harvest: String?,
+        @Field("fruit_pruning_rest_period") fruit_rest: String?,
+        @Field("foundation_pruning_foundation_pruning") foundation_pruning: String?,
+        @Field("foundation_pruning_bud_break") foundation_pruning_bud_break: String?,
+        @Field("foundation_pruning_cane_thinning") foundation_sub_cane_thinning: String?,
+        @Field("foundation_pruning_sub_cane") foundation_sub_cane: String?,
+        @Field("foundation_pruning_topping") foundation_topping: String?,
+    ): Response<CropStageModel>
 
     @GET("api/v1/plot-stage-calender")
     suspend fun getCropStage(
-    @HeaderMap map: Map<String, String>?,
-    ):Response<GetCropStage>
+        @HeaderMap map: Map<String, String>?,
+    ): Response<GetCropStage>
 
     @POST("api/v1/add-farm-support")
     @FormUrlEncoded
     suspend fun updateFarmSupport(
         @HeaderMap map: Map<String, String>?,
-        @Field("name")name: String,
-        @Field("contact")contact: Long,
-        @Field("lat")lat:Double,
-        @Field("long")long:Double,
-        @Field("role_id")roleId: Int,
-        @Field("pincode")pincode: Int?,
-        @Field("village")village: String?,
-        @Field("address")address: String?,
-        @Field("state")state: String?,
-        @Field("district")district: String
-    ):Response<FarmSupportModel>
+        @Field("name") name: String,
+        @Field("contact") contact: Long,
+        @Field("lat") lat: Double,
+        @Field("long") long: Double,
+        @Field("role_id") roleId: Int,
+        @Field("pincode") pincode: Int?,
+        @Field("village") village: String?,
+        @Field("address") address: String?,
+        @Field("state") state: String?,
+        @Field("district") district: String
+    ): Response<FarmSupportModel>
+
     @GET("api/v1/get-farm-support-users")
     suspend fun getFarmSupportUser(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_id")accountId: Int
-    ):Response<GetFarmSupport>
+        @Query("account_id") accountId: Int
+    ): Response<GetFarmSupport>
 
     @DELETE("api/v1/delete-farm-support/{id}")
     suspend fun deleteFarmSupport(
@@ -417,21 +420,21 @@ interface ApiInterface {
     @GET("api/v1/get-user-ndvi-history")
     suspend fun getNdvi(
         @HeaderMap map: Map<String, String>?,
-        @Query("farm_id")farmId: Int,
-        @Query("account_no_id")account_no_id: Int
-    ):Response<NdviModel>
+        @Query("farm_id") farmId: Int,
+        @Query("account_no_id") account_no_id: Int
+    ): Response<NdviModel>
 
     @GET("api/v1/user-notifications")
     suspend fun getNotification(
         @HeaderMap map: Map<String, String>?,
-    ):Response<NotificationModel>
+    ): Response<NotificationModel>
 
     @PUT("api/v1/update-user-notification")
     @FormUrlEncoded
     suspend fun updateNotification(
         @HeaderMap map: Map<String, String>?,
-        @Field("notification_id")Nid: Int
-    )
+        @Field("notification_id") Nid: String
+    ):Response<UpdateNotification>
 
 
 }

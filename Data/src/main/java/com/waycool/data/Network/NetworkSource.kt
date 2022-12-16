@@ -711,14 +711,14 @@ object NetworkSource {
 //    }
     fun getMandiList(
         lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
-        sortBy: String?, orderBy: String?, search: String?
+        sortBy: String?, orderBy: String?, search: String?,accountId: Int?
     ): Flow<PagingData<MandiDomainRecord>> {
         return Pager(
             config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
             pagingSourceFactory = {
                 MandiPagingSource(
                     apiInterface, lat, lon, crop_category,
-                    state, crop, sortBy, orderBy, search
+                    state, crop, sortBy, orderBy, search,accountId
                 )
             }
         ).flow
@@ -1087,6 +1087,22 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNotification(map)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun updateNotification(id: String)
+            = flow<Resource<UpdateNotification?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateNotification(map,id)
             if(response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

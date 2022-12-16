@@ -20,10 +20,12 @@ import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.syncer.*
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -232,11 +234,25 @@ class MyProfileFragment : Fragment() {
                         }
                     moveToLogin()
                 }
+
         }
     private fun moveToLogin() {
         val intent:Intent = Intent(context, LoginMainActivity::class.java)
         startActivity(intent)
         activity?.finish()
+        GlobalScope.launch {
+            LocalSource.deleteMyCrop()
+            LocalSource.deleteTags()
+            LocalSource.deleteCropMaster()
+            LocalSource.deleteCropInformation()
+            LocalSource.deletePestDisease()
+            MyCropSyncer().invalidateSync()
+            CropMasterSyncer().invalidateSync()
+            CropInformationSyncer().invalidateSync()
+            TagsSyncer().invalidateSync()
+            PestDiseaseSyncer().invalidateSync()
+
+        }
     }
 
    }

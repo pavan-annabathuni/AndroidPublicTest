@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -45,6 +46,7 @@ class SearchFragment : Fragment() {
     private var crop: String? = null
     private var lat= "12.22"
     private var long= "78.22"
+    private var accountId = 0
     private val REQUEST_CODE_SPEECH_INPUT = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,11 +65,22 @@ class SearchFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner){
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
+            accountId = it.data?.accountId!!
         }
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController()
                 .navigateUp()
         }
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@SearchFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         binding.searchBar.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -96,7 +109,7 @@ class SearchFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
+            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountId)
                 .observe(viewLifecycleOwner) {
                     // binding.viewModel = it
                     adapterMandi.submitData(lifecycle, it)
@@ -427,8 +440,7 @@ class SearchFragment : Fragment() {
                 crop,
                 sortBy,
                 orderBy,
-                search
-            ).observe(viewLifecycleOwner) {
+                search,accountId).observe(viewLifecycleOwner) {
                 // binding.viewModel = it
                 adapterMandi.submitData(lifecycle, it)
                 // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
