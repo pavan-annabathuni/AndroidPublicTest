@@ -31,7 +31,7 @@ class SoilTestingLabsAdapter(val context: Context) :
         val details = details[position]
         holder.binding.tvSoilTest.text = details.tittle
         Glide.with(context)
-            .load(R.drawable.mask)
+            .load(details.moduleIcon)
             .into(holder.binding.ivOne)
     }
 

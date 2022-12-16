@@ -42,7 +42,6 @@ class AddCropDetailsFragment : Fragment() {
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
 
-
     val colors = arrayOf(
         "Select Irrigation method",
         "Drip Irrigation",
@@ -71,18 +70,19 @@ class AddCropDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments != null) {
-            var crop_id_selected = arguments?.getInt("cropid")
-            binding.cardCheckHealth.setOnClickListener {
-                if (accountID != null)
-                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
-                viewModel.getUserDetails().observe(viewLifecycleOwner) {
-
-                    accountID = it.data?.accountId
-                        postAddCrop(crop_id_selected!!,accountID!!)
-
-                }
-            }
+//        if (arguments != null) {
+//            var crop_id_selected = arguments?.getInt("cropid")
+//            binding.cardCheckHealth.setOnClickListener {
+//                if (accountID != null)
+//                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//
+//                    accountID = it.data?.accountId
+//                    postAddCrop(crop_id_selected!!, accountID!!)
+//
+//                }
+//            }
+//        }
 
 
 //        spinner()
@@ -100,7 +100,7 @@ class AddCropDetailsFragment : Fragment() {
 //        }
 
 
-        }
+//        }
 
 //    private fun spinner() {
 //        val arrayAdapter =
@@ -180,7 +180,22 @@ class AddCropDetailsFragment : Fragment() {
         binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val item = p0?.selectedItem
-                year_selected = item.toString()
+                year_selected = item.toString().lowercase()
+                if (arguments != null) {
+                    var crop_id_selected = arguments?.getInt("cropid")
+                    binding.cardCheckHealth.setOnClickListener {
+                        if (accountID != null)
+                            Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
+                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+
+                            accountID = it.data?.accountId
+                            postAddCrop(crop_id_selected!!, accountID!!,year_selected)
+
+                        }
+                    }
+                }
+
+
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -191,7 +206,7 @@ class AddCropDetailsFragment : Fragment() {
 
 
     //format(binding.etAreaNumber.text.toString()).toDouble()
-    private fun postAddCrop(crop_id: Int, account_id: Int) {
+    private fun postAddCrop(crop_id: Int, account_id: Int,area_type:String) {
         binding.progressBar.visibility=View.VISIBLE
         binding.cardCheckHealth.visibility=View.INVISIBLE
 //    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
@@ -200,6 +215,26 @@ class AddCropDetailsFragment : Fragment() {
         map.put("crop_id", crop_id)
         map.put("plot_nickname", binding.etNickName.text.toString())
         map.put("sowing_date", binding.etCalender.text.toString())
+        map.put("area_type",area_type)
+        map.put("area",binding.etAreaNumber.text)
+
+//        if (binding.Acres.equals("Gunta")){
+////            val data=binding.etAreaNumber.text.toString().toInt() * 0.
+//            map.put("area",binding.etAreaNumber.text.toString().toInt() * 0.025 )
+//        }else if (binding.Acres.equals("Acres")){
+//            map.put("area",binding.etAreaNumber.text.toString().toInt())
+//        }
+//        else if (binding.Acres.equals("cent")){
+//            map.put("area",binding.etAreaNumber.text.toString().toInt() * 0.01 )
+//        }
+//        else if (binding.Acres.equals("Hectare")){
+//            map.put("area",binding.etAreaNumber.text.toString().toInt() * 2.2471 )
+//        }else if (binding.Acres.equals("Bigha")){
+//            map.put("area",binding.etAreaNumber.text.toString().toInt() * 0.619 )
+//        }else{
+//            map.put("area",binding.etAreaNumber.text)
+//        }
+//        map.put("area",binding.etAreaNumber.text)
         viewModel.addCropDataPass(
             map
 //            crop_id, account_id, binding.etNickName.text.toString(), 1,
