@@ -29,14 +29,14 @@ class DeltaTomAdapter(val context: Context) : RecyclerView.Adapter<DeltaTomHolde
         val details = details[position]
         holder.binding.nowTvSprayingVh.setText(
             Constant.changeDateFormatSpraying(
-                details.Today[position].datetime
+                details.Tomorrow[position].datetime
             )
         )
         if (position == details.Today.size - 1) {
-            holder.binding.timeTvSprayingVh .setText("08 PM")
-            holder.binding.timeTvSprayingVh.setVisibility(View.VISIBLE)
+            holder.binding.timeTvSprayingVh.text = "08 PM"
+            holder.binding.timeTvSprayingVh.visibility = View.VISIBLE
         } else {
-            holder.binding.timeTvSprayingVh.setVisibility(View.GONE)
+            holder.binding.timeTvSprayingVh.visibility = View.GONE
         }
         details.Tomorrow.forEach {
             if (it.condition.equals("ideal")) {

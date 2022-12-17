@@ -2,15 +2,14 @@ package com.waycool.iwap.premium
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -18,18 +17,22 @@ import com.ekn.gruzer.gaugelibrary.Range
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.irrigationplanner.IrrigationPlannerActivity
+import com.github.anastr.speedviewlib.components.Section
+import com.github.anastr.speedviewlib.components.Style
+import com.github.anastr.speedviewlib.components.indicators.ImageIndicator
+import com.github.anastr.speedviewlib.components.indicators.Indicator
+import com.github.anastr.speedviewlib.util.doOnSections
 import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.Polygon
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
-import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
+import java.util.*
 import kotlin.math.roundToInt
 
 
@@ -391,6 +394,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceData) {
 
 //        viewDeviceListAdapter.upDateList()
@@ -398,11 +402,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
         binding.let {
             it.totalAreea.text = data.iotDevicesData?.battery.toString()
             it.tvAddDeviceStart.text = data.model?.modelName.toString()
-            it.tvTempDegree.text = data.temperature.toString()
-            it.tvWindDegree.text = data.rainfall.toString()
-
-            it.tvHumidityDegree.text = data.humidity.toString()
-            it.tvWindSpeedDegree.text = data.windspeed.toString()
+            it.tvTempDegree.text = data.temperature.toString()+" \u2103"
+            it.tvWindDegree.text = data.rainfall.toString()+" mm"
+            it.tvHumidityDegree.text = data.humidity.toString()+" %"
+            it.tvWindSpeedDegree.text = data.windspeed.toString() +" Km/h"
             if (data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
@@ -410,48 +413,115 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
             }
-            it.tvPressureDegree.text = data.pressure.toString()
-            it.ivSoilDegree.text = data.soilTemperature1.toString() + " C"
+//            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
+//
+//            speedometer.indicator = imageIndicator
+            it.tvPressureDegree.text = data.pressure.toString()+" hPa"
+            it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux .toString() + " Lux"
             it.tvLastUpdate.text = data.dataTimestamp.toString()
+            binding.soilMoistureOne.clearSections()
+            binding.soilMoistureTwo.clearSections()
+            binding.kpaOne.text=data.soilMoisture1+" kPa"
+            binding.kpaTwo.text=data.soilMoisture2+" kPa"
 
-            val range = Range()
-            range.color = Color.parseColor("#EC4544")
-            range.from = 0.0
-            range.to = 10.0
+            binding.soilMoistureOne.addSections(Section(0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f))
+                , Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureOne.dpTOpx(12f))
+                , Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureOne.dpTOpx(12f))
+                , Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f)))
 
-            val range2 = Range()
-            range2.color = Color.parseColor("#1FB04B")
-            range2.from = 10.0
-            range2.to = 40.0
+            //two
+//            binding.soilMoistureOne .indicator.color = Color.RED
+            binding.soilMoistureTwo.addSections(Section
 
-            val range3 = Range()
-            range3.color = Color.parseColor("#F3C461")
-            range3.from = 40.0
-            range3.to = 80.0
-            val range4 = Range()
-            range4.color = Color.parseColor("#EC4544")
-            range4.from = 80.0
-            range4.to = 100.0
+                (0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f))
+                , Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureTwo.dpTOpx(12f))
+                , Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureTwo.dpTOpx(12f))
+                , Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f)))
+
+
+
+
+//            binding.soilMoistureOne.sections[0].color = Color.RED
+//            binding.soilMoistureOne.sections[1].color = Color.GREEN
+////            binding.soilMoistureOne.sections[1].color = Color.YELLOW
+//            binding.soilMoistureOne.sections[2].color = Color.RED
+//            binding.soilMoistureOne.dpTOpx(5f)
+//            binding.soilMoistureOne.addSections(
+//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(5f)),
+//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(5f)),
+//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
+//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
+//            )
+
+//            binding.soilMoistureOne.setIndicator(Indicator.Indicators.KiteIndicator)
+//            binding.soilMoistureTwo.setIndicator(Indicator.Indicators.KiteIndicator)
+
+//            binding.soilMoistureOne.ticks= arrayListOf(0f,.1f,.3f,.5f,1f)
+            binding.soilMoistureOne.tickNumber=0
+            binding.soilMoistureOne.marksNumber=0
+            binding.soilMoistureTwo.tickNumber=0
+            binding.soilMoistureTwo.marksNumber=0
+
+//            binding.soilMoistureOne.speedTo()
+                binding.soilMoistureOne.maxSpeed=100F
+            binding.soilMoistureTwo.maxSpeed=100F
+//            binding.soilMoistureOne.ticks  = listOf(10.0F)
+//            binding.soilMoistureTwo.ticks = 10
+            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
+            Log.d("TAG", "viewDevice:$data.soilMoisture1!!.toFloat() ")
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
+
+
+            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
+
+//            binding.soilMoistureOne.speed(data.sensorValue1?.toFloat())
+//            binding.soilMoistureOne.speedTextListener =
+//                {
+//                        speed: Float? ->
+//                    String.format(data.sensorValue1.toString(), "lol%.0f", speed)
+//                }
+
+//            binding.soilMoistureOne.addSections(
+//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(20f)),
+//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(20f)),
+//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
+//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
+//            )
+            //        speedView.getSections().add(new Section(1f, Color.RED));
+//            binding.soilMoistureOne.onSectionChangeListener = { previousSection: Section?, newSection: Section? ->
+//                if (previousSection != null) {
+////                    previousSection.setPadding(10);
+//                    previousSection.width = binding.soilMoistureOne.dpTOpx(20f)
+//                }
+//                if (newSection != null) {
+////                    newSection.setPadding(0);
+//                    newSection.width = binding.soilMoistureOne.dpTOpx(20f)
+//                }
+//                Unit
+//            }
+
+
             //add color ranges to gauge
-            binding.soilMoistureOne.addRange(range)
-            binding.soilMoistureOne.addRange(range2)
-            binding.soilMoistureOne.addRange(range3)
-            binding.soilMoistureOne.addRange(range4)
-
-            binding.soilMoistureTwo.addRange(range)
-            binding.soilMoistureTwo.addRange(range2)
-            binding.soilMoistureTwo.addRange(range3)
-            binding.soilMoistureTwo.addRange(range4)
-
-            //set min max and current value
-            binding.soilMoistureOne.minValue = 0.0
-            binding.soilMoistureOne.maxValue = 100.0
-            binding.soilMoistureOne.value = data.soilMoisture1!!.toDouble()
-
-            binding.soilMoistureTwo.minValue = 0.0
-            binding.soilMoistureTwo.maxValue = 100.0
-            binding.soilMoistureTwo.value = data.soilMoisture1!!.toDouble()
+//            binding.soilMoistureOne.addRange(range)
+//            binding.soilMoistureOne.addRange(range2)
+//            binding.soilMoistureOne.addRange(range3)
+//            binding.soilMoistureOne.addRange(range4)
+//
+//            binding.soilMoistureTwo.addRange(range)
+//            binding.soilMoistureTwo.addRange(range2)
+//            binding.soilMoistureTwo.addRange(range3)
+//            binding.soilMoistureTwo.addRange(range4)
+//
+//            //set min max and current value
+//            binding.soilMoistureOne.minValue = 0.0
+//            binding.soilMoistureOne.maxValue = 100.0
+//            binding.soilMoistureOne.value = data.soilMoisture1!!.toDouble()
+//
+//            binding.soilMoistureTwo.minValue = 0.0
+//            binding.soilMoistureTwo.maxValue = 100.0
+//            binding.soilMoistureTwo.value = data.soilMoisture1!!.toDouble()
 
 //            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
 //            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
@@ -541,20 +611,20 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     )
                 }
             }
-            it.clLeafWetness.setOnClickListener {
-                val bundle = Bundle()
-                if (data.serialNoId != null && data.modelId != null) {
-                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "leadwetnes")
-                    bundle.putString("temp_value",data.rainfall)
-                    bundle.putString("date_time",data.dataTimestamp)
-                    findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
-                        bundle
-                    )
-                }
-            }
+//            it.clLeafWetness.setOnClickListener {
+//                val bundle = Bundle()
+//                if (data.serialNoId != null && data.modelId != null) {
+//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+//                    bundle.putString("value", "leadwetnes")
+//                    bundle.putString("temp_value",data.rainfall)
+//                    bundle.putString("date_time",data.dataTimestamp)
+//                    findNavController().navigate(
+//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+//                        bundle
+//                    )
+//                }
+//            }
             it.clPressure.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {

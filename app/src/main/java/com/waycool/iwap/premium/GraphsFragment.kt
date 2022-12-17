@@ -3,11 +3,11 @@ package com.waycool.iwap.premium
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -19,16 +19,11 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.utils.Resource
-
 import com.waycool.iwap.databinding.FragmentGraphsBinding
-
 import com.waycool.iwap.utils.Constant.TAG
 import kotlinx.coroutines.launch
-import java.text.ParseException
-
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class GraphsFragment : Fragment() {
@@ -57,10 +52,14 @@ class GraphsFragment : Fragment() {
             val device_model_id = arguments?.getInt("device_model_id")
             val value = arguments?.getString("value")
             val data_degree=arguments?.getString("temp_value")
-//            val
+            val update_date=arguments?.getString("date_time")
             Log.d(Constant.TAG, "onCreateViewONPID:$serial_no ")
             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
+            Log.d(Constant.TAG, "onCreateViewONPID:$data_degree")
+            Log.d(Constant.TAG, "onCreateViewONPID:$update_date ")
+            binding.degree.text=data_degree
+            binding.date.text=update_date
             graphApiData(serial_no, device_model_id, value)
 //            binding.today.text=
 
@@ -106,14 +105,18 @@ class GraphsFragment : Fragment() {
                             Log.d(Constant.TAG, "onCreateViewONPID:$device_model_id ")
                             Log.d(Constant.TAG, "onCreateViewONPID:$value ")
                             graphApiData(serial_no, device_model_id, value)
+
 //                            initObserveGraphs(serial_no,device_model_id,value)
 //                            initObserveGraphs(serial_no, device_model_id, value)
                         }
                     }
                     1 -> {
 
+
+
                     }
                     2 -> {
+
 
                     }
 
@@ -129,7 +132,77 @@ class GraphsFragment : Fragment() {
             }
         })
     }
+    private fun getUints(paramType: String): String? {
+        return when (paramType) {
+            "temp" -> " °C"
+            "rain" -> " mm"
+            "humidity", "leaf", "soil1", "soil2" -> " %"
+            "wind" -> " Kmph"
+            "lux" -> " lux"
+            else -> " "
+        }
+    }
+    private fun getParamNote(paramType: String, valList: List<Double>): String? {
+        return when (paramType) {
+            "temperature" -> "Avg Temperature: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            "rainfall" -> "Total Rainfall: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateSum(valList)
+            ) + getUints(paramType)
+            "humidity" -> "Avg Humidity: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            "windspeed" -> "Avg Windspeed: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            "leaf" -> "Avg Leaf Wetness: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            "soil1", "soil2" -> "Avg Soil Moisture: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            "lux" -> "Avg Lux: " + String.format(
+                Locale.ENGLISH,
+                "%.2f",
+                calculateAvg(valList)
+            ) + getUints(paramType)
+            else -> ""
+        }
+    }
+    private fun calculateAvg(valList: List<Double>): Double? {
+        var sum = 0.0
+        if (!valList.isEmpty()) {
+            for (mark in valList) {
+                sum += mark
+            }
+            return sum / valList.size
+        }
+        return sum
+    }
 
+    private fun calculateSum(valList: List<Double>): Double? {
+        var sum = 0.0
+        if (!valList.isEmpty()) {
+            for (mark in valList) {
+                sum += mark
+            }
+            return sum
+        }
+        return sum
+    }
     private fun graphApiData(serialNo: Int?, deviceModelId: Int?, value: String?) {
         viewDevice.viewModelScope.launch {
             viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
@@ -137,16 +210,15 @@ class GraphsFragment : Fragment() {
                     when (it) {
                         is Resource.Success -> {
                             if (it.data?.data != null) {
+                                val listone = arrayListOf<Double>()
+                                listone.addAll(it.data?.data!!.LastTodayData?.values!!)
+//                                val d: Double = it.data?.data!!.LastTodayData?.values.toString().toDouble()
+//                                val list: List<Double> = listOf(d)
+                              binding.tvDramatic.text= getParamNote(value!!,listone )
                                 Log.d(TAG, "dataGraDataPoints: ${it.data?.data}")
                                 listLine = ArrayList()
-
                                 if (it.data?.data != null) {
                                     for (i in it.data?.data?.LastTodayData?.keys!!.indices) {
-//                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
-//                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
-//                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
-//                val formateDate = outputDate.format(date)
-//                Log.d("DATE", "graph: $formateDate ")
                                         val xAxis: XAxis = binding.lineChart.getXAxis()
                                         listLine.add(
                                             Entry(
@@ -156,21 +228,9 @@ class GraphsFragment : Fragment() {
                                         )
                                     }
                                 }
-
-
                                 lineDataSet = LineDataSet(listLine, "")
 
                                 val datesList = it.data?.data?.LastTodayData?.keys
-//                                val datesList = it.data?.data?.LastTodayData?.one?.map { date ->
-//                                    try {
-//                                        val date: Date =
-//                                            inputDateFormatter.parse(it.data?.data?.LastTodayData?.one.toString())
-//                                        outputDateFormatter.format(date)
-//                                    } catch (e: ParseException) {
-//                                        Log.d("Graphs", e.message.toString())
-//                                        ""
-//                                    }
-//                                }
                                 val valueFormatter2 = IndexAxisValueFormatter()
 
                                 var xAxis2 = datesList?.toTypedArray()

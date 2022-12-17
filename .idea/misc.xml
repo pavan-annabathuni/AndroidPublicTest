@@ -160,15 +160,15 @@
         <entry key="app/src/main/res/drawable/ic_weather_device.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/pb_circular_determinative.xml" value="0.201" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.11720428466796873" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/banner_dialog.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_all_services.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/fragment_device_one.xml" value="0.2982982982982983" />
         <entry key="app/src/main/res/layout/fragment_farm_details.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.29947089947089944" />
-        <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
-        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.37271728515624997" />
+        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.5046649703138253" />
+        <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.38169642857142855" />
         <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.4647430419921875" />
         <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.335" />

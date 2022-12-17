@@ -15,6 +15,8 @@ import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.ndvi.MainActivityNdvi
+import com.github.anastr.speedviewlib.components.Section
+import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -47,7 +49,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
         initObserveDevice()
         myCrop()
         initiFarmDeltT()
-        initDeltaSpeedGauges()
+//        initDeltaSpeedGauges()
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (arguments != null) {
                 val farm_id = arguments?.getInt("farm_id")
@@ -68,35 +70,18 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
 
     }
 
-    private fun initDeltaSpeedGauges() {
-        val range = Range()
-        range.color = Color.parseColor("#EC4544")
-        range.from = 0.0
-        range.to = 10.0
+//    private fun initDeltaSpeedGauges() {
+//        binding.soilMoistureTwo.clearSections()
+//        binding.soilMoistureTwo.setIndicator(Indicator.Indicators.KiteIndicator)
+//        binding.soilMoistureTwo.maxSpeed=100F
+////        binding.soilMoistureTwo.speedTo()
+//        binding.soilMoistureTwo.addSections(Section
+//            (0f, .11f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(10f))
+//            , Section(.11f, .47f, Color.parseColor("#01B833"), binding.soilMoistureTwo.dpTOpx(10f))
+//            , Section(.47f, .59f, Color.parseColor("#F3C461"), binding.soilMoistureTwo.dpTOpx(10f))
+//            , Section(.59f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(10f)))
+//    }
 
-        val range2 = Range()
-        range2.color = Color.parseColor("#1FB04B")
-        range2.from = 10.0
-        range2.to = 40.0
-
-        val range3 = Range()
-        range3.color = Color.parseColor("#00b20b")
-        range3.from = 40.0
-        range3.to = 80.0
-        val range4 = Range()
-        range3.color = Color.parseColor("#EC4544")
-        range3.from = 80.0
-        range3.to = 100.0
-        //add color ranges to gauge
-        binding.soilMoistureOne.addRange(range)
-        binding.soilMoistureOne.addRange(range2)
-        binding.soilMoistureOne.addRange(range3)
-        binding.soilMoistureOne.addRange(range4)
-        //set min max and current value
-        binding.soilMoistureOne.minValue = 0.0
-        binding.soilMoistureOne.maxValue = 100.0
-        binding.soilMoistureOne.value = 0.0
-    }
 
     private fun farmDetailsObserve(account: Int, farm_id: Int?) {
         viewModel.getMyFarms(account, farm_id).observe(viewLifecycleOwner) { it ->
@@ -211,6 +196,24 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                         val response = it.data!!.data as ArrayList<ViewDeviceData>
                         binding.deviceFarm.adapter = viewDeviceListAdapter
                         viewDeviceListAdapter.setMovieList(response)
+
+                        binding.currentDelta.clearSections()
+//                        binding.kpaOne.text=response[0]. .soilMoisture1+" kPa"
+                        binding.currentDelta.setIndicator(Indicator.Indicators.KiteIndicator)
+                        binding.currentDelta.maxSpeed=15F
+
+                        binding.currentDelta.tickNumber=0
+                        binding.currentDelta.marksNumber=0
+                        binding.currentDelta.speedTo(response[0].delta_t!!.toFloat())
+                        binding.deltaText.text= it.data?.data!![0].delta_t.toString()
+
+                        binding.currentDelta.addSections(Section
+                            (0f, .24f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.24f, .59f, Color.parseColor("#01B833"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.59f, .71f, Color.parseColor("#F3C461"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.71f, 1f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f)))
+
+
                     }
 
                 }

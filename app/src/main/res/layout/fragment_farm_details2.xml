@@ -856,7 +856,6 @@ more details."
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
-
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/cl_progress_spreying"
                                     android:layout_width="0dp"
@@ -876,13 +875,33 @@ more details."
 <!--                                        app:layout_constraintStart_toStartOf="parent"-->
 <!--                                        app:layout_constraintTop_toTopOf="parent"-->
 <!--                                        />-->
-                                    <com.ekn.gruzer.gaugelibrary.HalfGauge
-                                        android:id="@+id/soil_moisture_one"
+<!--                                    <com.ekn.gruzer.gaugelibrary.HalfGauge-->
+<!--                                        android:id="@+id/soil_moisture_one"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        android:layout_height="100dp"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                                      />-->
+                                    <com.github.anastr.speedviewlib.SpeedView
+                                        android:id="@+id/current_delta"
                                         android:layout_width="100dp"
                                         android:layout_height="100dp"
-                                        app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
-                                      />
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:sv_speedTextFormat="FLOAT"
+                                        app:sv_withTremble="false"
+                                        app:sv_minSpeed="-2"
+                                        app:sv_maxSpeed="15"
+                                        android:layout_marginTop="12dp"
+                                        android:layout_marginStart="16dp"
+                                        app:sv_unitTextSize="0dp"
+                                        app:sv_speedTextSize="0dp"
+                                        app:sv_indicatorColor="#683C13"
+                                        app:sv_centerCircleRadius="7dp"
+                                        app:sv_indicator="NeedleIndicator"
+                                        app:sv_tickNumber="0"
+
+                                        />
 
 
 
@@ -900,33 +919,33 @@ more details."
                                         android:id="@+id/update_date"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="60dp"
                                         android:text="Last Updated: Today 03:00PM"
                                         android:textColor="#585858"
                                         android:textSize="12sp"
+                                        android:layout_marginTop="2dp"
                                         android:textStyle="bold"
-                                        app:layout_constraintStart_toEndOf="@+id/soil_moisture_one"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/current_delta"
+                                        app:layout_constraintStart_toEndOf="@+id/delta_text"
+                                        />
 
                                     <TextView
-                                        android:id="@+id/kpa_one"
+                                        android:id="@+id/delta_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/space16"
                                         android:text="100 KPa"
                                         android:textColor="#171717"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        android:layout_marginTop="@dimen/space70"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one" />
+                                        app:layout_constraintEnd_toEndOf="@+id/current_delta"
+                                        app:layout_constraintStart_toStartOf="@+id/current_delta"
+                                        app:layout_constraintTop_toBottomOf="@+id/current_delta" />
                                     <View
                                         android:id="@+id/line_one"
                                         android:background="#EBECF2"
                                         android:layout_width="match_parent"
                                         android:layout_marginTop="20dp"
-                                        app:layout_constraintTop_toBottomOf="@+id/kpa_one"
+                                        app:layout_constraintTop_toBottomOf="@+id/delta_text"
                                         android:layout_height="1dp"/>
 
                                     <LinearLayout
