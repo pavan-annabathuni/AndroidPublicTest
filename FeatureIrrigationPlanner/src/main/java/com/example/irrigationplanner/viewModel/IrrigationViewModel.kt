@@ -10,6 +10,7 @@ import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
+import java.util.*
 
 class IrrigationViewModel:ViewModel() {
     fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
@@ -33,8 +34,12 @@ class IrrigationViewModel:ViewModel() {
         return AdvIrrigationRepository.updateCropStage(id,farmId,plotId,value1,value2,value3,value4,value5,value7,value7,value8,value9,
             value10,value11,value12,value13,value14,value15).asLiveData()
     }
-    fun getCropStage():LiveData<Resource<GetCropStage?>> {
-        return AdvIrrigationRepository.getCropStage().asLiveData()
+    fun getCropStage(account_id: Int,plot_id: Int):LiveData<Resource<CropStageModel?>> {
+        return AdvIrrigationRepository.getCropStage(account_id,plot_id).asLiveData()
+    }
+
+    fun updateCropStage(account_id: Int,cropStageId:Int,plot_id: Int,date:String):LiveData<Resource<UpdateCropStage?>> {
+        return AdvIrrigationRepository.updateCropStage(account_id,cropStageId,plot_id,date).asLiveData()
     }
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =

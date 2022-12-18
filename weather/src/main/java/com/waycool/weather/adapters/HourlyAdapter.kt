@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.weather.R
 import com.waycool.weather.databinding.ItemHourlyBinding
+import com.waycool.weather.utils.WeatherIcons
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,6 +26,7 @@ class HourlyAdapter(val onClickListener:OnClickListener)
         val x = binding.tvTime
         val ll = binding.cvHourly
         var tv = binding.tvTemp
+        val icon = binding.icon
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
@@ -59,9 +61,8 @@ class HourlyAdapter(val onClickListener:OnClickListener)
           //  holder.ll.setBackgroundResource(R.drawable.border)
             holder.tv.setTextColor(Color.parseColor("#000000"))
         }
-
-
-
+        val image = holder.icon
+        properties.weather[0].icon?.let { WeatherIcons.setWeatherIcon(it,image)}
     }
 
 

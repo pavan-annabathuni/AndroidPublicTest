@@ -93,6 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="Country Tomato"
+                        android:visibility="gone"
                         android:textColor="@color/darkGray"
                         android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -123,6 +124,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_cropStage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="visible">
@@ -437,7 +439,7 @@
                     android:id="@+id/perDay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view2">
 

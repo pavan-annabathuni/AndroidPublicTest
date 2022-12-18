@@ -2,9 +2,11 @@ package com.waycool.weather.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.waycool.weather.viewModel.DailyvViewModel
 import com.waycool.weather.viewModel.DetailViewModelFactory
@@ -13,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R
 import com.waycool.weather.databinding.FragmentSheetDialogBinding
+import com.waycool.weather.utils.WeatherIcons
 import java.text.SimpleDateFormat
 
 
@@ -23,7 +26,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
     val green = "#146133"
-    val lightGreen = "#DEE9E2"
+    val lightGreen = "#C4D8CC"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,7 +56,10 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     }
     fun observer(){
         binding.viewModel?.selectedProperty?.observe(viewLifecycleOwner){
-
+              if (it != null) {
+                  WeatherIcons.setWeatherIcon(it?.weather?.get(0)?.icon.toString(),binding.icon2)
+                //  Toast.makeText(context, "${it?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
+              }
                 val date: Int? = it?.dt
                 val formatter = SimpleDateFormat("EE, d MMMM")//or use getDateInstance()
                 val formatedDate = formatter.format(date?.times(1000L))

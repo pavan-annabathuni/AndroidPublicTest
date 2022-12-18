@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -20,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
@@ -32,6 +34,7 @@ import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
 import com.waycool.weather.utils.Constants.*
+import com.waycool.weather.utils.WeatherIcons
 import com.waycool.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,8 +51,8 @@ class WeatherFragment : Fragment() {
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
     val lightRed = "#FFD7D0"
-    val green = "#08FA12"
-    val lightGreen = "#08FA12"
+    val green = "#146133"
+    val lightGreen = "#C4D8CC"
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
@@ -182,12 +185,14 @@ class WeatherFragment : Fragment() {
 
     private fun getWeatherData(lat: String, lon: String) {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
+
             it.data?.profile?.lat?.let { it1 ->
                 it.data?.profile?.long?.let { it2 ->
                     viewModel.getWeather(it1, it2).observe(requireActivity()) {
 
                         if (it?.data != null) {
-
+                            WeatherIcons.setWeatherIcon(it.data?.current?.weather?.get(0)?.icon.toString(),binding.weatherIcon)
+                            //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
                             binding.weatherMaster = it.data
 
                             if (null != it) {
@@ -219,7 +224,6 @@ class WeatherFragment : Fragment() {
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
-
                                     }
                                     202 -> {
                                         binding.tvTodayTips.text =
@@ -249,11 +253,10 @@ class WeatherFragment : Fragment() {
                                     212 -> {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
-                                        // binding.icon2.setTextColor(Color.parseColor(red))
+                                      //   binding.icon2.setTextColor(Color.parseColor(red))
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
-
                                     }
                                     221 -> {
                                         binding.tvTodayTips.text =
@@ -262,12 +265,11 @@ class WeatherFragment : Fragment() {
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
-
                                     }
                                     230 -> {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
-                                        //binding.icon2.setTextColor(Color.parseColor(yellow))
+                                      //  binding.icon2.setTextColor(Color.parseColor(yellow))
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_circle_exclamation_brown, 0, 0, 0
                                         )
@@ -279,7 +281,6 @@ class WeatherFragment : Fragment() {
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
-
                                     }
                                     232 -> {
                                         binding.tvTodayTips.text =
@@ -295,6 +296,7 @@ class WeatherFragment : Fragment() {
                                         //binding.icon2.setTextColor(Color.parseColor(yellow))
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_circle_exclamation_brown, 0, 0, 0
+
                                         )
                                     }
                                     301 -> {
@@ -312,7 +314,6 @@ class WeatherFragment : Fragment() {
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
-
                                     }
                                     310 -> {
                                         binding.tvTodayTips.text =
@@ -351,13 +352,11 @@ class WeatherFragment : Fragment() {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
                                         //binding.icon2.setTextColor(Color.parseColor(red))
-
                                     }
                                     321 -> {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
                                         //binding.icon2.setTextColor(Color.parseColor(yellow))
-
                                         binding.tvTodayTips.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_circle_exclamation_brown, 0, 0, 0
                                         )
@@ -384,7 +383,6 @@ class WeatherFragment : Fragment() {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
                                         //binding.icon2.setTextColor(Color.parseColor(red))
-
                                     }
                                     503 -> {
                                         binding.tvTodayTips.text =
@@ -542,6 +540,7 @@ class WeatherFragment : Fragment() {
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_circle_exclamation_brown, 0, 0, 0
                                         )
+
                                     }
                                 }
                         }

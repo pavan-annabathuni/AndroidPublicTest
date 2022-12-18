@@ -585,8 +585,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
     }
 
     override fun myCropListener(data: MyCropDataDomain) {
-        val intent = Intent(activity, IrrigationPlannerActivity::class.java)
-        startActivity(intent)
+        val bundle = Bundle()
+        data.id?.let { bundle.putInt("plotId", it) }
+        data.cropLogo?.let { bundle.putString("cropLogo",it) }
+        data.cropName?.let { bundle.putString("cropName",it) }
+        this.findNavController().navigate(R.id.action_homePagePremiumFragment2_to_navigation,bundle)
     }
 
 

@@ -193,6 +193,7 @@ object LocalSource {
     suspend fun getTranslationForString(appKey:String):AppTranslationsEntity? {
         return outgrowDao.getTranslation(appKey)
     }
+    fun deleteAllMyCrops() = outgrowDao.getDeleteAllMyCrops()
     fun deleteTags() = outgrowDao.deleteTags()
     fun deleteCropMaster() = outgrowDao.deleteCropMaster()
     fun deletePestDisease() = outgrowDao.deletePestDiseases()

@@ -73,6 +73,9 @@ interface OutgrowDao {
     @Query("DELETE FROM My_crop WHERE id=:id")
     fun getDeleteMyCrops(id: Int)
 
+    @Query("DELETE FROM My_crop")
+    fun getDeleteAllMyCrops()
+
     //Translations
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTranslations(translations: List<AppTranslationsEntity>)

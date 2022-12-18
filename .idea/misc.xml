@@ -38,17 +38,19 @@
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_overview.xml" value="0.2640625" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_stage.xml" value="0.29391304347826086" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_disase_history.xml" value="0.2833333333333333" />
-        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_forecast.xml" value="0.2640625" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_forecast.xml" value="0.176" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation.xml" value="0.22572614107883818" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation_history.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_sheet_harvest.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/irrigation_pre_day.xml" value="0.2833333333333333" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_crop_stage.xml" value="0.2175925925925926" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_disease.xml" value="0.375" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_disease_history.xml" value="0.26716827392578124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_forecast.xml" value="0.2640625" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_history.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_history_details.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_large_image.xml" value="0.2637781778971354" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_pager_forcast.xml" value="0.2175925925925926" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_tab.xml" value="0.2640625" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_tab_irrigation.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/item_weekly_irrgation.xml" value="0.2640625" />
@@ -154,6 +156,7 @@
         <entry key="app/src/main/res/drawable/ic_lux.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_pressure_p.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_rain.xml" value="0.201" />
+        <entry key="app/src/main/res/drawable/ic_rain_weather.xml" value="0.145" />
         <entry key="app/src/main/res/drawable/ic_rainfall.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_temp_p.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/ic_tempearatrue_premium.xml" value="0.201" />
@@ -169,7 +172,7 @@
         <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.29947089947089944" />
         <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
         <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.37271728515624997" />
-        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.4647430419921875" />
+        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.32852111816406254" />
         <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_spot_light.xml" value="0.1175925925925926" />

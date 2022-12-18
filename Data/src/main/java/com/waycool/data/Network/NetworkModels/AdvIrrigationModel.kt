@@ -1,6 +1,9 @@
 package com.waycool.data.Network.NetworkModels
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 data class AdvIrrigationModel(
     @SerializedName("status"  ) var status  : Boolean? = null,
@@ -16,13 +19,13 @@ data class AdvIrrigationData (
 
 )
 
+@Parcelize
 data class Irrigation (
+    @SerializedName("current_data"        ) var currentData        : @RawValue CurrentData?                  = CurrentData(),
+    @SerializedName("historic_data"       ) var historicData       : @RawValue ArrayList<HistoricData>       = arrayListOf(),
+    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?     = IrrigationForecast()
 
-    @SerializedName("current_data"        ) var currentData        : CurrentData?                  = CurrentData(),
-    @SerializedName("historic_data"       ) var historicData       : ArrayList<HistoricData>       = arrayListOf(),
-    @SerializedName("irrigation_forecast" ) var irrigationForecast : IrrigationForecast?     = IrrigationForecast()
-
-)
+):Parcelable
 data class IrrigationForecast (
 
     @SerializedName("mad"         ) var mad        : ArrayList<Int>    = arrayListOf(),
@@ -33,6 +36,7 @@ data class IrrigationForecast (
     @SerializedName("eto"         ) var eto        : ArrayList<Double> = arrayListOf()
 
 )
+@Parcelize
 data class HistoricData (
 
     @SerializedName("id"                ) var id               : Int?    = null,
@@ -48,7 +52,8 @@ data class HistoricData (
     @SerializedName("updated_at"        ) var updatedAt        : String? = null,
     @SerializedName("deleted_at"        ) var deletedAt        : String? = null
 
-)
+):Parcelable
+
 data class Disease (
 
     @SerializedName("id"               ) var id              : Int?    = null,

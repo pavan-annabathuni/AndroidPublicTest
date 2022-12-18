@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class CropOverviewFragment : BottomSheetDialogFragment() {
     private val viewModel by lazy { ViewModelProvider(this)[IrrigationViewModel::class.java] }
     private lateinit var binding: FragmentCropOverviewBinding
+     var accountId:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -28,12 +29,15 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         binding.imgClose.setOnClickListener() {
             this.dismiss()
         }
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            accountId = it.data?.accountId!!
+        }
         information()
         return binding.root
     }
 
     fun information() {
-        viewModel.getMyCrop2(477).observe(viewLifecycleOwner) {
+        viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
             binding.apply {
                 if (it.data?.get(0)?.area != null)
                     tvAce.text = it.data?.get(0)?.area

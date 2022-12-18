@@ -241,7 +241,7 @@ class MyProfileFragment : Fragment() {
         startActivity(intent)
         activity?.finish()
         GlobalScope.launch {
-           // LocalSource.deleteMyCrop()
+            LocalSource.deleteAllMyCrops()
             LocalSource.deleteTags()
             LocalSource.deleteCropMaster()
             LocalSource.deleteCropInformation()

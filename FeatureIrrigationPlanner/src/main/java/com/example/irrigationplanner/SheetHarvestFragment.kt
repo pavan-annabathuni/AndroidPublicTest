@@ -22,13 +22,14 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
+    private var plotId:Int = 0
     var dateCrop: String = ""
     val myCalendar = Calendar.getInstance()
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
+         plotId = it.getInt("plotId")
         }
     }
 
@@ -46,7 +47,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             var yield_tone = binding.editText.text.toString().toInt()
             var date  = binding.editText2.text.toString()
 
-            viewModel.updateHarvest(1,date,yield_tone).observe(viewLifecycleOwner){
+            viewModel.updateHarvest(plotId,date,yield_tone).observe(viewLifecycleOwner){
                 Log.d("Harvest", "onCreateView: ${it.message}")
             }
             Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()

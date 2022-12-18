@@ -13,6 +13,7 @@ import com.example.irrigationplanner.adapter.DiseaseHistoryAdapter
 import com.example.irrigationplanner.databinding.FragmentDisaseHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.Network.NetworkModels.Irrigation
 import kotlinx.coroutines.launch
 
 class DiseaseHistoryFragment : Fragment() {
@@ -27,7 +28,7 @@ class DiseaseHistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
+           // irrigation = it.getParcelable("IrrigationHis")!!
         }
     }
 
@@ -43,7 +44,7 @@ class DiseaseHistoryFragment : Fragment() {
         mHistoryAdapter = DiseaseHistoryAdapter()
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(477, 1).observe(viewLifecycleOwner) {
+            viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
                 val data = it.data?.data?.disease?.filter { itt ->
@@ -93,7 +94,7 @@ class DiseaseHistoryFragment : Fragment() {
                         }
                     }
                     1->{viewModel.viewModelScope.launch {
-                        viewModel.getIrrigationHis(477, 1).observe(viewLifecycleOwner) {
+                        viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
                             val data = it.data?.data?.disease?.filter { itt ->
@@ -105,7 +106,7 @@ class DiseaseHistoryFragment : Fragment() {
                         }
                     }}
                     2->{viewModel.viewModelScope.launch {
-                        viewModel.getIrrigationHis(477, 1).observe(viewLifecycleOwner) {
+                        viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
                             val data = it.data?.data?.disease?.filter { itt ->

@@ -34,13 +34,14 @@
                 android:text="@{Integer.toString(property.dt)}"
                 android:layout_margin="8dp"
                 android:textColor="@color/black" />
-
+<!--            imageUrl='@{@string/url+property.weather[0].icon+".png"}'-->
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                tools:src="@drawable/ic_rain"
-                imageUrl='@{@string/url+property.weather[0].icon+".png"}'
-                android:layout_margin="8dp" />
+                android:id="@+id/icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="8dp"
+                tools:src="@drawable/ic_rain_weather"
+                app:tint="@color/DarkGreen"/>
 
             <TextView
                 android:id="@+id/tv_temp"

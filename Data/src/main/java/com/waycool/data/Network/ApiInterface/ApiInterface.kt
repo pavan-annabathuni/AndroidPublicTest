@@ -17,6 +17,7 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import java.io.File
+import java.util.*
 
 interface ApiInterface {
     @GET("api/v1/language-master")
@@ -419,10 +420,12 @@ interface ApiInterface {
         @Field("foundation_pruning_topping") foundation_topping: String?,
     ): Response<CropStageModel>
 
-    @GET("api/v1/plot-stage-calender")
+    @GET("api/v1/get-crop-stage-masters")
     suspend fun getCropStage(
         @HeaderMap map: Map<String, String>?,
-    ): Response<GetCropStage>
+        @Query("account_no_id")account:Int?,
+        @Query("plot_id")plotId: Int
+    ): Response<CropStageModel>
 
     @POST("api/v1/add-farm-support")
     @FormUrlEncoded
@@ -470,6 +473,15 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
         @Field("notification_id") Nid: String
     ):Response<UpdateNotification>
+
+    @POST("api/v1/plot-stage-calender")
+    suspend fun updateCropStage(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_no_id")accountId: Int,
+        @Query("crop_stage_master_id")stageId:Int,
+        @Query("plot_id")plotId: Int,
+        @Query("date")date:String
+    ):Response<UpdateCropStage>
 
 
 }

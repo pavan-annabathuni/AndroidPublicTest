@@ -59,12 +59,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/savePreDay"
+        android:id="@+id/savePreDayL"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="16dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/DarkGreen"
         android:text="Save"

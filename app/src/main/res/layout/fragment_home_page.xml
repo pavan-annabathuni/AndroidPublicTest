@@ -762,7 +762,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
-                                android:src="@drawable/ic_wind"
+                                android:src="@drawable/ic_wind_weather"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -807,7 +807,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
-                                android:src="@drawable/ic_rain"
+                                android:src="@drawable/ic_rain_weather"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -28,6 +28,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
+import java.util.*
 import kotlin.Exception
 
 object NetworkSource {
@@ -912,7 +913,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.message))
+          //  emit(Resource.Error(e.message))
         }
     }
 
@@ -981,7 +982,7 @@ object NetworkSource {
     fun getAppTranslations()= flow<Resource<AppTranlationsDTO?>> {
         try {
             val langCode=LocalSource.getLanguageCode()?:"en"
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()?: emptyMap()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 
@@ -1049,13 +1050,30 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getCropStage()
-            = flow<Resource<GetCropStage?>> {
+    fun getCropStage(account_id: Int,plot_id: Int)
+            = flow<Resource<CropStageModel?>> {
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getCropStage(map)
+            val response = apiInterface.getCropStage(map,account_id,plot_id)
             if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun updateCropStage(accountId: Int,stageId:Int,plotId: Int,date:String)
+        = flow<Resource<UpdateCropStage?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.updateCropStage(map, accountId, stageId, plotId, date)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))

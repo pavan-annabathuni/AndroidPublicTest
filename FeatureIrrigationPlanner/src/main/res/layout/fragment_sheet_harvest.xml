@@ -113,6 +113,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/DarkGreen"
+        android:theme="@style/Theme.MaterialComponents.Light"
         android:text="Save"
         android:textColor="@color/white"
         android:textSize="16sp"

@@ -124,6 +124,9 @@
         <action
             android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment3"
             app:destination="@id/farmDetailsFragment3" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_navigation"
+            app:destination="@id/navigation" />
     </fragment>
     <fragment
         android:id="@+id/farmDetailsFragment2"
@@ -150,5 +153,6 @@
         android:name="com.waycool.iwap.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <include app:graph="@navigation/irrgation_navigation" />
 
 </navigation>
