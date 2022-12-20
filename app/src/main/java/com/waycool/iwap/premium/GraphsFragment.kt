@@ -259,7 +259,6 @@ class GraphsFragment : Fragment() {
                                             )
                                         }
                                         lineDataSet = LineDataSet(listLine, "")
-
                                         val datesList = it.data?.data?.LastTodayData?.keys
                                         val valueFormatter2 = IndexAxisValueFormatter()
 
@@ -285,13 +284,14 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.setDrawBorders(true)
                                         binding.lineChart.setBorderColor(com.example.mandiprice.R.color.LightGray)
                                         binding.lineChart.setBorderWidth(1f)
+                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         binding.lineChart.axisRight.setDrawGridLines(false)
                                         binding.lineChart.axisLeft.setDrawGridLines(false)
                                         //binding.lineChart.xAxis.setDrawGridLines(false)
                                         binding.lineChart.description.isEnabled = false
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisRight.isEnabled = false
-                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
+
                                         lineDataSet.fillDrawable =
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
 //                                        binding.lineChart.xAxis.spaceMax = 1f
@@ -331,7 +331,6 @@ class GraphsFragment : Fragment() {
                                             resources.getColor(com.example.mandiprice.R.color.DarkGreen)
                                         lineDataSet.circleRadius = 6f
                                         binding.lineChart.fitScreen()
-                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         binding.lineChart.setScaleEnabled(false)
                                         lineDataSet.mode = LineDataSet.Mode.LINEAR
                                         lineDataSet.setDrawFilled(true)
@@ -351,6 +350,7 @@ class GraphsFragment : Fragment() {
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
                                         binding.lineChart.xAxis.spaceMax = 1f
                                         binding.lineChart.fitScreen()
+                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         // binding.lineChart.axisLeft.isEnabled = false;
                                         binding.lineChart.isScaleXEnabled = false
                                     }
@@ -403,8 +403,8 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.axisRight.isEnabled = false
                                         lineDataSet.fillDrawable =
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
-                                        binding.lineChart.xAxis.spaceMax = 1f
-                                        binding.lineChart.fitScreen()
+                                        binding.lineChart.xAxis.spaceMax = 0f
+
                                         // binding.lineChart.axisLeft.isEnabled = false;
                                         binding.lineChart.isScaleXEnabled = false
 
@@ -418,7 +418,7 @@ class GraphsFragment : Fragment() {
 
                         }
                         is Resource.Error -> {
-                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                         }
                         is Resource.Loading -> {
                             Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()

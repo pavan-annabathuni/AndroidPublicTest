@@ -535,7 +535,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
             it.tvLastUpdateRefresh.setOnClickListener {
                 viewDeviceListAdapter.upDateList()
             }
-            it.clTempView.setOnClickListener {
+            it.clTemp.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
@@ -671,7 +671,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 
                 }
             }
-            binding.clTemp.setOnClickListener {
+            binding.clTempView .setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
@@ -688,29 +688,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                 }
 
             }
-            binding.clTemp.setOnClickListener {
-                val bundle = Bundle()
-                if (data.serialNoId != null && data.modelId != null) {
-                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soil_temperature")
-                    bundle.putString("toolbar","Soil Temperature")
-                    bundle.putString("temp_value", data.soilTemperature1)
-                    bundle.putString("date_time", data.dataTimestamp)
-                    findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
-                        bundle
-                    )
-
-                }
-
-            }
             binding.clSoilTemp.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soilmoisture")
+                    bundle.putString("value", "soil_temperature_1")
                     bundle.putString("toolbar","Soil Temperature")
                     bundle.putString("temp_value", data.soilTemperature1)
                     bundle.putString("date_time", data.dataTimestamp)
@@ -722,6 +705,23 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                 }
 
             }
+//            binding.clSoilTemp.setOnClickListener {
+//                val bundle = Bundle()
+//                if (data.serialNoId != null && data.modelId != null) {
+//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+//                    bundle.putString("value", "soilmoisture")
+//                    bundle.putString("toolbar","Soil Temperature")
+//                    bundle.putString("temp_value", data.soilTemperature1)
+//                    bundle.putString("date_time", data.dataTimestamp)
+//                    findNavController().navigate(
+//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+//                        bundle
+//                    )
+//
+//                }
+//
+//            }
         }
 
 

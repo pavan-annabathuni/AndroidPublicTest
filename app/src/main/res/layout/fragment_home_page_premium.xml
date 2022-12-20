@@ -1408,7 +1408,7 @@ more details."
                             app:cardCornerRadius="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/cl_Temp">
+                            app:layout_constraintTop_toBottomOf="@+id/cl_Temp_view">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_speed_meter"
@@ -1509,8 +1509,7 @@ more details."
                                         app:sv_speedTextSize="0dp"
                                         app:sv_tickNumber="0"
                                         app:sv_unitTextSize="0dp"
-                                        app:sv_withTremble="false"
-                                        />
+                                        app:sv_withTremble="false" />
 
 
                                     <!--                                    <View-->
@@ -1612,8 +1611,7 @@ more details."
                                         app:sv_speedTextSize="0dp"
                                         app:sv_tickNumber="0"
                                         app:sv_unitTextSize="0dp"
-                                        app:sv_withTremble="false"
-                                        />
+                                        app:sv_withTremble="false" />
                                     <!--                                    <View-->
                                     <!--                                        android:layout_width="100dp"-->
                                     <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
@@ -1702,7 +1700,7 @@ more details."
 
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_Temp"
+                            android:id="@+id/cl_Temp_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"

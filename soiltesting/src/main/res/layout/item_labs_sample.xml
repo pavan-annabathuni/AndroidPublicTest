@@ -7,7 +7,8 @@
     android:layout_marginStart="@dimen/space1"
     android:layout_marginEnd="@dimen/space1"
 
-    android:background="@drawable/bg_ans">
+    android:background="@drawable/bg_ans"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
