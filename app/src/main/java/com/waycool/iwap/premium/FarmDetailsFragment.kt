@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.ekn.gruzer.gaugelibrary.Range
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
@@ -60,6 +61,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                 }
 
             }
+        }
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+//            soilTestingLabsAdapter.upDateList()
         }
 
 //        val progressbar: ProgressBar = findViewById(R.id.progressbar) as ProgressBar
@@ -199,9 +205,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
 
                         binding.currentDelta.clearSections()
 //                        binding.kpaOne.text=response[0]. .soilMoisture1+" kPa"
-                        binding.currentDelta.setIndicator(Indicator.Indicators.KiteIndicator)
+//                        binding.currentDelta.setIndicator(Indicator.Indicators.KiteIndicator)
                         binding.currentDelta.maxSpeed=15F
-
                         binding.currentDelta.tickNumber=0
                         binding.currentDelta.marksNumber=0
                         binding.currentDelta.speedTo(response[0].delta_t!!.toFloat())

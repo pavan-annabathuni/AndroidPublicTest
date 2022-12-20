@@ -876,7 +876,7 @@ more details."
 <!--                                        app:layout_constraintTop_toTopOf="parent"-->
 <!--                                        />-->
 <!--                                    <com.ekn.gruzer.gaugelibrary.HalfGauge-->
-<!--                                        android:id="@+id/soil_moisture_one"-->
+<!--                                        android:id="@+id/soil_smoisture_one"-->
 <!--                                        android:layout_width="100dp"-->
 <!--                                        android:layout_height="100dp"-->
 <!--                                        app:layout_constraintStart_toStartOf="parent"-->
@@ -884,22 +884,22 @@ more details."
 <!--                                      />-->
                                     <com.github.anastr.speedviewlib.SpeedView
                                         android:id="@+id/current_delta"
-                                        android:layout_width="100dp"
-                                        android:layout_height="100dp"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:sv_speedTextFormat="FLOAT"
-                                        app:sv_withTremble="false"
                                         app:sv_minSpeed="-2"
+                                        android:layout_marginTop="8dp"
                                         app:sv_maxSpeed="15"
-                                        android:layout_marginTop="12dp"
                                         android:layout_marginStart="16dp"
-                                        app:sv_unitTextSize="0dp"
-                                        app:sv_speedTextSize="0dp"
-                                        app:sv_indicatorColor="#683C13"
+                                        android:layout_width="100dp"
+                                        android:layout_height="100dp"
                                         app:sv_centerCircleRadius="7dp"
                                         app:sv_indicator="NeedleIndicator"
+                                        app:sv_indicatorColor="#683C13"
+                                        app:sv_speedTextFormat="FLOAT"
+                                        app:sv_speedTextSize="0dp"
                                         app:sv_tickNumber="0"
+                                        app:sv_unitTextSize="0dp"
+                                        app:sv_withTremble="false"
 
                                         />
 

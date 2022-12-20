@@ -14,5 +14,5 @@ data class SoilTestData(
 @SerializedName("soil_test_number" ) var soilTestNumber : String? = null,
 @SerializedName("status"           ) var status         : String? = null,
 @SerializedName("approve_status"   ) var approveStatus  : String? = null,
-@SerializedName("updated_at"       ) var updatedAt      : String? = null
+@SerializedName("date"       ) var updatedAt      : String? = null
 )

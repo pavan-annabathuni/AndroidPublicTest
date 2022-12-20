@@ -98,6 +98,7 @@
         <entry key="Profile/src/main/res/layout/fragment_profile_language.xml" value="0.11979166666666667" />
         <entry key="Profile/src/main/res/layout/item_support.xml" value="0.2640625" />
         <entry key="Profile/src/main/res/menu/chat_menu.xml" value="0.25893769152196117" />
+        <entry key="SquareCamera/src/main/res/layout/fragment_capture_image.xml" value="0.2419837537409149" />
         <entry key="UiComponents/src/main/res/drawable/ic_chat.xml" value="0.1685" />
         <entry key="UiComponents/src/main/res/drawable/ic_cross.xml" value="0.1685" />
         <entry key="UiComponents/src/main/res/drawable/ic_fab_call.xml" value="0.1685" />

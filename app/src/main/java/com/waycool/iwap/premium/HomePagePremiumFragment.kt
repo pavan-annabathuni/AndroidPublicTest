@@ -276,7 +276,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
     }
 
     private fun initObserveMYFarm() {
-        var myFarmPremiumAdapter = MyFarmPremiumAdapter( this)
+        var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
 //        val mapFragment = childFragmentManager
 //            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
 //        mapFragment!!.requireView().isClickable = false
@@ -396,16 +396,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 
     @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceData) {
-
-//        viewDeviceListAdapter.upDateList()
-//        viewDeviceListAdapter.notifyDataSetChanged()
         binding.let {
             it.totalAreea.text = data.iotDevicesData?.battery.toString()
             it.tvAddDeviceStart.text = data.model?.modelName.toString()
-            it.tvTempDegree.text = data.temperature.toString()+" \u2103"
-            it.tvWindDegree.text = data.rainfall.toString()+" mm"
-            it.tvHumidityDegree.text = data.humidity.toString()+" %"
-            it.tvWindSpeedDegree.text = data.windspeed.toString() +" Km/h"
+            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
+            it.tvWindDegree.text = data.rainfall.toString() + " mm"
+            it.tvHumidityDegree.text = data.humidity.toString() + " %"
+            it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
             if (data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
@@ -416,37 +413,32 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 //            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
 //
 //            speedometer.indicator = imageIndicator
-            it.tvPressureDegree.text = data.pressure.toString()+" hPa"
+            it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
-            it.ivSoilDegreeOne.text = data.lux .toString() + " Lux"
+            it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
             it.tvLastUpdate.text = data.dataTimestamp.toString()
             binding.soilMoistureOne.clearSections()
             binding.soilMoistureTwo.clearSections()
-            binding.kpaOne.text=data.soilMoisture1+" kPa"
-            binding.kpaTwo.text=data.soilMoisture2+" kPa"
+            binding.kpaOne.text = data.soilMoisture1 + " kPa"
+            binding.kpaTwo.text = data.soilMoisture2 + " kPa"
 
-            binding.soilMoistureOne.addSections(Section(0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f))
-                , Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureOne.dpTOpx(12f))
-                , Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureOne.dpTOpx(12f))
-                , Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f)))
-
+            binding.soilMoistureOne.addSections(
+                Section(0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f))
+            )
             //two
 //            binding.soilMoistureOne .indicator.color = Color.RED
-            binding.soilMoistureTwo.addSections(Section
+            binding.soilMoistureTwo.addSections(
+                Section
+                    (0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f))
+            )
 
-                (0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f))
-                , Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureTwo.dpTOpx(12f))
-                , Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureTwo.dpTOpx(12f))
-                , Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f)))
 
-
-
-
-//            binding.soilMoistureOne.sections[0].color = Color.RED
-//            binding.soilMoistureOne.sections[1].color = Color.GREEN
-////            binding.soilMoistureOne.sections[1].color = Color.YELLOW
-//            binding.soilMoistureOne.sections[2].color = Color.RED
-//            binding.soilMoistureOne.dpTOpx(5f)
 //            binding.soilMoistureOne.addSections(
 //                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(5f)),
 //                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(5f)),
@@ -458,14 +450,15 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 //            binding.soilMoistureTwo.setIndicator(Indicator.Indicators.KiteIndicator)
 
 //            binding.soilMoistureOne.ticks= arrayListOf(0f,.1f,.3f,.5f,1f)
-            binding.soilMoistureOne.tickNumber=0
-            binding.soilMoistureOne.marksNumber=0
-            binding.soilMoistureTwo.tickNumber=0
-            binding.soilMoistureTwo.marksNumber=0
+            binding.soilMoistureOne.tickNumber = 0
+            binding.soilMoistureOne.marksNumber = 0
+
+            binding.soilMoistureTwo.tickNumber = 0
+            binding.soilMoistureTwo.marksNumber = 0
 
 //            binding.soilMoistureOne.speedTo()
-                binding.soilMoistureOne.maxSpeed=100F
-            binding.soilMoistureTwo.maxSpeed=100F
+            binding.soilMoistureOne.maxSpeed = 100F
+            binding.soilMoistureTwo.maxSpeed = 100F
 //            binding.soilMoistureOne.ticks  = listOf(10.0F)
 //            binding.soilMoistureTwo.ticks = 10
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
@@ -542,15 +535,15 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
             it.tvLastUpdateRefresh.setOnClickListener {
                 viewDeviceListAdapter.upDateList()
             }
-            it.clTemp.setOnClickListener {
+            it.clTempView.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "temperature")
-                    bundle.putString("temp_value",data.temperature)
-                    bundle.putString("date_time",data.dataTimestamp)
-
+                    bundle.putString("toolbar","Temperature")
+                    bundle.putString("temp_value", data.temperature)
+                    bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -563,8 +556,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "rainfall")
-                    bundle.putString("temp_value",data.rainfall)
-                    bundle.putString("date_time",data.dataTimestamp)
+                    bundle.putString("toolbar","Rainfall")
+                    bundle.putString("temp_value", data.rainfall)
+                    bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -589,8 +583,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "humidity")
-                    bundle.putString("temp_value",data.humidity)
-                    bundle.putString("date_time",data.dataTimestamp)
+                    bundle.putString("toolbar","Humidity")
+                    bundle.putString("temp_value", data.humidity)
+                    bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
@@ -603,7 +598,25 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "windspeed")
-                    bundle.putString("temp_value",data.windspeed)
+                    bundle.putString("toolbar","Wind Speed")
+                    bundle.putString("temp_value", data.windspeed)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+
+            it.clLeafWetness.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "leaf_wetness")
+                    bundle.putString("toolbar","Leaf wetness")
+
+                    bundle.putString("temp_value",data.rainfall)
                     bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
@@ -611,33 +624,103 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     )
                 }
             }
-//            it.clLeafWetness.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "leadwetnes")
-//                    bundle.putString("temp_value",data.rainfall)
-//                    bundle.putString("date_time",data.dataTimestamp)
-//                    findNavController().navigate(
-//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
-//                        bundle
-//                    )
-//                }
-//            }
             it.clPressure.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "pressure")
-                    bundle.putString("temp_value",data.pressure)
-                    bundle.putString("date_time",data.dataTimestamp)
+                    bundle.putString("toolbar","Pressure")
+                    bundle.putString("temp_value", data.pressure)
+                    bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment2_to_graphsFragment,
                         bundle
                     )
                 }
+            }
+            binding.clTop.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "soil_moisture_1")
+                    bundle.putString("toolbar","Soil Moisture Top")
+                    bundle.putString("temp_value", data.pressure)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
+            }
+            binding.bottomTop.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "soil_moisture_2")
+                    bundle.putString("toolbar","Soil Moisture Bottom")
+                    bundle.putString("temp_value", data.pressure)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
+            }
+            binding.clTemp.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "lux")
+                    bundle.putString("toolbar","Light Intensity")
+                    bundle.putString("temp_value", data.soilTemperature1)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
+
+            }
+            binding.clTemp.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "soil_temperature")
+                    bundle.putString("toolbar","Soil Temperature")
+                    bundle.putString("temp_value", data.soilTemperature1)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
+
+            }
+            binding.clSoilTemp.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "soilmoisture")
+                    bundle.putString("toolbar","Soil Temperature")
+                    bundle.putString("temp_value", data.soilTemperature1)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
+
             }
         }
 
