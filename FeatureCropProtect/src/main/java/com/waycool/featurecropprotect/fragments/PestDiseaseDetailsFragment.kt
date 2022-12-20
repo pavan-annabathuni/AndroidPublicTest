@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
@@ -28,6 +27,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
@@ -90,16 +91,17 @@ class PestDiseaseDetailsFragment : Fragment() {
             audioUrl = it.getString("audioUrl")
         }
 
-        shareLayout=binding.shareScreen
-        binding.imgShare.setOnClickListener() {
-            screenShot()
-        }
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
+
+        shareLayout=binding.shareScreen
+        binding.imgShare.setOnClickListener() {
+            screenShot(diseaseId,diseaseName,audioUrl)
+        }
 
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
@@ -216,10 +218,10 @@ class PestDiseaseDetailsFragment : Fragment() {
         audioPlayer()
     }
 
-    fun screenShot() {
+    fun screenShot(diseaseId: Int?, diseaseName: String?, audioUrl: String?) {
         val now = Date()
         android.text.format.DateFormat.format("", now)
-        val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
+        val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(bitmap)
@@ -230,12 +232,42 @@ class PestDiseaseDetailsFragment : Fragment() {
         outputFile.flush()
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
+                    .setDescription("Find Pest Management and more on Outgrow app")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener {task->
+                if (task.isSuccessful()) {
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-        val i = Intent()
-        i.action = Intent.ACTION_SEND
-        i.putExtra(Intent.EXTRA_STREAM, URI)
-        i.type = "text/plain"
-        startActivity(i)
+                }
+            }
+
+     /*   val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
+        share.putExtra(Intent.EXTRA_STREAM, URI)
+        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/pestdiseasedetail?diseaseid=$diseaseId")
+        startActivity(Intent.createChooser(share, "Share link!"))*/
     }
 
 

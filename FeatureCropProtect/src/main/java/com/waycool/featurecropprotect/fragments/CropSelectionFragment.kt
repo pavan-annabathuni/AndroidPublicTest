@@ -75,10 +75,8 @@ class CropSelectionFragment : Fragment() {
 //        binding.toolbarTitle.text = "Protect Your Crop"
 
         binding.cropsRv.adapter = adapter
-        binding.tvAddFrom.setOnClickListener {
-            val intent = Intent(activity, AddCropActivity::class.java)
-            startActivity(intent)
-        }
+
+
 
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
@@ -89,7 +87,7 @@ class CropSelectionFragment : Fragment() {
                 args
             )
         })
-//        binding.rvMyCrops.adapter = myCropAdapter
+        binding.rvMyCrops.adapter = myCropAdapter
         fabButton()
         myCrops()
         handler = Handler(Looper.myLooper()!!)
@@ -284,12 +282,10 @@ class CropSelectionFragment : Fragment() {
                 viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
                     myCropAdapter.submitList(it.data)
                     if ((it.data?.size!=0)) {
-                        binding.cvMyCrops.visibility=View.VISIBLE
-                        binding.cvAddCrop.visibility=View.GONE
                         binding.tvCount.text = it.data!!.size.toString()
                     } else {
-                        binding.cvAddCrop.visibility=View.GONE
-                        binding.cvMyCrops.visibility=View.GONE
+                        binding.tvCount.text = "0"
+
                     }
                 }
         }

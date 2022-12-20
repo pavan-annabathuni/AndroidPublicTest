@@ -25,13 +25,13 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.videos.R
-import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentVideosListBinding
 import com.waycool.videos.VideoViewModel
@@ -88,6 +88,34 @@ class VideosListFragment : Fragment() {
         adapterVideo = VideosPagerAdapter(requireContext())
         binding.videosVideoListRv.adapter = adapterVideo
 
+        adapterVideo.onItemShareClick={
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                        .setDescription("Watch more videos and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener {task->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                    }
+                }
+        }
 
         adapterVideo.onItemClick = {
             val bundle = Bundle()
@@ -200,7 +228,7 @@ class VideosListFragment : Fragment() {
     }
 
     private fun getVideos(
-        tags: String? = null,
+        tags: String? = "",
         categoryId: Int? = null
     ) {
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {

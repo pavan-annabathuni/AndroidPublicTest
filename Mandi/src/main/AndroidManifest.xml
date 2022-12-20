@@ -8,8 +8,28 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MandiActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateAlwaysVisible"/>
+            android:exported="true"
+            android:windowSoftInputMode="stateAlwaysVisible">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/mandi"
+                    android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/mandigraph"
+                    android:scheme="https"/>
+            </intent-filter>
+
+        </activity>
         <provider
             android:name="com.example.mandiprice.FileProvider"
             android:authorities="com.example.outgrow"

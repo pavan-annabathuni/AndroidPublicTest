@@ -21,23 +21,34 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.featurelogin.FeatureLogin
+import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.AdsAdapter
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity() {
+    private var searchTag: CharSequence? = ""
+
     private var selectedCategory: String? = null
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
-
 
 
     private lateinit var newsAdapter: NewsPagerAdapter
@@ -75,6 +86,13 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         getNewsCategories()
         fabButton()
 
+        CoroutineScope(Dispatchers.Main).launch {
+            if (!FeatureLogin.getLoginStatus()) {
+                val intent = Intent(this@NewsAndArticlesActivity, LoginMainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -91,7 +109,51 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
+        newsAdapter.onItemShareClick = {
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                        .setDescription("Watch more videos and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
 
+                    }
+                }
+
+            Firebase.dynamicLinks
+                .getDynamicLink(intent)
+                .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+                    // Get deep link from result (may be null if no link is found)
+                    var deepLink: Uri? = null
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.link
+                    }
+                    if (deepLink != null) {
+
+                        val intent =
+                            Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
+        }
         newsAdapter.onItemClick = {
             val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
             intent.putExtra("title", it?.title)
@@ -244,22 +306,23 @@ class NewsAndArticlesActivity : AppCompatActivity() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                val searchTag = result?.get(0)
+                searchTag = result?.get(0).toString()
                 binding.search.setText(searchTag)
 
             }
         }
     }
-    private fun fabButton(){
+
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -267,12 +330,12 @@ class NewsAndArticlesActivity : AppCompatActivity() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(this)
         }
     }

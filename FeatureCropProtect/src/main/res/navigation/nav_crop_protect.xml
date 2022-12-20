@@ -17,6 +17,9 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/cropSelectionFragment" />
+        <action
+            android:id="@+id/action_cropSelectionFragment_to_pestDiseaseDetailsFragment"
+            app:destination="@id/pestDiseaseDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/pestDiseaseFragment"

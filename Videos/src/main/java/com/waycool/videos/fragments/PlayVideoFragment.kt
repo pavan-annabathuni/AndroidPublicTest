@@ -24,6 +24,10 @@ class PlayVideoFragment : Fragment() {
 
     private lateinit var binding: FragmentPlayVideoBinding
     private var videoSelected: VansFeederListDomain? = null
+    private var videoTitle:String?=null
+    private var videoDesc:String?=null
+    private var videoUrl:String?=null
+
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
     private lateinit var adapterVideo: VideosPagerAdapter
@@ -35,8 +39,7 @@ class PlayVideoFragment : Fragment() {
     ): View {
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
         val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true)
-            {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     this@PlayVideoFragment.findNavController().navigateUp()
                 }
@@ -51,12 +54,23 @@ class PlayVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null)
-            videoSelected = requireArguments().getParcelable("video")
+        if (arguments != null) {
+            if (arguments?.containsKey("video") == true)
+                videoSelected = requireArguments().getParcelable("video")
+            else {
+                videoTitle=arguments?.getString("title")
+                videoDesc=arguments?.getString("description")
+                videoUrl=arguments?.getString("url")
+            }
+        }
 
-        binding.ytTitleTv.text = videoSelected?.title
-        binding.ytDescriptionTv.text = videoSelected?.desc
-
+        if(videoSelected!=null) {
+            binding.ytTitleTv.text = videoSelected?.title
+            binding.ytDescriptionTv.text = videoSelected?.desc
+        }else{
+            binding.ytTitleTv.text = videoTitle
+            binding.ytDescriptionTv.text =videoDesc
+        }
         adapterVideo = VideosPagerAdapter(requireContext())
         binding.ytBottomsheetRv.adapter = adapterVideo
 
@@ -79,7 +93,9 @@ class PlayVideoFragment : Fragment() {
                     ) {
                         if (!p2) {
                             player = youTubePlayer
+                            if(videoSelected!=null)
                             youTubePlayer?.loadVideo(videoSelected?.contentUrl)
+                            else youTubePlayer?.loadVideo(videoUrl)
                             youTubePlayer?.play()
                             setupPlayerEvents()
                         }

@@ -1,6 +1,8 @@
 package com.example.mandiprice.fragments
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -26,14 +28,14 @@ import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
-import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MandiFragment : Fragment() {
@@ -111,6 +113,9 @@ class MandiFragment : Fragment() {
             it?.crop?.let { it1 -> args.putString("cropName", it1) }
             it?.market?.let { it1 -> args.putString("market", it1) }
             args.putString("fragment", "one")
+
+
+
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         })
@@ -165,18 +170,6 @@ class MandiFragment : Fragment() {
                         binding.filter.text = "Low to High"
                         binding.recycleViewDis.adapter = adapterMandi
                         getMandiData(cropCategory, state, crop, sortBy, orderBy)
-//                        viewModel.viewModelScope.launch {
-//                            viewModel.getMandiDetails(
-//                                cropCategory,
-//                                state,
-//                                crop,
-//                                sortBy,
-//                                orderBy,
-//                                search
-//                            ).observe(viewLifecycleOwner) {
-//                                adapterMandi.submitData(lifecycle, it)
-//                            }
-//                        }
                         Log.d("High", "filterMenu: $cropCategory ")
 
                     }
@@ -190,20 +183,6 @@ class MandiFragment : Fragment() {
                         binding.recycleViewDis.adapter = adapterMandi
                         getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                        viewModel.viewModelScope.launch {
-//                            viewModel.getMandiDetails(
-//                                cropCategory,
-//                                state,
-//                                crop,
-//                                sortBy,
-//                                orderBy,
-//                                search
-//                            ).observe(viewLifecycleOwner) {
-//                                // binding.viewModel = it
-//                                adapterMandi.submitData(lifecycle, it)
-//                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                            }
-//                        }
                         binding.filter.text = "High to Low"
                     }
                 }
@@ -252,22 +231,7 @@ class MandiFragment : Fragment() {
                         }
                     }
                     binding.recycleViewDis.adapter = adapterMandi
-//                    getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                    viewModel.viewModelScope.launch {
-//                        viewModel.getMandiDetails(
-//                            cropCategory,
-//                            state,
-//                            crop,
-//                            sortBy,
-//                            orderBy,
-//                            search
-//                        ).observe(viewLifecycleOwner) {
-//                            // binding.viewModel = it
-//                            adapterMandi.submitData(lifecycle, it)
-//                            // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
                         val filter = it.data?.filter { it.cropCategory_id == crop_category_id }
                         val cropNameList = (filter?.map { data ->
@@ -305,21 +269,7 @@ class MandiFragment : Fragment() {
                                         }
                                     }
                                     binding.recycleViewDis.adapter = adapterMandi
-//                                    viewModel.viewModelScope.launch {
-//                                        viewModel.getMandiDetails(
-//                                            cropCategory,
-//                                            state,
-//                                            crop,
-//                                            sortBy,
-//                                            orderBy,
-//                                            search
-//                                        ).observe(viewLifecycleOwner) {
-//                                            // binding.viewModel = it
-//                                            adapterMandi.submitData(lifecycle, it)
-//                                            // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                                        }
-//
-//                                    }
+
                                 }
                             }
 
@@ -364,20 +314,7 @@ class MandiFragment : Fragment() {
                     }
                 }
                 binding.recycleViewDis.adapter = adapterMandi
-//                viewModel.viewModelScope.launch {
-//                    viewModel.getMandiDetails(
-//                        cropCategory,
-//                        state,
-//                        crop,
-//                        sortBy,
-//                        orderBy,
-//                        search
-//                    ).observe(viewLifecycleOwner) {
-//                        // binding.viewModel = it
-//                        adapterMandi.submitData(lifecycle, it)
-//                        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                    }
-//                }
+
             }
 
         }
@@ -403,40 +340,14 @@ class MandiFragment : Fragment() {
 //                                binding.recycleViewDis.adapter = adapterMandi
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                            viewModel.viewModelScope.launch {
-//                                viewModel.getMandiDetails(
-//                                    cropCategory,
-//                                    state,
-//                                    crop,
-//                                    sortBy,
-//                                    orderBy,
-//                                    search
-//                                ).observe(viewLifecycleOwner) {
-//                                    // binding.viewModel = it
-//                                    adapterMandi.submitData(lifecycle, it)
-//                                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
+
 
                         } else {
                             orderBy = "distance"
 //                                binding.recycleViewDis.adapter = adapterMandi
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                            viewModel.viewModelScope.launch {
-//                                viewModel.getMandiDetails(
-//                                    cropCategory,
-//                                    state,
-//                                    crop,
-//                                    sortBy,
-//                                    orderBy,
-//                                    search
-//                                ).observe(viewLifecycleOwner) {
-//                                    // binding.viewModel = it
-//                                    adapterMandi.submitData(lifecycle, it)
-//                                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
+
 
                         }
 
@@ -450,47 +361,14 @@ class MandiFragment : Fragment() {
                             binding.llPorgressBar.visibility = View.VISIBLE
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                            viewModel.viewModelScope.launch {
-//                                viewModel.getMandiDetails(
-//                                    cropCategory,
-//                                    state,
-//                                    crop,
-//                                    sortBy,
-//                                    orderBy,
-//                                    search
-//                                ).observe(viewLifecycleOwner) {
-//                                    // binding.viewModel = it
-//                                    adapterMandi.submitData(lifecycle, it)
-//                                    Handler().postDelayed({
-//                                        binding.llPorgressBar.visibility = View.GONE
-//                                    }, 2000)
-//                                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
+
                         } else {
                             orderBy = "price"
                             binding.recycleViewDis.adapter = adapterMandi
                             binding.llPorgressBar.visibility = View.VISIBLE
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
-//                            viewModel.viewModelScope.launch {
-//                                viewModel.getMandiDetails(
-//                                    cropCategory,
-//                                    state,
-//                                    crop,
-//                                    sortBy,
-//                                    orderBy,
-//                                    search
-//                                ).observe(viewLifecycleOwner) {
-//                                    // binding.viewModel = it
-//                                    adapterMandi.submitData(lifecycle, it)
-//                                    Handler().postDelayed({
-//                                        binding.llPorgressBar.visibility = View.GONE
-//                                    }, 2000)
-//
-//                                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
+
                         }
 
                     }

@@ -165,6 +165,9 @@ class OtpFragment : Fragment() {
     @Composable
     fun otpView(otpVal: String = "") {
         var otpValue by remember { mutableStateOf(otpVal) }
+        if(otpValue.length ==4){
+            getOTPValidate()
+        }
         OtpView(
             otpText = otpValue,
             onOtpTextChange = {
@@ -182,6 +185,7 @@ class OtpFragment : Fragment() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
         )
+
 
     }
 
@@ -211,7 +215,7 @@ class OtpFragment : Fragment() {
         }
     }
 
-    val isSmsPermissionGranted: Boolean
+    private val isSmsPermissionGranted: Boolean
         get() = activity?.let {
             ContextCompat.checkSelfPermission(
                 it,

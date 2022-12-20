@@ -8,7 +8,7 @@ import com.waycool.data.Network.NetworkModels.VansFeederListNetwork
 
 class VansPagingSource(
     private val api: ApiInterface,
-    private val queryMap: MutableMap<String, String>
+    private val queryMap: MutableMap<String, String>,
 ) : PagingSource<Int, VansFeederListNetwork>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, VansFeederListNetwork> {

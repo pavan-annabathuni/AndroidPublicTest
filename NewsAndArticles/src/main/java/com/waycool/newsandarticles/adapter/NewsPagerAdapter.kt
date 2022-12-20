@@ -25,6 +25,7 @@ class NewsPagerAdapter(
     private var lastPosition = -1
 
     var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
+    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
@@ -58,14 +59,15 @@ class NewsPagerAdapter(
                 .into(itemBinding.newsListImage)
 
             itemBinding.share.setOnClickListener {
-                val sendIntent = Intent()
+                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
+          /*      val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 val sharetext =
                     """Hi, Checkout the video on ${vans?.title}. For more videos Download Outgrow App from PlayStore 
 https://play.google.com/store/apps/details?id=${it.context.packageName}"""
                 sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
                 sendIntent.type = "text/plain"
-                it.context.startActivity(Intent.createChooser(sendIntent, "share"))
+                it.context.startActivity(Intent.createChooser(sendIntent, "share"))*/
             }
 
             itemBinding.newsCv.setOnClickListener {

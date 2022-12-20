@@ -16,7 +16,7 @@ class VideoViewModel : ViewModel() {
     //Videos
     fun getVansVideosList(
         tags: String? = null,
-        categoryId: Int? = null
+        categoryId: Int? = null,
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()

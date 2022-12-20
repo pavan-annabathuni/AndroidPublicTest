@@ -14,7 +14,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.waycool.newsandarticles.Util.AppUtil
-import com.waycool.newsandarticles.Util.NetworkUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
 
@@ -34,15 +33,11 @@ class NewsFullviewActivity : AppCompatActivity() {
     var newsDate: String? = null
     var source: String? = null
     var mediaPlayer: MediaPlayer? = null
-    private val startTime = 0.0
-    private val finalTime = 0.0
-    private val myHandler = Handler()
     var audioWife: AudioWife? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-
         audioNewLayout = binding.audioLayout
 
         val bundle = intent.extras

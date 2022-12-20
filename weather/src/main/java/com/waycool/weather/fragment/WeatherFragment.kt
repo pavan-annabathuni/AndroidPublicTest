@@ -3,7 +3,6 @@ package com.waycool.weather.fragment
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,27 +11,20 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.utils.Resource
-import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.weather.R
 import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
-import com.waycool.weather.utils.Constants.*
 import com.waycool.weather.viewModel.WeatherViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -112,17 +104,18 @@ class WeatherFragment : Fragment() {
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
-        val i = Intent()
-        i.action = Intent.ACTION_SEND
-        //i.putExtra(Intent.EXTRA_TEXT,"Title")
-        i.putExtra(Intent.EXTRA_STREAM, URI)
-        i.type = "text/plain"
-        startActivity(i)
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
+        share.putExtra(Intent.EXTRA_STREAM, URI)
+        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+
+        startActivity(Intent.createChooser(share, "Share link!"))
     }
 
     private fun observer() {
-
-
         viewModel.getUserDetails().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
