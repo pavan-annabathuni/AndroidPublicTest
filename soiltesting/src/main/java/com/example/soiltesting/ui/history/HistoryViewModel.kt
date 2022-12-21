@@ -3,6 +3,7 @@ package com.example.soiltesting.ui.history
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.Network.NetworkModels.CheckSoilTestLabDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain

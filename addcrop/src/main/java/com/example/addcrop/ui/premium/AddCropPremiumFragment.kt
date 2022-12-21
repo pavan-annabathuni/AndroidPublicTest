@@ -121,7 +121,6 @@ class AddCropPremiumFragment : Fragment() {
 //            viewModel.addCropDataPass(map)
 //        }
         return map
-
     }
 
     private fun initViewClicks() {
@@ -148,7 +147,6 @@ class AddCropPremiumFragment : Fragment() {
             }
         }
     }
-
 
     private fun irrigationTypeSpinner(account_id: Int, crop_id: Int, soil_type_id: Int) {
         val arrayAdapter =

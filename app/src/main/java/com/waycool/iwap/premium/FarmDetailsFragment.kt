@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.opengl.Visibility
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.ekn.gruzer.gaugelibrary.Range
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
@@ -28,6 +31,8 @@ import com.google.android.libraries.maps.model.*
 import com.google.android.material.chip.Chip
 import com.google.maps.android.SphericalUtil
 import com.waycool.data.Local.utils.TypeConverter
+import com.github.anastr.speedviewlib.components.Section
+import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -98,22 +103,19 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         initiFarmDeltT()
         farmDetailsObserve()
 
-
-//        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-//                if (arguments != null) {
-//                    val farm_id = arguments?.getInt("farm_id")
-//                    var accountId = it.data?.accountId
-//                    Log.d("TAG", "getFarmsAccount: $accountId")
-//                    if (accountId != null) {
-//                    }
-//
-//                }
-//            }
+            }
+        }
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+//            soilTestingLabsAdapter.upDateList()
+        }
 
 //        val progressbar: ProgressBar = findViewById(R.id.progressbar) as ProgressBar
 //        val color = -0xff0100
 //        progressbar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
 //        progressbar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
+
 
 
     }
@@ -148,7 +150,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 is Resource.Success -> {
                     if (it.data?.data!!.isNotEmpty()) {
                         deltaAdapter.setMovieList(it.data?.data)
-                        binding.soilMoistureOne.progress = 60
+//                        binding.soilMoistureOne.progress=60
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
 //                        deltaAdapter.notifyDataSetChanged()
                         deltaTomAdapter.setMovieList(it.data?.data)
@@ -215,6 +217,23 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         val response = it.data!!.data as ArrayList<ViewDeviceData>
                         binding.deviceFarm.adapter = viewDeviceListAdapter
                         viewDeviceListAdapter.setMovieList(response)
+
+                        binding.currentDelta.clearSections()
+//                        binding.kpaOne.text=response[0]. .soilMoisture1+" kPa"
+//                        binding.currentDelta.setIndicator(Indicator.Indicators.KiteIndicator)
+                        binding.currentDelta.maxSpeed=15F
+                        binding.currentDelta.tickNumber=0
+                        binding.currentDelta.marksNumber=0
+                        binding.currentDelta.speedTo(response[0].delta_t!!.toFloat())
+                        binding.deltaText.text= it.data?.data!![0].delta_t.toString()
+
+                        binding.currentDelta.addSections(Section
+                            (0f, .24f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.24f, .59f, Color.parseColor("#01B833"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.59f, .71f, Color.parseColor("#F3C461"), binding.currentDelta.dpTOpx(12f))
+                            , Section(.71f, 1f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f)))
+
+
                     }
 
                 }

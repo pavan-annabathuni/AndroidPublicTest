@@ -778,7 +778,6 @@ more details."
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
-
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/cl_progress_spreying"
                                     android:layout_width="0dp"
@@ -787,60 +786,90 @@ more details."
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
 
-                                    <ProgressBar
-                                        android:id="@+id/soil_moisture_one"
+<!--                                    <ProgressBar-->
+<!--                                        android:id="@+id/soil_moisture_one"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        android:layout_height="100dp"-->
+<!--                                        android:indeterminateOnly="false"-->
+<!--                                        android:max="140"-->
+<!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
+<!--                                        android:rotation="-120"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                                        />-->
+<!--                                    <com.ekn.gruzer.gaugelibrary.HalfGauge-->
+<!--                                        android:id="@+id/soil_smoisture_one"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        android:layout_height="100dp"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                                      />-->
+                                    <com.github.anastr.speedviewlib.SpeedView
+                                        android:id="@+id/current_delta"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:sv_minSpeed="-2"
+                                        android:layout_marginTop="8dp"
+                                        app:sv_maxSpeed="15"
+                                        android:layout_marginStart="16dp"
                                         android:layout_width="100dp"
                                         android:layout_height="100dp"
-                                        android:indeterminateOnly="false"
-                                        android:max="140"
-                                        android:progressDrawable="@drawable/pb_circular_determinative"
-                                        android:rotation="-120"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:sv_centerCircleRadius="7dp"
+                                        app:sv_indicator="NeedleIndicator"
+                                        app:sv_indicatorColor="#683C13"
+                                        app:sv_speedTextFormat="FLOAT"
+                                        app:sv_speedTextSize="0dp"
+                                        app:sv_tickNumber="0"
+                                        app:sv_unitTextSize="0dp"
+                                        app:sv_withTremble="false"
 
-                                    <View
-                                        android:id="@+id/space"
-                                        android:layout_width="100dp"
-                                        android:layout_height="20dp"
-                                        android:layout_marginTop="70dp"
-                                        android:background="#ffffff"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        />
+
+
+
+<!--                                    <View-->
+<!--                                        android:id="@+id/space"-->
+<!--                                        android:layout_width="100dp"-->
+<!--                                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                                        android:layout_marginTop="70dp"-->
+<!--                                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                                        android:background="#ffffff"-->
+<!--                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one"-->
+<!--                                        android:layout_height="20dp"/>-->
 
                                     <TextView
                                         android:id="@+id/update_date"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="60dp"
                                         android:text="Last Updated: Today 03:00PM"
                                         android:textColor="#585858"
                                         android:textSize="12sp"
+                                        android:layout_marginTop="2dp"
                                         android:textStyle="bold"
-                                        app:layout_constraintStart_toEndOf="@+id/soil_moisture_one"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/current_delta"
+                                        app:layout_constraintStart_toEndOf="@+id/delta_text"
+                                        />
 
                                     <TextView
-                                        android:id="@+id/kpa_one"
+                                        android:id="@+id/delta_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/space16"
-                                        android:layout_marginTop="@dimen/space70"
                                         android:text="100 KPa"
                                         android:textColor="#171717"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
+                                        app:layout_constraintEnd_toEndOf="@+id/current_delta"
+                                        app:layout_constraintStart_toStartOf="@+id/current_delta"
+                                        app:layout_constraintTop_toBottomOf="@+id/current_delta" />
                                     <View
                                         android:id="@+id/line_one"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"
-                                        android:layout_marginTop="20dp"
                                         android:background="#EBECF2"
-                                        app:layout_constraintTop_toBottomOf="@+id/kpa_one" />
+                                        android:layout_width="match_parent"
+                                        android:layout_marginTop="20dp"
+                                        app:layout_constraintTop_toBottomOf="@+id/delta_text"
+                                        android:layout_height="1dp"/>
 
                                     <LinearLayout
                                         android:id="@+id/linearLayout5"
@@ -852,6 +881,7 @@ more details."
                                         android:layout_marginBottom="@dimen/space16"
                                         android:nestedScrollingEnabled="true"
                                         android:orientation="vertical"
+                                        android:layout_marginTop="@dimen/space12"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -873,14 +903,13 @@ more details."
                                             android:orientation="horizontal"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             tools:listitem="@layout/item_delta_progress_bar" />
-
                                         <View
                                             android:id="@+id/line_two"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"
-                                            android:layout_marginTop="20dp"
                                             android:background="#EBECF2"
-                                            app:layout_constraintTop_toBottomOf="@+id/kpa_one" />
+                                            android:layout_width="match_parent"
+                                            android:layout_marginTop="20dp"
+                                            app:layout_constraintTop_toBottomOf="@+id/kpa_one"
+                                            android:layout_height="1dp"/>
 
                                         <TextView
                                             android:id="@+id/textView164"

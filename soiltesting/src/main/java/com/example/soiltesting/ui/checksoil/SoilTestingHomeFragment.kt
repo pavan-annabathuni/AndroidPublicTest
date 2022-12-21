@@ -486,7 +486,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                                    } else if (it.data?.isNotEmpty() == true) {
+                                    } else if (it.data?.isNotEmpty() == true && it.data !=null) {
                                         val response = it.data
                                         Log.d(
                                             TAG,
@@ -501,6 +501,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
+//                                        bundle.putString("lab_name",it.data)
 
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,

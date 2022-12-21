@@ -19,35 +19,44 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
     private var _binding: FragmentCheckSoilTestBinding? = null
     private val binding get() = _binding!!
     private var soilTestingLabsAdapter = SoilTestingLabsAdapter(this)
-    private var list:CheckSoilTestData?=null
+    private var list: CheckSoilTestData? = null
 
-    private var latitude:String?=null
-    private var longitude:String?=null
-    @SuppressLint("NotifyDataSetChanged")
+    private var latitude: String? = null
+    private var longitude: String? = null
+
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
-        if (arguments!=null) {
+        if (arguments != null) {
             var your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
             Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
+//            binding.tvLabTitle.text = your_list?.get(0)?.onp_name.toString()
+//            binding.tvName.text = your_list?.get(0)?.onp_address.toString()
+//            binding.tvCheckCrop.text = your_list?.get(0)?.onp_distance_km.toString() + " from your location"
+//            binding.pinCode.text = your_list?.get(0)?.onp_pincode.toString()
+
             binding.recyclerviewStatusLab.layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             binding.recyclerviewStatusLab.adapter = soilTestingLabsAdapter
-            soilTestingLabsAdapter.setMovieList(your_list!!)
+            soilTestingLabsAdapter.setMovieList(your_list)
             soilTestingLabsAdapter.notifyDataSetChanged()
 
-            latitude=arguments?.getString("lat")
-            longitude=arguments?.getString("lon")
-//        binding.cardCheckHealth.setOnClickListener {
-//            val bundle=Bundle()
-//            bundle.putString("onp_id",your_list[0].onp_name.toString())
-//            Log.d(Constant.TAG, "initViewsendingId: "+your_list[0].onp_name.toString())
-//
-//            findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)x
-//
-//        }
+            latitude = arguments?.getString("lat")
+            longitude = arguments?.getString("lon")
+            binding.cardCheckHealth.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("onp_id", your_list?.get(0)?.onpName.toString())
+////            Log.d(Constant.TAG, "initViewsendingId: "+your_list[0]..toString())
+
+                findNavController().navigate(
+                    R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
+                    bundle
+                )
+
+            }
         }
         return binding.root
     }
@@ -55,6 +64,9 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewBackClick()
+//        binding.btnSelectCrop.setOnClickListener {
+//
+//        }
 
     }
 
@@ -83,16 +95,19 @@ class CheckSoilTestFragment : Fragment(), CheckSoilTestListener {
     }
 
     override fun checkBoxSoilTest(data: CheckSoilTestDomain) {
-        binding.cardCheckHealth.isEnabled=true
+        binding.cardCheckHealth.isEnabled = true
         binding.cardCheckHealth.setOnClickListener {
             soilTestingLabsAdapter.upDateList()
             val bundle = Bundle()
-            bundle.putInt("soil_test_number",data.onp_id!!)
-            bundle.putString("lat",latitude)
-            bundle.putDouble("lat_onp",data.onp_lat!!)
-            bundle.putString("long",longitude)
-            bundle.putDouble("long_onp",data.onp_long!!)
-            findNavController().navigate(R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,bundle)
+            bundle.putInt("soil_test_number", data.onpId!!)
+            bundle.putString("lat", latitude)
+            bundle.putString("lat_onp", data.onpLat!!)
+            bundle.putString("long", longitude)
+            bundle.putString("long_onp", data.onpLong!!)
+            findNavController().navigate(
+                R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
+                bundle
+            )
 //            soilTestingLabsAdapter.upDateList(ArrayList(data))
 
 

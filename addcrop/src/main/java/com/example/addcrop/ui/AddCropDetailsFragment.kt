@@ -13,23 +13,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.viewmodel.AddCropViewModel
-import com.google.android.material.chip.Chip
-import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.example.addcrop.viewmodel.AddViewModel
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
-    private var selectedFarmId: Int? = null
     private var accountID: Int? = null
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
@@ -78,7 +73,7 @@ class AddCropDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
             val cropIdSelected = arguments?.getInt("cropid")
-
+        }
 
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
@@ -105,7 +100,7 @@ class AddCropDetailsFragment : Fragment() {
 //        }
 
 
-        }
+//        }
 
 //    private fun spinner() {
 //        val arrayAdapter =
@@ -251,6 +246,7 @@ class AddCropDetailsFragment : Fragment() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
             }
         }
     }

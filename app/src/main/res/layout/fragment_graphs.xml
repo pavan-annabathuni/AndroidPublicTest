@@ -23,6 +23,7 @@
             android:src="@drawable/ic_back_btn_toolbar" />
 
         <TextView
+            android:id="@+id/tv_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,15 +43,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <ImageView
-            android:id="@+id/sunrise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="@dimen/space16"
-            android:src="@drawable/ic_sunrise"
-            app:layout_constraintEnd_toStartOf="@+id/today"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/sunrise"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="24dp"-->
+        <!--            android:layout_marginEnd="@dimen/space16"-->
+        <!--            android:src="@drawable/ic_sunrise"-->
+        <!--            app:layout_constraintEnd_toStartOf="@+id/today"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/today"
@@ -58,38 +59,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Today"
+            style="@style/Bold"
             android:textColor="#111827"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tue 26, Jul"
+            style="@style/Bold"
+            android:textColor="#374151"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/today"
+            />
 
         <TextView
             android:id="@+id/degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="24°C"
             android:textColor="#111827"
             android:textSize="32sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/today" />
+            app:layout_constraintTop_toBottomOf="@+id/date" />
 
-        <TextView
-            android:id="@+id/tvDramatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="23dp"
-            android:text="Dramatic Cloudy"
-            android:textColor="#111827"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/degree" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -121,19 +123,32 @@
             app:tabSelectedTextColor="@color/Green"
             app:tabTextColor="@color/black"
             tools:ignore="SpeakableTextPresentCheck" />
+        <TextView
+            android:id="@+id/tvDramatic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="23dp"
+            android:text="Dramatic Cloudy"
+            android:textColor="#111827"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
-            android:layout_width="340dp"
-            android:layout_height="250dp"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
             android:layout_marginStart="24dp"
             android:background="@color/white"
+            android:layout_marginEnd="@dimen/space16"
             android:padding="10dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDramatic" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

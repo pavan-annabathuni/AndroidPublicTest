@@ -97,13 +97,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-//                    val sharedPreference =  getSharedPreferences("PREFERENCE_NAME",Context.MODE_PRIVATE)
-//                    var editor = sharedPreference.edit()
-//                    editor.putString("username","Anupam")
-//                    editor.putLong("l",100L)
-//                    editor.commit()
                     activity?.finish()
-//                    findNavController().navigateUp()
+
                     Toast.makeText(requireContext(), "Device is Created", Toast.LENGTH_SHORT).show()
 
                 }
@@ -167,8 +162,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             } else {
                 // if the intentResult is not null we'll set
                 // the content and format of scan message
-                Toast.makeText(context, "Scanned ${intentResult.contents}", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Device is Scanned", Toast.LENGTH_SHORT)
                     .show()
+                binding.tvScanned.text="Scanned"
                 Log.d(TAG, "onActivityResultGSCg: ${intentResult.contents} ")
 //                messageText.setText(intentResult.contents)
 //                messageFormat.setText(intentResult.formatName)
@@ -181,7 +177,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                                 val map = mutableMapOf<String, Any>()
                                 map.put("account_no", accountId)
                                 map.put("device_name", binding.device1.text)
-                                map.put("farm_id",25)
+                                map.put("farm_id",4)
                                 map.put("device_lat",12.930220)
                                 map.put("device_long",77.686267)
                                 Log.d(TAG, "onActivityResultLatitude: $binding.latitude.text")

@@ -145,10 +145,8 @@ class CropHealthFragment : Fragment() {
 //                        historyAdapter.submitList(it.data)
                         val response = it.data
                         if (response?.size!! <= 2) {
-
                             historyAdapter.submitList(response)
 //                            historyAdapter.submitList(response)
-
                         } else {
                             val arrayList = ArrayList<AiCropHistoryDomain>()
                             arrayList.add(response[0])

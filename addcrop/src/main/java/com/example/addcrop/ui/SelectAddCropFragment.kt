@@ -87,7 +87,7 @@ class SelectAddCropFragment : Fragment() {
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1)
             }
-                Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
+//                Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
 //                when (it?.cropId) {
 //                    67-> {
 //                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")

@@ -152,9 +152,9 @@ class CropDetailsCaptureFragment : Fragment() {
 
 
         } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
-
             val uri: Uri? = data?.data
             selecteduri = uri!!
+            Log.d(TAG, "onActivityResultDataResultURi:$selecteduri ")
 //            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
 
             Log.d(TAG, "onActivityResultUri: $uri")
@@ -186,7 +186,6 @@ class CropDetailsCaptureFragment : Fragment() {
                 Log.d("aidetect", profileImage.toString())
                 binding.progressBar?.visibility = View.VISIBLE
                 binding.cardCheckHealth.visibility = View.GONE
-
 //                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
 //                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
 
