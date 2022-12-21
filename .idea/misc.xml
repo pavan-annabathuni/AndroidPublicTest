@@ -16,6 +16,7 @@
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_history.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_select.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_how_to_click.xml" value="0.2833333333333333" />
+        <entry key="FeatureCropHealth/src/main/res/layout/viewholder_history.xml" value="0.2419837537409149" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_pause.xml" value="0.124" />
@@ -231,10 +232,11 @@
         <entry key="soiltesting/src/main/res/drawable/ic_add_crop_card.xml" value="0.181" />
         <entry key="soiltesting/src/main/res/drawable/ic_check_box.xml" value="0.1495" />
         <entry key="soiltesting/src/main/res/drawable/ic_location.xml" value="0.181" />
+        <entry key="soiltesting/src/main/res/drawable/ic_select_crop.xml" value="0.1835" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_history.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_services.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_video.xml" value="0.2796296296296296" />
-        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.24444444444444444" />
+        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.29653167724609375" />
         <entry key="soiltesting/src/main/res/layout/fragment_home_pages.xml" value="0.1" />
         <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_report_generator.xml" value="0.15522215810732834" />

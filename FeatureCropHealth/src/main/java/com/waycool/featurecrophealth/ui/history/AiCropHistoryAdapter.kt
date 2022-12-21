@@ -1,5 +1,6 @@
 package com.waycool.featurecrophealth.ui.history
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -39,12 +40,13 @@ class AiCropHistoryAdapter(private val context: Context) :
     inner class NoteViewHolder(private val binding: ViewholderHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(note: AiCropHistoryDomain) {
             binding.tvCropID.text = "id : " + note.crop_id.toString()
 //            binding.tvRequest.text = note.prediction
 //            binding.tvDesiessName.text = note.disease_id.toString()
             binding.tvDate.text = note.updated_at
-            binding.tvRequest.text = note.cropdata?.name.toString()
+            binding.tvRequest.text = note.cropdata.cropName.toString()
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()
@@ -60,12 +62,12 @@ class AiCropHistoryAdapter(private val context: Context) :
 
     }
 //
-    fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
-        list.clear()
-        list.addAll(list)
-        notifyDataSetChanged()
-
-    }
+//    fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
+//        list.clear()
+//        list.addAll(list)
+//        notifyDataSetChanged()
+//
+//    }
 
     class ComparatorDiffUtil : DiffUtil.ItemCallback<AiCropHistoryDomain>() {
         override fun areItemsTheSame(

@@ -7,27 +7,27 @@ import com.waycool.data.Network.NetworkModels.AiHistoryData
 class AiCropHistoryEntityMapper : EntityMapper<AiCropHistoryEntity, AiHistoryData> {
     fun mapFromEntity(entity: AiCropHistoryEntity): AiHistoryData {
         return AiHistoryData(
-            crop_id = entity.crop_id,
-            disease_id = entity.disease_id,
+            cropId = entity.cropId,
+            diseaseId = entity.diseaseId,
             id = entity.id,
-            image_url = entity.image_url,
+            imageUrl = entity.imageUrl,
             prediction = entity.prediction,
             probability = entity.probability,
-            user_feedback = entity.user_feedback,
-           cropdata = entity.cropdata
+            userFeedback = entity.userFeedback,
+           crop = entity.crop
         )
     }
 
     override fun mapToEntity(dto: AiHistoryData): AiCropHistoryEntity {
         return AiCropHistoryEntity(
-            crop_id = dto.crop_id,
-            disease_id = dto.disease_id,
+            cropId = dto.cropId,
+            diseaseId = dto.diseaseId,
             id = dto.id,
-            image_url = dto.image_url,
+            imageUrl = dto.imageUrl,
             prediction = dto.prediction,
             probability = dto.probability,
-            user_feedback = dto.user_feedback,
-            cropdata = dto.cropdata
+            userFeedback = dto.userFeedback,
+            crop = dto.crop
         )
     }
 

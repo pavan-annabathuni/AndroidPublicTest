@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemLabsSampleBinding
+import com.waycool.data.Network.NetworkModels.CheckSoilTestData
+import com.waycool.data.Network.NetworkModels.CheckSoilTestLabDTO
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import java.util.ArrayList
 
@@ -30,10 +32,10 @@ class SoilTestingLabsAdapter(private val checkSoilTestListener: CheckSoilTestLis
     override fun onBindViewHolder(holder: SoilTestingLabsHolder, position: Int) {
         val details = details[position]
         if (details !=null){
-            holder.binding.tvLabTitle.text = details.onp_name.toString()
-            holder.binding.tvName.text = details.onp_address.toString()
-            holder.binding.tvCheckCrop.text = details.onp_distance_km.toString() + " from your location"
-            holder.binding.pinCode.text = details.onp_pincode.toString()
+            holder.binding.tvLabTitle.text = details.onpName .toString()
+            holder.binding.tvName.text = details.onpAddress .toString()
+            holder.binding.tvCheckCrop.text = details.onpDistanceKm.toString() + " from your location"
+            holder.binding.pinCode.text = details.onpPincode.toString()
 //        holder.binding.ivCheck.isEnabled == false
             if (position == 0 && holder.binding.ivCheck.isChecked == true) {
                 checkSoilTestListener.checkBoxSoilTest(details)

@@ -7,15 +7,15 @@ import com.waycool.data.repository.util.DomainMapper
 class AiCropHistoryDomainMapper : DomainMapper<AiCropHistoryDomain, AiCropHistoryEntity> {
     override fun mapToDomain(dto: AiCropHistoryEntity): AiCropHistoryDomain {
         return AiCropHistoryDomain(
-            crop_id = dto.crop_id,
-            disease_id = dto.disease_id,
+            crop_id = dto.cropId,
+            disease_id = dto.diseaseId,
             id = dto.id,
-            image_url = dto.image_url,
+            image_url = dto.imageUrl,
             prediction = dto.prediction,
             probability = dto.probability,
-            user_feedback = dto.user_feedback,
-            updated_at = dto.updated_at,
-            cropdata = dto.cropdata
+            user_feedback = dto.userFeedback,
+            updated_at = dto.updatedAt,
+            cropdata = dto.crop
         )
     }
 

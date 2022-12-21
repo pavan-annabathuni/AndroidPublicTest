@@ -12,14 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.utils.Constant
+import com.github.mikephil.charting.components.IMarker
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.utils.Resource
-
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
 import com.waycool.iwap.utils.Constant.TAG
 import kotlinx.coroutines.launch
@@ -31,9 +33,9 @@ class GraphsFragment : Fragment() {
     private var _binding: FragmentGraphsBinding? = null
     private val binding get() = _binding!!
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
-    lateinit var listLine: ArrayList<Entry>
-    lateinit var lineDataSet: LineDataSet
-    lateinit var lineData: LineData
+//    lateinit var listLine: ArrayList<Entry>
+//    lateinit var lineDataSet: LineDataSet
+//    lateinit var lineData: LineData
     private val inputDateFormatter: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
     private val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
@@ -231,6 +233,7 @@ class GraphsFragment : Fragment() {
         return sum
     }
 
+
     private fun graphApiData(serialNo: Int?, deviceModelId: Int?, value: String?, timePeriod: String) {
         viewDevice.viewModelScope.launch {
             viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
@@ -245,10 +248,13 @@ class GraphsFragment : Fragment() {
                                 binding.tvDramatic.text = getParamNote(value!!, listone)
 
                                 Log.d(TAG, "dataGraDataPoints: ${it.data?.data}")
-                                listLine = ArrayList()
+                               var listLine = ArrayList<Entry>()
                                 if (it.data?.data != null) {
                                     val response= it.data!!.data
                                     if (timePeriod=="one_day"){
+                                        val listone = arrayListOf<Double>()
+                                        listone.addAll(it.data?.data!!.LastTodayData?.values!!)
+                                        binding.tvDramatic.text = getParamNote(value!!, listone)
                                         for (i in it.data?.data?.LastTodayData?.keys!!.indices) {
                                             val xAxis: XAxis = binding.lineChart.getXAxis()
                                             listLine.add(
@@ -258,7 +264,7 @@ class GraphsFragment : Fragment() {
                                                 )
                                             )
                                         }
-                                        lineDataSet = LineDataSet(listLine, "")
+                                       var lineDataSet = LineDataSet(listLine, "")
                                         val datesList = it.data?.data?.LastTodayData?.keys
                                         val valueFormatter2 = IndexAxisValueFormatter()
 
@@ -267,10 +273,9 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.xAxis.valueFormatter = valueFormatter2
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisLeft.axisMinimum = 0f
-                                        binding.lineChart.fitScreen()
-                                        binding.lineChart.setScaleEnabled(false)
+//                                        binding.lineChart.setAutoScaleMinMaxEnabled(true)
 
-                                        lineData = LineData(lineDataSet)
+                                       var lineData = LineData(lineDataSet)
                                         lineDataSet.color =
                                             resources.getColor(com.example.mandiprice.R.color.WoodBrown)
                                         binding.lineChart.data = lineData
@@ -294,14 +299,22 @@ class GraphsFragment : Fragment() {
 
                                         lineDataSet.fillDrawable =
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
-//                                        binding.lineChart.xAxis.spaceMax = 1f
+                                        binding.lineChart.xAxis.spaceMax = 0.1f
                                         binding.lineChart.fitScreen()
                                         // binding.lineChart.axisLeft.isEnabled = false;
-                                        binding.lineChart.isScaleXEnabled = false
+//                                        binding.lineChart.isScaleXEnabled = false
+//                                        lineDataSet.clear();
+//                                        binding.lineChart.setAutoScaleMinMaxEnabled(true)
+
+                                        binding.lineChart.invalidate();
+//                                        binding.lineChart.clear();
 
 
                                     }
                                     else if (timePeriod=="seven_days"){
+                                        val listone = arrayListOf<Double>()
+                                        listone.addAll(it.data?.data!!.sevenDaysData?.values!!)
+                                        binding.tvDramatic.text = getParamNote(value!!, listone)
                                         for (i in it.data?.data?.sevenDaysData?.keys!!.indices) {
                                             val xAxis: XAxis = binding.lineChart.getXAxis()
                                             listLine.add(
@@ -311,7 +324,7 @@ class GraphsFragment : Fragment() {
                                                 )
                                             )
                                         }
-                                        lineDataSet = LineDataSet(listLine, "")
+                                      var  lineDataSet = LineDataSet(listLine, "")
 
                                         val datesList = it.data?.data?.sevenDaysData?.keys
                                         val valueFormatter2 = IndexAxisValueFormatter()
@@ -322,7 +335,7 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisLeft.axisMinimum = 0f
 
-                                        lineData = LineData(lineDataSet)
+                                       var lineData = LineData(lineDataSet)
                                         lineDataSet.color =
                                             resources.getColor(com.example.mandiprice.R.color.WoodBrown)
                                         binding.lineChart.data = lineData
@@ -331,7 +344,7 @@ class GraphsFragment : Fragment() {
                                             resources.getColor(com.example.mandiprice.R.color.DarkGreen)
                                         lineDataSet.circleRadius = 6f
                                         binding.lineChart.fitScreen()
-                                        binding.lineChart.setScaleEnabled(false)
+//                                        binding.lineChart.setScaleEnabled(false)
                                         lineDataSet.mode = LineDataSet.Mode.LINEAR
                                         lineDataSet.setDrawFilled(true)
                                         binding.lineChart.setDrawGridBackground(false)
@@ -341,20 +354,27 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.axisRight.setDrawGridLines(false)
                                         binding.lineChart.axisLeft.setDrawGridLines(false)
 //                                        binding.lineChart.fitScreen()
-//                                        binding.lineChart.setScaleEnabled(false)
                                         //binding.lineChart.xAxis.setDrawGridLines(false)
                                         binding.lineChart.description.isEnabled = false
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisRight.isEnabled = false
                                         lineDataSet.fillDrawable =
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
-                                        binding.lineChart.xAxis.spaceMax = 1f
+                                        binding.lineChart.xAxis.spaceMax = .1f
                                         binding.lineChart.fitScreen()
                                         binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         // binding.lineChart.axisLeft.isEnabled = false;
-                                        binding.lineChart.isScaleXEnabled = false
+//                                        binding.lineChart.isScaleXEnabled = false
+//                                        lineDataSet.clear();
+//                                        binding.lineChart.setAutoScaleMinMaxEnabled(true)
+
+                                        binding.lineChart.invalidate();
+//                                        binding.lineChart.clear();
                                     }
                                     else if (timePeriod=="last_month"){
+                                        val listone = arrayListOf<Double>()
+                                        listone.addAll(it.data?.data!!.MonthDaysData?.values!!)
+                                        binding.tvDramatic.text = getParamNote(value!!, listone)
                                         for (i in it.data?.data?.MonthDaysData ?.keys!!.indices) {
                                             val xAxis: XAxis = binding.lineChart.getXAxis()
                                             listLine.add(
@@ -364,7 +384,7 @@ class GraphsFragment : Fragment() {
                                                 )
                                             )
                                         }
-                                        lineDataSet = LineDataSet(listLine, "")
+                                       var lineDataSet = LineDataSet(listLine, "")
 
                                         val datesList = it.data?.data?.MonthDaysData?.keys
 
@@ -375,9 +395,14 @@ class GraphsFragment : Fragment() {
                                         valueFormatter2.values = xAxis2
                                         binding.lineChart.xAxis.valueFormatter = valueFormatter2
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-                                        binding.lineChart.axisLeft.axisMinimum = 0f
+//                                        binding.lineChart.axisLeft.axisMinimum = 0f
+//                                        binding.lineChart.xAxis.axisMaximum = 30F
+//                                        binding.lineChart.xAxis.resetAxisMaximum()
+//                                        binding.lineChart.xAxis.axisMinimum = 30F
+//                                        binding.lineChart. xAxis.setAxisMinValue(30F)
+//                                        binding.lineChart. xAxis.setAxisMaxValue(30F)
 
-                                        lineData = LineData(lineDataSet)
+                                       var lineData = LineData(lineDataSet)
                                         lineDataSet.color =
                                             resources.getColor(com.example.mandiprice.R.color.WoodBrown)
                                         binding.lineChart.data = lineData
@@ -390,7 +415,7 @@ class GraphsFragment : Fragment() {
 //                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         binding.lineChart.fitScreen()
                                         binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
-                                        binding.lineChart.setScaleEnabled(false)
+//                                        binding.lineChart.setAutoScaleMinMaxEnabled(true)
                                         binding.lineChart.setDrawGridBackground(false)
                                         binding.lineChart.setDrawBorders(true)
                                         binding.lineChart.setBorderColor(com.example.mandiprice.R.color.LightGray)
@@ -401,12 +426,15 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.description.isEnabled = false
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisRight.isEnabled = false
+                                        binding.lineChart.setAutoScaleMinMaxEnabled(true)
                                         lineDataSet.fillDrawable =
                                             resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
-                                        binding.lineChart.xAxis.spaceMax = 0f
-
+                                        binding.lineChart.xAxis.spaceMax = 0.1f
                                         // binding.lineChart.axisLeft.isEnabled = false;
-                                        binding.lineChart.isScaleXEnabled = false
+//                                        binding.lineChart.isScaleXEnabled = false
+//                                        lineDataSet.clear();
+                                        binding.lineChart.invalidate();
+//                                        binding.lineChart.clear();
 
                                     }
 
@@ -430,12 +458,85 @@ class GraphsFragment : Fragment() {
 
         }
     }
-
+//    private fun getKeyList(duration: GraphSelection): List<String?> {
+//        return if (duration == GraphSelection.LAST12HRS) viewDevice.getLast12HrData()
+//            .getLast12hrs() else if (duration == GraphSelection.LAST7DAYS) viewDevice.getDeviceCharts()
+//            .getWeeklyDays() else {
+//            getDaysFromLast30Days()
+//        }
+//    }
+//    private fun populateGraph(paramType: String?, duration: GraphSelection) {
+//        if (paramType != null && viewDevice != null) {
+//            var keysList: List<String?> = ArrayList()
+//            var valList: List<Double> = ArrayList()
+//            keysList = getKeyList(duration)
+//            valList = getValueList(duration, paramType)
+//            if (valList.isEmpty()) paramNoteTv.setText("Loading...") else paramNoteTv.setText(
+//                getParamNote(paramType, valList)
+//            )
 //
-//    private fun graphAccess(datesList:String,keys:String,valueFormatter2:Int) {
+////            if (duration == GraphSelection.LAST7DAYS) {
+////                ((Button) findViewById(R.id.days_graph_button)).setText(keysList.size() + " Days");
+////            }
+//            val entries: MutableList<Entry> = ArrayList()
+//            for (i in keysList.indices) {
+//                val entryVal = java.lang.Float.valueOf(valList[i].toString())
+//                entries.add(Entry(i.toFloat(), entryVal))
+//            }
 //
-//
-//
+////        graph.getAxisLeft().setDrawLabels(true);
+////        gV2.getAxisLeft().setDrawAxisLine(false);
+//            graph.getAxisLeft().setDrawGridLines(false)
+//            graph.getXAxis().setDrawGridLines(false)
+//            graph.getAxisRight().setDrawGridLines(false)
+//            graph.getAxisRight().setDrawAxisLine(false)
+//            val valueFormatter2 = IndexAxisValueFormatter()
+//            var xAxis2: Array<String?>? = arrayOfNulls(keysList.size)
+//            xAxis2 = keysList.toArray(xAxis2)
+//            valueFormatter2.values = xAxis2
+//            graph.getXAxis().setValueFormatter(valueFormatter2)
+//            graph.getXAxis().setValueFormatter(valueFormatter2)
+//            graph.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM)
+//            val line: MutableList<ILineDataSet> = ArrayList()
+//            val lDataSet = LineDataSet(entries, getGraphDataSetTitle(paramType))
+//            lDataSet.color = getGraphLineColor(paramType)
+//            lDataSet.setCircleColor(getGraphLineColor(paramType))
+//            lDataSet.lineWidth = 4f
+//            lDataSet.setDrawValues(false)
+//            lDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+//            lDataSet.setDrawFilled(true)
+//            lDataSet.fillColor = getGraphFillColor(paramType)
+//            line.add(lDataSet)
+//            graph.getAxisRight().setDrawLabels(false)
+//            graph.getXAxis().setLabelRotationAngle(-45f)
+//            graph.getAxisLeft().setAxisMinimum(0f)
+//            if (paramType.equals("soil1", ignoreCase = true) || paramType.equals(
+//                    "soil2",
+//                    ignoreCase = true
+//                ) || paramType.equals("leaf", ignoreCase = true) || paramType.equals(
+//                    "humidity",
+//                    ignoreCase = true
+//                )
+//            ) {
+//                graph.getAxisLeft().setAxisMaximum(100f)
+//            }
+//            if (duration == GraphSelection.LAST30DAYS) graph.getXAxis()
+//                .setLabelCount(keysList.size, false) else graph.getXAxis()
+//                .setLabelCount(keysList.size, true)
+//            graph.setData(LineData(line))
+//            graph.setTouchEnabled(true)
+//            val mv2: IMarker = CustomMarkerView(
+//                this,
+//                R.layout.viewholder_marker_custom,
+//                getUints(paramType),
+//                keysList
+//            )
+//            graph.setMarker(mv2)
+//            graph.setHighlightPerTapEnabled(true)
+//            graph.setScaleYEnabled(false)
+//            graph.setDescription(null)
+//            graph.invalidate()
+//        }
 //    }
 
 }

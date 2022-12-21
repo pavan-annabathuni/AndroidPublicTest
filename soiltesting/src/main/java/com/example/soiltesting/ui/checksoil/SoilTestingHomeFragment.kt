@@ -501,6 +501,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
+//                                        bundle.putString("lab_name",it.data)
 
                                         findNavController().navigate(
                                             R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
