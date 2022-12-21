@@ -39,7 +39,8 @@
                     android:layout_height="wrap_content"
                     android:padding="6dp"
                     android:src="@android:drawable/ic_media_pause"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="gone" />
             </FrameLayout>
 
             <FrameLayout

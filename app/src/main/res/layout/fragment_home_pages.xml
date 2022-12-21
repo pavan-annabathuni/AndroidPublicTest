@@ -51,8 +51,8 @@
 
                     <ImageView
                         android:id="@+id/ivLocation"
-                        android:layout_width="@dimen/txt12"
-                        android:layout_height="@dimen/txt15"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="@dimen/space30"
                         android:src="@drawable/ic_vlocation"
@@ -61,16 +61,18 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvWelcome"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/txt8"
-                        android:layout_marginTop="@dimen/space30"
-                        android:fontFamily="@font/regular"
+                        android:layout_marginEnd="24dp"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="Bangalore"
                         android:textColor="#111827"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivLocation"
+                        app:layout_constraintEnd_toStartOf="@+id/IvNotification"
                         app:layout_constraintStart_toEndOf="@+id/ivLocation"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/ivLocation" />
 
                     <ImageView
                         android:id="@+id/IvNotification"
@@ -84,28 +86,30 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvWelcomeName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="@font/regular"
+                        android:fontFamily="@font/notosans_medium"
                         android:text="Welcome, Krishna Kumar"
                         android:textColor="#111827"
                         android:textSize="@dimen/space13"
+                        app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvGoodMorning"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:fontFamily="@font/playfair_reg"
                         android:text="Namaste"
-                        android:textColor="#111827"
-                        android:textSize="26sp"
+                        android:textColor="@color/textdark"
+                        android:textSize="20sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tvWelcomeName"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
 
@@ -144,7 +148,7 @@
                                     android:layout_marginStart="@dimen/txt16"
                                     android:layout_marginTop="@dimen/txt16"
                                     android:layout_marginEnd="8dp"
-                                    android:fontFamily="@font/bold"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:text="Add your Crop and get more details."
                                     android:textColor="#111827"
                                     android:textSize="@dimen/txt18"
@@ -179,7 +183,7 @@
                                         android:layout_marginTop="6dp"
                                         android:layout_marginEnd="6dp"
                                         android:layout_marginBottom="@dimen/space6"
-                                        android:fontFamily="@font/bold"
+                                        android:fontFamily="@font/notosans_bold"
                                         android:text="Add crops"
                                         android:textColor="#146133"
                                         android:textSize="@dimen/txt14"
@@ -410,7 +414,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clAddForm"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/space40"
+                        android:layout_height="50dp"
                         android:background="@drawable/bg_add_form"
                         android:clickable="true"
                         android:foreground="?android:selectableItemBackground"
@@ -434,7 +438,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/txt8"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             android:text="Add your farm"
                             android:textColor="#146133"
                             android:textSize="@dimen/txt18"
@@ -452,13 +456,14 @@
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/clAddForm"
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/tvMyform"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             android:text="My Farm"
                             android:textColor="#111827"
                             android:textSize="@dimen/space20"
@@ -472,7 +477,7 @@
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/add"
                             android:drawablePadding="8dp"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/notosans_medium"
                             android:padding="4dp"
                             android:text="Add Farm"
                             android:textColor="#146133"
@@ -505,7 +510,8 @@
 
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/clMyForm">
+                        app:layout_constraintTop_toBottomOf="@id/clMyForm"
+                        tools:visibility="visible">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cardView7"
@@ -513,10 +519,12 @@
                             android:layout_height="75dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:clickable="false"
                             app:cardCornerRadius="12dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tvCityName"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0">
 
                             <fragment
                                 android:id="@+id/map_farms_home"
@@ -528,29 +536,37 @@
                                 map:layout_constraintTop_toTopOf="parent"
                                 map:liteMode="true" />
                         </androidx.cardview.widget.CardView>
+
                         <TextView
                             android:id="@+id/farmname_home"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:fontFamily="@font/bold"
+                            android:clickable="false"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/notosans_bold"
+                            android:maxLines="1"
                             android:textColor="@color/textdark"
                             android:textSize="16sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/cardView7"
-                            app:layout_constraintTop_toTopOf="@+id/cardView7"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="Krishna Farm Plot 1" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/crop_farm_rv"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:clickable="false"
                             android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintBottom_toTopOf="@+id/tvCityName"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/farmname_home"
                             app:layout_constraintTop_toBottomOf="@+id/farmname_home"
+                            tools:ignore="SpeakableTextPresentCheck"
                             tools:itemCount="5"
                             tools:listitem="@layout/viewholder_farm_crops" />
 
@@ -558,25 +574,29 @@
                             android:id="@+id/tvCityName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:fontFamily="@font/regular"
+                            android:clickable="false"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/notosans_medium"
+                            android:maxLines="1"
                             android:textColor="#5D6571"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/cardView7"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cardView7"
-                            tools:text="Bangalore" />
+                            app:layout_constraintStart_toStartOf="@+id/farmname_home"
+                            app:layout_constraintTop_toBottomOf="@+id/crop_farm_rv"
+                            tools:text="Bangalore"
+                            tools:visibility="visible" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/clViewFarmDetails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space16"
-                            android:layout_marginTop="@dimen/space16"
+                            android:layout_marginTop="24dp"
                             android:layout_marginEnd="@dimen/space12"
                             android:layout_marginBottom="@dimen/space16"
                             android:background="@drawable/bg_add_form"
+                            android:clickable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -659,7 +679,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 android:text="28°C"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt20"
@@ -672,7 +692,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/space2"
-                                android:fontFamily="@font/regular"
+                                android:fontFamily="@font/notosans_medium"
                                 android:text="Temperature"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
@@ -684,7 +704,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/txt16"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 android:text="Bengaluru"
                                 android:textColor="#171717"
                                 android:textSize="@dimen/txt14"
@@ -697,7 +717,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:layout_marginEnd="@dimen/txt16"
-                                android:fontFamily="@font/regular"
+                                android:fontFamily="@font/notosans_medium"
                                 android:text="Today Tue 26, Jul"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
@@ -741,7 +761,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
                                     android:ellipsize="end"
-                                    android:fontFamily="@font/bold"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:maxLines="1"
                                     android:text="66%"
                                     android:textColor="#171717"
@@ -756,7 +776,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginBottom="@dimen/txt10"
-                                    android:fontFamily="@font/regular"
+                                    android:fontFamily="@font/notosans_medium"
                                     android:text="Humidity"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -789,7 +809,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
-                                    android:fontFamily="@font/bold"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
@@ -802,7 +822,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginBottom="@dimen/txt10"
-                                    android:fontFamily="@font/regular"
+                                    android:fontFamily="@font/notosans_medium"
                                     android:text="Wind"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -836,7 +856,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
                                     android:ellipsize="end"
-                                    android:fontFamily="@font/bold"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:maxLines="1"
                                     android:text="66%"
                                     android:textColor="#171717"
@@ -852,7 +872,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_marginEnd="12dp"
                                     android:layout_marginBottom="@dimen/txt10"
-                                    android:fontFamily="@font/regular"
+                                    android:fontFamily="@font/notosans_medium"
                                     android:text="Chance of rain"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
@@ -880,7 +900,7 @@
                                     android:layout_marginBottom="8dp"
                                     android:drawableStart="@drawable/ic_cloudy_deng"
                                     android:drawablePadding="8dp"
-                                    android:fontFamily="@font/regular"
+                                    android:fontFamily="@font/notosans_medium"
                                     android:text="Cloudy with a thunderstorm this afternoon"
                                     android:textColor="#FF2C23"
                                     android:textSize="@dimen/txt12"
@@ -908,7 +928,8 @@
                     app:cardCornerRadius="@dimen/txt10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cv_weather">
+                    app:layout_constraintTop_toBottomOf="@+id/cv_weather"
+                    tools:visibility="visible">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -1054,7 +1075,7 @@
                         android:text="Mandi Prices"
                         android:textColor="#111827"
                         android:textSize="@dimen/space20"
-                        android:fontFamily="@font/bold"
+                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -1102,7 +1123,7 @@
                         android:text="View All"
                         android:textColor="#146133"
                         android:textSize="14sp"
-                        android:fontFamily="@font/bold"
+                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1159,7 +1180,7 @@
                         android:text="View All"
                         android:textColor="#146133"
                         android:textSize="14sp"
-                        android:fontFamily="@font/bold"
+                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintBottom_toBottomOf="@+id/tvOurService"
                         app:layout_constraintEnd_toStartOf="@+id/ivOurService"
                         app:layout_constraintTop_toTopOf="@+id/tvOurService" />
@@ -1186,14 +1207,16 @@
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvService"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:text="Soil Testing"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                                app:fontFamily="@font/bold"
+                                app:fontFamily="@font/notosans_bold"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline2"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1208,7 +1231,7 @@
                                 android:text="Helps you assess and recommend the nutrition of your soil"
                                 android:textColor="@color/textlight"
                                 android:textSize="@dimen/txt12"
-                                android:fontFamily="@font/regular"
+                                android:fontFamily="@font/notosans_medium"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView11"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvService" />
@@ -1218,9 +1241,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="@dimen/txt15"
                                 android:background="@drawable/bg_add_form"
                                 app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvEnable">
 
@@ -1232,7 +1258,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                   app:fontFamily="@font/bold"
+                                    app:fontFamily="@font/notosans_bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1297,14 +1323,16 @@
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvCropHealth"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:text="Crop Health Detection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                                app:fontFamily="@font/bold"
+                                app:fontFamily="@font/notosans_bold"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline3"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1318,7 +1346,7 @@
                                 android:text="Helps you detect crop’s health using Artificial Intelligence"
                                 android:textColor="@color/textlight"
                                 android:textSize="@dimen/txt12"
-                                app:fontFamily="@font/regular"
+                                app:fontFamily="@font/notosans_medium"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView12"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCropHealth" />
@@ -1343,7 +1371,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                  app:fontFamily="@font/bold"
+                                  app:fontFamily="@font/notosans_bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1405,14 +1433,16 @@
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvInfoCrop"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:text="Crop Info."
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt14"
-                                app:fontFamily="@font/bold"
+                                app:fontFamily="@font/notosans_bold"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView13"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1426,7 +1456,7 @@
                                 android:text="Gives you end to end  information about your crop."
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
-                                app:fontFamily="@font/regular"
+                                app:fontFamily="@font/notosans_medium"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView13"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvInfoCrop" />
@@ -1437,9 +1467,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="@dimen/txt15"
                                 android:background="@drawable/bg_add_form"
                                 app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView13"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvEnableCropInformation">
 
@@ -1452,7 +1485,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    app:fontFamily="@font/regular"
+                                    app:fontFamily="@font/notosans_medium"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1516,14 +1549,16 @@
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvCropProtect"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:text="Crop Protection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
-                              app:fontFamily="@font/bold"
+                                app:fontFamily="@font/notosans_bold"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView14"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -1538,7 +1573,7 @@
                                 android:text="Gives you pests &amp; diseases information to protect your crop"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
-                                app:fontFamily="@font/regular"
+                                app:fontFamily="@font/notosans_medium"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView14"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvCropProtect" />
@@ -1548,9 +1583,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
+                                android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="@dimen/txt15"
                                 android:background="@drawable/bg_add_form"
                                 app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvEnableCropProtect">
 
@@ -1563,7 +1601,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                    app:fontFamily="@font/bold"
+                                    app:fontFamily="@font/notosans_bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />

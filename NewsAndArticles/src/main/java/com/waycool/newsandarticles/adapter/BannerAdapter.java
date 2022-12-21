@@ -33,7 +33,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.viewholder_banner, parent, false);
+        View view = LayoutInflater.from(context).inflate(com.waycool.uicomponents.R.layout.viewholder_banner, parent, false);
         return new ViewHolder(view);
     }
 
@@ -64,7 +64,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            banneriv = itemView.findViewById(R.id.vh_banner_iv);
+            banneriv = itemView.findViewById(com.waycool.uicomponents.R.id.vh_banner_iv);
         }
     }
 }

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MyCropSyncer:SyncInterface {
-    override fun getSyncKey():  Preferences.Key<String> = SyncKey.MY_CROP_MASTER
+    override fun getSyncKey():  Preferences.Key<String> = SyncKey.MY_CROPS
     override fun getRefreshRate():Int = SyncRate.getRefreshRate(getSyncKey())
 
     fun getMyCrop(account_id: Int): Flow<Resource<List<MyCropDataEntity>>> {
@@ -30,11 +30,12 @@ class MyCropSyncer:SyncInterface {
         return getSelectedMyCrop()
     }
 
-    fun getSelectedMyCrop(): Flow<Resource<List<MyCropDataEntity>>> {
+   private fun getSelectedMyCrop(): Flow<Resource<List<MyCropDataEntity>>> {
         return LocalSource.getMyCrop().map {
             Resource.Success(it)
         }
     }
+
     private fun makeNetworkCall(account_id:Int) {
 
         GlobalScope.launch(Dispatchers.IO) {

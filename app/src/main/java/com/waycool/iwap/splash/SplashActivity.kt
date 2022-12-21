@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.waycool.featurelogin.FeatureLogin
@@ -22,15 +23,11 @@ class SplashActivity : AppCompatActivity() {
     lateinit var splashBinding: ActivitySplashBinding
     var logoAnim: AnimatedVectorDrawable? = null
     var imageSplashAnim: AnimatedVectorDrawable? = null
-    var mFCM_token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         splashBinding = ActivitySplashBinding.inflate(LayoutInflater.from(this))
         setContentView(splashBinding.root)
-
-
-
 
         if (splashBinding.imageSplash.drawable is AnimatedVectorDrawable) {
             imageSplashAnim = splashBinding.imageSplash.drawable as AnimatedVectorDrawable
@@ -42,7 +39,6 @@ class SplashActivity : AppCompatActivity() {
             logoAnim!!.start()
         }
 
-        FirebaseApp.initializeApp(this)
 
         Handler(Looper.myLooper()!!).postDelayed({
             CoroutineScope(Dispatchers.Main).launch {

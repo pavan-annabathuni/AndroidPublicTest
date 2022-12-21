@@ -122,7 +122,7 @@ class OtpFragment : Fragment() {
         }
 
         binding.doneBtn.setOnClickListener {
-            getOTPValidate()
+            validateOTP()
         }
 
         binding.resendMsgBtn.setOnClickListener {
@@ -171,13 +171,15 @@ class OtpFragment : Fragment() {
                 otpValue = it
                 OTP = it
                 Log.d("Actual Value", otpValue)
+                if (it.length == 4)
+                    validateOTP()
             },
             type = OTP_VIEW_TYPE_BORDER,
             password = false,
             containerSize = 48.dp,
             passwordChar = "•",
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
+            charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor)),
         )
 
     }
@@ -236,7 +238,7 @@ class OtpFragment : Fragment() {
     }
 
 
-    private fun getOTPValidate() {
+    private fun validateOTP() {
 
         if (OTP.length == 4) {
             loginViewModel.verifyOtp(requireContext(), OTP, mobileNumber)
@@ -324,6 +326,7 @@ class OtpFragment : Fragment() {
                 otpView(matcher.group(0))
             }
             OTP = matcher.group(0)
+            validateOTP()
         }
     }
 

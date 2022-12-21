@@ -83,8 +83,8 @@ class FarmsViewModel : ViewModel() {
         CropsRepository.getMyCrop2(account_id).asLiveData(
 
         )
-    fun getFarms(account_id: Int,farm_id:Int?): LiveData<Resource<List<MyFarmsDomain>>> =
-        FarmsRepository.getMyFarms(account_id,farm_id).asLiveData()
+    fun getFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms().asLiveData()
 
 
 }

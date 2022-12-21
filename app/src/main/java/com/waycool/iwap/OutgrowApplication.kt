@@ -2,6 +2,7 @@ package com.waycool.iwap
 
 import android.app.Application
 import com.facebook.stetho.Stetho
+import com.google.firebase.FirebaseApp
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Local.db.OutgrowDB
@@ -17,5 +18,7 @@ class OutgrowApplication : Application() {
         SyncManager.init(applicationContext)
         OutgrowDB.init(applicationContext)
         TranslationsManager().init()
+        FirebaseApp.initializeApp(this)
+
     }
 }

@@ -70,4 +70,11 @@ interface OutgrowDao {
     @Query("SELECT * FROM app_translations WHERE appKey = :appkey")
     suspend fun getTranslation(appkey: String): AppTranslationsEntity?
 
+
+    //My Farms
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMyFarms(farms: List<MyFarmsEntity>)
+
+    @Query("SELECT * FROM my_farms")
+    fun getMyFarms():Flow<List<MyFarmsEntity>>
 }

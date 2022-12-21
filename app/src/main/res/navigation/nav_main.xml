@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/nav_home">
+    app:startDestination="@id/loadingFragment">
 
     <include app:graph="@navigation/nav_home" />
     <include app:graph="@navigation/navigation_profile" />
@@ -20,4 +21,11 @@
         android:id="@+id/irrigationPlannerActivity"
         android:name="com.example.irrigationplanner.IrrigationPlannerActivity"
         android:label="IrrigationPlannerActivity" />
+    <include app:graph="@navigation/nav_home_premium" />
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.waycool.iwap.placeholderLoading.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading" />
+    <include app:graph="@navigation/nav_crop_protect" />
 </navigation>

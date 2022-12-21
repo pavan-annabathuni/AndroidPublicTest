@@ -280,7 +280,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener,farmdetailsli
                 Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
                 if (accountId != null)
-                    viewModel.getMyFarms(accountId,null).observe(viewLifecycleOwner) {
+                    viewModel.getMyFarms().observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
                                 if (it.data == null) {

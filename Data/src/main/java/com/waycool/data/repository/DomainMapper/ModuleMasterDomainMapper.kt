@@ -12,11 +12,12 @@ class ModuleMasterDomainMapper : DomainMapper<ModuleMasterDomain, ModuleMasterEn
             moduleType = dto.moduleType,
             moduleIcon = dto.moduleIcon,
             moduleDesc = dto.moduleDesc,
-            Premium = dto.Premium,
-            tittle = dto.tittle,
-            price = dto.price,
-            audioURl = dto.audioURl,
+            subscription = dto.subscription,
+            title = dto.title,
+            audioUrl = dto.audioUrl,
+            mobileDisplay = dto.mobileDisplay,
             translation = dto.translation,
+            updatedAt = dto.updatedAt
         )
     }
 

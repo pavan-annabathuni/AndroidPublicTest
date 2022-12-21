@@ -86,8 +86,8 @@ class LoginFragment : Fragment() {
             .loginTextSuffix(TruecallerSdkScope.LOGIN_TEXT_SUFFIX_PLEASE_VERIFY_MOBILE_NO)
             .ctaTextPrefix(TruecallerSdkScope.CTA_TEXT_PREFIX_USE)
             .buttonShapeOptions(TruecallerSdkScope.BUTTON_SHAPE_ROUNDED)
-            .privacyPolicyUrl("http://one.waycool.in/Outgrow_PrivacyPolicy.html")
-            .termsOfServiceUrl("http://one.waycool.in/Terms_and_Conditions.html")
+            .privacyPolicyUrl("https://admindev.outgrowdigital.com/privacy-policy")
+            .termsOfServiceUrl("https://admindev.outgrowdigital.com/terms-and-conditions")
             .footerType(TruecallerSdkScope.FOOTER_TYPE_MANUALLY)
             .consentTitleOption(TruecallerSdkScope.SDK_CONSENT_TITLE_LOG_IN)
             .sdkOptions(TruecallerSdkScope.SDK_OPTION_WITHOUT_OTP)
@@ -137,7 +137,7 @@ class LoginFragment : Fragment() {
         val clickableSpan1: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
-                intent.putExtra("url", "http://one.waycool.in/Terms_and_Conditions.html")
+                intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
                 intent.putExtra("tittle", "Terms and Conditions")
                 requireActivity().startActivity(intent)
             }
@@ -145,7 +145,7 @@ class LoginFragment : Fragment() {
         val clickableSpan2: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
-                intent.putExtra("url", "http://one.waycool.in/Outgrow_PrivacyPolicy.html")
+                intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
                 intent.putExtra("tittle", "Privacy Policy")
                 requireActivity().startActivity(intent)
             }

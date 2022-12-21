@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@id/nav_home_premium"
+        android:icon="@drawable/ic_home_selector"
+        android:title="HOME" />
+    <item
+        android:id="@+id/navigation_mandi"
+        android:icon="@drawable/ic_mandi_selector"
+        android:title="MANDI" />
+
+
+    <item
+        android:id="@+id/nav_crop_protect"
+        android:icon="@drawable/ic_crop_protection_selector"
+        android:title="CROP PROTECTION" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile_selector"
+        android:title="PROFILE" />
+</menu>

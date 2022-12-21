@@ -16,7 +16,6 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
-import java.io.File
 
 interface ApiInterface {
     @GET("api/v1/language-master")
@@ -346,9 +345,7 @@ interface ApiInterface {
     @GET("api/v1/farm/my-farm")
     suspend fun getMyFarms(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_no_id") account_no_id: Int,
-        @Query("farm_id") farm_id: Int?
-
+        @Query("account_no_id") account_no_id: Int
     ): Response<MyFarmsDTO>
 
     @GET("api/v1/dashboard")
@@ -356,7 +353,7 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
 
 //        @Query("")
-    ): Response<DashBoardModel>
+    ): Response<DashBoardDTO>
 
     @GET("api/v1/get-delta-t-data")
     suspend fun farmDetailsDelta(

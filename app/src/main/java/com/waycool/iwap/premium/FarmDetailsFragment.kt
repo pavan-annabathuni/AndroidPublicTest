@@ -1,34 +1,77 @@
 package com.waycool.iwap.premium
 
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.ndvi.MainActivityNdvi
+import com.google.android.libraries.maps.CameraUpdateFactory
+import com.google.android.libraries.maps.GoogleMap
+import com.google.android.libraries.maps.OnMapReadyCallback
+import com.google.android.libraries.maps.SupportMapFragment
+import com.google.android.libraries.maps.model.*
+import com.google.android.material.chip.Chip
+import com.google.maps.android.SphericalUtil
+import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
+import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.FeatureChat
 import com.waycool.iwap.MainViewModel
+import com.waycool.iwap.R
+import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
-import com.waycool.iwap.utils.Constant.TAG
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
+class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallback {
     private var _binding: FragmentFarmDetails2Binding? = null
     private val binding get() = _binding!!
 
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
+    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+
     private lateinit var myCropAdapter: MyCropsAdapter
-//    private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
-    var viewDeviceListAdapter = ViewDeviceListAdapter( this)
+
+    //    private var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
+    var viewDeviceListAdapter = ViewDeviceListAdapter(this)
+    private var myFarm: MyFarmsDomain? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@FarmDetailsFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,22 +82,33 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        myFarm = arguments?.getParcelable<MyFarmsDomain>("farm")
+
+        (childFragmentManager.findFragmentById(R.id.map_farmdetails) as SupportMapFragment?)?.getMapAsync(
+            this
+        )
+
+        binding.backBtn.setOnClickListener { findNavController().navigateUp() }
+
         initViewClick()
         initMyObserve()
         initObserveDevice()
         myCrop()
         initiFarmDeltT()
-            viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-                if (arguments != null) {
-                    val farm_id = arguments?.getInt("farm_id")
-                    var accountId = it.data?.accountId
-                    Log.d("TAG", "getFarmsAccount: $accountId ")
-                    if (accountId != null) {
-                        farmDetailsObserve(accountId,farm_id)
-                    }
+        farmDetailsObserve()
 
-                }
-            }
+
+//        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
+//                if (arguments != null) {
+//                    val farm_id = arguments?.getInt("farm_id")
+//                    var accountId = it.data?.accountId
+//                    Log.d("TAG", "getFarmsAccount: $accountId")
+//                    if (accountId != null) {
+//                    }
+//
+//                }
+//            }
 
 //        val progressbar: ProgressBar = findViewById(R.id.progressbar) as ProgressBar
 //        val color = -0xff0100
@@ -62,56 +116,39 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 //        progressbar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
 
 
-
     }
 
-    private fun farmDetailsObserve(account:Int,farm_id:Int?) {
-        viewModel.getMyFarms(account,farm_id).observe(viewLifecycleOwner){it->
-            when (it) {
-                is Resource.Success -> {
-                    val response=it.data
-                    if (it.data?.isNullOrEmpty() == true){
-                       response?.forEach {
-                            binding.tvPempDate.text=it.farmPumpHp
-                            binding.tvRiver.text= it.farmWaterSource
-//                        binding.totalFormDate.text=response!![0].
-                            binding.totalFormDate.text= it.farmPumpType
-                            binding.totalHeightInches.text= it.farmPumpPipeSize
-                            binding.tvPumpFlowRateNUmber.text=it.farmPumpFlowRate
-                        }
-//                        Log.d(TAG, "initiFarmDeltT:")
-//                        binding.tvPempDate.text=it.farmPumpHp
-//                        binding.tvRiver.text= response[0].farmWaterSource
-////                        binding.totalFormDate.text=response!![0].
-//                        binding.totalFormDate.text= response[0].farmPumpType
-//                        binding.totalHeightInches.text= response[0].farmPumpPipeSize
-//                        binding.tvPumpFlowRateNUmber.text= response[0].farmPumpFlowRate
+    private fun farmDetailsObserve() {
+        binding.toolbarTextFarm.text = myFarm?.farmName
+        binding.tvPempDate.text = myFarm?.farmPumpHp
+        binding.totalFormDate.text = myFarm?.farmPumpType
+        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize
+        binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate
+        if (myFarm?.farmWaterSource != null) {
+            binding.waterNotAvailable.visibility = View.INVISIBLE
+            binding.waterChipGroup.visibility=View.VISIBLE
 
-                    }
-
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-
-                }
-            }
+            binding.waterChipGroup.removeAllViews()
+            for (category in myFarm?.farmWaterSource!!)
+                createChip(category)
+        } else {
+            binding.waterNotAvailable.visibility = View.VISIBLE
+            binding.waterNotAvailable.text = "NA"
+            binding.waterChipGroup.visibility=View.INVISIBLE
         }
     }
 
     private fun initiFarmDeltT() {
-         var  deltaAdapter=DeltaAdapter(requireContext())
-        var  deltaTomAdapter=DeltaTomAdapter(requireContext())
+        var deltaAdapter = DeltaAdapter(requireContext())
+        var deltaTomAdapter = DeltaTomAdapter(requireContext())
         binding.sparayingRv.adapter = deltaAdapter
         binding.sparayingRv2.adapter = deltaTomAdapter
-        viewDevice.farmDetailsDelta().observe(viewLifecycleOwner){
+        viewDevice.farmDetailsDelta().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    if (it.data?.data!!.isNotEmpty()){
+                    if (it.data?.data!!.isNotEmpty()) {
                         deltaAdapter.setMovieList(it.data?.data)
-                        binding.soilMoistureOne.progress=60
+                        binding.soilMoistureOne.progress = 60
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
 //                        deltaAdapter.notifyDataSetChanged()
                         deltaTomAdapter.setMovieList(it.data?.data)
@@ -148,13 +185,14 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
                 if (accountId != null)
                     viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
                         Log.d("MyCrops", "myCrop: ${it.data}")
-                        myCropAdapter.submitList(it.data)
-                        if ((it.data != null)) {
-                            binding.tvCount.text = it.data!!.size.toString()
+                        val cropList = it.data?.filter { plot -> plot.farmId == myFarm?.id }
+                        myCropAdapter.submitList(cropList)
+                        if (!(cropList.isNullOrEmpty())) {
+                            binding.tvCount.text = cropList.size.toString()
                         } else {
                             binding.tvCount.text = "0"
                         }
-                        if (it.data!!.isNotEmpty()) {
+                        if (!cropList.isNullOrEmpty()) {
                             binding.cvEditCrop.visibility = View.VISIBLE
                             binding.cardAddForm.visibility = View.GONE
                         } else {
@@ -171,23 +209,23 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 
     private fun initObserveDevice() {
         viewDevice.getIotDevice().observe(requireActivity()) {
-                when (it) {
-                    is Resource.Success -> {
-                        if (it.data?.data != null) {
-                            val response = it.data!!.data as ArrayList<ViewDeviceData>
-                            binding.deviceFarm.adapter = viewDeviceListAdapter
-                            viewDeviceListAdapter.setMovieList(response)
-                        }
+            when (it) {
+                is Resource.Success -> {
+                    if (it.data?.data != null) {
+                        val response = it.data!!.data as ArrayList<ViewDeviceData>
+                        binding.deviceFarm.adapter = viewDeviceListAdapter
+                        viewDeviceListAdapter.setMovieList(response)
+                    }
 
-                    }
-                    is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                    }
-                    is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-
-                    }
                 }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> {
+                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+
+                }
+            }
 
         }
 
@@ -233,8 +271,52 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
     }
 
     private fun initMyObserve() {
+        tokenCheckViewModel.getDasBoard().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    if (it.data?.subscription?.iot == true) {
+                        binding.farmdetailsPremiumCl.visibility = View.VISIBLE
+                        binding.cardMYDevice.visibility = View.VISIBLE
+                        binding.freeAddDeviceCv.visibility = View.GONE
+                    } else {
+                        binding.farmdetailsPremiumCl.visibility = View.GONE
+                        binding.cardMYDevice.visibility = View.GONE
+                        binding.freeAddDeviceCv.visibility = View.VISIBLE
+                    }
+                }
+                is Resource.Loading -> {
+
+
+                }
+                is Resource.Error -> {
+                }
+            }
+
+
+        }
 
     }
+
+    private fun createChip(waterSource: String) {
+        val chip = Chip(requireContext())
+        chip.text = waterSource
+        chip.isEnabled = false
+        chip.setTextColor(
+            AppCompatResources.getColorStateList(
+                requireContext(),
+                com.waycool.uicomponents.R.color.bg_chip_text
+            )
+        )
+        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+        chip.chipStrokeWidth = 1f
+        chip.chipStrokeColor = AppCompatResources.getColorStateList(
+            requireContext(),
+            com.waycool.uicomponents.R.color.bg_chip_text
+        )
+
+        binding.waterChipGroup.addView(chip)
+    }
+
 
     private fun initViewClick() {
         binding.tvMyCrops.setOnClickListener {
@@ -249,7 +331,18 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
             val intent = Intent(activity, MainActivityNdvi::class.java)
             startActivity(intent)
         }
-
+        binding.callDevice.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.messageDevice.setOnClickListener() {
+            FeatureChat.zenDeskInit(requireContext())
+        }
+        binding.addDeviceFree.setOnClickListener {
+            val intent = Intent(activity, AddDeviceActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun viewDevice(data: ViewDeviceData) {
@@ -265,5 +358,61 @@ class FarmDetailsFragment : Fragment() ,ViewDeviceFlexListener {
 
     }
 
+    override fun onMapReady(map: GoogleMap?) {
+        if (map != null) {
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+
+            if (myFarm != null) {
+                val points = myFarm?.farmJson
+                if (points != null) {
+                    if (points.size >= 3) {
+                        map.addPolygon(
+                            PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                                .strokeColor(
+                                    Color.argb(255, 255, 255, 255)
+                                )
+                        )
+                    }
+                    for (latLng in points) {
+                        val marker = map.addMarker(
+                            MarkerOptions().position(
+                                latLng
+                            )
+                                .icon(BitmapDescriptorFactory.fromResource(com.waycool.addfarm.R.drawable.circle_green))
+                                .anchor(0.5f, .5f)
+                                .draggable(false)
+                                .flat(true)
+                        )
+                    }
+                    map.animateCamera(
+                        CameraUpdateFactory.newLatLngBounds(
+                            getLatLnBounds(points), 20
+                        )
+                    )
+                    val area: Double =
+                        getArea(points) / 4046.86
+                    binding.farmAreaSingleFarm.setText(
+                        (String.format(
+                            Locale.ENGLISH,
+                            "%.2f",
+                            area
+                        )).trim { it <= ' ' } + " Acre"
+                    )
+                }
+            }
+        }
+    }
+
+    fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
+        val builder = LatLngBounds.builder()
+        for (ll in points) {
+            builder.include(ll)
+        }
+        return builder.build()
+    }
+
+    private fun getArea(latLngs: List<LatLng?>?): Double {
+        return SphericalUtil.computeArea(latLngs)
+    }
 
 }

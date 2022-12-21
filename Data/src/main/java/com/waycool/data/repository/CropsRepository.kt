@@ -1,5 +1,6 @@
 package com.waycool.data.repository
 
+import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.*
@@ -12,10 +13,12 @@ import com.waycool.data.Sync.syncer.CropInformationSyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
 import com.waycool.data.Sync.syncer.*
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -41,22 +44,22 @@ object CropsRepository {
         }
     }
 
-    fun getAddCropType(): Flow<Resource<List<AddCropTypeDomain>?>> {
-        return AddCropTypeSyncer().getData().map {
-            when (it) {
-                is Resource.Success -> {
-                    Resource.Success(
-                        AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
-                    )
-                }
-                is Resource.Loading -> {
-                    Resource.Loading()
-                }
-                is Resource.Error -> {
-                    Resource.Error(it.message)
+    fun getSoilType(): Flow<Resource<List<SoilTypeDomain>?>> {
+        return  AddCropTypeSyncer().getData().map {
+                when (it) {
+                    is Resource.Success -> {
+                        Resource.Success(
+                            AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
+                        )
+                    }
+                    is Resource.Loading -> {
+                        Resource.Loading()
+                    }
+                    is Resource.Error -> {
+                        Resource.Error(it.message)
+                    }
                 }
             }
-        }
     }
 
 
@@ -178,7 +181,7 @@ object CropsRepository {
         }
     }
 
-//    fun getIotDevice(
+    //    fun getIotDevice(
 //        account: Int,device_model_id:Int
 //    ): Flow<Resource<List<ViewDeviceDTO>?>> {
 //        return NetworkSource.getIotDevice().map {
@@ -208,25 +211,42 @@ object CropsRepository {
         }
         return NetworkSource.getIotDevice()
     }
-    fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?): Flow<Resource<GraphsViewDataDTO?>> {
+
+    fun getGraphsViewDevice(
+        serial_no_id: Int?,
+        device_model_id: Int?,
+        value: String?
+    ): Flow<Resource<GraphsViewDataDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
-        return NetworkSource.getGraphsViewDevice(serial_no_id,device_model_id,value)
+        return NetworkSource.getGraphsViewDevice(serial_no_id, device_model_id, value)
     }
-    fun getDashBoard(): Flow<Resource<DashBoardModel?>> {
-        GlobalScope.launch {
-            MyCropSyncer().invalidateSync()
+
+    fun getDashBoard(): Flow<Resource<DashboardDomain?>> {
+        return DashboardSyncer().getData().map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        DashboardDomainMapper().mapToDomain(it.data ?: DashboardEntity())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
         }
-        return NetworkSource.dashBoard()
     }
+
     fun farmDetailsDelta(): Flow<Resource<FarmDetailsDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
         return NetworkSource.farmDetailsDelta()
     }
-
 
 
     fun getTracker(soil_test_request_id: Int): Flow<Resource<List<TrackerDemain>?>> {
@@ -247,6 +267,7 @@ object CropsRepository {
             }
         }
     }
+
     fun pdfDownload(soil_test_request_id: Int): Flow<Resource<ResponseBody?>> {
         return NetworkSource.pdfDownload(soil_test_request_id)
     }
@@ -310,7 +331,7 @@ object CropsRepository {
         }
     }
 
-//    fun addCropPassData(
+    //    fun addCropPassData(
 //        crop_id: Int?,
 //        account_id: Int?,
 //        plot_nickname: String?,
@@ -328,22 +349,24 @@ object CropsRepository {
 //        )
 //    }
     fun addCropDataPass(
-        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
+        map: MutableMap<String, Any> = mutableMapOf<String, Any>()
     ): Flow<Resource<AddCropResponseDTO?>> {
-    GlobalScope.launch {
-        MyCropSyncer().invalidateSync()
-    }
+        GlobalScope.launch {
+            MyCropSyncer().invalidateSync()
+        }
         return NetworkSource.addCropDataPass(map)
     }
+
     fun activateDevice(
-        map: MutableMap<String, Any> = mutableMapOf<String,Any>()
+        map: MutableMap<String, Any> = mutableMapOf<String, Any>()
     ): Flow<Resource<ActivateDeviceDTO?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
         return NetworkSource.activateDevice(map)
     }
-    fun viewReport(id:Int): Flow<Resource<SoilTestReportMaster?>> {
+
+    fun viewReport(id: Int): Flow<Resource<SoilTestReportMaster?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
         }
@@ -376,13 +399,14 @@ object CropsRepository {
             number
         )
     }
+
     fun checkToken(
         user_id: Int,
         token: String
     ): Flow<Resource<CheckTokenResponseDTO?>> {
 
         return NetworkSource.checkToken(
-          user_id,token
+            user_id, token
         )
     }
 
@@ -402,7 +426,7 @@ object CropsRepository {
                     is Resource.Success -> {
                         Resource.Success(
                             AiCropDetectionDomainMapper().mapToDomain(
-                                it.data?: AiCropDetectionDTO()
+                                it.data ?: AiCropDetectionDTO()
                             )
                         )
                     }
@@ -476,7 +500,7 @@ object CropsRepository {
     }
 
     suspend fun getState(): Flow<Resource<StateModel?>> {
-        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         return NetworkSource.getStateList(map)
     }
 
@@ -499,11 +523,13 @@ object CropsRepository {
         }
 
     }
-     fun getEditCrop(id:Int):Flow<Resource<Unit?>> {
-         GlobalScope.launch(Dispatchers.IO){ LocalSource.deleteMyCrop(id)
-             MyCropSyncer().invalidateSync()
-         }
-         return NetworkSource.editMyCrop(id)
+
+    fun getEditCrop(id: Int): Flow<Resource<Unit?>> {
+        GlobalScope.launch(Dispatchers.IO) {
+            LocalSource.deleteMyCrop(id)
+            MyCropSyncer().invalidateSync()
+        }
+        return NetworkSource.editMyCrop(id)
 
     }
 }

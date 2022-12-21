@@ -13,18 +13,23 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.viewmodel.AddViewModel
+import com.example.addcrop.viewmodel.AddCropViewModel
+import com.google.android.material.chip.Chip
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
+    private var selectedFarmId: Int? = null
     private var accountID: Int? = null
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
@@ -36,11 +41,11 @@ class AddCropDetailsFragment : Fragment() {
     var date: String = ""
     val arrayList = ArrayList<String>()
     lateinit var irrigation_selected: String
-    lateinit var year_selected: String
+    lateinit var areaTypeSelected: String
 
 
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
-    private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
 
     val colors = arrayOf(
@@ -72,16 +77,16 @@ class AddCropDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
-            var crop_id_selected = arguments?.getInt("cropid")
+            val cropIdSelected = arguments?.getInt("cropid")
+
+
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                accountID = it.data?.accountId
+                getFarms()
+            }
+
             binding.cardCheckHealth.setOnClickListener {
-                if (accountID != null)
-                    Log.d(TAG, "onViewCreatedmvsdcsxdkcx: ")
-                viewModel.getUserDetails().observe(viewLifecycleOwner) {
-
-                    accountID = it.data?.accountId
-                        postAddCrop(crop_id_selected!!,accountID!!)
-
-                }
+                postAddCrop(cropIdSelected!!, accountID!!)
             }
 
 
@@ -173,6 +178,68 @@ class AddCropDetailsFragment : Fragment() {
 //    }
     }
 
+    private fun getFarms() {
+        if (accountID != null)
+            viewModel.getMyFarms().observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Success -> {
+                        if (!it.data.isNullOrEmpty()) {
+                            binding.farmsCl.visibility = View.VISIBLE
+                            binding.myfarmsChipGroup.removeAllViews()
+                            selectedFarmId = null
+                            val farmsList = it.data
+                            if (farmsList != null) {
+                                for (farm in farmsList) {
+                                    createChip(farm)
+                                }
+                            }
+                        } else {
+                            binding.farmsCl.visibility = View.GONE
+                        }
+                    }
+                    is Resource.Loading -> {
+                        Log.d("farm", "step5")
+                    }
+                    is Resource.Error -> {
+                        binding.farmsCl.visibility = View.GONE
+                        Log.d("farm", "step6 " + it.message)
+                    }
+                    else -> {
+                        Log.d("farm", "step7")
+
+                    }
+                }
+            }
+    }
+
+    private fun createChip(farm: MyFarmsDomain) {
+        val chip = Chip(requireContext())
+        chip.text = farm.farmName
+        chip.isCheckable = true
+        chip.isClickable = true
+        chip.isCheckedIconVisible = true
+        chip.setTextColor(
+            AppCompatResources.getColorStateList(
+                requireContext(),
+                com.waycool.uicomponents.R.color.bg_chip_text
+            )
+        )
+        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+        chip.chipStrokeWidth = 1f
+        chip.chipStrokeColor = AppCompatResources.getColorStateList(
+            requireContext(),
+            com.waycool.uicomponents.R.color.strokegrey
+        )
+
+        chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
+            if (b) {
+                selectedFarmId = farm.id
+            }
+        }
+        binding.myfarmsChipGroup.addView(chip)
+    }
+
+
     private fun spinnerYear() {
         val arrayAdapter =
             ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, years)
@@ -180,11 +247,10 @@ class AddCropDetailsFragment : Fragment() {
         binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val item = p0?.selectedItem
-                year_selected = item.toString()
+                areaTypeSelected = item.toString()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
         }
     }
@@ -192,14 +258,19 @@ class AddCropDetailsFragment : Fragment() {
 
     //format(binding.etAreaNumber.text.toString()).toDouble()
     private fun postAddCrop(crop_id: Int, account_id: Int) {
-        binding.progressBar.visibility=View.VISIBLE
-        binding.cardCheckHealth.visibility=View.INVISIBLE
+        binding.progressBar.visibility = View.VISIBLE
+        binding.cardCheckHealth.visibility = View.INVISIBLE
 //    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
         val map = mutableMapOf<String, Any>()
-        map.put("account_no_id", account_id)
-        map.put("crop_id", crop_id)
-        map.put("plot_nickname", binding.etNickName.text.toString())
-        map.put("sowing_date", binding.etCalender.text.toString())
+        map["account_no_id"] = account_id
+        map["crop_id"] = crop_id
+        map["plot_nickname"] = binding.etNickName.text.toString()
+        map["sowing_date"] = binding.etCalender.text.toString()
+        map["area_type"] = areaTypeSelected.lowercase()
+        map["area"] = binding.etAreaNumber.text
+        if (selectedFarmId != null)
+            map["farm_id"] = selectedFarmId!!
+
         viewModel.addCropDataPass(
             map
 //            crop_id, account_id, binding.etNickName.text.toString(), 1,
@@ -208,8 +279,8 @@ class AddCropDetailsFragment : Fragment() {
 //            Log.d(TAG, "itemClickedData: $myCalendar")
             when (it) {
                 is Resource.Success -> {
-                    binding.progressBar.visibility=View.INVISIBLE
-                    binding.cardCheckHealth.visibility=View.VISIBLE
+                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.cardCheckHealth.visibility = View.VISIBLE
                     activity?.finish()
                     accountID?.let { it1 ->
                         viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}

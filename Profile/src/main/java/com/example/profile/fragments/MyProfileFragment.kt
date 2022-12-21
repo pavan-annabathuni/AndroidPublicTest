@@ -121,13 +121,13 @@ class MyProfileFragment : Fragment() {
         }
         binding.textView.setOnClickListener(){
             val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
-            intent.putExtra("url", "http://one.waycool.in/Outgrow_PrivacyPolicy.html")
+            intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
             intent.putExtra("tittle", "Privacy Policy")
             requireActivity().startActivity(intent)
         }
         binding.textView2.setOnClickListener(){
             val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
-            intent.putExtra("url", "http://one.waycool.in/Terms_and_Conditions.html")
+            intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
             intent.putExtra("tittle", "Terms and Conditions")
             requireActivity().startActivity(intent)
 

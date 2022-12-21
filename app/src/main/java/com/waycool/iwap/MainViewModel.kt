@@ -74,8 +74,8 @@ class MainViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-    fun getMyFarms(account_id: Int,farm_id:Int?): LiveData<Resource<List<MyFarmsDomain>>> =
-        FarmsRepository.getMyFarms(account_id,farm_id).asLiveData()
+    fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms().asLiveData()
 
     fun getNotification():LiveData<Resource<NotificationModel?>>{
         return NotificationRepository.getNotification().asLiveData()

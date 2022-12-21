@@ -1,8 +1,8 @@
 package com.example.addcrop.ui
 
 
-import com.waycool.data.repository.domainModels.AddCropTypeDomain
+import com.waycool.data.repository.domainModels.SoilTypeDomain
 
 interface AddCropItemClick {
-    fun clickOnCategory(name:AddCropTypeDomain)
+    fun clickOnCategory(name:SoilTypeDomain)
 }

@@ -56,7 +56,9 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -79,8 +81,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private var accountID: Int? = null
     private var farmjson: String? = null
     private var farmCentroid: String? = null
-    private var lat:String = ""
-    private var long:String = ""
+    private var lat: String = ""
+    private var long: String = ""
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
@@ -128,19 +130,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     args
                 )
         })
-        val c = Calendar.getInstance()
-        val timeOfDay = c.get(Calendar.HOUR_OF_DAY)
-        if (timeOfDay in (1..11)) {
-            binding.tvGoodMorning.text = "Hello"
-        } else if (timeOfDay in 12..15) {
-            binding.tvGoodMorning.text = "Good Afternoon!"
-        } else if (timeOfDay in 16..20) {
-            binding.tvGoodMorning.text = "Good Evening!"
-        } else if (timeOfDay in 21..23) {
-            binding.tvGoodMorning.text = "Good Night!"
-        }
-        else{
-            binding.tvGoodMorning.text="Namaste"
+
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
+            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
+            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
+            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
+            else -> binding.tvGoodMorning.text = "Namaste"
         }
 
         binding.recyclerview.adapter = mandiAdapter
@@ -166,8 +162,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.clCropProtect.setOnClickListener {
-            val intent = Intent(activity, CropProtectActivity::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
+//            val intent = Intent(activity, CropProtectActivity::class.java)
+//            startActivity(intent)
         }
 
         binding.tvAddFromServiceCropProtect.setOnClickListener {
@@ -197,19 +194,19 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
-        binding.tvGoodMorning.setOnClickListener() {
-           findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
+        binding.tvGoodMorning.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
         }
-        binding.farmsDetailsCl.setOnClickListener {
-            findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment)
-        }
+//        binding.farmsDetailsCl.setOnClickListener {
+//            findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment3)
+//        }
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
         }
-        binding.tvMyCrops.setOnClickListener() {
+        binding.tvMyCrops.setOnClickListener {
             findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_editCropFragment)
         }
-        binding.cvAddCrop.setOnClickListener() {
+        binding.cvAddCrop.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
@@ -223,7 +220,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
 
-        binding.IvNotification.setOnClickListener(){
+        binding.IvNotification.setOnClickListener() {
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
         }
 
@@ -244,7 +241,16 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory,
+                state,
+                crop,
+                sortBy,
+                orderBy,
+                search
+            )
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
                     // binding.viewModel = it
@@ -258,7 +264,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                 is Resource.Success -> {
                     val account = it.data?.accountId
                     accountID = it.data?.accountId
-                    it.data.let { userDetails ->
+                    it.data.also { userDetails ->
                         binding.tvWelcome.text = userDetails?.profile?.district
                         binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
                         userDetails?.profile?.lat?.let { it1 ->
@@ -270,12 +276,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                             }
                         }
 
-                        getFarms(account!!)
+
+                        account?.also { accId ->
+                            getFarms(accId)
+                        }
                     }
                 }
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
-                else -> {}
             }
             binding.tvAddress.text = it.data?.profile?.district
         }
@@ -301,9 +309,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-
     private fun getFarms(account: Int) {
-        viewModel.getMyFarms(account!!,null).observe(viewLifecycleOwner) {
+        viewModel.getMyFarms().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     Log.d("farm", "step3")
@@ -315,6 +322,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         farmsAdapter.submitList(it.data)
                         farmsAdapter.onItemClick = { farm ->
                             binding.farmnameHome.text = farm?.farmName
+
+                            binding.farmsDetailsCl.setOnClickListener {
+                                val bundle=Bundle()
+                                bundle.putParcelable("farm",farm)
+                                findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment3,bundle)
+                            }
                             loadFarm(farm?.farmJson)
 //                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
                             (farm?.farmCenter)?.get(0)?.latitude?.let { lat ->
@@ -325,8 +338,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                                 }
                             }
                             binding.tvCityName.text = district
-                            viewModel.getMyCrop2(account!!)
-                                .observe(viewLifecycleOwner) { crops ->
+                            viewModel.getMyCrop2(account!!).observe(viewLifecycleOwner) { crops ->
                                     val croplist =
                                         crops.data?.filter { filter ->
                                             filter.farmId == farm?.id
@@ -344,18 +356,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
                     }
-                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
+//                        .show()
                 }
                 is Resource.Loading -> {
                     Log.d("farm", "step5")
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
-                        context,
-                        "Farm Api called Error ${it.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        context,
+//                        "Farm Api called Error ${it.message}",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
 
                     Log.d("farm", "step6 " + it.message)
                 }
@@ -368,10 +380,16 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun getFarmLocation(lat: Double, lng: Double) {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val list: List<Address> =
-            geocoder.getFromLocation(lat, lng, 1) as List<Address>
-        district = list[0].locality + "," + list[0].adminArea
+        viewModel.viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                val list: List<Address> =
+                    geocoder.getFromLocation(lat, lng, 1) as List<Address>
+                district = list[0].locality + "," + list[0].adminArea
+            } catch (e: InvocationTargetException) {
+
+            }
+        }
     }
 
     private fun loadFarm(farmJson: ArrayList<LatLng>?) {

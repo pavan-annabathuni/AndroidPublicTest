@@ -1,11 +1,11 @@
 package com.waycool.data.repository.DomainMapper
 
-import com.waycool.data.Network.NetworkModels.MyFarmsData
+import com.waycool.data.Local.Entity.MyFarmsEntity
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.util.DomainMapper
 
-class MyFarmsDomainMapper:DomainMapper<MyFarmsDomain,MyFarmsData> {
-    override fun mapToDomain(dto: MyFarmsData): MyFarmsDomain {
+class MyFarmsDomainMapper:DomainMapper<MyFarmsDomain,MyFarmsEntity> {
+    override fun mapToDomain(dto: MyFarmsEntity): MyFarmsDomain {
 
         return MyFarmsDomain(
             id=dto.id,
@@ -25,7 +25,7 @@ class MyFarmsDomainMapper:DomainMapper<MyFarmsDomain,MyFarmsData> {
         )
     }
 
-    fun toDomainList(initial: List<MyFarmsData>): List<MyFarmsDomain> {
+    fun toDomainList(initial: List<MyFarmsEntity>): List<MyFarmsDomain> {
         return initial.map { mapToDomain(it) }
     }
 }

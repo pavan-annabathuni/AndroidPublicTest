@@ -543,7 +543,7 @@ object NetworkSource {
             }
         }
     fun dashBoard() =
-        flow<Resource<DashBoardModel?>> {
+        flow<Resource<DashBoardDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
@@ -961,13 +961,13 @@ object NetworkSource {
         }
     }
 
-    fun getMyFarms(accountId: Int,farm_id:Int?) = flow<Resource<MyFarmsDTO?>> {
+    fun getMyFarms(accountId: Int) = flow<Resource<MyFarmsDTO?>> {
 
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
 
         try {
-            val response = apiInterface.getMyFarms(map,accountIdLocal,farm_id)
+            val response = apiInterface.getMyFarms(map,accountIdLocal)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

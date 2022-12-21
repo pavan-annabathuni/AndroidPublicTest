@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -18,7 +17,6 @@ import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -29,25 +27,19 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.gms.common.api.ApiException
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
-import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -56,7 +48,6 @@ import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
 import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
-import com.waycool.uicomponents.utils.AppUtil
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import java.util.*
@@ -65,7 +56,8 @@ import java.util.*
 class RegistrationFragment : Fragment() {
     lateinit var binding: FragmentRegistrationBinding
     var k: Int = 4
-    var dummylist: MutableList<ModuleMasterDomain> = mutableListOf()
+
+    //    var dummylist: MutableList<ModuleMasterDomain> = mutableListOf()
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
     private val REQUEST_CODE_SPEECH_INPUT = 101
@@ -151,7 +143,6 @@ class RegistrationFragment : Fragment() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         premiumAdapter = UserProfilePremiumAdapter(
-            dummylist,
             context, RegistrationFragment()
         )
         binding.premiumFeaturesRecyclerView.setHasFixedSize(true)
@@ -164,7 +155,6 @@ class RegistrationFragment : Fragment() {
         binding.premiumFeaturesRecyclerView.invalidate()
 
         knowAdapter = UserProfileKnowServiceAdapter(
-            dummylist,
             context, RegistrationFragment()
         )
         binding.knowServicesRecyclerView.setHasFixedSize(true)
@@ -249,11 +239,12 @@ class RegistrationFragment : Fragment() {
         return binding.root
     }
 
-    fun replaceFragmentwithoutbackstack(
-        tittle: String,
-        desc: String,
-        url: String?,
+    fun showServiceDialog(
+        tittle: String?,
+        desc: String?,
+        audiourl: String?,
         type: String,
+        imageUrl:String?,
         context: Context
     ) {
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -263,35 +254,38 @@ class RegistrationFragment : Fragment() {
         val descTV = bottomSheetDialog.findViewById<TextView>(R.id.desc_tv)
         val close = bottomSheetDialog.findViewById<ImageView>(R.id.privacy_close_btn)
         val icon = bottomSheetDialog.findViewById<ImageView>(R.id.image)
+        val descImage: ImageView = bottomSheetDialog.findViewById<ImageView>(R.id.desc_image)!!
         val audioLayout = bottomSheetDialog.findViewById<LinearLayout>(R.id.audio_layout)
         val play = bottomSheetDialog.findViewById<ImageView>(R.id.play)
-        val pause = bottomSheetDialog.findViewById<ImageView>(R.id.play)
+        val pause = bottomSheetDialog.findViewById<ImageView>(R.id.pause)
         val seekbar = bottomSheetDialog.findViewById<SeekBar>(R.id.media_seekbar)
         val totalTime = bottomSheetDialog.findViewById<TextView>(R.id.total_time)
-        headerTv!!.setText(tittle)
-        descTV!!.setText(desc)
+        headerTv!!.text = tittle?:""
+        descTV!!.text = desc?:""
         if (type.equals("0")) {
-            UserTYpeTV!!.setText("Free User")
+//            UserTYpeTV!!.setText("Free User")
             icon!!.visibility = View.GONE
         } else {
-            UserTYpeTV!!.setText("Premium User")
+            UserTYpeTV!!.text = "Subscription"
             icon!!.visibility = View.VISIBLE
         }
-        if (url == null) {
+        if (audiourl == null) {
             audioLayout!!.visibility = View.GONE
         } else {
             audioLayout!!.visibility = View.VISIBLE
         }
-        descTV.setMovementMethod(ScrollingMovementMethod())
-        bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.setCanceledOnTouchOutside(false)
+        if (imageUrl != null) {
+           Glide.with(context).load(imageUrl).into(descImage)
+        }
+
+        descTV.movementMethod = ScrollingMovementMethod()
+        bottomSheetDialog.setCancelable(true)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
         bottomSheetDialog.show()
-        close!!.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                bottomSheetDialog.dismiss()
-                audioWife.release()
-            }
-        })
+        close!!.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            audioWife.release()
+        }
         audioWife = AudioWife.getInstance()
         audioWife.addOnCompletionListener(MediaPlayer.OnCompletionListener {
             //                audioWife.release();
@@ -301,8 +295,10 @@ class RegistrationFragment : Fragment() {
             audioWife.release()
         }
         play!!.setOnClickListener { view ->
-            if (url != null) {
-                playAudio(url, play, pause!!, seekbar!!, totalTime!!)
+            if (audiourl != null) {
+                if (pause != null) {
+                    playAudio(context,audiourl, play, pause, seekbar!!, totalTime!!)
+                }
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -319,7 +315,7 @@ class RegistrationFragment : Fragment() {
 //            pause!!.setVisibility(View.GONE)
 //            play.setVisibility(View.VISIBLE)
 //        })
-   }
+    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
@@ -539,9 +535,10 @@ class RegistrationFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
 
-                    dummylist.addAll(it.data as MutableList)
-                    knowAdapter.notifyDataSetChanged()
-                    premiumAdapter.notifyDataSetChanged()
+                    val freelist = it.data?.filter { it.subscription == 0 } as MutableList
+                    val paidlist = it.data?.filter { it.subscription == 1 } as MutableList
+                    knowAdapter.update(freelist)
+                    premiumAdapter.update(paidlist)
 //                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                 }
 
@@ -606,6 +603,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun playAudio(
+        context: Context,
         path: String,
         play: ImageView,
         pause: ImageView,
@@ -622,23 +620,23 @@ class RegistrationFragment : Fragment() {
 //        //                .setTotalTimeView(mTotalTime);
 //        audioWife.play()
 
-            mediaPlayer = MediaPlayer();
-            mediaPlayer!!.setOnCompletionListener {
-                mediaSeekbar.progress = 0
-               pause.visibility = View.GONE
-                play.visibility = View.VISIBLE
-            }
+        mediaPlayer = MediaPlayer();
+        mediaPlayer!!.setOnCompletionListener {
+            mediaSeekbar.progress = 0
+            pause.visibility = View.GONE
+            play.visibility = View.VISIBLE
+        }
 
-            Log.d("Audio", "audioPlayer: $audioUrl")
-            var audio = AudioWife.getInstance()
-                .init(requireContext(), Uri.parse(path))
-                .setPlayView(play)
-                .setPauseView(pause)
-                .setSeekBar(mediaSeekbar)
-                .setRuntimeView(totalTime)
-            // .setTotalTimeView(mTotalTime);
-            audio.play()
+        Log.d("Audio", "audioPlayer: $audioUrl")
+        val audio = AudioWife.getInstance()
+            .init(context, Uri.parse(path))
+            .setPlayView(play)
+            .setPauseView(pause)
+            .setSeekBar(mediaSeekbar)
+            .setRuntimeView(totalTime)
+        // .setTotalTimeView(mTotalTime);
+        audio.play()
         //else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
 
     }
-    }
+}

@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
@@ -64,8 +65,21 @@ class CropSelectionFragment : Fragment() {
 
         binding.toolbarTitle.text="Protect your Crop"
 
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@CropSelectionFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
+
         binding.toolbar.setNavigationOnClickListener {
-            activity?.finish()
+//            activity?.finish()
+            findNavController().navigateUp()
         }
 //        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
 //        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
@@ -218,7 +232,7 @@ class CropSelectionFragment : Fragment() {
         )
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE,
-            Locale.getDefault()
+                    Locale.getDefault()
         )
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
         try {

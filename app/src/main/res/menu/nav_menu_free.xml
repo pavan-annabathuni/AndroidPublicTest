@@ -3,22 +3,22 @@
 
     <item
         android:id="@id/nav_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_home_selector"
         android:title="HOME" />
     <item
         android:id="@+id/navigation_mandi"
-        android:icon="@drawable/ic_mandi_nav"
+        android:icon="@drawable/ic_mandi_selector"
         android:title="MANDI" />
 
 
     <item
-        android:id="@+id/cropProtectActivity"
-        android:icon="@drawable/ic_crop_protection"
+        android:id="@+id/nav_crop_protect"
+        android:icon="@drawable/ic_crop_protection_selector"
         android:title="CROP PROTECTION" />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/user"
+        android:icon="@drawable/ic_profile_selector"
         android:title="PROFILE" />
 
     <!--    <item-->

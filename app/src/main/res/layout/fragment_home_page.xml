@@ -440,7 +440,8 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/tvMyform"
@@ -493,7 +494,8 @@
 
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clMyForm">
+                    app:layout_constraintTop_toBottomOf="@id/clMyForm"
+                    tools:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView7"
@@ -1089,7 +1091,7 @@
                     android:layout_marginEnd="16dp"
                     android:drawableEnd="@drawable/ic_viewall"
                     android:drawablePadding="8dp"
-                    android:fontFamily="@font/bold"
+                    android:fontFamily="@font/notosans_bold"
                     android:padding="4dp"
                     android:text="View All"
                     android:textColor="#146133"
@@ -1123,7 +1125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/bold"
+                    android:fontFamily="@font/notosans_bold"
                     android:text="Our Services"
                     android:textColor="#111827"
                     android:textSize="@dimen/space20"
@@ -1138,7 +1140,7 @@
                     android:layout_marginEnd="16dp"
                     android:drawableEnd="@drawable/ic_viewall"
                     android:drawablePadding="8dp"
-                    android:fontFamily="@font/bold"
+                    android:fontFamily="@font/notosans_bold"
                     android:padding="4dp"
                     android:text="View All"
                     android:textColor="#146133"
@@ -1176,7 +1178,7 @@
                             android:text="Soil Testing"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1188,7 +1190,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:gravity="start"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/notosans_medium"
                             android:text="Enables you with an informations of soil and yield! "
                             android:textColor="@color/textlight"
                             android:textSize="@dimen/txt14"
@@ -1216,7 +1218,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1287,7 +1289,7 @@
                             android:layout_marginTop="@dimen/txt16"
                             android:text="Crop Health"
                             android:textColor="#111827"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             android:textSize="@dimen/txt16"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -1302,7 +1304,7 @@
                             android:text="Explore about our AI enable feature."
                             android:textColor="@color/textlight"
                             android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/notosans_medium"
                             app:layout_constraintEnd_toStartOf="@+id/imageView12"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvCropHealth" />
@@ -1327,7 +1329,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1396,7 +1398,7 @@
                             android:text="Crop Information"
                             android:textColor="#111827"
                             android:textSize="16sp"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1410,7 +1412,7 @@
                             android:text="Understand the complete information about your crops"
                             android:textColor="#585858"
                             android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/notosans_medium"
                             app:layout_constraintEnd_toStartOf="@+id/imageView13"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvInfoCrop" />
@@ -1436,7 +1438,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1507,7 +1509,7 @@
                             android:text="Crop Protection"
                             android:textColor="#111827"
                             android:textSize="@dimen/txt16"
-                            android:fontFamily="@font/bold"
+                            android:fontFamily="@font/notosans_bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1522,7 +1524,7 @@
                             android:text="Complete information to fight against all the possible diseases."
                             android:textColor="#585858"
                             android:textSize="@dimen/txt14"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/notosans_medium"
                             app:layout_constraintEnd_toStartOf="@+id/imageView14"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvCropProtect" />
@@ -1547,7 +1549,7 @@
                                 android:text="Know more"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
-                                android:fontFamily="@font/bold"
+                                android:fontFamily="@font/notosans_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

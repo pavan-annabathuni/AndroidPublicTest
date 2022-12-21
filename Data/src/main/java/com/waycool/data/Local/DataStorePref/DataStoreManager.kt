@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.utils.TypeConverter
-import com.waycool.data.Network.NetworkModels.DashBoardModel
+import com.waycool.data.Network.NetworkModels.DashBoardDTO
 import kotlinx.coroutines.flow.*
 
 @SuppressLint("StaticFieldLeak")
@@ -289,7 +289,7 @@ object DataStoreManager {
             Log.d("Languaga", "SavedLanguaga")
         }
     }
-    suspend fun insertDashboard(moduleMaster: List<DashBoardModel>) {
+    suspend fun insertDashboard(moduleMaster: DashboardEntity) {
         performPrefsSanityCheck()
         context?.dashBoard?.edit {
             it[StoreKey.DASH_BOARD] =
@@ -336,7 +336,7 @@ object DataStoreManager {
             }
 
     }
-    fun getDashBoard(): Flow<List<DashBoardModel>>? {
+    fun getDashBoard(): Flow<DashboardEntity>? {
         performPrefsSanityCheck()
         return context?.soilTestHistory?.data
             ?.catch { exception ->
@@ -345,7 +345,7 @@ object DataStoreManager {
             ?.map {
                 val string = it[StoreKey.DASH_BOARD]
                 string?.let {
-                    TypeConverter.convertStringDashboard(string) } ?: emptyList()
+                    TypeConverter.convertStringDashboard(string) } ?: DashboardEntity()
             }
 
     }

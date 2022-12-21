@@ -2,13 +2,14 @@ package com.waycool.data.Sync.syncer
 
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
-import com.waycool.data.Local.Entity.SoilTestHistoryEntity
+import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.Local.mappers.SoilTestHistoryMapper
-import com.waycool.data.Network.NetworkModels.DashBoardModel
+import com.waycool.data.Local.mappers.DashboardEntityMapper
+import com.waycool.data.Network.NetworkModels.DashBoardDTO
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncInterface
 import com.waycool.data.Sync.SyncKey
+import com.waycool.data.Sync.SyncRate
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,64 +21,49 @@ import kotlinx.coroutines.launch
 class DashboardSyncer : SyncInterface {
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.DASH_BOARD
 
-    override fun getRefreshRate(): Int {
-        TODO("Not yet implemented")
-    }
-    fun getData(account_id: Int): Flow<Resource<List<DashBoardModel>>> {
+    override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
+
+    fun getData(): Flow<Resource<DashboardEntity>> {
 
         GlobalScope.launch(Dispatchers.IO) {
-
-            Log.d("SoilTestSyncer","Sync Status: ${isSyncRequired()}")
-
             if (isSyncRequired()) {
-//                makeNetworkCall(account_id)
+                makeNetworkCall()
             }
         }
         return getDataFromLocal()
     }
 
-    private fun getDataFromLocal(): Flow<Resource<List<DashBoardModel>>> {
+    private fun getDataFromLocal(): Flow<Resource<DashboardEntity>> {
 
 //        emit(Resource.Loading())
         return LocalSource.getDashBoard()?.map {
-            if (it != null) {
-                Resource.Success(it)
-            } else {
-                Resource.Error("")
-            }
+            Resource.Success(it)
         } ?: emptyFlow()
     }
 
-//    private fun makeNetworkCall() {
-//        GlobalScope.launch(Dispatchers.IO) {
-//            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-////            val account =
-////                LocalSource.getUserDetailsEntity()?.account
-////                    ?.firstOrNull { it.accountType == "outgrow" }
-//
-//
-//            if (headerMap != null ) {
-//                NetworkSource.dashBoard(headerMap)
-//                    .collect {
-//                        when (it) {
-//                            is Resource.Success -> {
-////                                LocalSource.insertDashboard(
-////                                    SoilTestHistoryMapper().toEntityList(
-////                                        it.data?.data!!
-////                                    )
-////                                )
-////                                setSyncStatus(true)
-//                            }
-//
-//                            is Resource.Loading -> {
-//
-//                            }
-//                            is Resource.Error -> {
-//                                setSyncStatus(false)
-//                            }
-//                        }
-//                    }
-//            }
-//        }
-//    }
+    private fun makeNetworkCall() {
+        GlobalScope.launch(Dispatchers.IO) {
+            NetworkSource.dashBoard()
+                .collect {
+                    when (it) {
+                        is Resource.Success -> {
+                                LocalSource.insertDashboard(
+                                    DashboardEntityMapper().mapToEntity(
+                                        it.data?.data!!
+                                    )
+                                )
+                                setSyncStatus(true)
+                        }
+
+                        is Resource.Loading -> {
+
+                        }
+                        is Resource.Error -> {
+                            setSyncStatus(false)
+                        }
+                    }
+                }
+        }
+
+    }
 }

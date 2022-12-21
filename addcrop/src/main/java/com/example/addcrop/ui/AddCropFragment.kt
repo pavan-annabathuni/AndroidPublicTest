@@ -13,15 +13,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
-import com.example.addcrop.viewmodel.AddViewModel
-import com.waycool.data.repository.domainModels.AddCropTypeDomain
+import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.utils.Resource
 
 
 class AddCropFragment : Fragment(), AddCropItemClick {
     private var _binding: FragmentAddCropBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
     private var categoryAdapter = CategoryAdapter(this)
     var crop_id_selected:Int?=null
     var pomo:String?=""
@@ -79,7 +79,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         }
     }
     @SuppressLint("NotifyDataSetChanged")
-    override fun clickOnCategory(name: AddCropTypeDomain) {
+    override fun clickOnCategory(name: SoilTypeDomain) {
         if (arguments != null) {
             crop_id_selected = arguments?.getInt("cropid")
             pomo= arguments?.getString("pom")

@@ -88,7 +88,7 @@ class LanguageFragment : Fragment() {
 //        val clickableSpan1: ClickableSpan = object : ClickableSpan() {
 //            override fun onClick(widget: View) {
 //                val intent: Intent = Intent(context, ExoPlayerActivity::class.java)
-//                intent.putExtra("url", "http://one.waycool.in/Terms_and_Conditions.html")
+//                intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
 //                intent.putExtra("tittle", "Terms and Conditions")
 //                requireActivity().startActivity(intent)
 //            }
@@ -108,7 +108,7 @@ class LanguageFragment : Fragment() {
 //        val clickableSpan2: ClickableSpan = object : ClickableSpan() {
 //            override fun onClick(widget: View) {
 //                val intent: Intent = Intent(context, ExoPlayerActivity::class.java)
-//                intent.putExtra("url", "http://one.waycool.in/Outgrow_PrivacyPolicy.html")
+//                intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
 //                intent.putExtra("tittle", "Privacy Policy")
 //                requireActivity().startActivity(intent)
 //            }

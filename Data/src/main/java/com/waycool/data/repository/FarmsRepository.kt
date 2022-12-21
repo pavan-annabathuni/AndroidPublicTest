@@ -3,10 +3,12 @@ package com.waycool.data.repository
 import android.util.Log
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.syncer.MyCropSyncer
+import com.waycool.data.Sync.syncer.MyFarmsSyncer
 import com.waycool.data.repository.DomainMapper.LanguageMasterDomainMapper
 import com.waycool.data.repository.DomainMapper.MyFarmsDomainMapper
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -33,6 +35,7 @@ object FarmsRepository {
     ): Flow<Resource<ResponseBody?>> {
         GlobalScope.launch {
             MyCropSyncer().invalidateSync()
+            MyFarmsSyncer().invalidateSync()
         }
         return NetworkSource.addFarm(
             accountId,
@@ -52,12 +55,11 @@ object FarmsRepository {
     }
 
 
-    fun getMyFarms(accountId: Int,farm_id:Int?): Flow<Resource<List<MyFarmsDomain>>> {
-        return NetworkSource.getMyFarms(accountId,farm_id).map {
+    fun getMyFarms(): Flow<Resource<List<MyFarmsDomain>>> {
+        return MyFarmsSyncer().getData().map {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("farm", "step8 ${it}")
-                    Resource.Success(MyFarmsDomainMapper().toDomainList(it.data?.data ?: emptyList()))
+                    Resource.Success(MyFarmsDomainMapper().toDomainList(it.data?: emptyList()))
                 }
                 is Resource.Loading -> {
                     Resource.Loading()

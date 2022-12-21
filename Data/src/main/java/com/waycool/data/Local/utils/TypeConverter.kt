@@ -3,15 +3,13 @@ package com.waycool.data.Local.utils
 import android.util.Log
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
+import com.google.android.libraries.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
-import com.waycool.data.Network.NetworkModels.CropModel
-import com.waycool.data.Network.NetworkModels.CropVarietyModel
-import com.waycool.data.Network.NetworkModels.DashBoardModel
+import com.waycool.data.Network.NetworkModels.DashBoardDTO
 import com.waycool.data.repository.domainModels.CropVarityDomain
-import com.waycool.data.repository.domainModels.UserDetailsDomain
 
 @ProvidedTypeConverter
 object TypeConverter {
@@ -75,12 +73,12 @@ object TypeConverter {
         val gson = Gson()
         return gson.toJson(language)
     }
-    fun convertStringDashboard(s: String): List<DashBoardModel>? {
+    fun convertStringDashboard(s: String): DashboardEntity? {
         Log.d("TypeConverterFrom", s)
-        val listType = object : TypeToken<List<DashBoardModel>?>() {}.type
+        val listType = object : TypeToken<DashboardEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
-    fun convertDashBoardString(language: List<DashBoardModel>): String {
+    fun convertDashBoardString(language: DashboardEntity): String {
         Log.d("TypeConverterTO", language.toString())
         val gson = Gson()
         return gson.toJson(language)
@@ -156,14 +154,30 @@ object TypeConverter {
         return Gson().fromJson(s, listType)
     }
 
-    fun convertStringToStringList(s: String?): List<String> {
-//        Log.d("TypeConverterFrom", s)
-        if (s == null)
-            return emptyList()
-        val listType = object : TypeToken<List<String>?>() {}.type
+    @TypeConverter
+    fun convertLatLngListToString(latlngs:ArrayList<LatLng>):String{
+        val gson = Gson()
+        return gson.toJson(latlngs)
+    }
+    @TypeConverter
+    fun convertStringToLatLng(s:String):ArrayList<LatLng>{
+        val listType = object : TypeToken<List<LatLng>?>() {}.type
         return Gson().fromJson(s, listType)
     }
 
+    @TypeConverter
+    fun convertStringToStringList(s: String?): ArrayList<String>? {
+        if (s == null)
+            return arrayListOf()
+        val listType = object : TypeToken<ArrayList<String>?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+
+    @TypeConverter
+    fun convertStringListToString(latlngs:ArrayList<String>?):String?{
+        val gson = Gson()
+        return gson.toJson(latlngs)
+    }
 
 
     fun convertStringToCheckToken(s: String): CheckTokenResponseDTO? {

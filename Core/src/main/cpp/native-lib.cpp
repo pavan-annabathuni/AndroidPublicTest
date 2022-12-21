@@ -16,7 +16,7 @@
 extern "C"
 JNIEXPORT jstring
 Java_com_waycool_core_utils_AppSecrets_getBASEURLDebug(JNIEnv *env, jobject clazz) {
-    std::string base_url = "https://adminuat.outgrowdigital.com/";
+    std::string base_url = "https://admindev.outgrowdigital.com/";
     return env->NewStringUTF(base_url.c_str());
 }
 
@@ -37,7 +37,7 @@ Java_com_waycool_core_utils_AppSecrets_getWeatherBaseUrl(JNIEnv *env, jobject th
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_waycool_core_utils_AppSecrets_getWeatherApiKey(JNIEnv *env, jobject thiz) {
-    std::string base_url = "b4820b4b64638b57e52d9c5be604b241";
+    std::string base_url = "9ff1d72c826bc07dd12b5194e9927dbd";
     return env->NewStringUTF(base_url.c_str());
 }
 //extern "C"

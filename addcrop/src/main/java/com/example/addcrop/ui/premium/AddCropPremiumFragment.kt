@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropPremiumBinding
-import com.example.addcrop.viewmodel.AddViewModel
+import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,7 +41,7 @@ class AddCropPremiumFragment : Fragment() {
     lateinit var year_selected: String
 
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
-    private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
     val colors = arrayOf(
         "Select Irrigation method",

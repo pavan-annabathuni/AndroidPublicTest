@@ -1,7 +1,6 @@
 package com.example.addcrop
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
-import com.example.addcrop.viewmodel.AddViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.addcrop.viewmodel.AddCropViewModel
 
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
-    private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
     private lateinit var myCropAdapter:EditMyCropsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

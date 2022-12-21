@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
-import com.example.addcrop.viewmodel.AddViewModel
+import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.utils.Resource
 
 class PlantSpacingFragment : Fragment() {
@@ -29,7 +29,7 @@ class PlantSpacingFragment : Fragment() {
     var planetBed:String=""
     var dripEmitterRate:String=""
 
-    private val viewModel by lazy { ViewModelProvider(this)[AddViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

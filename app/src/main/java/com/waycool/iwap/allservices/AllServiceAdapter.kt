@@ -29,7 +29,7 @@ class SoilTestingLabsAdapter(val context: Context) :
 
     override fun onBindViewHolder(holder: SoilTestingLabsHolder, position: Int) {
         val details = details[position]
-        holder.binding.tvSoilTest.text = details.tittle
+        holder.binding.tvSoilTest.text = details.title
         Glide.with(context)
             .load(R.drawable.mask)
             .into(holder.binding.ivOne)

@@ -43,12 +43,18 @@ object SyncKey {
     //Pest Disease Master
     val PEST_DISEASE_MASTER = stringPreferencesKey("pest_disease")
 
+    //CROP INFORMATION
     val CROP_INFORMATION_MASTER = stringPreferencesKey("crop_information")
 
-    val MY_CROP_MASTER = stringPreferencesKey("my_crop")
+    //MY CROPS
+    val MY_CROPS = stringPreferencesKey("my_crop")
 
+    //MANDI PRICE
     val MANDI_PRICE = stringPreferencesKey("mandi_price")
 
+    //APP TRANSLATIONS
     val APP_TRANSLATIONS = stringPreferencesKey("app_translations")
 
+    //MY FARMS
+    val MY_FARMS = stringPreferencesKey("myfarms")
 }

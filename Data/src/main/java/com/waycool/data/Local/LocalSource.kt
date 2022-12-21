@@ -4,8 +4,7 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
 
-import com.waycool.data.Local.db.OutgrowDao
-import com.waycool.data.Network.NetworkModels.DashBoardModel
+import com.waycool.data.Network.NetworkModels.DashBoardDTO
 
 import kotlinx.coroutines.flow.Flow
 
@@ -101,7 +100,8 @@ object LocalSource {
     suspend fun insertSoilTestHistory(moduleMaster: List<SoilTestHistoryEntity>) {
         DataStoreManager.insertSoilTestHistory(moduleMaster)
     }
-    suspend fun insertDashboard(moduleMaster: List<DashBoardModel>) {
+
+    suspend fun insertDashboard(moduleMaster: DashboardEntity) {
         DataStoreManager.insertDashboard(moduleMaster)
     }
 
@@ -116,7 +116,8 @@ object LocalSource {
     fun getSoilTestHistory(): Flow<List<SoilTestHistoryEntity>>? {
         return DataStoreManager.getSoilTestHistory()
     }
-    fun getDashBoard(): Flow<List<DashBoardModel>>? {
+
+    fun getDashBoard(): Flow<DashboardEntity>? {
         return DataStoreManager.getDashBoard()
     }
 
@@ -186,11 +187,20 @@ object LocalSource {
 
     suspend fun deleteMyCrop(id: Int) = outgrowDao.getDeleteMyCrops(id)
 
-    fun insertTranslations(translations:List<AppTranslationsEntity>){
+    fun insertTranslations(translations: List<AppTranslationsEntity>) {
         outgrowDao.insertTranslations(translations)
     }
 
-    suspend fun getTranslationForString(appKey:String):AppTranslationsEntity? {
+    suspend fun getTranslationForString(appKey: String): AppTranslationsEntity? {
         return outgrowDao.getTranslation(appKey)
+    }
+
+
+    fun insertMyFarms(farms: List<MyFarmsEntity>) {
+        outgrowDao.insertMyFarms(farms)
+    }
+
+    fun getMyFarms(): Flow<List<MyFarmsEntity>> {
+        return outgrowDao.getMyFarms()
     }
 }

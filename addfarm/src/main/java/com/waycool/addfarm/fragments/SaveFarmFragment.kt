@@ -2,6 +2,7 @@ package com.waycool.addfarm.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,6 +127,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 var watersources:String?=null
                 if(waterSourcesSelected.isNotEmpty()){
                     watersources=Gson().toJson(waterSourcesSelected)
+                    Log.d("savefarm",watersources)
                 }else watersources=null
 
                 if(binding.farmnameEtAddfarm.text.toString().isEmpty()){
@@ -149,7 +151,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                         }
 
                         accountId?.let { it1 ->
-                            viewModel.getFarms(it1,null).observe(viewLifecycleOwner) {}
+                            viewModel.getFarms().observe(viewLifecycleOwner) {}
                         }
                         Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
                         activity?.finish()

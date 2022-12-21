@@ -22,7 +22,6 @@ import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
-import com.waycool.iwap.utils.Constant.TAG
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat

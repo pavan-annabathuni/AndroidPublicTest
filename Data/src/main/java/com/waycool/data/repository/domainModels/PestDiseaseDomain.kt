@@ -5,7 +5,7 @@ data class PestDiseaseDomain(
     var diseaseName: String? = null,
     var diseaseId: Int? = null,
     var thumb: String? = null,
-    var imageUrl: List<String>? = null,
+    var imageUrl: ArrayList<String>? = null,
     var audioUrl: String? = null,
     var modeOfInfestation: String? = null,
     var symptoms: String? = null,
