@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity() {
                     } else if (it.data?.status == false) {
                         Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
                             .show()
-                        Log.d("TAG", "tokenCheckViewModelTokenExpire:")
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {

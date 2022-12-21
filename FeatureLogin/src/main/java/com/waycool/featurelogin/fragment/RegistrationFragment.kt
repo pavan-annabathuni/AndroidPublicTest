@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -18,7 +17,6 @@ import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -29,24 +27,19 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -56,7 +49,6 @@ import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
 import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
-import com.waycool.uicomponents.utils.AppUtil
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import java.util.*
@@ -101,12 +93,10 @@ class RegistrationFragment : Fragment() {
         }
 
 
-    val requestPermissionLauncher = registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
 
-
-        Log.d("permission", "test" + result)
         var allAreGranted = true
         for (b in result.values) {
             allAreGranted = allAreGranted && b
@@ -141,8 +131,6 @@ class RegistrationFragment : Fragment() {
 
         if (arguments?.getString("mobile_number") != null) {
             mobileNumber = arguments?.getString("mobile_number")
-//            Toast.makeText(requireContext(), mobileNumber, Toast.LENGTH_SHORT).show()
-
             binding.nameEt.setText(arguments?.getString("name"))
         }
 
@@ -187,11 +175,7 @@ class RegistrationFragment : Fragment() {
             override fun afterTextChanged(editable: Editable) {
                 if (binding.nameEt.text.toString().trim().isNotEmpty()) {
                     //TODO Implement Reverse Geocoder
-                    if (binding.locationEt.text.toString().trim().length != 0) {
-                        binding.registerDoneBtn.isEnabled = true
-                    } else {
-                        binding.registerDoneBtn.isEnabled = false
-                    }
+                    binding.registerDoneBtn.isEnabled = binding.locationEt.text.toString().trim().length != 0
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -208,11 +192,7 @@ class RegistrationFragment : Fragment() {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.locationEt.text.toString().trim().length != 0) {
-                    if (binding.nameEt.text.toString().trim().length != 0) {
-                        binding.registerDoneBtn.isEnabled = true
-                    } else {
-                        binding.registerDoneBtn.isEnabled = false
-                    }
+                    binding.registerDoneBtn.isEnabled = binding.nameEt.text.toString().trim().length != 0
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -268,8 +248,8 @@ class RegistrationFragment : Fragment() {
         val pause = bottomSheetDialog.findViewById<ImageView>(R.id.play)
         val seekbar = bottomSheetDialog.findViewById<SeekBar>(R.id.media_seekbar)
         val totalTime = bottomSheetDialog.findViewById<TextView>(R.id.total_time)
-        headerTv!!.setText(tittle)
-        descTV!!.setText(desc)
+        headerTv!!.text = tittle
+        descTV!!.text = desc
         if (type.equals("0")) {
             UserTYpeTV!!.setText("Free User")
             icon!!.visibility = View.GONE
@@ -282,16 +262,14 @@ class RegistrationFragment : Fragment() {
         } else {
             audioLayout!!.visibility = View.VISIBLE
         }
-        descTV.setMovementMethod(ScrollingMovementMethod())
+        descTV.movementMethod = ScrollingMovementMethod()
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setCanceledOnTouchOutside(false)
         bottomSheetDialog.show()
-        close!!.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                bottomSheetDialog.dismiss()
-                audioWife.release()
-            }
-        })
+        close!!.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            audioWife.release()
+        }
         audioWife = AudioWife.getInstance()
         audioWife.addOnCompletionListener(MediaPlayer.OnCompletionListener {
             //                audioWife.release();
@@ -304,21 +282,11 @@ class RegistrationFragment : Fragment() {
             if (url != null) {
                 playAudio(url, play, pause!!, seekbar!!, totalTime!!)
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Audio file not found",
-                    Toast.LENGTH_SHORT
-                ).show()
+                context?.let { ToastStateHandling.toastWarning(it,"Audio file not found",Toast.LENGTH_SHORT) }
+
             }
         }
 
-//        mediaPlayer = MediaPlayer()
-//        mediaPlayer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-//            Toast.makeText(requireContext(), "completed", Toast.LENGTH_SHORT).show()
-//            seekbar!!.setProgress(0)
-//            pause!!.setVisibility(View.GONE)
-//            play.setVisibility(View.VISIBLE)
-//        })
    }
 
     @SuppressLint("MissingPermission")
@@ -361,15 +329,20 @@ class RegistrationFragment : Fragment() {
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        it.message?.let { it1 ->
+                            ToastStateHandling.toastError(requireContext(),
+                                it1,Toast.LENGTH_SHORT)
+                        }
                         Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        Toast.makeText(requireContext(), "Cancelled", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(),
+                            "Cancelled",Toast.LENGTH_SHORT)
 
                     }
             } else {
-                Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
+                ToastStateHandling.toastWarning(requireContext(),
+                    "Please turn on location",Toast.LENGTH_SHORT)
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -437,21 +410,23 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.length > 0 && longitutde.length > 0) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+                context?.let { ToastStateHandling.toastWarning(it,"No Internet",Toast.LENGTH_LONG) }
             } else {
+                binding.progressBar.visibility=View.VISIBLE
+
                 query = HashMap()
-                query.put("name", binding.nameEt.text.toString().trim())
-                query.put("contact", mobileNumber.toString())
-                query.put("lat", latitude)
-                query.put("long", longitutde)
-                query.put("lang_id", "1")
-                query.put("email", "")
-                query.put("pincode", pincode)
+                query["name"] = binding.nameEt.text.toString().trim()
+                query["contact"] = mobileNumber.toString()
+                query["lat"] = latitude
+                query["long"] = longitutde
+                query["lang_id"] = "1"
+                query["email"] = ""
+                query["pincode"] = pincode
                 village?.let { query.put("village", it) }
-                query.put("address", "")
-                query.put("state_id", "")
-                query.put("district_id", "")
-                query.put("sub_district_id", "")
+                query["address"] = ""
+                query["state_id"] = ""
+                query["district_id"] = ""
+                query["sub_district_id"] = ""
                 Log.d(
                     "register",
                     "test" + binding.nameEt.text.toString()
@@ -463,23 +438,24 @@ class RegistrationFragment : Fragment() {
 
                     when (it) {
                         is Resource.Success -> {
-                            Toast.makeText(
-                                activity,
-                                "Successfully Registered",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            binding.progressBar.visibility=View.GONE
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"SuccessFully Registered",Toast.LENGTH_SHORT) }
                             lifecycleScope.launch {
                                 userLogin()
                             }
                         }
-                        is Resource.Loading -> {}
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility=View.VISIBLE
+                        }
                         is Resource.Error -> {
+                            it.message?.let { it1 ->
+                                context?.let { it2 ->
+                                    ToastStateHandling.toastSuccess(
+                                        it2,
+                                        it1,Toast.LENGTH_SHORT)
+                                }
+                            }
 
-                            Toast.makeText(
-                                activity,
-                                it.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     }
 
@@ -512,8 +488,7 @@ class RegistrationFragment : Fragment() {
                         viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }
-//                        requireActivity().setResult(RESULT_OK)
-//                        requireActivity().finish()
+
                     }
                 }
                 is Resource.Loading -> {
@@ -550,8 +525,7 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -579,12 +553,10 @@ class RegistrationFragment : Fragment() {
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
-            Toast
-                .makeText(
+            ToastStateHandling.toastError(
                     requireContext(), " " + e.message,
                     Toast.LENGTH_SHORT
                 )
-                .show()
         }
     }
 
@@ -598,7 +570,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                var searchTag: String = Objects.requireNonNull(result)!![0]
+                val searchTag: String = Objects.requireNonNull(result)!![0]
                 binding.nameEt.setText(searchTag)
 
             }
@@ -612,17 +584,8 @@ class RegistrationFragment : Fragment() {
         mediaSeekbar: SeekBar,
         totalTime: TextView
     ) {
-        Log.d("RecordView", "actiondown2")
-//        audioWife = AudioWife.getInstance()
-//        audioWife.init(requireContext(), Uri.parse(path))
-//            .setPlayView(play)
-//            .setPauseView(pause)
-//            .setSeekBar(mediaSeekbar)
-//            .setRuntimeView(totalTime)
-//        //                .setTotalTimeView(mTotalTime);
-//        audioWife.play()
 
-            mediaPlayer = MediaPlayer();
+        mediaPlayer = MediaPlayer()
             mediaPlayer!!.setOnCompletionListener {
                 mediaSeekbar.progress = 0
                pause.visibility = View.GONE
@@ -630,15 +593,13 @@ class RegistrationFragment : Fragment() {
             }
 
             Log.d("Audio", "audioPlayer: $audioUrl")
-            var audio = AudioWife.getInstance()
+            val audio = AudioWife.getInstance()
                 .init(requireContext(), Uri.parse(path))
                 .setPlayView(play)
                 .setPauseView(pause)
                 .setSeekBar(mediaSeekbar)
                 .setRuntimeView(totalTime)
-            // .setTotalTimeView(mTotalTime);
             audio.play()
-        //else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
 
     }
     }

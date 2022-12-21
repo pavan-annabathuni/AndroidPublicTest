@@ -1,6 +1,5 @@
 package com.waycool.featurelogin.fragment
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -29,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.truecaller.android.sdk.ITrueCallback
 import com.truecaller.android.sdk.TrueProfile
 import com.truecaller.android.sdk.TrueError
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -38,7 +38,6 @@ import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.interfaces.RSAKey
 import java.util.*
 
 class LoginFragment : Fragment() {
@@ -113,7 +112,6 @@ class LoginFragment : Fragment() {
             } else {
 
                 loginViewModel.setMobileNumber(binding.mobilenoEt.text.toString())
-//                moveToRegistration()
 
                 AuthorizeMobileNumber(binding.mobilenoEt.text.toString())
             }
@@ -181,7 +179,7 @@ class LoginFragment : Fragment() {
      */
     fun AuthorizeMobileNumber(mobileNo: String) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your Internet connection",Toast.LENGTH_SHORT) }
         } else {
             loginViewModel.setMobileNumber(mobileNo)
 
@@ -205,8 +203,7 @@ class LoginFragment : Fragment() {
 
                                     }
                                     gotoMainActivity()
-//                                    requireActivity().setResult(RESULT_OK)
-//                                    requireActivity().finish()
+//
 
                                 } else {
                                     if (loginMaster?.data == "406") {
@@ -224,21 +221,18 @@ class LoginFragment : Fragment() {
                                         goBackBtn!!.setOnClickListener { view: View? -> bottomSheetDialog.dismiss() }
                                         logginTv!!.text =
                                             Html.fromHtml("You have already logged in  <b>" + "another Devices" + "</b>. Click on <b>Continue</b> to login.")
-                                        continueBtn!!.setOnClickListener { view: View? ->
+                                        continueBtn!!.setOnClickListener {
                                             loginViewModel.logout(mobileNo)
-                                                .observe(requireActivity()) {
-                                                    when (it) {
+                                                .observe(requireActivity()) { it1 ->
+                                                    when (it1) {
                                                         is Resource.Success -> {
                                                             AuthorizeMobileNumber(mobileNo)
                                                             bottomSheetDialog.dismiss()
                                                         }
                                                         is Resource.Loading -> {}
                                                         is Resource.Error -> {
-                                                            Toast.makeText(
-                                                                requireContext(),
-                                                                "Error occurred.",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
+                                                            context?.let { ToastStateHandling.toastError(it,"Error occurred",Toast.LENGTH_SHORT) }
+
                                                         }
                                                     }
 
@@ -255,8 +249,8 @@ class LoginFragment : Fragment() {
 
                             }
                             is Resource.Error -> {
+                                context?.let { ToastStateHandling.toastError(it,"Error occured",Toast.LENGTH_LONG) }
 
-                                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                             }
                         }
 

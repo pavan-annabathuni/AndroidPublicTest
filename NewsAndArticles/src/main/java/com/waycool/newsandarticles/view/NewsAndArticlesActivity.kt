@@ -11,6 +11,7 @@ import android.os.Looper
 import android.net.Uri
 import android.speech.RecognizerIntent
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,8 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.FeatureLogin
@@ -36,6 +39,7 @@ import com.waycool.newsandarticles.adapter.AdsAdapter
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,6 +48,8 @@ import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity() {
     private var searchTag: CharSequence? = ""
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
 
     private var selectedCategory: String? = null
 
@@ -69,6 +75,12 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        apiErrorHandlingBinding=binding.errorState
+        networkCall()
+        if(NetworkUtil.getConnectivityStatusString(this)==0){
+            networkCall()
+        }
+
 
         binding.videosVideoListRv.layoutManager = LinearLayoutManager(this)
 
@@ -168,6 +180,25 @@ class NewsAndArticlesActivity : AppCompatActivity() {
         binding.micBtn.setOnClickListener { speechToText() }
     }
 
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(this)==0){
+            binding.clInclude.visibility= View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility= View.VISIBLE
+            binding.addFab.visibility= View.GONE
+            binding.materialCardView.visibility=View.GONE
+            this?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+
+
+        }else{
+            binding.clInclude.visibility= View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility= View.GONE
+            binding.addFab.visibility= View.VISIBLE
+            binding.materialCardView.visibility=View.VISIBLE
+            getNewsCategories()
+            setBanners()
+        }
+
+    }
 
     private fun getNewsCategories() {
         binding.videoCategoryChipGroup.removeAllViews()

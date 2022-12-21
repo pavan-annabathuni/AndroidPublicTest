@@ -13,11 +13,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 
 class NewsFullviewActivity : AppCompatActivity() {
+
     private val binding: ActivityNewsFullLayoutBinding by lazy {
         ActivityNewsFullLayoutBinding.inflate(
             layoutInflater
@@ -36,6 +40,8 @@ class NewsFullviewActivity : AppCompatActivity() {
     var audioWife: AudioWife? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         setContentView(binding.root)
         audioNewLayout = binding.audioLayout
@@ -109,6 +115,9 @@ class NewsFullviewActivity : AppCompatActivity() {
             )
         }
     }
+
+
+
 
     private fun playAudio(path: String) {
         Log.d("RecordView", "actiondown2")

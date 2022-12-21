@@ -69,10 +69,6 @@ class CropInfoFragment : Fragment() {
        setBanners()
 
 
-//        Zendesk.INSTANCE.init(this.requireContext(), zendeskUrl, appId, oauthClientId);
-//        Support.INSTANCE.init(Zendesk.INSTANCE);
-//        AnswerBot.INSTANCE.init(Zendesk.INSTANCE, Support.INSTANCE);
-//        Chat.INSTANCE.init(this.requireContext(), chatAccountKey);
 
         ViewModel.getTabItem()
         binding.lifecycleOwner = this

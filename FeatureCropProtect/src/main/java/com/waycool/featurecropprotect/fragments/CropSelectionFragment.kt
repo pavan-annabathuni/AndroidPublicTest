@@ -30,10 +30,12 @@ import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentCropSelectionBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import java.util.*
 
 
 class CropSelectionFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var selectedCategory: CropCategoryMasterDomain? = null
     private var _binding: FragmentCropSelectionBinding? = null
@@ -63,6 +65,8 @@ class CropSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarTitle.text="Protect your Crop"
+        apiErrorHandlingBinding=binding.errorState
+
 
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
@@ -128,7 +132,6 @@ class CropSelectionFragment : Fragment() {
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data

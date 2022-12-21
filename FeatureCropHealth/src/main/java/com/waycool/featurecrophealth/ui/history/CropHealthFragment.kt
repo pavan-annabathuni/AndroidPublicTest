@@ -12,13 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHealthBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
@@ -28,6 +31,8 @@ import kotlin.math.roundToInt
 class CropHealthFragment : Fragment() {
     private var _binding: FragmentCropHealthBinding? = null
     private val binding get() = _binding!!
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
 
@@ -45,10 +50,24 @@ class CropHealthFragment : Fragment() {
 //        initView()
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
+
         historyAdapter = AiCropHistoryAdapter(requireContext())
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
-            findNavController().navigate(R.id.action_cropHealthFragment_to_cropSelectFragment)
+            if(NetworkUtil.getConnectivityStatusString(context)==0){
+                ToastStateHandling.toastWarning(
+                    requireContext(),
+                    "Please check you internet connectivity",
+                    Toast.LENGTH_SHORT
+                )            }else{
+                findNavController().navigate(R.id.action_cropHealthFragment_to_cropSelectFragment)
+
+            }
         }
         binding.tvViewAll.setOnClickListener {
             findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
@@ -72,8 +91,32 @@ class CropHealthFragment : Fragment() {
 
     }
 
-    private fun getVideos() {
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.cardCheckHealth.visibility = View.GONE
+            binding.addFab.visibility=View.GONE
 
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            binding.cardCheckHealth.visibility = View.VISIBLE
+            binding.addFab.visibility=View.VISIBLE
+            getVideos()
+            bindObservers()
+
+        }
+    }
+
+    private fun getVideos() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter

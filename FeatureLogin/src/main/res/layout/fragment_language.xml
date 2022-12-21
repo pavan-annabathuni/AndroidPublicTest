@@ -51,38 +51,6 @@
         tools:listitem="@layout/viewholder_language_cardview" />
 
 
-<!--    <CheckBox-->
-<!--        android:id="@+id/privacy_check_box"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginLeft="16dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:layout_marginEnd="10dp"-->
-<!--        android:layout_marginRight="10dp"-->
-<!--        android:layout_marginBottom="32dp"-->
-<!--        android:checked="true"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/done_btn"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/privacy_policy_tv"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/language_recyclerview" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/privacy_policy_tv"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="15dp"-->
-<!--        android:layout_marginRight="15dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:fontFamily="@font/notosans_medium"-->
-<!--        android:lines="2"-->
-<!--        android:maxLines="2"-->
-<!--        android:text="@string/privacy_text"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textSize="@dimen/txt14"-->
-<!--        app:layout_constraintBaseline_toBaselineOf="@+id/privacy_check_box"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/privacy_check_box" />-->
 
 
     <com.google.android.material.button.MaterialButton
@@ -98,4 +66,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <include layout="@layout/api_error_handling"
+        android:id="@+id/errorState"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

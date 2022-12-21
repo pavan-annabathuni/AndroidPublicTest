@@ -1,8 +1,6 @@
 package com.example.mandiprice.fragments
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -28,48 +26,34 @@ import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class MandiFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private lateinit var binding: FragmentMandiBinding
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
     private lateinit var adapterMandi: DistanceAdapter
-    private var crops_category =
-        arrayOf("Category", "Cereals", "Pulses", "Vegetables", "Fruits", "Spices", "Others")
-    private var crops = arrayOf("Crops", "Watermelon", "Apple", "Orange", "Mango")
     private var sortBy: String = "asc"
     private var orderBy: String = "distance"
     private var cropCategory: String? = null
     private var state: String? = null
     private var crop: String? = null
-    private var search: String? = null
-    private var crop_category_id: Int? = 1
-    private var count = 0
-
-    val arrayCat = ArrayList<String>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
+    private var cropCategoryId: Int? = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentMandiBinding.inflate(inflater)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -82,8 +66,13 @@ class MandiFragment : Fragment() {
             callback
         )
         binding.lifecycleOwner = this
+        initClickListeners()
+        setBanners()
+        return binding.root
 
+    }
 
+    private fun initClickListeners() {
         binding.searchBar.setOnClickListener() {
             this.findNavController()
                 .navigate(MandiFragmentDirections.actionMandiFragmentToSearchFragment())
@@ -97,15 +86,13 @@ class MandiFragment : Fragment() {
             this.findNavController().navigateUp()
         }
 
-        setBanners()
-        return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
+        apiErrorHandlingBinding=binding.errorState
+
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -113,9 +100,6 @@ class MandiFragment : Fragment() {
             it?.crop?.let { it1 -> args.putString("cropName", it1) }
             it?.market?.let { it1 -> args.putString("market", it1) }
             args.putString("fragment", "one")
-
-
-
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         })
@@ -127,27 +111,28 @@ class MandiFragment : Fragment() {
         fabButton()
 
         binding.recycleViewDis.isNestedScrollingEnabled = true
+        apiErrorHandlingBinding.clInternetError.setOnClickListener {
+            mandiApiCall()
+        }
+        mandiApiCall()
 
-        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+    }
 
+    private fun mandiApiCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.progressBar.visibility=View.GONE
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            binding.addFab.visibility=View.GONE
+            context?.let { ToastStateHandling.toastWarning(it,"Please connect to network",Toast.LENGTH_SHORT) }
+        }
+        else{
+            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+        }
 
     }
 
     private fun onClick() {
-//        viewModel.status.observe(viewLifecycleOwner) {
-//            when (it) {
-//                "true" -> {
-//                    binding.llNotFound.visibility = View.GONE
-//                    binding.recycleViewDis.visibility = View.VISIBLE
-//                }
-//                "Failed" -> {
-//                    binding.llNotFound.visibility = View.VISIBLE
-//                    binding.recycleViewDis.visibility = View.GONE
-//                }
-
-        // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-        // Log.d("status", "onClick:$it ")
-        // }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         binding.textView2.text = "Today $sdf"
     }
@@ -158,19 +143,15 @@ class MandiFragment : Fragment() {
             popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
 
 
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+            popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_crick -> {
-                        if (item.isChecked) {
-                            item.setChecked(false)
-                        } else {
-                            item.setChecked(true)
-                        }
+                        item.isChecked = !item.isChecked
                         sortBy = "asc"
                         binding.filter.text = "Low to High"
                         binding.recycleViewDis.adapter = adapterMandi
-                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
-                        Log.d("High", "filterMenu: $cropCategory ")
+                        mandiApiCall()
+//                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                     }
                     R.id.action_ftbal -> {
@@ -181,13 +162,15 @@ class MandiFragment : Fragment() {
                         }
                         sortBy = "desc"
                         binding.recycleViewDis.adapter = adapterMandi
-                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                        mandiApiCall()
+
+//                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                         binding.filter.text = "High to Low"
                     }
                 }
                 true
-            })
+            }
             popupMenu.show()
         }
     }
@@ -215,25 +198,29 @@ class MandiFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    crop_category_id = it.data!![position].id
+                    cropCategoryId = it.data!![position].id
                     Log.d("spinnerId", "onItemSelected: $id")
                     binding.recycleViewDis.adapter = adapterMandi
                     val text = binding.spinner1.selectedItem.toString()
                     if (position > 0) {
                         cropCategory = text
-                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                        mandiApiCall()
+
+//                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                     } else {
                         if (cropCategory != null) {
                             cropCategory = ""
-                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                            mandiApiCall()
+
+//                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                         }
                     }
                     binding.recycleViewDis.adapter = adapterMandi
 
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
-                        val filter = it.data?.filter { it.cropCategory_id == crop_category_id }
+                        val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                         val cropNameList = (filter?.map { data ->
                             data.cropName
                         } ?: emptyList()).toMutableList()
@@ -260,12 +247,16 @@ class MandiFragment : Fragment() {
                                     val text = binding.spinner2.selectedItem.toString()
                                     if (position > 0) {
                                         crop = text
-                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                        mandiApiCall()
+
+//                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                                     } else {
                                         if (crop != null) {
                                             crop = ""
-                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                            mandiApiCall()
+
+//                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
                                         }
                                     }
                                     binding.recycleViewDis.adapter = adapterMandi
@@ -353,7 +344,6 @@ class MandiFragment : Fragment() {
 
                     }
                     1 -> {
-                        //  Toast.makeText(context, "WORKED2", Toast.LENGTH_SHORT).show()
                         if (binding.filter.text == "Sort by") {
                             orderBy = "price"
                             sortBy = "desc"
@@ -458,11 +448,15 @@ class MandiFragment : Fragment() {
                 .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
+                        binding.clInclude.visibility=View.GONE
+                        apiErrorHandlingBinding.clInternetError.visibility=View.GONE
                         binding.llPorgressBar.visibility = View.GONE
+
+                        binding.addFab.visibility=View.VISIBLE
+
                     }, 1500)
 
 
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
         }
     }
