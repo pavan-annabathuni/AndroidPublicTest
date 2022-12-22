@@ -231,6 +231,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+
     private fun expandableViewThree() {
         binding.clFAQAnsThree.setOnClickListener {
             if (binding.clExpandebleThree.visibility == View.GONE) {
@@ -376,12 +377,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
             if (it.data!!.isEmpty()) {
                 binding.clTopGuide.visibility = View.VISIBLE
-                binding.clRequest.visibility=View.GONE
+                binding.clRequest.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
                         binding.clTopGuide.visibility = View.GONE
-                        binding.clRequest.visibility=View.VISIBLE
+                        binding.clRequest.visibility = View.VISIBLE
 
                         Log.d("TAG", "bindObserversData:" + it.data.toString())
                         if (it.data != null) {
@@ -486,7 +487,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //                                        binding.clProgressBar.visibility = View.VISIBLE
 //                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
                                         //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                                    } else if (it.data?.isNotEmpty() == true && it.data !=null) {
+                                    } else if (it.data?.isNotEmpty() == true && it.data != null) {
                                         val response = it.data
                                         Log.d(
                                             TAG,
@@ -502,11 +503,17 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
 //                                        bundle.putString("lab_name",it.data)
+                                        try {
+                                            findNavController().navigate(
+                                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+                                                bundle
+                                            )
+                                            Log.d("TAGPraveen", "isLocationPermissionGranted: SetPass")
+                                        }catch (e:Exception){
+                                            Log.d("TAGPraveenAade", "isLocationPermissionGranted: NotPassed $e")
+                                        }
 
-                                        findNavController().navigate(
-                                            R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-                                            bundle
-                                        )
+
                                     }
 
                                 }
@@ -545,16 +552,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         _binding = null
     }
 
-    private fun fabButton(){
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -562,7 +569,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)

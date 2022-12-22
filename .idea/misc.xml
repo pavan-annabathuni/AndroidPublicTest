@@ -5,10 +5,13 @@
       <map>
         <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.3098958333333333" />
         <entry key="FeatureCropHealth/src/main/res/drawable/bd_flex.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/bg_search.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/drawable/btn_background.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_palybtn.xml" value="0.124" />
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_pause.xml" value="0.124" />
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_play.xml" value="0.124" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_search.xml" value="0.1645" />
+        <entry key="FeatureCropHealth/src/main/res/drawable/ic_speech.xml" value="0.1645" />
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.375" />
@@ -30,6 +33,7 @@
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease_details.xml" value="0.2212962962962963" />
         <entry key="FeatureCropProtect/src/main/res/layout/item_mycrops.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/border.xml" value="0.124" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_edit.xml" value="0.308" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_index.xml" value="0.124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_irrigation.xml" value="0.124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_irrigation_2.xml" value="0.138" />
@@ -226,21 +230,29 @@
         <entry key="soiltesting/src/main/res/drawable/bg_feedback.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/bg_no_disease.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/bg_plot_edittext.xml" value="0.1645" />
+        <entry key="soiltesting/src/main/res/drawable/bg_search.xml" value="0.1635" />
         <entry key="soiltesting/src/main/res/drawable/bg_search_icon.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/bg_update.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/check_box.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/ic_add_crop_card.xml" value="0.181" />
         <entry key="soiltesting/src/main/res/drawable/ic_check_box.xml" value="0.1495" />
+        <entry key="soiltesting/src/main/res/drawable/ic_dotted_image.xml" value="0.1835" />
+        <entry key="soiltesting/src/main/res/drawable/ic_edited_view.xml" value="0.308" />
         <entry key="soiltesting/src/main/res/drawable/ic_location.xml" value="0.181" />
+        <entry key="soiltesting/src/main/res/drawable/ic_search.xml" value="0.1635" />
         <entry key="soiltesting/src/main/res/drawable/ic_select_crop.xml" value="0.1835" />
+        <entry key="soiltesting/src/main/res/drawable/ic_speech.xml" value="0.1635" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_history.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_services.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_video.xml" value="0.2796296296296296" />
-        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.29653167724609375" />
+        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.2892693702210771" />
+        <entry key="soiltesting/src/main/res/layout/fragment_crop_selected_soil_test.xml" value="0.2543822146216332" />
+        <entry key="soiltesting/src/main/res/layout/fragment_home_page_premium.xml" value="0.2543822146216332" />
         <entry key="soiltesting/src/main/res/layout/fragment_home_pages.xml" value="0.1" />
         <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_report_generator.xml" value="0.15522215810732834" />
         <entry key="soiltesting/src/main/res/layout/fragment_sagar_form.xml" value="0.2947916666666667" />
+        <entry key="soiltesting/src/main/res/layout/fragment_select_crop_soil_test.xml" value="0.12740487387772553" />
         <entry key="soiltesting/src/main/res/layout/fragment_soil_testing_home.xml" value="0.335" />
         <entry key="soiltesting/src/main/res/layout/fragment_status_tracker.xml" value="0.2947916666666667" />
         <entry key="soiltesting/src/main/res/layout/fragment_sucess_full.xml" value="0.21481481481481482" />
@@ -250,7 +262,9 @@
         <entry key="soiltesting/src/main/res/layout/item_premium_add_farm.xml" value="0.2947916666666667" />
         <entry key="soiltesting/src/main/res/layout/item_premium_crops.xml" value="0.18927764892578125" />
         <entry key="soiltesting/src/main/res/layout/item_premium_weather.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/item_select_soil_test_group.xml" value="0.2543822146216332" />
         <entry key="soiltesting/src/main/res/layout/item_soil_history.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/item_soil_test_selected_crop.xml" value="0.2535271483539974" />
         <entry key="soiltesting/src/main/res/layout/item_status_tracker.xml" value="0.7677017777054398" />
         <entry key="soiltesting/src/main/res/layout/item_video.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/item_view_report.xml" value="0.3098958333333333" />

@@ -10,12 +10,21 @@ import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.ProfileRepository
-import com.waycool.data.repository.domainModels.GeocodeDomain
-import com.waycool.data.repository.domainModels.UserDetailsDomain
+import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import okhttp3.ResponseBody
 
 class SoilTestRequestViewModel : ViewModel() {
+    fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
+        return CropsRepository.getAiCrops(searchQuery).asLiveData()
+    }
+
+    fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
+        return CropsRepository.getCropCategory().asLiveData()
+    }
+
+    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2(account_id).asLiveData()
 
     fun postNewSoil(
         account_id: Int,
@@ -27,7 +36,8 @@ class SoilTestRequestViewModel : ViewModel() {
         address: String,
         state: String,
         district: String,
-        number: String
+        number: String,
+        plot_id:Int
     ): LiveData<Resource<SoilTestResponseDTO?>> =
         CropsRepository.postNewSoil(
             account_id,
@@ -39,7 +49,8 @@ class SoilTestRequestViewModel : ViewModel() {
             address,
             state,
             district,
-            number
+            number,
+            plot_id
         ).asLiveData()
 
     //    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =

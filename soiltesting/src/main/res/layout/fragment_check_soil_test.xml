@@ -33,147 +33,173 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/plot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/space12"
-        android:text="@string/soil_sample_will_be_collected_by_the_selected_lab"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/cl_top_onp"-->
-<!--        android:layout_width="match_parent"-->
+<!--    <TextView-->
+<!--        android:id="@+id/plot"-->
+<!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="@dimen/space16"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:background="@drawable/bg_ans"-->
-<!--        android:layout_marginEnd="@dimen/space16"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="@dimen/space12"-->
+<!--        android:text="@string/soil_sample_will_be_collected_by_the_selected_lab"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="14sp"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/plot"-->
-<!--        >-->
-<!--        &lt;!&ndash;        <CheckBox&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
 
-<!--        <CheckBox-->
-<!--            android:id="@+id/iv_Check"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_marginStart="@dimen/space16"-->
-<!--            android:layout_marginTop="@dimen/space16"-->
-<!--            android:checked="true"-->
-<!--            android:button="@drawable/check_box"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-<!--        &lt;!&ndash;        android:button="@drawable/check_box"&ndash;&gt;-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_top_onp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        <!--        <CheckBox-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"/>-->
 
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/tvLabTitle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/space16"-->
-<!--            android:layout_marginTop="@dimen/space16"-->
-<!--            android:text="@string/krishna_s_lab"-->
-<!--            android:textColor="#171717"-->
-<!--            android:textSize="@dimen/space16"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/iv_Check"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--            <CheckBox-->
+        <!--                android:id="@+id/iv_Check"-->
+        <!--                android:layout_width="24dp"-->
+        <!--                android:layout_height="24dp"-->
+        <!--                android:layout_marginStart="@dimen/space16"-->
+        <!--                android:layout_marginTop="@dimen/space16"-->
+        <!--                android:checked="true"-->
+        <!--                android:button="@drawable/check_box"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        android:button="@drawable/check_box"-->
 
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/tvName"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/space40"-->
-<!--            android:layout_marginTop="@dimen/space16"-->
-<!--            android:text="@string/b_mudhuganapalli_n_village_devaripalli_post_talk_hosur_n_tamilnadu_pin_635124"-->
-<!--            android:textColor=" #828699"-->
-<!--            android:layout_marginEnd="@dimen/space16"-->
-<!--            android:textSize="@dimen/space16"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/iv_Check"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tvLabTitle" />-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLabTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:text="@string/krishna_s_lab"
+            android:textColor="#171717"
+            android:textSize="@dimen/txt18"
+            android:textStyle="bold"
+            android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/pinCode"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/space16"-->
-<!--            android:layout_marginTop="@dimen/space16"-->
-<!--            android:layout_marginEnd="@dimen/txt16"-->
-<!--            android:text="PIN 635124"-->
-<!--            android:textColor=" #828699"-->
-<!--            android:textSize="@dimen/space16"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/view"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/tvName"-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/space16"
+            android:padding="4dp"
+            android:layout_marginEnd="@dimen/space16"
+            android:text="@string/b_mudhuganapalli_n_village_devaripalli_post_talk_hosur_n_tamilnadu_pin_635124"
+            android:textColor=" #828699"
+            android:textSize="@dimen/space16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabTitle" />
 
-<!--            />-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pinCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:layout_marginEnd="@dimen/txt16"
+            android:text="PIN 635124"
+            android:textColor=" #828699"
+            android:textSize="@dimen/space16"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvName"
 
-<!--        <View-->
-<!--            android:id="@+id/view"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0.5dp"-->
-<!--            android:layout_marginTop="@dimen/space16"-->
-<!--            android:background="#EDEDED"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tvName" />-->
+            />
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="@dimen/space0_5"-->
-<!--            android:background="#F9F9F9"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/view">-->
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#EDEDED"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginEnd="@dimen/space16"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/ivClick"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:src="@drawable/ic_distance"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_km"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space0_5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
 
-<!--            <TextView-->
-<!--                android:id="@+id/tvCheckCrop"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space8"-->
-<!--                android:layout_marginTop="@dimen/space8"-->
-<!--                android:layout_marginBottom="@dimen/space8"-->
-<!--                android:text="@string/_11_km_from_your_location"-->
-<!--                android:textColor="#585858"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/ivClick"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+            <ImageView
+                android:id="@+id/ivClick"
+                android:layout_width="@dimen/space16"
+                android:layout_height="@dimen/space16"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_distance"
+                android:layout_marginTop="@dimen/space12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <TextView
+                android:id="@+id/tvCheckCrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space8"
+                android:layout_marginTop="@dimen/space12"
+                android:layout_marginBottom="@dimen/space8"
+                android:text="@string/_11_km_from_your_location"
+                android:textColor="#585858"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivClick"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view_two"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#EDEDED"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginEnd="@dimen/space16"
+            app:layout_constraintTop_toBottomOf="@+id/cl_km" />
 
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/collectedLab"
+        app:layout_constraintTop_toBottomOf="@+id/cl_top_onp"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#828699"
+        android:padding="4dp"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:layout_marginStart="@dimen/space16"
+        android:layout_marginEnd="@dimen/space16"
+        android:text="Soil sample will be collected by the selected Lab"
+        android:layout_height="wrap_content"/>
+
     <View
         android:id="@+id/viewTwo"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:background="#EBECF2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview_status_lab" />
-    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/collectedLab" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/select_crop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -185,32 +211,132 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
-    <ImageView
-        android:id="@+id/btn_select_crop"
-        app:layout_constraintTop_toBottomOf="@+id/select_crop"
-        android:layout_width="match_parent"
-        android:scaleType="fitXY"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/space16"
-        android:layout_marginEnd="@dimen/space16"
-        android:src="@drawable/ic_add_crop_cta"
-        android:layout_height="wrap_content"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_status_lab"
+    <ImageView
+        android:id="@+id/editImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_edited_view"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/select_crop_edit"
+        app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/select_crop_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/space16"
+        android:text="Edit"
+        android:textColor="#146133"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_select_crop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space16"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/space16"
-        tools:itemCount="1"
+        android:background="@drawable/ic_dotted_image"
+        android:scaleType="fitXY"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plot"
-        tools:listitem="@layout/item_labs_sample"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/select_crop">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/add_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space16"
+            android:text="Add"
+            android:textColor="#146133"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivAddOne"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="@dimen/space16"
+            android:layout_marginEnd="@dimen/space8"
+            android:layout_marginBottom="@dimen/space16"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/add_text"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:padding="2dp"
+        android:visibility="gone"
+        app:civ_border_color="#E5E7EB"
+        app:civ_border_width="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_crop" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_crops"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Tomato"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/btn_select_crop"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tvSoil"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/btn_select_crop"-->
+    <!--        android:text="SetData"-->
+    <!--        android:layout_margin="@dimen/space20"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:textSize="@dimen/space16"-->
+    <!--        android:layout_height="wrap_content"/>-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/tvSoil_image"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tvSoil"-->
+    <!--        android:text="SetData"-->
+    <!--        android:src="@drawable/ic_add_crop_card"-->
+    <!--        android:layout_margin="@dimen/space20"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:textSize="@dimen/space16"-->
+    <!--        android:layout_height="wrap_content"/>-->
+
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/recyclerview_status_lab"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/space16"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:layout_marginEnd="@dimen/space16"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/plot"-->
+    <!--        tools:itemCount="1"-->
+    <!--        tools:listitem="@layout/item_labs_sample" />-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cardCheckHealth"
@@ -229,48 +355,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/cardCheckHealth"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="16dp"-->
-    <!--        android:clickable="false"-->
-    <!--        app:cardCornerRadius="8dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent">-->
-
-    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="50dp"-->
-    <!--            android:background="#0A651C">-->
-
-    <!--            &lt;!&ndash;            <ImageView&ndash;&gt;-->
-    <!--            &lt;!&ndash;                android:id="@+id/ivClick"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                android:layout_marginEnd="16dp"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                android:src="@drawable/ic_add_button"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"&ndash;&gt;-->
-    <!--            &lt;!&ndash;                app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/tvCheckCrop"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:text="Next"-->
-    <!--                android:textCo lor="#FFFFFF"-->
-    <!--                android:textSize="16sp"-->
-    <!--                android:textStyle="bold"-->
-    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-    <!--    </androidx.cardview.widget.CardView>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

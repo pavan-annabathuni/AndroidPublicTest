@@ -65,6 +65,7 @@ class NewSoilTestFormFragment : Fragment() {
             val onp_id = arguments?.getInt("soil_test_number")
             val lat = arguments?.getString("lat")
             val long = arguments?.getString("long")
+            val plot_id = arguments?.getInt("plot_id")
 
             Log.d(TAG, "onCreateViewONPID:$onp_id ")
             Log.d(TAG, "onCreateViewONPID:$lat ")
@@ -92,8 +93,6 @@ class NewSoilTestFormFragment : Fragment() {
 
 //            soilViewModel.viewModelScope.launch {
             soilViewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
                 contactNumber = it.data?.phone.toString()
                 binding.tvContact.text = contactNumber
                 var accountId = it.data?.accountId
@@ -102,7 +101,7 @@ class NewSoilTestFormFragment : Fragment() {
                         .show()
                 } else if (it.data?.accountId != null) {
                     Log.d(TAG, "onCreateViewAccountID:$accountID")
-                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber)
+                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,plot_id.toString().toInt())
                 }
 
 
@@ -221,50 +220,52 @@ class NewSoilTestFormFragment : Fragment() {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
+
+
     }
 
-    private fun bindObserversSoilTestHistory(
-        account_id: Int,
-        lat: Double,
-        long: Double,
-        onp_number: Int,
-        phoneNumber: String
-    ) {
-        soilViewModel.postNewSoil(
-            account_id, lat, long,
-            onp_number,
-            binding.etPlotNumber.text.toString(),
-            binding.etPincodeNumber.text.toString(),
-            binding.etAddress.text.toString(),
-            binding.etState.text.toString(),
-            binding.etCity.text.toString(),
-            phoneNumber
-
-        ).observe(requireActivity()) {
-            when (it) {
-                is Resource.Success -> {
-                    val bundle = Bundle()
-                    bundle.putString("soil_req_number", it.data!!.data.soilTestNumber)
-                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber)
-                    findNavController().navigate(
-                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
-                        bundle
-                    )
-                }
-                is Resource.Loading -> {
-
-
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+//    private fun bindObserversSoilTestHistory(
+//        account_id: Int,
+//        lat: Double,
+//        long: Double,
+//        onp_number: Int,
+//        phoneNumber: String
+//    ) {
+//        soilViewModel.postNewSoil(
+//            account_id, lat, long,
+//            onp_number,
+//            binding.etPlotNumber.text.toString(),
+//            binding.etPincodeNumber.text.toString(),
+//            binding.etAddress.text.toString(),
+//            binding.etState.text.toString(),
+//            binding.etCity.text.toString(),
+//            phoneNumber
+//
+//        ).observe(requireActivity()) {
+//            when (it) {
+//                is Resource.Success -> {
+//                    val bundle = Bundle()
+//                    bundle.putString("soil_req_number", it.data!!.data.soilTestNumber)
+//                    Log.d(TAG, "initViewsendingId: " + it.data!!.data.soilTestNumber)
+//                    findNavController().navigate(
+//                        R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
+//                        bundle
+//                    )
+//                }
+//                is Resource.Loading -> {
+//
+//
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
 //                        .show()
-                }
-            }
-
-
-        }
-    }
+////                        .show()
+//                }
+//            }
+//
+//
+//        }
+//    }
 
 
     private fun itemClicked(
@@ -272,7 +273,8 @@ class NewSoilTestFormFragment : Fragment() {
         lat: String,
         long: String,
         onp_number: Int,
-        phoneNumber: String
+        phoneNumber: String,
+        plot_id:Int
     ) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
@@ -303,8 +305,8 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.tvContact.error = "Enter Mobile Number"
                 return@setOnClickListener
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
-                binding.cardCheckHealth.visibility=View.GONE
-                binding.progressBar2.visibility=View.VISIBLE
+                binding.cardCheckHealth.visibility = View.GONE
+                binding.progressBar2.visibility = View.VISIBLE
                 binding
                 soilViewModel.postNewSoil(
                     account_id, lat.toDouble(), long.toDouble(),
@@ -314,18 +316,25 @@ class NewSoilTestFormFragment : Fragment() {
                     binding.etAddress.text.toString(),
                     binding.etState.text.toString(),
                     binding.etCity.text.toString(),
-                    phoneNumber
+                    phoneNumber,
+                    plot_id
                 ).observe(requireActivity()) {
 
                     when (it) {
                         is Resource.Success -> {
                             val bundle = Bundle()
-                            bundle.putString("soil_test_number", it.data?.data?.soilTestNumber. toString())
+                            bundle.putString(
+                                "soil_test_number",
+                                it.data?.data?.soilTestNumber.toString()
+                            )
                             Log.d(
                                 TAG,
                                 "initViewsendingId: " + it.data!!.data.soilTestNumber.toString()
                             )
-                            findNavController().navigate(R.id.action_newSoilTestFormFragment_to_sucessFullFragment,bundle)
+                            findNavController().navigate(
+                                R.id.action_newSoilTestFormFragment_to_sucessFullFragment,
+                                bundle
+                            )
                         }
                         is Resource.Loading -> {
 
