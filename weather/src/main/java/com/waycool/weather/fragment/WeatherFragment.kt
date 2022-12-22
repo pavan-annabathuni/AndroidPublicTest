@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +19,10 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.weather.R
 import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
@@ -34,6 +38,8 @@ import java.util.*
 class WeatherFragment : Fragment() {
     private lateinit var binding: FragmentWeatherBinding
     private lateinit var shareLayout: LinearLayout
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
@@ -60,10 +66,19 @@ class WeatherFragment : Fragment() {
 
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        apiErrorHandlingBinding=binding.errorState
+
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
             screenShot()
         }
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
+        observer()
+        setBanners()
+
         binding.recycleView.adapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             viewModel.displayPropertyDaily(it)
         })
@@ -71,16 +86,23 @@ class WeatherFragment : Fragment() {
             viewModel.displayPropertyHourly(it)
         })
 
-        observer()
-        setBanners()
-        //getWeatherData("12.22", "77.32")
-//        ViewModel.getCurrentWeather()
-//        ViewModel.getWeekWeather()
-//        ViewModel.getHourlyWeather()
-
-
         binding.imgBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
+    }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        }
+        else{
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+
+            observer()
+            setBanners()
+        }
     }
 //     fun onClick(){
 //          binding.recycleViewHourly.setOnClickListener(){

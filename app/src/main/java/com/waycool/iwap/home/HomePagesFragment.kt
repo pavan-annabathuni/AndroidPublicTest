@@ -38,6 +38,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -59,6 +61,9 @@ import java.util.*
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
+
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
+    private lateinit var newsBinding: GenericLayoutNewsListBinding
 
     private var district: String? = null
     private var jsonString: String? = null
@@ -102,6 +107,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             if (value != "true")
                 findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
         }
+        videosBinding = binding.layoutVideos
+        newsBinding = binding.layoutNews
+
         return binding.root
     }
 
@@ -122,19 +130,34 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     args
                 )
         })
-        val c = Calendar.getInstance()
-        val timeOfDay = c.get(Calendar.HOUR_OF_DAY)
-        if (timeOfDay in (1..11)) {
-            binding.tvGoodMorning.text = "Hello"
-        } else if (timeOfDay in 12..15) {
-            binding.tvGoodMorning.text = "Good Afternoon!"
-        } else if (timeOfDay in 16..20) {
-            binding.tvGoodMorning.text = "Good Evening!"
-        } else if (timeOfDay in 21..23) {
-            binding.tvGoodMorning.text = "Good Night!"
+
+        networkCall()
+        videosBinding.imgRetry.setOnClickListener {
+            networkCall()
         }
-        else{
-            binding.tvGoodMorning.text="Namaste"
+
+        networkNewsCall()
+        newsBinding.imgRetry.setOnClickListener {
+            networkNewsCall()
+        }
+
+
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> {
+                binding.tvGoodMorning.text = "Hello"
+            }
+            in 12..15 -> {
+                binding.tvGoodMorning.text = "Good Afternoon!"
+            }
+            in 16..20 -> {
+                binding.tvGoodMorning.text = "Good Evening!"
+            }
+            in 21..23 -> {
+                binding.tvGoodMorning.text = "Good Night!"
+            }
+            else -> {
+                binding.tvGoodMorning.text = "Namaste"
+            }
         }
 
         binding.recyclerview.adapter = mandiAdapter
@@ -183,8 +206,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
         binding.tvViewAllMandi.setOnClickListener {
-//            val intent = Intent(activity, MandiActivity::class.java)
-//            startActivity(intent)
             this.findNavController().navigate(R.id.navigation_mandi)
         }
         binding.cvWeather.setOnClickListener() {
@@ -214,10 +235,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
 
-//        binding.IvNotification.setOnClickListener{
-//            val intent = Intent(activity, AddDeviceActivity::class.java)
-//            startActivity(intent)
-//        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -284,6 +301,47 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun networkNewsCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+            newsBinding.newsListRv.visibility = View.GONE
+            newsBinding.viewAllNews.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Check internet",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            newsBinding.videoCardNoInternet.visibility = View.GONE
+            newsBinding.newsListRv.visibility = View.VISIBLE
+            newsBinding.viewAllNews.visibility = View.VISIBLE
+            setNews()
+        }
+    }
+
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+            videosBinding.videosListRv.visibility = View.GONE
+            videosBinding.viewAllVideos.visibility = View.GONE
+            videosBinding.videosScroll.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Check internet",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            videosBinding.videoCardNoInternet.visibility = View.GONE
+            videosBinding.videosListRv.visibility = View.VISIBLE
+            videosBinding.viewAllVideos.visibility = View.VISIBLE
+            videosBinding.videosScroll.visibility = View.VISIBLE
+            setVideos()
+        }
+    }
 
 
     private fun getFarms(account: Int) {
@@ -335,11 +393,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     Log.d("farm", "step5")
                 }
                 is Resource.Error -> {
-                /*    Toast.makeText(
-                        context,
-                        "Farm Api called Error ${it.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()*/
+                    /*    Toast.makeText(
+                            context,
+                            "Farm Api called Error ${it.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()*/
 
                     Log.d("farm", "step6 " + it.message)
                 }
@@ -434,7 +492,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setNews() {
-        val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         viewModel.getVansNewsList().observe(requireActivity()) {
@@ -465,7 +522,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setVideos() {
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {

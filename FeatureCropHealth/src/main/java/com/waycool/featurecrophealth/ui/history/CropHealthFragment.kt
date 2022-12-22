@@ -74,6 +74,7 @@ class CropHealthFragment : Fragment() {
         }
 
 
+
         bindObservers()
         getVideos()
         fabButton()
@@ -117,11 +118,14 @@ class CropHealthFragment : Fragment() {
     }
 
     private fun getVideos() {
+        binding.clProgressBar.visibility=View.VISIBLE
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility=View.GONE
+
         }
 
         adapter.onItemClick = {
@@ -164,6 +168,7 @@ class CropHealthFragment : Fragment() {
 //    }
 
     private fun bindObservers() {
+        binding.clProgressBar.visibility=View.VISIBLE
 
         viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
@@ -172,6 +177,7 @@ class CropHealthFragment : Fragment() {
                 when (it) {
                     is Resource.Success -> {
                         binding.takeGuide.visibility = View.GONE
+                        binding.clProgressBar.visibility=View.GONE
 
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())
 //                        historyAdapter.submitList(it.data)

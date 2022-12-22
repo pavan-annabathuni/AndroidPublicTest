@@ -102,6 +102,27 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             if (!FeatureLogin.getLoginStatus()) {
                 val intent = Intent(this@NewsAndArticlesActivity, LoginMainActivity::class.java)
                 startActivity(intent)
+                this@NewsAndArticlesActivity.finish()
+
+            }else{
+                Firebase.dynamicLinks
+                    .getDynamicLink(intent)
+                    .addOnSuccessListener {pendingDynamicLinkData: PendingDynamicLinkData? ->
+
+                        var deepLink: Uri? = null
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.link
+                        }
+                        if (deepLink != null) {
+
+                            val intent =
+                                Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                    .addOnFailureListener {
+                            e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+                    }
             }
         }
 

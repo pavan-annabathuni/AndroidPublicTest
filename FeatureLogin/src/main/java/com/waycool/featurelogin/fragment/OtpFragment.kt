@@ -155,7 +155,7 @@ class OtpFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+//                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -248,11 +248,11 @@ class OtpFragment : Fragment() {
                                 verifyUser()
 
                             } else if (otpResponse?.type == "error") {
-                                ToastStateHandling.toastError(
+                                /*ToastStateHandling.toastError(
                                     requireContext(),
                                     "Error occurred",
                                     Toast.LENGTH_SHORT
-                                )
+                                )*/
 
                             }
                         }

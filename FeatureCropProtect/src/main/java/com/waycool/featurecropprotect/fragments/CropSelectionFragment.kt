@@ -93,6 +93,7 @@ class CropSelectionFragment : Fragment() {
         })
         binding.rvMyCrops.adapter = myCropAdapter
         fabButton()
+
         myCrops()
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
@@ -129,9 +130,13 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun setUpCropCategories() {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility=View.GONE
+
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data
@@ -194,9 +199,13 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility=View.GONE
+
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
@@ -279,6 +288,7 @@ class CropSelectionFragment : Fragment() {
     }
 
     fun myCrops() {
+        binding.clProgressBar.visibility=View.VISIBLE
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             var accountId = it.data?.accountId
             if (accountId != null)

@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,6 +35,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -51,8 +51,8 @@ import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
-    private var _binding: FragmentSoilTestingHomeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit  var binding: FragmentSoilTestingHomeBinding
+//    private val binding get() = _binding!!
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var soilHistoryAdapter = HistoryDataAdapter(this)
@@ -68,7 +68,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSoilTestingHomeBinding.inflate(inflater, container, false)
+        binding = FragmentSoilTestingHomeBinding.inflate(layoutInflater)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return binding.root
@@ -90,6 +90,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         initViewBackClick()
         expandableView()
         expandableViewTWo()
+        binding.clProgressBar.visibility=View.VISIBLE
         getVideos()
         fabButton()
         getAllHistory()
@@ -124,11 +125,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun setBanners() {
+        binding.clProgressBar.visibility=View.VISIBLE
 
         val bannerAdapter = AdsAdapter()
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility=View.GONE
+
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
@@ -157,14 +161,15 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun getAllHistory() {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
             if (accountID != null) {
                 Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
                 bindObserversSoilTestHistory(accountID!!)
+
             }
-
-
         }
     }
 
@@ -182,8 +187,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (accountID != null) {
                     Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                     isLocationPermissionGranted(accountID!!)
-                    binding.progressBar.isVisible = true
-                    binding.clProgressBar.visibility = View.VISIBLE
                     binding.cardCheckHealth.isClickable = false
 
                 }
@@ -206,12 +209,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
     private fun getVideos() {
+        binding.clProgressBar.visibility = View.VISIBLE
+
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility = View.GONE
         }
+
 
         adapter.onItemClick = {
             val bundle = Bundle()
@@ -315,6 +322,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else
                 when (it) {
                     is Resource.Success -> {
+                        binding.clProgressBar.visibility=View.GONE
+
                         Log.d("TAG", "bindObserversData:" + it.data.toString())
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
@@ -461,10 +470,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     private fun fabButton(){
         var isVisible = false

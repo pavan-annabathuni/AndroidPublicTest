@@ -231,7 +231,9 @@ class LoginFragment : Fragment() {
                                                         }
                                                         is Resource.Loading -> {}
                                                         is Resource.Error -> {
+/*
                                                             context?.let { ToastStateHandling.toastError(it,"Error occurred",Toast.LENGTH_SHORT) }
+*/
 
                                                         }
                                                     }
@@ -249,7 +251,9 @@ class LoginFragment : Fragment() {
 
                             }
                             is Resource.Error -> {
-                                context?.let { ToastStateHandling.toastError(it,"Error occured",Toast.LENGTH_LONG) }
+/*
+                                context?.let { ToastStateHandling.toastError(it,"Error occurred",Toast.LENGTH_LONG) }
+*/
 
                             }
                         }

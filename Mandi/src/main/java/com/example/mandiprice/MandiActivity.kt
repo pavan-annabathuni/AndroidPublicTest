@@ -26,6 +26,8 @@ class MandiActivity : AppCompatActivity() {
             if (!FeatureLogin.getLoginStatus()) {
                 val intent = Intent(this@MandiActivity, LoginMainActivity::class.java)
                 startActivity(intent)
+                this@MandiActivity.finish()
+
             }
         }
         Firebase.dynamicLinks

@@ -124,7 +124,7 @@ class MandiFragment : Fragment() {
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
             binding.addFab.visibility=View.GONE
-            context?.let { ToastStateHandling.toastWarning(it,"Please connect to network",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastWarning(it,"Please check you internet connectivity",Toast.LENGTH_SHORT) }
         }
         else{
             getMandiData(cropCategory, state, crop, sortBy, orderBy)

@@ -50,9 +50,12 @@ import com.waycool.addfarm.databinding.FragmentDrawFarmBinding
 import com.waycool.addfarm.utils.DrawingOption
 import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.PlacesSearchEventError
 import com.waycool.data.utils.PlacesSearchEventFound
 import com.waycool.data.utils.PlacesSearchEventLoading
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import smartdevelop.ir.eram.showcaseviewlib.GuideView
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType
 import java.util.*
@@ -68,6 +71,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private var searchLocationMarker: Marker? = null
     private var mMap: GoogleMap? = null
     private var points: MutableList<LatLng> = mutableListOf()
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var markerList: MutableList<Marker> = mutableListOf()
     private var polygon: Polygon? = null
@@ -121,7 +125,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         binding.toolbarTitle.text = "Add Farm"
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
@@ -418,6 +426,22 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     bundle
                 )
             }
+        }
+    }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.tutorial.isClickable=false
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        }
+        else{
+            binding.tutorial.isClickable=true
+
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+            getLocation()
         }
     }
 

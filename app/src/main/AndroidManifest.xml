@@ -47,8 +47,11 @@
         <activity
             android:name="com.waycool.iwap.MainActivity"
             android:exported="true" >
-
-            <intent-filter>
+<intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+            <intent-filter >
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
@@ -57,24 +60,7 @@
                     android:path="/weathershare"
                     android:scheme="https"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/profilepage"
-                    android:scheme="https"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/home"
-                    android:scheme="https"/>
-            </intent-filter>
+
         </activity>
     </application>
 

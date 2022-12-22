@@ -104,18 +104,21 @@ class CropSelectFragment : Fragment() {
     }
 
     fun myCrops() {
-
+ binding.clProgressBar.visibility=View.VISIBLE
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             var accountId = it.data?.accountId
 
             if (accountId != null)
                 viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
                     myCropAdapter.submitList(it.data)
+                    binding.clProgressBar.visibility=View.GONE
+
                     if ((it.data != null)) {
                         binding.tvCount.text = it.data!!.size.toString()
                     } else {
                         binding.tvCount.text = "0"
                     }
+
                     // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 
                 }
@@ -136,11 +139,15 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun bindObserversCategory() {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
 //                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     binding.cropCategoryChipGroup.removeAllViews()
+                    binding.clProgressBar.visibility=View.GONE
+
                     selectedCategory = null
                     val categoryList = it.data
                     val allCategory = CropCategoryMasterDomain(categoryName = "All")
@@ -207,9 +214,12 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility=View.GONE
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
@@ -224,72 +234,8 @@ class CropSelectFragment : Fragment() {
     }
 
 
-//    private fun bindObserversDetails() {
-//        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer {
-//
-//            when (it) {
-//                is NetworkResult.Success -> {
-//                    Log.d(Constant.TAG, "bindObserversDataDetails:" + it.data?.data.toString())
-//                    val response =
-//                        it.data?.data as List<com.waycool.featurecrophealth.model.cropdetails.Data>
-////                    detailsAdapter.setMovieList(response)
-//                    responseDataList = response as MutableList<Data>
-//
-//                    cropDetailsList = CropDetails(responseDataList, "", true)
-//
-//                    binding.apply {
-//                        detailsAdapter = DetailsAdapter(this@CropSelectFragment)
-//                        recyclerviewDetails.adapter = detailsAdapter
-//                        detailsAdapter.setMovieList(responseDataList)
-//                        categoryAdapter.notifyDataSetChanged()
-//                    }
-//
-//                }
-//                is NetworkResult.Error -> {
-//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//                is NetworkResult.Loading -> {
-//
-//
-//                }
-//            }
-//        })
-//
-//
-//    }
 
-//    override fun clickOnDetails(data: Data) {
-//        Log.wtf("get_arg:", "Item is clicked" + data.crop_category_id)
-//        val bundle = Bundle()
-//        bundle.putInt("crop_id", data.crop_id)
-//        bundle.putString("name", data.crop_name)
-//        bundle.putString("crop_logo", data.crop_logo)
-//
-//
-//        Log.wtf("get_arg:", "SendingData" + data.crop_name.toString())
-//        findNavController().navigate(
-//            R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
-//            bundle
-//        )
-//    }
-//
-//    override fun clickOnCategory(categoryDate: com.waycool.featurecrophealth.model.cropcate.Data) {
-//        var detailsListArea = ArrayList<Data>()
-//        responseDataList.forEach {
-//            if (it.crop_category_id.equals(categoryDate.id)) {
-//                detailsListArea.add(it)
-//            }
-//        }
-//        binding.all.setTextColor(Color.parseColor("#111827"))
-//        binding.all.setBackgroundResource(R.drawable.bd_flex)
-//        detailsAdapter.setMovieList(detailsListArea)
-//        detailsAdapter.notifyDataSetChanged()
-////        binding.skillName.setBackgroundResource(R.drawable.bg_details)
-//
-//        Log.d(TAG, "clickOnCategory: " + categoryDate.category_name)
-//        Log.d(TAG, "clickOnCategoryName: $str")
-//    }
+
 
     private fun clickSearch() {
 

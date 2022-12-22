@@ -78,7 +78,18 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-    <include layout="@layout/api_error_handling"
-        android:id="@+id/errorState"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInclude"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#fff">
+        <include layout="@layout/api_error_handling"
+            android:id="@+id/errorState"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

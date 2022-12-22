@@ -7,6 +7,7 @@
     <include app:graph="@navigation/nav_home" />
     <include app:graph="@navigation/navigation_profile" />
     <include app:graph = "@navigation/navigation_weather"/>
+
     <activity
         android:id="@+id/cropProtectActivity"
         android:name="com.waycool.featurecropprotect.CropProtectActivity"

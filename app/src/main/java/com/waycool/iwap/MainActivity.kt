@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
             if (!FeatureLogin.getLoginStatus()) {
                 val intent = Intent(this@MainActivity, LoginMainActivity::class.java)
                 startActivity(intent)
+                this@MainActivity.finish()
+
             }
         }
         Firebase.dynamicLinks
@@ -58,19 +60,19 @@ class MainActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+
                 }
                 if (deepLink?.lastPathSegment != null) {
-                    if (deepLink?.lastPathSegment!!.equals("weathershare")) {
+                    if (deepLink?.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
-                    } else if (deepLink?.lastPathSegment!!.equals("profilepage")) {
-                        this.findNavController(R.id.nav_host_fragment_main).navigate(com.example.profile.R.id.myProfileFragment)
-//                        val intent = Intent(this, ProfileActivity::class.java)
-//                        startActivity(intent)
                     }
+
                 }
             }
-            .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
+            .addOnFailureListener(this) {
+                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            }
 
 
         tokenCheckViewModel.getUserDetails().observe(this) {

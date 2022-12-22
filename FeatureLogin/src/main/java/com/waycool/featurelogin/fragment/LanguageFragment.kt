@@ -77,6 +77,7 @@ class LanguageFragment : Fragment() {
         languageSelectionAdapter: LanguageSelectionAdapter
     ) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility=View.VISIBLE
             binding.progressBar.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
             context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connection",Toast.LENGTH_SHORT) }
@@ -90,6 +91,8 @@ class LanguageFragment : Fragment() {
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
+                        binding.clInclude.visibility=View.GONE
+
                         binding.progressBar.visibility=View.GONE
                         binding.doneBtn.visibility=View.VISIBLE
                         binding.helloTv.visibility=View.VISIBLE

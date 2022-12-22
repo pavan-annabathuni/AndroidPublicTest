@@ -28,6 +28,8 @@ class CropProtectActivity : AppCompatActivity() {
             if (!FeatureLogin.getLoginStatus()) {
                 val intent = Intent(this@CropProtectActivity, LoginMainActivity::class.java)
                 startActivity(intent)
+                this@CropProtectActivity.finish()
+
             }
         }
 
