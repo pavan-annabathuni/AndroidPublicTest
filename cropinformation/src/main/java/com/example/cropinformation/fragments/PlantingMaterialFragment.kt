@@ -1,6 +1,7 @@
 package com.example.cropinformation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,11 +38,23 @@ class PlantingMaterialFragment : Fragment() {
     }
 
     private fun observer() {
+        var lang:String
+        ViewModel.getUserDetails().observe(viewLifecycleOwner){
+            lang = it.data?.profile?.langCode.toString()
+
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
+
             val data = it.data!!
             for(i in 0 until data.size){
-                if(data[i].label_name=="Planting Material") {
-                    val values = data[i].label_value
+                if(data[i].label_name=="Planting Material"||data[i].labelNameTag=="Planting Material") {
+                    binding.textView7.text = data[i].label_name
+                    var values:String
+                    if(lang!="en") {
+                         values = data[i].labelValueTag.toString()
+                        Log.d("cropInfo", "observer: $values")
+                    }else{
+                        values = data[i].labelValueTag.toString()
+                    }
                     val lstValues: List<String> = values?.split(",")!!.map { it -> it.trim() }
                     lstValues.forEach { itt ->
                         when (itt) {
@@ -81,5 +94,5 @@ class PlantingMaterialFragment : Fragment() {
 
         }
         }
-    }
+    }}
 }

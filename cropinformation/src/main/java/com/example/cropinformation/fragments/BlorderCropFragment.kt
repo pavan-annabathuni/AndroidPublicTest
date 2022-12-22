@@ -40,12 +40,13 @@ class BlorderCropFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data
             for(i in 0 until data!!.size){
-                if(data!![i].label_name=="Border crop") {
+                if(data!![i].label_name=="Border crop"||data[i].labelNameTag=="Border crop") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
+                    break
             }
-        ViewModel.response3.observe(viewLifecycleOwner){
-
-        }
+//        ViewModel.response3.observe(viewLifecycleOwner){
+//
+//        }
     }
 }}}

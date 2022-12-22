@@ -39,6 +39,7 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':featureChat')
+    implementation project(path: ':FeatureSpeechToText')
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'

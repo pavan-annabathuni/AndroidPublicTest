@@ -28,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="#C3B1A1"
+                android:background="#FFECC7"
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="Jammu Kashmir and Himachal Pradesh"
-                android:textColor="@color/WoodBrown"
+                android:textColor="@color/DarkBrown"
                 android:textSize="16sp" />
 
             <com.google.android.material.chip.ChipGroup
@@ -46,6 +46,10 @@
                 app:chipSpacingHorizontal="6dp"
                 android:theme="@style/AppTheme"
                 app:chipSpacing="8dp"
+                android:checkable="false"
+                android:focusable="false"
+                style="@style/CustomChipChoice"
+                app:chipBackgroundColor="@color/chip_bg"
                 android:clickable="false"
                 app:selectionRequired="false">
 

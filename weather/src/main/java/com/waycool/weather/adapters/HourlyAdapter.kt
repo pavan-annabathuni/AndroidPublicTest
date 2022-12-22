@@ -78,4 +78,12 @@ class HourlyAdapter(val onClickListener:OnClickListener)
     class OnClickListener(val clickListener: (data: HourlyDomain) -> Unit) {
         fun onClick(data: HourlyDomain) = clickListener(data)
     }
+
+    override fun getItemCount(): Int {
+        if(currentList.size>=12)
+            return 12
+        else
+            return currentList.size
+
+    }
 }

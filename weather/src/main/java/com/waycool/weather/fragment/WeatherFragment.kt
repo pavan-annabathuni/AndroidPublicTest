@@ -87,6 +87,7 @@ class WeatherFragment : Fragment() {
 
         observer()
         setBanners()
+        translation()
         //getWeatherData("12.22", "77.32")
 //        ViewModel.getCurrentWeather()
 //        ViewModel.getWeekWeather()

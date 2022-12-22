@@ -17,8 +17,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
+import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -30,6 +32,7 @@ import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentCropSelectionBinding
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -67,9 +70,9 @@ class CropSelectionFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-//        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
-//        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
-//        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
+        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
+        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
+        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
 
 
 //        binding.toolbarTitle.text = "Protect Your Crop"
@@ -220,7 +223,9 @@ class CropSelectionFragment : Fragment() {
             RecognizerIntent.EXTRA_LANGUAGE,
             Locale.getDefault()
         )
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+        viewModel.viewModelScope.launch {
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+        }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {

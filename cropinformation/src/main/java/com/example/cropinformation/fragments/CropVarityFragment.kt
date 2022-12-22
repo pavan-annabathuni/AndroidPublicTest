@@ -51,7 +51,7 @@ class CropVarityFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(requireActivity()){
             val data = it.data
             for(i in 0 until it.data!!.size){
-                if(it.data!![i].label_name=="Crop Variety") {
+                if(it.data!![i].label_name=="Crop Variety"|| it.data!!.first().labelNameTag=="Crop Variety") {
                     binding.labelName.text = data?.get(i)!!.label_name
 
                     Log.d("CropProtect",data[i].label_value!!)
@@ -62,6 +62,8 @@ class CropVarityFragment : Fragment() {
                         binding.rvCropVariety.adapter=adapter
                         adapter.submitList(varietyList)
                     }
+                    break
+
 
 
 //                    var jsonData: String = data[i].label_value!!

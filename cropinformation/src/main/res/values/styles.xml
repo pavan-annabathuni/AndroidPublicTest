@@ -42,4 +42,9 @@
         <item name="android:dropDownHorizontalOffset">-4dp</item>
         <item name="android:dropDownVerticalOffset">4dp</item>
     </style>
+
+    <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/LightCream</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

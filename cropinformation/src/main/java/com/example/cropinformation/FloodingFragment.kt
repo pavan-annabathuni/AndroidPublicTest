@@ -40,9 +40,10 @@ class FloodingFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Flooding") {
+                if (data[i].label_name == "Flooding"||data[i].labelNameTag == "Flooding") {
                   binding.lableName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
+                    break
                 }
             }
         }}}

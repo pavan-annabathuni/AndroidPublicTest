@@ -19,7 +19,7 @@
             style="@style/Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="16dp"
             android:text="Planting"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -120,7 +120,7 @@
                         android:layout_margin="2dp"
                         android:background="@drawable/circle_border"
                         android:padding="8dp"
-                        android:text="Jau"
+                        android:text="Jun"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -137,7 +137,10 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:background="@drawable/circle_border"
-                        android:padding="8dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
                         android:text="Jul"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
@@ -209,9 +212,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:layout_marginTop="32dp"
             android:scaleType="fitXY"
-            android:layout_marginTop="66dp"
-            android:src="@drawable/img_sowing_plant"
+            android:src="@drawable/img_sowingimg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView6" />

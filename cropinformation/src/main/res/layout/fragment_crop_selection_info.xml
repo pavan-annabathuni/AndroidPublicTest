@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -31,6 +32,7 @@
                 android:text="Crop information"
                 android:textSize="18sp"
                 style="@style/Bold"
+                android:gravity="center"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -88,7 +90,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <com.waycool.uicomponents.Text.ParagraphMedium
+                <TextView
                     android:id="@+id/textView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -135,13 +137,14 @@ about your crops."
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.waycool.uicomponents.Text.Title3SemiBold
+                        <TextView
                             android:id="@+id/title3SemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:text="My Crops"
+                            style="@style/Bold"
                             android:textColor="@color/textdark"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -351,4 +354,4 @@ about your crops."
     </LinearLayout>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

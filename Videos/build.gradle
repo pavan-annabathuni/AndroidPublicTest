@@ -42,6 +42,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':Core')
     implementation project(path: ':featureChat')
+    implementation project(path: ':FeatureSpeechToText')
 
 
     implementation 'androidx.appcompat:appcompat:1.5.1'

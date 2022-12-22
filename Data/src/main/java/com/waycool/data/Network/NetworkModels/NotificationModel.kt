@@ -14,7 +14,7 @@ data class DataNotification (
     @SerializedName("type"    ) var type   : String? = null,
     @SerializedName("read_at" ) var readAt : String? = null,
     @SerializedName("data"    ) var data2   : Notification   = Notification(),
-    @SerializedName("created_at" ) var createdAt : String? = null
+    @SerializedName("date" ) var createdAt : String? = null
 
 )
 data class Notification (

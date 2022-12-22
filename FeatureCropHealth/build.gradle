@@ -50,6 +50,7 @@ dependencies {
     implementation project(path: ':soiltesting')
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureCropProtect')
+    implementation project(path: ':FeatureSpeechToText')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

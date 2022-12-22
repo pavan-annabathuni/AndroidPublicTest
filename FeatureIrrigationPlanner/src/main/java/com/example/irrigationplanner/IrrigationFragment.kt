@@ -9,10 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -26,7 +23,10 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.Network.NetworkModels.Disease
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
 class IrrigationFragment : Fragment() {
@@ -85,9 +85,7 @@ class IrrigationFragment : Fragment() {
         if(accountId!=null)
             setAdapter(accountId!!)
         }
-        binding.tvCropInfo.setOnClickListener(){
-            this.findNavController().navigate(R.id.action_irrigationFragment_to_cropOverviewFragment)
-        }
+
        // binding.recycleViewHis.adapter = mHistoryAdapter
 
 
@@ -108,17 +106,25 @@ class IrrigationFragment : Fragment() {
             dialog()
         }
 
-        onClick()
+
         setDetails()
+        translation()
 
-    }
 
-    private fun onClick() {
-        val args = Bundle()
-        args.putInt("plotId",plotId)
-        binding.btHarvest.setOnClickListener(){
-            this.findNavController().navigate(IrrigationFragmentDirections.
-            actionIrrigationFragmentToSheetHarvestFragment())
+
+        var yes:String
+        var no:String
+        var delete:String
+        var harvest:String
+        viewModel.viewModelScope.launch {
+            yes = TranslationsManager().getString("str_yes")
+            binding.irrigationYes.text = yes
+            no = TranslationsManager().getString("str_no")
+            binding.irrigationNo.text = no
+            delete = TranslationsManager().getString("str_delete_crop")
+            binding.btExit.text = delete
+            harvest = TranslationsManager().getString("str_harvest_crop")
+            binding.btHarvest.text = harvest
 
         }
 
@@ -128,13 +134,14 @@ class IrrigationFragment : Fragment() {
         }
         binding.tvEdit.setOnClickListener(){
             binding.perDay.visibility = View.VISIBLE
-            val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
-            dialog.setContentView(R.layout.irrigation_pre_day)
-            val close = dialog.findViewById<ImageView>(R.id.close)
-            close!!.setOnClickListener(){
-                dialog.dismiss()
-            }
-            dialog.show()
+//            val dialog = BottomSheetDialog(this.requireContext(),R.style.BottomSheetDialog)
+//            dialog.setContentView(R.layout.irrigation_pre_day)
+//            val close = dialog.findViewById<ImageView>(R.id.close)
+//            close!!.setOnClickListener(){
+//                dialog.dismiss()
+//            }
+//            dialog.show()
+            dialog()
         }
 
         binding.btHistory.setOnClickListener(){
@@ -145,7 +152,11 @@ class IrrigationFragment : Fragment() {
             this.findNavController().navigate(R.id.action_irrigationFragment_to_irrigationHistoryFragment,args)
         }
         binding.btDisease.setOnClickListener(){
-            this.findNavController().navigate(R.id.action_irrigationFragment_to_diseaseHistoryFragment)
+            val args = Bundle()
+            args.putParcelable("IrrigationHis",irrigation)
+            args.putInt("plotId",plotId)
+            accountId?.let { it1 -> args.putInt("accountId", it1) }
+            this.findNavController().navigate(R.id.action_irrigationFragment_to_diseaseHistoryFragment,args)
         }
 
         binding.btForecast.setOnClickListener(){
@@ -163,6 +174,18 @@ class IrrigationFragment : Fragment() {
         }
         binding.topAppBar.setOnClickListener(){
             this.findNavController().navigateUp()
+        }
+
+        binding.btHarvest.setOnClickListener(){
+            val args = Bundle()
+            args.putInt("plotId",plotId)
+            this.findNavController().navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment,args)
+
+        }
+        binding.tvCropInfo.setOnClickListener(){
+            val args = Bundle()
+            args.putInt("plotId",plotId)
+            this.findNavController().navigate(R.id.action_irrigationFragment_to_cropOverviewFragment,args)
         }
     }
 
@@ -191,20 +214,32 @@ class IrrigationFragment : Fragment() {
 //                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
                 //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
 //                }
+                when(it){
+                    is Resource.Loading ->{
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Error->{
+
+                    }
+                    is Resource.Success->{
+                        //history
+                        mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
+                        //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
+                        if(it.data?.data?.irrigation?.historicData?.get(0)?.irrigation!=null){
+                            binding.dailyIrrigation.visibility = View.GONE
+                            binding.perDay.visibility = View.VISIBLE
+                            binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+"L"
+                        }
+                        irrigation = it.data?.data?.irrigation!!
+                        binding.progressBar.visibility = View.GONE
+                    }
+                }
                 //weekly
                 it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
                     mWeeklyAdapter.setList(
                         it1
                     ) }
-                //history
-                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
-              //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
-                if(it.data?.data?.irrigation?.historicData?.get(0)?.irrigation!=null){
-                    binding.dailyIrrigation.visibility = View.GONE
-                    binding.perDay.visibility = View.VISIBLE
-                    binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+"L"
-                }
-                irrigation = it.data?.data?.irrigation!!
+
 
                 //disease
                 val data = it.data?.data?.disease?.filter { itt ->
@@ -226,16 +261,28 @@ class IrrigationFragment : Fragment() {
 
     private fun tabs() {
 
+        var Pest:String
+        var Def:String
+        viewModel.viewModelScope.launch {
+            var Disease:String
+            Disease = TranslationsManager().getString("str_disease")
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Disease").setCustomView(R.layout.item_tab)
-        )
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Pest").setCustomView(R.layout.item_tab)
-        )
-        if(dificiency == "diff"){
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Deficiency").setCustomView(R.layout.item_tab)
+            binding.tabLayout.newTab().setText(Disease).setCustomView(R.layout.item_tab)
         )}
+        viewModel.viewModelScope.launch {
+            var pest:String
+            pest = TranslationsManager().getString("str_pest")
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab().setText(pest).setCustomView(R.layout.item_tab)
+        )}
+        if(dificiency == "diff"){
+            viewModel.viewModelScope.launch {
+                var dif:String
+                dif = TranslationsManager().getString("str_deficiency")
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab().setText(dif).setCustomView(R.layout.item_tab)
+        )}}
+
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(binding.tabLayout.selectedTabPosition) {
@@ -294,24 +341,39 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun dialog() {
-
         val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
         dialog.setContentView(R.layout.irrigation_pre_day)
         val close = dialog.findViewById<ImageView>(R.id.close)
         val save = dialog.findViewById<Button>(R.id.savePreDayL) as Button
         val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
+        val irrigationDone = dialog.findViewById<TextView>(R.id.textView13)
+        val irrigationPer = dialog.findViewById<TextView>(R.id.textView13)
+
+        //translation
+        if (irrigationDone != null) {
+            TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone)
+        }
+            if (irrigationPer != null) {
+                TranslationsManager().loadString("str_enter_water",irrigationPer)
+            }
+            viewModel.viewModelScope.launch {
+                val saveTv = TranslationsManager().getString("str_save")
+                save.text = saveTv
+        }
+
 
         save.setOnClickListener() {
             val value = irrigation?.text.toString().toInt()
             irrigationId?.let { it1 ->
                 viewModel.updateIrrigation(it1, value).observe(viewLifecycleOwner) {
-                  //  Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT).show()
+               binding.textViewL.text = value.toString()
                 }
             }
             dialog.dismiss()
         }
         close!!.setOnClickListener() {
             dialog.dismiss()
+            Toast.makeText(context, "worked", Toast.LENGTH_SHORT).show()
         }
         dialog.show()
 
@@ -326,6 +388,9 @@ class IrrigationFragment : Fragment() {
             // val body = dialog.findViewById(R.id.body) as TextView
             val cancel = dialog.findViewById(R.id.cancel) as Button
             val delete = dialog.findViewById(R.id.delete) as Button
+            val deleteTv = dialog.findViewById<TextView>(R.id.textView14)
+            val deleteDesc = dialog.findViewById<TextView>(R.id.textView15)
+
             delete.setOnClickListener {
              viewModel.getEditMyCrop(plotId).observe(viewLifecycleOwner){
              }
@@ -334,6 +399,17 @@ class IrrigationFragment : Fragment() {
             cancel.setOnClickListener { dialog.dismiss() }
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
+
+            //translation
+            TranslationsManager().loadString("str_delete",deleteTv)
+            TranslationsManager().loadString("str_delete_crop_desc",deleteDesc)
+            viewModel.viewModelScope.launch{
+                val deletetv = TranslationsManager().getString("str_delete")
+                delete.text = deletetv
+                val cancelTv = TranslationsManager().getString("str_cancel")
+                cancel.text = cancelTv
+            }
+
         }
     }
 
@@ -341,5 +417,25 @@ class IrrigationFragment : Fragment() {
         Glide.with(requireContext()).load(cropLogo).into(binding.imageView)
         binding.textView.text = cropName
         Log.d("CropName2", "setDetails: $cropName")
+    }
+
+    private fun translation(){
+//        TranslationsManager().loadString("",binding.graps)
+        TranslationsManager().loadString("str_view_all",binding.cropStage)
+        TranslationsManager().loadString("str_irrigation",binding.textView3)
+        TranslationsManager().loadString("str_crop _nformation",binding.tvCropInfo)
+        TranslationsManager().loadString("str_today",binding.textView4)
+        TranslationsManager().loadString("str_weekly_irrigation",binding.textView5)
+        TranslationsManager().loadString("str_have_you _irrigated",binding.textView6)
+        TranslationsManager().loadString("str_irrigation_done",binding.tvPerDay)
+        TranslationsManager().loadString("str_view_all",binding.tvViewDeatils)
+        TranslationsManager().loadString("str_view_all",binding.tvViewDetails2)
+        TranslationsManager().loadString("str_view_all",binding.viewDetails3)
+        TranslationsManager().loadString("str_edit",binding.tvEdit)
+        TranslationsManager().loadString("str_risk_outbreak",binding.textView9)
+       TranslationsManager().loadString("str_irrigation_history",binding.textView8)
+//        TranslationsManager().loadString("str_irrigation_history",binding.textView8)
+
+
     }
 }

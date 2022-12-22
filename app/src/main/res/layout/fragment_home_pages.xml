@@ -650,7 +650,7 @@
                                 android:layout_width="42dp"
                                 android:layout_height="42dp"
                                 android:layout_margin="@dimen/txt16"
-                                app:tint = "@color/dark_green"
+                                app:tint = "@color/DarkGreen"
                                 android:src="@drawable/ic_weather_icon"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

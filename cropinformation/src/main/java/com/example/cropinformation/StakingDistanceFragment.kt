@@ -41,13 +41,14 @@ class StakingDistanceFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Distance between stakes") {
+                if (data[i].label_name == "Distance between stakes"||data[i].labelNameTag == "Distance between stakes") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
-                }
-                if(data[i].label_name=="Distance between stakes"){
                     binding.labelValue4.text = data[i].label_value
                 }
+//                if(data[i].label_name=="Distance between stakes"){
+//
+//                }
             }
         }
     }

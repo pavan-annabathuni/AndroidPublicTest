@@ -9,6 +9,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.example.irrigationplanner.databinding.ItemForecastBinding
 import com.example.irrigationplanner.databinding.ItemPagerForecastBinding
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
+import com.waycool.data.translations.TranslationsManager
 import java.util.*
 
 class PagerForcastAdapter(private var area:String?,private var areaPerPlant:String?,private var length:String?,private var width:String?)
@@ -23,6 +24,8 @@ class PagerForcastAdapter(private var area:String?,private var areaPerPlant:Stri
           val mm = binding.tvMm
           val areaPerPlant = binding.tvPerPlant
           val irrigationReq = binding.irrigationReq
+        val totalWaterLoss =  binding.textView20
+        val eva = binding.textView2
     }
     private var details = IrrigationForecast()
     fun setListData(listData: IrrigationForecast) {
@@ -40,8 +43,8 @@ class PagerForcastAdapter(private var area:String?,private var areaPerPlant:Stri
      val properties = details
         var dep = details.depletion[position]
         if(!area.isNullOrEmpty()){
-//            area = (width?.toInt()?.let { length?.toInt()?.times(it) }).toString()
-//            holder.acres.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * area?.toFloat()!! / 0.9) + " L")
+           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
+            holder.acres.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * area?.toFloat()!! / 0.9) + " L")
         }else holder.acres.text = "0"
         if(!areaPerPlant.isNullOrEmpty()){
         holder.areaPerPlant.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * areaPerPlant!!.toFloat() / 0.9) + " L")
@@ -51,8 +54,8 @@ class PagerForcastAdapter(private var area:String?,private var areaPerPlant:Stri
             holder.areaPerPlant.visibility = View.INVISIBLE
 }
         holder.mm.text = dep
-        holder.etc.text = properties.etc[position]
-        holder.eto.text = properties.eto[position].toString()
+        holder.etc.text = properties.etc[position]+"mm"
+        holder.eto.text = properties.eto[position].toString()+"mm"
 
         if (properties!!.mad[position] == 0) {
             val value = 30 - properties.depletion[position].toFloat()
@@ -74,6 +77,10 @@ class PagerForcastAdapter(private var area:String?,private var areaPerPlant:Stri
             }
 
         }
+
+        //translation
+        TranslationsManager().loadString("str_total_water_loss",holder.totalWaterLoss)
+        TranslationsManager().loadString("str_evapotranspiration",holder.eva)
 
     }
 

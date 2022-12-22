@@ -200,12 +200,13 @@ interface ApiInterface {
     @FormUrlEncoded
     suspend fun updateProfile(
         @HeaderMap map: Map<String, String>,
-        @Field("name") name: String,
-        @Field("address") address: String,
-        @Field("village") village: String,
-        @Field("pincode") pincode: String,
-        @Field("state") state: String,
-        @Field("district") district: String
+        @FieldMap date: Map<String,String>
+//        @Field("name") name: String,
+//        @Field("address") address: String,
+//        @Field("village") village: String,
+//        @Field("pincode") pincode: String,
+//        @Field("state") state: String,
+//        @Field("district") district: String
     ): Response<profile>
 
     @Multipart

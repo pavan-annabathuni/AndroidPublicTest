@@ -22,12 +22,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.featurespeechtotext.SpeechToText
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,7 +50,9 @@ class SearchFragment : Fragment() {
     private var lat= "12.22"
     private var long= "78.22"
     private var accountId = 0
-    private val REQUEST_CODE_SPEECH_INPUT = 1
+    private lateinit var distance:String
+    private lateinit var price:String
+    private val REQUEST_CODE_SPEECH_INPUT = 11019
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -82,16 +87,17 @@ class SearchFragment : Fragment() {
             callback
         )
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        binding.searchBar.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Log.d("search", "onEditorAction: Working")
-                    callingData()
-                    return true
-                }
-                return false
-            }
-        })
+//        binding.searchBar.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+//            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                    Log.d("search", "onEditorAction: Working")
+//                    callingData()
+//                    return true
+//                }
+//                return false
+//            }
+//        })
+        translation()
         return binding.root
     }
 
@@ -126,6 +132,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun speechToText() {
+        //val lang = SpeechToText.langCode
         binding.SpeechtextTo.setOnClickListener() {
             binding.searchBar.text.clear()
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -139,9 +146,10 @@ class SearchFragment : Fragment() {
 
             // on below line we are passing our
             // language as a default language.
-            intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE, "en-IN"
-            )
+            viewModel.viewModelScope.launch {
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+            }
+
 
             // on below line we are specifying a prompt
             // message as speak to text on below line.
@@ -162,6 +170,7 @@ class SearchFragment : Fragment() {
 //                    .show()
             }
         }
+      // SpeechToText.speechToText(requireContext())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -189,13 +198,16 @@ class SearchFragment : Fragment() {
 
 
     private fun tabs() {
-
+        viewModel.viewModelScope.launch {
+            distance = TranslationsManager().getString("distance")
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Distance").setCustomView(R.layout.item_tab)
-        )
+            binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
+        )}
+        viewModel.viewModelScope.launch {
+            price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Price").setCustomView(R.layout.item_tab)
-        )
+            binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
+        )}
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -318,26 +330,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun notFound() {
- //      viewModel.viewModelScope.launch {
-
-
-//        viewModel.getMandiDetails(lat,
-//            long,cropCategory,
-//            state,
-//            crop,
-//            sortBy,
-//            orderBy,
-//            search).observe(viewLifecycleOwner){
-//            Log.d("mandi", "notFound: $it")
-//        if (it!=null) {
-//            binding.llNotFound.visibility = View.GONE
-//            binding.recycleViewDis.visibility = View.VISIBLE
-//        } else {
-//            binding.llNotFound.visibility = View.VISIBLE
-//            binding.recycleViewDis.visibility = View.GONE
-//        }
-//        //Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//       }}
        adapterMandi.addLoadStateListener { loadState->
            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                binding.llNotFound.visibility = View.VISIBLE
@@ -367,52 +359,26 @@ class SearchFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-//        binding.searchBar.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-//            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-//                search = binding.searchBar.text.toString()
-//                    //binding.filter.text = "Sort By"
-//                        if (!search.isNullOrEmpty())
-//                            binding.recycleViewDis.adapter = adapterMandi
-//                        viewModel.viewModelScope.launch {
-//                            viewModel.getMandiDetails(
-//                                cropCategory,
-//                                state,
-//                                crop,
-//                                sortBy,
-//                                orderBy,
-//                                search
-//                            ).observe(viewLifecycleOwner) {
-//                                // binding.viewModel = it
-//                                adapterMandi.submitData(lifecycle, it)
-//                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                            }
-//                        }
-//                        if (binding.searchBar.text.isNullOrEmpty())
-//                            binding.recycleViewDis.adapter = adapterMandi
-//                        viewModel.viewModelScope.launch {
-//                            viewModel.getMandiDetails(
-//                                cropCategory,
-//                                state,
-//                                crop,
-//                                sortBy,
-//                                orderBy,
-//                                search
-//                            ).observe(viewLifecycleOwner) {
-//                                // binding.viewModel = it
-//                                adapterMandi.submitData(lifecycle, it)
-//                                // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-//                            }
-//                }
-//            }
-//
-//            override fun afterTextChanged(editable: Editable) {
-//                //after the change calling the method and passing the search input
-//                // viewModel.getSearch(editable.toString())
-//
-//            }
-//        })
-//
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                search = binding.searchBar.text.toString()
+                    //binding.filter.text = "Sort By"
+                        if (!search.isNullOrEmpty())
+                            binding.recycleViewDis.adapter = adapterMandi
+                submitAdapter()
+                        if (binding.searchBar.text.isNullOrEmpty())
+                            binding.recycleViewDis.adapter = adapterMandi
+                submitAdapter()
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                //after the change calling the method and passing the search input
+                // viewModel.getSearch(editable.toString())
+
+            }
+        })
+
         callingData()
     }
 
@@ -446,5 +412,16 @@ class SearchFragment : Fragment() {
                 // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    private fun translation(){
+        var mandi = "Mandi Price"
+        viewModel.viewModelScope.launch {
+            mandi = TranslationsManager().getString("mandi_price")
+            binding.topAppBar.title = mandi
+            var hint = TranslationsManager().getString("search_crop_mandi")
+            binding.searchBar.hint =hint
+        }
+        TranslationsManager().loadString("sort_by",binding.filter)
+
     }
 }

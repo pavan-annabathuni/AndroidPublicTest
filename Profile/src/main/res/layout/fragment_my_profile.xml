@@ -31,13 +31,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.waycool.uicomponents.Text.Title1Bold
+            <TextView
+                android:id="@+id/tv_myProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="My Profile"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                style="@style/Bold"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintStart_toEndOf="@+id/back"
                 app:layout_constraintTop_toTopOf="@+id/back" />
@@ -47,7 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
+                android:padding="8dp"
                 android:src="@drawable/ic_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -138,6 +141,7 @@
                     android:src="@drawable/ic_map_location" />
 
                 <TextView
+                    android:id="@+id/tv_farmer"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -172,6 +176,7 @@
                     android:src="@drawable/ic_language" />
 
                 <TextView
+                    android:id="@+id/tv_lang"
                     style="@style/SemiBold"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
@@ -220,6 +225,7 @@
                     android:src="@drawable/ic_logo" />
 
                 <TextView
+                    android:id="@+id/tv_support"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -253,7 +259,8 @@
                     android:padding="8dp"
                     android:src="@drawable/ic_logo" />
 
-                <com.waycool.uicomponents.Text.Title3SemiBold
+                <TextView
+                    android:id="@+id/tv_about"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -288,6 +295,7 @@
                     android:src="@drawable/ic_invite" />
 
                 <TextView
+                    android:id="@+id/tv_invite"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -328,7 +336,8 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_support" />
 
-                    <com.waycool.uicomponents.Text.ParagraphSemiBold
+                    <TextView
+                        android:id="@+id/tv_ask"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -371,7 +380,8 @@
                     android:layout_gravity="center"
                     android:orientation="horizontal">
 
-                    <com.waycool.uicomponents.Text.ParagraphSemiBold
+                    <TextView
+                        android:id="@+id/tv_rate"
                         style="@style/SemiBold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -435,7 +445,8 @@
                 app:strokeColor="@color/LightGray"
                 app:strokeWidth="1dp">
 
-                <com.waycool.uicomponents.Text.Title3SemiBold
+                <TextView
+                    android:id="@+id/tv_logout"
                     style="@style/SemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -451,7 +462,7 @@
                 style="@style/Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="77dp"
+                android:layout_marginStart="66dp"
                 android:layout_marginTop="24dp"
                 android:text="Privacy Policy"
                 android:textColor="@color/darkGray"
@@ -465,7 +476,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="77dp"
+                android:layout_marginEnd="66dp"
                 android:text="Terms of Use"
                 android:textColor="@color/darkGray"
                 android:textSize="14sp"

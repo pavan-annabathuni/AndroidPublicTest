@@ -42,9 +42,8 @@ class EditProfileViewModel:ViewModel() {
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
 
-     suspend fun getProfileRepository(name:String,address:String, village:String, pincode:String, state:String,
-                                      district:String):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
-        ProfileRepository.updateProfile(name,address,village,pincode,state,district).asLiveData()
+     suspend fun getProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
+        ProfileRepository.updateProfile(field).asLiveData()
 
     suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
         ProfileRepository.getUserProfileDet().asLiveData()
@@ -66,5 +65,9 @@ class EditProfileViewModel:ViewModel() {
 
     fun deleteFarmSupport(userId:Int):LiveData<Resource<DeleteFarmSupport?>> =
         ProfileRepository.deleteFarmSupport(userId).asLiveData()
+
+    fun setSelectedLanguage(langCode: String?, langId: Int?,language:String?) {
+        LoginRepository.setSelectedLanguageCode(langCode, langId,language)
+    }
 
 }

@@ -41,9 +41,10 @@ class MulchingFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0 until data.size){
-                if(data[i].label_name=="Mulching") {
+                if(data[i].label_name=="Mulching"||data[i].labelNameTag=="Mulching") {
             binding.labelName.text = data[i].label_name
             binding.labelValue.text = data[i].label_value
+                    break
         }
     }}
     }

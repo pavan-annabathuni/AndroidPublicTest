@@ -14,10 +14,12 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -29,6 +31,7 @@ import com.waycool.newsandarticles.adapter.AdsAdapter
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
@@ -221,7 +224,8 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             RecognizerIntent.EXTRA_LANGUAGE,
             Locale.getDefault()
         )
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+        viewModel.viewModelScope.launch {
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,SpeechToText.getLangCode())}
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {

@@ -14,6 +14,7 @@ import com.example.irrigationplanner.databinding.FragmentDisaseHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
 class DiseaseHistoryFragment : Fragment() {
@@ -22,13 +23,18 @@ class DiseaseHistoryFragment : Fragment() {
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
+    private var plotId:Int = 0
+    var accountId:Int?= null
     private lateinit var mHistoryAdapter: DiseaseHistoryAdapter
     var dificiency:String = "noData"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+
            // irrigation = it.getParcelable("IrrigationHis")!!
+            accountId = it.getInt("accountId")
+            plotId = it.getInt("plotId")
         }
     }
 
@@ -60,6 +66,10 @@ class DiseaseHistoryFragment : Fragment() {
                 else dificiency = "noData"
 //                        }
             }
+        }
+        //translation
+        viewModel.viewModelScope.launch{
+            val title = TranslationsManager().getString("")
         }
         tabs()
 
@@ -106,15 +116,17 @@ class DiseaseHistoryFragment : Fragment() {
                         }
                     }}
                     2->{viewModel.viewModelScope.launch {
-                        viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
-//                        val i = it.data?.data?.disease?.size?.minus(1)
-//                        while (i!=0) {
-                            val data = it.data?.data?.disease?.filter { itt ->
-                                itt.disease.diseaseType == "Deficiency"
+                        accountId?.let {
+                            viewModel.getIrrigationHis(it,plotId).observe(viewLifecycleOwner) {
+                    //                        val i = it.data?.data?.disease?.size?.minus(1)
+                    //                        while (i!=0) {
+                                val data = it.data?.data?.disease?.filter { itt ->
+                                    itt.disease.diseaseType == "Deficiency"
+                                }
+                                mHistoryAdapter.submitList(data)
+                                Log.d("hostry", "setAdapter: ${it.message}")
+                    //                        }
                             }
-                            mHistoryAdapter.submitList(data)
-                            Log.d("hostry", "setAdapter: ${it.message}")
-//                        }
                         }
                     }}
 

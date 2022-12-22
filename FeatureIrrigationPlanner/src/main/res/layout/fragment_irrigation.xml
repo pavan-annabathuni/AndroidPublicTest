@@ -350,6 +350,7 @@
                 tools:visibility="visible">
 
                 <TextView
+                    android:id="@+id/tv_viewDeatils"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -439,7 +440,7 @@
                     android:id="@+id/perDay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view2">
 
@@ -546,6 +547,7 @@
                 tools:visibility="visible">
 
                 <TextView
+                    android:id="@+id/tv_viewDetails2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -651,6 +653,7 @@
                 tools:visibility="visible">
 
                 <TextView
+                    android:id="@+id/viewDetails3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -720,7 +723,16 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/bt_forecast"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/DarkGreen" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

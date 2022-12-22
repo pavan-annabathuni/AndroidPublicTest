@@ -39,9 +39,10 @@ class YieldFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Yield ( kg or tons/ac)") {
+                if(data[i].label_name=="Yield ( kg or tons/ac)"||data[i].labelNameTag=="Yield ( kg or tons/ac)") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
+                    break
                 }
             }}
     }

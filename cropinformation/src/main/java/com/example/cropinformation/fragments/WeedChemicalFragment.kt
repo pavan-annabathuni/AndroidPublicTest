@@ -41,9 +41,10 @@ class WeedChemicalFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Weed control(chemical)") {
+                if(data[i].label_name=="Weed control(chemical)"||data[i].labelNameTag=="Weed control(chemical)") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
+                    break
                 }
             }}
     }

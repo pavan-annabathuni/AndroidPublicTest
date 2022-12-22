@@ -30,7 +30,10 @@ class MyCropEntityMapper:EntityMapper<MyCropDataEntity,MyCropDataModel> {
             //widthDrip=dto.widthDrip,
             cropIdd = dto.crop?.id,
         cropName = dto.crop?.cropName,
-        cropLogo = dto.crop?.cropLogo)
+        cropLogo = dto.crop?.cropLogo,
+        soilType = dto.soilType?.soilType,
+        actualHarvestDate = dto.actualHarvestDate)
+
     }
     fun toEntityList(initial: List<MyCropDataModel>): List<MyCropDataEntity> {
         return initial.map { mapToEntity(it) }

@@ -75,7 +75,7 @@ class ViewpagerAdapter(
             "Seed Rate (Line Sowing)" -> {
                 val bundle = Bundle()
                 bundle.putInt("CropId", cropid)
-                val fragment = SeedRateFragment()
+                val fragment = SeedFragment()
                 fragment.arguments = bundle
                 fragment
             }
@@ -194,7 +194,7 @@ class ViewpagerAdapter(
             "Weed control(chemical)" -> {
                 val bundle = Bundle()
                 bundle.putInt("CropId", cropid)
-                val fragment = WeedCulturalFragment()
+                val fragment = WeedChemicalFragment()
                 fragment.arguments = bundle
                 fragment
             }

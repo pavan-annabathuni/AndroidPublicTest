@@ -84,4 +84,6 @@
     <color name="transparent">#00000000</color>
     <color name="language_common">#373232</color>
     <color name="language_native">#848C90</color>
+
+    <color name="LightCream">#FFFAF0</color>
 </resources>

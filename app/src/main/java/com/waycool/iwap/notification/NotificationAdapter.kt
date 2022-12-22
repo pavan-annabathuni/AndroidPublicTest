@@ -42,6 +42,7 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
 //        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd-MMMM-yy", Locale.ENGLISH)
 //        val date: Date = inputDateFormatter.parse(properties.createdAt)
 //        holder.data.text = outputDateFormatter.format(date)
+        holder.data.text = properties.createdAt
         if(properties.readAt!=null){
             holder.circleImg.visibility = View.GONE
         }else holder.circleImg.visibility = View.VISIBLE

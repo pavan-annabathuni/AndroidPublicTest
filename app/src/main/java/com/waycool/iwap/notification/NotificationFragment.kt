@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
+import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentNotificationBinding
@@ -65,12 +66,24 @@ class NotificationFragment : Fragment() {
 
     private fun newNotification(){
         viewModel.getNotification().observe(viewLifecycleOwner){
-            var data = it.data?.data?.filter { itt->
-                itt.readAt== null
+            when(it){
+                is Resource.Success ->{
+                    binding.progressBar.visibility = View.GONE
+                    var data = it.data?.data?.filter { itt->
+                        itt.readAt== null
+                    }
+                    data?.size
+                    binding.tvSize.text = "New ${data?.size}"
+                    Log.d("Notifcation", "setAdapter: ${it.data?.data?.size}")
+                }
+                is Resource.Loading->{
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Resource.Error->{
+
+                }
             }
-            data?.size
-            binding.tvSize.text = "New ${data?.size}"
-         Log.d("Notifcation", "setAdapter: ${it.data?.data?.size}")
+
         }
     }
 

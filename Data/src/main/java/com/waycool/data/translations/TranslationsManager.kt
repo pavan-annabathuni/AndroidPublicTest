@@ -17,14 +17,20 @@ class TranslationsManager {
         }
     }
 
-    suspend fun getString(stringId: String): String = withContext(Dispatchers.IO) {
-            return@withContext AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
+    fun refreshTranslations() {
+        GlobalScope.launch {
+            AppTranslationsSyncer().getData("")
         }
+    }
+
+    suspend fun getString(stringId: String): String = withContext(Dispatchers.IO) {
+        return@withContext AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
+    }
 
 
     fun loadString(stringId: String, textview: TextView) {
         GlobalScope.launch(Dispatchers.Main) {
-                textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
+            textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
         }
     }
 }

@@ -22,6 +22,7 @@ import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
 import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
@@ -65,6 +66,7 @@ class CropInfoFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCropInfoBinding.inflate(inflater)
 
+        translation()
         setBanners()
 
 
@@ -587,5 +589,9 @@ class CropInfoFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
+    private fun translation(){
+        TranslationsManager().loadString("str_title",binding.textView2)
+      //  TranslationsManager().loadString("str_video")
+    }
 
 }

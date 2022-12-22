@@ -32,6 +32,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
@@ -109,6 +110,7 @@ class MandiGraphFragment : Fragment() {
         onClick()
         graph()
         setBanners()
+        translation()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -282,5 +284,15 @@ class MandiGraphFragment : Fragment() {
         i.putExtra(Intent.EXTRA_STREAM, URI)
         i.type = "text/plain"
         startActivity(i)
+    }
+    private fun translation(){
+
+        TranslationsManager().loadString("str_share",binding.imgShare)
+        TranslationsManager().loadString("rate_kg",binding.textView7)
+        TranslationsManager().loadString("rate_kg",binding.tvKg)
+        TranslationsManager().loadString("date",binding.textView8)
+
+
+
     }
 }

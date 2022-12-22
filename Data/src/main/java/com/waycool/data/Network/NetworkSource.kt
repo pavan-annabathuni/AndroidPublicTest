@@ -684,22 +684,14 @@ object NetworkSource {
         }
     }
 
-    fun updateProfile(
-        name: String,
-        address: String, village: String, pincode: String, state: String, district: String,
-        headerMap: Map<String, String>,
+    fun updateProfile(headerMap: Map<String, String>,field:Map<String,String>
     ) = flow<Resource<profile?>> {
 
         emit(Resource.Loading())
         try {
             val response = apiInterface.updateProfile(
                 headerMap,
-                name,
-                address,
-                village,
-                pincode,
-                state,
-                district
+                field
             )
 
             if (response.isSuccessful)

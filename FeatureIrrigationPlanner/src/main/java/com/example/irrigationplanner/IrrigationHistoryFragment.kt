@@ -15,6 +15,7 @@ import com.example.irrigationplanner.databinding.FragmentIrrigationHistoryBindin
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
 
@@ -53,6 +54,11 @@ class IrrigationHistoryFragment : Fragment() {
 
 
         onClick()
+        //translation
+        viewModel.viewModelScope.launch {
+            val title = TranslationsManager().getString("str_irrigation_history")
+            binding.topAppBar.title = title
+        }
         return binding.root
     }
     private fun onClick(){

@@ -24,6 +24,7 @@
             android:background="@color/white"
             android:elevation="0dp"
             android:gravity="center"
+            android:theme="@style/Theme.MaterialComponents.Light"
             android:textAlignment="center"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_back"

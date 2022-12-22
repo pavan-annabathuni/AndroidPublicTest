@@ -31,7 +31,9 @@ class MyCropDomainMapper:DomainMapper<MyCropDataDomain,MyCropDataEntity> {
             cropVarietyId = dto.cropVarietyId,
             idd = dto.cropIdd,
             cropName = dto.cropName,
-            cropLogo = dto.cropLogo)
+            cropLogo = dto.cropLogo,
+             soilType = dto.soilType,
+        actualHarvestDate = dto.actualHarvestDate)
     }
 
 //    class CropDomainMapper:DomainMapper<CropDomain,MyCropEntity> {

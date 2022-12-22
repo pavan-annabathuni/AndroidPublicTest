@@ -39,11 +39,11 @@ class DripFragment : Fragment() {
     private fun observer() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data
-
             for(i in 0 until data!!.size){
-                if(data[i].label_name=="Drip") {
+                if(data[i].label_name=="Drip"||data[i].labelNameTag=="Drip") {
                     binding.lableName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
+                    break
 
     }}
         }}

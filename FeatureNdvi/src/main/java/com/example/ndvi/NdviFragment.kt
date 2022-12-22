@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import com.example.ndvi.adapter.DateAdapter
 import com.example.ndvi.databinding.FragmentNdviBinding
 import com.example.ndvi.viewModel.NdviViewModel
@@ -19,11 +22,14 @@ import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
 import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -62,17 +68,30 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map_ndvi) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
+        viewModel.getNdvi(2, 2).observe(viewLifecycleOwner) {
             Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
              ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
              trueColor = it.data?.data?.get(0)?.truecolorTile.toString()
-        }
+
+
+            //cloud data
+            val cloud = it.data?.data?.get(0)?.cloudCoverage?.toInt()
+            if(cloud!=null)
+            if(cloud < 30){
+            val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
+            dialog.setContentView(R.layout.item_cloud)
+            val close = dialog.findViewById<ImageView>(R.id.img_close)
+            close?.setOnClickListener(){
+                dialog.dismiss()
+            }
+        }}
+
         onClicks()
         tabs()
         observer()
         spinner()
         opacity()
-
+        translation()
 
 
 //        binding.slider.setLabelFormatter(LabelFormatter { value ->
@@ -90,20 +109,33 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun onClicks() {
-        binding.floatingActionButton2.setOnClickListener() {
+        binding.floatingActionButton1.setOnClickListener() {
+            this.findNavController().navigate(R.id.action_ndviFragment_to_infoSheetFragment)
+        }
+        binding.topAppBar.setOnClickListener(){
+            this.findNavController().navigateUp()
         }
 
     }
 
     private fun tabs() {
-
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Vegetation Index").setCustomView(R.layout.item_tab))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("True Color").setCustomView(R.layout.item_tab))
+         viewModel.viewModelScope.launch {
+             val vegIndex = TranslationsManager().getString("vegetation_index")
+             binding.tabLayout.addTab(
+                 binding.tabLayout.newTab().setText(vegIndex)
+                     .setCustomView(R.layout.item_tab)
+             )
+         }
+        viewModel.viewModelScope.launch {
+            val TranTureColor = TranslationsManager().getString("true_colour")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(TranTureColor).setCustomView(R.layout.item_tab)
+            )
+        }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                when(binding.tabLayout.selectedTabPosition){
                    0-> {
-
                        selectedTileType = TileType.NDVI
                        Log.d("select", "onTabSelected: $selectedTileType")
                    }
@@ -274,5 +306,24 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             }
         })
     }
+    private fun translation(){
+        TranslationsManager().loadString("str_date", binding.textView8)
+        TranslationsManager().loadString("str_low", binding.textView3)
+        TranslationsManager().loadString("str_high", binding.textView4)
+        TranslationsManager().loadString("str_unhealthy", binding.unhealthy)
+        TranslationsManager().loadString("moderately_healthy", binding.moderate)
+        TranslationsManager().loadString("healthy", binding.healthy)
+        TranslationsManager().loadString("mean_ndvi", binding.textView5)
+        TranslationsManager().loadString("opacity", binding.textView6)
 
+        viewModel.viewModelScope.launch() {
+            val title = TranslationsManager().getString("str_ndvi")
+            binding.topAppBar.title = title
+        }
+
+        binding.topAppBar.setOnClickListener(){
+            this.findNavController().navigateUp()
+        }
+
+    }
     }

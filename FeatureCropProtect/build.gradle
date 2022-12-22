@@ -45,6 +45,7 @@ dependencies {
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':addcrop')
     implementation project(path: ':soiltesting')
+    implementation project(path: ':FeatureSpeechToText')
 
 
 

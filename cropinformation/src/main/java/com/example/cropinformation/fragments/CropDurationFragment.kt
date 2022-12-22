@@ -11,16 +11,6 @@ import com.example.cropinformation.databinding.FragmentCropDurationBinding
 import com.example.cropinformation.utils.Constants.Companion.CROP_ID
 import com.example.cropinformation.viewModle.TabViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CropDurationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CropDurationFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private lateinit var binding:FragmentCropDurationBinding
@@ -56,9 +46,11 @@ class CropDurationFragment : Fragment() {
            // val data = it.filter { it -> it.crop_id==CROP_ID}
             val data = it.data
             for(i in 0 until data!!.size){
-                if(data!![i].label_name=="Crop Duration") {
+                if(data[i].label_name=="Crop Duration"||data[i].labelNameTag=="Crop Duration") {
                     binding.tvDays.text = data[i].label_value
                     binding.tvDays2.text = data[i].label_value
+                    binding.textView8.text = data[i].label_name
+                    break
                 }
             }
         }

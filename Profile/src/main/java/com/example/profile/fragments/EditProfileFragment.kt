@@ -26,6 +26,7 @@ import com.example.profile.databinding.FragmentEditProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.translations.TranslationsManager
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,15 +37,22 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class EditProfileFragment : Fragment() {
     private var selecteduri: Uri? = null
     val requestImageId = 1
+    lateinit var field: java.util.HashMap<String, String>
     private lateinit var binding: FragmentEditProfileBinding
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    private lateinit var title:String
+    private lateinit var submit:String
+    private lateinit var lat:String
+    private lateinit var long:String
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +77,20 @@ class EditProfileFragment : Fragment() {
         //getLocation()
         onClick()
         observerName()
+        translation()
         binding.submit.setOnClickListener {
 
             editProfile()
 
         }
 
+        viewModel.viewModelScope.launch {
+            title = TranslationsManager().getString("str_farmer_profile")
+            binding.topAppBar.title = title
+            submit = TranslationsManager().getString("str_submit")
+            binding.submit.text = submit
+
+        }
 
         return binding.root
 
@@ -93,6 +109,7 @@ class EditProfileFragment : Fragment() {
                 binding.tvPincode.setText(it.data?.data?.profile?.pincode)
                 binding.tvState.setText(it.data?.data?.profile?.state)
                 binding.tvCity.setText(it.data?.data?.profile?.district)
+
             }
         }
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -114,19 +131,29 @@ class EditProfileFragment : Fragment() {
 //    }
 
     fun editProfile() {
-
+        field = HashMap()
         val name: String = binding.tvName.text.toString()
         val address: String = binding.tvAddress1.text.toString()
         val village = binding.tvAddress2.text.toString()
         val pincode = binding.tvPincode.text.toString()
         val state = binding.tvState.text.toString()
         val city = binding.tvCity.text.toString()
+        field.put("name",name)
+        field.put("address",address)
+        field.put("village",village)
+        field.put("pincode",pincode)
+        field.put("state",state)
+        field.put("district",city)
+        field.put("lat",lat)
+        field.put("long",long)
+
+
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
 
             viewModel.viewModelScope.launch {
-                viewModel.getProfileRepository(name, address, village, pincode, state, city)
+                viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         Log.d("ProfileUpdate", "editProfile: $it")
                         Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
@@ -223,8 +250,11 @@ class EditProfileFragment : Fragment() {
         }
         task.addOnSuccessListener {
             if (it != null) {
-//                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+                //Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
 
+                  lat = String.format("%.5f",it.latitude)
+                 long = String.format("%.5f",it.longitude)
+                Toast.makeText(context, "${lat} ${long}", Toast.LENGTH_LONG).show()
                 viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
                     .observe(viewLifecycleOwner) {
                         if (it.results.isNotEmpty()) {
@@ -242,6 +272,7 @@ class EditProfileFragment : Fragment() {
                             binding.tvPincode.setText(result.pincode ?: "")
                         }
                     }
+
 
             }
 //                val bounds = RectangularBounds.newInstance(
@@ -362,5 +393,15 @@ class EditProfileFragment : Fragment() {
 //            }
             Log.d("ProfilePicImage2", "editProfile: $selecteduri")
         }
+    }
+
+    private fun translation(){
+        TranslationsManager().loadString("str_farmer_name",binding.textView3)
+        TranslationsManager().loadString("str_mobile_number",binding.textView4)
+        TranslationsManager().loadString("str_addressline_1",binding.textView5)
+        TranslationsManager().loadString("str_city",binding.textView6)
+        TranslationsManager().loadString("str_state",binding.textView8)
+        TranslationsManager().loadString("str_pincode",binding.textView9)
+
     }
 }

@@ -16,6 +16,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -54,6 +55,11 @@ class ForecastFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentForecastBinding.inflate(inflater)
 
+         //translation
+        viewModel.viewModelScope.launch {
+            val title = TranslationsManager().getString("str_weekly_irrigation")
+            binding.topAppBar.title = title
+        }
         return binding.root
     }
 
@@ -79,18 +85,14 @@ class ForecastFragment : Fragment() {
             accountId = it.data?.accountId ?: 0
         }
         viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-            val data = it.data?.filter {
-                it.id == plotId
+            val data = it.data?.filter {itt->
+                itt.id == plotId
             }
             if(data!=null) {
-                area = it.data?.get(0)?.area.toString()
-                length = it.data?.get(0)?.lenDrip.toString()
-                width = it.data?.get(0)?.widthDrip.toString()
-                mPagerForcastAdapter = PagerForcastAdapter(
-                    area, areaperPlant, length,
-                    width
-                )
-//                areaperPlant = (length.toInt() * width.toInt()).toString()
+                area = data[0].area.toString()
+                length = data.get(0).lenDrip.toString()
+                width = data.get(0).widthDrip.toString()
+              areaperPlant = (length.toDouble() * width.toDouble()).toString().trim()
                 mPagerForcastAdapter = PagerForcastAdapter(area,areaperPlant,length,width)
             }else{
                 mPagerForcastAdapter = PagerForcastAdapter("","","","")

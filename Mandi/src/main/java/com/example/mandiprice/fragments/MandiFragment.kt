@@ -103,6 +103,7 @@ class MandiFragment : Fragment() {
         }
 
         setBanners()
+        translation()
         return binding.root
 
     }
@@ -395,13 +396,17 @@ class MandiFragment : Fragment() {
 
 
     private fun tabs() {
-
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
-        )
+        viewModel.viewModelScope.launch {
+            distance = TranslationsManager().getString("distance")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
+            )
+        }
+        viewModel.viewModelScope.launch {
+            price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
-        )
+        )}
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -453,6 +458,7 @@ class MandiFragment : Fragment() {
                     1 -> {
                         //  Toast.makeText(context, "WORKED2", Toast.LENGTH_SHORT).show()
                         if (binding.filter.text == "Sort by") {
+
                             orderBy = "price"
                             sortBy = "desc"
                             binding.recycleViewDis.adapter = adapterMandi
@@ -602,12 +608,10 @@ class MandiFragment : Fragment() {
         var mandi = "Mandi Price"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
-            distance = TranslationsManager().getString("distance")
-            price = TranslationsManager().getString("distance")
+            binding.topAppBar.title = mandi
         }
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("str_Weather",binding.filter)
         TranslationsManager().loadString("sort_by",binding.filter)
 
     }

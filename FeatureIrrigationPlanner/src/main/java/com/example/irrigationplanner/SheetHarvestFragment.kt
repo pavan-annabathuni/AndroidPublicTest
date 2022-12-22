@@ -10,9 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.syncer.MyCropSyncer
+import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,7 +28,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
-    private var plotId:Int = 0
+    private var plotId:Int? = null
     var dateCrop: String = ""
     val myCalendar = Calendar.getInstance()
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -47,15 +53,24 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             var yield_tone = binding.editText.text.toString().toInt()
             var date  = binding.editText2.text.toString()
 
-            viewModel.updateHarvest(plotId,date,yield_tone).observe(viewLifecycleOwner){
-                Log.d("Harvest", "onCreateView: ${it.message}")
-            }
-            Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
-         this.dismiss()
+                plotId?.let { it1 ->
+                    viewModel.updateHarvest(it1,date,yield_tone).observe(viewLifecycleOwner){
+                        Log.d("Harvest", "onCreateView: ${it.message}")
+                    }
+                }
+               // Toast.makeText(context,"Enter the data",Toast.LENGTH_SHORT).show()
+//                GlobalScope.launch {
+//                    LocalSource.deleteAllMyCrops()
+//                    MyCropSyncer().invalidateSync()
+//
+//            }
+            this.dismiss()
+
         }
         binding.cal.setOnClickListener(){
             showCalender()
         }
+        translation()
         return binding.root
     }
     override fun getTheme(): Int {
@@ -101,5 +116,16 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.editText2.setText(dateFormat.format(myCalendar.getTime()))
+    }
+    private fun translation(){
+        TranslationsManager().loadString("str_harvest_details",binding.textView13)
+        TranslationsManager().loadString("str_actual_yeild",binding.textView14)
+        TranslationsManager().loadString("str_actual_harvest_date",binding.textView2)
+
+        viewModel.viewModelScope.launch {
+            val save = TranslationsManager().getString("str_save")
+            binding.save.text = save
+        }
+
     }
 }

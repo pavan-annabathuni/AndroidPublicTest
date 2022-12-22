@@ -24,19 +24,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/label_value"
-        style="@style/Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="130-150 gm/ac"
-        android:textColor="@color/WoodBrown"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lable_name" />
+        <TextView
+            android:id="@+id/label_value"
+            style="@style/Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:layout_marginEnd="24dp"
+            android:text="130-150 gm/ac"
+            android:textAlignment="center"
+            android:textColor="@color/WoodBrown"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lable_name" />
 
         <ImageView
             android:layout_width="match_parent"

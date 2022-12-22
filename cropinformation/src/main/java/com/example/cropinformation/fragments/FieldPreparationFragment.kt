@@ -43,9 +43,10 @@ class FieldPreparationFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data
             for(i in 0..data!!.size-1){
-                if(data[i].label_name== "Field preparation") {
+                if(data[i].label_name== "Field preparation"||data[i].labelNameTag=="Field preparation") {
                     binding.labelName.text = data[i].label_name
                     binding.tvLabelValue.text = data[i].label_value
+                    break
                 }
             }}
         }

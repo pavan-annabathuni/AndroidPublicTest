@@ -38,10 +38,11 @@ class MicronutrientsFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Micronutrients") {
+                if (data[i].label_name == "Micronutrients"||data[i].labelNameTag == "Micronutrients") {
                     binding.labelName.text = data[i].label_name
                     val str = data[i].label_value?.replace("<br>", System.getProperty("line.separator"))
                     binding.labelValue.text = str
+                    break
                 }
             }
         }}}

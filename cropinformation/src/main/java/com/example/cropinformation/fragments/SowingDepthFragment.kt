@@ -39,10 +39,11 @@ class SowingDepthFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Sowing Depth(cm)") {
+                if(data[i].label_name=="Sowing Depth(cm)"||data[i].labelNameTag=="Sowing Depth(cm)") {
             binding.tvLabelName.text = data[i].label_name
             binding.labelValue.text = data[i].label_value
             binding.tvLabelValue2.text = data[i].label_value
+                    break
 
         }
             }}

@@ -38,8 +38,8 @@ data class MyCropDataEntity (
    // @SerializedName("crop"                  ) var crop                : MyCropEntity   = MyCropEntity()
     @SerializedName("idd"        ) var cropIdd       : Int?    = null,
     @SerializedName("crop_name" ) var cropName : String? = null,
-    @SerializedName("crop_logo" ) var cropLogo : String? = null
-
+    @SerializedName("crop_logo" ) var cropLogo : String? = null,
+    @SerializedName("soil_type"   ) var soilType    : String? = null,
 )
 //data class MyCropEntity(
 //    @SerializedName("id"        ) var id       : Int?    = null,

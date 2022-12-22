@@ -42,10 +42,10 @@ class SoilPhFragment : Fragment() {
             val data = it.data!!
 
                 for(i in 0..data.size-1){
-                if(data[i].label_name=="Soil pH") {
+                if(data[i].label_name=="Soil pH"||data[i].labelNameTag=="Soil pH") {
                     binding.tvLabelValue.text = data[i].label_value
                     binding.tvLabelName.text = data[i].label_name
-                    val values = data[i].label_value
+                    val values = data[i].labelValueTag
                     val lstValues:List<String> = values?.split("-")!!.map { it -> it.trim() }
                     binding.slider.value = lstValues[0].toFloat()
                     if(lstValues[0]< 6.toString() &&lstValues[1]> 7.toString()){

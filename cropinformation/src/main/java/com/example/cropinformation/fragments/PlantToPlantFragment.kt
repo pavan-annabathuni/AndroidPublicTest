@@ -38,10 +38,11 @@ class PlantToPlantFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for (i in 0 until data.size) {
-                if (data[i].label_name == "Spacing between Plant to Plant") {
+                if (data[i].label_name == "Spacing between Plant to Plant"||data[i].labelNameTag == "Spacing between Plant to Plant") {
                     binding.tvRow.text = data[i].label_name
                     binding.labelValue2.text = data[i].label_value
                     binding.labelValue4.text = data[i].label_value
+                    break
                 }
         }
     }}
