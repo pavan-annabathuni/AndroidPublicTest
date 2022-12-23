@@ -264,7 +264,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         Log.d(
                             Constant.TAG,
                             "bindObserversCheckSoilTestModelFJndsj: $response")
-                        var bundle = Bundle().apply {
+                        val bundle = Bundle().apply {
                             putParcelableArrayList("list", ArrayList<Parcelable>(response))
                         }
 

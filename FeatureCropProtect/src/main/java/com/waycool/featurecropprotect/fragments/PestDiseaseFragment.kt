@@ -78,6 +78,7 @@ class PestDiseaseFragment : Fragment() {
         fabButton()
     }
 
+
     private fun pestDiseaseApiCall() {
         cropId?.let { cropId ->
             viewModel.getPestDiseaseListForCrop(cropId).observe(requireActivity()) {

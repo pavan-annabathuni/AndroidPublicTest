@@ -224,7 +224,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmap)
         shareLayout.draw(canvas)
         val imageFile = File(path)
         val outputFile = FileOutputStream(imageFile)
@@ -248,7 +248,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener {task->
-                if (task.isSuccessful()) {
+                if (task.isSuccessful) {
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -260,14 +260,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                 }
             }
 
-     /*   val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 
-        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
-        share.putExtra(Intent.EXTRA_STREAM, URI)
-        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/pestdiseasedetail?diseaseid=$diseaseId")
-        startActivity(Intent.createChooser(share, "Share link!"))*/
     }
 
 

@@ -60,7 +60,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var accountID: Int? = null
 
 
-    //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
     private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilLabViewModel::class.java] }
@@ -198,9 +197,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.tvViewAll.setOnClickListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
-//        binding.tvViewAllVideos.setOnClickListener {
-//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allVideoFragment)
-//        }
+
         binding.cardCheckHealth.setOnClickListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
 
@@ -357,9 +354,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
-        bundle.putInt("id", data.id!!)
+        bundle.putInt("s", data.id!!)
         bundle.putString("soil_test_number", data.soil_test_number)
-        Log.d(TAG, "statusTrackerIDPass: ${data.id}")
         findNavController().navigate(
             R.id.action_soilTestingHomeFragment_to_statusTrackerFragment,
             bundle

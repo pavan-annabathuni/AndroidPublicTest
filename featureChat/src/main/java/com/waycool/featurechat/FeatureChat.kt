@@ -13,38 +13,6 @@ object FeatureChat {
 
     fun zenDeskInit(context: Context) {
 
-//        Chat.INSTANCE.init(context,AppSecrets.getAccountKey(),
-//            AppSecrets.getChatAppId())
-//        val chatConfiguration = ChatConfiguration.builder()
-//            .withAgentAvailabilityEnabled(false)
-//            .withTranscriptEnabled(false)
-//            .build()
-//
-//
-//
-//        val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-//            .withDepartment("English Language Group")
-//            .build()
-//     GlobalScope.launch {
-//         val jwt = getJwtToken()
-//         Log.d("JWT", "zenDesk: $jwt")
-//         Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-//
-//
-//         val jwtAuthenticator = JwtAuthenticator {
-//             it.onTokenLoaded(jwt)
-//             it.onError()
-//         }
-//
-//
-//         Chat.INSTANCE.setIdentity(jwtAuthenticator)
-//
-//         MessagingActivity.builder()
-//             .withEngines(ChatEngine.engine())
-//             .show(context, chatConfiguration);
-//     }
-//    }
-//
 
         GlobalScope.launch {
             val jwt = getJwtToken() ?: ""

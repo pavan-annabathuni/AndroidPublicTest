@@ -145,11 +145,11 @@ class OtpFragment : Fragment() {
                     val otpResponse: OTPResponseDomain? = it.data
                     if (otpResponse?.type == "success") {
                     } else if (otpResponse?.type == "error") {
-                        ToastStateHandling.toastWarning(
+                       /* ToastStateHandling.toastWarning(
                             requireContext(),
                             "${it.data?.message}",
                             Toast.LENGTH_SHORT
-                        )
+                        )*/
 
                     }
                 }
