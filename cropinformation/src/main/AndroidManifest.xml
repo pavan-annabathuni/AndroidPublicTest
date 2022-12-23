@@ -6,9 +6,18 @@
     <application>
         <activity
             android:name=".CropInfo"
-            android:exported="false"
+            android:exported="true"
             android:autoLink="phone"
             android:theme="@style/AppTheme">
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/cropinfodetail"
+                    android:scheme="https"/>
+            </intent-filter>
         </activity>
 
     </application>

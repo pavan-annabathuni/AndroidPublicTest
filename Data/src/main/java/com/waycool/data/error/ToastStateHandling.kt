@@ -5,8 +5,7 @@ import es.dmoral.toasty.Toasty
 
 object ToastStateHandling {
 
-
-     fun toastSuccess(context: Context, msg: String, duration: Int) {
+    fun toastSuccess(context: Context, msg: String, duration: Int) {
         Toasty.Config.getInstance()
              .tintIcon(true)
              .setTextSize(14)
