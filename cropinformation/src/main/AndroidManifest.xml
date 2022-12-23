@@ -15,7 +15,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:host="adminuat.outgrowdigital.com"
-                    android:path="/cropinfodetail"
+                    android:path="/cropinfo"
                     android:scheme="https"/>
             </intent-filter>
         </activity>

@@ -60,6 +60,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
+
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var videosBinding: GenericLayoutVideosListBinding
@@ -245,15 +246,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
-        //weather("12.22", "78.22")
-
         mandiViewModel.viewModelScope.launch {
             mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
-                    // binding.viewModel = it
-//                adapterMandi.submitData(lifecycle,it)
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -306,6 +302,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             newsBinding.videoCardNoInternet.visibility = View.VISIBLE
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
+            newsBinding.noDataNews.visibility=View.GONE
             context?.let {
                 ToastStateHandling.toastWarning(
                     it,
@@ -317,6 +314,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             newsBinding.videoCardNoInternet.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.VISIBLE
             newsBinding.viewAllNews.visibility = View.VISIBLE
+            newsBinding.noDataNews.visibility=View.VISIBLE
+
             setNews()
         }
     }
@@ -386,8 +385,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
                     }
-//                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
-//                        .show()
                 }
                 is Resource.Loading -> {
                     Log.d("farm", "step5")
@@ -419,14 +416,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun loadFarm(farmJson: ArrayList<LatLng>?) {
         mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmJson != null) {
-            val points = farmJson
-            if (points != null) {
+            if (farmJson != null) {
                 if (polygon != null)
                     polygon!!.remove()
                 polygon = null
-                if (points.size >= 3) {
+                if (farmJson.size >= 3) {
                     polygon = mMap?.addPolygon(
-                        PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                        PolygonOptions().addAll(farmJson).fillColor(Color.argb(100, 58, 146, 17))
                             .strokeColor(
                                 Color.argb(255, 255, 255, 255)
                             )
@@ -434,11 +430,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
                     mMap?.animateCamera(
                         CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(points), 10
+                            getLatLnBounds(farmJson), 10
                         )
                     )
                 } else {
-                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(points[0], 16f))
+                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(farmJson[0], 16f))
                 }
             }
         }
@@ -495,7 +491,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         viewModel.getVansNewsList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                newsBinding.noDataNews.visibility=View.VISIBLE
+            }
+            else{
+                newsBinding.noDataNews.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
 
         newsBinding.viewAllNews.setOnClickListener {
@@ -525,14 +527,19 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+//            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
-
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
-
         adapter.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)

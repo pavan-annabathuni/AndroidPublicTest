@@ -45,19 +45,18 @@ class CropProtectActivity : AppCompatActivity() {
                     if(deepLink.lastPathSegment.equals("cropprotect")){
                         this.findNavController(R.id.fragmentContainerView).navigate(R.id.cropSelectionFragment)
                     }
-                    else if(deepLink.path!!.contains("pestdisease")){
+               /*     else if(deepLink.path!!.contains("pestdisease")){
                         val cropId=deepLink.getQueryParameter("crop_id")
                         val cropName=deepLink.getQueryParameter("crop_name")
                         if(!cropId.isNullOrEmpty()&&!cropName.isNullOrEmpty()){
                             val args = Bundle()
-
                             args.putInt("cropid", cropId.toInt())
                             args.putString("cropname", cropName)
                             this.findNavController(R.id.fragmentContainerView).navigate(
                                 R.id.action_cropSelectionFragment_to_pestDiseaseFragment,
                                 args)
                         }
-                    }
+                    }*/
                     else{
                         Log.d("CropProtect","$deepLink")
                         val diseaseId = deepLink.getQueryParameter ("disease_id")

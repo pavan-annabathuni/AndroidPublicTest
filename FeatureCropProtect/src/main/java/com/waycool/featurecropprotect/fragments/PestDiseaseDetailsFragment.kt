@@ -269,8 +269,14 @@ class PestDiseaseDetailsFragment : Fragment() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         viewModel.getVansNewsList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-        }
+            if (adapter.snapshot().size==0){
+                newsBinding.noDataNews.visibility=View.VISIBLE
+            }
+            else{
+                newsBinding.noDataNews.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
+      }
 
         newsBinding.viewAllNews.setOnClickListener {
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
@@ -299,7 +305,13 @@ class PestDiseaseDetailsFragment : Fragment() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
 
         videosBinding.viewAllVideos.setOnClickListener {

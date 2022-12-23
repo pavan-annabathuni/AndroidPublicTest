@@ -123,8 +123,17 @@ class CropHealthFragment : Fragment() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-            binding.clProgressBar.visibility=View.GONE
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+                binding.clProgressBar.visibility=View.GONE
+
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+                binding.clProgressBar.visibility=View.GONE
+
+            }
 
         }
 
