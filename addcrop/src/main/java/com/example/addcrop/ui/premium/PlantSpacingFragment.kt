@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
 import com.example.addcrop.viewmodel.AddViewModel
@@ -44,7 +45,20 @@ class PlantSpacingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+//        binding.constraintLayout3.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+//
+//            if (isChecked) {
+//                when (checkedId) {
+//                    R.id. -> showToast("Robot that looks like human.")
+//                    R.id.btnFlutter -> showToast("It's a Butterfly thing.")
+//                    R.id.btnWeb -> showToast("You still exist?")
+//                }
+//            } else {
+//                if (toggleButtonGroup.checkedButtonId == View.NO_ID) {
+//                    showToast("Nothing Selected")
+//                }
+//            }
+//        }
         val bundle = Bundle()
         if (arguments != null) {
             account_id = arguments?.getInt("account_id")

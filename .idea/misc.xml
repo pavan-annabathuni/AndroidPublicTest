@@ -130,7 +130,9 @@
         <entry key="addcrop/src/main/res/drawable/ic_mic.xml" value="0.1385" />
         <entry key="addcrop/src/main/res/layout/fragment_add_crop.xml" value="0.30512820512820515" />
         <entry key="addcrop/src/main/res/layout/fragment_add_crop_details.xml" value="0.2722222222222222" />
+        <entry key="addcrop/src/main/res/layout/fragment_add_crop_premium.xml" value="0.2543822146216332" />
         <entry key="addcrop/src/main/res/layout/fragment_edit_crop.xml" value="0.2833333333333333" />
+        <entry key="addcrop/src/main/res/layout/fragment_plant_spacing.xml" value="0.375" />
         <entry key="addcrop/src/main/res/layout/fragment_select_add_crop.xml" value="0.30512820512820515" />
         <entry key="addcrop/src/main/res/layout/item.xml" value="0.2675925925925926" />
         <entry key="addcrop/src/main/res/layout/item_edit_crop.xml" value="0.45" />
@@ -172,7 +174,7 @@
         <entry key="app/src/main/res/layout/fragment_all_services.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/fragment_device_one.xml" value="0.2982982982982983" />
         <entry key="app/src/main/res/layout/fragment_farm_details.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.5046649703138253" />
+        <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.38169642857142855" />
         <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.4647430419921875" />
@@ -234,6 +236,7 @@
         <entry key="soiltesting/src/main/res/drawable/bg_search_icon.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/bg_update.xml" value="0.1645" />
         <entry key="soiltesting/src/main/res/drawable/check_box.xml" value="0.1645" />
+        <entry key="soiltesting/src/main/res/drawable/ic_add.xml" value="0.1835" />
         <entry key="soiltesting/src/main/res/drawable/ic_add_crop_card.xml" value="0.181" />
         <entry key="soiltesting/src/main/res/drawable/ic_check_box.xml" value="0.1495" />
         <entry key="soiltesting/src/main/res/drawable/ic_dotted_image.xml" value="0.1835" />
@@ -249,7 +252,7 @@
         <entry key="soiltesting/src/main/res/layout/fragment_crop_selected_soil_test.xml" value="0.2543822146216332" />
         <entry key="soiltesting/src/main/res/layout/fragment_home_page_premium.xml" value="0.2543822146216332" />
         <entry key="soiltesting/src/main/res/layout/fragment_home_pages.xml" value="0.1" />
-        <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.3098958333333333" />
+        <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.18148409140230426" />
         <entry key="soiltesting/src/main/res/layout/fragment_report_generator.xml" value="0.15522215810732834" />
         <entry key="soiltesting/src/main/res/layout/fragment_sagar_form.xml" value="0.2947916666666667" />
         <entry key="soiltesting/src/main/res/layout/fragment_select_crop_soil_test.xml" value="0.12740487387772553" />

@@ -21,6 +21,7 @@ import com.github.anastr.speedviewlib.components.indicators.Indicator
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
 import com.waycool.iwap.utils.Constant.TAG
 
@@ -287,7 +288,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
             val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
         }
-        binding.tvNdviBanner.setOnClickListener {
+        binding.cardAddFormOne.setOnClickListener {
             val intent = Intent(activity, MainActivityNdvi::class.java)
             startActivity(intent)
         }
@@ -298,12 +299,134 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
         binding.let {
             it.totalAreea.text = data.iotDevicesData?.battery.toString()
             it.tvAddDeviceStart.text = data.model?.modelName.toString()
-            it.tvLastUpdate.text = data.dataTimestamp.toString()
-//            binding.soilMoistureOne .progress=60
-//            binding.soilMoistureTwo .progress=70
+            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
+            it.tvWindDegree.text = data.rainfall.toString() + " mm"
+            it.tvHumidityDegree.text = data.humidity.toString() + " %"
+            it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
+            if (data.leafWetness!!.equals(1)) {
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            } else {
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
+            it.tvPressureDegree.text = data.pressure.toString() + " hPa"
+
+
             it.tvLastUpdateRefresh.setOnClickListener {
+                viewDeviceListAdapter.upDateList()
+            }
+            it.clTemp.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    bundle.putString("toolbar","Temperature")
+                    bundle.putString("temp_value", data.temperature)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+            it.clWind.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "rainfall")
+                    bundle.putString("toolbar","Rainfall")
+                    bundle.putString("temp_value", data.rainfall)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+            it.clHumidity.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "humidity")
+                    bundle.putString("toolbar","Humidity")
+                    bundle.putString("temp_value", data.humidity)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+            it.clWindSpeed.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "windspeed")
+                    bundle.putString("toolbar","Wind Speed")
+                    bundle.putString("temp_value", data.windspeed)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+
+            it.clLeafWetness.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "leaf_wetness")
+                    bundle.putString("toolbar","Leaf wetness")
+
+                    bundle.putString("temp_value",data.leafWetness)
+                    bundle.putString("date_time",data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+            it.clPressure.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "pressure")
+                    bundle.putString("toolbar","Pressure")
+                    bundle.putString("temp_value", data.pressure)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+                }
+            }
+            binding.clTop.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "soil_moisture_1")
+                    bundle.putString("toolbar","Soil Moisture Top")
+                    bundle.putString("temp_value", data.soilMoisture1)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        bundle
+                    )
+
+                }
             }
         }
+
+
 
     }
 

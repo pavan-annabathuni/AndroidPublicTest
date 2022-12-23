@@ -81,8 +81,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             if (accountID != null) {
                 bindObserversSoilTestHistory(accountID!!)
             }
-
-
         }
 //        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
 //            override fun handleOnBackPressed() {
@@ -251,7 +249,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 //                filteredList.clear()
                 if (charSequence.length>0){
                     filteredList.forEach {
-                        if (it.plot_no?.lowercase()!!.contains(charSequence.toString().lowercase())){
+                        if (it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())){
                             if (!temp.contains(it)){
                                 temp.add(it)
                             }
@@ -260,9 +258,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 soilHistoryAdapter.upDateList(temp)
                 Log.d("TAG", "::::stderr  $temp")
                 }
-                if (temp.isEmpty()){
-                    soilHistoryAdapter.upDateList(filteredList)
-                }
+//                if (temp.isEmpty()){
+//                    soilHistoryAdapter.upDateList(filteredList)
+//                }
             }
 //                filteredList.forEach {
 //                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){

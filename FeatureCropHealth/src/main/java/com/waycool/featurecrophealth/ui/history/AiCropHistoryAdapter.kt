@@ -32,7 +32,6 @@ class AiCropHistoryAdapter(private val context: Context) :
     }
 
     override fun getItemCount(): Int {
-
         return currentList.size
 //        else currentList.size
     }
@@ -62,12 +61,12 @@ class AiCropHistoryAdapter(private val context: Context) :
 
     }
 //
-//    fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
-//        list.clear()
-//        list.addAll(list)
-//        notifyDataSetChanged()
-//
-//    }
+    fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
+//        currentList.clear()
+        list.addAll(list)
+        notifyDataSetChanged()
+
+    }
 
     class ComparatorDiffUtil : DiffUtil.ItemCallback<AiCropHistoryDomain>() {
         override fun areItemsTheSame(
