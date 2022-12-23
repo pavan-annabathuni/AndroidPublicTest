@@ -37,7 +37,7 @@ object NetworkSource {
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
 
-    private val geocodeInterface:MapsApiInterface
+    private val geocodeInterface: MapsApiInterface
 
 
     init {
@@ -48,8 +48,8 @@ object NetworkSource {
         otpInterface = otpRetrofit.create(OTPApiInterface::class.java)
         val weatherClient = WeatherClient.apiClient
         weatherInterface = weatherClient.create(WeatherApiInterface::class.java)
-        val geocodeCLient=MapsClient.apiClient
-        geocodeInterface=geocodeCLient.create(MapsApiInterface::class.java)
+        val geocodeCLient = MapsClient.apiClient
+        geocodeInterface = geocodeCLient.create(MapsApiInterface::class.java)
     }
 
     fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
@@ -96,7 +96,7 @@ object NetworkSource {
 
     fun getCropMaster(headerMap: Map<String, String>) = flow<Resource<CropMasterDTO?>> {
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
+            val langCode = LocalSource.getLanguageCode() ?: "en"
             val response = apiInterface.getCropMaster(headerMap, lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
@@ -111,7 +111,7 @@ object NetworkSource {
 
     fun getVansCategory(headerMap: Map<String, String>) = flow<Resource<VansCategoryDTO?>> {
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
+            val langCode = LocalSource.getLanguageCode() ?: "en"
 
             val response = apiInterface.getVansCategory(headerMap, lang = langCode)
             if (response.isSuccessful) {
@@ -191,7 +191,7 @@ object NetworkSource {
         flow<Resource<CropCategoryMasterDTO?>> {
 
             try {
-                val langCode=LocalSource.getLanguageCode()?:"en"
+                val langCode = LocalSource.getLanguageCode() ?: "en"
                 val response = apiInterface.getCropCategoryMaster(headerMap, lang = langCode)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
@@ -203,7 +203,7 @@ object NetworkSource {
             }
         }
 
-//    fun addCropPassData(
+    //    fun addCropPassData(
 //        crop_id: Int?,
 //        account_id: Int?,
 //        plot_nickname: String?,
@@ -231,11 +231,28 @@ object NetworkSource {
 //            emit(Resource.Error(e.message))
 //        }
 //    }
-    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<AddCropResponseDTO?>> {
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String, Any>()) =
+        flow<Resource<AddCropResponseDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+                val response = apiInterface.addCropDataPass(headerMap!!, map)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
+
+    fun activateDevice(map: MutableMap<String, Any>) = flow<Resource<ActivateDeviceDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.
-            addCropDataPass(headerMap!!,map)
+            val accountId = LocalSource.getUserDetailsEntity()?.accountId
+            if (accountId != null)
+                map["account_no"] = accountId
+            val response = apiInterface.activateDevice(headerMap!!, map)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -245,11 +262,12 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-    fun activateDevice(map: MutableMap<String, Any> = mutableMapOf<String,Any>()) = flow<Resource<ActivateDeviceDTO?>> {
+
+    fun verifyQR(deviceNumber: String, isQR: Int) = flow<Resource<VerifyQrDTO?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            val response = apiInterface.
-            activateDevice(headerMap!!,map)
+            val response = apiInterface.verifyQR(headerMap!!, deviceNumber, isQR)
+
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -259,11 +277,12 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
-    fun viewReport(id:Int) = flow<Resource<SoilTestReportMaster?>> {
+
+    fun viewReport(id: Int) = flow<Resource<SoilTestReportMaster?>> {
         try {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-            val response = apiInterface.viewReport(headerMap!!,id)
+            val response = apiInterface.viewReport(headerMap!!, id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -479,7 +498,7 @@ object NetworkSource {
         flow<Resource<PestDiseaseDTO?>> {
             emit(Resource.Loading())
             try {
-                val langCode=LocalSource.getLanguageCode()?:"en"
+                val langCode = LocalSource.getLanguageCode() ?: "en"
 
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
                 if (headerMap != null) {
@@ -542,6 +561,7 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+
     fun dashBoard() =
         flow<Resource<DashBoardDTO?>> {
             try {
@@ -557,6 +577,7 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+
     fun farmDetailsDelta() =
         flow<Resource<FarmDetailsDTO?>> {
             try {
@@ -591,6 +612,7 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+
     fun getIotDevice() =
         flow<Resource<ViewDeviceDTO?>> {
             try {
@@ -606,10 +628,11 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message))
+//                catch(Resource.Error(e.message))
             }
         }
-    fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?) =
+
+    fun getGraphsViewDevice(serial_no_id: Int?, device_model_id: Int?, value: String?) =
         flow<Resource<GraphsViewDataDTO?>> {
             try {
 //            val header =
@@ -617,7 +640,12 @@ object NetworkSource {
 //                    ?.firstOrNull { it.accountType == "outgrow" }
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-                val response = apiInterface.getGraphsViewDevice(headerMap!!,serial_no_id,device_model_id,value)
+                val response = apiInterface.getGraphsViewDevice(
+                    headerMap!!,
+                    serial_no_id,
+                    device_model_id,
+                    value
+                )
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -645,6 +673,7 @@ object NetworkSource {
             emit(Resource.Error(e.message))
         }
     }
+
     fun pdfDownload(soil_test_request_id: Int) = flow<Resource<ResponseBody?>> {
         try {
 //            val header =
@@ -670,7 +699,7 @@ object NetworkSource {
 
         emit(Resource.Loading())
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
+            val langCode = LocalSource.getLanguageCode() ?: "en"
             val response = apiInterface.getCropInformation(headerMap, lang = langCode)
 
             if (response.isSuccessful)
@@ -818,27 +847,29 @@ object NetworkSource {
     }
 
     fun editMyCrop(
-        id:Int)
-    = flow<Resource<Unit?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        id: Int
+    ) = flow<Resource<Unit?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-                val response = apiInterface.editMyCrops(map,id)
-             if(response.isSuccessful)
-                 emit(Resource.Success(response.body()))
-             else {
-                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-             }
+            val response = apiInterface.editMyCrops(map, id)
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
 
         } catch (e: Exception) {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getMyCrop(headerMap: Map<String, String>,account_id: Int,
+
+    fun getMyCrop(
+        headerMap: Map<String, String>, account_id: Int,
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap,account_id)
+            val response = apiInterface.getMyCrops(headerMap, account_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -850,15 +881,15 @@ object NetworkSource {
         }
     }
 
-    fun getMyCrop2(headerMap: Map<String, String>,account_id: Int,
+    fun getMyCrop2(
+        headerMap: Map<String, String>, account_id: Int,
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap,account_id)
+            val response = apiInterface.getMyCrops(headerMap, account_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
-
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
@@ -867,11 +898,12 @@ object NetworkSource {
         }
     }
 
-    fun getGeocode(address: String
+    fun getGeocode(
+        address: String
     ) = flow<GeocodeDTO?> {
 
         try {
-            val response = geocodeInterface.getGeocode(address,AppSecrets.getMapsKey())
+            val response = geocodeInterface.getGeocode(address, AppSecrets.getMapsKey())
 
             if (response.isSuccessful)
                 emit(response.body())
@@ -883,11 +915,12 @@ object NetworkSource {
         }
     }
 
-    fun getReverseGeocode(latlon: String
+    fun getReverseGeocode(
+        latlon: String
     ) = flow<GeocodeDTO?> {
 
         try {
-            val response = geocodeInterface.getReverseGeocode(latlon,AppSecrets.getMapsKey())
+            val response = geocodeInterface.getReverseGeocode(latlon, AppSecrets.getMapsKey())
 
             if (response.isSuccessful)
                 emit(response.body())
@@ -963,11 +996,11 @@ object NetworkSource {
 
     fun getMyFarms(accountId: Int) = flow<Resource<MyFarmsDTO?>> {
 
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
-        val accountIdLocal=LocalSource.getUserDetailsEntity()?.accountId?:accountId
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val accountIdLocal = LocalSource.getUserDetailsEntity()?.accountId ?: accountId
 
         try {
-            val response = apiInterface.getMyFarms(map,accountIdLocal)
+            val response = apiInterface.getMyFarms(map, accountIdLocal)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
@@ -978,10 +1011,10 @@ object NetworkSource {
         }
     }
 
-    fun getAppTranslations()= flow<Resource<AppTranlationsDTO?>> {
+    fun getAppTranslations() = flow<Resource<AppTranlationsDTO?>> {
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
-            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()?: emptyMap()
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic() ?: emptyMap()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 
@@ -996,13 +1029,13 @@ object NetworkSource {
     }
 
     fun updateHarvest(
-        id:Int,harvest_date:String,actual_yield:Int)
-            = flow<Resource<HarvestDateModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        id: Int, harvest_date: String, actual_yield: Int
+    ) = flow<Resource<HarvestDateModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.harvestDate(map,id,harvest_date, actual_yield,"PUT")
-            if(response.isSuccessful)
+            val response = apiInterface.harvestDate(map, id, harvest_date, actual_yield, "PUT")
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1012,14 +1045,15 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
+
     fun updateIrrigation(
-        id:Int,irrigation:Int)
-            = flow<Resource<IrrigationPerDay?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        id: Int, irrigation: Int
+    ) = flow<Resource<IrrigationPerDay?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.irrigationPerDay(map,id,irrigation,"PUT")
-            if(response.isSuccessful)
+            val response = apiInterface.irrigationPerDay(map, id, irrigation, "PUT")
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1029,17 +1063,52 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
+
     fun updateCropStage(
-        id:Int,farmId:Int,plotId:Int,value1:String?,value2:String?,value3:String?,value4:String?,value5:String?,value6:String?,
-        value7:String?,value8:String?,value9:String?,value10:String?,value11:String?,value12:String?,value13:String?,value14:String?,
-        value15:String?)
-            = flow<Resource<CropStageModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        id: Int,
+        farmId: Int,
+        plotId: Int,
+        value1: String?,
+        value2: String?,
+        value3: String?,
+        value4: String?,
+        value5: String?,
+        value6: String?,
+        value7: String?,
+        value8: String?,
+        value9: String?,
+        value10: String?,
+        value11: String?,
+        value12: String?,
+        value13: String?,
+        value14: String?,
+        value15: String?
+    ) = flow<Resource<CropStageModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.updateCropStage(map,id,farmId,plotId,value1,value2,value3,value4,value5,value7,value7,value8,value9,
-                value10,value11,value12,value13,value14,value15)
-            if(response.isSuccessful)
+            val response = apiInterface.updateCropStage(
+                map,
+                id,
+                farmId,
+                plotId,
+                value1,
+                value2,
+                value3,
+                value4,
+                value5,
+                value7,
+                value7,
+                value8,
+                value9,
+                value10,
+                value11,
+                value12,
+                value13,
+                value14,
+                value15
+            )
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1049,13 +1118,13 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getCropStage()
-            = flow<Resource<GetCropStage?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+    fun getCropStage() = flow<Resource<GetCropStage?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
             val response = apiInterface.getCropStage(map)
-            if(response.isSuccessful)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1066,13 +1135,12 @@ object NetworkSource {
         }
     }
 
-    fun getNdvi(farmId: Int,accountId: Int)
-            = flow<Resource<NdviModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+    fun getNdvi(farmId: Int, accountId: Int) = flow<Resource<NdviModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getNdvi(map,farmId,accountId)
-            if(response.isSuccessful)
+            val response = apiInterface.getNdvi(map, farmId, accountId)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1082,17 +1150,21 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun updateFarmSupport(name: String,contact:Long,
-                          lat:Double,lon:Double, roleId:Int,
-                          pincode:Int,village: String,address: String,
-    state: String,district: String)
-            = flow<Resource<FarmSupportModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+    fun updateFarmSupport(
+        name: String, contact: Long,
+        lat: Double, lon: Double, roleId: Int,
+        pincode: Int, village: String, address: String,
+        state: String, district: String
+    ) = flow<Resource<FarmSupportModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.updateFarmSupport(map,name,contact,lat,lon,roleId,pincode,
-           village,address,state,district)
-            if(response.isSuccessful)
+            val response = apiInterface.updateFarmSupport(
+                map, name, contact, lat, lon, roleId, pincode,
+                village, address, state, district
+            )
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1102,13 +1174,13 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getFarmSupport(accountId: Int)
-            = flow<Resource<GetFarmSupport?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+    fun getFarmSupport(accountId: Int) = flow<Resource<GetFarmSupport?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getFarmSupportUser(map,accountId)
-            if(response.isSuccessful)
+            val response = apiInterface.getFarmSupportUser(map, accountId)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1120,13 +1192,13 @@ object NetworkSource {
     }
 
     fun deleteFarmSupport(
-        id:Int)
-            = flow<Resource<DeleteFarmSupport?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        id: Int
+    ) = flow<Resource<DeleteFarmSupport?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.deleteFarmSupport(map,id)
-            if(response.isSuccessful)
+            val response = apiInterface.deleteFarmSupport(map, id)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1137,13 +1209,12 @@ object NetworkSource {
         }
     }
 
-    fun getNotification()
-            = flow<Resource<NotificationModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+    fun getNotification() = flow<Resource<NotificationModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNotification(map)
-            if(response.isSuccessful)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))

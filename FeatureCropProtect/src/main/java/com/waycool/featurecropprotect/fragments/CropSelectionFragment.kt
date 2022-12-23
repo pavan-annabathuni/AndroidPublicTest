@@ -292,20 +292,16 @@ class CropSelectionFragment : Fragment() {
     }
 
     fun myCrops() {
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-            var accountId = it.data?.accountId
-            if (accountId != null)
-                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                    myCropAdapter.submitList(it.data)
-                    if ((it.data?.size!=0)) {
-                        binding.cvMyCrops.visibility=View.VISIBLE
-                        binding.cvAddCrop.visibility=View.GONE
-                        binding.tvCount.text = it.data!!.size.toString()
-                    } else {
-                        binding.cvAddCrop.visibility=View.GONE
-                        binding.cvMyCrops.visibility=View.GONE
-                    }
-                }
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            myCropAdapter.submitList(it.data)
+            if ((it.data?.size!=0)) {
+                binding.cvMyCrops.visibility=View.VISIBLE
+                binding.cvAddCrop.visibility=View.GONE
+                binding.tvCount.text = it.data!!.size.toString()
+            } else {
+                binding.cvAddCrop.visibility=View.GONE
+                binding.cvMyCrops.visibility=View.GONE
+            }
         }
     }
 }

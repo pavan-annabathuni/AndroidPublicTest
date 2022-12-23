@@ -15,6 +15,7 @@ public class NetworkUtil {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
+
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (null != activeNetwork && activeNetwork.isConnectedOrConnecting()) {
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)

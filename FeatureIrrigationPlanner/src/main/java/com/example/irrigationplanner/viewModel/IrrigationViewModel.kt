@@ -12,8 +12,8 @@ import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
 
 class IrrigationViewModel:ViewModel() {
-    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData()
+    fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2().asLiveData()
 
     suspend fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
         AdvIrrigationRepository.getAdvIrrigation(account_id,plot_id).asLiveData()

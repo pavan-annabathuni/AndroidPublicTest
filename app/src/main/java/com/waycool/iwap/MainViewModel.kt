@@ -64,8 +64,8 @@ class MainViewModel : ViewModel() {
     fun getModuleMaster(): LiveData<Resource<List<ModuleMasterDomain>>> =
         LoginRepository.getModuleMaster().asLiveData()
 
-    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData()
+    fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2().asLiveData()
 
     //Ad Banners
     fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {

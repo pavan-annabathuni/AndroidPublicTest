@@ -66,8 +66,8 @@ object LocalSource {
         outgrowDao.insertCropMaster(cropMasterList)
     }
 
-    fun getCropMaster(): Flow<List<CropMasterEntity>?> {
-        return outgrowDao.getCropMaster()
+    fun getCropMaster(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
+        return outgrowDao.getCropMaster(searchQuery)
     }
 
     fun getCropsPestDiseases(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {

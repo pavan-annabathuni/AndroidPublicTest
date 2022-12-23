@@ -54,8 +54,8 @@ class CropProtectViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData()
+    fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2().asLiveData()
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()

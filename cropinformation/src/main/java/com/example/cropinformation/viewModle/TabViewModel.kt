@@ -42,8 +42,8 @@ class TabViewModel:ViewModel {
     fun getCropInformationDetails(crop_id:Int): LiveData<Resource<List<CropInformationDomainData>>> =
         CropsRepository.getCropInformation(crop_id).asLiveData()
 
-    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData()
+    fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2().asLiveData()
 
     fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
         return CropsRepository.getCropInfoCrops(searchQuery).asLiveData()

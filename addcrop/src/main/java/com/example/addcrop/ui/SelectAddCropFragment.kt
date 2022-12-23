@@ -23,6 +23,7 @@ import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
 import java.util.*
 
@@ -39,6 +40,8 @@ class SelectAddCropFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
+    private var dashboardDomain:DashboardDomain?=null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,6 +83,11 @@ class SelectAddCropFragment : Fragment() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
+
+        viewModel.getDasBoard().observe(viewLifecycleOwner){
+            dashboardDomain=it?.data
+        }
+
         adapter.onItemClick = {
 
             val response = it
@@ -87,29 +95,32 @@ class SelectAddCropFragment : Fragment() {
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1)
             }
-//                Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
-//                when (it?.cropId) {
-//                    67-> {
-//                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
-//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
-//                    }
-//                    2 -> {
-//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
-//                    }
-//                    else -> {
-//                        Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
-//                        findNavController().navigate(R.id.action_selectAddCropFragment_to_addCropFragment, args)
-//                    }
-//                }
+            if(dashboardDomain?.subscription?.iot==true) {
+                Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
+                when (it?.cropId) {
+                    67-> {
+                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
+                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+                    }
+                    97 -> {
+                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+                    }
+                    else -> {
+                        Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
+                        findNavController().navigate(R.id.action_selectAddCropFragment_to_addCropFragment, args)
+                    }
+                }
 
-            findNavController().navigate(
-                R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
-                args
-            )
+
 //            findNavController().navigate(
 //                R.id.action_selectAddCropFragment_to_addCropFragment, args
 //            )
-
+            }else{
+                findNavController().navigate(
+                    R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
+                    args
+                )
+            }
 
         }
 

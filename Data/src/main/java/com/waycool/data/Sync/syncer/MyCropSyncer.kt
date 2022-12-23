@@ -17,51 +17,53 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class MyCropSyncer:SyncInterface {
-    override fun getSyncKey():  Preferences.Key<String> = SyncKey.MY_CROPS
-    override fun getRefreshRate():Int = SyncRate.getRefreshRate(getSyncKey())
+class MyCropSyncer : SyncInterface {
+    override fun getSyncKey(): Preferences.Key<String> = SyncKey.MY_CROPS
+    override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
-    fun getMyCrop(account_id: Int): Flow<Resource<List<MyCropDataEntity>>> {
+    fun getMyCrop(): Flow<Resource<List<MyCropDataEntity>>> {
         GlobalScope.launch(Dispatchers.IO) {
             if (isSyncRequired()) {
-                makeNetworkCall(account_id)
+                makeNetworkCall()
             }
         }
         return getSelectedMyCrop()
     }
 
-   private fun getSelectedMyCrop(): Flow<Resource<List<MyCropDataEntity>>> {
+    private fun getSelectedMyCrop(): Flow<Resource<List<MyCropDataEntity>>> {
         return LocalSource.getMyCrop().map {
             Resource.Success(it)
         }
     }
 
-    private fun makeNetworkCall(account_id:Int) {
+    private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+            val accountId: Int? = LocalSource.getUserDetailsEntity()?.accountId
             if (headerMap != null)
-                NetworkSource.getMyCrop2(headerMap,account_id)
-                    .collect {
-                        when (it) {
-                            is Resource.Success -> {
-                                LocalSource.insertMyCrop(
-                                    MyCropEntityMapper().toEntityList(it.data?.data!!)
-                                  //  CropInformationEntityMapper().toEntityList(it.data?.data!!)
-                                )
+                if (accountId != null)
+                    NetworkSource.getMyCrop2(headerMap, accountId)
+                        .collect {
+                            when (it) {
+                                is Resource.Success -> {
+                                    LocalSource.insertMyCrop(
+                                        MyCropEntityMapper().toEntityList(it.data?.data!!)
+                                        //  CropInformationEntityMapper().toEntityList(it.data?.data!!)
+                                    )
 
-                                setSyncStatus(true)
+                                    setSyncStatus(true)
+                                }
+
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Error -> {
+                                    setSyncStatus(false)
+                                }
+
                             }
-
-                            is Resource.Loading -> {
-
-                            }
-                            is Resource.Error -> {
-                                setSyncStatus(false)
-                            }
-
                         }
-                    }
         }
     }
 }

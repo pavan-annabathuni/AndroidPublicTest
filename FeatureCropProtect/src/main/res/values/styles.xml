@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Medium">
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:fontFamily">@font/notosans_medium</item>
     </style>
     <style name="SemiBold">
-        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+        <item name="android:fontFamily">@font/notosans_semibold</item>
     </style>
     <style name="Bold">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
     </style>
 
     <style name="MenuDialog" parent="Platform.MaterialComponents.Light">

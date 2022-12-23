@@ -28,4 +28,10 @@
         android:label="fragment_loading"
         tools:layout="@layout/fragment_loading" />
     <include app:graph="@navigation/nav_crop_protect" />
+    <include app:graph="@navigation/nav_myfarms" />
+    <fragment
+        android:id="@+id/allServicesFragment2"
+        android:name="com.waycool.iwap.allservices.AllServicesFragment"
+        android:label="fragment_all_services"
+        tools:layout="@layout/fragment_all_services" />
 </navigation>

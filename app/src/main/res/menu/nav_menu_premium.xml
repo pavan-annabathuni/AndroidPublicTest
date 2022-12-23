@@ -5,16 +5,18 @@
         android:id="@id/nav_home_premium"
         android:icon="@drawable/ic_home_selector"
         android:title="HOME" />
-    <item
-        android:id="@+id/navigation_mandi"
-        android:icon="@drawable/ic_mandi_selector"
-        android:title="MANDI" />
 
 
     <item
-        android:id="@+id/nav_crop_protect"
-        android:icon="@drawable/ic_crop_protection_selector"
-        android:title="CROP PROTECTION" />
+        android:id="@+id/allServicesFragment2"
+        android:icon="@drawable/ic_services"
+        android:title="SERVICES" />
+
+    <item
+        android:id="@+id/nav_myfarms"
+        android:icon="@drawable/ic_myfarm_selector"
+        android:title="MY FARMS" />
+
 
     <item
         android:id="@+id/navigation_profile"

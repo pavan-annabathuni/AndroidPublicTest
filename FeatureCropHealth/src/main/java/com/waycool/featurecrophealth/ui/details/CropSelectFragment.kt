@@ -103,22 +103,17 @@ class CropSelectFragment : Fragment() {
         myCrops()
     }
 
-    fun myCrops() {
+    private fun myCrops() {
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            var accountId = it.data?.accountId
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            myCropAdapter.submitList(it.data)
+            if ((it.data != null)) {
+                binding.tvCount.text = it.data!!.size.toString()
+            } else {
+                binding.tvCount.text = "0"
+            }
+            // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 
-            if (accountId != null)
-                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                    myCropAdapter.submitList(it.data)
-                    if ((it.data != null)) {
-                        binding.tvCount.text = it.data!!.size.toString()
-                    } else {
-                        binding.tvCount.text = "0"
-                    }
-                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
-                }
         }
     }
 

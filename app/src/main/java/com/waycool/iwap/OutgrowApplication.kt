@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.translations.TranslationsManager
 
 class OutgrowApplication : Application() {
@@ -19,6 +20,9 @@ class OutgrowApplication : Application() {
         OutgrowDB.init(applicationContext)
         TranslationsManager().init()
         FirebaseApp.initializeApp(this)
+
+        //Refresh UserDetails If Required
+        UserDetailsSyncer().getData()
 
     }
 }

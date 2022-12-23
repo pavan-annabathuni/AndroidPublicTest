@@ -16,7 +16,7 @@ object StoreName {
     const val SOIL_TEST_HISTORY = "soiltesthisory"
 
     //soil test history
-    const val DASH_BOARD = "bashboard"
+    const val DASH_BOARD = "dashboard"
     //add crop
     const val ADD_CROP_TYPE = "addcroptype"
 

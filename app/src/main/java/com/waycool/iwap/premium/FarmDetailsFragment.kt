@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.opengl.Visibility
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -90,21 +89,19 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         myFarm = arguments?.getParcelable<MyFarmsDomain>("farm")
 
-        (childFragmentManager.findFragmentById(R.id.map_farmdetails) as SupportMapFragment?)?.getMapAsync(
-            this
-        )
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map_farmdetails) as SupportMapFragment
+        mapFragment.requireView().isClickable = false
+        mapFragment.getMapAsync(this)
 
         binding.backBtn.setOnClickListener { findNavController().navigateUp() }
 
         initViewClick()
         initMyObserve()
-        initObserveDevice()
         myCrop()
-        initiFarmDeltT()
         farmDetailsObserve()
 
-            }
-        }
+
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
@@ -117,7 +114,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //        progressbar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
 
 
-
     }
 
     private fun farmDetailsObserve() {
@@ -128,7 +124,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE
-            binding.waterChipGroup.visibility=View.VISIBLE
+            binding.waterChipGroup.visibility = View.VISIBLE
 
             binding.waterChipGroup.removeAllViews()
             for (category in myFarm?.farmWaterSource!!)
@@ -136,7 +132,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         } else {
             binding.waterNotAvailable.visibility = View.VISIBLE
             binding.waterNotAvailable.text = "NA"
-            binding.waterChipGroup.visibility=View.INVISIBLE
+            binding.waterChipGroup.visibility = View.INVISIBLE
         }
     }
 
@@ -178,34 +174,25 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-            if (it.data != null) {
-                var accountId: Int? = null
-                accountId = it.data?.accountId
-
-//                var accountId: Int = it.data!!.account[0].id!!
-                if (accountId != null)
-                    viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                        Log.d("MyCrops", "myCrop: ${it.data}")
-                        val cropList = it.data?.filter { plot -> plot.farmId == myFarm?.id }
-                        myCropAdapter.submitList(cropList)
-                        if (!(cropList.isNullOrEmpty())) {
-                            binding.tvCount.text = cropList.size.toString()
-                        } else {
-                            binding.tvCount.text = "0"
-                        }
-                        if (!cropList.isNullOrEmpty()) {
-                            binding.cvEditCrop.visibility = View.VISIBLE
-                            binding.cardAddForm.visibility = View.GONE
-                        } else {
-                            binding.cvEditCrop.visibility = View.GONE
-                            binding.cardAddForm.visibility = View.VISIBLE
-                        }
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            Log.d("MyCrops", "myCrop: ${it.data}")
+            val cropList = it.data?.filter { plot -> plot.farmId == myFarm?.id }
+            myCropAdapter.submitList(cropList)
+            if (!(cropList.isNullOrEmpty())) {
+                binding.tvCount.text = cropList.size.toString()
+            } else {
+                binding.tvCount.text = "0"
+            }
+            if (!cropList.isNullOrEmpty()) {
+                binding.cvEditCrop.visibility = View.VISIBLE
+                binding.cardAddForm.visibility = View.GONE
+            } else {
+                binding.cvEditCrop.visibility = View.GONE
+                binding.cardAddForm.visibility = View.VISIBLE
+            }
 //                        if (it.data?.size!! < 8) {
 //                            binding.addLl.visibility = View.VISIBLE
 //                        } else binding.addLl.visibility = View.GONE
-                    }
-            }
         }
     }
 
@@ -221,17 +208,39 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         binding.currentDelta.clearSections()
 //                        binding.kpaOne.text=response[0]. .soilMoisture1+" kPa"
 //                        binding.currentDelta.setIndicator(Indicator.Indicators.KiteIndicator)
-                        binding.currentDelta.maxSpeed=15F
-                        binding.currentDelta.tickNumber=0
-                        binding.currentDelta.marksNumber=0
+                        binding.currentDelta.maxSpeed = 15F
+                        binding.currentDelta.tickNumber = 0
+                        binding.currentDelta.marksNumber = 0
                         binding.currentDelta.speedTo(response[0].delta_t!!.toFloat())
-                        binding.deltaText.text= it.data?.data!![0].delta_t.toString()
+                        binding.deltaText.text = it.data?.data!![0].delta_t.toString()
 
-                        binding.currentDelta.addSections(Section
-                            (0f, .24f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f))
-                            , Section(.24f, .59f, Color.parseColor("#01B833"), binding.currentDelta.dpTOpx(12f))
-                            , Section(.59f, .71f, Color.parseColor("#F3C461"), binding.currentDelta.dpTOpx(12f))
-                            , Section(.71f, 1f, Color.parseColor("#DA0101"), binding.currentDelta.dpTOpx(12f)))
+                        binding.currentDelta.addSections(
+                            Section
+                                (
+                                0f,
+                                .24f,
+                                Color.parseColor("#DA0101"),
+                                binding.currentDelta.dpTOpx(12f)
+                            ),
+                            Section(
+                                .24f,
+                                .59f,
+                                Color.parseColor("#01B833"),
+                                binding.currentDelta.dpTOpx(12f)
+                            ),
+                            Section(
+                                .59f,
+                                .71f,
+                                Color.parseColor("#F3C461"),
+                                binding.currentDelta.dpTOpx(12f)
+                            ),
+                            Section(
+                                .71f,
+                                1f,
+                                Color.parseColor("#DA0101"),
+                                binding.currentDelta.dpTOpx(12f)
+                            )
+                        )
 
 
                     }
@@ -297,6 +306,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         binding.farmdetailsPremiumCl.visibility = View.VISIBLE
                         binding.cardMYDevice.visibility = View.VISIBLE
                         binding.freeAddDeviceCv.visibility = View.GONE
+                        initObserveDevice()
+                        initiFarmDeltT()
                     } else {
                         binding.farmdetailsPremiumCl.visibility = View.GONE
                         binding.cardMYDevice.visibility = View.GONE
@@ -343,8 +354,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             startActivity(intent)
         }
         binding.MyDevice.setOnClickListener {
-            val intent = Intent(activity, AddDeviceActivity::class.java)
-            startActivity(intent)
+            val bundle = Bundle()
+            bundle.putParcelable("farm", myFarm)
+            findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation_adddevice, bundle)
         }
         binding.tvNdviBanner.setOnClickListener {
             val intent = Intent(activity, MainActivityNdvi::class.java)
@@ -359,8 +371,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             FeatureChat.zenDeskInit(requireContext())
         }
         binding.addDeviceFree.setOnClickListener {
-            val intent = Intent(activity, AddDeviceActivity::class.java)
-            startActivity(intent)
+            val bundle = Bundle()
+            bundle.putParcelable("farm", myFarm)
+            findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation_adddevice, bundle)
         }
     }
 
@@ -380,7 +393,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     override fun onMapReady(map: GoogleMap?) {
         if (map != null) {
             map.mapType = GoogleMap.MAP_TYPE_NORMAL
-
+            map!!.uiSettings.setAllGesturesEnabled(false)
+            map!!.uiSettings.isMapToolbarEnabled = false
             if (myFarm != null) {
                 val points = myFarm?.farmJson
                 if (points != null) {

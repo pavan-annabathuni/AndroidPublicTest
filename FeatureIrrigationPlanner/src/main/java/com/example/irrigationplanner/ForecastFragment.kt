@@ -96,7 +96,7 @@ class ForecastFragment : Fragment() {
     private fun viewModelData(i:Int){
         var area:Int =0
         var areaPerPlant:Float = 0.00f
-        viewModel.getMyCrop2(477).observe(viewLifecycleOwner){
+        viewModel.getMyCrop2().observe(viewLifecycleOwner){
             area = it.data?.get(0)?.area?.toInt() ?: 0
             val lenght = it.data?.get(0)?.lenDrip?.toFloat()
             val width = it.data?.get(0)?.widthDrip?.toFloat()?:0f

@@ -24,8 +24,8 @@ interface OutgrowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCropMaster(crops: List<CropMasterEntity>)
 
-    @Query("SELECT * FROM crop_master ORDER BY crop_name Asc")
-    fun getCropMaster(): Flow<List<CropMasterEntity>?>
+    @Query("SELECT * FROM crop_master WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
+    fun getCropMaster(search: String? = ""): Flow<List<CropMasterEntity>?>
 
     @Query("SELECT * FROM crop_master WHERE pest_disease_info = 1 AND crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
     fun getCropsPestDiseases(search: String? = ""): Flow<List<CropMasterEntity>?>

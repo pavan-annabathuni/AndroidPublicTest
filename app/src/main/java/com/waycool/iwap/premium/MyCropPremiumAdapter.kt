@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cropinformation.databinding.ItemMycropsBinding
-import com.example.soiltesting.databinding.ItemPremiumCropsBinding
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.iwap.databinding.ItemPremiumCropsBinding
 import com.waycool.iwap.databinding.ItemViewallServiceBinding
 
 import java.util.ArrayList

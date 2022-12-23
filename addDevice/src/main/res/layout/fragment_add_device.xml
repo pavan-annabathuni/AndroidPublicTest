@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AddDeviceFragment">
@@ -13,11 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:theme="@style/Theme.MaterialComponents.Light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
+            android:theme="@style/Theme.MaterialComponents.Light"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="64dp"
@@ -73,18 +76,20 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="140dp"
+                        android:theme="@style/Theme.MaterialComponents.Light"
                         app:cardCornerRadius="12dp">
-                        <ImageView
+
+                        <fragment
+                            android:id="@+id/map_adddevice"
+                            android:name="com.google.android.libraries.maps.SupportMapFragment"
                             android:layout_width="match_parent"
-                            android:src="@drawable/ndvi_pic"
-                            android:scaleType="fitXY"
-                            android:layout_height="wrap_content"/>
-                        <!--                        <fragment-->
-                        <!--                            android:id="@+id/Map"-->
-                        <!--                            android:name="com.google.android.gms.maps.SupportMapFragment"-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="match_parent" />-->
+                            android:layout_height="match_parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            map:liteMode="true" />
+
                     </com.google.android.material.card.MaterialCardView>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
@@ -107,6 +112,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" , "
+                            android:visibility="gone"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/latitude"
                             android:textColor="@color/black"
@@ -114,6 +120,7 @@
                         <TextView
                             android:id="@+id/longitude"
                             style="@style/SemiBold"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" 77.23"
@@ -146,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/device_name"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -161,22 +168,24 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:paddingStart="16dp"
-                android:textColorHint="@color/darkGray"
-                android:hint="Eg. Zone 1 Device"
                 android:background="@drawable/text_border"
+                android:hint="Eg. Zone 1 Device"
+                android:inputType="textCapWords"
+                android:paddingStart="16dp"
                 android:textColor="@color/black"
+                android:textColorHint="@color/darkGray"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
+
             <TextView
                 android:id="@+id/textView2"
                 style="@style/Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/device_details"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -214,36 +223,74 @@
             <!--                android:layout_width="wrap_content"-->
             <!--                android:layout_height="wrap_content"/>-->
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/textView3"-->
-            <!--                style="@style/Medium"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="32dp"-->
-            <!--                android:text="@string/device_imei_address"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/bt_scanner" />-->
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Device Number"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bt_scanner" />
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/imeiAddress"-->
-            <!--                style="@style/SemiBold"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="48dp"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:background="@drawable/text_border"-->
-            <!--                android:hint="@string/e_g_50"-->
-            <!--                android:paddingStart="16dp"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textColorHint="@color/darkGray"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
+            <EditText
+                android:id="@+id/imeiAddress"
+                style="@style/SemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/text_border"
+                android:hint="@string/e_g_50"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/darkGray"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                map:layout_constraintHorizontal_bias="0.0" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/plotl_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imeiAddress">
+
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Select Plot to add GSX Device"
+                    android:textColor="@color/textdark"
+                    app:layout_constraintStart_toStartOf="parent"
+                    map:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mycrops_rv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView22"
+                    app:layout_constraintTop_toBottomOf="@+id/textView22"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/viewholder_crop_select" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--            <TextView-->
             <!--                android:id="@+id/textView4"-->
@@ -365,6 +412,7 @@
             android:id="@+id/cardView5"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
             app:cardBackgroundColor="@color/white"
             app:cardElevation="24dp"
             app:layout_constraintBottom_toBottomOf="parent"

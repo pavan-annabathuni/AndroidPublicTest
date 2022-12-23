@@ -17,14 +17,11 @@ class DashboardDomainMapper : DomainMapper<DashboardDomain, DashboardEntity> {
             emailVerifiedAt = dto.emailVerifiedAt,
             approved = dto.approved,
             settings = dto.settings,
-            subscription = SubscriptionDomainMapper()
-                .mapToEntity(dto.subscription ?: SubscriptionEntity())
+            subscription = SubscriptionDomainMapper().mapToEntity(dto.subscription ?: SubscriptionEntity())
         )
     }
 
     class SubscriptionDomainMapper : EntityMapper<SubscriptionDomain, SubscriptionEntity> {
-
-
         override fun mapToEntity(dto: SubscriptionEntity): SubscriptionDomain {
             return SubscriptionDomain(
                 iot = dto.iot

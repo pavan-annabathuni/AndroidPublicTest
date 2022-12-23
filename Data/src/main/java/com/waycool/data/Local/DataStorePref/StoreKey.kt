@@ -36,7 +36,7 @@ object StoreKey {
     //ModuleMaster
     val SOIL_TEST_HISTORY = stringPreferencesKey("soiltesthistory")
     //ModuleMaster
-    val DASH_BOARD = stringPreferencesKey("soiltesthistory")
+    val DASH_BOARD = stringPreferencesKey("dashboard")
     //CropCategory
     val CROP_CATEGORY = stringPreferencesKey("cropcategory")
 

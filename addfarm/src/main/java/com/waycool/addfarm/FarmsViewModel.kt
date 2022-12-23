@@ -5,6 +5,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.ktx.api.net.awaitFindAutocompletePredictions
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.FarmsRepository
+import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.*
@@ -79,12 +80,14 @@ class FarmsViewModel : ViewModel() {
             farm_pump_flow_rate
         ).asLiveData()
 
-    fun getMyCrop2(account_id: Int): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2(account_id).asLiveData(
+    fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
+        CropsRepository.getMyCrop2().asLiveData(
 
         )
     fun getFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
         FarmsRepository.getMyFarms().asLiveData()
 
 
+    fun getDashBoard(): LiveData<Resource<DashboardDomain?>> =
+        CropsRepository.getDashBoard().asLiveData()
 }

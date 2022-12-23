@@ -8,5 +8,22 @@
         android:id="@+id/homePagePremiumFragment3"
         android:name="com.waycool.iwap.premium.HomePagePremiumFragment"
         android:label="fragment_home_page_premium"
-        tools:layout="@layout/fragment_home_page_premium" />
+        tools:layout="@layout/fragment_home_page_premium" >
+        <action
+            android:id="@+id/action_homePagePremiumFragment3_to_graphsFragment2"
+            app:destination="@id/graphsFragment2" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment3_to_navigation_irrigation"
+            app:destination="@id/navigation_irrigation" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment3_to_nav_farmdetails"
+            app:destination="@id/nav_farmdetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/graphsFragment2"
+        android:name="com.waycool.iwap.premium.GraphsFragment"
+        android:label="fragment_graphs"
+        tools:layout="@layout/fragment_graphs" />
+    <include app:graph="@navigation/irrgation_navigation" />
+    <include app:graph="@navigation/nav_farmdetails" />
 </navigation>

@@ -35,9 +35,9 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
         if (arguments != null) {
             crop_id = arguments?.getInt("cropid")
             crop_type = arguments?.getInt("soil_type_id")
-            if (crop_id == 2) {
+            if (crop_id == 67) {
                 initView()
-            } else if (crop_id == 67) {
+            } else if (crop_id == 97) {
                 initViewGraphs()
             }
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsvff: $crop_id")

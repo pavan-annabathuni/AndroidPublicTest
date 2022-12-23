@@ -13,15 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.ekn.gruzer.gaugelibrary.Range
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.github.anastr.speedviewlib.components.Section
-import com.github.anastr.speedviewlib.components.Style
-import com.github.anastr.speedviewlib.components.indicators.ImageIndicator
-import com.github.anastr.speedviewlib.components.indicators.Indicator
-import com.github.anastr.speedviewlib.util.doOnSections
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.model.Polygon
 import com.waycool.addfarm.AddFarmActivity
@@ -36,7 +31,7 @@ import java.util.*
 import kotlin.math.roundToInt
 
 
-class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailslistener,
+class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailslistener,
     myCropListener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
@@ -83,9 +78,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
     }
 
     private fun initViewPager() {
-        binding.tvWelcomeName.setOnClickListener {
-            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_deviceFragmentOne)
-        }
+//        binding.tvWelcomeName.setOnClickListener {
+//            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_deviceFragmentOne)
+//        }
 
 
     }
@@ -203,38 +198,23 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     calculateScrollPercentage2(binding).toFloat()
             }
         })
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            if (it.data != null) {
-                var accountId = it.data?.accountId
-                Log.d("TAG", "initMyCropObserveAccountId: ")
-//                var accountId: Int? = null
-//                for (account in it?.data?.) {
-//                    if (account.accountType?.lowercase() == "outgrow") {
-//                        accountId = account.id
-//                    }
-//
-//                }
-//                var accountId: Int = it.data!!.account[0].id!!
-                if (accountId != null)
-                    viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
 //                        myCropAdapter.submitList(it.data)
-                        val response = it.data as ArrayList<MyCropDataDomain>
-                        myCropPremiumAdapter.setMovieList(response)
-                        if ((it.data != null)) {
+            val response = it.data as ArrayList<MyCropDataDomain>
+            myCropPremiumAdapter.setMovieList(response)
+            if ((it.data != null)) {
 //                            binding.tvCount.text = it.data!!.size.toString()
 
-                        } else {
+            } else {
 
 //                            binding.tvCount.text = "0"
-                        }
-                        if (it.data!!.isNotEmpty()) {
-                            binding.cvEditCrop.visibility = View.VISIBLE
-                            binding.cardAddForm.visibility = View.GONE
-                        } else {
-                            binding.cvEditCrop.visibility = View.GONE
-                            binding.cardAddForm.visibility = View.VISIBLE
-                        }
-                    }
+            }
+            if (it.data!!.isNotEmpty()) {
+                binding.cvEditCrop.visibility = View.VISIBLE
+                binding.cardAddForm.visibility = View.GONE
+            } else {
+                binding.cvEditCrop.visibility = View.GONE
+                binding.cardAddForm.visibility = View.VISIBLE
             }
         }
 
@@ -423,19 +403,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
             binding.kpaTwo.text = data.soilMoisture2 + " kPa"
 
             binding.soilMoistureOne.addSections(
-                Section(0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureOne.dpTOpx(12f))
+                Section(0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
             )
             //two
 //            binding.soilMoistureOne .indicator.color = Color.RED
             binding.soilMoistureTwo.addSections(
                 Section
-                    (0f, .1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#01B833"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#F3C461"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#DA0101"), binding.soilMoistureTwo.dpTOpx(12f))
+                    (0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
             )
 
 
@@ -545,7 +525,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.temperature)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -560,7 +540,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.rainfall)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -572,7 +552,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 //                    bundle.putInt("device_model_id", data.modelId!!.toInt())
 //                    bundle.putString("value", "pressure")
 //                    findNavController().navigate(
-//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+//                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
 //                        bundle
 //                    )
 //                }
@@ -587,7 +567,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.humidity)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -602,7 +582,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.windspeed)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -619,7 +599,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value",data.rainfall)
                     bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -634,7 +614,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.pressure)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
                 }
@@ -649,7 +629,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.pressure)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
 
@@ -665,7 +645,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.pressure)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
 
@@ -681,7 +661,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.soilTemperature1)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
 
@@ -698,7 +678,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
                     bundle.putString("temp_value", data.soilTemperature1)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
                     )
 
@@ -715,7 +695,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 //                    bundle.putString("temp_value", data.soilTemperature1)
 //                    bundle.putString("date_time", data.dataTimestamp)
 //                    findNavController().navigate(
-//                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+//                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
 //                        bundle
 //                    )
 //
@@ -730,9 +710,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, farmdetailsl
 
     override fun farmDetails(data: MyFarmsDomain) {
         val bundle = Bundle()
-        bundle.putInt("farm_id", data.id!!)
+        bundle.putParcelable("farm", data)
         findNavController().navigate(
-            R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3,
+            R.id.action_homePagePremiumFragment3_to_nav_farmdetails,
             bundle
         )
     }

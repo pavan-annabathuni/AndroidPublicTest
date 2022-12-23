@@ -1,5 +1,7 @@
 package com.waycool.data.repository
 
+import android.os.Handler
+import android.os.Looper
 import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
@@ -63,8 +65,8 @@ object CropsRepository {
     }
 
 
-    fun getAllCrops(): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsMaster().map {
+    fun getAllCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+        return CropMasterSyncer().getCropsMaster(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -206,9 +208,6 @@ object CropsRepository {
 //        }
 //    }
     fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
-        GlobalScope.launch {
-            MyCropSyncer().invalidateSync()
-        }
         return NetworkSource.getIotDevice()
     }
 
@@ -360,10 +359,30 @@ object CropsRepository {
     fun activateDevice(
         map: MutableMap<String, Any> = mutableMapOf<String, Any>()
     ): Flow<Resource<ActivateDeviceDTO?>> {
-        GlobalScope.launch {
-            MyCropSyncer().invalidateSync()
-        }
+        Handler(Looper.myLooper()!!).postDelayed({
+            GlobalScope.launch {
+                DashboardSyncer().invalidateSync()
+                DashboardSyncer().getData()
+            }
+        },500)
         return NetworkSource.activateDevice(map)
+    }
+
+    fun verifyQR(deviceNumber: String, isQR: Int): Flow<Resource<VerifyQrDomain?>> {
+        return NetworkSource.verifyQR(deviceNumber, isQR).map {
+            when(it){
+                is Resource.Success->{
+                    Resource.Success(VerifyQrDomainMapper().mapToDomain(it.data?:VerifyQrDTO()))
+                }
+                is Resource.Loading->{
+                    Resource.Loading()
+                }
+                is Resource.Error->{
+                    Resource.Error(it.message)
+                }
+            }
+
+        }
     }
 
     fun viewReport(id: Int): Flow<Resource<SoilTestReportMaster?>> {
@@ -505,8 +524,8 @@ object CropsRepository {
     }
 
 
-    fun getMyCrop2(crop_id: Int): Flow<Resource<List<MyCropDataDomain>>> {
-        return MyCropSyncer().getMyCrop(crop_id).map {
+    fun getMyCrop2(): Flow<Resource<List<MyCropDataDomain>>> {
+        return MyCropSyncer().getMyCrop().map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(

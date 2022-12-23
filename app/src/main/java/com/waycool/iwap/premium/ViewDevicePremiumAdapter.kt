@@ -3,7 +3,6 @@ package com.waycool.iwap.premium
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemAddDeviceBinding
-import com.example.soiltesting.databinding.ItemPremiumAddFarmBinding
 
 class ViewDevicePremiumAdapter :  RecyclerView.Adapter<ViewDevicePremiumViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewDevicePremiumViewHolder {

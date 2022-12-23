@@ -517,10 +517,10 @@ class OtpFragment : Fragment() {
                                     logginTv!!.text =
                                         Html.fromHtml("You have already logged in  <b>" + "another Devices" + "</b>. Click on <b>Continue</b> to login.")
                                     continueBtn!!.setOnClickListener { view: View? ->
+                                        bottomSheetDialog.dismiss()
                                         loginViewModel.logout(mobileNumber)
                                             .observe(requireActivity()) {
                                                 verifyUser()
-                                                bottomSheetDialog.dismiss()
                                             }
 
                                     }

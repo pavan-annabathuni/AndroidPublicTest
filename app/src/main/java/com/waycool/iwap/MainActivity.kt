@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.soiltesting.utils.Constant
+import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
@@ -22,8 +26,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
+    private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
-//    val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
+
+    //    val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
 
@@ -59,10 +65,11 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     when (it.data?.status) {
                         true -> {
-                //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                            //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                         }
                         false -> {
-                            Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
+                                .show()
                             Log.d("TAG", "tokenCheckViewModelTokenExpire:")
                             val intent = Intent(this, LoginMainActivity::class.java)
                             startActivity(intent)
@@ -92,19 +99,51 @@ class MainActivity : AppCompatActivity() {
     private fun getDashBoard() {
 
         tokenCheckViewModel.getDasBoard().observe(this) {
-            when (it) {
-                is Resource.Success -> {
-                    if (it.data?.subscription?.iot == true) {
-                        setupBottomNavigationAndNavigationGraph(isPremium = true)
-                    } else {
-                        setupBottomNavigationAndNavigationGraph(isPremium = false)
+            if(dashboardDomain==null){
+                dashboardDomain=it.data
+                when (it) {
+                    is Resource.Success -> {
+                        Log.d("dashboard", "${it.data?.subscription?.iot}")
+
+                        if (it.data?.subscription?.iot == true) {
+                            setupBottomNavigationAndNavigationGraph(isPremium = true)
+                            Log.d("dashboard", "Premium Triggered")
+
+                        } else {
+                            Log.d("dashboard", "Free Triggered")
+                            setupBottomNavigationAndNavigationGraph(isPremium = false)
+                        }
+                    }
+                    is Resource.Loading -> {
+
+
+                    }
+                    is Resource.Error -> {
                     }
                 }
-                is Resource.Loading -> {
+            }else{
+                if(dashboardDomain?.subscription?.iot!=it.data?.subscription?.iot){
+
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("dashboard", "${it.data?.subscription?.iot}")
+
+                            if (it.data?.subscription?.iot == true) {
+                                setupBottomNavigationAndNavigationGraph(isPremium = true)
+                                Log.d("dashboard", "Premium Triggered")
+
+                            } else {
+                                Log.d("dashboard", "Free Triggered")
+                                setupBottomNavigationAndNavigationGraph(isPremium = false)
+                            }
+                        }
+                        is Resource.Loading -> {
 
 
-                }
-                is Resource.Error -> {
+                        }
+                        is Resource.Error -> {
+                        }
+                    }
                 }
             }
 
@@ -129,21 +168,23 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         if (isPremium) {
-            bottomNavigationView.menu.clear()
-            bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
             navGraph.setStartDestination(R.id.nav_home_premium)
             navController.graph = navGraph
-        } else {
             bottomNavigationView.menu.clear()
-            bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
+            bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
+        } else {
             navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
+            bottomNavigationView.menu.clear()
+            bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
         }
 
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homePagesFragment -> showBottomNav()
+                R.id.myFarmFragment -> showBottomNav()
+                R.id.allServicesFragment2 -> showBottomNav()
                 com.example.profile.R.id.myProfileFragment -> showBottomNav()
                 com.example.mandiprice.R.id.mandiFragment -> showBottomNav()
                 com.waycool.featurecropprotect.R.id.cropSelectionFragment -> showBottomNav()
@@ -164,13 +205,29 @@ class MainActivity : AppCompatActivity() {
     private fun hideBottomNav() {
         binding.activityMainBottomNavigationView.clearAnimation()
         binding.activityMainBottomNavigationView.animate().translationY(
-            binding.activityMainBottomNavigationView.height.toFloat()).duration = 300
+            binding.activityMainBottomNavigationView.height.toFloat()
+        ).duration = 300
         binding.activityMainBottomNavigationView.visibility = View.GONE
 
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp()
+    }
+
+    fun <T> LiveData<T>.observeOnce(
+        owner: LifecycleOwner,
+        reactToChange: (T) -> Unit
+    ): Observer<T> {
+        val wrappedObserver = object : Observer<T> {
+            override fun onChanged(data: T) {
+                reactToChange(data)
+                removeObserver(this)
+            }
+        }
+
+        observe(owner, wrappedObserver)
+        return wrappedObserver
     }
 
 }

@@ -102,6 +102,7 @@ class AddCropPremiumFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID=it.data?.accountId
             }
+            irrigationTypeSpinner(accountID,crop_id,crop_type)
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")
         }
@@ -148,7 +149,7 @@ class AddCropPremiumFragment : Fragment() {
         }
     }
 
-    private fun irrigationTypeSpinner(account_id: Int, crop_id: Int, soil_type_id: Int) {
+    private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
         binding.tvSpinner.adapter = arrayAdapter
@@ -203,9 +204,15 @@ class AddCropPremiumFragment : Fragment() {
 //                                Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
 //                                bundle.putString("map",map.toString())
 
-                                bundle.putInt("account_id", account_id)
-                                bundle.putInt("cropid", crop_id)
-                                bundle.putInt("crop_type", soil_type_id)
+                                if (account_id != null) {
+                                    bundle.putInt("account_id", account_id)
+                                }
+                                if (crop_id != null) {
+                                    bundle.putInt("cropid", crop_id)
+                                }
+                                if (soil_type_id != null) {
+                                    bundle.putInt("crop_type", soil_type_id)
+                                }
                                 bundle.putString("area", area)
                                 bundle.putString("date", date)
                                 bundle.putString("irrigation_selected", irrigation_selected)
@@ -251,7 +258,7 @@ class AddCropPremiumFragment : Fragment() {
     }
 
 
-    private fun itemClicked(account_id: Int, crop_id: Int,soil_type_id:Int,irrigation_type:String) {
+    private fun itemClicked(account_id: Int?, crop_id: Int?,soil_type_id:Int?,irrigation_type:String) {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
@@ -276,9 +283,15 @@ class AddCropPremiumFragment : Fragment() {
             } else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
                 val map = mutableMapOf<String, Any>()
                 Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
-                map.put("account_no_id", account_id)
-                map.put("crop_id", crop_id)
-                map.put("soil_type_id",soil_type_id)
+                if (account_id != null) {
+                    map.put("account_no_id", account_id)
+                }
+                if (crop_id != null) {
+                    map.put("crop_id", crop_id)
+                }
+                if (soil_type_id != null) {
+                    map.put("soil_type_id",soil_type_id)
+                }
                 map.put("plot_nickname", binding.etNickName.text.toString())
                 map.put("area", binding.etAreaNumber.text)
                 map.put("irrigation_type",irrigation_type)

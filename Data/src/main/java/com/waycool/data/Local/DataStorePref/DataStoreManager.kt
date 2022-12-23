@@ -338,7 +338,7 @@ object DataStoreManager {
     }
     fun getDashBoard(): Flow<DashboardEntity>? {
         performPrefsSanityCheck()
-        return context?.soilTestHistory?.data
+        return context?.dashBoard?.data
             ?.catch { exception ->
                 Log.d("languageDataStore: ", exception.toString())
             }

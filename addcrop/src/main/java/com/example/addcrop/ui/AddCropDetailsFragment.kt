@@ -13,18 +13,24 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.viewmodel.AddViewModel
+import com.example.addcrop.viewmodel.AddCropViewModel
+import com.google.android.material.chip.Chip
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
+    private var selectedFarmId: Int?=null
+    private var cropIdSelected: Int?=null
     private var accountID: Int? = null
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
@@ -72,7 +78,7 @@ class AddCropDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
-            val cropIdSelected = arguments?.getInt("cropid")
+            cropIdSelected = arguments?.getInt("cropid")
         }
 
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -81,7 +87,7 @@ class AddCropDetailsFragment : Fragment() {
             }
 
             binding.cardCheckHealth.setOnClickListener {
-                postAddCrop(cropIdSelected!!, accountID!!)
+                cropIdSelected?.let { it1 -> accountID?.let { it2 -> postAddCrop(it1, it2) } }
             }
 
 
@@ -278,9 +284,8 @@ class AddCropDetailsFragment : Fragment() {
                     binding.progressBar.visibility = View.INVISIBLE
                     binding.cardCheckHealth.visibility = View.VISIBLE
                     activity?.finish()
-                    accountID?.let { it1 ->
-                        viewModel.getMyCrop2(it1).observe(viewLifecycleOwner) {}
-                    }
+                    viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
+
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)

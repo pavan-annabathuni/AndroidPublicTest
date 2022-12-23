@@ -310,6 +310,14 @@ interface ApiInterface {
 
     ): Response<ActivateDeviceDTO>
 
+    @FormUrlEncoded
+    @POST("api/v1/verify-device")
+    suspend fun verifyQR(
+        @HeaderMap headerMap: Map<String, String>,
+        @Field("device_number") deviceNumber: String,
+        @Field("is_device_qr") isDeviceQR: Int
+    ): Response<VerifyQrDTO>
+
 
     //view report
 

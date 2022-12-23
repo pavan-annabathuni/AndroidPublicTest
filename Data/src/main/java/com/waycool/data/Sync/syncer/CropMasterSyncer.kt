@@ -22,14 +22,14 @@ class CropMasterSyncer : SyncInterface {
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
-    fun getCropsMaster(): Flow<Resource<List<CropMasterEntity>>> {
+    fun getCropsMaster(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
 
         GlobalScope.launch(Dispatchers.IO) {
             if (isSyncRequired()) {
                 makeNetworkCall()
             }
         }
-        return getCropMasterFromLocal()
+        return getCropMasterFromLocal(searchQuery)
     }
 
     fun getCropsPestDiseases(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
@@ -92,8 +92,8 @@ class CropMasterSyncer : SyncInterface {
         }
     }
 
-    private fun getCropMasterFromLocal(): Flow<Resource<List<CropMasterEntity>>> {
-        return LocalSource.getCropMaster().map {
+    private fun getCropMasterFromLocal(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
+        return LocalSource.getCropMaster(searchQuery).map {
             if (it != null) {
                 Resource.Success(it)
             } else {

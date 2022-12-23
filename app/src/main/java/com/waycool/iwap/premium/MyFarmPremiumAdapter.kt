@@ -1,34 +1,21 @@
 package com.waycool.iwap.premium
 
-import android.content.Context
-import android.graphics.Color
-import android.location.Address
-import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import com.example.soiltesting.databinding.ItemPremiumAddFarmBinding
-import com.example.soiltesting.databinding.ItemPremiumCropsBinding
-import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.LatLng
-import com.google.android.libraries.maps.model.LatLngBounds
 import com.google.android.libraries.maps.model.Polygon
-import com.google.android.libraries.maps.model.PolygonOptions
-import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
-import com.waycool.iwap.R
-import java.util.*
+import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 
-class MyFarmPremiumAdapter(val farmdetailslistener: farmdetailslistener) :  RecyclerView.Adapter<MyFarmPremiumViewHolder>() {
+class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener) :  RecyclerView.Adapter<MyFarmPremiumViewHolder>() {
 //    val context: Context,
     var details = mutableListOf<MyFarmsDomain>()
     private var mMap: GoogleMap? = null
     private var polygon: Polygon? = null
     private var district: String? = null
-    fun setMovieList(movies: ArrayList<MyFarmsDomain>?) {
+
+    fun setMovieList(movies: List<MyFarmsDomain>?) {
         if (movies != null) {
             this.details = movies.toMutableList()
         }

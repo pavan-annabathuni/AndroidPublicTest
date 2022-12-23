@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,8 +23,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
-import com.example.irrigationplanner.ForecastFragment
-import com.example.irrigationplanner.IrrigationPlannerActivity
 import com.example.mandiprice.viewModel.MandiViewModel
 
 import com.example.soiltesting.SoilTestActivity
@@ -41,6 +38,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -66,6 +64,7 @@ import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
+    private var selectedFarm: MyFarmsDomain?=null
     private var district: String? = null
     private var jsonString: String? = null
     private var polygon: Polygon? = null
@@ -194,9 +193,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
-        binding.tvGoodMorning.setOnClickListener {
-            findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
-        }
+//        binding.tvGoodMorning.setOnClickListener {
+//            findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
+//        }
 //        binding.farmsDetailsCl.setOnClickListener {
 //            findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment3)
 //        }
@@ -321,33 +320,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         farmsAdapter.submitList(it.data)
                         farmsAdapter.onItemClick = { farm ->
-                            binding.farmnameHome.text = farm?.farmName
-
-                            binding.farmsDetailsCl.setOnClickListener {
-                                val bundle=Bundle()
-                                bundle.putParcelable("farm",farm)
-                                findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment3,bundle)
-                            }
-                            loadFarm(farm?.farmJson)
-//                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
-                            (farm?.farmCenter)?.get(0)?.latitude?.let { lat ->
-                                (farm?.farmCenter)?.get(0)?.longitude?.let { lng ->
-                                    getFarmLocation(
-                                        lat, lng
-                                    )
-                                }
-                            }
-                            binding.tvCityName.text = district
-                            viewModel.getMyCrop2(account!!).observe(viewLifecycleOwner) { crops ->
-                                    val croplist =
-                                        crops.data?.filter { filter ->
-                                            filter.farmId == farm?.id
-                                        }
-                                    if (croplist?.isEmpty() == true) {
-
-                                    }
-                                    farmsCropsAdapter.submitList(croplist)
-                                }
+                            selectedFarm=farm
+                            populateMyFarm()
                         }
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
@@ -379,6 +353,37 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun populateMyFarm() {
+        binding.farmnameHome.text = selectedFarm?.farmName
+
+        binding.farmsDetailsCl.setOnClickListener {
+            val bundle=Bundle()
+            bundle.putParcelable("farm",selectedFarm)
+            findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails,bundle)
+        }
+        drawFarmBoundaries(selectedFarm?.farmJson)
+//                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
+        (selectedFarm?.farmCenter)?.get(0)?.latitude?.let { lat ->
+            (selectedFarm?.farmCenter)?.get(0)?.longitude?.let { lng ->
+                getFarmLocation(
+                    lat, lng
+                )
+            }
+        }
+        binding.tvCityName.text = district
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) { crops ->
+            val croplist =
+                crops.data?.filter { filter ->
+                    filter.farmId == selectedFarm?.id
+                }
+            if (croplist?.isEmpty() == true) {
+
+            }
+            farmsCropsAdapter.submitList(croplist)
+        }
+
+    }
+
     private fun getFarmLocation(lat: Double, lng: Double) {
         viewModel.viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -392,7 +397,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun loadFarm(farmJson: ArrayList<LatLng>?) {
+    private fun drawFarmBoundaries(farmJson: ArrayList<LatLng>?) {
         mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmJson != null) {
             val points = farmJson
@@ -896,34 +901,24 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 //            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-            if (it.data != null) {
-                var accountId: Int? = null
-
-                accountId = it.data?.accountId
-
-//                var accountId: Int = it.data!!.account[0].id!!
-                if (accountId != null)
-                    viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                        Log.d("MyCrops", "myCrop: ${it.data}")
-                        myCropAdapter.submitList(it.data)
-                        if ((it.data != null)) {
-                            binding.tvCount.text = it.data!!.size.toString()
-                        } else {
-                            binding.tvCount.text = "0"
-                        }
-                        if (it.data!!.isNotEmpty()) {
-                            binding.cvEditCrop.visibility = View.VISIBLE
-                            binding.cardAddForm.visibility = View.GONE
-                        } else {
-                            binding.cvEditCrop.visibility = View.GONE
-                            binding.cardAddForm.visibility = View.VISIBLE
-                        }
-                        if (it.data?.size!! < 8) {
-                            binding.addLl.visibility = View.VISIBLE
-                        } else binding.addLl.visibility = View.GONE
-                    }
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            Log.d("MyCrops", "myCrop: ${it.data}")
+            myCropAdapter.submitList(it.data)
+            if ((it.data != null)) {
+                binding.tvCount.text = it.data!!.size.toString()
+            } else {
+                binding.tvCount.text = "0"
             }
+            if (it.data!!.isNotEmpty()) {
+                binding.cvEditCrop.visibility = View.VISIBLE
+                binding.cardAddForm.visibility = View.GONE
+            } else {
+                binding.cvEditCrop.visibility = View.GONE
+                binding.cardAddForm.visibility = View.VISIBLE
+            }
+            if (it.data?.size!! < 8) {
+                binding.addLl.visibility = View.VISIBLE
+            } else binding.addLl.visibility = View.GONE
         }
     }
 

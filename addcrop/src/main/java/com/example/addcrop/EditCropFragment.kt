@@ -54,21 +54,15 @@ class EditCropFragment : Fragment() {
         )
         return binding.root
     }
-    fun myCrops() {
+    private fun myCrops() {
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            var accountId = it.data?.accountId
-
-            if (accountId != null) {
-                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                    myCropAdapter.submitList(it.data)
-                    if ((it.data != null)) {
-                        binding.tvCount.text = it.data!!.size.toString()
-                    }
-                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
-
-                }
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            myCropAdapter.submitList(it.data)
+            if ((it.data != null)) {
+                binding.tvCount.text = it.data!!.size.toString()
             }
+            // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+
         }
     }
 }
