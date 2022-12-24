@@ -326,7 +326,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.temperature)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -341,7 +341,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.rainfall)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -356,7 +356,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.humidity)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -371,7 +371,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.windspeed)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -388,7 +388,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value",data.leafWetness)
                     bundle.putString("date_time",data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -403,7 +403,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.pressure)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
                 }
@@ -418,7 +418,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener {
                     bundle.putString("temp_value", data.soilMoisture1)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
-                        R.id.action_homePagePremiumFragment2_to_graphsFragment,
+                        R.id.action_farmDetailsFragment2_to_graphsFragment,
                         bundle
                     )
 

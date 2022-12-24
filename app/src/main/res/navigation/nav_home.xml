@@ -129,7 +129,11 @@
         android:id="@+id/farmDetailsFragment2"
         android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
         android:label="fragment_farm_details"
-        tools:layout="@layout/fragment_farm_details" />
+        tools:layout="@layout/fragment_farm_details" >
+        <action
+            android:id="@+id/action_farmDetailsFragment2_to_graphsFragment"
+            app:destination="@id/graphsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/deviceFragmentOne"
         android:name="com.waycool.iwap.premium.DeviceFragmentOne"
