@@ -49,17 +49,24 @@
             android:exported="true" />
         <activity
             android:name="com.waycool.iwap.MainActivity"
-            android:exported="true" />
-        <!--        <activity-->
-        <!--            android:name="com.waycool.featurecrophealth.CropHealthActivity"-->
-        <!--            android:exported="true" />-->
-        <!--        <activity-->
-        <!--            android:name="com.waycool.featurecropprotect.CropProtectActivity"-->
-        <!--            android:exported="true" />-->
-        <!--        <meta-data-->
-        <!--            android:name="com.google.android.geo.API_KEY"-->
-        <!--            android:value="${MAPS_API_KEY}" />-->
-        <service
+            android:exported="true" >
+<intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/weathershare"
+                    android:scheme="https"/>
+            </intent-filter>
+
+        </activity>
+
+       <service
             android:name=".service.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>

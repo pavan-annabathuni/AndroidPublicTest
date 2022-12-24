@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/errorLayout">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clServerError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvInternal"
+            android:src="@drawable/internal_server_error"
+            android:layout_marginBottom="40dp"/>
+        <TextView
+            android:id="@+id/tvInternal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oops! \nInternal server error"
+            android:textColor="#EC4544"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tvBePatient"
+            app:layout_constraintStart_toStartOf="@id/clBtnTryAgain"
+            android:layout_marginBottom="16dp"
+            />
+        <TextView
+            android:id="@+id/tvBePatient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please be patient and try again"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/clBtnTryAgain"
+            app:layout_constraintStart_toStartOf="@id/clBtnTryAgain"
+            android:layout_marginBottom="62dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBtnTryAgain"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/btn_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvTryAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Try again"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInternetError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvInternetProblem"
+            android:src="@drawable/internet_connection_error"
+            android:layout_marginBottom="40dp"/>
+        <TextView
+            android:id="@+id/tvInternetProblem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OOPS! \nThere is a problem with Internet."
+            android:textColor="#EC4544"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tvCheckInternetConnection"
+            app:layout_constraintStart_toStartOf="@id/clBtnTryAgainInternet"
+            android:layout_marginBottom="16dp"
+            />
+        <TextView
+            android:id="@+id/tvCheckInternetConnection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please check your Internet connection"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/clBtnTryAgainInternet"
+            app:layout_constraintStart_toStartOf="@id/clBtnTryAgainInternet"
+            android:layout_marginBottom="62dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBtnTryAgainInternet"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/btn_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvTryAgainInternet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Try again"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,6 +40,8 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -177,11 +179,7 @@ class RegistrationFragment : Fragment() {
             override fun afterTextChanged(editable: Editable) {
                 if (binding.nameEt.text.toString().trim().isNotEmpty()) {
                     //TODO Implement Reverse Geocoder
-                    if (binding.locationEt.text.toString().trim().length != 0) {
-                        binding.registerDoneBtn.isEnabled = true
-                    } else {
-                        binding.registerDoneBtn.isEnabled = false
-                    }
+                    binding.registerDoneBtn.isEnabled = binding.locationEt.text.toString().trim().length != 0
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -198,11 +196,7 @@ class RegistrationFragment : Fragment() {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.locationEt.text.toString().trim().length != 0) {
-                    if (binding.nameEt.text.toString().trim().length != 0) {
-                        binding.registerDoneBtn.isEnabled = true
-                    } else {
-                        binding.registerDoneBtn.isEnabled = false
-                    }
+                    binding.registerDoneBtn.isEnabled = binding.nameEt.text.toString().trim().length != 0
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -308,14 +302,7 @@ class RegistrationFragment : Fragment() {
             }
         }
 
-//        mediaPlayer = MediaPlayer()
-//        mediaPlayer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-//            Toast.makeText(requireContext(), "completed", Toast.LENGTH_SHORT).show()
-//            seekbar!!.setProgress(0)
-//            pause!!.setVisibility(View.GONE)
-//            play.setVisibility(View.VISIBLE)
-//        })
-    }
+   }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
@@ -357,15 +344,20 @@ class RegistrationFragment : Fragment() {
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        it.message?.let { it1 ->
+                            ToastStateHandling.toastError(requireContext(),
+                                it1,Toast.LENGTH_SHORT)
+                        }
                         Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        Toast.makeText(requireContext(), "Cancelled", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(),
+                            "Cancelled",Toast.LENGTH_SHORT)
 
                     }
             } else {
-                Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
+                ToastStateHandling.toastWarning(requireContext(),
+                    "Please turn on location",Toast.LENGTH_SHORT)
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -433,21 +425,23 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.length > 0 && longitutde.length > 0) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+                context?.let { ToastStateHandling.toastWarning(it,"No Internet",Toast.LENGTH_LONG) }
             } else {
+                binding.progressBar.visibility=View.VISIBLE
+
                 query = HashMap()
-                query.put("name", binding.nameEt.text.toString().trim())
-                query.put("contact", mobileNumber.toString())
-                query.put("lat", latitude)
-                query.put("long", longitutde)
-                query.put("lang_id", "1")
-                query.put("email", "")
-                query.put("pincode", pincode)
+                query["name"] = binding.nameEt.text.toString().trim()
+                query["contact"] = mobileNumber.toString()
+                query["lat"] = latitude
+                query["long"] = longitutde
+                query["lang_id"] = "1"
+                query["email"] = ""
+                query["pincode"] = pincode
                 village?.let { query.put("village", it) }
-                query.put("address", "")
-                query.put("state_id", "")
-                query.put("district_id", "")
-                query.put("sub_district_id", "")
+                query["address"] = ""
+                query["state_id"] = ""
+                query["district_id"] = ""
+                query["sub_district_id"] = ""
                 Log.d(
                     "register",
                     "test" + binding.nameEt.text.toString()
@@ -459,23 +453,24 @@ class RegistrationFragment : Fragment() {
 
                     when (it) {
                         is Resource.Success -> {
-                            Toast.makeText(
-                                activity,
-                                "Successfully Registered",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            binding.progressBar.visibility=View.GONE
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"SuccessFully Registered",Toast.LENGTH_SHORT) }
                             lifecycleScope.launch {
                                 userLogin()
                             }
                         }
-                        is Resource.Loading -> {}
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility=View.VISIBLE
+                        }
                         is Resource.Error -> {
+                            it.message?.let { it1 ->
+                                context?.let { it2 ->
+                                    ToastStateHandling.toastSuccess(
+                                        it2,
+                                        it1,Toast.LENGTH_SHORT)
+                                }
+                            }
 
-                            Toast.makeText(
-                                activity,
-                                it.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     }
 
@@ -508,8 +503,7 @@ class RegistrationFragment : Fragment() {
                         viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }
-//                        requireActivity().setResult(RESULT_OK)
-//                        requireActivity().finish()
+
                     }
                 }
                 is Resource.Loading -> {
@@ -547,8 +541,7 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -576,12 +569,10 @@ class RegistrationFragment : Fragment() {
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
-            Toast
-                .makeText(
+            ToastStateHandling.toastError(
                     requireContext(), " " + e.message,
                     Toast.LENGTH_SHORT
                 )
-                .show()
         }
     }
 
@@ -595,7 +586,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                var searchTag: String = Objects.requireNonNull(result)!![0]
+                val searchTag: String = Objects.requireNonNull(result)!![0]
                 binding.nameEt.setText(searchTag)
 
             }
@@ -610,15 +601,6 @@ class RegistrationFragment : Fragment() {
         mediaSeekbar: SeekBar,
         totalTime: TextView
     ) {
-        Log.d("RecordView", "actiondown2")
-//        audioWife = AudioWife.getInstance()
-//        audioWife.init(requireContext(), Uri.parse(path))
-//            .setPlayView(play)
-//            .setPauseView(pause)
-//            .setSeekBar(mediaSeekbar)
-//            .setRuntimeView(totalTime)
-//        //                .setTotalTimeView(mTotalTime);
-//        audioWife.play()
 
         mediaPlayer = MediaPlayer();
         mediaPlayer!!.setOnCompletionListener {

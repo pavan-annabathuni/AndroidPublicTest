@@ -340,7 +340,10 @@
                     tools:listitem="@layout/item_distance" />
 
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </ScrollView>
 
         <LinearLayout
@@ -383,7 +386,7 @@
             app:layout_constraintBottom_toTopOf="@+id/add_chat"
             app:layout_constraintEnd_toEndOf="@+id/add_chat"
             app:tint="@color/white"
-            tools:visibility="visible" />
+          />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_chat"
@@ -404,7 +407,8 @@
             app:layout_constraintBottom_toTopOf="@+id/add_fab"
             app:layout_constraintEnd_toEndOf="@+id/add_fab"
             app:tint="@color/white"
-            tools:visibility="visible" />
+        />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_fab"
@@ -419,9 +423,25 @@
             android:src="@drawable/ic_chat_call"
             android:theme="@style/Theme.MaterialComponents.Light"
             app:fabSize="normal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@color/white" />
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/clInclude"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:visibility="gone"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:background="#fff">
+    <include layout="@layout/api_error_handling"
+        android:id="@+id/errorState"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

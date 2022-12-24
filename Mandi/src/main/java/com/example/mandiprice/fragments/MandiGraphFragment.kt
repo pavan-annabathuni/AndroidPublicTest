@@ -4,14 +4,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -31,8 +32,13 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
-import com.waycool.newsandarticles.adapter.BannerAdapter
+import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
+import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
+import com.waycool.data.utils.Resource
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import java.io.File
@@ -44,6 +50,7 @@ import kotlin.collections.ArrayList
 
 
 class MandiGraphFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     lateinit var binding: FragmentMandiGraphBinding
     lateinit var listLine: ArrayList<Entry>
     lateinit var lineDataSet: LineDataSet
@@ -53,10 +60,10 @@ class MandiGraphFragment : Fragment() {
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
-    private var crop_master_id: Int? = null
-    private var mandi_master_id: Int? = null
-    private var crop_name: String? = null
-    private var market_name: String? = null
+    private var cropMasterId: Int? = null
+    private var mandiMasterId: Int? = null
+    private var cropName: String? = null
+    private var marketName: String? = null
     private var fragment: String? = null
 
     private val inputDateFormatter: SimpleDateFormat =
@@ -66,13 +73,13 @@ class MandiGraphFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            crop_master_id = it.getInt("cropId")
-            mandi_master_id = it.getInt("mandiId")
-            crop_name = it.getString("cropName")
-            market_name = it.getString("market")
-
+            cropMasterId = it.getInt("cropId")
+            mandiMasterId = it.getInt("mandiId")
+            cropName = it.getString("cropName")
+            marketName = it.getString("market")
             fragment = it.getString("fragment")
         }
+
     }
 
 
@@ -82,9 +89,11 @@ class MandiGraphFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
+        apiErrorHandlingBinding=binding.errorState
+
         binding.lifecycleOwner = this
-        binding.cropName.text = crop_name
-        binding.tvMarket.text = market_name
+        binding.cropName.text = cropName
+        binding.tvMarket.text = marketName
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
@@ -99,9 +108,50 @@ class MandiGraphFragment : Fragment() {
                 //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
             }
         }
+        binding.imgShare.setOnClickListener() {
+            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one",)
+        }
+        binding.recycleViewDis.adapter = DateAdapter()
+        binding.recycleViewDis.isNestedScrollingEnabled = true
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            mandiGraphPageApi()
+        }
+        mandiGraphPageApi()
 
 
         return binding.root
+    }
+
+    private fun mandiGraphPageApi() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+
+            context?.let { ToastStateHandling.toastWarning(it,"Please connect to network", Toast.LENGTH_SHORT) }
+        }else{
+            viewModel.viewModelScope.launch {
+                viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is Resource.Success ->{
+                            binding.viewModel = it.data
+                            binding.clInclude.visibility=View.GONE
+                            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+                            graph()
+                            setBanners()
+
+                        }
+
+                        is Resource.Loading->{
+
+                        }
+                        is Resource.Error->{
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,17 +196,13 @@ class MandiGraphFragment : Fragment() {
 
     private fun graph() {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) { it ->
+            viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) { it ->
 
 
                 listLine = ArrayList()
                 if (it.data?.data != null) {
                     for (i in it.data?.data!!.indices) {
-//                val inputDate:SimpleDateFormat = SimpleDateFormat(it.data!!.data[0].arrivalDate)
-//                val outputDate:SimpleDateFormat = SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ")
-//                val date:Date = inputDate.parse(it.data!!.data[0].arrivalDate)
-//                val formateDate = outputDate.format(date)
-//                Log.d("DATE", "graph: $formateDate ")
+
                         val xAxis: XAxis = binding.lineChart.getXAxis()
                         listLine.add(
                             Entry(
@@ -165,10 +211,6 @@ class MandiGraphFragment : Fragment() {
                         )
                     }
                 }
-//        listLine.add(Entry(20f,13f))
-//        listLine.add(Entry(30f,11f))
-//        listLine.add(Entry(40f,13f))
-//        listLine.add(Entry(60f,12f))
 
                 lineDataSet = LineDataSet(listLine, "")
                     val datesList = it.data?.data?.map { mandi ->
@@ -183,7 +225,7 @@ class MandiGraphFragment : Fragment() {
 
                 val valueFormatter2 = IndexAxisValueFormatter()
 
-                var xAxis2 = datesList?.toTypedArray()
+                val xAxis2 = datesList?.toTypedArray()
                 valueFormatter2.values = xAxis2
                 binding.lineChart.xAxis.valueFormatter = valueFormatter2
                 binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -261,13 +303,18 @@ class MandiGraphFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
-    fun screenShot() {
+    fun screenShot(
+        crop_master_id: Int?,
+        mandi_master_id: Int?,
+        crop_name: String?,
+        market_name: String?,
+        fragment: String?) {
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmap)
         shareLayout.draw(canvas)
         val imageFile = File(path)
         val outputFile = FileOutputStream(imageFile)
@@ -276,11 +323,34 @@ class MandiGraphFragment : Fragment() {
         outputFile.close()
         val URI = com.example.mandiprice.FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
-        val i = Intent()
-        i.action = Intent.ACTION_SEND
-        //i.putExtra(Intent.EXTRA_TEXT,"Title")
-        i.putExtra(Intent.EXTRA_STREAM, URI)
-        i.type = "text/plain"
-        startActivity(i)
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setTitle("Outgrow - Mandi Detail for $crop_name")
+                    .setDescription("Find Mandi details and more on Outgrow app")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener {task->
+                if (task.isSuccessful()) {
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                }
+            }
+
+
     }
 }

@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,16 +15,24 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.utils.NetworkUtil
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
 class PlayVideoFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private lateinit var binding: FragmentPlayVideoBinding
     private var videoSelected: VansFeederListDomain? = null
+    private var videoTitle:String?=null
+    private var videoDesc:String?=null
+    private var videoUrl:String?=null
+
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
     private lateinit var adapterVideo: VideosPagerAdapter
@@ -34,9 +43,13 @@ class PlayVideoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
+        apiErrorHandlingBinding=binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true)
-            {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     this@PlayVideoFragment.findNavController().navigateUp()
                 }
@@ -48,15 +61,47 @@ class PlayVideoFragment : Fragment() {
         return binding.root
     }
 
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check your internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            getVideos()
+
+        }
+
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null)
-            videoSelected = requireArguments().getParcelable("video")
+        if (arguments != null) {
+            if (arguments?.containsKey("video") == true)
+                videoSelected = requireArguments().getParcelable("video")
+            else {
+                videoTitle=arguments?.getString("title")
+                videoDesc=arguments?.getString("description")
+                videoUrl=arguments?.getString("url")
+            }
+        }
 
-        binding.ytTitleTv.text = videoSelected?.title
-        binding.ytDescriptionTv.text = videoSelected?.desc
-
+        if(videoSelected!=null) {
+            binding.ytTitleTv.text = videoSelected?.title
+            binding.ytDescriptionTv.text = videoSelected?.desc
+        }else{
+            binding.ytTitleTv.text = videoTitle
+            binding.ytDescriptionTv.text =videoDesc
+        }
         adapterVideo = VideosPagerAdapter(requireContext())
         binding.ytBottomsheetRv.adapter = adapterVideo
 
@@ -65,8 +110,7 @@ class PlayVideoFragment : Fragment() {
         }, 600)
 
 
-        val frag =
-            childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
+        val frag = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
 
         Handler(Looper.myLooper()!!).postDelayed({
             frag.initialize(
@@ -79,7 +123,9 @@ class PlayVideoFragment : Fragment() {
                     ) {
                         if (!p2) {
                             player = youTubePlayer
+                            if(videoSelected!=null)
                             youTubePlayer?.loadVideo(videoSelected?.contentUrl)
+                            else youTubePlayer?.loadVideo(videoUrl)
                             youTubePlayer?.play()
                             setupPlayerEvents()
                         }

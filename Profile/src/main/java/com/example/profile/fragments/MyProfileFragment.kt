@@ -20,15 +20,20 @@ import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.launch
 
 
 class MyProfileFragment : Fragment() {
     private lateinit var binding: FragmentMyProfileBinding
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     private val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
@@ -46,10 +51,17 @@ class MyProfileFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentMyProfileBinding.inflate(inflater)
+
+        apiErrorHandlingBinding=binding.errorState
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         //viewModel.getUsers()
         // viewModel.getUserDetails()
+
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
 
 
         binding.version.text = "App Ver ${com.example.profile.BuildConfig.VERSION_NAME}"
@@ -72,9 +84,30 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
-    fun observer(): Boolean {
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check your internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            observer()
 
-          viewModel.viewModelScope.launch {
+
+        }
+
+    }
+
+
+    fun observer(): Boolean {
+        viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
@@ -86,13 +119,6 @@ class MyProfileFragment : Fragment() {
               }
           }
 
-
-//        viewModel.getUserDetails().observe(viewLifecycleOwner){
-//            if(it.data?.profile?.profilePic!=null) {
-//               Glide.with(this).load(it.data?.profile?.profilePic).into(binding.proPic)
-//            Log.d("ProfilePic", "observer: $it")
-//
-//        }}
          return true
     }
 

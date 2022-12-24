@@ -45,10 +45,13 @@ dependencies {
 
     implementation project(path: ':Data')
     implementation project(path: ':UiComponents')
+    implementation project(path: ':FeatureLogin')
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.7.1'
 
 

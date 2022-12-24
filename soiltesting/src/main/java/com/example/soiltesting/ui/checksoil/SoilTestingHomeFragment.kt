@@ -1,6 +1,5 @@
 package com.example.soiltesting.ui.checksoil
 
-import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
 
@@ -13,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,10 +34,14 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
@@ -49,8 +51,10 @@ import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
-    private var _binding: FragmentSoilTestingHomeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit  var binding: FragmentSoilTestingHomeBinding
+//    private val binding get() = _binding!!
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
@@ -64,7 +68,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSoilTestingHomeBinding.inflate(inflater, container, false)
+        binding = FragmentSoilTestingHomeBinding.inflate(layoutInflater)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return binding.root
@@ -74,13 +78,19 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
+
         binding.recyclerview.adapter = soilHistoryAdapter
+
         initViewClick()
-//        bindObservers()
-//        locationClick()
         initViewBackClick()
         expandableView()
         expandableViewTWo()
+        binding.clProgressBar.visibility=View.VISIBLE
         expandableViewThree()
         getVideos()
         fabButton()
@@ -88,12 +98,42 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         setBanners()
     }
 
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.cardCheckHealth.visibility = View.GONE
+            binding.addFab.visibility=View.GONE
+
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            binding.cardCheckHealth.visibility = View.VISIBLE
+            binding.addFab.visibility=View.VISIBLE
+            setBanners()
+            getAllHistory()
+            getVideos()
+
+
+        }
+    }
+
     private fun setBanners() {
+        binding.clProgressBar.visibility=View.VISIBLE
 
         val bannerAdapter = AdsAdapter()
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility=View.GONE
+
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
@@ -122,14 +162,15 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun getAllHistory() {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
             if (accountID != null) {
                 Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
                 bindObserversSoilTestHistory(accountID!!)
+
             }
-
-
         }
     }
 
@@ -147,8 +188,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (accountID != null) {
                     Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                     isLocationPermissionGranted(accountID!!)
-                    binding.progressBar.isVisible = true
-                    binding.clProgressBar.visibility = View.VISIBLE
                     binding.cardCheckHealth.isClickable = false
 
                 }
@@ -171,13 +210,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
     private fun getVideos() {
+        binding.clProgressBar.visibility = View.VISIBLE
 
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility = View.GONE
         }
+
 
         adapter.onItemClick = {
             val bundle = Bundle()
@@ -289,88 +331,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     }
 
-//
-//    private fun bindObserversCheckSoilTest() {
-//        checkSoilTestViewModel.getCheckSoilTestLab(1,13.078100, 77.636580)
-//            .observe(viewLifecycleOwner, Observer {
-//                when (it) {
-//                    is Resource.Success -> {
-//                        binding.progressBar.isVisible = false
-//                        binding.clProgressBar.visibility = View.GONE
-//                        Log.d(
-//                            "TAG",
-//                            "bindObserversDataCheckSoilData:" + it.data.toString()
-//                        )
-//                        if (it.data!!.isNullOrEmpty()) {
-////                        binding.clProgressBar.visibility = View.VISIBLE
-////                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-//                            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-//                        } else if (it.data!!.isNotEmpty()) {
-//                            val response = it.data
-//                            Log.d(
-//                                TAG,
-//                                "bindObserversCheckSoilTestModelFJndsj: $response"
-//                            )
-//                            var bundle = Bundle().apply {
-//                                putParcelableArrayList("list", ArrayList<Parcelable>(response))
-//                            }
-//
-//                            findNavController().navigate(
-//                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-//                                bundle
-//                            )
-//                        }
-//
-//                    }
-//                    is Resource.Error -> {
-//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
-//                            .show()
-//
-//                    }
-//                    is Resource.Loading -> {
-//                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-//                            .show()
-//
-//                    }
-//                }
-////            when (model) {
-////                is NetworkResult.Success -> {
-////                    binding.progressBar.isVisible = false
-////                    binding.clProgressBar.visibility = View.GONE
-////                    Log.d("TAG", "bindObserversDataCheckSoilData:" + model.data.toString())
-////                    if (model.data?.data!!.isNullOrEmpty()) {
-//////                        binding.clProgressBar.visibility = View.VISIBLE
-//////                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-////
-////                        findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-////                    } else if (model.data.data.isNotEmpty()) {
-////                        val response = model.data.data
-////                        var bundle = Bundle().apply {
-////                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
-////                        }
-////                        Log.d(TAG, "bindObserversCheckSoilTestModel: ${model.data.data.toString()}")
-////                        findNavController().navigate(
-////                            R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-////                            bundle
-////                        )
-////                    }
-////                }
-////                is NetworkResult.Error -> {
-////                    Toast.makeText(requireContext(), model.message.toString(), Toast.LENGTH_SHORT)
-////                        .show()
-////                    binding.progressBar.isVisible = false
-////                    binding.clProgressBar.visibility = View.GONE
-////                }
-////                is NetworkResult.Loading -> {
-////                    binding.clProgressBar.visibility = View.VISIBLE
-////                    binding.progressBar.isVisible = true
-////
-////                }
-////            }
-//
-//            })
-//
-//    }
 
     private fun bindObserversSoilTestHistory(account_id: Int) {
         viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
@@ -380,6 +340,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else
                 when (it) {
                     is Resource.Success -> {
+                        binding.clProgressBar.visibility=View.GONE
+
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility=View.VISIBLE
 
@@ -402,11 +364,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        context?.let { it1 -> ToastStateHandling.toastError(it1, "Error", Toast.LENGTH_SHORT) }
 
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
 
                     }
                 }
@@ -472,10 +433,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 is Resource.Success -> {
                                     binding.clProgressBar.visibility = View.GONE
                                     binding.progressBar.isVisible = false
-                                    Log.d(
-                                        "TAG",
-                                        "bindObserversDataCheckSoilData:" + it.data.toString()
-                                    )
                                     if (it.data!!.isEmpty()) {
 
                                         CustomeDialogFragment.newInstance().show(
@@ -483,10 +440,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             CustomeDialogFragment.TAG
                                         )
                                         binding.cardCheckHealth.isClickable = true
-//                                        binding.clProgressBar.visibility = View.VISIBLE
-//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                                    } else if (it.data?.isNotEmpty() == true && it.data !=null) {
+                                    } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
                                         Log.d(
                                             TAG,
@@ -511,14 +465,22 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Currently We are Facing Server Error",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    binding.clProgressBar.visibility = View.GONE
+                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+                                        ToastStateHandling.toastWarning(
+                                            requireContext(),
+                                            "Please check you internet connectivity",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                    else{
+                                        ToastStateHandling.toastError(
+                                            requireContext(),
+                                            "Server Error",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
 
+                                    binding.clProgressBar.visibility = View.GONE
                                     binding.cardCheckHealth.isClickable = true
 
                                 }
@@ -540,10 +502,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     private fun fabButton(){
         var isVisible = false

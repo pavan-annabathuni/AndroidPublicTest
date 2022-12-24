@@ -18,6 +18,7 @@ import com.waycool.featurelogin.fragment.RegistrationFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfilePremiumAdapter.TilesVh> {
     List<ModuleMasterDomain> listItem;

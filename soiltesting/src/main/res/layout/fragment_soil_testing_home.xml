@@ -791,25 +791,13 @@
 
 
     </androidx.core.widget.NestedScrollView>
-    <!--        <ProgressBar-->
-    <!--            android:visibility="gone"-->
-    <!--            android:id="@+id/progressBar"-->
-    <!--            android:layout_width="@dimen/space90"-->
-    <!--            android:layout_height="@dimen/space90"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:indeterminate="true"-->
-    <!--            android:indeterminateDrawable="@drawable/ic_logo_loader"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintHorizontal_bias="0.5"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent" />-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clProgressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#99656866"
+        android:background="#ffffff"
         android:visibility="gone"
+        android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -819,13 +807,27 @@
             android:id="@+id/progressBar"
             android:layout_width="@dimen/space90"
             android:layout_height="@dimen/space90"
-            android:indeterminateDrawable="@drawable/ic_logo_loader"
-            android:visibility="gone"
+
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInclude"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#fff">
+        <include layout="@layout/api_error_handling"
+            android:id="@+id/errorState"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -947,4 +949,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@null" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

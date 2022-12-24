@@ -39,8 +39,6 @@ class LoginMainActivity : AppCompatActivity() {
         setContentView(binding!!.root)
         navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-//        navHost.findNavController().setGraph(R.navigation.login_nav)
-
         lifecycleScope.launch(Dispatchers.Main) {
             if (viewModel.getIsFirst()) {
                 navHost.findNavController().setGraph(R.navigation.onboarding_nav)
@@ -68,18 +66,6 @@ class LoginMainActivity : AppCompatActivity() {
     }
 
 
-    private fun checkRunTimePermission() {
-        val permissionArrays = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(permissionArrays, permissionId)
-        } else {
-            // if already permition granted
-            // PUT YOUR ACTION (Like Open cemara etc..)
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -89,30 +75,4 @@ class LoginMainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun moveToFragment(fragment: Fragment) {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.login_fragment_frame, fragment, fragment.javaClass.simpleName)
-//            .addToBackStack(null).commit()
-//    }
-
-//    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        val fragment = supportFragmentManager.findFragmentById(R.id.login_fragment_frame)
-//        if (requestCode == TruecallerSDK.SHARE_PROFILE_REQUEST_CODE) {
-//            fragment!!.onActivityResult(requestCode, resultCode, data)
-//        }
-//        if (requestCode == 101) {
-//            fragment!!.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        val fragment = supportFragmentManager.findFragmentById(R.id.login_fragment_frame)
-//        fragment!!.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//}
 }

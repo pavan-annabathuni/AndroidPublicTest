@@ -11,7 +11,6 @@ import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import com.example.cropinformation.apiservice.response.DataX
 import com.example.cropinformation.apiservice.videoApi
-import com.waycool.data.Network.NetworkModels.MyCropsModel
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository

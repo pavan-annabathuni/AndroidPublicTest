@@ -3,16 +3,15 @@ package com.waycool.weather.fragment
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -24,17 +23,16 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.videos.adapter.BannerAdapter
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.weather.R
 import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
-import com.waycool.weather.utils.Constants.*
 import com.waycool.weather.viewModel.WeatherViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -44,6 +42,8 @@ import java.util.*
 class WeatherFragment : Fragment() {
     private lateinit var binding: FragmentWeatherBinding
     private lateinit var shareLayout: LinearLayout
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
@@ -70,11 +70,19 @@ class WeatherFragment : Fragment() {
 
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
-        //translation()
+        apiErrorHandlingBinding=binding.errorState
+
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
             screenShot()
         }
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
+        observer()
+        setBanners()
+
         binding.recycleView.adapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             viewModel.displayPropertyDaily(it)
         })
@@ -92,6 +100,21 @@ class WeatherFragment : Fragment() {
 
         binding.imgBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
+    }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        }
+        else{
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+
+            observer()
+            setBanners()
+        }
     }
 //     fun onClick(){
 //          binding.recycleViewHourly.setOnClickListener(){
@@ -115,12 +138,15 @@ class WeatherFragment : Fragment() {
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
-        val i = Intent()
-        i.action = Intent.ACTION_SEND
-        //i.putExtra(Intent.EXTRA_TEXT,"Title")
-        i.putExtra(Intent.EXTRA_STREAM, URI)
-        i.type = "text/plain"
-        startActivity(i)
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
+        share.putExtra(Intent.EXTRA_STREAM, URI)
+        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+
+        startActivity(Intent.createChooser(share, "Share link!"))
     }
 
     private fun observer() {

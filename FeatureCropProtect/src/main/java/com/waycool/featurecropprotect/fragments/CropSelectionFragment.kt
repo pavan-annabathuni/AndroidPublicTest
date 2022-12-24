@@ -31,10 +31,12 @@ import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentCropSelectionBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import java.util.*
 
 
 class CropSelectionFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var selectedCategory: CropCategoryMasterDomain? = null
     private var _binding: FragmentCropSelectionBinding? = null
@@ -64,6 +66,8 @@ class CropSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarTitle.text="Protect your Crop"
+        apiErrorHandlingBinding=binding.errorState
+
 
 
         val callback: OnBackPressedCallback =
@@ -89,10 +93,8 @@ class CropSelectionFragment : Fragment() {
 //        binding.toolbarTitle.text = "Protect Your Crop"
 
         binding.cropsRv.adapter = adapter
-        binding.tvAddFrom.setOnClickListener {
-            val intent = Intent(activity, AddCropActivity::class.java)
-            startActivity(intent)
-        }
+
+
 
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
@@ -103,8 +105,9 @@ class CropSelectionFragment : Fragment() {
                 args
             )
         })
-//        binding.rvMyCrops.adapter = myCropAdapter
+        binding.rvMyCrops.adapter = myCropAdapter
         fabButton()
+
         myCrops()
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
@@ -141,10 +144,13 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun setUpCropCategories() {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                    binding.clProgressBar.visibility=View.GONE
+
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data
@@ -207,9 +213,13 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
+        binding.clProgressBar.visibility=View.VISIBLE
+
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility=View.GONE
+
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
@@ -292,6 +302,7 @@ class CropSelectionFragment : Fragment() {
     }
 
     fun myCrops() {
+        binding.clProgressBar.visibility=View.VISIBLE
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data?.size!=0)) {

@@ -39,6 +39,8 @@ import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -65,6 +67,9 @@ import kotlin.math.roundToInt
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
     private var selectedFarm: MyFarmsDomain?=null
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
+    private lateinit var newsBinding: GenericLayoutNewsListBinding
+
     private var district: String? = null
     private var jsonString: String? = null
     private var polygon: Polygon? = null
@@ -109,6 +114,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             if (value != "true")
                 findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
         }
+        videosBinding = binding.layoutVideos
+        newsBinding = binding.layoutNews
+
         return binding.root
     }
 
@@ -137,6 +145,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
             else -> binding.tvGoodMorning.text = "Namaste"
         }
+        networkCall()
+        videosBinding.imgRetry.setOnClickListener {
+            networkCall()
+        }
+
+        networkNewsCall()
+        newsBinding.imgRetry.setOnClickListener {
+            networkNewsCall()
+        }
+
+
 
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
@@ -185,8 +204,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
         binding.tvViewAllMandi.setOnClickListener {
-//            val intent = Intent(activity, MandiActivity::class.java)
-//            startActivity(intent)
             this.findNavController().navigate(R.id.navigation_mandi)
         }
         binding.cvWeather.setOnClickListener() {
@@ -240,16 +257,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         //weather("12.22", "78.22")
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(
-                lat,
-                long,
-                cropCategory,
-                state,
-                crop,
-                sortBy,
-                orderBy,
-                search
-            )
+            mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
                     // binding.viewModel = it
@@ -304,6 +312,48 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             mMap = googleMap
             mMap?.uiSettings?.setAllGesturesEnabled(false)
             mMap?.uiSettings?.isMapToolbarEnabled = false
+        }
+    }
+
+    private fun networkNewsCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+            newsBinding.newsListRv.visibility = View.GONE
+            newsBinding.viewAllNews.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Check internet",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            newsBinding.videoCardNoInternet.visibility = View.GONE
+            newsBinding.newsListRv.visibility = View.VISIBLE
+            newsBinding.viewAllNews.visibility = View.VISIBLE
+            setNews()
+        }
+    }
+
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+            videosBinding.videosListRv.visibility = View.GONE
+            videosBinding.viewAllVideos.visibility = View.GONE
+            videosBinding.videosScroll.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Check internet",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            videosBinding.videoCardNoInternet.visibility = View.GONE
+            videosBinding.videosListRv.visibility = View.VISIBLE
+            videosBinding.viewAllVideos.visibility = View.VISIBLE
+            videosBinding.videosScroll.visibility = View.VISIBLE
+            setVideos()
         }
     }
 

@@ -42,6 +42,8 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':featureChat')
+    implementation project(path: ':FeatureLogin')
+
 
 
     implementation 'androidx.paging:paging-common-ktx:3.1.1'

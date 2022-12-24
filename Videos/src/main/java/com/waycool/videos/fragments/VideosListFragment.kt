@@ -25,13 +25,16 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
-import com.waycool.videos.adapter.BannerAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentVideosListBinding
 import com.waycool.videos.VideoViewModel
@@ -43,6 +46,8 @@ class VideosListFragment : Fragment() {
 
     private lateinit var binding: FragmentVideosListBinding
     private var selectedCategory: VansCategoryDomain? = null
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
 
@@ -65,6 +70,12 @@ class VideosListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+
+        }
 
         binding.toolbarTitle.text = "Videos"
         binding.toolbar.setNavigationOnClickListener {
@@ -88,6 +99,34 @@ class VideosListFragment : Fragment() {
         adapterVideo = VideosPagerAdapter(requireContext())
         binding.videosVideoListRv.adapter = adapterVideo
 
+        adapterVideo.onItemShareClick = {
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                        .setDescription("Watch more videos and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                    }
+                }
+        }
 
         adapterVideo.onItemClick = {
             val bundle = Bundle()
@@ -142,6 +181,33 @@ class VideosListFragment : Fragment() {
 //                isAllFabsVisible = false
 //            }
 //        }
+
+    }
+
+
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.addFab.visibility = View.GONE
+            binding.materialCardView.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check your internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+
+
+        } else {
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            binding.addFab.visibility = View.VISIBLE
+            binding.materialCardView.visibility = View.VISIBLE
+            getVideoCategories()
+            setBanners()
+        }
 
     }
 
@@ -200,7 +266,7 @@ class VideosListFragment : Fragment() {
     }
 
     private fun getVideos(
-        tags: String? = null,
+        tags: String? = "",
         categoryId: Int? = null
     ) {
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
@@ -280,16 +346,17 @@ class VideosListFragment : Fragment() {
             }
         }
     }
-    private fun fabButton(){
+
+    private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener(){
-            if(!isVisible){
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            }else{
+            } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -297,15 +364,16 @@ class VideosListFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }
+
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }

@@ -1,6 +1,7 @@
 package com.waycool.iwap
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,13 +12,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.profile.ProfileActivity
 import com.example.soiltesting.utils.Constant
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurecropprotect.CropProtectActivity
+import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
+import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,8 +50,36 @@ class MainActivity : AppCompatActivity() {
 //        setupBottomNavigationBar()
         getDashBoard()
 
-        tokenCheckViewModel.getUserDetails().observe(this) {
+        CoroutineScope(Dispatchers.Main).launch {
+            if (!FeatureLogin.getLoginStatus()) {
+                val intent = Intent(this@MainActivity, LoginMainActivity::class.java)
+                startActivity(intent)
+                this@MainActivity.finish()
 
+            }
+        }
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+
+                }
+                if (deepLink?.lastPathSegment != null) {
+                    if (deepLink?.lastPathSegment!! == "weathershare") {
+                        val intent = Intent(this, WeatherActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                }
+            }
+            .addOnFailureListener(this) {
+                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            }
+
+
+        tokenCheckViewModel.getUserDetails().observe(this) {
             accountID = it.data?.accountId
             if (accountID != null) {
                 Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
@@ -63,21 +101,17 @@ class MainActivity : AppCompatActivity() {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
             when (it) {
                 is Resource.Success -> {
-                    when (it.data?.status) {
-                        true -> {
-                            //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-                        }
-                        false -> {
-                            Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
-                                .show()
-                            Log.d("TAG", "tokenCheckViewModelTokenExpire:")
-                            val intent = Intent(this, LoginMainActivity::class.java)
-                            startActivity(intent)
-                        }
-                        else -> {
-                            val intent = Intent(this, LoginMainActivity::class.java)
-                            startActivity(intent)
-                        }
+                    if (it.data?.status == true) {
+//                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                    } else if (it.data?.status == false) {
+                        Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
+                            .show()
+                        Log.d("TAG", "tokenCheckViewModelTokenExpire:")
+                        val intent = Intent(this, LoginMainActivity::class.java)
+                        startActivity(intent);
+                    } else {
+                        val intent = Intent(this, LoginMainActivity::class.java)
+                        startActivity(intent);
                     }
                 }
                 is Resource.Loading -> {

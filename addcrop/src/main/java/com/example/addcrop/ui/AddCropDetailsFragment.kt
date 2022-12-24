@@ -2,7 +2,6 @@ package com.example.addcrop.ui
 
 import android.R
 import android.app.DatePickerDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -23,15 +22,20 @@ import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
-    private var selectedFarmId: Int?=null
-    private var cropIdSelected: Int?=null
+    private var selectedFarmId: Int? = null
+    private var cropIdSelected: Int? = null
     private var accountID: Int? = null
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
     val myCalendar = Calendar.getInstance()
@@ -77,107 +81,66 @@ class AddCropDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
+
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
         }
 
-            viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                accountID = it.data?.accountId
-                getFarms()
-            }
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            accountID = it.data?.accountId
+            getFarms()
+        }
 
-            binding.cardCheckHealth.setOnClickListener {
-                cropIdSelected?.let { it1 -> accountID?.let { it2 -> postAddCrop(it1, it2) } }
-            }
+        binding.cardCheckHealth.setOnClickListener {
+            cropIdSelected?.let { it1 -> accountID?.let { it2 -> postAddCrop(it1, it2) } }
+        }
 
 
 //        spinner()
-            spinnerYear()
-            binding.clCalender.setOnClickListener {
-                showCalender()
-//            showDateDailog()
+        spinnerYear()
+        binding.clCalender.setOnClickListener {
+            showCalender()
+        }
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+        }
+
+
+
+        binding.cardCheckHealth.setOnClickListener {
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                accountID = it.data?.accountId
+                postAddCrop(cropIdSelected!!, accountID!!)
             }
-            binding.backBtn.setOnClickListener {
-                val isSuccess = findNavController().navigateUp()
-                if (!isSuccess) requireActivity().onBackPressed()
-            }
-//        if (binding.etNickName.text.toString().isEmpty() || binding.etAreaNumber.text.toString().isEmpty() || binding.etCalender.text.toString().isEmpty()){
-//
-//        }
+        }
 
-
-//        }
-
-//    private fun spinner() {
-//        val arrayAdapter =
-//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
-//        binding.tvSpinner.adapter = arrayAdapter
-//        binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-////                itemClicked()
-//                val item = p0?.selectedItem
-//                irrigation_selected = item.toString()
-////                arrayList.add(irrigation)
-//                if (colors[1] == (irrigation_selected)) {
-//
-//                    binding.clPlotNumber.visibility = View.GONE
-//                    binding.plotNumber.visibility = View.GONE
-//                    binding.tvCheckCrop.setText("Next")
-//                    binding.cardCheckHealth.setOnClickListener {
-//                        it.hideSoftInput()
-////                        nickName = binding.etPlotNumber.text.toString().trim()
-//                        area = binding.etPincodeNumber.text.toString().trim()
-//                        numberOfPlanets = binding.etState.text.toString().trim()
-//                        date = binding.etCalender.text.toString().trim()
-//                         if (area.isEmpty()) {
-//                            binding.etPincodeNumber.error = "Enter Area"
-//                            return@setOnClickListener
-//                        } else if (date.isEmpty()) {
-//                            binding.etCalender.error = "Pick up the Date"
-//                            return@setOnClickListener
-//
-//                        } else if (numberOfPlanets.isEmpty()) {
-//                            binding.etState.error = "Enter Number of Planets"
-//                            return@setOnClickListener
-//                        } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-//                                Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT)
-//                                    .show()
-//                                val bundle = Bundle()
-//                                bundle.putString("area", area)
-//                                bundle.putString("date", date)
-//                                bundle.putString("irrigation_selected",irrigation_selected)
-//                                bundle.putString("numberOfPlanets",numberOfPlanets)
-//                                findNavController().navigate(R.id.action_addCropDetailsFragment_to_plantSpacingFragment,bundle)
-//
-//
-//                        }
-//                    }
-//                } else if (colors[2] == (item)) {
-////                    itemClicked()
-//                    binding.clPlotNumber.visibility = View.VISIBLE
-//                    binding.plotNumber.visibility = View.VISIBLE
-//                    binding.tvCheckCrop.setText("Save Crop")
-//
-//                } else if (colors[3] == (item)) {
-////                    binding.etPincodeNumber.notify().
-//                    binding.clPlotNumber.visibility = View.VISIBLE
-//                    binding.plotNumber.visibility = View.VISIBLE
-//                    binding.tvCheckCrop.setText("Save Crop")
-//                    itemClicked()
-//
-//
-//                }
-//
-//            }
-//
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }
-//
-//    }
     }
+
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.cardCheckHealth.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            binding.cardCheckHealth.visibility = View.VISIBLE
+        }
+    }
+
 
     private fun getFarms() {
         if (accountID != null)
@@ -258,11 +221,9 @@ class AddCropDetailsFragment : Fragment() {
     }
 
 
-    //format(binding.etAreaNumber.text.toString()).toDouble()
     private fun postAddCrop(crop_id: Int, account_id: Int) {
         binding.progressBar.visibility = View.VISIBLE
         binding.cardCheckHealth.visibility = View.INVISIBLE
-//    if (binding.etNickName.text.isEmpty() ||format(binding.etAreaNumber.text.toString()).toDouble() ==null){
         val map = mutableMapOf<String, Any>()
         map["account_no_id"] = account_id
         map["crop_id"] = crop_id
@@ -275,10 +236,7 @@ class AddCropDetailsFragment : Fragment() {
 
         viewModel.addCropDataPass(
             map
-//            crop_id, account_id, binding.etNickName.text.toString(), 1,
-//            binding.etCalender.text.toString(), binding.etAreaNumber.text
         ).observe(requireActivity()) {
-//            Log.d(TAG, "itemClickedData: $myCalendar")
             when (it) {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.INVISIBLE
@@ -290,7 +248,6 @@ class AddCropDetailsFragment : Fragment() {
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                         .show()
-                    Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
                 }
                 is Resource.Loading -> {
                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
@@ -301,27 +258,6 @@ class AddCropDetailsFragment : Fragment() {
 
 
     }
-//    else {
-//        viewModel.addCropPassData(
-//            crop_id,account_id, binding.etNickName.text.toString(), 1,
-//             binding.etCalender.text.toString(),format(binding.etAreaNumber.text.toString()).toDouble()).observe(requireActivity()) {
-////            Log.d(TAG, "itemClickedData: $myCalendar")
-//            when (it) {
-//                is Resource.Success -> {
-//                    activity?.finish()
-//                }
-//                is Resource.Error -> {
-//                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-//                    Log.d(TAG, "postAddCropExption: ${it.message.toString()}")
-//                }
-//                is Resource.Loading -> {
-//                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-//
-//                }
-//            }
-//        }
-//    }
-//    }
 
 
     private fun itemClicked(rop_id: Int) {
@@ -330,8 +266,6 @@ class AddCropDetailsFragment : Fragment() {
             nickName = binding.etNickName.text.toString().trim()
             area = binding.etAreaNumber.text.toString().trim()
             date = binding.etCalender.text.toString().trim()
-
-//            numberOfPlanets = binding.etState.text.toString().trim()
 
             if (nickName.isEmpty()) {
                 binding.etNickName.error = "Nick name should not be empty"
@@ -345,58 +279,11 @@ class AddCropDetailsFragment : Fragment() {
             } else if (accountID == null) {
                 Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
             }
-//            else if (numberOfPlanets.isEmpty()) {
-//                binding.etState.error = "Enter Number of Planets"
-//                return@setOnClickListener
-//            }
-//            else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && accountID != null) {
-//                viewModel.addCropPassData(rop_id, accountID!!, binding.etNickName.text.toString(), 1,
-//                    sowing_date = dateCrop,
-//                    area = area.toDouble()).observe(requireActivity()) {
-//                    Log.d(TAG, "itemClickedData: $myCalendar")
-//                    if (it is Resource.Success) {
-//                        activity?.finish()
-//                    } else {
-//                        activity?.finish()
-//                        Toast.makeText(requireContext(), "Error API Call", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//
-//                }
-//
-//            }
+
 
         }
     }
 
-//    private fun addCropPostBody() {
-//        nickName = binding.etPlotNumber.text.toString().trim()
-//        area = binding.etPincodeNumber.text.toString().trim()
-//        date = binding.etCalender.text.toString().trim()
-//        numberOfPlanets = binding.etState.text.toString().trim()
-//        if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()  ) {
-//            Toast.makeText(requireContext(), "Success API Call", Toast.LENGTH_SHORT).show()
-////            val requestBody=AddCropRequest(19,area,1,"","","")
-////            viewModel.addCropPassData(requestBody)
-//        }
-//        else{
-//            Toast.makeText(requireContext(), "Please Fill The Details", Toast.LENGTH_SHORT).show()
-//        }
-//
-//            arrayList.add(nickName)
-//            arrayList.add(area)
-//            arrayList.add(date)
-//            arrayList.add(numberOfPlanets)
-//
-//
-//            Log.d(TAG, "bindHandlersArea: $nickName")
-//            Log.d(TAG, "bindHandlersArea: $area")
-//            Log.d(TAG, "bindHandlersArea: $date")
-//            Log.d(TAG, "bindHandlersArea: $numberOfPlanets")
-//            Log.d(TAG, "bindHandlersAreaList: $arrayList")
-//            Log.d(TAG, "bindHandlersSelectedItem: $irrigation_selected")
-//            Log.d(TAG, "bindHandlersYear: $year_selected")
-//    }
 
     private fun showCalender() {
 
@@ -407,10 +294,10 @@ class AddCropDetailsFragment : Fragment() {
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
                 myCalendar.add(Calendar.YEAR, 0);
-                view.setMinDate(myCalendar.timeInMillis)
+                view.minDate = myCalendar.timeInMillis
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 0)
-                view.setMaxDate(myCalendar.timeInMillis)
+                view.maxDate = myCalendar.timeInMillis
 
             }
 
@@ -423,9 +310,9 @@ class AddCropDetailsFragment : Fragment() {
         )
         dateCrop = dateofBirthFormat.format(myCalendar.time)
         myCalendar.add(Calendar.YEAR, -1);
-        dialog.datePicker.setMinDate(myCalendar.timeInMillis)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
         myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
-        dialog.datePicker.setMaxDate(myCalendar.getTimeInMillis());
+        dialog.datePicker.maxDate = myCalendar.timeInMillis;
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")

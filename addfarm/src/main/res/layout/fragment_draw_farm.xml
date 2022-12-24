@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,13 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DrawFarmFragment">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:elevation="8dp">
+        app:elevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -34,9 +35,12 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/appbarlayout"
+        app:layout_constraintStart_toStartOf="parent"
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -100,8 +104,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/micBtn"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible"
-                    app:tint="@color/textdark"/>
+                    app:tint="@color/textdark"
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,6 +142,40 @@
                     map:layout_constraintStart_toStartOf="parent"
                     map:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/pointA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="150dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    map:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/pointB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="70dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/pointA"
+                    map:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/pointC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="100dp"
+                    android:src="@drawable/circle_green"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pointA" />
+
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/reset_fab"
                     android:layout_width="wrap_content"
@@ -152,6 +190,21 @@
                     map:fabSize="mini"
                     map:layout_constraintBottom_toBottomOf="parent"
                     map:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <ImageView
+                    android:id="@+id/tutorial"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:src="@drawable/info"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:backgroundTint="#ffffff"
+                    app:layout_constraintBottom_toTopOf="@+id/gps_fab"
+                    app:layout_constraintEnd_toEndOf="@id/gps_fab"
+                    app:layout_constraintStart_toStartOf="@id/gps_fab"
+                    map:fabSize="mini"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -337,6 +390,19 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInclude"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#fff">
+        <include layout="@layout/api_error_handling"
+            android:id="@+id/errorState"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

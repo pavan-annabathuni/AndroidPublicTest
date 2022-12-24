@@ -12,10 +12,20 @@
         <activity
             android:name=".ProfileActivity"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/YourLightTheme">
-<!--            android:requestLegacyExternalStorage="true">-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/profile"
+                    android:scheme="https"/>
+            </intent-filter>
+
         </activity>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

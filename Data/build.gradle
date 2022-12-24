@@ -6,7 +6,6 @@ plugins {
     id "org.jetbrains.kotlin.plugin.parcelize"
     id 'kotlin-parcelize'
 }
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion appCompileSdkVersion
@@ -84,6 +83,9 @@ dependencies {
 
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation 'com.google.maps.android:places-ktx:2.0.0'
+
+    //toast
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
 
 }
 repositories {

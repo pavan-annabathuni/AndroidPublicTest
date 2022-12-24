@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,9 +26,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.content.ContextCompat
-import androidx.databinding.ObservableMap.OnMapChangedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -49,22 +48,30 @@ import com.waycool.addfarm.R
 import com.waycool.addfarm.adapter.PlacesListAdapter
 import com.waycool.addfarm.databinding.FragmentDrawFarmBinding
 import com.waycool.addfarm.utils.DrawingOption
+import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.PlacesSearchEventError
 import com.waycool.data.utils.PlacesSearchEventFound
 import com.waycool.data.utils.PlacesSearchEventLoading
-import kotlinx.coroutines.flow.merge
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import smartdevelop.ir.eram.showcaseviewlib.GuideView
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType
 import java.util.*
+import kotlin.collections.ArrayList
 
 
+@Suppress("DEPRECATION")
 class DrawFarmFragment : Fragment(), OnMapReadyCallback {
-
-
+    private var viewCase: GuideView?=null
+    private var pos: Int=0
     private var isLocationFabPressed: Boolean = false
     private var currentMarker: Marker? = null
     private var searchLocationMarker: Marker? = null
     private var mMap: GoogleMap? = null
     private var points: MutableList<LatLng> = mutableListOf()
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var markerList: MutableList<Marker> = mutableListOf()
     private var polygon: Polygon? = null
@@ -79,6 +86,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private lateinit var placesClient: PlacesClient
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
+    private val showCaseDataList:ArrayList<ShowCaseViewModel> = ArrayList<ShowCaseViewModel>()
+
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -116,7 +125,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         binding.toolbarTitle.text = "Add Farm"
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
@@ -126,8 +139,26 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         binding.placesRv.adapter = adapter
 
         (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)?.getMapAsync(this)
+        showCaseDataList.add(ShowCaseViewModel(binding.gpsFab,"Get Current Location","Click on the Location Button \nto view current location on google maps."))
+        showCaseDataList.add(ShowCaseViewModel(binding.pointA,"Mark Point 1","NEXT"))
+        showCaseDataList.add(ShowCaseViewModel(binding.pointB,"Mark Point 2","NEXT"))
+        showCaseDataList.add(ShowCaseViewModel(binding.pointC,"Mark alteast 3 Points to plot a farm","NEXT"))
+        showCaseDataList.add(ShowCaseViewModel(binding.undoFab,"Click this to Undo point","NEXT"))
+        showCaseDataList.add(ShowCaseViewModel(binding.resetFab,"Click this to Reset all points","NEXT"))
 
 
+
+
+        binding.tutorial.setOnClickListener {
+            binding.pointA.visibility=View.VISIBLE
+            binding.pointB.visibility=View.VISIBLE
+            binding.pointC.visibility=View.VISIBLE
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                guideView(showCaseDataList[pos])
+
+            }
+        }
         binding.gpsFab.setOnClickListener {
             getLocation()
             isLocationFabPressed = true
@@ -397,6 +428,48 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.tutorial.isClickable=false
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        }
+        else{
+            binding.tutorial.isClickable=true
+
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+            getLocation()
+        }
+    }
+
+    private fun guideView(showCaseData: ShowCaseViewModel) {
+       viewCase= GuideView.Builder(requireContext())
+            .setTitle(showCaseData.title)
+            .setContentText(showCaseData.content)
+            .setTargetView(showCaseData.view)
+            .setContentTextSize(12) //optional
+            .setTitleTextSize(14)
+            .setDismissType(DismissType.anywhere)//optional
+            .setGuideListener {
+                if(pos+1<=(showCaseDataList.size-1)) {
+                    pos += 1
+                    guideView(showCaseDataList[pos])
+                }
+                if(pos+1==showCaseDataList.size-1){
+                    binding.pointA.visibility=View.GONE
+                    binding.pointB.visibility=View.GONE
+                    binding.pointC.visibility=View.GONE
+                }
+
+            }
+            .build()
+        viewCase!!.show()
+
+    }
+
 
 
     override fun onMapReady(p0: GoogleMap?) {

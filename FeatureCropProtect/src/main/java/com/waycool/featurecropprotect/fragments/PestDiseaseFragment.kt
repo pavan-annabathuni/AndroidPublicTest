@@ -15,7 +15,9 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -24,9 +26,11 @@ import com.waycool.featurecropprotect.Adapter.DiseasesParentAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseBinding
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 
 
 class PestDiseaseFragment : Fragment() {
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private var selectedCategory: CropCategoryMasterDomain? = null
     private lateinit var binding: FragmentPestDiseaseBinding
@@ -50,11 +54,16 @@ class PestDiseaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        apiErrorHandlingBinding=binding.errorState
         arguments?.let {
             cropId = it.getInt("cropid")
             cropName = it.getString("cropname")
         }
 
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -62,18 +71,25 @@ class PestDiseaseFragment : Fragment() {
 
         binding.diseasesRv.adapter = adapter
 
+
+
+        pestDiseaseApiCall()
+        setBanners()
+        fabButton()
+    }
+
+    private fun pestDiseaseApiCall() {
         cropId?.let { cropId ->
             viewModel.getPestDiseaseListForCrop(cropId).observe(requireActivity()) {
                 when (it) {
                     is Resource.Success -> {
-//                        Toast.makeText(requireContext(),"Success: ${it.data?.size}",Toast.LENGTH_SHORT).show()
                         if (it.data == null)
                             adapter.submitList(emptyList())
                         else
                             adapter.submitList(it.data)
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loadind..", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Loading.", Toast.LENGTH_SHORT).show()
 
                     }
                     is Resource.Error -> {
@@ -94,8 +110,26 @@ class PestDiseaseFragment : Fragment() {
                 args
             )
         }
-        setBanners()
-        fabButton()
+    }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.diseasesRv.visibility=View.GONE
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            binding.addFab.visibility=View.GONE
+            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+
+
+        }else{
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+            binding.addFab.visibility=View.VISIBLE
+            binding.diseasesRv.visibility=View.VISIBLE
+            pestDiseaseApiCall()
+            setBanners()
+        }
+
     }
 
     private fun setBanners() {

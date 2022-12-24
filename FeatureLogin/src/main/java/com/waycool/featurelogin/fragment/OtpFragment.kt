@@ -36,6 +36,7 @@ import com.waycool.core.retrofit.OTPApiCient
 import com.waycool.data.utils.NetworkUtil
 //import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -179,7 +180,7 @@ class OtpFragment : Fragment() {
             containerSize = 48.dp,
             passwordChar = "•",
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor)),
+            charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
         )
 
     }
@@ -210,7 +211,7 @@ class OtpFragment : Fragment() {
         }
     }
 
-    val isSmsPermissionGranted: Boolean
+    private val isSmsPermissionGranted: Boolean
         get() = activity?.let {
             ContextCompat.checkSelfPermission(
                 it,
@@ -395,84 +396,8 @@ class OtpFragment : Fragment() {
             Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
         } else {
             apiOTP(mobileNumber)
-            /*SendOTPConfigBuilder()
-                .setCountryCode(91)
-                .setMobileNumber(mobileNumber)
-                .setVerifyWithoutOtp(false) //direct verification while connect with mobile network
-                .setAutoVerification(activity) //Auto read otp from Sms And Verify
-                .setMessage("Welcome to GramworkX, Your Verification Code for Signup is ##OTP##")
-                .setSenderId("GWXIND")
-                .setOtpLength(OTP_LENGTH)
-                .setVerificationCallBack(VerificationListener { sendOTPResponseCode, s ->
-                    requireActivity().runOnUiThread {
-                        if (sendOTPResponseCode == SendOTPResponseCode.DIRECT_VERIFICATION_SUCCESSFUL_FOR_NUMBER || sendOTPResponseCode == SendOTPResponseCode.OTP_VERIFIED) {
-                            //otp verified OR direct verified by send otp 2.O
-                            //otpVerified()
-                            Toast.makeText(
-                                context,
-                                " Verified",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            verifyUser()
-                        } else if (sendOTPResponseCode == SendOTPResponseCode.READ_OTP_SUCCESS) {
-                            //Auto read otp from sms successfully
-                            // you can get otp form message filled
-                            Toast.makeText(
-                                context,
-                                "OTP auto",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                           // binding.otpPassword.setText(s)
-
-                        } else if (sendOTPResponseCode == SendOTPResponseCode.SMS_SUCCESSFUL_SEND_TO_NUMBER || sendOTPResponseCode == SendOTPResponseCode.DIRECT_VERIFICATION_FAILED_SMS_SUCCESSFUL_SEND_TO_NUMBER) {
-                            // Otp send to number successfully
-
-                            Toast.makeText(
-                                activity,
-                                "OTP Sent",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
-                    }
-                }).build()
-
-
-            SendOTP.getInstance().trigger.initiate()*/
         }
     }
-
-    /* fun onSendOtpResponse(responseCode: SendOTPResponseCode, s: String?) {
-        runOnUiThread {
-            if (responseCode == SendOTPResponseCode.DIRECT_VERIFICATION_SUCCESSFUL_FOR_NUMBER || responseCode == SendOTPResponseCode.OTP_VERIFIED) {
-                //otp verified OR direct verified by send otp 2.O
-                //otpVerified()
-                Toast.makeText(
-                    context,
-                    " verified",
-                    Toast.LENGTH_SHORT
-                ).show()
-                verifyUser()
-            } else if (responseCode == SendOTPResponseCode.READ_OTP_SUCCESS) {
-                //Auto read otp from sms successfully
-                // you can get otp form message filled
-                Toast.makeText(
-                    context,
-                    "OTP auto",
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.otpPassword.setText(s)
-
-            } else if (responseCode == SendOTPResponseCode.SMS_SUCCESSFUL_SEND_TO_NUMBER || responseCode == SendOTPResponseCode.DIRECT_VERIFICATION_FAILED_SMS_SUCCESSFUL_SEND_TO_NUMBER) {
-                // Otp send to number successfully
-                Toast.makeText(
-                    context,
-                    "OTP Sent",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }*/
 
 
     fun verifyUser() {
@@ -496,9 +421,12 @@ class OtpFragment : Fragment() {
                                     loginViewModel.setUserToken(loginMaster.data)
 
                                 }
+                                ToastStateHandling.toastSuccess(
+                                    requireContext(),
+                                    "Logged in successfully",
+                                    Toast.LENGTH_SHORT
+                                )
                                 gotoMainActivity()
-//                                requireActivity().setResult(RESULT_OK)
-//                                requireActivity().finish()
 
                             } else {
                                 if (loginMaster?.data == "406") {
@@ -548,20 +476,6 @@ class OtpFragment : Fragment() {
     }
 
 
-//    fun verifyUser() {
-//
-//
-//        if (existingUser.equals("0")) {
-//            moveToRegistration(RegistrationFragment())
-//        } else {
-//            SharedPreferenceUtility.setMobileNumber(context, mobileNumber)
-//            SharedPreferenceUtility.seUserToken(context, fcmToken)
-//            SharedPreferenceUtility.setLogin(context, "1")
-//            requireActivity().setResult(RESULT_OK)
-//            requireActivity().finish()
-//        }
-//    }
-
     private fun moveToRegistration() {
         val args = Bundle()
         args.putString(
@@ -576,7 +490,7 @@ class OtpFragment : Fragment() {
     fun apiOTP(mobileNumber: String) {
         loginViewModel.getOtp(mobileNumber).observe(requireActivity()) {
             if (it is Resource.Success) {
-                Toast.makeText(requireContext(), "OTP Sent", Toast.LENGTH_LONG).show()
+                context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"OTP Sent",Toast.LENGTH_SHORT) }
             }
         }
     }

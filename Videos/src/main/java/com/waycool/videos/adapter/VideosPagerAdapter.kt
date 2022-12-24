@@ -20,6 +20,8 @@ class VideosPagerAdapter(
     PagingDataAdapter<VansFeederListDomain, VideosPagerAdapter.VideosViewHolder>(COMPARATOR) {
 
     var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
+    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
@@ -46,14 +48,15 @@ class VideosPagerAdapter(
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(itemBinding.videosListVideoImage)
             itemBinding.share.setOnClickListener {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                val sharetext =
-                    """Hi, Checkout the video on ${vans?.title} at ${vans?.contentUrl} . For more videos Download Outgrow App from PlayStore 
-https://play.google.com/store/apps/details?id=${it.context.packageName}"""
-                sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
-                sendIntent.type = "text/plain"
-                it.context.startActivity(Intent.createChooser(sendIntent, "share"))
+                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
+//                val sendIntent = Intent()
+//                sendIntent.action = Intent.ACTION_SEND
+//                val sharetext =
+//                    """Hi, Checkout the video on ${vans?.title} at ${vans?.contentUrl} . For more videos Download Outgrow App from PlayStore
+//https://play.google.com/store/apps/details?id=${it.context.packageName}"""
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
+//                sendIntent.type = "text/plain"
+//                it.context.startActivity(Intent.createChooser(sendIntent, "share"))
             }
 
             itemBinding.videosListVideoCardview.setOnClickListener {
