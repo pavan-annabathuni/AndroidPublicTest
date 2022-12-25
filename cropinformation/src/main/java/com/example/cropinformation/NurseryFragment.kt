@@ -42,9 +42,9 @@ class NurseryFragment : Fragment() {
             val data = it.data!!
 
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Nursery Practices") {
+                if(data[i].label_name=="Nursery Practices"||data[i].labelNameTag=="Nursery Practices") {
 
-                    var jsonData: String = data[i].label_value!!
+                    var jsonData: String = data[i].labelValueTag!!
                     val jsonArray = JSONArray(jsonData)
                     binding.Germination.text = jsonArray.getJSONObject(0).get("title").toString()
                     binding.GerminationTime.text = jsonArray.getJSONObject(0).get("value").toString()

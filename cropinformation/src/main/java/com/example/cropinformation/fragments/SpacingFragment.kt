@@ -40,10 +40,11 @@ class SpacingFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Spacing between Row to Row") {
+                if (data[i].label_name == "Spacing between Row to Row"||data[i].labelNameTag == "Spacing between Row to Row") {
                     binding.labelName2.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
                     binding.labelValue3.text = data[i].label_value
+                    break
                 }
         }
 }}}

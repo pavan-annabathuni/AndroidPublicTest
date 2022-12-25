@@ -9,5 +9,14 @@
         android:id="@+id/ndviFragment"
         android:name="com.example.ndvi.NdviFragment"
         android:label="fragment_ndvi"
-        tools:layout="@layout/fragment_ndvi" />
+        tools:layout="@layout/fragment_ndvi" >
+        <action
+            android:id="@+id/action_ndviFragment_to_infoSheetFragment"
+            app:destination="@id/infoSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/infoSheetFragment"
+        android:name="com.example.ndvi.InfoSheetFragment"
+        android:label="fragment_info_sheet"
+        tools:layout="@layout/fragment_info_sheet" />
 </navigation>

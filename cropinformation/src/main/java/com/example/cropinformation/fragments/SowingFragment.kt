@@ -1,6 +1,7 @@
 package com.example.cropinformation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,15 +37,22 @@ class SowingFragment : Fragment() {
     }
 
     private fun observer() {
+        var lang = "en"
+        ViewModel.getUserDetails().observe(viewLifecycleOwner){
+            lang= it.data?.profile?.langCode.toString()
+        }
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Sowing Season") {
-            val values = data[i].label_value
+                if(data[i].label_name=="Sowing Season"||data[i].labelNameTag=="Sowing Season") {
+                   binding.tvLabelName.text = data[i].label_name
+                    val  values = data[i].labelValueTag
+
+
             val lstValues: List<String> = values?.split(",")!!.map { it -> it.trim() }
             lstValues.forEach { itt ->
                 when (itt) {
-                    "Jan" -> binding.jan.setBackgroundResource(R.drawable.brown_circle_border)
+                    "Jan" ->binding.jan.setBackgroundResource(R.drawable.brown_circle_border)
                     "Feb" -> binding.tvFeb.setBackgroundResource(R.drawable.brown_circle_border)
                     "Mar" -> binding.Mar.setBackgroundResource(R.drawable.brown_circle_border)
                     "Apr" -> binding.Apr.setBackgroundResource(R.drawable.brown_circle_border)

@@ -58,6 +58,7 @@ import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.Dispatchers
+import com.waycool.weather.utils.WeatherIcons
 import kotlinx.coroutines.launch
 import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
@@ -258,7 +259,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         mandiViewModel.viewModelScope.launch {
             cropCategory?.let {
                 state?.let { it1 ->
-                    mandiViewModel.getMandiDetails(lat,long,it, it1, crop, sortBy, orderBy, search)
+                    mandiViewModel.getMandiDetails(lat,long,it, it1, crop, sortBy, orderBy, search,0)
                         .observe(viewLifecycleOwner) {
                             mandiAdapter.submitData(lifecycle, it)
                         }
@@ -611,14 +612,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         String.format("%.0f", it.data?.daily?.get(0)?.pop?.times(100)) + "%"
                 Log.d("Weather", "weather: $it")
                 if (it.data?.current?.weather?.isNotEmpty() == true)
-                    Glide.with(requireContext())
-                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
-                        .into(binding.ivWeather)
+//                    Glide.with(requireContext())
+//                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
+//                        .into(binding.ivWeather)
                 binding.tvHumidityDegree.text =
                     String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
                 if (null != it) {
+                    WeatherIcons.setWeatherIcon(it.data!!.current?.weather?.get(0)?.icon!!,binding.ivWeather)
                     val date: Long? = it.data?.current?.dt?.times(1000L)
                     val dateTime = Date()
                     if (date != null) {

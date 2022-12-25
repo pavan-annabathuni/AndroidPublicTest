@@ -17,16 +17,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.cropinformation.adapter.CropListAdapter
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CropInfoSelectionFragment : Fragment() {
@@ -54,6 +58,7 @@ class CropInfoSelectionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
+        translation()
         return binding.root
     }
 
@@ -216,7 +221,9 @@ class CropInfoSelectionFragment : Fragment() {
             RecognizerIntent.EXTRA_LANGUAGE,
             Locale.getDefault()
         )
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+        viewModel.viewModelScope.launch {
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+        }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
@@ -286,5 +293,15 @@ class CropInfoSelectionFragment : Fragment() {
 
         }
 
+    }
+    private fun translation(){
+        var title:String
+        TranslationsManager().loadString("str_description",binding.textView )
+        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
+        viewModel.viewModelScope.launch{
+            title = TranslationsManager().getString("str_title")
+            binding.toolbarTitle.text = title
+
+        }
     }
 }

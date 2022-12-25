@@ -20,6 +20,8 @@ import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.syncer.*
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.FeatureChat
@@ -27,6 +29,7 @@ import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -38,6 +41,7 @@ class MyProfileFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
+    private lateinit var appVer:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -58,6 +62,10 @@ class MyProfileFragment : Fragment() {
         //viewModel.getUsers()
         // viewModel.getUserDetails()
 
+        viewModel.viewModelScope.launch {
+            appVer = TranslationsManager().getString("str_app_ver")
+            binding.version.text = "$appVer ${com.example.profile.BuildConfig.VERSION_NAME}"
+        }
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -80,6 +88,7 @@ class MyProfileFragment : Fragment() {
             requireActivity(),
             callback
         )
+        translation()
         observer()
         return binding.root
     }
@@ -258,36 +267,38 @@ class MyProfileFragment : Fragment() {
                         }
                     moveToLogin()
                 }
+
         }
     private fun moveToLogin() {
         val intent:Intent = Intent(context, LoginMainActivity::class.java)
         startActivity(intent)
         activity?.finish()
+        GlobalScope.launch {
+            LocalSource.deleteAllMyCrops()
+            LocalSource.deleteTags()
+            LocalSource.deleteCropMaster()
+            LocalSource.deleteCropInformation()
+            LocalSource.deletePestDisease()
+            MyCropSyncer().invalidateSync()
+            CropMasterSyncer().invalidateSync()
+            CropInformationSyncer().invalidateSync()
+            TagsSyncer().invalidateSync()
+            PestDiseaseSyncer().invalidateSync()
+
+        }
     }
+      private fun translation(){
+          TranslationsManager().loadString("str_farmer_profile",binding.tvFarmer)
+          TranslationsManager().loadString("str_myProfile",binding.tvMyProfile)
+          TranslationsManager().loadString("str_language",binding.tvLang)
+          TranslationsManager().loadString("str_about",binding.tvAbout)
+          TranslationsManager().loadString("str_invite_farmer",binding.tvInvite)
+          TranslationsManager().loadString("str_ask_chat",binding.tvAsk)
+          TranslationsManager().loadString("str_rate_us",binding.tvRate)
+          TranslationsManager().loadString("str_logout",binding.tvLogout)
+          TranslationsManager().loadString("str_privacy_policy",binding.textView)
+          TranslationsManager().loadString("str_terms",binding.textView2)
+          TranslationsManager().loadString("str_farm_support",binding.tvSupport)
+      }
 
    }
-//internal class JwtAuth : JwtAuthenticator {
-//
-//    private fun retrieveToken(callback: JwtCallback) {
-//        // request to backend service that returns a JWT Token or an Error
-//
-//        callback.onSuccess("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NTAsIm5hbWUiOiJTZCIsImNvbnRhY3QiOiI3Njc5OTUyMDUwIiwiZW1haWwiOiI3Njc5OTUyMDUwNjM3MjFmMGNkYmY1YmR1bW15QHdheWNvb2wuaW4iLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiYXBwcm92ZWQiOjEsInNldHRpbmdzIjpudWxsLCJpYXQiOjE2Njg0MjM0MzYsImp0aSI6IjYzNzIxZjBjZGJmODIiLCJwcm9maWxlIjp7ImlkIjozMSwiZ2VuZGVyIjpudWxsLCJhZGRyZXNzIjpudWxsLCJ2aWxsYWdlIjoiQmVsbGFuZHVyIiwicGluY29kZSI6IjU2MDEwMyIsInN0YXRlIjpudWxsLCJkaXN0cmljdCI6bnVsbCwic3ViX2Rpc3RyaWN0IjpudWxsLCJjaXR5IjpudWxsLCJjb3VudHJ5IjpudWxsLCJsYXQiOiIxMi45MzAxNDAwMCIsImxvbmciOiI3Ny42ODYyOTAwMCIsInByb2ZpbGVfcGljIjpudWxsLCJ1c2VyX2lkIjo1MCwibGFuZ19pZCI6MX0sImFjY291bnQiOlt7ImlkIjozMCwiYWNjb3VudF9ubyI6IkFITFg3VlNZTVIiLCJhY2NvdW50X3R5cGUiOiJvdXRncm93IiwiaXNfYWN0aXZlIjoxLCJkZWZhdWx0X21vZHVsZXMiOjEsImlzX3ByZW1pdW0iOjB9XX0.y3pY-4UPvfmPjPFIwRbNmABQ8nclvtdjF_Vx91yJQno")
-//    }
-//
-//    override fun getToken(jwtCompletion: JwtCompletion) {
-//        retrieveToken(object : JwtCallback {
-//            override fun onSuccess(token: String?) {
-//                jwtCompletion.onTokenLoaded(token)
-//            }
-//
-//            override fun onError() {
-//                jwtCompletion.onError()
-//            }
-//        })
-//    }
-//
-//    internal interface JwtCallback {
-//        fun onSuccess(token: String?)
-//        fun onError()
-//    }
-//}

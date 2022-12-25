@@ -20,6 +20,7 @@ import com.waycool.data.Network.NetworkModels.Disease
 import com.waycool.data.Network.NetworkModels.GetFarmSupportData
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDataDomain
+import com.waycool.data.translations.TranslationsManager
 
 class AddUseAdapter(val onClickListener: OnClickListener):ListAdapter<GetFarmSupportData,AddUseAdapter.ViewHolder>(DiffCallback){
     class ViewHolder(private val binding:ItemSupportBinding):
@@ -59,6 +60,8 @@ class AddUseAdapter(val onClickListener: OnClickListener):ListAdapter<GetFarmSup
 //       dialog.show()
 
    }
+        TranslationsManager().loadString("str_delete",holder.delete)
+
     }
     companion object DiffCallback : DiffUtil.ItemCallback<GetFarmSupportData>() {
 

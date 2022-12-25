@@ -15,6 +15,7 @@ class PostHarvestFragment : Fragment() {
     private val ViewModel: TabViewModel by lazy {
         ViewModelProviders.of(this).get(TabViewModel::class.java)
     }
+
     private var cropId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +36,10 @@ class PostHarvestFragment : Fragment() {
     }
 
     private fun observer() {
-        ViewModel.response3.observe(viewLifecycleOwner){
-            val data = it.filter { it -> it.crop_id== Constants.CROP_ID }
+        ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
+            val data = it.data!!
             for(i in 0 until data.size){
-                if(data[i].label_name=="Post Harvesting") {
+                if(data[i].label_name=="Post Harvesting"||data[i].labelNameTag=="Post Harvesting") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
                 }

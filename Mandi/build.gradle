@@ -42,6 +42,7 @@ dependencies {
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureLogin')
 
+    implementation project(path: ':FeatureSpeechToText')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

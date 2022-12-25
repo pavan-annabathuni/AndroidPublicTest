@@ -203,4 +203,10 @@ object LocalSource {
     fun getMyFarms(): Flow<List<MyFarmsEntity>> {
         return outgrowDao.getMyFarms()
     }
+    fun deleteAllMyCrops() = outgrowDao.getDeleteAllMyCrops()
+    fun deleteTags() = outgrowDao.deleteTags()
+    fun deleteCropMaster() = outgrowDao.deleteCropMaster()
+    fun deletePestDisease() = outgrowDao.deletePestDiseases()
+    fun deleteCropInformation() = outgrowDao.deleteCropInformation()
+
 }

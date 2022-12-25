@@ -8,6 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cropinformation.R
 import com.example.cropinformation.apiservice.response.DataX
 import com.example.cropinformation.databinding.ItemCropVarietyBinding
 import com.example.cropinformation.databinding.ItemNewsBinding
@@ -36,8 +37,8 @@ class CropVarietyAdapter :
         private fun createChip(category: String, context: Context): Chip {
             val chip = Chip(context)
             chip.text = category
-            chip.isCheckable = true
-            chip.isClickable = true
+            chip.isCheckable = false
+            chip.isClickable = false
             chip.isCheckedIconVisible = false
             chip.setTextColor(
                 AppCompatResources.getColorStateList(
@@ -45,7 +46,7 @@ class CropVarietyAdapter :
                     com.waycool.uicomponents.R.color.bg_chip_text
                 )
             )
-            chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+            chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg)
             chip.chipStrokeWidth = 1f
             chip.chipStrokeColor = AppCompatResources.getColorStateList(
                 context,

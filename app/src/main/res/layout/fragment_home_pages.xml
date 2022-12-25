@@ -679,8 +679,9 @@
                             <ImageView
                                 android:id="@+id/ivWeather"
                                 android:layout_width="42dp"
-                                android:layout_height="32dp"
+                                android:layout_height="42dp"
                                 android:layout_margin="@dimen/txt16"
+                                app:tint = "@color/DarkGreen"
                                 android:src="@drawable/ic_weather_icon"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -777,7 +778,6 @@
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
-                                    app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/ivHumidity"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -811,7 +811,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
-                                    android:src="@drawable/ic_wind"
+                                    android:src="@drawable/ic_wind_weather"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -819,13 +819,14 @@
                                     android:id="@+id/tvWindDegree"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/txt16"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
                                     android:fontFamily="@font/notosans_bold"
-                                    android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
                                     app:layout_constraintStart_toEndOf="@+id/ivWind"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="5Km/h" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvWind"
@@ -857,7 +858,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
-                                    android:src="@drawable/ic_rain"
+                                    android:src="@drawable/ic_rain_weather"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -872,7 +873,6 @@
                                     android:text="66%"
                                     android:textColor="#171717"
                                     android:textSize="@dimen/txt14"
-                                    app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/ivRain"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -880,16 +880,15 @@
                                     android:id="@+id/tvRain"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
                                     android:layout_marginTop="4dp"
-                                    android:layout_marginEnd="12dp"
                                     android:layout_marginBottom="@dimen/txt10"
                                     android:fontFamily="@font/notosans_medium"
                                     android:text="Chance of rain"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@+id/ivRain"
+                                    app:layout_constraintStart_toStartOf="@+id/ivRain"
                                     app:layout_constraintTop_toBottomOf="@+id/tvRainDegree" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 

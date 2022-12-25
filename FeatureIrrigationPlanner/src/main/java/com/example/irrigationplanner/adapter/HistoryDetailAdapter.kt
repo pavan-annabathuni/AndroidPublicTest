@@ -10,6 +10,7 @@ import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemHistoryBinding
 import com.example.irrigationplanner.databinding.ItemHistoryDetailsBinding
 import com.waycool.data.Network.NetworkModels.HistoricData
+import com.waycool.data.translations.TranslationsManager
 
 class HistoryDetailAdapter(val onClickListener:OnClickListener):
     ListAdapter<HistoricData, HistoryDetailAdapter.MyViewHolder>(HistoryAdapter) {
@@ -21,6 +22,8 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         val view = binding.sideView
         val eto = binding.eto
         val etc = binding.textView2
+        val eva = binding.textView19
+        val rainfall = binding.textView4
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -51,6 +54,8 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
             holder.image.setImageResource(R.drawable.ic_holo_gray)
             holder.date.setTextColor(Color.parseColor("#070D09"))
         }
+        //translation
+        TranslationsManager().loadString("str_evapotranspiration",holder.eva)
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<HistoricData>() {

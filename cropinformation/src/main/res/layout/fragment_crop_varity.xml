@@ -10,9 +10,10 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F3ECDE"
+        app:cardBackgroundColor="#FFFAF0"
         app:cardCornerRadius="12dp"
         android:minHeight="350dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
         app:cardUseCompatPadding="true"
         tools:context=".fragments.SeedRateFragment">
 
@@ -41,6 +42,8 @@
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_name"
                 tools:itemCount="4"
                 tools:listitem="@layout/item_crop_variety" />

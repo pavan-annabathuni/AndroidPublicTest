@@ -13,6 +13,9 @@ import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
 import com.example.irrigationplanner.databinding.FragmentIrrigationHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
+import com.waycool.data.Network.NetworkModels.HistoricData
+import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
 
@@ -21,11 +24,12 @@ class IrrigationHistoryFragment : Fragment() {
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
+    private var historyDetails:Irrigation? = null
     private lateinit var mHistoryAdapter: HistoryDetailAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
+            historyDetails = it.getParcelable("IrrigationHis")
         }
     }
 
@@ -40,13 +44,21 @@ class IrrigationHistoryFragment : Fragment() {
 
         })
         binding.recycleViewHis.adapter = mHistoryAdapter
-        viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(477,1).observe(viewLifecycleOwner) {
-                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
-            }
-        }
+//        viewModel.viewModelScope.launch {
+//            viewModel.getIrrigationHis(2,3).observe(viewLifecycleOwner) {
+//                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
+//            }
+//        }
+       // mHistoryAdapter.submitList(historyDetails?.historicData)
+        mHistoryAdapter.submitList(historyDetails?.historicData)
+
 
         onClick()
+        //translation
+        viewModel.viewModelScope.launch {
+            val title = TranslationsManager().getString("str_irrigation_history")
+            binding.topAppBar.title = title
+        }
         return binding.root
     }
     private fun onClick(){

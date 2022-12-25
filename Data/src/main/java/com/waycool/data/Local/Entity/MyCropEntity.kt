@@ -37,11 +37,12 @@ data class MyCropDataEntity (
     @ColumnInfo(name="idd"        ) var cropIdd       : Int?    = null,
     @ColumnInfo(name="crop_name" ) var cropName : String? = null,
     @ColumnInfo(name="crop_logo" ) var cropLogo : String? = null
+    @ColumnInfo(name="soil_type"   ) var soilType    : String? = null,
 
 )
 //data class MyCropEntity(
-//    @ColumnInfo(name="id"        ) var id       : Int?    = null,
-//    @ColumnInfo(name="crop_name" ) var cropName : String? = null,
-//    @ColumnInfo(name="crop_logo" ) var cropLogo : String? = null
+//    @SerializedName("id"        ) var id       : Int?    = null,
+//    @SerializedName("crop_name" ) var cropName : String? = null,
+//    @SerializedName("crop_logo" ) var cropLogo : String? = null
 //
 //)

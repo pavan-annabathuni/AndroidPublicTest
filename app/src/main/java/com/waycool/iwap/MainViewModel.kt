@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.Network.NetworkModels.Notification
 import com.waycool.data.Network.NetworkModels.NotificationModel
+import com.waycool.data.Network.NetworkModels.UpdateNotification
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
@@ -79,6 +80,9 @@ class MainViewModel : ViewModel() {
 
     fun getNotification():LiveData<Resource<NotificationModel?>>{
         return NotificationRepository.getNotification().asLiveData()
+    }
+    fun updateNotification(id:String):LiveData<Resource<UpdateNotification?>>{
+        return NotificationRepository.updateNotification(id).asLiveData()
     }
 
 }

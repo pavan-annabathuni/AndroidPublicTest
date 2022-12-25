@@ -40,14 +40,16 @@ class IrrigationTypeFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Irrigation Type") {
-                    val values = data[i].label_value
+                if(data[i].label_name=="Irrigation Type"||data[i].labelNameTag=="Irrigation Type") {
+                    binding.tvLabelName.text = data[i].label_name
+                    val values = data[i].labelValueTag
                     val lstValues: List<String> = values?.split(",")!!.map { it -> it.trim() }
                     lstValues.forEach { itt ->
                         when (itt) {
                             "Flooding" -> {
                                 binding.img1.visibility = View.VISIBLE
                                 binding.ll1.setBackgroundResource(R.drawable.brownborder)
+                                binding.tvLabelName
 
                             }
                             "Drip" -> {

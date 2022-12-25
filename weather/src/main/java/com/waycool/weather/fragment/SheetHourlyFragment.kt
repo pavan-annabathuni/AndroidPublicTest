@@ -10,6 +10,7 @@ import com.waycool.weather.viewModel.HourlyViewModel
 import com.waycool.weather.viewModel.HourlyViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.weather.utils.WeatherIcons
 import java.text.SimpleDateFormat
 
 
@@ -48,7 +49,7 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
 
            binding.viewModel?.selectedProperty?.observe(viewLifecycleOwner){
 
-
+               WeatherIcons.setWeatherIcon(it.weather[0].icon.toString(),binding.icon2)
                val date: Int? = it.dt
                val formatter = SimpleDateFormat("hh:mm a")//or use getDateInstance()
                val formatedDate = formatter.format(date?.times(1000L))

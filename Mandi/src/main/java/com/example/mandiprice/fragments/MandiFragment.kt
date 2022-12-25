@@ -58,6 +58,11 @@ class MandiFragment : Fragment() {
     private var search: String? = null
     private var cropCategoryId: Int? = 1
     private var count = 0
+    private var lat= "12.22"
+    private var long= "78.22"
+    var distance = "Distance"
+    var price = "Price"
+    var accountID = 0
 
     val arrayCat = ArrayList<String>()
 
@@ -105,6 +110,10 @@ class MandiFragment : Fragment() {
             this.findNavController().navigateUp()
         }
 
+        setBanners()
+        translation()
+        return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,6 +134,7 @@ class MandiFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
+            accountID = it.data?.accountId!!
         }
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
@@ -162,11 +172,11 @@ class MandiFragment : Fragment() {
     }
 
     private fun onClick() {
-        adapterMandi.addLoadStateListener { loadState ->
+        adapterMandi.addLoadStateListener { loadState->
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                 binding.llNotFound.visibility = View.VISIBLE
                 binding.recycleViewDis.visibility = View.GONE
-            } else {
+            }else{
                 binding.llNotFound.visibility = View.GONE
                 binding.recycleViewDis.visibility = View.VISIBLE
             }
@@ -352,13 +362,17 @@ class MandiFragment : Fragment() {
 
 
     private fun tabs() {
-
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
-        )
+        viewModel.viewModelScope.launch {
+            distance = TranslationsManager().getString("distance")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
+            )
+        }
+        viewModel.viewModelScope.launch {
+            price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
-        )
+        )}
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -503,21 +517,20 @@ class MandiFragment : Fragment() {
                         }, 1500)
 
 
-                    }
+                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
-    private fun translation() {
+    private fun translation(){
         var mandi = "Mandi Price"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
-            distance = TranslationsManager().getString("distance")
-            price = TranslationsManager().getString("distance")
+            binding.topAppBar.title = mandi
         }
-        TranslationsManager().loadString("search_crop_mandi", binding.searchBar)
-        TranslationsManager().loadString("search_crop_mandi", binding.searchBar)
-        TranslationsManager().loadString("str_Weather", binding.filter)
-        TranslationsManager().loadString("sort_by", binding.filter)
+        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
+        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
+        TranslationsManager().loadString("sort_by",binding.filter)
 
     }
 }

@@ -39,7 +39,7 @@ class WeedCulturalFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Weed control(cultural)") {
+                if(data[i].label_name=="Weed control(cultural)"||data[i].labelNameTag=="Weed control(cultural)") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
                 }

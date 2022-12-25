@@ -6,6 +6,7 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 object AdvIrrigationRepository {
     suspend fun getAdvIrrigation(account_id: Int,plot_id:Int): Flow<Resource<AdvIrrigationModel?>> {
@@ -25,7 +26,11 @@ object AdvIrrigationRepository {
         return  NetworkSource.updateCropStage(id,farmId,plotId,value1,value2,value3,value4,value5,value7,value7,value8,value9,
             value10,value11,value12,value13,value14,value15)
     }
-    fun getCropStage():Flow<Resource<GetCropStage?>>{
-        return NetworkSource.getCropStage()
+    fun getCropStage(account_id: Int,plot_id: Int):Flow<Resource<CropStageModel?>>{
+        return NetworkSource.getCropStage(account_id,plot_id)
+    }
+
+    fun updateCropStage(account_id: Int,cropStageId:Int,plot_id: Int,date:String):Flow<Resource<UpdateCropStage?>>{
+        return NetworkSource.updateCropStage(account_id,cropStageId,plot_id,date)
     }
 }

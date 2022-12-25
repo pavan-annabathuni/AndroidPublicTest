@@ -38,9 +38,11 @@ class HarvestSowingFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
             for(i in 0..data.size-1){
-                if(data[i].label_name=="Harvest (sowing, planting, transplantation)") {
+                if(data[i].label_name=="Harvest (sowing, planting, transplantation)"||data[i].labelNameTag=="Harvest (sowing, planting, transplantation)") {
+                    val str = data[i].label_value?.replace("<br>", System.getProperty("line.separator"))
                     binding.labelName.text = data[i].label_name
-                    binding.labelValue.text = data[i].label_value
+                    binding.labelValue.text = str
+                    break
                 }
             }}
     }

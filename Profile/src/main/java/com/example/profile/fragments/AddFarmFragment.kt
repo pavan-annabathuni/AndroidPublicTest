@@ -12,12 +12,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.profile.R
 import com.example.profile.databinding.FragmentAddFarmBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.launch
 
 
 class AddFarmFragment : Fragment() {
@@ -34,6 +37,7 @@ class AddFarmFragment : Fragment() {
     var address = ""
     var state = ""
     var district = ""
+    private lateinit var submit:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,6 +57,7 @@ class AddFarmFragment : Fragment() {
         binding.imgLocation.setOnClickListener(){
             location()
         }
+        translation()
         return binding.root
 
             }
@@ -87,7 +92,7 @@ class AddFarmFragment : Fragment() {
                 Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
             }
             else if(binding.mobilenoEt.text.toString()
-                    .isEmpty() || binding.mobilenoEt.text.toString().length != 10){
+                    .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10){
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             }
                 else {
@@ -95,11 +100,12 @@ class AddFarmFragment : Fragment() {
                     name, contact, lat, long, roleid, pinCode,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
-                    if(it.data?.status.toString()!="true") {
-                        Toast.makeText(context, "Number already taken", Toast.LENGTH_SHORT).show()
+                    if(it.data?.status==false) {
+                        Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
                     }
-                    else
-                    findNavController().navigateUp()
+                    else if(it.data?.status==true) {
+                        findNavController().navigateUp()
+                    }
                 }
                 // findNavController().navigateUp()
             }
@@ -152,6 +158,22 @@ class AddFarmFragment : Fragment() {
 //                )
 
 
+        }
+
+    }
+    private fun translation(){
+        TranslationsManager().loadString("str_farmer_name",binding.textView1)
+       // TranslationsManager().loadString("delete_farm_support",binding.textView3)
+        TranslationsManager().loadString("str_farm_location",binding.textView5)
+        TranslationsManager().loadString("str_mobile_number",binding.textView4)
+//        TranslationsManager().loadString("delete_farm_support",areYouSure)
+
+        viewModel.viewModelScope.launch{
+            var title = ""
+            submit = TranslationsManager().getString("str_submit")
+            binding.submit.text = submit
+//            title = TranslationsManager().getString("str_submit")
+//            binding.topAppBar.title = title
         }
 
     }

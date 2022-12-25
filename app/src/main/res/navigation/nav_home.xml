@@ -99,10 +99,56 @@
             app:destination="@id/homePagesFragment" />
     </fragment>
     <fragment
+        android:id="@+id/farmDetailsFragment"
+        android:name="com.example.soiltesting.premium.FarmDetailsFragment"
+        android:label="FarmDetailsFragment" />
+    <fragment
+        android:id="@+id/homePagePremiumFragment2"
+        android:name="com.waycool.iwap.premium.HomePagePremiumFragment"
+        android:label="fragment_home_page_premium"
+        tools:layout="@layout/fragment_home_page_premium">
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment2"
+            app:destination="@id/farmDetailsFragment2" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_deviceFragmentOne"
+            app:destination="@id/deviceFragmentOne" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_graphsFragment"
+            app:destination="@id/graphsFragment" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment3"
+            app:destination="@id/farmDetailsFragment3" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment2_to_navigation"
+            app:destination="@id/navigation" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmDetailsFragment2"
+        android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
+        android:label="fragment_farm_details"
+        tools:layout="@layout/fragment_farm_details" />
+    <fragment
+        android:id="@+id/deviceFragmentOne"
+        android:name="com.waycool.iwap.premium.DeviceFragmentOne"
+        android:label="fragment_device_one"
+        tools:layout="@layout/fragment_device_one" />
+    <fragment
+        android:id="@+id/graphsFragment"
+        android:name="com.waycool.iwap.premium.GraphsFragment"
+        android:label="fragment_graphs"
+        tools:layout="@layout/fragment_graphs" />
+    <fragment
+        android:id="@+id/farmDetailsFragment3"
+        android:name="com.waycool.iwap.premium.FarmDetailsFragment"
+        android:label="fragment_farm_details"
+        tools:layout="@layout/fragment_farm_details" />
+    <fragment
         android:id="@+id/notificationFragment"
         android:name="com.waycool.iwap.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <include app:graph="@navigation/irrgation_navigation" />
     <include app:graph="@navigation/nav_crop_protect" />
     <include app:graph="@navigation/nav_farmdetails" />
 

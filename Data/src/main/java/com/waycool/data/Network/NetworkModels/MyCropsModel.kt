@@ -40,6 +40,21 @@ data class MyCropDataModel (
     @SerializedName("farm_id"               ) var farmId              : Int?    = null,
     @SerializedName("soil_type_id"          ) var soilTypeId          : Int?    = null,
     @SerializedName("crop_variety_id"       ) var cropVarietyId       : String? = null,
-    @SerializedName("crop"                  ) var crop                : CropModel?   = CropModel()
+    @SerializedName("crop"                  ) var crop                : CropModel?   = CropModel(),
+    @SerializedName("soil_type"             ) var soilType            : SoilType? = SoilType()
+)
+data class SoilType (
+
+    @SerializedName("id"          ) var id          : Int?    = null,
+    @SerializedName("soil_type"   ) var soilType    : String? = null,
+    @SerializedName("sat"         ) var sat         : Int?    = null,
+    @SerializedName("fc"          ) var fc          : Int?    = null,
+    @SerializedName("wp"          ) var wp          : Int?    = null,
+    @SerializedName("soil_drain"  ) var soilDrain   : Int?    = null,
+    @SerializedName("ksat"        ) var ksat        : Int?    = null,
+    @SerializedName("translation" ) var translation : String? = null,
+    @SerializedName("created_at"  ) var createdAt   : String? = null,
+    @SerializedName("updated_at"  ) var updatedAt   : String? = null,
+    @SerializedName("deleted_at"  ) var deletedAt   : String? = null
 
 )

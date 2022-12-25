@@ -40,9 +40,11 @@ class IntercropFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
             for (i in 0 until data.size) {
-                if (data[i].label_name == "Intercrop") {
+                if (data[i].label_name == "Intercrop"||data[i].labelNameTag == "Intercrop") {
+                    val str = data[i].label_value?.replace("<br>", System.getProperty("line.separator"))
                     binding.labelName.text = data[i].label_name
-                    binding.labelValue.text = data[i].label_value
+                    binding.labelValue.text = str
+                    break
                 }
             }
         }}

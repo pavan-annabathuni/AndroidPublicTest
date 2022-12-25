@@ -36,6 +36,7 @@ import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
 import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -159,6 +160,7 @@ class MandiGraphFragment : Fragment() {
         onClick()
         graph()
         setBanners()
+        translation()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -350,6 +352,16 @@ class MandiGraphFragment : Fragment() {
 
                 }
             }
+
+
+
+    private fun translation(){
+
+        TranslationsManager().loadString("str_share",binding.imgShare)
+        TranslationsManager().loadString("rate_kg",binding.textView7)
+        TranslationsManager().loadString("rate_kg",binding.tvKg)
+        TranslationsManager().loadString("date",binding.textView8)
+
 
 
     }

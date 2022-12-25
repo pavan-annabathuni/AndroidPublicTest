@@ -9,9 +9,9 @@ import okhttp3.MultipartBody
 
 object ProfileRepository {
 
-   suspend fun updateProfile(name:String,address:String,village:String,pincode:String,state:String,district:String): Flow<Resource<profile?>> {
+   suspend fun updateProfile(field:Map<String,String>): Flow<Resource<profile?>> {
        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
-       return NetworkSource.updateProfile(name,address,village,pincode,state,district,map)
+       return NetworkSource.updateProfile(map,field)
     }
 
     suspend fun getUserProfileDet(): Flow<Resource<UserDetailsDTO?>> {
