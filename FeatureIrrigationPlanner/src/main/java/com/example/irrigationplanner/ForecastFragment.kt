@@ -84,7 +84,7 @@ class ForecastFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner){
             accountId = it.data?.accountId ?: 0
         }
-        viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val data = it.data?.filter {itt->
                 itt.id == plotId
             }

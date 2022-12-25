@@ -40,10 +40,10 @@ import java.util.*
 
 
 class MandiFragment : Fragment() {
-    private var long: String? = null
-    private var lat: String? = null
-    private var price: String? = null
-    private var distance: String? = null
+//    private var long: String? = null
+//    private var lat: String? = null
+//    private var price: String? = null
+//    private var distance: String? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private lateinit var binding: FragmentMandiBinding
     private val viewModel: MandiViewModel by lazy {
@@ -61,7 +61,7 @@ class MandiFragment : Fragment() {
     private var lat= "12.22"
     private var long= "78.22"
     var distance = "Distance"
-    var price = "Price"
+    private var price = "Price"
     var accountID = 0
 
     val arrayCat = ArrayList<String>()
@@ -112,7 +112,7 @@ class MandiFragment : Fragment() {
 
         setBanners()
         translation()
-        return binding.root
+//        return binding.root
 
     }
 

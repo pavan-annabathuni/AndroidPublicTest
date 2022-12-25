@@ -36,7 +36,7 @@ data class MyCropDataEntity (
    // @ColumnInfo(name="crop"                  ) var crop                : MyCropEntity   = MyCropEntity()
     @ColumnInfo(name="idd"        ) var cropIdd       : Int?    = null,
     @ColumnInfo(name="crop_name" ) var cropName : String? = null,
-    @ColumnInfo(name="crop_logo" ) var cropLogo : String? = null
+    @ColumnInfo(name="crop_logo" ) var cropLogo : String? = null,
     @ColumnInfo(name="soil_type"   ) var soilType    : String? = null,
 
 )

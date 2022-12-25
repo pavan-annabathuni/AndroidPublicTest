@@ -90,7 +90,7 @@ class MandiGraphFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
-        apiErrorHandlingBinding=binding.errorState
+        apiErrorHandlingBinding = binding.errorState
 
         binding.lifecycleOwner = this
         binding.cropName.text = cropName
@@ -99,18 +99,19 @@ class MandiGraphFragment : Fragment() {
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) { it2 ->
+            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
+                .observe(viewLifecycleOwner) { it2 ->
 //                 val data2 = (it2.data?.data?.map { data ->
 //                         data.arrivalDate
 //                     } ?: emptyList()).toMutableList()
 //                data2.sort()
 
-               mDateAdapter.submitList(it2.data?.data)
-                //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
-            }
+                    mDateAdapter.submitList(it2.data?.data)
+                    //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
+                }
         }
         binding.imgShare.setOnClickListener() {
-            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one",)
+            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -124,32 +125,39 @@ class MandiGraphFragment : Fragment() {
     }
 
     private fun mandiGraphPageApi() {
-        if(NetworkUtil.getConnectivityStatusString(context)==0){
-            binding.clInclude.visibility=View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
-            context?.let { ToastStateHandling.toastWarning(it,"Please connect to network", Toast.LENGTH_SHORT) }
-        }else{
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please connect to network",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
             viewModel.viewModelScope.launch {
-                viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) {
-                    when (it) {
-                        is Resource.Success ->{
-                            binding.viewModel = it.data
-                            binding.clInclude.visibility=View.GONE
-                            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
-                            graph()
-                            setBanners()
+                viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
+                    .observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Success -> {
+                                binding.viewModel = it.data
+                                binding.clInclude.visibility = View.GONE
+                                apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+                                graph()
+                                setBanners()
 
-                        }
+                            }
 
-                        is Resource.Loading->{
+                            is Resource.Loading -> {
 
-                        }
-                        is Resource.Error->{
+                            }
+                            is Resource.Error -> {
 
+                            }
                         }
                     }
-                }
             }
         }
 
@@ -164,8 +172,7 @@ class MandiGraphFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiGraphFragment.findNavController().
-                    navigateUp()
+                    this@MandiGraphFragment.findNavController().navigateUp()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -189,32 +196,33 @@ class MandiGraphFragment : Fragment() {
             }
         }
 
-            binding.imgShare.setOnClickListener() {
-                screenShot(cropMasterId,mandiMasterId,cropName,marketName,"one")
-                Log.d("toast", "onClick: Working")
-            }
+        binding.imgShare.setOnClickListener() {
+            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
+            Log.d("toast", "onClick: Working")
+        }
     }
 
 
     private fun graph() {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) { it ->
+            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
+                .observe(viewLifecycleOwner) { it ->
 
 
-                listLine = ArrayList()
-                if (it.data?.data != null) {
-                    for (i in it.data?.data!!.indices) {
+                    listLine = ArrayList()
+                    if (it.data?.data != null) {
+                        for (i in it.data?.data!!.indices) {
 
-                        val xAxis: XAxis = binding.lineChart.getXAxis()
-                        listLine.add(
-                            Entry(
-                                i.toFloat(),it.data!!.data[i].avgPrice!!.toFloat()
+                            val xAxis: XAxis = binding.lineChart.getXAxis()
+                            listLine.add(
+                                Entry(
+                                    i.toFloat(), it.data!!.data[i].avgPrice!!.toFloat()
+                                )
                             )
-                        )
+                        }
                     }
-                }
 
-                lineDataSet = LineDataSet(listLine, "")
+                    lineDataSet = LineDataSet(listLine, "")
                     val datesList = it.data?.data?.map { mandi ->
                         try {
                             val date: Date = inputDateFormatter.parse(mandi.arrivalDate)
@@ -225,49 +233,49 @@ class MandiGraphFragment : Fragment() {
                         }
                     }
 
-                val valueFormatter2 = IndexAxisValueFormatter()
+                    val valueFormatter2 = IndexAxisValueFormatter()
 
-                val xAxis2 = datesList?.toTypedArray()
-                valueFormatter2.values = xAxis2
-                binding.lineChart.xAxis.valueFormatter = valueFormatter2
-                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+                    val xAxis2 = datesList?.toTypedArray()
+                    valueFormatter2.values = xAxis2
+                    binding.lineChart.xAxis.valueFormatter = valueFormatter2
+                    binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 //                binding.lineChart.xAxis.labelRotationAngle = -45f
 
-                binding.lineChart.axisLeft.axisMinimum = 0f
+                    binding.lineChart.axisLeft.axisMinimum = 0f
 
-                lineData = LineData(lineDataSet)
-                lineDataSet.color = resources.getColor(R.color.WoodBrown)
-                binding.lineChart.data = lineData
-                lineDataSet.setCircleColor(Color.WHITE)
-                lineDataSet.circleHoleColor = resources.getColor(R.color.DarkGreen)
-                lineDataSet.circleRadius = 6f
-                lineDataSet.mode = LineDataSet.Mode.LINEAR
+                    lineData = LineData(lineDataSet)
+                    lineDataSet.color = resources.getColor(R.color.WoodBrown)
+                    binding.lineChart.data = lineData
+                    lineDataSet.setCircleColor(Color.WHITE)
+                    lineDataSet.circleHoleColor = resources.getColor(R.color.DarkGreen)
+                    lineDataSet.circleRadius = 6f
+                    lineDataSet.mode = LineDataSet.Mode.LINEAR
 
 
-                lineDataSet.setDrawFilled(true)
-                binding.lineChart.setDrawGridBackground(false)
-                binding.lineChart.setDrawBorders(true)
-                binding.lineChart.setBorderColor(R.color.LightGray)
-                binding.lineChart.setBorderWidth(2f)
-                binding.lineChart.axisRight.setDrawGridLines(false)
-                binding.lineChart.axisLeft.setDrawGridLines(false)
-                //binding.lineChart.xAxis.setDrawGridLines(false)
-                binding.lineChart.description.isEnabled = false
-                binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-                binding.lineChart.axisRight.isEnabled = false
-                lineDataSet.fillDrawable = resources.getDrawable(R.drawable.bg_graph)
-               // binding.lineChart.xAxis.spaceMax = 1f
-                binding.lineChart.fitScreen()
-                binding.lineChart.setScaleEnabled(false)
-                binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
-                // binding.lineChart.axisLeft.isEnabled = false;
-                binding.lineChart.isScaleXEnabled = false
-                binding.lineChart.getLegend().setEnabled(false);
-               binding.lineChart.xAxis.setCenterAxisLabels(false);
-                binding.lineChart.xAxis.setGranularity(1f);
-               // binding.lineChart.setVisibleXRangeMaximum(3f);
+                    lineDataSet.setDrawFilled(true)
+                    binding.lineChart.setDrawGridBackground(false)
+                    binding.lineChart.setDrawBorders(true)
+                    binding.lineChart.setBorderColor(R.color.LightGray)
+                    binding.lineChart.setBorderWidth(2f)
+                    binding.lineChart.axisRight.setDrawGridLines(false)
+                    binding.lineChart.axisLeft.setDrawGridLines(false)
+                    //binding.lineChart.xAxis.setDrawGridLines(false)
+                    binding.lineChart.description.isEnabled = false
+                    binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+                    binding.lineChart.axisRight.isEnabled = false
+                    lineDataSet.fillDrawable = resources.getDrawable(R.drawable.bg_graph)
+                    // binding.lineChart.xAxis.spaceMax = 1f
+                    binding.lineChart.fitScreen()
+                    binding.lineChart.setScaleEnabled(false)
+                    binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
+                    // binding.lineChart.axisLeft.isEnabled = false;
+                    binding.lineChart.isScaleXEnabled = false
+                    binding.lineChart.getLegend().setEnabled(false);
+                    binding.lineChart.xAxis.setCenterAxisLabels(false);
+                    binding.lineChart.xAxis.setGranularity(1f);
+                    // binding.lineChart.setVisibleXRangeMaximum(3f);
 
-            }
+                }
         }
 
     }
@@ -310,7 +318,8 @@ class MandiGraphFragment : Fragment() {
         mandi_master_id: Int?,
         crop_name: String?,
         market_name: String?,
-        fragment: String?) {
+        fragment: String?
+    ) {
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
@@ -323,7 +332,11 @@ class MandiGraphFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
         outputFile.flush()
         outputFile.close()
-        val URI = com.example.mandiprice.FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+        val URI = com.example.mandiprice.FileProvider.getUriForFile(
+            requireContext(),
+            "com.example.outgrow",
+            imageFile
+        )
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
@@ -340,7 +353,7 @@ class MandiGraphFragment : Fragment() {
                     .setDescription("Find Mandi details and more on Outgrow app")
                     .build()
             )
-            .buildShortDynamicLink().addOnCompleteListener {task->
+            .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful()) {
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
@@ -353,15 +366,14 @@ class MandiGraphFragment : Fragment() {
                 }
             }
 
+    }
 
+    private fun translation() {
 
-    private fun translation(){
-
-        TranslationsManager().loadString("str_share",binding.imgShare)
-        TranslationsManager().loadString("rate_kg",binding.textView7)
-        TranslationsManager().loadString("rate_kg",binding.tvKg)
-        TranslationsManager().loadString("date",binding.textView8)
-
+        TranslationsManager().loadString("str_share", binding.imgShare)
+        TranslationsManager().loadString("rate_kg", binding.textView7)
+        TranslationsManager().loadString("rate_kg", binding.tvKg)
+        TranslationsManager().loadString("date", binding.textView8)
 
 
     }
