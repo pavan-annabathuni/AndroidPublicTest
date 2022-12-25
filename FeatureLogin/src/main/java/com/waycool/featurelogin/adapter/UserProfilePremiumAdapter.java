@@ -64,7 +64,12 @@ public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfileP
         }
         @Override
         public void onClick(View view) {
-            fragment.replaceFragmentwithoutbackstack(listItem.get(getAdapterPosition()).getTittle(),listItem.get(getAdapterPosition()).getModuleDesc(),listItem.get(getAdapterPosition()).getAudioURl(), String.valueOf(listItem.get(getAdapterPosition()).getPremium()),context);
+            fragment.showServiceDialog(listItem.get(getLayoutPosition()).getTitle(),
+                    listItem.get(getLayoutPosition()).getModuleDesc(),
+                    listItem.get(getLayoutPosition()).getAudioUrl(),
+                    String.valueOf(listItem.get(getLayoutPosition()).getSubscription()),
+                    listItem.get(getLayoutPosition()).getModuleIcon(),
+                    context);
         }
     }
 

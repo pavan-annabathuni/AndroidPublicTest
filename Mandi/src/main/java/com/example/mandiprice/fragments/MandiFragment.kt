@@ -40,6 +40,10 @@ import java.util.*
 
 
 class MandiFragment : Fragment() {
+    private var long: String? = null
+    private var lat: String? = null
+    private var price: String? = null
+    private var distance: String? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private lateinit var binding: FragmentMandiBinding
     private val viewModel: MandiViewModel by lazy {
@@ -52,7 +56,7 @@ class MandiFragment : Fragment() {
     private var state: String? = null
     private var crop: String? = null
     private var search: String? = null
-    private var crop_category_id: Int? = 1
+    private var cropCategoryId: Int? = 1
     private var count = 0
 
     val arrayCat = ArrayList<String>()
@@ -82,6 +86,7 @@ class MandiFragment : Fragment() {
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()
+        translation()
         return binding.root
 
     }
@@ -105,7 +110,7 @@ class MandiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
-        apiErrorHandlingBinding=binding.errorState
+        apiErrorHandlingBinding = binding.errorState
 
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()
@@ -117,7 +122,7 @@ class MandiFragment : Fragment() {
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         })
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
         }
@@ -138,25 +143,30 @@ class MandiFragment : Fragment() {
     }
 
     private fun mandiApiCall() {
-        if(NetworkUtil.getConnectivityStatusString(context)==0){
-            binding.progressBar.visibility=View.GONE
-            binding.clInclude.visibility=View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            binding.addFab.visibility=View.GONE
-            context?.let { ToastStateHandling.toastWarning(it,"Please check you internet connectivity",Toast.LENGTH_SHORT) }
-        }
-        else{
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.progressBar.visibility = View.GONE
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.addFab.visibility = View.GONE
+            context?.let {
+                ToastStateHandling.toastWarning(
+                    it,
+                    "Please check you internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
             getMandiData(cropCategory, state, crop, sortBy, orderBy)
         }
 
     }
 
     private fun onClick() {
-        adapterMandi.addLoadStateListener { loadState->
+        adapterMandi.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                 binding.llNotFound.visibility = View.VISIBLE
                 binding.recycleViewDis.visibility = View.GONE
-            }else{
+            } else {
                 binding.llNotFound.visibility = View.GONE
                 binding.recycleViewDis.visibility = View.VISIBLE
             }
@@ -360,12 +370,10 @@ class MandiFragment : Fragment() {
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
 
-
                         } else {
                             orderBy = "distance"
 //                                binding.recycleViewDis.adapter = adapterMandi
                             getMandiData(cropCategory, state, crop, sortBy, orderBy)
-
 
 
                         }
@@ -472,34 +480,44 @@ class MandiFragment : Fragment() {
         search: String? = null
     ) {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
-                .observe(requireActivity()) {
-                    adapterMandi.submitData(lifecycle, it)
-                    Handler().postDelayed({
-                        binding.clInclude.visibility=View.GONE
-                        apiErrorHandlingBinding.clInternetError.visibility=View.GONE
-                        binding.llPorgressBar.visibility = View.GONE
+            if (lat != null && long != null)
+                viewModel.getMandiDetails(
+                    lat!!,
+                    long!!,
+                    cropCategory,
+                    state,
+                    crop,
+                    sortBy,
+                    orderBy,
+                    search
+                )
+                    .observe(requireActivity()) {
+                        adapterMandi.submitData(lifecycle, it)
+                        Handler().postDelayed({
+                            binding.clInclude.visibility = View.GONE
+                            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+                            binding.llPorgressBar.visibility = View.GONE
 
-                        binding.addFab.visibility=View.VISIBLE
+                            binding.addFab.visibility = View.VISIBLE
 
-                    }, 1500)
+                        }, 1500)
 
 
-                }
+                    }
         }
     }
 
-    private fun translation(){
+    private fun translation() {
         var mandi = "Mandi Price"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             distance = TranslationsManager().getString("distance")
             price = TranslationsManager().getString("distance")
         }
-        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("str_Weather",binding.filter)
-        TranslationsManager().loadString("sort_by",binding.filter)
+        TranslationsManager().loadString("search_crop_mandi", binding.searchBar)
+        TranslationsManager().loadString("search_crop_mandi", binding.searchBar)
+        TranslationsManager().loadString("str_Weather", binding.filter)
+        TranslationsManager().loadString("sort_by", binding.filter)
 
     }
 }

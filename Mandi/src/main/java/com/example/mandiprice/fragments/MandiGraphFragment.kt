@@ -98,7 +98,7 @@ class MandiGraphFragment : Fragment() {
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(crop_master_id,mandi_master_id).observe(viewLifecycleOwner) { it2 ->
+            viewModel.getMandiHistoryDetails(cropMasterId,mandiMasterId).observe(viewLifecycleOwner) { it2 ->
 //                 val data2 = (it2.data?.data?.map { data ->
 //                         data.arrivalDate
 //                     } ?: emptyList()).toMutableList()
@@ -188,7 +188,7 @@ class MandiGraphFragment : Fragment() {
         }
 
             binding.imgShare.setOnClickListener() {
-                screenShot()
+                screenShot(cropMasterId,mandiMasterId,cropName,marketName,"one")
                 Log.d("toast", "onClick: Working")
             }
     }

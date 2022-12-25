@@ -308,10 +308,10 @@ class CropSelectionFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data?.size!=0)) {
                 binding.cvMyCrops.visibility=View.VISIBLE
-                binding.cvAddCrop.visibility=View.GONE
+//                binding.cvAddCrop.visibility=View.GONE
                 binding.tvCount.text = it.data!!.size.toString()
             } else {
-                binding.cvAddCrop.visibility=View.GONE
+//                binding.cvAddCrop.visibility=View.GONE
                 binding.cvMyCrops.visibility=View.GONE
             }
         }

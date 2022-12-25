@@ -117,7 +117,7 @@ class CropSelectFragment : Fragment() {
 
                 }
         }
-    }
+
 
 
     fun initView() {

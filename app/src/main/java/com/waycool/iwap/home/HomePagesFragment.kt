@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -255,10 +256,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         })
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
-                .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle, it)
+            cropCategory?.let {
+                state?.let { it1 ->
+                    mandiViewModel.getMandiDetails(lat,long,it, it1, crop, sortBy, orderBy, search)
+                        .observe(viewLifecycleOwner) {
+                            mandiAdapter.submitData(lifecycle, it)
+                        }
                 }
+            }
         }
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -277,11 +282,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
-
-
-
-                            getFarms(accId)
-
+                        getFarms()
                     }
                 }
                 is Resource.Error -> {}
@@ -291,7 +292,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         }
 
         if (accountID != null) {
-            getFarms(accountID!!)
+            getFarms()
         }
         setVideos()
         setNews()
