@@ -296,7 +296,7 @@ object NetworkSource {
 
     fun postNewSoil(
         account_id: Int, lat: Double, long: Double, org_id: Int, plot_no: String, pincode: String,
-        address: String, state: String, district: String, number: String
+        address: String, state: String, district: String, number: String,plot_id:Int
     ) =
         flow<Resource<SoilTestResponseDTO?>> {
             try {
@@ -313,7 +313,8 @@ object NetworkSource {
                         address,
                         state,
                         district,
-                        number
+                        number,
+                        plot_id
                     )
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
@@ -610,7 +611,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(e.message))
+//                emit(Resource.Error(e.message))
             }
         }
 

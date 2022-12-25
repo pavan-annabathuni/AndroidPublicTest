@@ -402,7 +402,8 @@ object CropsRepository {
         address: String,
         state: String,
         district: String,
-        number: String
+        number: String,
+        plot_id:Int
     ): Flow<Resource<SoilTestResponseDTO?>> {
 
         return NetworkSource.postNewSoil(
@@ -415,7 +416,8 @@ object CropsRepository {
             address,
             state,
             district,
-            number
+            number,
+            plot_id
         )
     }
 

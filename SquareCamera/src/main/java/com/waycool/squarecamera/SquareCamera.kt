@@ -14,7 +14,6 @@ class SquareCamera(builder: Builder) {
         val intent = Intent(builder.context, SquareCameraActivity::class.java)
         (builder.context as Activity).startActivityForResult(intent, REQUEST_CODE)
     }
-
     class Builder {
         var context: Context? = null
         fun with(context: Context) = apply { this.context = context as Activity }

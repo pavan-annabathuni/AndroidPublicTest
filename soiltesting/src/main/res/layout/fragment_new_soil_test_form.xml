@@ -102,10 +102,9 @@
                     android:layout_height="@dimen/space50"
                     android:layout_marginStart="@dimen/space16"
                     android:layout_marginTop="@dimen/space2"
-
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     android:inputType="number"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +124,7 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clPlotNumber" />
+                app:layout_constraintTop_toBottomOf="@+id/clState" />
 
             <TextView
                 android:id="@+id/symTwo"
@@ -162,7 +161,7 @@
                     android:layout_marginTop="@dimen/space2"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     android:inputType="number"
                     android:maxLength="6"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -183,7 +182,7 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clPincode" />
+                app:layout_constraintTop_toBottomOf="@+id/clPlotNumber" />
 
             <TextView
                 android:id="@+id/symThree"
@@ -220,7 +219,7 @@
                     android:layout_marginTop="@dimen/space2"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     android:inputType="textPostalAddress|textMultiLine"
                     android:maxLines="5"
                     android:minLines="3"
@@ -280,7 +279,7 @@
 
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -336,7 +335,7 @@
                     android:layout_marginTop="@dimen/space2"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     android:maxLength="10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -352,11 +351,11 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
-                android:text="@string/mobile"
+                android:text="Mobile Number"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clState" />
+                app:layout_constraintTop_toBottomOf="@+id/clPincode" />
 
             <!--            <TextView-->
             <!--                android:id="@+id/symSix"-->
@@ -405,7 +404,7 @@
                     android:layout_marginTop="@dimen/space2"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="@dimen/space2"
-                    android:background="#F5F5F5"
+                    android:background="#ffffff"
                     android:gravity="center_vertical"
                     android:text="6343567837"
                     android:textColor="#000000"

@@ -89,6 +89,18 @@
         <action
             android:id="@+id/action_checkSoilTestFragment_to_newSoilTestFormFragment"
             app:destination="@id/newSoilTestFormFragment" />
+        <action
+            android:id="@+id/action_checkSoilTestFragment_to_selectCropSoilTestFragment"
+            app:destination="@id/selectCropSoilTestFragment" />
+<!--        <argument-->
+<!--            android:name="id"-->
+<!--            app:argType="integer"/>-->
+<!--        <argument-->
+<!--            android:name="cropName"-->
+<!--            app:argType="string"/>-->
+<!--        <argument-->
+<!--            android:name="cropLogo"-->
+<!--            app:argType="string"/>-->
     </fragment>
     <fragment
         android:id="@+id/sucessFullFragment"
@@ -135,4 +147,15 @@
         android:id="@+id/playVideoFragment2"
         android:name="com.waycool.videos.fragments.PlayVideoFragment"
         android:label="PlayVideoFragment" />
+    <fragment
+        android:id="@+id/selectCropSoilTestFragment"
+        android:name="com.example.soiltesting.ui.request.SelectCropSoilTestFragment"
+        android:label="fragment_select_crop_soil_test"
+        tools:layout="@layout/fragment_select_crop_soil_test" >
+        <action
+            android:id="@+id/action_selectCropSoilTestFragment_to_checkSoilTestFragment"
+            app:destination="@id/checkSoilTestFragment"
+            app:popUpTo="@id/checkSoilTestFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

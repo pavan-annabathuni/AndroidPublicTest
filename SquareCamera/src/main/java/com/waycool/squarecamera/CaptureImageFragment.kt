@@ -234,6 +234,7 @@ class CaptureImageFragment : Fragment() {
 
         Navigation.findNavController(binding.root)
             .navigate(R.id.action_captureImageFragment_to_imagePreviewFragment, bundle);
+
 //        val intent = Intent(this, ImageSelectedActivity::class.java)
 //        intent.data = uri
 //        startActivity(intent)

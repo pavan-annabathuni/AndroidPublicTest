@@ -81,8 +81,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             if (accountID != null) {
                 bindObserversSoilTestHistory(accountID!!)
             }
-
-
         }
 //        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
 //            override fun handleOnBackPressed() {
@@ -217,6 +215,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 is Resource.Success -> {
                     val response = it.data as ArrayList<SoilTestHistoryDomain>
                     soilHistoryAdapter.setMovieList(response)
+                    filteredList.addAll(response)
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
@@ -247,19 +246,22 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 i2: Int
             ) {
                 val temp= ArrayList<SoilTestHistoryDomain>()
-                temp.addAll(filteredList)
 //                filteredList.clear()
-               val searchlist= temp.filter {
-//                    Log.d("TAG", "::::stderr $charSequence")
-                    it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())
-
-
-//                    filteredList.addAll(temp)
+                if (charSequence.length>0){
+                    filteredList.forEach {
+                        if (it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())){
+                            if (!temp.contains(it)){
+                                temp.add(it)
+                            }
+                        }
+                    }
+                soilHistoryAdapter.upDateList(temp)
+                Log.d("TAG", "::::stderr  $temp")
                 }
-
-                soilHistoryAdapter.upDateList(searchlist as ArrayList<SoilTestHistoryDomain>)
-                Log.d("TAG", "::::stderr $charSequence")
-                }
+//                if (temp.isEmpty()){
+//                    soilHistoryAdapter.upDateList(filteredList)
+//                }
+            }
 //                filteredList.forEach {
 //                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
 //                     filteredList.add(filteredList)
