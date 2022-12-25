@@ -79,18 +79,21 @@ class SelectCropSoilTestFragment : Fragment() {
             val args = Bundle()
             it.idd?.let { it1 -> args.putInt("crop_id", it1) }
             it.cropName?.let { it1 -> args.putString("name", it1) }
-            it.cropLogo?.let { it2->args.putString("crop_logo", it2) }
+            it.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
 //            findNavController().navigateUp()
-            findNavController().navigate(R.id.action_selectCropSoilTestFragment_to_checkSoilTestFragment,args)
+            findNavController().navigate(
+                R.id.action_selectCropSoilTestFragment_to_checkSoilTestFragment,
+                args
+            )
 //           val action=SelectCropSoilTestFragmentDirections.actionSelectCropSoilTestFragmentToCheckSoilTestFragment(it.idd.toString().toInt(),it.cropName.toString(),it.cropLogo.toString())
 //            findNavController().navigate(action)
 //            findNavController().navigate(
 //                        R.id.action_selectCropSoilTestFragment_to_checkSoilTestFragment,
 //                        args)
-            viewModel.getCropMaster().observe(viewLifecycleOwner){
-                for (i in 0 until it.data?.size!!){
+            viewModel.getCropMaster().observe(viewLifecycleOwner) {
+                for (i in 0 until it.data?.size!!) {
                     Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
-                    if(it.data?.get(i)?.cropId==id) {
+                    if (it.data?.get(i)?.cropId == id) {
                         id2 = it.data?.get(i)?.cropId!!
                     }
                 }
@@ -107,23 +110,21 @@ class SelectCropSoilTestFragment : Fragment() {
         myCrops()
 
     }
+
     fun myCrops() {
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            var accountId = it.data?.accountId
 
-            if (accountId != null)
-                viewModel.getMyCrop2(accountId).observe(viewLifecycleOwner) {
-                    myCropAdapter.submitList(it.data)
-                    if ((it.data != null)) {
-                        binding.tvCount.text = it.data!!.size.toString()
-                    } else {
-                        binding.tvCount.text = "0"
-                    }
-                    // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            myCropAdapter.submitList(it.data)
+            if ((it.data != null)) {
+                binding.tvCount.text = it.data!!.size.toString()
+            } else {
+                binding.tvCount.text = "0"
+            }
+            // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 
-                }
         }
+
     }
 
 
