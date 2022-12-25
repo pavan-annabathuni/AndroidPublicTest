@@ -224,7 +224,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmap)
         shareLayout.draw(canvas)
         val imageFile = File(path)
         val outputFile = FileOutputStream(imageFile)
@@ -248,7 +248,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener {task->
-                if (task.isSuccessful()) {
+                if (task.isSuccessful) {
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -260,14 +260,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                 }
             }
 
-     /*   val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 
-        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
-        share.putExtra(Intent.EXTRA_STREAM, URI)
-        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/pestdiseasedetail?diseaseid=$diseaseId")
-        startActivity(Intent.createChooser(share, "Share link!"))*/
     }
 
 
@@ -276,8 +269,14 @@ class PestDiseaseDetailsFragment : Fragment() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         viewModel.getVansNewsList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-        }
+            if (adapter.snapshot().size==0){
+                newsBinding.noDataNews.visibility=View.VISIBLE
+            }
+            else{
+                newsBinding.noDataNews.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
+      }
 
         newsBinding.viewAllNews.setOnClickListener {
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
@@ -306,7 +305,13 @@ class PestDiseaseDetailsFragment : Fragment() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
 
         videosBinding.viewAllVideos.setOnClickListener {

@@ -26,6 +26,26 @@
                     android:path="/soiltesting"
                     android:scheme="https"/>
             </intent-filter>
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/soiltestinghistory"
+                    android:scheme="https"/>
+            </intent-filter>
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/soiltestinghistorystatus"
+                    android:scheme="https"/>
+            </intent-filter>
         </activity>
         <provider
             android:name="com.example.soiltesting.FileProvider"

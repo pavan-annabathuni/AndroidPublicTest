@@ -144,19 +144,18 @@ class OtpFragment : Fragment() {
                 is Resource.Success -> {
                     val otpResponse: OTPResponseDomain? = it.data
                     if (otpResponse?.type == "success") {
-//                        Toast.makeText(requireContext(),"Retry with $type requested",Toast.LENGTH_SHORT).show()
                     } else if (otpResponse?.type == "error") {
-                        Toast.makeText(
+                       /* ToastStateHandling.toastWarning(
                             requireContext(),
                             "${it.data?.message}",
                             Toast.LENGTH_SHORT
-                        ).show()
+                        )*/
 
                     }
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+//                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -183,15 +182,9 @@ class OtpFragment : Fragment() {
             charColor = Color(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
         )
 
+
     }
 
-    private fun showToastAtCentre(message: String, duration: Int) {
-        if (mToast != null) {
-            mToast!!.cancel()
-            mToast = null
-        }
-        Toast.makeText(context, message, duration).show()
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -249,28 +242,29 @@ class OtpFragment : Fragment() {
                             val otpResponse: OTPResponseDomain? = it.data
                             if (otpResponse?.type == "success") {
                                 verifyUser()
+
                             } else if (otpResponse?.type == "error") {
-                                Toast.makeText(
+                                /*ToastStateHandling.toastError(
                                     requireContext(),
-                                    "${it.data?.message}",
+                                    "Error occurred",
                                     Toast.LENGTH_SHORT
-                                ).show()
+                                )*/
 
                             }
                         }
                         is Resource.Loading -> {}
                         is Resource.Error -> {
-                            Toast.makeText(
+                            ToastStateHandling.toastError(
                                 requireContext(),
-                                "Error Occurred. ${it.message}",
+                                "Server Error Occurred",
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
 
                         }
                     }
                 }
         } else {
-            showToastAtCentre("Please enter the OTP", Toast.LENGTH_LONG)
+            context?.let { ToastStateHandling.toastWarning(it,"Please enter the OTP", Toast.LENGTH_LONG) }
         }
     }
 
@@ -298,7 +292,6 @@ class OtpFragment : Fragment() {
                 //  Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 // System.out.println(String.format("%s - %s", "Received Message", message)+"otptestedmsg");
                 getOtpFromMessage(message)
-                binding.doneBtn.isEnabled = true
             } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
                 //binding.doneBtn.isEnabled = false
                 getCancelResult()
@@ -308,9 +301,9 @@ class OtpFragment : Fragment() {
 
     private fun getCancelResult() {
         countDownTimer!!.cancel()
-        binding.progressCircular.setVisibility(View.GONE)
-        binding.otpResendLayout.setVisibility(View.VISIBLE)
-        binding.otpCallLayout.setVisibility(View.VISIBLE)
+        binding.progressCircular.visibility = View.GONE
+        binding.otpResendLayout.visibility = View.VISIBLE
+        binding.otpCallLayout.visibility = View.VISIBLE
     }
 
     private fun getOtpFromMessage(message: String?) {
@@ -319,7 +312,6 @@ class OtpFragment : Fragment() {
         val matcher = pattern.matcher(message)
         if (matcher.find()) {
             countDownTimer!!.cancel()
-            binding.doneBtn.isEnabled
             binding.progressCircular.visibility = View.GONE
             binding.otpResendLayout.visibility = View.GONE
             binding.otpCallLayout.visibility = View.GONE
@@ -377,10 +369,9 @@ class OtpFragment : Fragment() {
             }
 
             override fun onFinish() {
-                binding.progressCircular.setVisibility(View.GONE)
-                binding.otpResendLayout.setVisibility(View.VISIBLE)
-                binding.otpCallLayout.setVisibility(View.VISIBLE)
-                binding.doneBtn.isEnabled = true
+                binding.progressCircular.visibility = View.GONE
+                binding.otpResendLayout.visibility = View.VISIBLE
+                binding.otpCallLayout.visibility = View.VISIBLE
             }
         }
         (countDownTimer as CountDownTimer).start()
@@ -393,7 +384,7 @@ class OtpFragment : Fragment() {
 
     private fun requestForOTP() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+            context?.let { ToastStateHandling.toastWarning(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
             apiOTP(mobileNumber)
         }
@@ -402,7 +393,7 @@ class OtpFragment : Fragment() {
 
     fun verifyUser() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+            context?.let { ToastStateHandling.toastWarning(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
 
             loginViewModel.login(mobileNumber, fcmToken!!, mobileModel!!, mobileManufacturer!!)

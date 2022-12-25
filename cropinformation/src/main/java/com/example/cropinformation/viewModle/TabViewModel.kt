@@ -55,12 +55,14 @@ class TabViewModel:ViewModel {
 
     fun getVansVideosList(
         tags: String? = null,
-        categoryId: Int? = null
+        categoryId: Int? = null,
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
+//        queryMap["crop_id"] = crop_id
+
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)

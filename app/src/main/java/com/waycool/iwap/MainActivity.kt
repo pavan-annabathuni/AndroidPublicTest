@@ -79,6 +79,35 @@ class MainActivity : AppCompatActivity() {
             }
 
 
+        CoroutineScope(Dispatchers.Main).launch {
+            if (!FeatureLogin.getLoginStatus()) {
+                val intent = Intent(this@MainActivity, LoginMainActivity::class.java)
+                startActivity(intent)
+                this@MainActivity.finish()
+
+            }
+        }
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+
+                }
+                if (deepLink?.lastPathSegment != null) {
+                    if (deepLink?.lastPathSegment!! == "weathershare") {
+                        val intent = Intent(this, WeatherActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                }
+            }
+            .addOnFailureListener(this) {
+                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            }
+
+
         tokenCheckViewModel.getUserDetails().observe(this) {
             accountID = it.data?.accountId
             if (accountID != null) {
@@ -106,7 +135,6 @@ class MainActivity : AppCompatActivity() {
                     } else if (it.data?.status == false) {
                         Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
                             .show()
-                        Log.d("TAG", "tokenCheckViewModelTokenExpire:")
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {

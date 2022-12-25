@@ -132,8 +132,17 @@ class CropHealthFragment : Fragment() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-            binding.clProgressBar.visibility=View.GONE
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+                binding.clProgressBar.visibility=View.GONE
+
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+                binding.clProgressBar.visibility=View.GONE
+
+            }
 
         }
 
@@ -187,19 +196,19 @@ class CropHealthFragment : Fragment() {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.clTopGuide.visibility = View.GONE
-                        binding.clRequest.visibility = View.VISIBLE
-//                        binding.clTopGuide.visibility = View.GONE
-//                        binding.takeGuide.visibility = View.GONE
+                        binding.takeGuide.visibility = View.GONE
                         binding.clProgressBar.visibility=View.GONE
 
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())
 //                        historyAdapter.submitList(it.data)
+
                         val response = it.data
-                        if (response?.size!! <= 2) {
+                        if (response?.size!! <=2) {
                             historyAdapter.submitList(response)
 //                            historyAdapter.submitList(response)
-                        } else {
+
+                        }
+                        else{
                             val arrayList = ArrayList<AiCropHistoryDomain>()
                             arrayList.add(response[0])
                             arrayList.add(response[1])
@@ -238,17 +247,16 @@ class CropHealthFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun fabButton() {
+    private fun fabButton(){
         var isVisible = false
-        binding.addFab.setOnClickListener() {
-            if (!isVisible) {
+        binding.addFab.setOnClickListener(){
+            if(!isVisible){
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
                 isVisible = true
-            } else {
+            }else{
                 binding.addChat.hide()
                 binding.addCall.hide()
                 binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
@@ -256,12 +264,12 @@ class CropHealthFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener(){
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener(){
             FeatureChat.zenDeskInit(requireContext())
         }
     }

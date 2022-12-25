@@ -254,15 +254,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             }
         })
 
-        //weather("12.22", "78.22")
-
         mandiViewModel.viewModelScope.launch {
             mandiViewModel.getMandiDetails(cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
-                    // binding.viewModel = it
-//                adapterMandi.submitData(lifecycle,it)
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -284,9 +279,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         }
 
 
-                        account?.also { accId ->
+
                             getFarms(accId)
-                        }
+
                     }
                 }
                 is Resource.Error -> {}
@@ -358,7 +353,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-    private fun getFarms(account: Int) {
+    private fun getFarms() {
         viewModel.getMyFarms().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -523,11 +518,16 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setNews() {
-        val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         viewModel.getVansNewsList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                newsBinding.noDataNews.visibility=View.VISIBLE
+            }
+            else{
+                newsBinding.noDataNews.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
 
         newsBinding.viewAllNews.setOnClickListener {
@@ -554,18 +554,22 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setVideos() {
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+//            adapter.submitData(lifecycle, it)
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+            }
         }
-
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
-
         adapter.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
@@ -947,7 +951,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
     private fun myCrop() {
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-//            val intent = Intent(activity,MainActivityNdvi::class.java)
+//            val intent = Intent(activity, IrrigationPlannerActivity::class.java)
 //            startActivity(intent)
         })
         binding.rvMyCrops.adapter = myCropAdapter

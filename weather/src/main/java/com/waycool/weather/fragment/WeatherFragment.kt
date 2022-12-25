@@ -90,14 +90,6 @@ class WeatherFragment : Fragment() {
             viewModel.displayPropertyHourly(it)
         })
 
-        observer()
-        setBanners()
-        //getWeatherData("12.22", "77.32")
-//        ViewModel.getCurrentWeather()
-//        ViewModel.getWeekWeather()
-//        ViewModel.getHourlyWeather()
-
-
         binding.imgBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }

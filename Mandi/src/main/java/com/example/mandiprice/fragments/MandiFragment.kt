@@ -46,9 +46,6 @@ class MandiFragment : Fragment() {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
     private lateinit var adapterMandi: DistanceAdapter
-    private var crops_category =
-        arrayOf("Category", "Cereals", "Pulses", "Vegetables", "Fruits", "Spices", "Others")
-    private var crops = arrayOf("Crops", "Watermelon", "Apple", "Orange", "Mango")
     private var sortBy: String = "asc"
     private var orderBy: String = "distance"
     private var cropCategory: String? = null
@@ -71,7 +68,6 @@ class MandiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentMandiBinding.inflate(inflater)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -489,7 +485,6 @@ class MandiFragment : Fragment() {
                     }, 1500)
 
 
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
         }
     }

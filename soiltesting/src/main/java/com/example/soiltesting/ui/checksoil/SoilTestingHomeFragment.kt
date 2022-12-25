@@ -60,7 +60,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var accountID: Int? = null
 
 
-    //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
     private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilLabViewModel::class.java] }
@@ -199,9 +198,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.tvViewAll.setOnClickListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
-//        binding.tvViewAllVideos.setOnClickListener {
-//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allVideoFragment)
-//        }
+
         binding.cardCheckHealth.setOnClickListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
 
@@ -216,8 +213,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-            binding.clProgressBar.visibility = View.GONE
+            if (adapter.snapshot().size==0){
+                videosBinding.noDataVideo.visibility=View.VISIBLE
+            }
+            else{
+                videosBinding.noDataVideo.visibility=View.GONE
+                adapter.submitData(lifecycle, it)
+                            binding.clProgressBar.visibility = View.GONE
+
+            }
+//            adapter.submitData(lifecycle, it)
         }
 
 
@@ -378,9 +383,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
-        bundle.putInt("id", data.id!!)
+        bundle.putInt("s", data.id!!)
         bundle.putString("soil_test_number", data.soil_test_number)
-        Log.d(TAG, "statusTrackerIDPass: ${data.id}")
         findNavController().navigate(
             R.id.action_soilTestingHomeFragment_to_statusTrackerFragment,
             bundle
@@ -412,15 +416,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
-                        // get latitude , longitude and other info from this
-                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
-//                        getAddress(location.latitude, location.longitude)
-                        Log.d(TAG, "isLocationPermissionGrantedLotudetude: ${location.latitude}")
-                        Log.d(TAG, "isLocationPermissionGrantedLotudetude: ${location.longitude}")
-
-//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
-//                        bindObserversCheckSoilTest()
-
                         val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
@@ -481,6 +476,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                     }
 
                                     binding.clProgressBar.visibility = View.GONE
+
                                     binding.cardCheckHealth.isClickable = true
 
                                 }

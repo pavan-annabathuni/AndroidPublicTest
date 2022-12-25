@@ -33,6 +33,7 @@ dependencies {
     implementation(lifecycle.livedata)
     implementation project(path: ':Core')
     implementation project(path: ':Data')
+    implementation project(path: ':FeatureLogin')
 
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
@@ -47,6 +48,7 @@ dependencies {
    // api group: 'com.zendesk', name: 'support', version: '5.1.0'
 //    api group: 'com.zendesk', name: 'answerbot', version: '3.0.9'
     implementation "zendesk.messaging:messaging-android:2.7.0"
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
 //    api group: 'com.zendesk', name: 'chat', version: '3.3.6'
 
   //  implementation group: 'com.zendesk', name: 'chat', version: '3.3.6'

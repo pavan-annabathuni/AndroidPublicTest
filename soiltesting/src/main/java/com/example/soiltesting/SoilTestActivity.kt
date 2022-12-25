@@ -40,6 +40,23 @@ class SoilTestActivity : AppCompatActivity() {
                         this.findNavController(R.id.fragmentContainerView).navigate(R.id.soilTestingHomeFragment)
 
                     }
+                    else   if (deepLink?.lastPathSegment!! == "soiltestinghistory") {
+                        this.findNavController(R.id.fragmentContainerView).navigate(R.id.allHistoryFragment)
+
+                    }
+                    else   if (deepLink?.lastPathSegment!! == "soiltestinghistorystatus") {
+                        val id = deepLink.getQueryParameter ("id")
+                        val soilTestNumber = deepLink.getQueryParameter ("soil_test_number")
+
+                        if (!id.isNullOrEmpty()&&!soilTestNumber.isNullOrEmpty()) {
+                            val args = Bundle()
+                            args.putInt("id", id.toInt())
+                            args.putString("soil_test_number", soilTestNumber)
+                            this.findNavController(R.id.fragmentContainerView).navigate(
+                                R.id.statusTrackerFragment,
+                                args)
+                        }
+                    }
                 }
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }

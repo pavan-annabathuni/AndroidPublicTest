@@ -107,6 +107,7 @@ class CropSelectFragment : Fragment() {
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
+            binding.clProgressBar.visibility=View.GONE
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
             } else {

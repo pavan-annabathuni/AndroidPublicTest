@@ -58,6 +58,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
 
     implementation(lifecycle.livedata)
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
 
     def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

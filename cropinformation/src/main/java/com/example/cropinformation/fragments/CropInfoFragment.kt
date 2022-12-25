@@ -86,46 +86,7 @@ class CropInfoFragment : Fragment() {
         binding.back.setOnClickListener() {
             findNavController().popBackStack()
         }
-//        binding.addFab.setOnClickListener(){
-//
-//           // zenDesk()
-//            val popupMenu = PopupMenu(context, binding.addFab,R.style.myListPopupWindow)
-//            popupMenu.menuInflater.inflate(R.menu.chat_menu_cropinfo, popupMenu.menu)
-//
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                popupMenu.gravity = Gravity.END
-//            }
-//
-//            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-//                when (item.itemId) {
-//                    R.id.call -> {
-//                        val intent = Intent(Intent.ACTION_DIAL)
-//                        intent.data = Uri.parse("tel:09020601234")
-//                        startActivity(intent)
-//                    }
-//                    R.id.chat->{
-//                        //zenDesk()
-//                        ZendeskChat.zenDesk(requireContext())
-//
-//                    }
-//                }
-//                true
-//            })
-//            try{
-//                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-//                fieldMPopup.isAccessible = true
-//                val mPopup = fieldMPopup.get(popupMenu)
-//                mPopup.javaClass
-//                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-//                    .invoke(mPopup, true)
-//            } catch (e: Exception){
-//                Log.e("Main", "Error showing menu icons.", e)
-//            } finally {
-//                popupMenu.show()
-//            }
-//             popupMenu.show()
-//
-//        }
+
         setTabs()
         Glide.with(requireContext()).load(cropLogo).into(binding.cropLogo)
         tabCount()
@@ -418,24 +379,6 @@ class CropInfoFragment : Fragment() {
             }
         }
         binding.ViewPager.registerOnPageChangeCallback(myPageChangeCallback)
-//        binding.ViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                super.onPageSelected(position)
-//                val view = // ... get the view
-//                    view?.post {
-//                        val wMeasureSpec = View.MeasureSpec.makeMeasureSpec(view!!.width, View.MeasureSpec.EXACTLY)
-//                        val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-//                        view?.measure(wMeasureSpec, hMeasureSpec)
-//
-//                        if (binding.ViewPager.layoutParams.height != view!!.measuredHeight) {
-//                            // ParentViewGroup is, for example, LinearLayout
-//                            // ... or whatever the parent of the ViewPager2 is
-//                            binding.ViewPager.layoutParams = (binding.ViewPager.layoutParams as LinearLayout.LayoutParams)
-//                                .also { lp -> lp.height = view!!.measuredHeight }
-//                        }
-//                    }
-//            }
-//        })
     }
 
     //Zendesk Chat and Calling Function
@@ -483,7 +426,14 @@ class CropInfoFragment : Fragment() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
         ViewModel.getVansNewsList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+                if (adapter.snapshot().size==0){
+                    newsBinding.noDataNews.visibility=View.VISIBLE
+                }
+                else{
+                    newsBinding.noDataNews.visibility=View.GONE
+                    adapter.submitData(lifecycle, it)
+                }
+
         }
 
         newsBinding.viewAllNews.setOnClickListener {
@@ -513,7 +463,13 @@ class CropInfoFragment : Fragment() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         ViewModel.getVansVideosList().observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+                if (adapter.snapshot().size==0){
+                    videosBinding.noDataVideo.visibility=View.VISIBLE
+                }
+                else{
+                    videosBinding.noDataVideo.visibility=View.GONE
+                    adapter.submitData(lifecycle, it)
+                }
         }
 
         videosBinding.viewAllVideos.setOnClickListener {

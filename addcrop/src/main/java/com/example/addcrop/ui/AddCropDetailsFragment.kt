@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,9 @@ import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.utils.NetworkUtil
+import com.example.addcrop.viewmodel.AddViewModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -120,7 +122,7 @@ class AddCropDetailsFragment : Fragment() {
             }
         }
 
-    }
+        }
 
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
@@ -221,6 +223,7 @@ class AddCropDetailsFragment : Fragment() {
     }
 
 
+    //format(binding.etAreaNumber.text.toString()).toDouble()
     private fun postAddCrop(crop_id: Int, account_id: Int) {
         binding.progressBar.visibility = View.VISIBLE
         binding.cardCheckHealth.visibility = View.INVISIBLE

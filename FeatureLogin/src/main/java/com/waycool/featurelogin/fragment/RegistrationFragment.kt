@@ -95,12 +95,10 @@ class RegistrationFragment : Fragment() {
         }
 
 
-    val requestPermissionLauncher = registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
 
-
-        Log.d("permission", "test" + result)
         var allAreGranted = true
         for (b in result.values) {
             allAreGranted = allAreGranted && b
@@ -135,8 +133,6 @@ class RegistrationFragment : Fragment() {
 
         if (arguments?.getString("mobile_number") != null) {
             mobileNumber = arguments?.getString("mobile_number")
-//            Toast.makeText(requireContext(), mobileNumber, Toast.LENGTH_SHORT).show()
-
             binding.nameEt.setText(arguments?.getString("name"))
         }
 
@@ -294,11 +290,8 @@ class RegistrationFragment : Fragment() {
                     playAudio(context,audiourl, play, pause, seekbar!!, totalTime!!)
                 }
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Audio file not found",
-                    Toast.LENGTH_SHORT
-                ).show()
+                context?.let { ToastStateHandling.toastWarning(it,"Audio file not found",Toast.LENGTH_SHORT) }
+
             }
         }
 
@@ -602,23 +595,21 @@ class RegistrationFragment : Fragment() {
         totalTime: TextView
     ) {
 
-        mediaPlayer = MediaPlayer();
-        mediaPlayer!!.setOnCompletionListener {
-            mediaSeekbar.progress = 0
-            pause.visibility = View.GONE
-            play.visibility = View.VISIBLE
-        }
+        mediaPlayer = MediaPlayer()
+            mediaPlayer!!.setOnCompletionListener {
+                mediaSeekbar.progress = 0
+               pause.visibility = View.GONE
+                play.visibility = View.VISIBLE
+            }
 
-        Log.d("Audio", "audioPlayer: $audioUrl")
-        val audio = AudioWife.getInstance()
-            .init(context, Uri.parse(path))
-            .setPlayView(play)
-            .setPauseView(pause)
-            .setSeekBar(mediaSeekbar)
-            .setRuntimeView(totalTime)
-        // .setTotalTimeView(mTotalTime);
-        audio.play()
-        //else Toast.makeText(requireContext(),"Audio is not there",Toast.LENGTH_SHORT).show()
+            Log.d("Audio", "audioPlayer: $audioUrl")
+            val audio = AudioWife.getInstance()
+                .init(requireContext(), Uri.parse(path))
+                .setPlayView(play)
+                .setPauseView(pause)
+                .setSeekBar(mediaSeekbar)
+                .setRuntimeView(totalTime)
+            audio.play()
 
     }
 }
