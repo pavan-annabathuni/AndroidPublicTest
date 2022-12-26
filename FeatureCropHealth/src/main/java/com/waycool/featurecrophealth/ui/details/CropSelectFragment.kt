@@ -21,11 +21,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding

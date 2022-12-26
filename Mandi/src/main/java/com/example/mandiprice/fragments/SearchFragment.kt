@@ -22,13 +22,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.featurespeechtotext.SpeechToText
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import java.text.SimpleDateFormat
@@ -147,7 +147,7 @@ class SearchFragment : Fragment() {
             // on below line we are passing our
             // language as a default language.
             viewModel.viewModelScope.launch {
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"en-IN")
             }
 
 
