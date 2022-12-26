@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.waycool.addfarm'
+//    namespace 'com.waycool.addfarm'
     compileSdk 32
 
     defaultConfig {

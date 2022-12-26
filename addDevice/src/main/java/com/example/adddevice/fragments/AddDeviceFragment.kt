@@ -6,7 +6,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -372,14 +375,31 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         if (currentMarker != null) {
             currentMarker?.setPosition(latLng)
         } else {
-            if (mMap != null)
+            if (mMap != null) {
+                val circleDrawable = ContextCompat.getDrawable(requireContext(),R.drawable.ic_weather_device_small)
+                val markerIcon = circleDrawable?.let { getMarkerIconFromDrawable(it) }
+
                 currentMarker = mMap?.addMarker(
                     MarkerOptions()
                         .position(latLng)
                         .flat(false)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.my_location))
+                        .icon(markerIcon)
                         .draggable(false)
                 )
+            }
         }
+    }
+
+    private fun getMarkerIconFromDrawable(drawable: Drawable): BitmapDescriptor? {
+        val canvas = Canvas()
+        val bitmap: Bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        canvas.setBitmap(bitmap)
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        drawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }
