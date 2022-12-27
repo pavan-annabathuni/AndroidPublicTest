@@ -97,16 +97,20 @@ class CropDetailsCaptureFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //     super.onActivityResult(requestCode, resultCode, data)
         binding.closeImage?.setOnClickListener {
-            binding.previewImage.visibility = View.GONE
+            binding.previewImage.visibility=View.GONE
 
         }
 
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
             val selectedImage: Uri? = data?.data
             val pic = File(requireActivity().externalCacheDir, "pest.jpg")
+
+
             val options: UCrop.Options = UCrop.Options()
             options.setCompressionQuality(100)
             options.setMaxBitmapSize(10000)
+            binding.previewImage.visibility = View.VISIBLE
+            binding.closeImage?.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(selectedImage)
 
             if (selectedImage != null)
@@ -115,8 +119,7 @@ class CropDetailsCaptureFragment : Fragment() {
                     .withMaxResultSize(1000, 1000)
                     .withOptions(options)
                     .start(requireActivity())
-            binding.previewImage.visibility = View.VISIBLE
-            binding.closeImage?.visibility = View.VISIBLE
+
             binding.cardCheckHealth.setOnClickListener {
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
@@ -157,12 +160,11 @@ class CropDetailsCaptureFragment : Fragment() {
             selecteduri = uri!!
             Log.d(TAG, "onActivityResultDataResultURi:$selecteduri ")
 //            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
-
-            Log.d(TAG, "onActivityResultUri: $uri")
-
             binding.closeImage?.visibility = View.VISIBLE
             binding.previewImage.visibility = View.VISIBLE
-            binding.uploadedImg.setImageURI(selecteduri)
+            Log.d(TAG, "onActivityResultUri: $uri")
+            binding.uploadedImg.setImageURI(uri)
+
             binding.cardCheckHealth.setOnClickListener {
                 binding.closeImage?.visibility = View.GONE
                 Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
@@ -221,7 +223,7 @@ class CropDetailsCaptureFragment : Fragment() {
         }
     }
 
-    private fun postImage(crop_id: Int?, crop_name: String?, profileImageBody: MultipartBody.Part) {
+    private fun postImage(crop_id:Int?, crop_name:String?, profileImageBody:MultipartBody.Part){
         viewModel.postAiImage(
             crop_id!!,
             crop_name!!,
@@ -232,7 +234,7 @@ class CropDetailsCaptureFragment : Fragment() {
                     binding.progressBar?.visibility = View.GONE
                     val data = it.data
                     data?.diseaseId
-                    if (data?.diseaseId == null) {
+                    if (data?.diseaseId==null){
 //                        Toast.makeText(requireContext(),data?.message.toString() , Toast.LENGTH_SHORT).show()
                         MaterialAlertDialogBuilder(requireContext()).setTitle(" Alert ")
                             .setMessage(it.data?.message)
@@ -257,8 +259,8 @@ class CropDetailsCaptureFragment : Fragment() {
 //                        )
 
                         binding.progressBar?.visibility = View.GONE
-                        binding.cardCheckHealth.visibility = View.VISIBLE
-                    } else {
+                        binding.cardCheckHealth.visibility=View.VISIBLE
+                    }else{
                         val bundle = Bundle()
                         data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
                         findNavController().navigate(
