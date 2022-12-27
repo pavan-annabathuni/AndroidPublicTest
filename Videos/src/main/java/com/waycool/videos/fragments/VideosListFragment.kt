@@ -166,7 +166,7 @@ class VideosListFragment : Fragment() {
             binding.addFab.visibility = View.GONE
             binding.materialCardView.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check your internet connectivity",
                     Toast.LENGTH_SHORT

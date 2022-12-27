@@ -126,7 +126,7 @@ class AddCropDetailsFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check internet connectivity",
                     Toast.LENGTH_SHORT

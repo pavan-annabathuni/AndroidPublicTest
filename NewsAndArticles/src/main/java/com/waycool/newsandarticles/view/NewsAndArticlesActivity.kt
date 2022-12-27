@@ -211,7 +211,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             apiErrorHandlingBinding.clInternetError.visibility= View.VISIBLE
             binding.addFab.visibility= View.GONE
             binding.materialCardView.visibility=View.GONE
-            this?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            this?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
 
 
         }else{

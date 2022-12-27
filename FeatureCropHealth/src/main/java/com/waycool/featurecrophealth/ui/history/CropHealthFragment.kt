@@ -61,7 +61,7 @@ class CropHealthFragment : Fragment() {
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
             if(NetworkUtil.getConnectivityStatusString(context)==0){
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     requireContext(),
                     "Please check you internet connectivity",
                     Toast.LENGTH_SHORT
@@ -110,7 +110,7 @@ class CropHealthFragment : Fragment() {
             binding.addFab.visibility=View.GONE
 
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check internet connectivity",
                     Toast.LENGTH_SHORT

@@ -66,7 +66,7 @@ class PlayVideoFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check your internet connectivity",
                     Toast.LENGTH_SHORT

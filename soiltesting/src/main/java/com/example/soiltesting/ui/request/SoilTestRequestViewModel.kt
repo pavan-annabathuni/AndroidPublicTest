@@ -37,7 +37,7 @@ class SoilTestRequestViewModel : ViewModel() {
         state: String,
         district: String,
         number: String,
-        plot_id:Int
+        crop_id:Int
     ): LiveData<Resource<SoilTestResponseDTO?>> =
         CropsRepository.postNewSoil(
             account_id,
@@ -50,7 +50,7 @@ class SoilTestRequestViewModel : ViewModel() {
             state,
             district,
             number,
-            plot_id
+            crop_id
         ).asLiveData()
 
     //    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =

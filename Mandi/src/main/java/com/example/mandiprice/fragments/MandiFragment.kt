@@ -159,7 +159,7 @@ class MandiFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.addFab.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check you internet connectivity",
                     Toast.LENGTH_SHORT

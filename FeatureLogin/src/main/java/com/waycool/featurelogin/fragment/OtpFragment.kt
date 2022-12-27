@@ -264,7 +264,7 @@ class OtpFragment : Fragment() {
                     }
                 }
         } else {
-            context?.let { ToastStateHandling.toastWarning(it,"Please enter the OTP", Toast.LENGTH_LONG) }
+            context?.let { ToastStateHandling.toastError(it,"Please enter the OTP", Toast.LENGTH_LONG) }
         }
     }
 
@@ -384,7 +384,7 @@ class OtpFragment : Fragment() {
 
     private fun requestForOTP() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let { ToastStateHandling.toastWarning(it, "No internet", Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
             apiOTP(mobileNumber)
         }
@@ -393,7 +393,7 @@ class OtpFragment : Fragment() {
 
     fun verifyUser() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let { ToastStateHandling.toastWarning(it, "No internet", Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
 
             loginViewModel.login(mobileNumber, fcmToken!!, mobileModel!!, mobileManufacturer!!)

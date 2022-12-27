@@ -318,7 +318,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Check internet",
                     Toast.LENGTH_SHORT
@@ -339,7 +339,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             videosBinding.viewAllVideos.visibility = View.GONE
             videosBinding.videosScroll.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Check internet",
                     Toast.LENGTH_SHORT
