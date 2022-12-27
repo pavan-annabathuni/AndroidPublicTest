@@ -124,6 +124,7 @@ class CropDetailsCaptureFragment : Fragment() {
 //            val userRequest = AiCropPostResponse()
                 val file = selecteduri?.toFile()
                 binding.uploadedImg.isEnabled = true
+
                 val requestFile: RequestBody =
                     RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
                 val profileImage: RequestBody = RequestBody.create(
