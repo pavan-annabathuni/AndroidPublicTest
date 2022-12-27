@@ -82,8 +82,7 @@ class CropHealthFragment : Fragment() {
 
         historyAdapter.onItemClick = {
             if (it?.disease_id==null) {
-                Toast.makeText(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
-                    .show()
+                ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
             } else {
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
@@ -231,12 +230,11 @@ class CropHealthFragment : Fragment() {
 //                        }
                     }
                     is Resource.Error -> {
-                        Toast.makeText(
+                        ToastStateHandling.toastError(
                             requireContext(),
                             it.message.toString(),
                             Toast.LENGTH_SHORT
                         )
-                            .show()
                     }
                     is Resource.Loading -> {
 

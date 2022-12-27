@@ -14,6 +14,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.databinding.FragmentVeriatyCropBinding
 import com.example.addcrop.ui.CategoryAdapter
+import com.waycool.data.error.ToastStateHandling
 
 
 class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
@@ -74,8 +75,8 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
             binding.cardCheckHealth.setOnClickListener {
 //                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    Toast.makeText(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
@@ -101,8 +102,7 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
             binding.cardCheckHealth.setOnClickListener {
 //                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    Toast.makeText(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()

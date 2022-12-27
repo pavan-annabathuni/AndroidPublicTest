@@ -32,6 +32,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -205,12 +206,11 @@ class PestDiseaseDetailsFragment : Fragment() {
 
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading..", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(), "Loading..", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                     }
 
@@ -460,7 +460,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                     .setRuntimeView(binding.totalTime)
                 // .setTotalTimeView(mTotalTime);
                 audio?.play()
-            } else Toast.makeText(requireContext(), "Audio is not there", Toast.LENGTH_SHORT).show()
+            } else ToastStateHandling.toastError(requireContext(), "Audio is not there", Toast.LENGTH_SHORT)
 
         }
     }

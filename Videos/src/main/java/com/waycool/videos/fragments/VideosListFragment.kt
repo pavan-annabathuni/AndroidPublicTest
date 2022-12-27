@@ -58,8 +58,7 @@ class VideosListFragment : Fragment() {
 
 
     var searchTag = ""
-    var tagsAndKeywordsList = ArrayList<String>()
-    var isAllFabsVisible = false
+
     private lateinit var adapterVideo: VideosPagerAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

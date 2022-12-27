@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
@@ -64,8 +65,7 @@ class CropHistoryFragment : Fragment() {
 
         historyAdapter.onItemClick = {
             if (it?.disease_id == null) {
-                Toast.makeText(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
-                    .show()
+                ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
             } else {
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
@@ -168,8 +168,7 @@ class CropHistoryFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
 

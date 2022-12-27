@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropPremiumBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
@@ -161,7 +162,7 @@ class AddCropPremiumFragment : Fragment() {
 //                arrayList.add(irrigation)
                     if (colors[0] == irrigation_selected) {
                         binding.cardCheckHealth.setOnClickListener {
-                            Toast.makeText(requireContext(), "Please Irrigation Type", Toast.LENGTH_SHORT).show()
+                            ToastStateHandling.toastError(requireContext(), "Please Select Irrigation Type", Toast.LENGTH_SHORT)
                         }
                     } else if (colors[1] == (irrigation_selected)) {
                         binding.clPlotNumber.visibility = View.GONE
@@ -174,11 +175,11 @@ class AddCropPremiumFragment : Fragment() {
                             numberOfPlanets = binding.etNoOfAcre.text.toString().trim()
                             date = binding.etCalender.text.toString().trim()
                             if (area.isEmpty()) {
-                                Toast.makeText(
+                                ToastStateHandling.toastError(
                                     requireContext(),
-                                    "please Enter Area",
+                                    "Please Enter Area",
                                     Toast.LENGTH_SHORT
-                                ).show()
+                                )
                                 binding.etAreaNumber.error = "Enter Area"
                                 return@setOnClickListener
                             } else if (date.isEmpty()) {
@@ -188,8 +189,7 @@ class AddCropPremiumFragment : Fragment() {
                                 binding.etNoOfAcre.error = "Enter Number of Planets"
                                 return@setOnClickListener
                             } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-                                Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)
-                                    .show()
+                                ToastStateHandling.toastSuccess(requireContext(), "Next Page", Toast.LENGTH_SHORT)
                                 val bundle = Bundle()
 //                                val map = mutableMapOf<String, Any>()
 //                                Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
@@ -276,7 +276,7 @@ class AddCropPremiumFragment : Fragment() {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
             } else if (accountID == null) {
-                Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
             } else if (numberOfPlanets.isEmpty()) {
                 binding.etNoOfAcre.error = "Enter Number of Planets"
                 return@setOnClickListener
@@ -304,19 +304,19 @@ class AddCropPremiumFragment : Fragment() {
                             activity?.finish()
                         }
                         is Resource.Error -> {
-                            Toast.makeText(
+                            ToastStateHandling.toastError(
                                 requireContext(),
                                 it.message.toString(),
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
                             Log.d(
                                 ContentValues.TAG,
                                 "postAddCropExption: ${it.message.toString()}"
                             )
                         }
                         is Resource.Loading -> {
-                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                .show()
+                            ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+
 
                         }
                     }

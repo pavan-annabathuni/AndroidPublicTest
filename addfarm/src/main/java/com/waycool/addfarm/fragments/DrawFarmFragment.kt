@@ -383,8 +383,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 }
                 .addOnFailureListener { exception ->
                     if (exception is ApiException) {
-                        Toast.makeText(requireContext(), exception.message + "", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(requireContext(), exception.message + "", Toast.LENGTH_SHORT)
                     }
                 }
         }
@@ -392,17 +391,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
         binding.savemapBtn.setOnClickListener {
             if (points.isEmpty() && searchLocationMarker == null) {
-                Toast.makeText(
+                ToastStateHandling.toastError(
                     requireContext(),
                     "Please Mark your Farm or nearest location of your farm.",
                     Toast.LENGTH_LONG
-                ).show()
+                )
             } else if(points.size<3){
-                Toast.makeText(
+                ToastStateHandling.toastError(
                     requireContext(),
                     "Please Mark more than 2 points to plot your Farm or nearest location of your farm.",
                     Toast.LENGTH_LONG
-                ).show()
+                )
 
             }else {
                 val bundle = Bundle()
@@ -434,7 +433,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.tutorial.isClickable=false
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
         }
         else{
             binding.tutorial.isClickable=true
@@ -658,15 +657,18 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        it.message?.let { it1 ->
+                            ToastStateHandling.toastError(requireContext(),
+                                it1, Toast.LENGTH_SHORT)
+                        }
                         Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        Toast.makeText(requireContext(), "Cancelled", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastError(requireContext(), "Cancelled", Toast.LENGTH_SHORT)
 
                     }
             } else {
-                Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
+                context?.let { ToastStateHandling.toastWarning(it, "Please turn on location", Toast.LENGTH_LONG) }
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -1042,8 +1044,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
-            Toast
-                .makeText(requireActivity(), " " + e.message, Toast.LENGTH_SHORT).show()
+            ToastStateHandling.toastError(requireActivity(), " " + e.message, Toast.LENGTH_SHORT)
         }
     }
 

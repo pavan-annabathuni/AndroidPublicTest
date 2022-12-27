@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -67,12 +68,11 @@ class AllServicesFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -89,12 +89,11 @@ class AllServicesFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                 }
             }

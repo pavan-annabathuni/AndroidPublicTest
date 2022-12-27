@@ -12,6 +12,9 @@ import com.waycool.data.Network.NetworkModels.UpdateNotification
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MainViewModel : ViewModel() {
     fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
@@ -21,7 +24,7 @@ class MainViewModel : ViewModel() {
         module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
@@ -32,7 +35,7 @@ class MainViewModel : ViewModel() {
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
     fun getVansNewsList(

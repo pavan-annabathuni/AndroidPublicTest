@@ -143,7 +143,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                       // Toast.makeText(context, "WORKED2", Toast.LENGTH_SHORT).show()
                        selectedTileType = TileType.TRUE_COLOR
                        Log.d("select", "onTabSelected: $selectedTileType")
-                       Toast.makeText(context, "WORKED", Toast.LENGTH_SHORT).show()
+//                       Toast(context, "WORKED", Toast.LENGTH_SHORT).show()
                    }
                 }
             }

@@ -29,8 +29,10 @@ import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
 import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
+import okhttp3.internal.wait
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -218,8 +220,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
 
@@ -337,15 +338,13 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
                     binding.progressBar.isVisible = true
                     binding.clProgressBar.visibility = View.VISIBLE
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -444,19 +443,17 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    Toast.makeText(
+                                    ToastStateHandling.toastError(
                                         requireContext(),
                                         it.message.toString(),
                                         Toast.LENGTH_SHORT
                                     )
-                                        .show()
 
                                 }
                                 is Resource.Loading -> {
                                     binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                                 }
                             }

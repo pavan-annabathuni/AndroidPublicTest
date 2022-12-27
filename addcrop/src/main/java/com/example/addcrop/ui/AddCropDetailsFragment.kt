@@ -247,11 +247,10 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -278,7 +277,7 @@ class AddCropDetailsFragment : Fragment() {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
             } else if (accountID == null) {
-                Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
             }
 
 

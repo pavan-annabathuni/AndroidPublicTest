@@ -54,7 +54,7 @@ class TabViewModel:ViewModel {
         LoginRepository.getUserDetails().asLiveData()
 
     fun getVansVideosList(
-        crop_id:Int?=null,
+        crop_id:String?=null,
         module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
@@ -63,9 +63,8 @@ class TabViewModel:ViewModel {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
-        if(crop_id!=null) {
-            queryMap["crop_id"] = crop_id.toString()
-        }
+
+        queryMap["crop_id"] = crop_id.toString()
         queryMap["module_id"] = module_id.toString()
 
         if (tags != null)

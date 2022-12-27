@@ -468,8 +468,9 @@ class CropInfoFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        ViewModel.getVansVideosList(cropId,module_id).observe(requireActivity()) {
+        ViewModel.getVansVideosList(cropId.toString(),module_id).observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
+            videosBinding.videosListRv.adapter = adapter
 
             /*   if (adapter.snapshot().size==0){
                    videosBinding.noDataVideo.visibility=View.VISIBLE
