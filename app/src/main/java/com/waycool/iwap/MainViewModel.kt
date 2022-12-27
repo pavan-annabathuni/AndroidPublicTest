@@ -18,6 +18,7 @@ class MainViewModel : ViewModel() {
 
     //Videos
     fun getVansVideosList(
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
@@ -25,6 +26,7 @@ class MainViewModel : ViewModel() {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
+            queryMap["module_id"] = module_id.toString()
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
@@ -34,6 +36,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun getVansNewsList(
+        module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
@@ -46,7 +49,7 @@ class MainViewModel : ViewModel() {
 
         if (tags != null)
             queryMap["tags"] = tags
-
+            queryMap["module_id"] = module_id.toString()
 //        if (categoryId != null)
 //            queryMap["category_id"] = categoryId.toString()
 

@@ -32,6 +32,7 @@ class CropHealthFragment : Fragment() {
     private var _binding: FragmentCropHealthBinding? = null
     private val binding get() = _binding!!
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+    private var module_id = "3"
 
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
@@ -131,18 +132,21 @@ class CropHealthFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
-                videosBinding.noDataVideo.visibility=View.VISIBLE
-                binding.clProgressBar.visibility=View.GONE
+        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility=View.GONE
 
-            }
-            else{
-                videosBinding.noDataVideo.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-                binding.clProgressBar.visibility=View.GONE
+            /*       if (adapter.snapshot().size==0){
+                       videosBinding.noDataVideo.visibility=View.VISIBLE
+                       binding.clProgressBar.visibility=View.GONE
 
-            }
+                   }
+                   else{
+                       videosBinding.noDataVideo.visibility=View.GONE
+                       adapter.submitData(lifecycle, it)
+                       binding.clProgressBar.visibility=View.GONE
+
+                   }*/
 
         }
 

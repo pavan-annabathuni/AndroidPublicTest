@@ -438,7 +438,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
         else{
             binding.tutorial.isClickable=true
-
             binding.clInclude.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.GONE
             getLocation()

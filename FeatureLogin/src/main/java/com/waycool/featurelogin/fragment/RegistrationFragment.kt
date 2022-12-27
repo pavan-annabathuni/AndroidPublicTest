@@ -49,6 +49,7 @@ import com.waycool.featurelogin.adapter.UserProfileKnowServiceAdapter
 import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
 import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
@@ -74,6 +75,8 @@ class RegistrationFragment : Fragment() {
     lateinit var premiumAdapter: UserProfilePremiumAdapter
     var mobileNumber: String? = ""
     lateinit var mContext: Context
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
@@ -118,13 +121,17 @@ class RegistrationFragment : Fragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
+        apiErrorHandlingBinding = binding.errorState
 
         binding.registerDoneBtn.isEnabled = true
 
         Places.initialize(requireActivity().applicationContext, AppSecrets.getMapsKey())
         placesClient = Places.createClient(requireContext())
 
-
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
         toolbarLayoutBinding.toolbarTile.text = "Profile"
         toolbarLayoutBinding.backBtn.setOnClickListener {
@@ -227,6 +234,15 @@ class RegistrationFragment : Fragment() {
             getLocation()
         }, 400)
         return binding.root
+    }
+
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+        }
+        else{
+            binding.clInclude.visibility=View.GONE
+        }
     }
 
     fun showServiceDialog(

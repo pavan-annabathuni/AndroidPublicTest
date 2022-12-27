@@ -23,13 +23,15 @@ class HistoryViewModel : ViewModel() {
         LoginRepository.getUserDetails().asLiveData()
     //Videos
     fun getVansVideosList(
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
-
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
+        queryMap["module_id"] = module_id.toString()
+
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
@@ -49,12 +51,4 @@ class HistoryViewModel : ViewModel() {
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
 
-//    private val repository = SoilTestingRepository(apiService)
-//    val historyLiveData get() = repository.historyLiveData
-//    val statusLiveData get() = repository.statusLiveData
-//    fun getAllHistory(userAccount: Int) {
-//        viewModelScope.launch {
-//            repository.getAllHistory(userAccount)
-//        }
-//    }
 }
