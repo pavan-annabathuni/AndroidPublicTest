@@ -23,11 +23,11 @@ import com.example.cropinformation.adapter.CropListAdapter
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
-import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import kotlinx.coroutines.launch

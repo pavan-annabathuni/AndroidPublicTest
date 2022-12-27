@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,6 +31,7 @@ import com.google.firebase.ktx.Firebase
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.FeatureLogin
@@ -340,7 +340,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             Locale.getDefault()
         )
         viewModel.viewModelScope.launch {
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,SpeechToText.getLangCode())}
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())}
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {

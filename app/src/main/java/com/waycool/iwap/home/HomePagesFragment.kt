@@ -181,11 +181,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent);
         }
 
-//        binding.clCropProtect.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
-////            val intent = Intent(activity, CropProtectActivity::class.java)
-////            startActivity(intent)
-//        }
+        binding.clCropProtect.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
+//            val intent = Intent(activity, CropProtectActivity::class.java)
+//            startActivity(intent)
+        }
 
         binding.tvAddFromServiceCropProtect.setOnClickListener {
             val intent = Intent(activity, CropProtectActivity::class.java)
@@ -257,13 +257,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         })
 
         mandiViewModel.viewModelScope.launch {
-            cropCategory?.let {
-                state?.let { it1 ->
-                    mandiViewModel.getMandiDetails(lat,long,it, it1, crop, sortBy, orderBy, search,0)
-                        .observe(viewLifecycleOwner) {
-                            mandiAdapter.submitData(lifecycle, it)
-                        }
-                }
+            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,0)
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
             }
         }
 
@@ -619,18 +615,21 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
-//                if (null != it) {
-//                    WeatherIcons.setWeatherIcon(it.data?.current?.weather?.get(0)?.icon!!,binding.ivWeather)
-//                    val date: Long? = it.data?.current?.dt?.times(1000L)
-//                    val dateTime = Date()
-//                    if (date != null) {
-//                        dateTime.time = date
-//                    }
-//                    val formatter =
-//                        SimpleDateFormat("EE d,MMM", Locale.ENGLISH)//or use getDateInstance()
-//                    val formatedDate = formatter.format(dateTime)
-//                    binding.tvDay.text = "Today $formatedDate"
-//                }
+                if (it.data != null) {
+                    it.data?.current?.weather?.get(0)?.icon?.let { it1 ->
+                        WeatherIcons.setWeatherIcon(
+                            it1,binding.ivWeather)
+                   }
+                    val date: Long? = it.data?.current?.dt?.times(1000L)
+                    val dateTime = Date()
+                    if (date != null) {
+                        dateTime.time = date
+                    }
+                    val formatter =
+                        SimpleDateFormat("EE d,MMM", Locale.ENGLISH)//or use getDateInstance()
+                    val formatedDate = formatter.format(dateTime)
+                    binding.tvDay.text = "Today $formatedDate"
+                }
 
             }
             if (it.data?.current?.weather?.isEmpty() == false)
