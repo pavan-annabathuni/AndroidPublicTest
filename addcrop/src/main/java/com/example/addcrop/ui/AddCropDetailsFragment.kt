@@ -48,7 +48,6 @@ class AddCropDetailsFragment : Fragment() {
     lateinit var irrigation_selected: String
     lateinit var areaTypeSelected: String
 
-
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 

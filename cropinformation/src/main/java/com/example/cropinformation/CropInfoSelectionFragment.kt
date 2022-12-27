@@ -194,7 +194,11 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
-        viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
+        viewModel.getIrrigationCrops(searchQuery).observe(requireActivity()) { res ->
+//            res.data?.filter {
+//                if (it.cropId)
+//
+//            }
             when (res) {
                 is Resource.Success -> {
                     if (categoryId == null) {

@@ -81,6 +81,9 @@ object LocalSource {
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropsInfo(searchQuery)
     }
+    fun getIrrigationCrops(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
+        return outgrowDao.getIrrigationCrops(searchQuery)
+    }
 
     suspend fun insertVansCategory(vansCategory: List<VansCategoryEntity>) {
         DataStoreManager.insertVansCategory(vansCategory)

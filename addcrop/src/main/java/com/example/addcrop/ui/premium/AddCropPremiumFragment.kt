@@ -56,6 +56,19 @@ class AddCropPremiumFragment : Fragment() {
         "Hectare",
         "Bigha"
     )
+    val noOFYearsBahar = arrayOf(
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4"
+    )
+    val noOFYear = arrayOf(
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4"
+    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,6 +84,8 @@ class AddCropPremiumFragment : Fragment() {
         initView()
         spinnerYear()
         initViewClicks()
+        noOFYear()
+        noOFYearBahar()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
 //        }
@@ -100,9 +115,9 @@ class AddCropPremiumFragment : Fragment() {
             }
 
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                accountID=it.data?.accountId
+                accountID = it.data?.accountId
             }
-            irrigationTypeSpinner(accountID,crop_id,crop_type)
+            irrigationTypeSpinner(accountID, crop_id, crop_type)
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")
         }
@@ -148,6 +163,36 @@ class AddCropPremiumFragment : Fragment() {
             }
         }
     }
+    private fun noOFYearBahar() {
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, noOFYearsBahar)
+        binding.tvSpinnerYearBahar.adapter = arrayAdapter
+        binding.tvSpinnerYearBahar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val item = p0?.selectedItem
+                year_selected = item.toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+    }
+    private fun noOFYear() {
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, noOFYear)
+        binding.tvSpinnerYear.adapter = arrayAdapter
+        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val item = p0?.selectedItem
+                year_selected = item.toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+    }
 
     private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
@@ -156,41 +201,41 @@ class AddCropPremiumFragment : Fragment() {
         binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 //                itemClicked()
-                    val item = p0?.selectedItem
-                    irrigation_selected = item.toString()
+                val item = p0?.selectedItem
+                irrigation_selected = item.toString()
 //                arrayList.add(irrigation)
-                    if (colors[0] == irrigation_selected) {
-                        binding.cardCheckHealth.setOnClickListener {
-                            Toast.makeText(requireContext(), "Please Irrigation Type", Toast.LENGTH_SHORT).show()
-                        }
-                    } else if (colors[1] == (irrigation_selected)) {
-                        binding.clPlotNumber.visibility = View.GONE
-                        binding.plotNumber.visibility = View.GONE
-                        binding.tvCheckCrop.setText("Next")
-                        binding.cardCheckHealth.setOnClickListener {
-                            it.hideSoftInput()
-                            nickName = binding.etNickName.text.toString().trim()
-                            area = binding.etAreaNumber.text.toString().trim()
-                            numberOfPlanets = binding.etNoOfAcre.text.toString().trim()
-                            date = binding.etCalender.text.toString().trim()
-                            if (area.isEmpty()) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "please Enter Area",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                binding.etAreaNumber.error = "Enter Area"
-                                return@setOnClickListener
-                            } else if (date.isEmpty()) {
-                                binding.etCalender.error = "Pick up the Date"
-                                return@setOnClickListener
-                            } else if (numberOfPlanets.isEmpty()) {
-                                binding.etNoOfAcre.error = "Enter Number of Planets"
-                                return@setOnClickListener
-                            } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-                                Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)
-                                    .show()
-                                val bundle = Bundle()
+                if (colors[0] == irrigation_selected) {
+                    binding.cardCheckHealth.setOnClickListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "Please Irrigation Type",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else if (colors[1] == (irrigation_selected)) {
+                    binding.tvCheckCrop.setText("Next")
+                    binding.cardCheckHealth.setOnClickListener {
+                        it.hideSoftInput()
+                        nickName = binding.etNickName.text.toString().trim()
+                        area = binding.etAreaNumber.text.toString().trim()
+                        numberOfPlanets = binding.etNoOfAcre.text.toString().trim()
+                        date = binding.etCalender.text.toString().trim()
+                        if (nickName.isEmpty()) {
+                            binding.etNickName.error = "Nick name should not be empty"
+                            return@setOnClickListener
+                        } else if (area.isEmpty()) {
+                            binding.etAreaNumber.error = "Enter Area"
+                            return@setOnClickListener
+                        } else if (date.isEmpty()) {
+                            binding.etCalender.error = "Pick up the Date"
+                            return@setOnClickListener
+                        } else if (numberOfPlanets.isEmpty()) {
+                            binding.etNoOfAcre.error = "Enter Number of Planets"
+                            return@setOnClickListener
+                        } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
+                            Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)
+                                .show()
+                            val bundle = Bundle()
 //                                val map = mutableMapOf<String, Any>()
 //                                Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
 //                                map.put("account_no_id", account_id)
@@ -204,49 +249,50 @@ class AddCropPremiumFragment : Fragment() {
 //                                Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
 //                                bundle.putString("map",map.toString())
 
-                                if (account_id != null) {
-                                    bundle.putInt("account_id", account_id)
-                                }
-                                if (crop_id != null) {
-                                    bundle.putInt("cropid", crop_id)
-                                }
-                                if (soil_type_id != null) {
-                                    bundle.putInt("crop_type", soil_type_id)
-                                }
-                                bundle.putString("area", area)
-                                bundle.putString("date", date)
-                                bundle.putString("irrigation_selected", irrigation_selected)
-                                bundle.putString("numberOfPlanets", numberOfPlanets)
-
-                                findNavController().navigate(
-                                    R.id.action_addCropPremiumFragment_to_plantSpacingFragment,
-                                    bundle
-                                )
+                            if (account_id != null) {
+                                bundle.putInt("account_id", account_id)
                             }
+                            if (crop_id != null) {
+                                bundle.putInt("cropid", crop_id)
+                            }
+                            if (soil_type_id != null) {
+                                bundle.putInt("crop_type", soil_type_id)
+                            }
+                            bundle.putString("nick_name",nickName)
+                            bundle.putString("area", area)
+                            bundle.putString("date", date)
+                            bundle.putString("irrigation_selected", irrigation_selected)
+                            bundle.putString("numberOfPlanets", numberOfPlanets)
+
+                            findNavController().navigate(
+                                R.id.action_addCropPremiumFragment_to_plantSpacingFragment,
+                                bundle
+                            )
                         }
-                    } else if (colors[2] == (item)) {
-                        Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
-                        Log.d("TAG", "onItemSelectedIrrigationType:$colors")
-                        Log.d("TAG", "onItemSelectedIrrigationType:$item")
-                        binding.clPlotNumber.visibility = View.VISIBLE
-                        binding.plotNumber.visibility = View.VISIBLE
-                        binding.tvCheckCrop.setText("Save Crop")
-                        itemClicked(account_id, crop_id,soil_type_id,item)
+                    }
+                } else if (colors[2] == (item)) {
+                    Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
+                    Log.d("TAG", "onItemSelectedIrrigationType:$colors")
+                    Log.d("TAG", "onItemSelectedIrrigationType:$item")
+                    binding.clPlotNumber.visibility = View.VISIBLE
+                    binding.plotNumber.visibility = View.VISIBLE
+                    binding.tvCheckCrop.setText("Save Crop")
+                    itemClicked(account_id, crop_id, soil_type_id, item)
 //                    else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 2", Toast.LENGTH_SHORT).show()
 //                    }
 
 
-                    } else if (colors[3] == (item)) {
-                        binding.clPlotNumber.visibility = View.VISIBLE
-                        binding.plotNumber.visibility = View.VISIBLE
-                        binding.tvCheckCrop.setText("Save Crop")
-                        itemClicked(account_id, crop_id,soil_type_id,item)
+                } else if (colors[3] == (item)) {
+                    binding.clPlotNumber.visibility = View.VISIBLE
+                    binding.plotNumber.visibility = View.VISIBLE
+                    binding.tvCheckCrop.setText("Save Crop")
+                    itemClicked(account_id, crop_id, soil_type_id, item)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
 //                    }
 
-                    }
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -258,7 +304,12 @@ class AddCropPremiumFragment : Fragment() {
     }
 
 
-    private fun itemClicked(account_id: Int?, crop_id: Int?,soil_type_id:Int?,irrigation_type:String) {
+    private fun itemClicked(
+        account_id: Int?,
+        crop_id: Int?,
+        soil_type_id: Int?,
+        irrigation_type: String
+    ) {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
@@ -290,13 +341,13 @@ class AddCropPremiumFragment : Fragment() {
                     map.put("crop_id", crop_id)
                 }
                 if (soil_type_id != null) {
-                    map.put("soil_type_id",soil_type_id)
+                    map.put("soil_type_id", soil_type_id)
                 }
-                map.put("plot_nickname", binding.etNickName.text.toString())
-                map.put("area", binding.etAreaNumber.text)
-                map.put("irrigation_type",irrigation_type)
-                map.put("sowing_date", binding.etCalender.text.toString())
-                map.put("no_of_plants", binding.etNoOfAcre.text.toString())
+                map["plot_nickname"] = binding.etNickName.text.toString()
+                map["area"] = binding.etAreaNumber.text
+                map["irrigation_type"] = irrigation_type
+                map["sowing_date"] = binding.etCalender.text.toString()
+                map["no_of_plants"] = binding.etNoOfAcre.text.toString()
                 Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
                 viewModel.addCropDataPass(map).observe(requireActivity()) {
                     when (it) {

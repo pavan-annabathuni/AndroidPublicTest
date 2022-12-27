@@ -119,6 +119,24 @@ object CropsRepository {
         }
     }
 
+  fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+        return CropMasterSyncer().getIrrigationCrops(searchQuery).map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        CropMasterDomainMapper().toDomainList(it.data ?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+    }
+
     fun getAiCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
         return CropMasterSyncer().getCropsAiCropHealth(searchQuery).map {
             when (it) {
