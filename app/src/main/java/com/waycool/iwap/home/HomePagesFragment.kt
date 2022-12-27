@@ -266,13 +266,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         })
 
         mandiViewModel.viewModelScope.launch {
-            cropCategory?.let {
-                state?.let { it1 ->
+
                     mandiViewModel.getMandiDetails(
                         lat,
                         long,
-                        it,
-                        it1,
+                        cropCategory, state,
                         crop,
                         sortBy,
                         orderBy,
@@ -281,8 +279,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     )
                         .observe(viewLifecycleOwner) {
                             mandiAdapter.submitData(lifecycle, it)
-                        }
-                }
+
             }
         }
 

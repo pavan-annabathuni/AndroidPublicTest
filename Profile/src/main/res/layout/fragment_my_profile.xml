@@ -473,31 +473,40 @@
                     android:textSize="16sp" />
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/textView"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/ll_tc"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="66dp"
                 android:layout_marginTop="24dp"
-                android:text="Privacy Policy"
-                android:textColor="@color/darkGray"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logout" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/logout">
 
-            <TextView
-                android:id="@+id/textView2"
-                style="@style/Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="66dp"
-                android:text="Terms of Use"
-                android:textColor="@color/darkGray"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logout" />
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="Privacy Policy"
+                    android:textColor="@color/darkGray"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/logout" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Terms of Use"
+                    android:textColor="@color/darkGray"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/logout" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/version"
@@ -512,7 +521,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/ll_tc" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
