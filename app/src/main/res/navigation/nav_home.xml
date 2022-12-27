@@ -22,6 +22,8 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/homePagesFragment" />
+
+
         <action
             android:id="@+id/action_homePagesFragment_to_allServicesFragment"
             app:destination="@id/allServicesFragment"
@@ -56,6 +58,12 @@
         <action
             android:id="@+id/action_homePagesFragment_to_nav_farmdetails"
             app:destination="@id/nav_farmdetails" />
+        <action
+            android:id="@+id/action_homePagesFragment_to_videosListFragment2"
+            app:destination="@+id/videosListFragment2" />
+        <action
+            android:id="@+id/xml"
+            app:destination="@id/nav_videos.xml" />
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -155,5 +163,10 @@
     <include app:graph="@navigation/irrgation_navigation" />
     <include app:graph="@navigation/nav_crop_protect" />
     <include app:graph="@navigation/nav_farmdetails" />
+    <fragment
+        android:id="@+id/videosListFragment2"
+        android:name="com.waycool.videos.fragments.VideosListFragment"
+        android:label="VideosListFragment" />
+    <include app:graph="@navigation/nav_videos" />
 
 </navigation>

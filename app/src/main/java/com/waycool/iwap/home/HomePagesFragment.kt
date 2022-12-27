@@ -90,6 +90,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private var lat: String = ""
     private var long: String = ""
 
+    private var module_id = "49"
+
+
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
@@ -311,6 +314,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun networkNewsCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+            newsBinding.noDataNews.visibility=View.GONE
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
             context?.let {
@@ -518,14 +522,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun setNews() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
-        viewModel.getVansNewsList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
-                newsBinding.noDataNews.visibility=View.VISIBLE
-            }
-            else{
-                newsBinding.noDataNews.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-            }
+        viewModel.getVansNewsList("49").observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+            /*     if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)!=0){
+                           newsBinding.noDataNews.visibility=View.VISIBLE
+                       }
+                       else{
+                           newsBinding.noDataNews.visibility=View.GONE
+                           newsBinding.videoCardNoInternet.visibility=View.GONE
+                           newsBinding.newsListRv.visibility=View.VISIBLE
+                           adapter.submitData(lifecycle, it)
+                       }*/
         }
 
         newsBinding.viewAllNews.setOnClickListener {
@@ -542,10 +549,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             bundle.putString("date", it?.startDate)
             bundle.putString("source", it?.sourceName)
 
-            findNavController().navigate(
-                com.waycool.iwap.R.id.action_homePagesFragment_to_newsFullviewActivity2,
-                bundle
-            )
+            findNavController().navigate(R.id.action_homePagesFragment_to_newsFullviewActivity2, bundle)
         }
 
     }
@@ -554,15 +558,19 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun setVideos() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList().observe(requireActivity()) {
-//            adapter.submitData(lifecycle, it)
-            if (adapter.snapshot().size==0){
-                videosBinding.noDataVideo.visibility=View.VISIBLE
-            }
-            else{
-                videosBinding.noDataVideo.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-            }
+        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+
+
+//            if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)!=0){
+//                videosBinding.noDataVideo.visibility=View.VISIBLE
+//            }
+//            else{
+//                videosBinding.noDataVideo.visibility=View.GONE
+//                videosBinding.videoCardNoInternet.visibility=View.GONE
+//                videosBinding.videosListRv.visibility=View.VISIBLE
+//                adapter.submitData(lifecycle, it)
+//            }
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
@@ -572,7 +580,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
-                com.waycool.iwap.R.id.action_homePagesFragment_to_playVideoFragment4,
+              R.id.action_homePagesFragment_to_playVideoFragment4,
                 bundle
             )
         }
@@ -597,6 +605,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         return scroll.roundToInt()
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun weather(lat: String, lon: String) {
         viewModel.getWeather(lat, lon).observe(viewLifecycleOwner) {
             if (it?.data != null) {
@@ -615,21 +624,27 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
-                if (it.data != null) {
-                    it.data?.current?.weather?.get(0)?.icon?.let { it1 ->
-                        WeatherIcons.setWeatherIcon(
-                            it1,binding.ivWeather)
-                   }
-                    val date: Long? = it.data?.current?.dt?.times(1000L)
-                    val dateTime = Date()
-                    if (date != null) {
-                        dateTime.time = date
+
+                    if (!it.data?.current?.weather.isNullOrEmpty()) {
+                        it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
+                            WeatherIcons.setWeatherIcon(
+                                it1, binding.ivWeather
+                            )
+
+                            val date: Long? = it.data?.current?.dt?.times(1000L)
+                            val dateTime = Date()
+                            if (date != null) {
+                                dateTime.time = date
+                            }
+                            val formatter =
+                                SimpleDateFormat(
+                                    "EE d,MMM",
+                                    Locale.ENGLISH
+                                )//or use getDateInstance()
+                            val formatedDate = formatter.format(dateTime)
+                            binding.tvDay.text = "Today $formatedDate"
+                        }
                     }
-                    val formatter =
-                        SimpleDateFormat("EE d,MMM", Locale.ENGLISH)//or use getDateInstance()
-                    val formatedDate = formatter.format(dateTime)
-                    binding.tvDay.text = "Today $formatedDate"
-                }
 
             }
             if (it.data?.current?.weather?.isEmpty() == false)

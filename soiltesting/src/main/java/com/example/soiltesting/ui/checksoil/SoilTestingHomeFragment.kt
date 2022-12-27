@@ -58,6 +58,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
+    private var module_id = "22"
 
 
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
@@ -212,8 +213,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
+        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
+       /*     if (adapter.snapshot().size==0){
                 videosBinding.noDataVideo.visibility=View.VISIBLE
             }
             else{
@@ -221,8 +222,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 adapter.submitData(lifecycle, it)
                             binding.clProgressBar.visibility = View.GONE
 
-            }
-//            adapter.submitData(lifecycle, it)
+            }*/
+            adapter.submitData(lifecycle, it)
         }
 
 
@@ -234,9 +235,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 bundle
             )
         }
-
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
+            intent.putExtra("module_id",module_id)
             startActivity(intent)
         }
 

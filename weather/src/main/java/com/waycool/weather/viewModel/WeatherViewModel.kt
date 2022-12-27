@@ -82,18 +82,7 @@ class WeatherViewModel : ViewModel() {
 //        }
 //    }
 //
-//    fun getHourlyWeather(lat: String, lon: String, lang: String = "en") {
-//        viewModelScope.launch {
-//            try {
-//                val data2 =
-//                    api.weatherApi.retrofitService.getWeather(12.92, 77.52, Constants.APP_KEY, "en")
-//                // _status.value = "SUCCESS"
-//                _responseHourly.value = data2.hourly
-//            } catch (e: Exception) {
-//
-//            }
-//        }
-//    }
+
 
     fun displayPropertyDaily(id: DailyDomain) {
         _navigateToSelectedProperty.value = id

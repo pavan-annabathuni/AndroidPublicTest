@@ -57,14 +57,19 @@ class TabViewModel:ViewModel {
         LoginRepository.getUserDetails().asLiveData()
 
     fun getVansVideosList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         tags: String? = null,
-        categoryId: Int? = null,
+        categoryId: Int? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
-//        queryMap["crop_id"] = crop_id
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+        queryMap["module_id"] = module_id.toString()
 
         if (tags != null)
             queryMap["tags"] = tags
@@ -75,12 +80,19 @@ class TabViewModel:ViewModel {
     }
 
     fun getVansNewsList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["lang_id"] = "1"
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+        queryMap["module_id"] = module_id.toString()
+
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()
