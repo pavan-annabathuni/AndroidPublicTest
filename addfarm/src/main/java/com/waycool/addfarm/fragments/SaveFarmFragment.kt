@@ -26,6 +26,7 @@ import com.waycool.addfarm.R
 import com.waycool.addfarm.adapter.SelectCropAdapter
 import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import kotlinx.coroutines.launch
 
@@ -177,7 +178,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 } else watersources = null
 
                 if (binding.farmnameEtAddfarm.text.toString().isEmpty()) {
-                    Toast.makeText(context, "Farm name is mandatory", Toast.LENGTH_SHORT).show()
+                    context?.let { it1 -> ToastStateHandling.toastError(it1, "Farm name is mandatory", Toast.LENGTH_SHORT) }
                 } else {
                     binding.saveProgressBar.visibility = View.VISIBLE
                     binding.saveFarmBtn.visibility = View.INVISIBLE
@@ -202,10 +203,10 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                         accountId?.let { it1 ->
                             viewModel.getFarms().observe(viewLifecycleOwner) {}
                         }
-                        Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
                         activity?.finish()
                     }
-                    Toast.makeText(requireContext(), "Farm Saved", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
                     activity?.finish()
                 }
 

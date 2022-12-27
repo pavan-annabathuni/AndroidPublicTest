@@ -49,14 +49,6 @@ class VideosPagerAdapter(
                 .into(itemBinding.videosListVideoImage)
             itemBinding.share.setOnClickListener {
                 onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
-//                val sendIntent = Intent()
-//                sendIntent.action = Intent.ACTION_SEND
-//                val sharetext =
-//                    """Hi, Checkout the video on ${vans?.title} at ${vans?.contentUrl} . For more videos Download Outgrow App from PlayStore
-//https://play.google.com/store/apps/details?id=${it.context.packageName}"""
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
-//                sendIntent.type = "text/plain"
-//                it.context.startActivity(Intent.createChooser(sendIntent, "share"))
             }
 
             itemBinding.videosListVideoCardview.setOnClickListener {

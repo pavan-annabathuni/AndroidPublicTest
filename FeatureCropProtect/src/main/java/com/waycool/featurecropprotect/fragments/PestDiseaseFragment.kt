@@ -90,12 +90,11 @@ class PestDiseaseFragment : Fragment() {
                             adapter.submitList(it.data)
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading.", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                     }
                 }
@@ -103,6 +102,7 @@ class PestDiseaseFragment : Fragment() {
         }
         adapter.onItemClick = {
             val args = Bundle()
+            it?.cropId?.let { it1 -> args.putInt("cropId", it1) }
             it?.diseaseId?.let { it1 -> args.putInt("diseaseid", it1) }
             it?.diseaseName?.let { it1 -> args.putString("diseasename", it1) }
             it?.audioUrl?.let { it1 -> args.putString("audioUrl", it1) }

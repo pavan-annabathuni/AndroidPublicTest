@@ -26,6 +26,7 @@ import com.example.profile.databinding.FragmentEditProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
@@ -119,7 +120,7 @@ class EditProfileFragment : Fragment() {
         }
 
         if (selecteduri != null) {
-            Toast.makeText(context, "Image Uploaded", Toast.LENGTH_SHORT).show()
+            context?.let { ToastStateHandling.toastSuccess(it, "Image Uploaded", Toast.LENGTH_SHORT) }
         }
     }
 
@@ -156,7 +157,7 @@ class EditProfileFragment : Fragment() {
                 viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         Log.d("ProfileUpdate", "editProfile: $it")
-                        Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
+                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
                     }
             }
             if (selecteduri != null) {
@@ -185,7 +186,7 @@ class EditProfileFragment : Fragment() {
             this.findNavController().navigateUp()
 
         } else {
-            Toast.makeText(context, "Please Fill All Fields", Toast.LENGTH_SHORT).show()
+            context?.let { ToastStateHandling.toastError(it, "Please Fill All Fields", Toast.LENGTH_SHORT) }
         }
     }
 
@@ -254,7 +255,6 @@ class EditProfileFragment : Fragment() {
 
                   lat = String.format("%.5f",it.latitude)
                  long = String.format("%.5f",it.longitude)
-                Toast.makeText(context, "${lat} ${long}", Toast.LENGTH_LONG).show()
                 viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
                     .observe(viewLifecycleOwner) {
                         if (it.results.isNotEmpty()) {

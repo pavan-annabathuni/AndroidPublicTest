@@ -21,6 +21,7 @@ import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.model.Polygon
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
@@ -102,10 +103,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                     }
                 }

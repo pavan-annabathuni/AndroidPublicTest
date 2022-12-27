@@ -32,8 +32,10 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
@@ -66,10 +68,13 @@ class PestDiseaseDetailsFragment : Fragment() {
 
     //banners
     var bannerImageList: MutableList<AdBannerImage> = ArrayList()
+    private var module_id = "2"
 
     var mediaPlayer: MediaPlayer? = null
 
     private var diseaseId: Int? = null
+    private var cropId: Int? = null
+
     private var diseaseName: String? = null
     private var audioUrl: String? = null
 
@@ -86,6 +91,8 @@ class PestDiseaseDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
+            cropId= it.getInt("cropId")
+
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
@@ -199,12 +206,11 @@ class PestDiseaseDetailsFragment : Fragment() {
 
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading..", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(), "Loading..", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                     }
 
@@ -263,19 +269,21 @@ class PestDiseaseDetailsFragment : Fragment() {
 
     }
 
-
     private fun setNews() {
         val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
-        viewModel.getVansNewsList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
-                newsBinding.noDataNews.visibility=View.VISIBLE
-            }
-            else{
-                newsBinding.noDataNews.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-            }
+
+        viewModel.getVansNewsList(cropId,module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+
+            /*     if (adapter.snapshot().size==0){
+                     newsBinding.noDataNews.visibility=View.VISIBLE
+                 }
+                 else{
+                     newsBinding.noDataNews.visibility=View.GONE
+                     adapter.submitData(lifecycle, it)
+                 }*/
       }
 
         newsBinding.viewAllNews.setOnClickListener {
@@ -304,14 +312,16 @@ class PestDiseaseDetailsFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
-                videosBinding.noDataVideo.visibility=View.VISIBLE
-            }
-            else{
-                videosBinding.noDataVideo.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-            }
+        viewModel.getVansVideosList(cropId,module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+
+            /*       if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)==0){
+                       videosBinding.noDataVideo.visibility=View.VISIBLE
+                   }
+                   else{
+                       videosBinding.noDataVideo.visibility=View.GONE
+                       adapter.submitData(lifecycle, it)
+                   }*/
         }
 
         videosBinding.viewAllVideos.setOnClickListener {
@@ -450,7 +460,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                     .setRuntimeView(binding.totalTime)
                 // .setTotalTimeView(mTotalTime);
                 audio?.play()
-            } else Toast.makeText(requireContext(), "Audio is not there", Toast.LENGTH_SHORT).show()
+            } else ToastStateHandling.toastError(requireContext(), "Audio is not there", Toast.LENGTH_SHORT)
 
         }
     }

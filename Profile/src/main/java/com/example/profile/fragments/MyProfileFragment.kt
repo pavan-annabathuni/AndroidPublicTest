@@ -258,11 +258,13 @@ class MyProfileFragment : Fragment() {
                             loginViewModel.setIsLoggedIn(false)
                             FeatureChat.zendeskLogout()
 
-                            Toast.makeText(
-                                context,
-                                "Successfully Logout",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            context?.let { it1 ->
+                                ToastStateHandling.toastSuccess(
+                                    it1,
+                                    "Successfully Logout",
+                                    Toast.LENGTH_LONG
+                                )
+                            }
 
                         }
                     moveToLogin()

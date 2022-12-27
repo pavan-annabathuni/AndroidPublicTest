@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSelectCropSoilTestBinding
 import com.google.android.material.chip.Chip
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import java.util.*
@@ -157,11 +158,11 @@ class SelectCropSoilTestFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -222,7 +223,7 @@ class SelectCropSoilTestFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
         }

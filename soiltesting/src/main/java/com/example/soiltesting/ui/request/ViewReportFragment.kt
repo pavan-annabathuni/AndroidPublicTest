@@ -19,6 +19,7 @@ import com.example.soiltesting.databinding.FragmentViewReportBinding
 import com.waycool.data.Network.NetworkModels.Recommendation
 import com.waycool.data.Network.NetworkModels.ReportDetails
 import com.waycool.data.Network.NetworkModels.ReportResult
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -222,8 +223,7 @@ class ViewReportFragment : Fragment() {
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -293,11 +293,11 @@ class ViewReportFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }

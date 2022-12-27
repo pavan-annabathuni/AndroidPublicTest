@@ -14,6 +14,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 
 class PlantSpacingFragment : Fragment() {
@@ -108,19 +109,19 @@ class PlantSpacingFragment : Fragment() {
                                 activity?.finish()
                             }
                             is Resource.Error -> {
-                                Toast.makeText(
+                                ToastStateHandling.toastError(
                                     requireContext(),
                                     it.message.toString(),
                                     Toast.LENGTH_SHORT
-                                ).show()
+                                )
                                 Log.d(
                                     ContentValues.TAG,
                                     "postAddCropExption: ${it.message.toString()}"
                                 )
                             }
                             is Resource.Loading -> {
-                                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                    .show()
+                                ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+
 
                             }
                         }

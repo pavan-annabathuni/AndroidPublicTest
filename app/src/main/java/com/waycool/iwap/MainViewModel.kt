@@ -12,28 +12,34 @@ import com.waycool.data.Network.NetworkModels.UpdateNotification
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MainViewModel : ViewModel() {
     fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
 
     //Videos
     fun getVansVideosList(
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
         queryMap["lang_id"] = "1"
+            queryMap["module_id"] = module_id.toString()
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
     fun getVansNewsList(
+        module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
@@ -46,7 +52,7 @@ class MainViewModel : ViewModel() {
 
         if (tags != null)
             queryMap["tags"] = tags
-
+            queryMap["module_id"] = module_id.toString()
 //        if (categoryId != null)
 //            queryMap["category_id"] = categoryId.toString()
 

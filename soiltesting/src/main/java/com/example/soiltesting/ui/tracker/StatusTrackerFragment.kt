@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentStatusTrackerBinding
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.TrackerDemain
 import com.waycool.data.utils.Resource
 import java.util.ArrayList
@@ -56,12 +57,12 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                 }
                 is Resource.Error -> {
                     binding.progressBar.visibility=View.GONE
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
                     binding.progressBar.visibility=View.VISIBLE
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }

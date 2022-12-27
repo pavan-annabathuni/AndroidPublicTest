@@ -25,6 +25,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Disease
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -373,7 +374,7 @@ class IrrigationFragment : Fragment() {
         }
         close!!.setOnClickListener() {
             dialog.dismiss()
-            Toast.makeText(context, "worked", Toast.LENGTH_SHORT).show()
+            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Worked", Toast.LENGTH_SHORT) }
         }
         dialog.show()
 

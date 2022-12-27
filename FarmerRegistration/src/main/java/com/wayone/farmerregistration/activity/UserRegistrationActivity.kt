@@ -236,7 +236,8 @@ class UserRegistrationActivity : AppCompatActivity() {
                     binding.userLocationEdittext.setText(village)
                 }
             } else {
-                Toast.makeText(this, "Please turn on location", Toast.LENGTH_LONG).show()
+                ToastStateHandling.toastError(this, "Please turn on location", Toast.LENGTH_SHORT)
+
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -289,7 +290,8 @@ class UserRegistrationActivity : AppCompatActivity() {
     }
     fun userCreater(){
         if (NetworkUtil.getConnectivityStatusString(applicationContext) == 0) {
-            Toast.makeText(this, "No internet", Toast.LENGTH_LONG).show()
+            ToastStateHandling.toastError(requireContext(), "No Internet", Toast.LENGTH_SHORT)
+
         }else {
             var query : HashMap<String,String>
             query = HashMap()
