@@ -32,7 +32,7 @@ class EditCropFragment : Fragment() {
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
                  Toast.makeText(context,"Crop Deleted",Toast.LENGTH_SHORT).show()
-                 myCrops()
+                 //myCrops()
              }
 
         })
@@ -58,11 +58,21 @@ class EditCropFragment : Fragment() {
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
+            val size:Int? = it.data?.size
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
             }
             // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+                if(it.data.isNullOrEmpty()){
+                    this@EditCropFragment.findNavController().navigateUp()
+                }
+
 
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        myCrops()
     }
 }
