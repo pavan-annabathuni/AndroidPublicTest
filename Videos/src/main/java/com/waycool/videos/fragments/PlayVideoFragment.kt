@@ -182,6 +182,7 @@ class PlayVideoFragment : Fragment() {
         tags: String? = null,
         categoryId: Int? = null
     ) {
+        adapterVideo= VideosPagerAdapter(requireContext())
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
         }

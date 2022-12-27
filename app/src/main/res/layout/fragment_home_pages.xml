@@ -1380,7 +1380,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                  app:fontFamily="@font/notosans_bold"
+                                    app:fontFamily="@font/notosans_bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
