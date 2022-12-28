@@ -155,9 +155,9 @@ class MyProfileFragment : Fragment() {
         viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                   if(it.data?.data?.account?.get(0)?.subscription == 0){
-                      binding.ll3.visibility = View.GONE
+                      binding.llFarmSupport.visibility = View.GONE
                   }else{
-                      binding.ll3.visibility = View.VISIBLE
+                      binding.llFarmSupport.visibility = View.VISIBLE
                   }
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
