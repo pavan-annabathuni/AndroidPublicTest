@@ -23,7 +23,6 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
-import com.waycool.data.Network.NetworkModels.Disease
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
@@ -191,14 +190,11 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun setAdapter(accountId:Int) {
-        viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(accountId,plotId).observe(viewLifecycleOwner){
-                // args.putO("allHistory",it.data?.data)
-                if(it.data?.data?.irrigation?.currentData?.irrigation !=null)
-                    binding.irrigationReq.text = "Irrigation Not Required"
-                else binding.irrigationReq.text = "Irrigation Required"
-            }
-        }
+      //  viewModel.viewModelScope.launch {
+//            viewModel.getIrrigationHis(accountId,plotId).observe(viewLifecycleOwner){
+//                // args.putO("allHistory",it.data?.data)
+//
+//        }
         mWeeklyAdapter = WeeklyAdapter()
         binding.recycleViewDis.adapter = mWeeklyAdapter
         mHistoryAdapter = HistoryAdapter(HistoryAdapter.DiffCallback.OnClickListener {
@@ -215,6 +211,10 @@ class IrrigationFragment : Fragment() {
 //                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
                 //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
 //                }
+                if(it.data?.data?.irrigation?.currentData?.irrigation !=null)
+                    binding.irrigationReq.text = "Irrigation Not Required"
+                else binding.irrigationReq.text = "Irrigation Required"
+
                 when(it){
                     is Resource.Loading ->{
                         binding.progressBar.visibility = View.VISIBLE
@@ -243,20 +243,23 @@ class IrrigationFragment : Fragment() {
 
 
                 //disease
-                val data = it.data?.data?.disease?.filter { itt ->
-                    itt.disease.diseaseType == "Disease"
-                }
-                mDiseaseAdapter.submitList(data)
-                val data2 = it.data?.data?.disease?.filter { itt ->
-                    itt.disease.diseaseType == "Deficiency"
-                }
-                if(data2!=null) dificiency = "dif"
-                else dificiency = "noData"
+
 
                 irrigationId = it.data?.data?.irrigation?.historicData?.get(0)?.id
 
             }
 
+        }
+        viewModel.getDisease(accountId,plotId).observe(viewLifecycleOwner){
+            val data = it.data?.data?.currentData?.filter { itt ->
+                itt.disease?.diseaseType == "Disease"
+            }
+            mDiseaseAdapter.submitList(data)
+            val data2 = it.data?.data?.currentData?.filter { itt ->
+                itt.disease?.diseaseType == "Deficiency"
+            }
+            if(data2!=null) dificiency = "dif"
+            else dificiency = "noData"
         }
     }
 
@@ -289,11 +292,11 @@ class IrrigationFragment : Fragment() {
                 when(binding.tabLayout.selectedTabPosition) {
                    0->viewModel.viewModelScope.launch {
                        accountId?.let {
-                           viewModel.getIrrigationHis(it,plotId).observe(viewLifecycleOwner) {
+                           viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
                    //                        val i = it.data?.data?.disease?.size?.minus(1)
                    //                        while (i!=0) {
-                               val data = it.data?.data?.disease?.filter { itt ->
-                                   itt.disease.diseaseType == "Disease"
+                               val data = it.data?.data?.currentData?.filter { itt ->
+                                   itt.disease?.diseaseType == "Disease"
                                }
                                mDiseaseAdapter.submitList(data)
                                Log.d("hostry", "setAdapter: ${it.message}")
@@ -303,11 +306,11 @@ class IrrigationFragment : Fragment() {
                     }
                     1->{viewModel.viewModelScope.launch {
                         accountId?.let {
-                            viewModel.getIrrigationHis(it,plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
                     //                        val i = it.data?.data?.disease?.size?.minus(1)
                     //                        while (i!=0) {
-                                val data = it.data?.data?.disease?.filter { itt ->
-                                    itt.disease.diseaseType == "Pest"
+                                val data = it.data?.data?.currentData?.filter { itt ->
+                                    itt.disease?.diseaseType == "Pest"
                                 }
                                 mDiseaseAdapter.submitList(data)
                                 Log.d("hostry", "setAdapter: ${it.message}")
@@ -317,11 +320,11 @@ class IrrigationFragment : Fragment() {
                     }}
                     2->{viewModel.viewModelScope.launch {
                         accountId?.let {
-                            viewModel.getIrrigationHis(it,plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
                     //                        val i = it.data?.data?.disease?.size?.minus(1)
                     //                        while (i!=0) {
-                                val data = it.data?.data?.disease?.filter { itt ->
-                                    itt.disease.diseaseType == "Deficiency"
+                                val data = it.data?.data?.currentData?.filter { itt ->
+                                    itt.disease?.diseaseType == "Deficiency"
                                 }
                                 mDiseaseAdapter.submitList(data)
                                 Log.d("hostry", "setAdapter: ${it.message}")
@@ -367,7 +370,7 @@ class IrrigationFragment : Fragment() {
             val value = irrigation?.text.toString().toInt()
             irrigationId?.let { it1 ->
                 viewModel.updateIrrigation(it1, value).observe(viewLifecycleOwner) {
-               binding.textViewL.text = value.toString()
+               binding.textViewL.text = value.toString()+"L"
                 }
             }
             dialog.dismiss()

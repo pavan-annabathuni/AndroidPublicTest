@@ -7,7 +7,7 @@
     <View
         android:id="@+id/side_view"
         android:layout_width="4dp"
-        android:layout_height="194dp"
+        android:layout_height="214dp"
         android:layout_marginStart="24dp"
         android:background="@color/LightGray"
         android:orientation="vertical"
@@ -39,7 +39,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="300dp"
-        android:layout_height="140dp"
+        android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/white"
@@ -105,7 +105,7 @@
 
                 <TextView
                     android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:text="Evapotranspiration"
                     android:textColor="@color/darkGray"

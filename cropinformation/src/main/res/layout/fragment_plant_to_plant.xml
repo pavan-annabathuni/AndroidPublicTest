@@ -31,9 +31,12 @@
         <TextView
             android:id="@+id/tv_row"
             style="@style/SemiBold"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
             android:text="Spacing between Plant to Plant"
             android:textColor="@color/darkGray"
             android:textSize="14sp"
@@ -44,10 +47,13 @@
         <TextView
             android:id="@+id/label_value2"
             style="@style/Bold"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:text="20-30"
+            android:gravity="center"
             android:textColor="@color/WoodBrown"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,25 +71,24 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="54dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="44dp"
+            android:layout_marginStart="98dp"
             android:layout_marginBottom="32dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
             app:cardBackgroundColor="@color/LightCream"
             app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/label_value2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_value2"
             app:strokeColor="@color/WoodBrown"
-            android:theme="@style/Theme.MaterialComponents.Light"
             app:strokeWidth="1dp">
 
             <TextView
                 android:id="@+id/label_value4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="20-30"
-                android:layout_gravity="center"
                 android:textColor="@color/WoodBrown"
                 android:textSize="12sp" />
         </com.google.android.material.card.MaterialCardView>

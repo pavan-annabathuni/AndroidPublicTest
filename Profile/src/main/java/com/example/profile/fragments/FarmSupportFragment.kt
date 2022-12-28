@@ -60,7 +60,7 @@ class FarmSupportFragment : Fragment() {
             mAddUseAdapter = AddUseAdapter(AddUseAdapter.OnClickListener {
                 name = it.name.toString()
                 it.id?.let { it1 -> accountId?.let { it2 -> deleteDialog(it1, it2) } }
-            })
+            }, it.data!!)
             binding.recycleView.adapter = mAddUseAdapter
             accountId?.let {
                 viewModel.getFarmSupport(it).observe(viewLifecycleOwner){

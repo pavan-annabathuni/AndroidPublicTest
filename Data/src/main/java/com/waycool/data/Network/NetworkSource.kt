@@ -1001,7 +1001,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.message))
+           // emit(Resource.Error(e.message))
         }
     }
 
@@ -1243,6 +1243,21 @@ object NetworkSource {
         try {
             val response = apiInterface.updateNotification(map,id)
             if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+    fun getDisease(account_id: Int,plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getDisease(map,account_id,plot_id)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
