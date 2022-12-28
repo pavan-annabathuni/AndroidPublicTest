@@ -130,7 +130,7 @@ class MandiGraphFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please connect to network",
                     Toast.LENGTH_SHORT

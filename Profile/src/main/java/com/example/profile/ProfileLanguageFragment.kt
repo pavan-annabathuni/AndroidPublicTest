@@ -96,7 +96,7 @@ class ProfileLanguageFragment : Fragment() {
             }
             if (selectedLanguage == null)
 
-                ToastStateHandling.toastWarning(requireContext(), "Select Language", Toast.LENGTH_SHORT)
+                ToastStateHandling.toastError(requireContext(), "Select Language", Toast.LENGTH_SHORT)
             else {
                 languageViewModel.setSelectedLanguage(
                     selectedLanguage!!.langCode,
