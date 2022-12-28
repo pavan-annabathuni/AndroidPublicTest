@@ -20,7 +20,9 @@ import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 class AddFarmFragment : Fragment() {
@@ -92,20 +94,34 @@ class AddFarmFragment : Fragment() {
                 Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
             }
             else if(binding.mobilenoEt.text.toString()
-                    .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10){
+                    .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10||
+                binding.mobilenoEt.text.toString().length <= 0){
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             }
                 else {
+                    binding.mobileNo.isErrorEnabled = false
                 viewModel.updateFarmSupport(
                     name, contact, lat, long, roleid, pinCode,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
-                    if(it.data?.status==false) {
-                        Toast.makeText(context, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+                    when(it){
+                        is Resource.Success->{
+                            findNavController().navigateUp()
+                        }
+                        is Resource.Error->{
+                            Toast.makeText(context,"Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Loading->{}
                     }
-                    else if(it.data?.status==true) {
-                        findNavController().navigateUp()
-                    }
+//                    if(it.data?.status!=true) {
+//                        findNavController().navigateUp()
+//                        Toast.makeText(context,"Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+//                        Log.d("check", "onClick: ${it.data?.status}")
+//                    }
+//                    else if(it.data?.status==true) {
+//
+//                        Log.d("check", "onClick: ${it.data?.status}")
+//                    }
                 }
                 // findNavController().navigateUp()
             }

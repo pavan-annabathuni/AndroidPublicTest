@@ -463,4 +463,34 @@ object DataStoreManager {
         val preferences = context?.spotLight?.data?.first()
         return preferences?.get(dataStoreKey)
     }
+
+    suspend fun clearData(){
+         context?.languageDataStore?.edit{
+             it.clear()
+         }
+        context?.userPreferences?.edit {
+            it.clear()
+        }
+        context?.vansCategory?.edit {
+            it.clear()
+        }
+        context?.moduleMaster?.edit {
+            it.clear()
+        }
+        context?.addCropType?.edit {
+            it.clear()
+        }
+        context?.soilTestHistory?.edit {
+            it.clear()
+        }
+        context?.aiCropHistory?.edit {
+            it.clear()
+        }
+        context?.weather?.edit {
+            it.clear()
+        }
+        context?.cropCategory?.edit {
+            it.clear()
+        }
+    }
 }

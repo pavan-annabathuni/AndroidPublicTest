@@ -183,6 +183,7 @@ class PlayVideoFragment : Fragment() {
         categoryId: Int? = null
     ) {
         adapterVideo= VideosPagerAdapter(requireContext())
+        binding.ytBottomsheetRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
         }

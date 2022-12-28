@@ -195,11 +195,11 @@ class MandiGraphFragment : Fragment() {
                     .popBackStack()
             }
         }
-
-        binding.imgShare.setOnClickListener() {
-            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-            Log.d("toast", "onClick: Working")
-        }
+//
+//        binding.imgShare.setOnClickListener() {
+//            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
+//            Log.d("toast", "onClick: Working")
+//        }
     }
 
 

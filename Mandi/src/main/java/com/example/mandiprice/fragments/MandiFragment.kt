@@ -346,8 +346,9 @@ class MandiFragment : Fragment() {
                 val text = binding.spinner3.selectedItem.toString()
                 if (position > 0) {
                     state = text
+                    getMandiData(cropCategory, state, crop, sortBy, orderBy)
                 } else {
-                    if (state != null) {
+                    if (state == null) {
                         state = ""
                         getMandiData(cropCategory, state, crop, sortBy, orderBy)
                     }

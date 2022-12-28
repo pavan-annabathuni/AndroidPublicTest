@@ -184,8 +184,8 @@ more details."
 
                             <ImageView
                                 android:id="@+id/imageView10"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_width="154dp"
+                                android:layout_height="154dp"
                                 android:scaleType="fitXY"
                                 android:src="@drawable/add_crop"
                                 app:layout_constraintBottom_toBottomOf="parent"
