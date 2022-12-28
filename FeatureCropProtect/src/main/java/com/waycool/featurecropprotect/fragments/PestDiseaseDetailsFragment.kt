@@ -18,8 +18,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -49,6 +51,10 @@ import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import java.io.File
@@ -91,7 +97,7 @@ class PestDiseaseDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            cropId= it.getInt("cropId")
+            cropId = it.getInt("cropId")
 
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
@@ -105,9 +111,9 @@ class PestDiseaseDetailsFragment : Fragment() {
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
-        shareLayout=binding.shareScreen
+        shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
-            screenShot(diseaseId,diseaseName,audioUrl)
+            screenShot(diseaseId, diseaseName, audioUrl)
         }
 
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
@@ -206,11 +212,19 @@ class PestDiseaseDetailsFragment : Fragment() {
 
                     }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(requireContext(), "Loading..", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastWarning(
+                            requireContext(),
+                            "Loading..",
+                            Toast.LENGTH_SHORT
+                        )
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Error: ${it.message}",
+                            Toast.LENGTH_SHORT
+                        )
 
                     }
 
@@ -253,7 +267,7 @@ class PestDiseaseDetailsFragment : Fragment() {
                     .setDescription("Find Pest Management and more on Outgrow app")
                     .build()
             )
-            .buildShortDynamicLink().addOnCompleteListener {task->
+            .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
@@ -273,18 +287,38 @@ class PestDiseaseDetailsFragment : Fragment() {
         val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansNewsList(cropId, module_id).collect() {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    newsBinding.noDataNews.visibility = View.GONE
+                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                } else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.NotLoading) {
 
-        viewModel.getVansNewsList(cropId,module_id).observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+                                    if (adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        newsBinding.noDataNews.visibility = View.GONE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.VISIBLE
 
-            /*     if (adapter.snapshot().size==0){
-                     newsBinding.noDataNews.visibility=View.VISIBLE
-                 }
-                 else{
-                     newsBinding.noDataNews.visibility=View.GONE
-                     adapter.submitData(lifecycle, it)
-                 }*/
-      }
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+
+
+        }
 
         newsBinding.viewAllNews.setOnClickListener {
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
@@ -312,161 +346,189 @@ class PestDiseaseDetailsFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList(cropId,module_id).observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(cropId, module_id).collect() {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.NotLoading) {
+                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
 
-            /*       if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)==0){
-                       videosBinding.noDataVideo.visibility=View.VISIBLE
-                   }
-                   else{
-                       videosBinding.noDataVideo.visibility=View.GONE
-                       adapter.submitData(lifecycle, it)
-                   }*/
-        }
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
+                                    }
+                                }
+                            }
+                    }
+                }
 
-        adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putParcelable("video", it)
-            findNavController().navigate(
-                R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
-                bundle
-            )
-        }
-        videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
-        videosBinding.videosListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                videosBinding.videosScroll.value =
-                    calculateScrollPercentage(videosBinding).toFloat()
             }
-        })
-    }
-
-    fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
-        val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
-        val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
-        val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
-        val scroll = 100.0f * offset / (range - extent).toFloat()
-        if (scroll.isNaN())
-            return 0
-        return scroll.roundToInt()
-    }
-
-
-    private fun addTab(title: String) {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title))
-        if (binding.tabLayout.tabCount == 1) {
-            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
         }
-        Log.d("PestDisease", "TabCount:${binding.tabLayout.tabCount}")
-    }
 
-    private fun populateTabText(tab: Tab?, pestDisease: PestDiseaseDomain?) {
-        when (tab?.text) {
-            "Chemical" -> {
+            videosBinding.viewAllVideos.setOnClickListener {
+                val intent = Intent(requireActivity(), VideoActivity::class.java)
+                startActivity(intent)
+            }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.measuresTv.text = Html.fromHtml(
-                        pestDisease?.chemical!!,
-                        Html.FROM_HTML_MODE_COMPACT
-                    )
-                } else {
-                    binding.measuresTv.text =
-                        Html.fromHtml(pestDisease?.chemical!!)
+            adapter.onItemClick = {
+                val bundle = Bundle()
+                bundle.putParcelable("video", it)
+                findNavController().navigate(
+                    R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
+                    bundle
+                )
+            }
+            videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
+
+            videosBinding.videosListRv.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    videosBinding.videosScroll.value =
+                        calculateScrollPercentage(videosBinding).toFloat()
+                }
+            })
+        }
+
+        fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
+            val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
+            val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
+            val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
+            val scroll = 100.0f * offset / (range - extent).toFloat()
+            if (scroll.isNaN())
+                return 0
+            return scroll.roundToInt()
+        }
+
+
+        private fun addTab(title: String) {
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title))
+            if (binding.tabLayout.tabCount == 1) {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
+            }
+            Log.d("PestDisease", "TabCount:${binding.tabLayout.tabCount}")
+        }
+
+        private fun populateTabText(tab: Tab?, pestDisease: PestDiseaseDomain?) {
+            when (tab?.text) {
+                "Chemical" -> {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        binding.measuresTv.text = Html.fromHtml(
+                            pestDisease?.chemical!!,
+                            Html.FROM_HTML_MODE_COMPACT
+                        )
+                    } else {
+                        binding.measuresTv.text =
+                            Html.fromHtml(pestDisease?.chemical!!)
+                    }
+                }
+                "Biological" -> {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        binding.measuresTv.text = Html.fromHtml(
+                            pestDisease?.biological!!,
+                            Html.FROM_HTML_MODE_COMPACT
+                        )
+                    } else {
+                        binding.measuresTv.text =
+                            Html.fromHtml(pestDisease?.biological!!)
+                    }
+                }
+                "Cultural" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        binding.measuresTv.text = Html.fromHtml(
+                            pestDisease?.cultural!!,
+                            Html.FROM_HTML_MODE_COMPACT
+                        )
+                    } else {
+                        binding.measuresTv.text =
+                            Html.fromHtml(pestDisease?.cultural!!)
+                    }
                 }
             }
-            "Biological" -> {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.measuresTv.text = Html.fromHtml(
-                        pestDisease?.biological!!,
-                        Html.FROM_HTML_MODE_COMPACT
-                    )
-                } else {
-                    binding.measuresTv.text =
-                        Html.fromHtml(pestDisease?.biological!!)
-                }
-            }
-            "Cultural" -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.measuresTv.text = Html.fromHtml(
-                        pestDisease?.cultural!!,
-                        Html.FROM_HTML_MODE_COMPACT
-                    )
-                } else {
-                    binding.measuresTv.text =
-                        Html.fromHtml(pestDisease?.cultural!!)
-                }
-            }
         }
 
-    }
+        private fun setBanners() {
 
-    private fun setBanners() {
+            val bannerAdapter = AdsAdapter()
+            viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-        val bannerAdapter = AdsAdapter()
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
-
-            bannerAdapter.submitData(lifecycle, it)
-            TabLayoutMediator(
-                binding.bannerIndicators, binding.bannerViewpager
-            ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
-            }.attach()
-        }
-        binding.bannerViewpager.adapter = bannerAdapter
+                bannerAdapter.submitData(lifecycle, it)
+                TabLayoutMediator(
+                    binding.bannerIndicators, binding.bannerViewpager
+                ) { tab: TabLayout.Tab, position: Int ->
+                    tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                }.attach()
+            }
+            binding.bannerViewpager.adapter = bannerAdapter
 //        TabLayoutMediator(
 //            binding.bannerIndicators, binding.bannerViewpager
 //        ) { tab: TabLayout.Tab, position: Int ->
 //            tab.text = "${position + 1} / ${bannerImageList.size}"
 //        }.attach()
 
-        binding.bannerViewpager.clipToPadding = false
-        binding.bannerViewpager.clipChildren = false
-        binding.bannerViewpager.offscreenPageLimit = 3
-        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            binding.bannerViewpager.clipToPadding = false
+            binding.bannerViewpager.clipChildren = false
+            binding.bannerViewpager.offscreenPageLimit = 3
+            binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-        val compositePageTransformer = CompositePageTransformer()
-        compositePageTransformer.addTransformer(MarginPageTransformer(40))
-        compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
-            page.scaleY = 0.85f + r * 0.15f
+            val compositePageTransformer = CompositePageTransformer()
+            compositePageTransformer.addTransformer(MarginPageTransformer(40))
+            compositePageTransformer.addTransformer { page, position ->
+                val r = 1 - Math.abs(position)
+                page.scaleY = 0.85f + r * 0.15f
+            }
+            binding.bannerViewpager.setPageTransformer(compositePageTransformer)
         }
-        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-    }
 
-    private fun audioPlayer() {
-        binding.playPauseLayout.setOnClickListener() {
-            if (audioUrl != null) {
-                mediaPlayer = MediaPlayer();
-                mediaPlayer!!.setOnCompletionListener {
-                    binding.mediaSeekbar.progress = 0
-                    binding.pause.visibility = View.GONE
-                    binding.play.visibility = View.VISIBLE
-                }
+        private fun audioPlayer() {
+            binding.playPauseLayout.setOnClickListener() {
+                if (audioUrl != null) {
+                    mediaPlayer = MediaPlayer();
+                    mediaPlayer!!.setOnCompletionListener {
+                        binding.mediaSeekbar.progress = 0
+                        binding.pause.visibility = View.GONE
+                        binding.play.visibility = View.VISIBLE
+                    }
 
-                Log.d("Audio", "audioPlayer: $audioUrl")
-                audio = AudioWife.getInstance()
-                    .init(requireContext(), Uri.parse(audioUrl))
-                    .setPlayView(binding.play)
-                    .setPauseView(binding.pause)
-                    .setSeekBar(binding.mediaSeekbar)
-                    .setRuntimeView(binding.totalTime)
-                // .setTotalTimeView(mTotalTime);
-                audio?.play()
-            } else ToastStateHandling.toastError(requireContext(), "Audio is not there", Toast.LENGTH_SHORT)
+                    Log.d("Audio", "audioPlayer: $audioUrl")
+                    audio = AudioWife.getInstance()
+                        .init(requireContext(), Uri.parse(audioUrl))
+                        .setPlayView(binding.play)
+                        .setPauseView(binding.pause)
+                        .setSeekBar(binding.mediaSeekbar)
+                        .setRuntimeView(binding.totalTime)
+                    // .setTotalTimeView(mTotalTime);
+                    audio?.play()
+                } else ToastStateHandling.toastError(
+                    requireContext(),
+                    "Audio is not there",
+                    Toast.LENGTH_SHORT
+                )
 
+            }
+        }
+
+        override fun onPause() {
+            super.onPause()
+            audio?.release()
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        audio?.release()
-    }
-}

@@ -309,7 +309,7 @@ class RegistrationFragment : Fragment() {
                     playAudio(context,audiourl, play, pause, seekbar!!, totalTime!!)
                 }
             } else {
-                context?.let { ToastStateHandling.toastWarning(it,"Audio file not found",Toast.LENGTH_SHORT) }
+                context?.let { ToastStateHandling.toastError(it,"Audio file not found",Toast.LENGTH_SHORT) }
 
             }
         }
@@ -370,12 +370,12 @@ class RegistrationFragment : Fragment() {
                         Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        ToastStateHandling.toastWarning(requireContext(),
+                        ToastStateHandling.toastError(requireContext(),
                             "Cancelled",Toast.LENGTH_SHORT)
 
                     }
             } else {
-                ToastStateHandling.toastWarning(requireContext(),
+                ToastStateHandling.toastError(requireContext(),
                     "Please turn on location",Toast.LENGTH_SHORT)
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
@@ -444,7 +444,7 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.length > 0 && longitutde.length > 0) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                context?.let { ToastStateHandling.toastWarning(it,"No Internet",Toast.LENGTH_LONG) }
+                context?.let { ToastStateHandling.toastError(it,"No Internet",Toast.LENGTH_LONG) }
             } else {
                 binding.progressBar.visibility=View.VISIBLE
                 Log.d("reg", "userCreater: ${selectedLanguage?.id}")
@@ -634,7 +634,7 @@ class RegistrationFragment : Fragment() {
 
             Log.d("Audio", "audioPlayer: $audioUrl")
             val audio = AudioWife.getInstance()
-                .init(requireContext(), Uri.parse(path))
+                .init(context, Uri.parse(path))
                 .setPlayView(play)
                 .setPauseView(pause)
                 .setSeekBar(mediaSeekbar)

@@ -106,7 +106,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             binding.addFab.visibility=View.GONE
 
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check internet connectivity",
                     Toast.LENGTH_SHORT
@@ -469,7 +469,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 }
                                 is Resource.Error -> {
                                     if(NetworkUtil.getConnectivityStatusString(context)==0){
-                                        ToastStateHandling.toastWarning(
+                                        ToastStateHandling.toastError(
                                             requireContext(),
                                             "Please check you internet connectivity",
                                             Toast.LENGTH_SHORT

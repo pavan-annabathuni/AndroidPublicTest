@@ -42,21 +42,22 @@ class MainViewModel : ViewModel() {
         module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["lang_id"] = "1"
+        queryMap["module_id"] = module_id.toString()
+
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()
 
         if (tags != null)
             queryMap["tags"] = tags
-            queryMap["module_id"] = module_id.toString()
 //        if (categoryId != null)
 //            queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
     fun getWeather(

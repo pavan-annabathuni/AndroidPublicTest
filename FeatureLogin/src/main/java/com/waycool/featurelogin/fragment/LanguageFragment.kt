@@ -49,7 +49,7 @@ class LanguageFragment : Fragment() {
 
         binding.doneBtn.setOnClickListener {
             if (selectedLanguage == null)
-                context?.let { it1 -> ToastStateHandling.toastWarning(it1,"Please select Language", Toast.LENGTH_SHORT) }
+                context?.let { it1 -> ToastStateHandling.toastError(it1,"Please select Language", Toast.LENGTH_SHORT) }
             else {
                 languageViewModel.setSelectedLanguage(
                     selectedLanguage!!.langCode,
@@ -80,7 +80,7 @@ class LanguageFragment : Fragment() {
             binding.clInclude.visibility=View.VISIBLE
             binding.progressBar.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connection",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it,"Please check your internet connection",Toast.LENGTH_SHORT) }
             binding.doneBtn.visibility=View.GONE
             binding.helloTv.visibility=View.GONE
             binding.selectLanguageTv.visibility=View.GONE
