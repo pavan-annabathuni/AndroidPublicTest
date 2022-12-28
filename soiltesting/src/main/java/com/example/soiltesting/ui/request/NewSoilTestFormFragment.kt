@@ -22,6 +22,7 @@ import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
 import com.example.soiltesting.utils.NetworkResult
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -97,8 +98,7 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.tvContact.text = contactNumber
                 var accountId = it.data?.accountId
                 if (it.data?.accountId == null) {
-                    Toast.makeText(requireContext(), "Please Select Account", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Please Select Account", Toast.LENGTH_SHORT)
                 } else if (it.data?.accountId != null) {
                     Log.d(TAG, "onCreateViewAccountID:$accountID")
                     itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,plot_id.toString().toInt())
@@ -290,8 +290,7 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.etPincodeNumber.error = "Enter Pincode "
                 return@setOnClickListener
             } else if (pincode.length != 6) {
-                Toast.makeText(requireContext(), "PLease Enter 6 Digit Pincode", Toast.LENGTH_SHORT)
-                    .show()
+                ToastStateHandling.toastError(requireContext(), "PLease Enter 6 Digit Pincode", Toast.LENGTH_SHORT)
             } else if (address.isEmpty()) {
                 binding.etState.error = "Enter Address"
                 return@setOnClickListener
@@ -341,13 +340,11 @@ class NewSoilTestFormFragment : Fragment() {
 
                         }
                         is Resource.Error -> {
-                            Toast.makeText(
+                            ToastStateHandling.toastError(
                                 requireContext(),
                                 it.message.toString(),
                                 Toast.LENGTH_SHORT
                             )
-                                .show()
-//                        .show()
                         }
                     }
 

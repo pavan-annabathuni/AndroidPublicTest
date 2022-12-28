@@ -36,6 +36,7 @@ import com.google.android.libraries.maps.OnMapReadyCallback
 import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import java.util.*
@@ -106,11 +107,11 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 binding.device1.error = "Device Name should not be empty"
                 return@setOnClickListener
             } else if (scanResult.isNullOrEmpty()) {
-                Toast.makeText(
+                ToastStateHandling.toastError(
                     requireContext(),
                     "please scan the Device QR",
                     Toast.LENGTH_SHORT
-                ).show()
+                )
 
             } else {
                 val map = mutableMapOf<String, Any>()
@@ -140,27 +141,27 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             when (it) {
                 is Resource.Success -> {
                     findNavController().navigateUp()
-                    Toast.makeText(
+                    ToastStateHandling.toastSuccess(
                         requireContext(),
                         "Device added successfully",
                         Toast.LENGTH_SHORT
-                    ).show()
+                    )
                 }
                 is Resource.Error -> {
 
-                    Toast.makeText(
+                    ToastStateHandling.toastError(
                         requireContext(),
                         it.message.toString(),
                         Toast.LENGTH_SHORT
-                    ).show()
+                    )
                     Log.d(
                         ContentValues.TAG,
                         "postAddCropExption: ${it.message.toString()}"
                     )
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+
 
                 }
             }
@@ -236,14 +237,14 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastError(requireContext(), "Failed", Toast.LENGTH_SHORT)
                     }
                     .addOnCanceledListener {
-                        Toast.makeText(requireContext(), "Cancelled", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastError(requireContext(), "Cancelled", Toast.LENGTH_SHORT)
 
                     }
             } else {
-                Toast.makeText(context, "Please turn on location", Toast.LENGTH_LONG).show()
+                context?.let { ToastStateHandling.toastError(it, "Please turn on location", Toast.LENGTH_LONG) }
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }

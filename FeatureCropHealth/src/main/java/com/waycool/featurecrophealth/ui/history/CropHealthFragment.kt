@@ -32,6 +32,7 @@ class CropHealthFragment : Fragment() {
     private var _binding: FragmentCropHealthBinding? = null
     private val binding get() = _binding!!
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+    private var module_id = "3"
 
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
@@ -60,7 +61,7 @@ class CropHealthFragment : Fragment() {
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
             if(NetworkUtil.getConnectivityStatusString(context)==0){
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     requireContext(),
                     "Please check you internet connectivity",
                     Toast.LENGTH_SHORT
@@ -81,8 +82,7 @@ class CropHealthFragment : Fragment() {
 
         historyAdapter.onItemClick = {
             if (it?.disease_id==null) {
-                Toast.makeText(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
-                    .show()
+                ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
             } else {
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
@@ -109,7 +109,7 @@ class CropHealthFragment : Fragment() {
             binding.addFab.visibility=View.GONE
 
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check internet connectivity",
                     Toast.LENGTH_SHORT
@@ -131,18 +131,21 @@ class CropHealthFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList().observe(requireActivity()) {
-            if (adapter.snapshot().size==0){
-                videosBinding.noDataVideo.visibility=View.VISIBLE
-                binding.clProgressBar.visibility=View.GONE
+        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+            binding.clProgressBar.visibility=View.GONE
 
-            }
-            else{
-                videosBinding.noDataVideo.visibility=View.GONE
-                adapter.submitData(lifecycle, it)
-                binding.clProgressBar.visibility=View.GONE
+            /*       if (adapter.snapshot().size==0){
+                       videosBinding.noDataVideo.visibility=View.VISIBLE
+                       binding.clProgressBar.visibility=View.GONE
 
-            }
+                   }
+                   else{
+                       videosBinding.noDataVideo.visibility=View.GONE
+                       adapter.submitData(lifecycle, it)
+                       binding.clProgressBar.visibility=View.GONE
+
+                   }*/
 
         }
 
@@ -227,12 +230,11 @@ class CropHealthFragment : Fragment() {
 //                        }
                     }
                     is Resource.Error -> {
-                        Toast.makeText(
+                        ToastStateHandling.toastError(
                             requireContext(),
                             it.message.toString(),
                             Toast.LENGTH_SHORT
                         )
-                            .show()
                     }
                     is Resource.Loading -> {
 

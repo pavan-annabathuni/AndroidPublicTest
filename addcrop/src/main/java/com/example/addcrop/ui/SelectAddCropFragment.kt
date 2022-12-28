@@ -23,6 +23,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
@@ -150,11 +151,11 @@ class SelectAddCropFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -213,7 +214,7 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
         }

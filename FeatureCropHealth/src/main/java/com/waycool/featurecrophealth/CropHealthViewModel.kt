@@ -44,12 +44,15 @@ class CropHealthViewModel : ViewModel() {
 
     //Videos
     fun getVansVideosList(
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
+            queryMap["module_id"] = module_id.toString()
+
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)

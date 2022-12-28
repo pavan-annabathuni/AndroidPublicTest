@@ -11,6 +11,8 @@ import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class CropProtectViewModel : ViewModel() {
 
@@ -32,18 +34,27 @@ class CropProtectViewModel : ViewModel() {
 
     //Videos
     fun getVansVideosList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+        if(module_id!=null){
+            queryMap["module_id"] = module_id.toString()
+
+        }
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
 
@@ -61,11 +72,20 @@ class CropProtectViewModel : ViewModel() {
         LoginRepository.getUserDetails().asLiveData()
 
     fun getVansNewsList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+
+            queryMap["module_id"] = module_id.toString()
+
+
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()
@@ -76,30 +96,9 @@ class CropProtectViewModel : ViewModel() {
 //        if (categoryId != null)
 //            queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
 
-//    fun getVansFeeder(
-//        map: Map<String, String>
-//    ): LiveData<Resource<VansFeederDomain>> {
-//        return VansRepository.getVansFeeder(map).asLiveData()
-//    }
-
-//    fun getVansNewsList(
-//        context: Context?,
-//        accessToken: String?,
-//        queryMap: HashMap<String?, String?>?
-//    ): LiveData<VANSMain> {
-//        return cropProtectViewModel.getVansNewsList(context, accessToken, queryMap)
-//    }
-
-//    fun setFeedback(
-//        context: Context?,
-//        accessToken: String?,
-//        queryMap: HashMap<String?, String?>?
-//    ): LiveData<FeedbackMaster> {
-//        return cropProtectViewModel.setFeedback(context, accessToken, queryMap)
-//    }
 
 }

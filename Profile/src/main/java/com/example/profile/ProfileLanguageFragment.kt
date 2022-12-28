@@ -19,6 +19,7 @@ import com.example.profile.databinding.FragmentProfileLanguageBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.*
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -59,7 +60,7 @@ class ProfileLanguageFragment : Fragment() {
             }
         }
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            Toast.makeText(context, "No internet", Toast.LENGTH_LONG).show()
+            context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_LONG) }
         } else {
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {
@@ -95,7 +96,7 @@ class ProfileLanguageFragment : Fragment() {
             }
             if (selectedLanguage == null)
 
-                Toast.makeText(requireContext(), "Select Language", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(requireContext(), "Select Language", Toast.LENGTH_SHORT)
             else {
                 languageViewModel.setSelectedLanguage(
                     selectedLanguage!!.langCode,

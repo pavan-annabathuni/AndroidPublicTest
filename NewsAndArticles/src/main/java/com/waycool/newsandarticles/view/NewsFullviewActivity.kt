@@ -95,16 +95,16 @@ class NewsFullviewActivity : AppCompatActivity() {
             if (audioUrl != null) {
                 playAudio(audioUrl!!)
             } else {
-                Toast.makeText(this, "Audio file not found", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(this, "Audio file not found", Toast.LENGTH_SHORT)
 
             }
         }
         mediaPlayer = MediaPlayer()
         mediaPlayer!!.setOnCompletionListener {
-            Toast.makeText(this@NewsFullviewActivity, "completed", Toast.LENGTH_SHORT).show()
-            audioNewLayout.mediaSeekbar.setProgress(0)
-            audioNewLayout.pause.setVisibility(View.GONE)
-            audioNewLayout.play.setVisibility(View.VISIBLE)
+            ToastStateHandling.toastSuccess(this@NewsFullviewActivity, "Completed", Toast.LENGTH_SHORT)
+            audioNewLayout.mediaSeekbar.progress = 0
+            audioNewLayout.pause.visibility = View.GONE
+            audioNewLayout.play.visibility = View.VISIBLE
         }
         binding!!.shareBtn.setOnClickListener { view: View ->
             AppUtil.shareItem(

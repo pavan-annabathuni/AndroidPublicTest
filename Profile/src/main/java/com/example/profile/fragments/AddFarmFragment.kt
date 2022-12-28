@@ -19,6 +19,7 @@ import com.example.profile.databinding.FragmentAddFarmBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -91,7 +92,7 @@ class AddFarmFragment : Fragment() {
             var long2 = binding.tvLong.text
 
             if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
-                Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
+                context?.let { it1 -> ToastStateHandling.toastError(it1, "Fill all Fields", Toast.LENGTH_SHORT) }
             }
             else if(binding.mobilenoEt.text.toString()
                     .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10||
@@ -113,15 +114,6 @@ class AddFarmFragment : Fragment() {
                         }
                         is Resource.Loading->{}
                     }
-//                    if(it.data?.status!=true) {
-//                        findNavController().navigateUp()
-//                        Toast.makeText(context,"Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
-//                        Log.d("check", "onClick: ${it.data?.status}")
-//                    }
-//                    else if(it.data?.status==true) {
-//
-//                        Log.d("check", "onClick: ${it.data?.status}")
-//                    }
                 }
                 // findNavController().navigateUp()
             }

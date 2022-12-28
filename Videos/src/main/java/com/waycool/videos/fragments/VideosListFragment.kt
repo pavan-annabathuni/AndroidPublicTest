@@ -59,8 +59,7 @@ class VideosListFragment : Fragment() {
 
 
     var searchTag = ""
-    var tagsAndKeywordsList = ArrayList<String>()
-    var isAllFabsVisible = false
+
     private lateinit var adapterVideo: VideosPagerAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +78,7 @@ class VideosListFragment : Fragment() {
             networkCall()
 
         }
+
 
         binding.toolbarTitle.text = "Videos"
         binding.toolbar.setNavigationOnClickListener {
@@ -134,10 +134,9 @@ class VideosListFragment : Fragment() {
         adapterVideo.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
+           this.findNavController().navigate(
+               R.id.action_videosListFragment_to_playVideoFragment,bundle
 
-            findNavController().navigate(
-                R.id.action_videosListFragment_to_playVideoFragment,
-                bundle
             )
 
         }
@@ -156,34 +155,6 @@ class VideosListFragment : Fragment() {
 
 
         binding.micBtn.setOnClickListener { speechToText() }
-//        binding.cropProtectAddFab.setOnClickListener {
-//            if (!isAllFabsVisible) {
-//                binding.cropProtectCallFab.visibility = View.VISIBLE
-//                binding.cropProtectChatFab.visibility = View.VISIBLE
-//                binding.cropProtectAddFab.backgroundTintList =
-//                    ColorStateList.valueOf(Color.BLACK)
-//                binding.cropProtectAddFab.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        requireContext(), R.drawable.ic_chatcall
-//                    )
-//                )
-//                isAllFabsVisible = true
-//            } else {
-//                binding.cropProtectCallFab.visibility = View.GONE
-//                binding.cropProtectChatFab.visibility = View.GONE
-//                binding.cropProtectAddFab.backgroundTintList = ColorStateList.valueOf(
-//                    ContextCompat.getColor(
-//                        requireContext(), com.waycool.uicomponents.R.color.primaryColor
-//                    )
-//                )
-//                binding.cropProtectAddFab.setImageDrawable(
-//                    ContextCompat.getDrawable(
-//                        requireContext(), R.drawable.ic_chatcall
-//                    )
-//                )
-//                isAllFabsVisible = false
-//            }
-//        }
 
     }
 
@@ -195,7 +166,7 @@ class VideosListFragment : Fragment() {
             binding.addFab.visibility = View.GONE
             binding.materialCardView.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check your internet connectivity",
                     Toast.LENGTH_SHORT
@@ -272,13 +243,14 @@ class VideosListFragment : Fragment() {
         tags: String? = "",
         categoryId: Int? = null
     ) {
+        adapterVideo=VideosPagerAdapter(requireContext())
+        binding.videosVideoListRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
         }
     }
 
     private fun setBanners() {
-
         val bannerAdapter = AdsAdapter()
         videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
@@ -290,11 +262,7 @@ class VideosListFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
+
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -322,7 +290,7 @@ class VideosListFragment : Fragment() {
             Locale.getDefault()
         )
         videoViewModel.viewModelScope.launch {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "")
         }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)

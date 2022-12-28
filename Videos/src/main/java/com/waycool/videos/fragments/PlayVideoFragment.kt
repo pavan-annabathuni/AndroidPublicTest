@@ -66,7 +66,7 @@ class PlayVideoFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check your internet connectivity",
                     Toast.LENGTH_SHORT
@@ -86,12 +86,15 @@ class PlayVideoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
-            if (arguments?.containsKey("video") == true)
+            if (arguments?.containsKey("video") == true){
                 videoSelected = requireArguments().getParcelable("video")
+        }
             else {
                 videoTitle=arguments?.getString("title")
                 videoDesc=arguments?.getString("description")
                 videoUrl=arguments?.getString("url")
+
+
             }
         }
 
@@ -102,8 +105,8 @@ class PlayVideoFragment : Fragment() {
             binding.ytTitleTv.text = videoTitle
             binding.ytDescriptionTv.text =videoDesc
         }
-        adapterVideo = VideosPagerAdapter(requireContext())
-        binding.ytBottomsheetRv.adapter = adapterVideo
+//        adapterVideo = VideosPagerAdapter(requireContext())
+//        binding.ytBottomsheetRv.adapter = adapterVideo
 
         Handler(Looper.myLooper()!!).postDelayed({
             getVideos()
@@ -182,49 +185,11 @@ class PlayVideoFragment : Fragment() {
         tags: String? = null,
         categoryId: Int? = null
     ) {
-        adapterVideo= VideosPagerAdapter(requireContext())
+        adapterVideo = VideosPagerAdapter(requireContext())
         binding.ytBottomsheetRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
         }
     }
-
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val dialog = super.onCreateDialog(savedInstanceState)
-//        dialog.setOnShowListener { dialogInterface ->
-//            val bottomSheetDialog =
-//                dialogInterface as BottomSheetDialog
-//            setupFullHeight(bottomSheetDialog)
-//        }
-//        return dialog
-//    }
-//
-//
-//    private fun setupFullHeight(bottomSheetDialog: BottomSheetDialog) {
-//        val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-//        val behavior = BottomSheetBehavior.from(bottomSheet?.rootView!!)
-//        val layoutParams = bottomSheet.layoutParams
-//        val windowHeight = getWindowHeight()
-//        if (layoutParams != null) {
-//            layoutParams.height = windowHeight
-//        }
-//        behavior.isHideable = false
-//        behavior.isDraggable = false
-//        bottomSheet.layoutParams = layoutParams
-//        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-//            override fun onStateChanged(bottomSheet: View, newState: Int) {}
-//            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            }
-//        })
-//    }
-//
-//    private fun getWindowHeight(): Int {
-//        // Calculate window height for fullscreen use
-//        val displayMetrics = DisplayMetrics()
-//        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-//        return displayMetrics.heightPixels
-//    }
 
 }
