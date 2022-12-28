@@ -47,6 +47,8 @@ class CropInfoFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var size: Int = 0
+    private var module_id = "1"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -427,14 +429,16 @@ class CropInfoFragment : Fragment() {
         val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
-        ViewModel.getVansNewsList().observe(requireActivity()) {
-                if (adapter.snapshot().size==0){
-                    newsBinding.noDataNews.visibility=View.VISIBLE
-                }
-                else{
-                    newsBinding.noDataNews.visibility=View.GONE
-                    adapter.submitData(lifecycle, it)
-                }
+        ViewModel.getVansNewsList(cropId,module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+
+            /*   if (adapter.snapshot().size==0){
+                   newsBinding.noDataNews.visibility=View.VISIBLE
+               }
+               else{
+                   newsBinding.noDataNews.visibility=View.GONE
+                   adapter.submitData(lifecycle, it)
+               }*/
 
         }
 
@@ -464,14 +468,17 @@ class CropInfoFragment : Fragment() {
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        ViewModel.getVansVideosList().observe(requireActivity()) {
-                if (adapter.snapshot().size==0){
-                    videosBinding.noDataVideo.visibility=View.VISIBLE
-                }
-                else{
-                    videosBinding.noDataVideo.visibility=View.GONE
-                    adapter.submitData(lifecycle, it)
-                }
+        ViewModel.getVansVideosList(cropId.toString(),module_id).observe(requireActivity()) {
+            adapter.submitData(lifecycle, it)
+            videosBinding.videosListRv.adapter = adapter
+
+            /*   if (adapter.snapshot().size==0){
+                   videosBinding.noDataVideo.visibility=View.VISIBLE
+               }
+               else{
+                   videosBinding.noDataVideo.visibility=View.GONE
+                   adapter.submitData(lifecycle, it)
+               }*/
         }
 
         videosBinding.viewAllVideos.setOnClickListener {

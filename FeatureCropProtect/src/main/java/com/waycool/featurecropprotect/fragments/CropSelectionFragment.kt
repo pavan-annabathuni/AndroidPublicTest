@@ -21,11 +21,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
-import com.example.featurespeechtotext.SpeechToText
 import com.google.android.material.chip.Chip
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecropprotect.Adapter.CropListAdapter
@@ -167,11 +168,11 @@ class CropSelectionFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -179,7 +180,7 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(requireContext())
+        val chip = Chip(context)
         chip.text = category.categoryName
         chip.isCheckable = true
         chip.isClickable = true
@@ -231,7 +232,7 @@ class CropSelectionFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
         }
@@ -249,7 +250,7 @@ class CropSelectionFragment : Fragment() {
                     Locale.getDefault()
         )
         viewModel.viewModelScope.launch {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,SpeechToText.getLangCode())
         }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)

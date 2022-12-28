@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
@@ -31,8 +32,8 @@ class EditCropFragment : Fragment() {
         binding = FragmentEditCropBinding.inflate(inflater)
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
-                 Toast.makeText(context,"Crop Deleted",Toast.LENGTH_SHORT).show()
-                 myCrops()
+                 context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Crop Deleted",Toast.LENGTH_SHORT) }
+                 //myCrops()
              }
 
         })
@@ -58,11 +59,21 @@ class EditCropFragment : Fragment() {
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
+            val size:Int? = it.data?.size
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
             }
             // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
+                if(it.data.isNullOrEmpty()){
+                    this@EditCropFragment.findNavController().navigateUp()
+                }
+
 
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        myCrops()
     }
 }

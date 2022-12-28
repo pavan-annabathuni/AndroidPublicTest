@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.NetworkModels.VansFeederListNetwork
+import kotlin.math.ceil
 
 class VansPagingSource(
     private val api: ApiInterface,
@@ -25,7 +26,7 @@ class VansPagingSource(
             return LoadResult.Page(
                 data = response.body()?.data?.vansFeederList!!,
                 prevKey = if (position == 1) null else position - 1,
-                nextKey = if (position == response.body()!!.data?.total || response.body()!!.data?.total == 0) null else position + 1
+                nextKey = if (position == response.body()!!.data?.lastPage || response.body()!!.data?.lastPage == 0) null else position + 1
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
@@ -449,7 +450,7 @@ class GraphsFragment : Fragment() {
 //                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                         }
                         is Resource.Loading -> {
-                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                            ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                         }
                     }

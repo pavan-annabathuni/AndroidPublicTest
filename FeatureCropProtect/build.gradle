@@ -47,7 +47,6 @@ dependencies {
     implementation project(path: ':soiltesting')
     implementation project(path: ':FeatureLogin')
 
-    implementation project(path: ':FeatureSpeechToText')
 
 
 

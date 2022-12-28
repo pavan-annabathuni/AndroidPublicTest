@@ -807,7 +807,6 @@
             android:id="@+id/progressBar"
             android:layout_width="@dimen/space90"
             android:layout_height="@dimen/space90"
-
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

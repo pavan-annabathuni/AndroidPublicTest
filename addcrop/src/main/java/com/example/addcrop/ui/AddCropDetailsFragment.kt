@@ -93,11 +93,11 @@ class AddCropDetailsFragment : Fragment() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
-            getFarms()
-        }
 
+        }
+        getFarms()
         binding.cardCheckHealth.setOnClickListener {
-            cropIdSelected?.let { it1 -> accountID?.let { it2 -> postAddCrop(it1, it2) } }
+            postAddCrop()
         }
 
 
@@ -112,15 +112,14 @@ class AddCropDetailsFragment : Fragment() {
         }
 
 
+//        binding.cardCheckHealth.setOnClickListener {
+//            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                accountID = it.data?.accountId
+//                postAddCrop(cropIdSelected!!, accountID!!)
+//            }
+//        }
 
-        binding.cardCheckHealth.setOnClickListener {
-            viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                accountID = it.data?.accountId
-                postAddCrop(cropIdSelected!!, accountID!!)
-            }
-        }
-
-        }
+    }
 
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
@@ -222,12 +221,14 @@ class AddCropDetailsFragment : Fragment() {
 
 
     //format(binding.etAreaNumber.text.toString()).toDouble()
-    private fun postAddCrop(crop_id: Int, account_id: Int) {
+    private fun postAddCrop() {
         binding.progressBar.visibility = View.VISIBLE
         binding.cardCheckHealth.visibility = View.INVISIBLE
         val map = mutableMapOf<String, Any>()
-        map["account_no_id"] = account_id
-        map["crop_id"] = crop_id
+        if (accountID != null)
+            map["account_no_id"] = accountID!!
+        if (cropIdSelected != null)
+            map["crop_id"] = cropIdSelected!!
         map["plot_nickname"] = binding.etNickName.text.toString()
         map["sowing_date"] = binding.etCalender.text.toString()
         map["area_type"] = areaTypeSelected.lowercase()
@@ -247,11 +248,10 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -278,7 +278,7 @@ class AddCropDetailsFragment : Fragment() {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
             } else if (accountID == null) {
-                Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
             }
 
 

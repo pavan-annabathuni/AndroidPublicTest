@@ -348,13 +348,12 @@ class MandiGraphFragment : Fragment() {
             )
             .setSocialMetaTagParameters(
                 SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
                     .setTitle("Outgrow - Mandi Detail for $crop_name")
                     .setDescription("Find Mandi details and more on Outgrow app")
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
-                if (task.isSuccessful()) {
+                if (task.isSuccessful) {
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND

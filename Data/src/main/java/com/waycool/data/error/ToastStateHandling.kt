@@ -16,7 +16,6 @@ object ToastStateHandling {
     }
     fun toastError(context: Context, msg: String, duration: Int) {
         Toasty.Config.getInstance()
-            .tintIcon(true)
             .setTextSize(14)
             .supportDarkTheme(false)
             .apply()
@@ -26,7 +25,6 @@ object ToastStateHandling {
 
     fun toastWarning(context: Context, msg: String, duration: Int) {
         Toasty.Config.getInstance()
-            .tintIcon(true)
             .setTextSize(14)
             .supportDarkTheme(false)
             .apply()

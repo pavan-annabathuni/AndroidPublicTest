@@ -116,7 +116,7 @@
                     <LinearLayout
                         android:id="@+id/ll"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="180dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginEnd="16dp"
@@ -196,8 +196,8 @@
 
                                 <ImageView
                                     android:id="@+id/imageView10"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="154dp"
+                                    android:layout_height="154dp"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/add_crop"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -343,6 +343,7 @@
                                             android:layout_toEndOf="@+id/add_ll"
                                             android:nestedScrollingEnabled="false"
                                             android:orientation="horizontal"
+                                            app:reverseLayout="true"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintStart_toStartOf="parent"
@@ -1379,7 +1380,7 @@
                                     android:text="Know more"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt14"
-                                  app:fontFamily="@font/notosans_bold"
+                                    app:fontFamily="@font/notosans_bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1448,7 +1449,7 @@
                                 android:layout_marginEnd="8dp"
                                 android:text="Crop Info."
                                 android:textColor="#111827"
-                                android:textSize="@dimen/txt14"
+                                android:textSize="16sp"
                                 app:fontFamily="@font/notosans_bold"
                                 app:layout_constraintEnd_toStartOf="@+id/imageView13"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -1528,7 +1529,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:layout_constraintGuide_percent=".6" />
+                                app:layout_constraintGuide_percent=".7" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>

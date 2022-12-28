@@ -32,12 +32,21 @@ class CropProtectViewModel : ViewModel() {
 
     //Videos
     fun getVansVideosList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+        if(module_id!=null){
+            queryMap["module_id"] = module_id.toString()
+
+        }
         if (tags != null)
             queryMap["tags"] = tags
         if (categoryId != null)
@@ -61,11 +70,20 @@ class CropProtectViewModel : ViewModel() {
         LoginRepository.getUserDetails().asLiveData()
 
     fun getVansNewsList(
+        crop_id:Int?=null,
+        module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
+        if(crop_id!=null) {
+            queryMap["crop_id"] = crop_id.toString()
+        }
+
+            queryMap["module_id"] = module_id.toString()
+
+
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()
@@ -80,26 +98,5 @@ class CropProtectViewModel : ViewModel() {
     }
 
 
-//    fun getVansFeeder(
-//        map: Map<String, String>
-//    ): LiveData<Resource<VansFeederDomain>> {
-//        return VansRepository.getVansFeeder(map).asLiveData()
-//    }
-
-//    fun getVansNewsList(
-//        context: Context?,
-//        accessToken: String?,
-//        queryMap: HashMap<String?, String?>?
-//    ): LiveData<VANSMain> {
-//        return cropProtectViewModel.getVansNewsList(context, accessToken, queryMap)
-//    }
-
-//    fun setFeedback(
-//        context: Context?,
-//        accessToken: String?,
-//        queryMap: HashMap<String?, String?>?
-//    ): LiveData<FeedbackMaster> {
-//        return cropProtectViewModel.setFeedback(context, accessToken, queryMap)
-//    }
 
 }

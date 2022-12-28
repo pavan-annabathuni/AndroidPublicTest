@@ -41,6 +41,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -49,6 +50,7 @@ import com.waycool.featurelogin.adapter.UserProfileKnowServiceAdapter
 import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
 import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
+import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
@@ -65,15 +67,19 @@ class RegistrationFragment : Fragment() {
     private val REQUEST_CODE_SPEECH_INPUT = 101
     var latitude: String = ""
     var longitutde: String = ""
+    var address:String?=""
     var village: String? = ""
     var state = ""
     var district = ""
     var subDistrict = ""
     var pincode = ""
+    var selectedLanguage: LanguageMasterDomain? = null
     lateinit var knowAdapter: UserProfileKnowServiceAdapter
     lateinit var premiumAdapter: UserProfilePremiumAdapter
     var mobileNumber: String? = ""
     lateinit var mContext: Context
+    private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+
     val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
@@ -118,13 +124,17 @@ class RegistrationFragment : Fragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
+        apiErrorHandlingBinding = binding.errorState
 
         binding.registerDoneBtn.isEnabled = true
 
         Places.initialize(requireActivity().applicationContext, AppSecrets.getMapsKey())
         placesClient = Places.createClient(requireContext())
 
-
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
         toolbarLayoutBinding.toolbarTile.text = "Profile"
         toolbarLayoutBinding.backBtn.setOnClickListener {
@@ -229,6 +239,15 @@ class RegistrationFragment : Fragment() {
         return binding.root
     }
 
+    private fun networkCall() {
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+        }
+        else{
+            binding.clInclude.visibility=View.GONE
+        }
+    }
+
     fun showServiceDialog(
         tittle: String?,
         desc: String?,
@@ -326,12 +345,19 @@ class RegistrationFragment : Fragment() {
                                             binding.locationEt.append(" ${result.district}")
                                         binding.locationEt.setSelection(0)
                                         binding.locationTextlayout.helperText = ""
+
+                                        address = result.formattedAddress.toString()
+                                        village = result.subLocality.toString()
+                                        pincode = result.pincode.toString()
+                                        state = result.state.toString()
+                                        district = result.district.toString()
                                     } else {
 //                                        binding.locationEt.setText("$village, $district")
                                         binding.locationTextlayout.helperText =
                                             "Could not find your location. " +
                                                     "Enter Manually."
                                     }
+
                                 }
 
                         }
@@ -421,7 +447,7 @@ class RegistrationFragment : Fragment() {
                 context?.let { ToastStateHandling.toastWarning(it,"No Internet",Toast.LENGTH_LONG) }
             } else {
                 binding.progressBar.visibility=View.VISIBLE
-
+                Log.d("reg", "userCreater: ${selectedLanguage?.id}")
                 query = HashMap()
                 query["name"] = binding.nameEt.text.toString().trim()
                 query["contact"] = mobileNumber.toString()
@@ -430,10 +456,14 @@ class RegistrationFragment : Fragment() {
                 query["lang_id"] = "1"
                 query["email"] = ""
                 query["pincode"] = pincode
-                village?.let { query.put("village", it) }
-                query["address"] = ""
-                query["state_id"] = ""
-                query["district_id"] = ""
+                if(village!=null) {
+                    query["village"] = village!!
+                }
+                if(address!=null) {
+                    query["address"] = address!!
+                }
+                query["state"] = state
+                query["district"] = district
                 query["sub_district_id"] = ""
                 Log.d(
                     "register",
