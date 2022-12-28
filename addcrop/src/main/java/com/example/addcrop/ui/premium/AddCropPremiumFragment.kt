@@ -335,13 +335,13 @@ class AddCropPremiumFragment : Fragment() {
                 val map = mutableMapOf<String, Any>()
                 Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
                 if (account_id != null) {
-                    map.put("account_no_id", account_id)
+                    map["account_no_id"] = account_id
                 }
                 if (crop_id != null) {
-                    map.put("crop_id", crop_id)
+                    map["crop_id"] = crop_id
                 }
                 if (soil_type_id != null) {
-                    map.put("soil_type_id", soil_type_id)
+                    map["soil_type_id"] = soil_type_id
                 }
                 map["plot_nickname"] = binding.etNickName.text.toString()
                 map["area"] = binding.etAreaNumber.text
