@@ -164,6 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
@@ -175,51 +176,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/location_textlayout"
                 app:layout_constraintTop_toTopOf="@+id/location_textlayout"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <!--            <com.waycool.uicomponents.Text.ParagraphMedium-->
-            <!--                android:id="@+id/farmer_location_tv"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:paddingTop="10dp"-->
-            <!--                android:text="Location"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                tools:layout_editor_absoluteX="16dp"-->
-            <!--                tools:layout_editor_absoluteY="232dp" />-->
-
-
-            <!--            <com.google.android.material.textfield.TextInputEditText-->
-            <!--                android:id="@+id/user_location_edittext"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="0dp"-->
-            <!--                android:layout_marginStart="15dp"-->
-            <!--                android:layout_marginLeft="15dp"-->
-            <!--                android:layout_marginEnd="15dp"-->
-            <!--                android:layout_marginRight="15dp"-->
-            <!--                android:inputType="text"-->
-            <!--                android:lines="1"-->
-            <!--                android:maxLines="1"-->
-            <!--                android:textColor="@color/black_two"-->
-            <!--                android:textColorHint="@color/grey400"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/know_services_tv"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/getFarmerLocation" />-->
-
-            <!--            <ImageButton-->
-            <!--                android:id="@+id/getFarmerLocation"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="35dp"-->
-            <!--                android:background="@android:color/transparent"-->
-            <!--                android:clickable="false"-->
-            <!--                android:enabled="false"-->
-            <!--                android:padding="10dp"-->
-            <!--                android:src="@drawable/ic_location_disable"-->
-            <!--                app:layout_constraintEnd_toEndOf="@+id/user_location_edittext"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/user_name_edittext" />-->
-
-
             <com.waycool.uicomponents.Text.Title2Bold
                 android:id="@+id/know_services_tv"
                 android:layout_width="wrap_content"
