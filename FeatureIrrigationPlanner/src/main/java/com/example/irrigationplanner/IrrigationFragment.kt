@@ -28,6 +28,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class IrrigationFragment : Fragment() {
      private lateinit var binding: FragmentIrrigationBinding
@@ -75,11 +76,7 @@ class IrrigationFragment : Fragment() {
             requireActivity(),
             callback
         )
-    if(cropId == 97){
-            binding.clCropStage.visibility = View.VISIBLE
-        }else{
-            binding.clCropStage.visibility = View.GONE
-        }
+
         viewModel.getUserDetails().observe(viewLifecycleOwner){
              accountId = it.data?.accountId!!
         if(accountId!=null)
@@ -94,7 +91,12 @@ class IrrigationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("cropID", "onCreateView: $cropId")
+        if(cropId == 97){
+            binding.clCropStage.visibility = View.VISIBLE
+        }else{
+            binding.clCropStage.visibility = View.GONE
+        }
         tabs()
         exitDialog()
 
