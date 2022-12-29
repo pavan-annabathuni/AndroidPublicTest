@@ -86,7 +86,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             binding.cardCheckHealth.setOnClickListener {
                 categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    ToastStateHandling.toastWarning(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
 
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")

@@ -668,7 +668,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
                     }
             } else {
-                context?.let { ToastStateHandling.toastWarning(it, "Please turn on location", Toast.LENGTH_LONG) }
+                context?.let { ToastStateHandling.toastError(it, "Please turn on location", Toast.LENGTH_LONG) }
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }

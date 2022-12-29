@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -47,8 +48,12 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
 //        val date: Date = inputDateFormatter.parse(properties.days[position])
 
 //        for(i in properties.days.indices){
+        val inputDateFormatter: SimpleDateFormat =
+            SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH)
+        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("EEE", Locale.ENGLISH)
+        val date: Date = inputDateFormatter.parse(properties.days[position])
 
-            holder.x.text = properties.days[position]
+            holder.x.text = outputDateFormatter.format(date)
 
         val level = (properties.mad[position].toFloat()) - (properties.depletion[position].toFloat())
         if(level<=0) {

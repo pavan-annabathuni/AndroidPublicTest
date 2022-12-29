@@ -32,6 +32,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -165,7 +166,7 @@ class VideosListFragment : Fragment() {
             binding.addFab.visibility = View.GONE
             binding.materialCardView.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please check your internet connectivity",
                     Toast.LENGTH_SHORT

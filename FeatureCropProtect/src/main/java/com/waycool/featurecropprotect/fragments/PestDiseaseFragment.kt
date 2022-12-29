@@ -119,7 +119,7 @@ class PestDiseaseFragment : Fragment() {
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
             binding.addFab.visibility=View.GONE
-            context?.let { ToastStateHandling.toastWarning(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
 
 
         }else{

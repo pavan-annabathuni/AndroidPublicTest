@@ -130,7 +130,7 @@ class MandiGraphFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Please connect to network",
                     Toast.LENGTH_SHORT
@@ -195,11 +195,11 @@ class MandiGraphFragment : Fragment() {
                     .popBackStack()
             }
         }
-
-        binding.imgShare.setOnClickListener() {
-            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-            Log.d("toast", "onClick: Working")
-        }
+//
+//        binding.imgShare.setOnClickListener() {
+//            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
+//            Log.d("toast", "onClick: Working")
+//        }
     }
 
 

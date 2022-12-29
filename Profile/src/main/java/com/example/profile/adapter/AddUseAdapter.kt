@@ -5,10 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -16,13 +13,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.profile.R
 import com.example.profile.databinding.ItemSupportBinding
-import com.waycool.data.Network.NetworkModels.Disease
 import com.waycool.data.Network.NetworkModels.GetFarmSupportData
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDataDomain
+import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.translations.TranslationsManager
 
-class AddUseAdapter(val onClickListener: OnClickListener):ListAdapter<GetFarmSupportData,AddUseAdapter.ViewHolder>(DiffCallback){
+class AddUseAdapter(val onClickListener: OnClickListener,val userDetailsDomain: UserDetailsDomain):ListAdapter<GetFarmSupportData,AddUseAdapter.ViewHolder>(DiffCallback){
     class ViewHolder(private val binding:ItemSupportBinding):
         RecyclerView.ViewHolder(binding.root) {
      val delete = binding.delete
@@ -60,6 +57,8 @@ class AddUseAdapter(val onClickListener: OnClickListener):ListAdapter<GetFarmSup
 //       dialog.show()
 
    }
+        if(userDetailsDomain.phone==properties.contact)
+            holder.delete.visibility = View.INVISIBLE
         TranslationsManager().loadString("str_delete",holder.delete)
 
     }

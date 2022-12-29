@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                     if (it.data?.status == true) {
 //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                     } else if (it.data?.status == false) {
-                        ToastStateHandling.toastWarning(this, "Account Logged in Another Device", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(this, "Account Logged in Another Device", Toast.LENGTH_SHORT)
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {

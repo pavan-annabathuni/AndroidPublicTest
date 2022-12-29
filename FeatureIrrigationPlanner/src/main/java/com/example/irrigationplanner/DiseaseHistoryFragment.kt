@@ -50,17 +50,17 @@ class DiseaseHistoryFragment : Fragment() {
         mHistoryAdapter = DiseaseHistoryAdapter()
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
+            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
-                val data = it.data?.data?.disease?.filter { itt ->
-                    itt.disease.diseaseType == "Disease"
+                val data = it.data?.data?.historicData?.filter { itt ->
+                    itt.disease?.diseaseType == "Disease"
                 }
                 mHistoryAdapter.submitList(data)
                 Log.d("hostry", "setAdapter: ${it.message}")
 
-                val data2 = it.data?.data?.disease?.filter { itt ->
-                    itt.disease.diseaseType == "Deficiency"
+                val data2 = it.data?.data?.historicData?.filter { itt ->
+                    itt.disease?.diseaseType == "Deficiency"
                 }
                 if(data2!=null) dificiency = "dif"
                 else dificiency = "noData"
@@ -92,11 +92,11 @@ class DiseaseHistoryFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(binding.tabLayout.selectedTabPosition) {
                     0->viewModel.viewModelScope.launch {
-                        viewModel.getIrrigationHis(477, 1).observe(viewLifecycleOwner) {
+                        viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
-                            val data = it.data?.data?.disease?.filter { itt ->
-                                itt.disease.diseaseType == "Disease"
+                            val data = it.data?.data?.historicData?.filter { itt ->
+                                itt.disease?.diseaseType == "Disease"
                             }
                             mHistoryAdapter.submitList(data)
                             Log.d("hostry", "setAdapter: ${it.message}")
@@ -104,11 +104,11 @@ class DiseaseHistoryFragment : Fragment() {
                         }
                     }
                     1->{viewModel.viewModelScope.launch {
-                        viewModel.getIrrigationHis(2, 3).observe(viewLifecycleOwner) {
+                        viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
 //                        val i = it.data?.data?.disease?.size?.minus(1)
 //                        while (i!=0) {
-                            val data = it.data?.data?.disease?.filter { itt ->
-                                itt.disease.diseaseType == "Pest"
+                            val data = it.data?.data?.historicData?.filter { itt ->
+                                itt.disease?.diseaseType == "Pest"
                             }
                             mHistoryAdapter.submitList(data)
                             Log.d("hostry", "setAdapter: ${it.message}")
@@ -117,11 +117,11 @@ class DiseaseHistoryFragment : Fragment() {
                     }}
                     2->{viewModel.viewModelScope.launch {
                         accountId?.let {
-                            viewModel.getIrrigationHis(it,plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
                     //                        val i = it.data?.data?.disease?.size?.minus(1)
                     //                        while (i!=0) {
-                                val data = it.data?.data?.disease?.filter { itt ->
-                                    itt.disease.diseaseType == "Deficiency"
+                                val data = it.data?.data?.historicData?.filter { itt ->
+                                    itt.disease?.diseaseType == "Deficiency"
                                 }
                                 mHistoryAdapter.submitList(data)
                                 Log.d("hostry", "setAdapter: ${it.message}")

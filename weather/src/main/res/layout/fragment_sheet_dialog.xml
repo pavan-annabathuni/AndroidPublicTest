@@ -173,7 +173,8 @@
                     <TextView
                         android:id="@+id/label_humidity"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
+                        android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="Humidity"
                         android:textColor="@color/darkGray"
@@ -214,7 +215,8 @@
                     <TextView
                         android:id="@+id/label_rain"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:text="@string/str_chance_of_rain"
                         android:textColor="@color/darkGray"
@@ -255,9 +257,10 @@
                     <TextView
                         android:id="@+id/label_uv"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:text="UV Index"
+                        android:gravity="center"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
@@ -298,7 +301,8 @@
                     <TextView
                         android:id="@+id/label_rainInt"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
+                        android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="Rain Intensity"
                         android:textColor="@color/darkGray"
@@ -330,7 +334,8 @@
                     <TextView
                         android:id="@+id/lable_wind"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
+                        android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="Wind Speed"
                         android:textColor="@color/darkGray"
@@ -360,9 +365,10 @@
                     <TextView
                         android:id="@+id/label_visiblity"
                         style="@style/Medium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:text="Visibility"
+                        android:gravity="center"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 

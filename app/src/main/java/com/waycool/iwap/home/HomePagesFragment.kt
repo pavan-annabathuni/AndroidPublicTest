@@ -370,7 +370,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Check internet",
                     Toast.LENGTH_SHORT
@@ -391,7 +391,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             videosBinding.viewAllVideos.visibility = View.GONE
             videosBinding.videosScroll.visibility = View.GONE
             context?.let {
-                ToastStateHandling.toastWarning(
+                ToastStateHandling.toastError(
                     it,
                     "Check internet",
                     Toast.LENGTH_SHORT
@@ -574,88 +574,67 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun setNews() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
-        viewModel.getVansNewsList(module_id).observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+        lifecycleScope.launch((Dispatchers.Main)) {
+            viewModel.getVansNewsList(module_id).collect {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    newsBinding.noDataNews.visibility = View.GONE
+                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                } else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.NotLoading) {
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                Handler(Looper.myLooper()!!).postDelayed({
-                    if (adapter.snapshot().size != 0 && NetworkUtil.getConnectivityStatusString(
-                            context
-                        ) != 0
-                    ) {
-                        newsBinding.noDataNews.visibility = View.GONE
-                        newsBinding.videoCardNoInternet.visibility = View.GONE
-                        newsBinding.newsListRv.visibility = View.VISIBLE
-                        adapter.submitData(lifecycle, it)
-                        newsBinding.newsListRv.adapter = adapter
+                                    if (adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        newsBinding.noDataNews.visibility = View.GONE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.VISIBLE
 
-                    } else if (adapter.snapshot().size == 0 && NetworkUtil.getConnectivityStatusString(
-                            context
-                        ) == 0
-                    ) {
-                        newsBinding.noDataNews.visibility = View.GONE
-                        newsBinding.videoCardNoInternet.visibility = View.VISIBLE
-                    } else {
-                        newsBinding.noDataNews.visibility = View.VISIBLE
-                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    }
+                                }
+                            }
                     }
-                }, 1000)
+                }
             }
-            /*     if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)!=0){
-                           newsBinding.noDataNews.visibility=View.VISIBLE
-                       }
-                       else{
-                           newsBinding.noDataNews.visibility=View.GONE
-                           newsBinding.videoCardNoInternet.visibility=View.GONE
-                           newsBinding.newsListRv.visibility=View.VISIBLE
-                           adapter.submitData(lifecycle, it)
-                       }*/
-        }
+            newsBinding.viewAllNews.setOnClickListener {
+                val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+                startActivity(intent)
+            }
 
-        newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
-            startActivity(intent)
-        }
+            adapter.onItemClick = {
+                val bundle = Bundle()
+                bundle.putString("title", it?.title)
+                bundle.putString("content", it?.desc)
+                bundle.putString("image", it?.thumbnailUrl)
+                bundle.putString("audio", it?.audioUrl)
+                bundle.putString("date", it?.startDate)
+                bundle.putString("source", it?.sourceName)
+                findNavController().navigate(
+                    R.id.action_homePagesFragment_to_newsFullviewActivity2,
+                    bundle
+                )
+            }
 
-        adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putString("title", it?.title)
-            bundle.putString("content", it?.desc)
-            bundle.putString("image", it?.thumbnailUrl)
-            bundle.putString("audio", it?.audioUrl)
-            bundle.putString("date", it?.startDate)
-            bundle.putString("source", it?.sourceName)
-            findNavController().navigate(
-                R.id.action_homePagesFragment_to_newsFullviewActivity2,
-                bundle
-            )
         }
-
     }
-
-
     private fun setVideos() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.getVansVideosList(module_id).collect {
-
-
                 adapter.submitData(lifecycle, it)
-
-                Log.d(
-                    "HomePage",
-                    "Network : ${NetworkUtil.getConnectivityStatusString(context)}"
-                )
-
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
-
                 } else {
-
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
@@ -663,7 +642,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                                 if (it1 is LoadState.NotLoading) {
                                     Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
 
-                                    // PagingDataAdapter.itemCount here
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
@@ -672,8 +650,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
-//                            adapter.submitData(lifecycle, it)
-//                            videosBinding.videosListRv.adapter = adapter
+
                                     }
                                 }
                             }
@@ -681,21 +658,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
                 }
-                /*  if (adapter.itemCount != 0 && NetworkUtil.getConnectivityStatusString(context) != 0) {
-                      videosBinding.noDataVideo.visibility = View.GONE
-                      videosBinding.videoCardNoInternet.visibility = View.GONE
-                      videosBinding.videosListRv.visibility = View.VISIBLE
-                      adapter.submitData(lifecycle, it)
-                      videosBinding.videosListRv.adapter = adapter
 
-                  } else if (adapter.itemCount == 0 && NetworkUtil.getConnectivityStatusString(context) == 0) {
-                      videosBinding.noDataVideo.visibility = View.GONE
-                      videosBinding.videoCardNoInternet.visibility = View.VISIBLE
-                  }
-                  else {
-                      videosBinding.noDataVideo.visibility = View.VISIBLE
-                      videosBinding.videoCardNoInternet.visibility = View.GONE
-                  }*/
 
 
             }

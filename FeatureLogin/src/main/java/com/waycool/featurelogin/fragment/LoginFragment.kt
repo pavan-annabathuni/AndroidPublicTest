@@ -179,7 +179,7 @@ class LoginFragment : Fragment() {
      */
     fun AuthorizeMobileNumber(mobileNo: String) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let { ToastStateHandling.toastWarning(it,"Please check your Internet connection",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it,"Please check your Internet connection",Toast.LENGTH_SHORT) }
         } else {
             loginViewModel.setMobileNumber(mobileNo)
 
