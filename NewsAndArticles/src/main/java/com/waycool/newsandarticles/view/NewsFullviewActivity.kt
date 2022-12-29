@@ -1,5 +1,6 @@
 package com.waycool.newsandarticles.view
 
+import android.content.Intent
 import android.media.MediaPlayer
 import nl.changer.audiowife.AudioWife
 import android.os.Bundle
@@ -13,7 +14,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
@@ -41,8 +48,6 @@ class NewsFullviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         setContentView(binding.root)
         audioNewLayout = binding.audioLayout
 
@@ -55,12 +60,44 @@ class NewsFullviewActivity : AppCompatActivity() {
             newsDate = bundle.getString("date")
             source = bundle.getString("source")
         }
+
         binding.newsHeading.text = "News Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
-        binding.title.text = title ?: ""
-        binding.desc.text = Html.fromHtml(desc ?: "")
-        binding.newsDate.text = AppUtil.changeDateFormat(newsDate ?: "")
+        binding.title.text = title?:""
+        binding.desc.text = Html.fromHtml(desc?:"")
+        binding.newsDate.text = AppUtil.changeDateFormat(newsDate?:"" )
         binding.shareBtn.setTextColor(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
+
+
+        binding.shareBtn.setOnClickListener {
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the News and Articles on ${title}.")
+                        .setDescription("Watch more News and Articles and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                    }
+                }
+        }
+
 
         if (source != null) {
             binding.newsSource.text = source
@@ -106,14 +143,14 @@ class NewsFullviewActivity : AppCompatActivity() {
             audioNewLayout.pause.visibility = View.GONE
             audioNewLayout.play.visibility = View.VISIBLE
         }
-        binding!!.shareBtn.setOnClickListener { view: View ->
+/*        binding!!.shareBtn.setOnClickListener { view: View ->
             AppUtil.shareItem(
                 this@NewsFullviewActivity, image, binding!!.newsImage, """
      $title
      https://play.google.com/store/apps/details?id=${view.context.packageName}
      """.trimIndent()
             )
-        }
+        }*/
     }
 
 

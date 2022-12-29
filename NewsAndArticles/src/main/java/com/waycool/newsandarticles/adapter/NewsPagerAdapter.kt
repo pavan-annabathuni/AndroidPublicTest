@@ -64,7 +64,6 @@ class NewsPagerAdapter(
 
             itemBinding.newsCv.setOnClickListener {
                 onItemClick.onItemClick(vans)
-
             }
 
         }
