@@ -359,48 +359,30 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
     override fun onShareItemClick(it: VansFeederListDomain?) {
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
-                .setAndroidParameters(
-                    DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                        .build()
-                )
-                .setSocialMetaTagParameters(
-                    DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
-                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
-                        .setDescription("Watch more videos and learn with Outgrow")
-                        .build()
-                )
-                .buildShortDynamicLink().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val shortLink: Uri? = task.result.shortLink
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        sendIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setTitle("Outgrow - Hi, Checkout the News and Articles on ${it?.title}.")
+                    .setDescription("Watch more News and Articles and learn with Outgrow")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-                    }
                 }
-
-            Firebase.dynamicLinks
-                .getDynamicLink(intent)
-                .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                    // Get deep link from result (may be null if no link is found)
-                    var deepLink: Uri? = null
-                    if (pendingDynamicLinkData != null) {
-                        deepLink = pendingDynamicLinkData.link
-                    }
-                    if (deepLink != null) {
-
-                        val intent =
-                            Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-                .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
-        }
-
+            }
+    }
 }

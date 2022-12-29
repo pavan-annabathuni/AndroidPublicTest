@@ -28,6 +28,8 @@ import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
+import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.newsandarticles.view.NewsFullviewActivity
 import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,13 +70,36 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 if (deepLink?.lastPathSegment != null) {
-                    if (deepLink?.lastPathSegment!! == "weathershare") {
+                    Log.d("DeepLink", "Deeplink ${deepLink.lastPathSegment}")
+                    if (deepLink.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
+                    }
+                    else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
+                        val title = deepLink.getQueryParameter("title")
+                        val desc = deepLink.getQueryParameter("content")
+                        val image = deepLink.getQueryParameter("image")
+                        val audioUrl = deepLink.getQueryParameter("audio")
+                        val newsDate = deepLink.getQueryParameter("date")
+                        val source = deepLink.getQueryParameter("source")
+
+
+
+                        if (!title.isNullOrEmpty()) {
+                            val intent = Intent(this, NewsFullviewActivity::class.java)
+                            intent.putExtra("title", title)
+                            intent.putExtra("content", desc)
+                            intent.putExtra("image", image)
+                            intent.putExtra("audio", audioUrl)
+                            intent.putExtra("date", newsDate)
+                            intent.putExtra("source", source)
+                            startActivity(intent)
+                        }
                     }
 
                 }
             }
+
             .addOnFailureListener(this) {
                     e -> Log.w("TAG", "getDynamicLink:onFailure", e)
             }
