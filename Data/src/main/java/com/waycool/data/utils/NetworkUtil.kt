@@ -16,7 +16,7 @@ object NetworkUtil {
             context?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE)
         if (connectivityManager != null) {
             connectivityManager = connectivityManager as ConnectivityManager
-            val networkCapabilities = connectivityManager.activeNetwork ?: return TYPE_MOBILE
+            val networkCapabilities = connectivityManager.activeNetwork ?: return TYPE_NOT_CONNECTED
             val actNw =
                 connectivityManager.getNetworkCapabilities(networkCapabilities)
                     ?: return TYPE_NOT_CONNECTED
