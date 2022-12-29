@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CropHealthActivity : AppCompatActivity() {
+    lateinit var navHost: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,20 @@ class CropHealthActivity : AppCompatActivity() {
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
 
+        navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)!!
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        navHost.let { navFragment ->
+            navFragment.childFragmentManager.primaryNavigationFragment?.onActivityResult(
+                requestCode,
+                resultCode,
+                data
+            )
+        }
     }
 
 }
