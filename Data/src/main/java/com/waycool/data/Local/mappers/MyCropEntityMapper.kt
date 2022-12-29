@@ -28,6 +28,9 @@ class MyCropEntityMapper:EntityMapper<MyCropDataEntity,MyCropDataModel> {
             soilTypeId =dto.soilTypeId,
             cropVarietyId = dto.cropVarietyId,
             //widthDrip=dto.widthDrip,
+
+            irrigationRequired  =dto.irrigationRequired,
+           disease           =dto.disease,
             cropIdd = dto.crop?.id,
         cropName = dto.crop?.cropName,
         cropLogo = dto.crop?.cropLogo,

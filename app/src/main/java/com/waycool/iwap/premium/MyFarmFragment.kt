@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -21,12 +22,22 @@ class MyFarmFragment : Fragment(),Farmdetailslistener {
     private val binding get() = _binding!!
 
     private val viewModel:MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
-    private val adapter:MyFarmPremiumAdapter by lazy { MyFarmPremiumAdapter(this) }
+    private val adapter:MyFarmFragmentAdapter by lazy { MyFarmFragmentAdapter(this,requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@MyFarmFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         _binding = FragmentMyFarmBinding.inflate(inflater, container, false)
         return binding.root
     }

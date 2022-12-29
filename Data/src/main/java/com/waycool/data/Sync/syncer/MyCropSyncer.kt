@@ -1,5 +1,6 @@
 package com.waycool.data.Sync.syncer
 
+import android.util.Log
 import androidx.datastore.preferences.core.Preferences
 import com.waycool.data.Local.Entity.CropInformationEntityData
 import com.waycool.data.Local.Entity.MyCropDataEntity
@@ -47,6 +48,8 @@ class MyCropSyncer : SyncInterface {
                         .collect {
                             when (it) {
                                 is Resource.Success -> {
+                                    Log.d("MyCrops"," ${it.data}")
+
                                     LocalSource.insertMyCrop(
                                         MyCropEntityMapper().toEntityList(it.data?.data!!)
                                         //  CropInformationEntityMapper().toEntityList(it.data?.data!!)
@@ -59,6 +62,8 @@ class MyCropSyncer : SyncInterface {
 
                                 }
                                 is Resource.Error -> {
+                                    Log.d("MyCrops"," ${it.message}")
+
                                     setSyncStatus(false)
                                 }
 

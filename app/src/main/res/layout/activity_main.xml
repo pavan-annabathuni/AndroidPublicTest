@@ -23,7 +23,6 @@
        android:id="@+id/activity_main_bottom_navigation_view"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       app:itemIconTint="@drawable/statecheck"
        app:itemTextColor="@drawable/statecheck"
        app:labelVisibilityMode="labeled"
        android:visibility="gone"

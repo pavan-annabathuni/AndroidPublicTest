@@ -3,6 +3,7 @@ package com.waycool.iwap.premium
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,18 +14,25 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.example.irrigationplanner.IrrigationPlannerActivity
+import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.github.anastr.speedviewlib.components.Section
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.model.Polygon
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
+import com.waycool.featurechat.Contants
+import com.waycool.featurechat.FeatureChat
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
@@ -65,6 +73,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initObserveDevice()
         progressColor()
         initViewPager()
+        fabButton()
+        setBanners()
         val fragment: ArrayList<Fragment> = arrayListOf(
             DeviceFragmentOne(),
             DeviceFragmentTwo()
@@ -76,6 +86,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         map.put("device_model_id", 2)
         val adapter = ViewPagerAdapter(fragment, requireParentFragment())
 //        binding.idViewPager.adapter=adapter
+
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
+            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
+            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
+            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
+            else -> binding.tvGoodMorning.text = "Namaste"
+        }
+
+        binding.IvNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
+        }
+
     }
 
     private fun initViewPager() {
@@ -200,22 +223,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
         })
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
-//                        myCropAdapter.submitList(it.data)
             val response = it.data as ArrayList<MyCropDataDomain>
             myCropPremiumAdapter.setMovieList(response)
-            if ((it.data != null)) {
-//                            binding.tvCount.text = it.data!!.size.toString()
 
-            } else {
-
-//                            binding.tvCount.text = "0"
-            }
-            if (it.data!!.isNotEmpty()) {
-                binding.cvEditCrop.visibility = View.VISIBLE
-                binding.cardAddForm.visibility = View.GONE
-            } else {
+            if (it.data.isNullOrEmpty()) {
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
+            } else {
+                if(it.data?.size!! >1){
+                    binding.videosScroll.visibility=View.VISIBLE
+                }else{
+                    binding.videosScroll.visibility=View.GONE
+
+                }
+                binding.cvEditCrop.visibility = View.VISIBLE
+                binding.cardAddForm.visibility = View.GONE
             }
         }
 
@@ -226,6 +248,35 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
 
     }
+
+    private fun fabButton() {
+        var isVisible = false
+        binding.addFab.setOnClickListener() {
+            if (!isVisible) {
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addChat.show()
+                binding.addCall.show()
+                binding.addFab.isExpanded = true
+                isVisible = true
+            } else {
+                binding.addChat.hide()
+                binding.addCall.hide()
+                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.isExpanded = false
+                isVisible = false
+            }
+        }
+        binding.addCall.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(Contants.CALL_NUMBER)
+            startActivity(intent)
+        }
+        binding.addChat.setOnClickListener() {
+            FeatureChat.zenDeskInit(requireContext())
+        }
+
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun initViewProfile() {
@@ -257,7 +308,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     private fun initObserveMYFarm() {
-        var myFarmPremiumAdapter = MyFarmPremiumAdapter(this)
+        var myFarmPremiumAdapter = MyFarmPremiumAdapter(this,requireContext())
 //        val mapFragment = childFragmentManager
 //            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
 //        mapFragment!!.requireView().isClickable = false
@@ -275,40 +326,42 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     calculateScrollPercentageFarm(binding).toFloat()
             }
         })
+        viewModel.getMyFarms().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    if (it.data == null) {
+                        Log.d("TAG", "initObserveMYFarmPraveen: ")
+                    } else if (it.data != null)
+                        if (it.data!!.isNotEmpty()) {
+                            binding.clAddForm.visibility = View.GONE
+                            binding.cardMYFarm.visibility = View.VISIBLE
+                            myFarmPremiumAdapter.setMovieList(it.data)
+                            if(it.data?.size!! >1){
+                                binding.videosScrollMyFarm.visibility=View.VISIBLE
+                            }else
+                                binding.videosScrollMyFarm.visibility=View.GONE
+
+                        } else {
+                            binding.clAddForm.visibility = View.VISIBLE
+                            binding.cardMYFarm.visibility = View.GONE
+//                                        binding.farmsDetailsCl.visibility = View.GONE
+//                                        binding.tvAddress.visibility=View.VISIBLE
+
+                        }
+                }
+                is Resource.Loading -> {}
+                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId = it.data?.accountId
                 Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
-                if (accountId != null)
-                    viewModel.getMyFarms().observe(viewLifecycleOwner) {
-                        when (it) {
-                            is Resource.Success -> {
-                                if (it.data == null) {
-                                    Log.d("TAG", "initObserveMYFarmPraveen: ")
-                                } else if (it.data != null)
-                                    if (it.data!!.isNotEmpty()) {
-                                        binding.clAddForm.visibility = View.GONE
-                                        binding.cardMYFarm.visibility = View.VISIBLE
-//                                        binding.farmsDetailsCl.visibility = View.VISIBLE
-//                                        binding.tvAddress.visibility=View.INVISIBLE
-                                        val response = it.data as ArrayList<MyFarmsDomain>
-                                        Log.d("TAG", "initObserveMYFarmData:$response ")
-                                        myFarmPremiumAdapter.setMovieList(response)
-                                    } else {
-                                        binding.clAddForm.visibility = View.VISIBLE
-                                        binding.cardMYFarm.visibility = View.GONE
-//                                        binding.farmsDetailsCl.visibility = View.GONE
-//                                        binding.tvAddress.visibility=View.VISIBLE
-
-                                    }
-                            }
-                            is Resource.Loading -> {}
-                            is Resource.Error -> {
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
+//                if (accountId != null)
             }
         }
     }
@@ -377,14 +430,24 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceData) {
+
+        if(data.model?.series=="GSX"){
+            binding.cardTopParent.visibility=View.GONE
+            binding.clTempView.visibility=View.GONE
+        }else{
+            binding.cardTopParent.visibility=View.VISIBLE
+            binding.clTempView.visibility=View.VISIBLE
+        }
+
         binding.let {
+
             it.totalAreea.text = data.iotDevicesData?.battery.toString()
             it.tvAddDeviceStart.text = data.model?.modelName.toString()
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            if (data.leafWetness!!.equals(1)) {
+            if (data.leafWetness!=null && data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
             } else {
@@ -724,6 +787,33 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         data.cropLogo?.let { bundle.putString("cropLogo",it) }
         data.cropName?.let { bundle.putString("cropName",it) }
         this.findNavController().navigate(R.id.action_homePagePremiumFragment3_to_navigation_irrigation,bundle)
+    }
+
+    private fun setBanners() {
+
+        val bannerAdapter = AdsAdapter()
+        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+
+            bannerAdapter.submitData(lifecycle, it)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+            }.attach()
+        }
+        binding.bannerViewpager.adapter = bannerAdapter
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
 
