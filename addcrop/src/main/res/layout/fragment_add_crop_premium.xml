@@ -146,22 +146,46 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <Spinner
-                    android:id="@+id/Acres"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/space40"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/space4"
-                    android:layout_marginEnd="@dimen/space16"
-                    android:background="@drawable/bg_select_acres"
-                    android:gravity="center"
-                    android:text="Acres"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_acres"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Spinner
+                        android:id="@+id/Acres"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/space40"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/space4"
+                        android:gravity="center"
+                        android:text="Acres"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                <Spinner-->
+<!--                    android:id="@+id/Acres"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/space40"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_margin="@dimen/space4"-->
+<!--                    android:layout_marginEnd="@dimen/space16"-->
+<!--                    android:background="@drawable/bg_select_acres"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="Acres"-->
+<!--                    android:textColor="#000000"-->
+<!--                    android:textSize="14sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <!--                <TextView-->
                 <!--                    android:id="@+id/Acres"-->
@@ -597,6 +621,48 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/farms_cl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clState">
+
+                <com.waycool.uicomponents.Text.ParagraphMedium
+                    android:id="@+id/paragraphMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Select Farm to add this crop"
+                    android:textColor="@color/textdark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/myfarms_chip_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:chipSpacingHorizontal="4dp"
+                    app:chipSpacingVertical="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/paragraphMedium"
+                    app:singleSelection="true">
+
+                </com.google.android.material.chip.ChipGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

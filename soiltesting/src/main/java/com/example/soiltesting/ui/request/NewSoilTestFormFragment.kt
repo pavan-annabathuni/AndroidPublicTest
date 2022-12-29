@@ -66,7 +66,7 @@ class NewSoilTestFormFragment : Fragment() {
             val onp_id = arguments?.getInt("soil_test_number")
             val lat = arguments?.getString("lat")
             val long = arguments?.getString("long")
-            val plot_id = arguments?.getInt("plot_id")
+            val crop_id = arguments?.getInt("plot_id")
 
             Log.d(TAG, "onCreateViewONPID:$onp_id ")
             Log.d(TAG, "onCreateViewONPID:$lat ")
@@ -101,7 +101,7 @@ class NewSoilTestFormFragment : Fragment() {
                     ToastStateHandling.toastError(requireContext(), "Please Select Account", Toast.LENGTH_SHORT)
                 } else if (it.data?.accountId != null) {
                     Log.d(TAG, "onCreateViewAccountID:$accountID")
-                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,plot_id.toString().toInt())
+                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,crop_id.toString().toInt())
                 }
 
 
@@ -274,7 +274,7 @@ class NewSoilTestFormFragment : Fragment() {
         long: String,
         onp_number: Int,
         phoneNumber: String,
-        plot_id:Int
+        crop_id:Int
     ) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
@@ -316,7 +316,7 @@ class NewSoilTestFormFragment : Fragment() {
                     binding.etState.text.toString(),
                     binding.etCity.text.toString(),
                     phoneNumber,
-                    plot_id
+                    crop_id
                 ).observe(requireActivity()) {
 
                     when (it) {

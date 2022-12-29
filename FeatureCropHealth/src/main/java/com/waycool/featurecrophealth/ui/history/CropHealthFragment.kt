@@ -29,9 +29,13 @@ import kotlin.math.roundToInt
 
 
 class CropHealthFragment : Fragment() {
+
+   private lateinit var binding: FragmentCropHealthBinding
+//    private val binding get() = binding!!
+
     private lateinit var videosBinding: GenericLayoutVideosListBinding
-    private var _binding: FragmentCropHealthBinding? = null
-    private val binding get() = _binding!!
+ 
+
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var module_id = "3"
 
@@ -42,8 +46,7 @@ class CropHealthFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCropHealthBinding.inflate(inflater, container, false)
-
+        binding = FragmentCropHealthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -249,10 +252,10 @@ class CropHealthFragment : Fragment() {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
     private fun fabButton(){
         var isVisible = false
         binding.addFab.setOnClickListener(){

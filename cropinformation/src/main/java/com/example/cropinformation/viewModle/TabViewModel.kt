@@ -47,6 +47,9 @@ class TabViewModel:ViewModel {
     fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
         return CropsRepository.getCropInfoCrops(searchQuery).asLiveData()
     }
+    fun getIrrigationCrops(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
+        return CropsRepository.getIrrigationCrops(searchQuery).asLiveData()
+    }
     fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
         return CropsRepository.getCropCategory().asLiveData()
     }
