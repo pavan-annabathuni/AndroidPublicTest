@@ -711,31 +711,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 //                    Glide.with(requireContext())
 //                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
 //                        .into(binding.ivWeather)
-                    binding.tvHumidityDegree.text =
-                        String.format("%.0f", it.data?.current?.humidity) + "%"
+                binding.tvHumidityDegree.text =
+                    String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
 
-                if (!it.data?.current?.weather.isNullOrEmpty()) {
-                    it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
-                        WeatherIcons.setWeatherIcon(
-                            it1, binding.ivWeather
-                        )
+                    if (!it.data?.current?.weather.isNullOrEmpty()) {
+                        it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
+                            WeatherIcons.setWeatherIcon(
+                                it1, binding.ivWeather
+                            )
 
-                        val date: Long? = it.data?.current?.dt?.times(1000L)
-                        val dateTime = Date()
-                        if (date != null) {
-                            dateTime.time = date
-                        }
-                        val formatter =
-                            SimpleDateFormat(
-                                "EE d,MMM",
-                                Locale.ENGLISH
-                            )//or use getDateInstance()
-                        val formatedDate = formatter.format(dateTime)
-                        binding.tvDay.text = "Today $formatedDate"
-                    }
-                }
                             val date: Long? = it.data?.current?.dt?.times(1000L)
                             val dateTime = Date()
                             if (date != null) {
