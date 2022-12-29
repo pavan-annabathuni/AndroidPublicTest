@@ -2,7 +2,8 @@ package com.waycool.data.Network.NetworkModels
 
 import com.google.gson.annotations.SerializedName
 
-data class MyCropsModel(@SerializedName("status"  ) var status  : Boolean?        = null,
+data class MyCropsModel(
+    @SerializedName("status"  ) var status  : Boolean?        = null,
                         @SerializedName("message" ) var message : String?         = null,
                         @SerializedName("data"    ) var data    : ArrayList<MyCropDataModel> = arrayListOf())
 data class CropModel (
@@ -40,6 +41,9 @@ data class MyCropDataModel (
     @SerializedName("farm_id"               ) var farmId              : Int?    = null,
     @SerializedName("soil_type_id"          ) var soilTypeId          : Int?    = null,
     @SerializedName("crop_variety_id"       ) var cropVarietyId       : String? = null,
+
+    @SerializedName("irrigation_required"   ) var irrigationRequired  : Boolean?  = null,
+    @SerializedName("disease"               ) var disease             : Boolean?  = null,
     @SerializedName("crop"                  ) var crop                : CropModel?   = CropModel(),
     @SerializedName("soil_type"             ) var soilType            : SoilType? = SoilType()
 )
@@ -47,11 +51,11 @@ data class SoilType (
 
     @SerializedName("id"          ) var id          : Int?    = null,
     @SerializedName("soil_type"   ) var soilType    : String? = null,
-    @SerializedName("sat"         ) var sat         : Int?    = null,
-    @SerializedName("fc"          ) var fc          : Int?    = null,
-    @SerializedName("wp"          ) var wp          : Int?    = null,
-    @SerializedName("soil_drain"  ) var soilDrain   : Int?    = null,
-    @SerializedName("ksat"        ) var ksat        : Int?    = null,
+    @SerializedName("sat"         ) var sat         : Double?    = null,
+    @SerializedName("fc"          ) var fc          : Double?    = null,
+    @SerializedName("wp"          ) var wp          : Double?    = null,
+    @SerializedName("soil_drain"  ) var soilDrain   : Double?    = null,
+    @SerializedName("ksat"        ) var ksat        : Double?    = null,
     @SerializedName("translation" ) var translation : String? = null,
     @SerializedName("created_at"  ) var createdAt   : String? = null,
     @SerializedName("updated_at"  ) var updatedAt   : String? = null,

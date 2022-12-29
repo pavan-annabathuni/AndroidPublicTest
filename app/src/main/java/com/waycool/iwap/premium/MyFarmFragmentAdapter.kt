@@ -14,10 +14,11 @@ import com.google.android.libraries.maps.model.PolygonOptions
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
+import com.waycool.iwap.databinding.ItemPremiumMyfarmsBinding
 import kotlin.collections.ArrayList
 
-class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val context: Context) :
-    RecyclerView.Adapter<MyFarmPremiumAdapter.MyFarmPremiumViewHolder>() {
+class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val context: Context) :
+    RecyclerView.Adapter<MyFarmFragmentAdapter.MyFarmPremiumViewHolder>() {
     //    val context: Context,
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
@@ -33,7 +34,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyFarmPremiumViewHolder {
         val binding =
-            ItemPremiumAddFarmBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemPremiumMyfarmsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyFarmPremiumViewHolder(binding)
     }
 
@@ -105,7 +106,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
     }
 
 
-    inner class MyFarmPremiumViewHolder(val binding: ItemPremiumAddFarmBinding) :
+    inner class MyFarmPremiumViewHolder(val binding: ItemPremiumMyfarmsBinding) :
         RecyclerView.ViewHolder(binding.root), OnMapReadyCallback {
         var mapCurrent: GoogleMap? = null
         var polygonCurrent: Polygon? = null

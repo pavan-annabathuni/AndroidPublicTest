@@ -22,7 +22,7 @@ class TokenViewModel : ViewModel() {
     fun getDasBoard(): LiveData<Resource<DashboardDomain?>> =
      CropsRepository.getDashBoard().asLiveData()
 
-    suspend fun getUserToken():String = LoginRepository.getUserToken()!!
+    suspend fun getUserToken():String = LoginRepository.getUserToken().toString()
 
 //    fun getSelectedLanguageCode() = LoginRepository.getSelectedLanguageCode()
 }

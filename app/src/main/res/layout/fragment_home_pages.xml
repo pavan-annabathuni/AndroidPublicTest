@@ -116,13 +116,15 @@
                     <LinearLayout
                         android:id="@+id/ll"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="60dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
                         android:elevation="15dp"
                         android:orientation="vertical"
                         app:cardCornerRadius="@dimen/txt10"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvGoodMorning">
@@ -131,9 +133,10 @@
                             android:id="@+id/cardAddForm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_margin="2dp"
                             android:elevation="15dp"
                             app:cardCornerRadius="@dimen/txt10">
+
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
@@ -164,7 +167,8 @@
                                     android:layout_marginBottom="16dp"
                                     android:background="@drawable/bg_add_form"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent">
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
 
                                     <ImageView
                                         android:id="@+id/ivAdd"
@@ -196,8 +200,9 @@
 
                                 <ImageView
                                     android:id="@+id/imageView10"
-                                    android:layout_width="154dp"
-                                    android:layout_height="154dp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:adjustViewBounds="true"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/add_crop"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -214,12 +219,12 @@
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone"
-                                app:layout_constraintTop_toTopOf="parent">
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/tvMyCrop"
@@ -248,10 +253,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/space16"
                                     android:layout_marginEnd="5dp"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:text="Add Farm"
                                     android:textColor="#146133"
                                     android:textSize="14sp"
-                                    android:fontFamily="@font/notosans_bold"
                                     app:layout_constraintEnd_toStartOf="@+id/ivMyForm"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -264,7 +269,7 @@
                             android:id="@+id/cvEditCrop"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/space4"
+                            android:layout_margin="2dp"
                             android:visibility="gone"
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="12dp"
@@ -279,7 +284,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
-                                    android:layout_marginTop="8dp"
+                                    android:layout_marginTop="16dp"
                                     android:text="My Crops"
                                     android:textColor="@color/textdark"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -312,15 +317,15 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="8dp"
                                     android:layout_marginEnd="16dp"
                                     android:drawablePadding="4dip"
                                     android:text="Edit Crops"
                                     android:textColor="@color/primaryColor"
                                     android:textSize="14sp"
                                     app:drawableEndCompat="@drawable/ic_edit_crop"
+                                    app:layout_constraintBottom_toBottomOf="@+id/my_crops_title"
                                     app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    app:layout_constraintTop_toTopOf="@+id/my_crops_title" />
 
                                 <HorizontalScrollView
                                     android:layout_width="0dp"
@@ -343,12 +348,12 @@
                                             android:layout_toEndOf="@+id/add_ll"
                                             android:nestedScrollingEnabled="false"
                                             android:orientation="horizontal"
-                                            app:reverseLayout="true"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             app:layout_constraintStart_toStartOf="parent"
                                             app:layout_constraintTop_toTopOf="parent"
-                                            tools:itemCount="1"
+                                            app:reverseLayout="true"
+                                            tools:itemCount="6"
                                             tools:listitem="@layout/item_mycrops" />
 
                                         <LinearLayout
@@ -367,7 +372,9 @@
                                                 android:layout_width="64dp"
                                                 android:layout_height="64dp"
                                                 android:layout_gravity="center"
+                                                android:layout_marginStart="8dp"
                                                 android:layout_marginTop="8dp"
+                                                android:layout_marginEnd="8dp"
                                                 android:gravity="center"
                                                 app:cardCornerRadius="100dp"
                                                 app:cardElevation="0dp"
@@ -386,7 +393,9 @@
                                                 style="@style/SemiBold"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
                                                 android:layout_marginTop="8dp"
+                                                android:gravity="center"
                                                 android:text="Add Crop"
                                                 android:textColor="#146133"
                                                 android:textSize="14sp" />
@@ -401,13 +410,14 @@
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:background="#FFFAF0"
-                        app:layout_constraintTop_toBottomOf="@id/ll"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintTop_toBottomOf="@id/ll" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -417,10 +427,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clBack">
+                    app:layout_constraintTop_toBottomOf="@id/clBack"
+                    tools:visibility="gone">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clAddForm"
@@ -650,7 +661,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_ans"
                     android:elevation="6dp"
@@ -682,10 +693,10 @@
                                 android:layout_width="42dp"
                                 android:layout_height="42dp"
                                 android:layout_margin="@dimen/txt16"
-                                app:tint = "@color/DarkGreen"
                                 android:src="@drawable/ic_weather_icon"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/DarkGreen" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvDegree"
@@ -734,9 +745,9 @@
                                 android:text="Today Tue 26, Jul"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
+                                app:layout_constraintBottom_toBottomOf="@+id/tvTemp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tvTemp"
-                                app:layout_constraintBottom_toBottomOf="@+id/tvTemp"/>
+                                app:layout_constraintTop_toTopOf="@+id/tvTemp" />
 
                             <View
                                 android:id="@+id/ViewOne"
@@ -787,12 +798,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
+                                    android:layout_marginEnd="24dp"
                                     android:layout_marginBottom="@dimen/txt10"
                                     android:fontFamily="@font/notosans_medium"
                                     android:text="Humidity"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="@+id/tvHumidityDegree"
                                     app:layout_constraintTop_toBottomOf="@+id/tvHumidityDegree" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -812,6 +825,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt16"
+                                    android:layout_marginTop="24dp"
                                     android:src="@drawable/ic_wind_weather"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -833,7 +847,7 @@
                                     android:id="@+id/tvWind"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
+                                    android:layout_marginTop="8dp"
                                     android:layout_marginBottom="@dimen/txt10"
                                     android:fontFamily="@font/notosans_medium"
                                     android:text="Wind"
@@ -883,12 +897,14 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="4dp"
+                                    android:layout_marginEnd="24dp"
                                     android:layout_marginBottom="@dimen/txt10"
                                     android:fontFamily="@font/notosans_medium"
                                     android:text="Chance of rain"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="@+id/ivRain"
                                     app:layout_constraintTop_toBottomOf="@+id/tvRainDegree" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1030,7 +1046,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardAddDevice">
@@ -1074,8 +1090,10 @@
                     android:id="@+id/clRequest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clBanner">
 
                     <TextView
@@ -1083,10 +1101,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
+                        android:fontFamily="@font/notosans_bold"
                         android:text="Mandi Prices"
                         android:textColor="#111827"
                         android:textSize="@dimen/space20"
-                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -1130,11 +1148,11 @@
                         android:layout_marginEnd="16dp"
                         android:drawableEnd="@drawable/ic_viewall"
                         android:drawablePadding="8dp"
+                        android:fontFamily="@font/notosans_bold"
                         android:padding="4dp"
                         android:text="View All"
                         android:textColor="#146133"
                         android:textSize="14sp"
-                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1403,6 +1421,7 @@
                                 android:id="@+id/imageView12"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:adjustViewBounds="true"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/crop_health_"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -1517,6 +1536,7 @@
                                 android:id="@+id/imageView13"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:adjustViewBounds="true"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/crop_information_"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -1633,6 +1653,7 @@
                                 android:id="@+id/imageView14"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:adjustViewBounds="true"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/crop_protection_"
                                 app:layout_constraintBottom_toBottomOf="parent"

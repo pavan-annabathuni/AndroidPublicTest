@@ -21,6 +21,7 @@ import com.example.profile.viewModel.EditProfileViewModel
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
@@ -153,6 +154,11 @@ class MyProfileFragment : Fragment() {
     fun observer(): Boolean {
         viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
+                  if(it.data?.data?.account?.get(0)?.subscription == 0){
+                      binding.llFarmSupport.visibility = View.GONE
+                  }else{
+                      binding.llFarmSupport.visibility = View.VISIBLE
+                  }
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
                   if(it.data?.data?.profile?.remotePhotoUrl!=null) {
@@ -256,6 +262,7 @@ class MyProfileFragment : Fragment() {
             CropInformationSyncer().invalidateSync()
             TagsSyncer().invalidateSync()
             PestDiseaseSyncer().invalidateSync()
+            DataStoreManager.clearData()
 
         }
     }
