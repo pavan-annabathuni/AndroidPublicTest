@@ -23,4 +23,5 @@
     <string name="select_variety">Select variety</string>
     <string name="mulching">Mulching</string>
     <string name="no_of_plants_per_acre">No of Plants Per Acre</string>
+    <string name="mtr">mtr</string>
 </resources>

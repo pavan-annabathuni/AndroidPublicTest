@@ -39,8 +39,12 @@ interface OutgrowDao {
     @Query("SELECT * FROM crop_master WHERE crop_info = 1 AND crop_name LIKE '%' || :searchQuery || '%' ORDER BY crop_name Asc")
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?>
 
+    @Query("SELECT * FROM crop_master WHERE water_model = 1 AND crop_name LIKE '%' || :searchQuery || '%' ORDER BY crop_name Asc")
+    fun getIrrigationCrops(searchQuery: String? = ""): Flow<List<CropMasterEntity>?>
+
     @Query("DELETE FROM crop_master")
     fun deleteCropMaster()
+
     //Pest Diseases
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPestDiseases(crops: List<PestDiseaseEntity>)
@@ -60,6 +64,7 @@ interface OutgrowDao {
 
     @Query("SELECT * FROM crop_information WHERE crop_id = :cropId")
     fun getCropInformation(cropId: Int): Flow<List<CropInformationEntityData>>
+
     @Query("DELETE FROM crop_information")
     fun deleteCropInformation()
 
@@ -89,5 +94,5 @@ interface OutgrowDao {
     fun insertMyFarms(farms: List<MyFarmsEntity>)
 
     @Query("SELECT * FROM my_farms")
-    fun getMyFarms():Flow<List<MyFarmsEntity>>
+    fun getMyFarms(): Flow<List<MyFarmsEntity>>
 }

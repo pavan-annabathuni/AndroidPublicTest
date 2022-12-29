@@ -70,6 +70,26 @@ class CropMasterSyncer : SyncInterface {
         }
     }
 
+    fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (isSyncRequired()) {
+                makeNetworkCall()
+            }
+        }
+        return getIrrigationCropsFromLocal(searchQuery)
+    }
+
+    private fun getIrrigationCropsFromLocal(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
+
+        return LocalSource.getIrrigationCrops(searchQuery).map {
+            if (it != null) {
+                (Resource.Success(it))
+            } else {
+                (Resource.Error(""))
+            }
+        }
+    }
+
     private fun getCropsAiCropHealthFromLocal(searchQuery: String? = ""): Flow<Resource<List<CropMasterEntity>>> {
 
         return LocalSource.getCropsAiCropHealth(searchQuery).map {

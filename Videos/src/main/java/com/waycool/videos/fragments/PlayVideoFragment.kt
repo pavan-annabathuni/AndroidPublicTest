@@ -95,8 +95,6 @@ class PlayVideoFragment : Fragment() ,itemClick{
                 videoTitle=arguments?.getString("title")
                 videoDesc=arguments?.getString("description")
                 videoUrl=arguments?.getString("url")
-
-
             }
         }
 

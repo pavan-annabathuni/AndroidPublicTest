@@ -88,6 +88,9 @@
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/homePagesFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_allServicesFragment_to_serviceDescFragment"
+            app:destination="@id/serviceDescFragment" />
     </fragment>
     <fragment
         android:id="@+id/mandiGraphFragment2"
@@ -168,5 +171,9 @@
         android:name="com.waycool.videos.fragments.VideosListFragment"
         android:label="VideosListFragment" />
     <include app:graph="@navigation/nav_videos" />
+    <dialog
+        android:id="@+id/serviceDescFragment"
+        android:name="com.waycool.iwap.allservices.ServiceDescFragment"
+        android:label="ServiceDescFragment" />
 
 </navigation>
