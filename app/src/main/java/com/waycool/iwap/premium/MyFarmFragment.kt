@@ -21,7 +21,7 @@ class MyFarmFragment : Fragment(),Farmdetailslistener {
     private val binding get() = _binding!!
 
     private val viewModel:MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
-    private val adapter:MyFarmPremiumAdapter by lazy { MyFarmPremiumAdapter(this) }
+    private val adapter:MyFarmFragmentAdapter by lazy { MyFarmFragmentAdapter(this,requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

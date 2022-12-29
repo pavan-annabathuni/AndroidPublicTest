@@ -224,6 +224,7 @@ class MainActivity : AppCompatActivity() {
         // Setup the bottom navigation view with navController
         val bottomNavigationView = binding.activityMainBottomNavigationView
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.itemIconTintList=null
 
         val graphInflater = navHostFragment.navController.navInflater
         val navGraph = graphInflater.inflate(R.navigation.nav_main)

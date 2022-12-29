@@ -44,6 +44,7 @@ import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -52,6 +53,7 @@ import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
+import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -74,6 +76,7 @@ import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
+    private var dashboardDomain: DashboardDomain? = null
     private var selectedFarm: MyFarmsDomain? = null
     private lateinit var videosBinding: GenericLayoutVideosListBinding
     private lateinit var newsBinding: GenericLayoutNewsListBinding
@@ -103,6 +106,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
+    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+
 
     //    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 //    private val mandiAdapter = MandiHomePageAdapter()
@@ -267,20 +272,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
         mandiViewModel.viewModelScope.launch {
 
-                    mandiViewModel.getMandiDetails(
-                        lat,
-                        long,
-                        cropCategory, state,
-                        crop,
-                        sortBy,
-                        orderBy,
-                        search,
-                        0
-                    )
-                        .observe(viewLifecycleOwner) {
-                            mandiAdapter.submitData(lifecycle, it)
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory, state,
+                crop,
+                sortBy,
+                orderBy,
+                search,
+                0
+            )
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
 
-            }
+                }
         }
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -326,7 +331,37 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             mMap?.uiSettings?.setAllGesturesEnabled(false)
             mMap?.uiSettings?.isMapToolbarEnabled = false
         }
+
+        getDashBoard()
+
     }
+
+    private fun getDashBoard() {
+
+        tokenCheckViewModel.getDasBoard().observe(viewLifecycleOwner) {
+
+            dashboardDomain = it.data
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("dashboard", "${it.data?.subscription?.iot}")
+                    if (it.data?.subscription?.iot == true) {
+                        binding.clAddYourFarm.visibility = View.GONE
+                        binding.tvWelcomeName.visibility = View.INVISIBLE
+                        binding.tvGoodMorning.visibility = View.INVISIBLE
+                        binding.IvNotification.visibility = View.GONE
+
+                    }
+                }
+                is Resource.Loading -> {
+
+
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+    }
+
 
     private fun networkNewsCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {

@@ -45,7 +45,8 @@ data class ViewIOTData(
 
 data class ViewIOTModel(
     @SerializedName("id") var id: Int? = null,
-    @SerializedName("model_name") var modelName: String? = null
+    @SerializedName("model_name") var modelName: String? = null,
+    @SerializedName("series") var series: String? = null
 )
 
 

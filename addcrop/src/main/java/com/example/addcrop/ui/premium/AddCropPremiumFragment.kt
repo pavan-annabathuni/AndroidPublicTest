@@ -103,7 +103,8 @@ class AddCropPremiumFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID=it.data?.accountId
             }
-            irrigationTypeSpinner(accountID,crop_id,crop_type)
+
+            irrigationTypeSpinner(crop_id,crop_type)
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")
         }
@@ -150,7 +151,7 @@ class AddCropPremiumFragment : Fragment() {
         }
     }
 
-    private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
+    private fun irrigationTypeSpinner( crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
         binding.tvSpinner.adapter = arrayAdapter
@@ -204,8 +205,10 @@ class AddCropPremiumFragment : Fragment() {
 //                                Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
 //                                bundle.putString("map",map.toString())
 
-                                if (account_id != null) {
-                                    bundle.putInt("account_id", account_id)
+//                                Toast.makeText(requireContext(), "${account_id} Abd ${accountID}",Toast.LENGTH_SHORT).show()
+
+                                if (accountID != null) {
+                                    bundle.putInt("account_id", accountID!!)
                                 }
                                 if (crop_id != null) {
                                     bundle.putInt("cropid", crop_id)
@@ -231,7 +234,7 @@ class AddCropPremiumFragment : Fragment() {
                         binding.clPlotNumber.visibility = View.VISIBLE
                         binding.plotNumber.visibility = View.VISIBLE
                         binding.tvCheckCrop.setText("Save Crop")
-                        itemClicked(account_id, crop_id,soil_type_id,item)
+                        itemClicked(accountID, crop_id,soil_type_id,item)
 //                    else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 2", Toast.LENGTH_SHORT).show()
 //                    }
@@ -241,7 +244,7 @@ class AddCropPremiumFragment : Fragment() {
                         binding.clPlotNumber.visibility = View.VISIBLE
                         binding.plotNumber.visibility = View.VISIBLE
                         binding.tvCheckCrop.setText("Save Crop")
-                        itemClicked(account_id, crop_id,soil_type_id,item)
+                        itemClicked(accountID, crop_id,soil_type_id,item)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
 //                    }

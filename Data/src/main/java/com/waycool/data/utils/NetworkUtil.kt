@@ -1,42 +1,56 @@
-package com.waycool.data.utils;
+package com.waycool.data.utils
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 
-public class NetworkUtil {
+object NetworkUtil {
+    var TYPE_WIFI = 1
+    var TYPE_MOBILE = 2
+    var TYPE_NOT_CONNECTED = 0
 
-    public static int TYPE_WIFI = 1;
-    public static int TYPE_MOBILE = 2;
-    public static int TYPE_NOT_CONNECTED = 0;
-
-
-    public static int getConnectivityStatus(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork && activeNetwork.isConnectedOrConnecting()) {
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
-                return TYPE_WIFI;
-
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
-                return TYPE_MOBILE;
+    private fun isInternetAvailable(context: Context?): Int {
+        var result = TYPE_NOT_CONNECTED
+        var connectivityManager =
+            context?.applicationContext?.getSystemService(Context.CONNECTIVITY_SERVICE)
+        if (connectivityManager != null) {
+            connectivityManager = connectivityManager as ConnectivityManager
+            val networkCapabilities = connectivityManager.activeNetwork ?: return TYPE_MOBILE
+            val actNw =
+                connectivityManager.getNetworkCapabilities(networkCapabilities)
+                    ?: return TYPE_NOT_CONNECTED
+            result = when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> TYPE_WIFI
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> TYPE_MOBILE
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> TYPE_MOBILE
+                else -> TYPE_NOT_CONNECTED
+            }
         }
-        return TYPE_NOT_CONNECTED;
+        return result
     }
 
-    public static int getConnectivityStatusString(Context context) {
-        int conn = NetworkUtil.getConnectivityStatus(context);
-        int status = 0;
-        if (conn == NetworkUtil.TYPE_WIFI) {
-            status = TYPE_WIFI;
-        } else if (conn == NetworkUtil.TYPE_MOBILE) {
-            status = TYPE_MOBILE;
-        } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
-            status = TYPE_NOT_CONNECTED;
+//    private fun getConnectivityStatus(context: Context?): Int {
+//        val cm = context
+//            ?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        val activeNetwork = cm.activeNetworkInfo
+//        if (null != activeNetwork && activeNetwork.isConnectedOrConnecting) {
+//            if (activeNetwork.type == ConnectivityManager.TYPE_WIFI) return TYPE_WIFI
+//            if (activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return TYPE_MOBILE
+//        }
+//        return TYPE_NOT_CONNECTED
+//    }
+
+    fun getConnectivityStatusString(context: Context?): Int {
+        val conn = isInternetAvailable(context)
+        var status = 0
+        if (conn == TYPE_WIFI) {
+            status = TYPE_WIFI
+        } else if (conn == TYPE_MOBILE) {
+            status = TYPE_MOBILE
+        } else if (conn == TYPE_NOT_CONNECTED) {
+            status = TYPE_NOT_CONNECTED
         }
-        return status;
+        return status
     }
 }

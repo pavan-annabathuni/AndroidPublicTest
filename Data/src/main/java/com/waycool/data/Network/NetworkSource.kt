@@ -888,6 +888,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("MyCrops","error: ${e.message}")
             emit(Resource.Error(e.message))
         }
     }

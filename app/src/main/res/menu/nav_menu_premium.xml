@@ -8,8 +8,8 @@
 
 
     <item
-        android:id="@+id/allServicesFragment2"
-        android:icon="@drawable/ic_services"
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_services_selector"
         android:title="SERVICES" />
 
     <item
