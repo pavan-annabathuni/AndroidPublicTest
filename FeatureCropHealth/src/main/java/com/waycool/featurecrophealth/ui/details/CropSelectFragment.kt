@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
@@ -156,11 +157,11 @@ class CropSelectFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -224,7 +225,7 @@ class CropSelectFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
         }

@@ -32,6 +32,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -58,8 +59,7 @@ class VideosListFragment : Fragment() {
 
 
     var searchTag = ""
-    var tagsAndKeywordsList = ArrayList<String>()
-    var isAllFabsVisible = false
+
     private lateinit var adapterVideo: VideosPagerAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

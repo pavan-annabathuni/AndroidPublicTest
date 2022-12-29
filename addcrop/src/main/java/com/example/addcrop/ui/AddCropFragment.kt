@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.utils.Resource
 
@@ -64,11 +65,11 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -85,8 +86,8 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             binding.cardCheckHealth.setOnClickListener {
                 categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    Toast.makeText(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
-                        .show()
+                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()

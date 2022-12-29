@@ -65,7 +65,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="130-150 gm/ac"
                 android:textAlignment="center"
                 android:textColor="@color/WoodBrown"

@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
@@ -276,6 +278,7 @@ class CropDetailsCaptureFragment : Fragment() {
                         "Currently We are Facing Server Error",
                         Toast.LENGTH_SHORT
                     ).show()
+                    ToastStateHandling.toastError(requireContext(), "Currently We are Facing Server Error", Toast.LENGTH_SHORT)
                     binding.progressBar?.visibility = View.GONE
                     binding.cardCheckHealth.visibility = View.VISIBLE
                 }

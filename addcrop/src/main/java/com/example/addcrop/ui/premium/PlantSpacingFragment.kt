@@ -14,6 +14,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 
 class PlantSpacingFragment : Fragment() {
@@ -142,6 +143,32 @@ class PlantSpacingFragment : Fragment() {
                                 is Resource.Loading -> {
                                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
                                         .show()
+                if (plantToPlant.isEmpty()){
+                    binding.etNumber.error = "Enter Plant to Plant Distance"
+                }else if (planetBed.isEmpty()){
+                    binding.etNumberWidth.error="Plant Bed width"
+                }else if (dripEmitterRate.isEmpty()){
+                    binding.etNumberWidthDistance.error="Plant to Plant Distance"
+                }else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()){
+                    viewModel.addCropDataPass(map).observe(requireActivity()) {
+                        when (it) {
+                            is Resource.Success -> {
+                                activity?.finish()
+                            }
+                            is Resource.Error -> {
+                                ToastStateHandling.toastError(
+                                    requireContext(),
+                                    it.message.toString(),
+                                    Toast.LENGTH_SHORT
+                                )
+                                Log.d(
+                                    ContentValues.TAG,
+                                    "postAddCropExption: ${it.message.toString()}"
+                                )
+                            }
+                            is Resource.Loading -> {
+                                ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+
 
                                 }
                             }

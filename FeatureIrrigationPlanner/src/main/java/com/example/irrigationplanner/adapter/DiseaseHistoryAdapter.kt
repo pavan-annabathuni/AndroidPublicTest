@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemDiseaseHistoryBinding
-import com.example.irrigationplanner.databinding.ItemHistoryBinding
-import com.waycool.data.Network.NetworkModels.Disease
+import com.waycool.data.Network.NetworkModels.DiseaseCurrentData
+import com.waycool.data.Network.NetworkModels.DiseaseHistoricData
 
-class DiseaseHistoryAdapter: ListAdapter<Disease,DiseaseHistoryAdapter.MyViewHolder>(DiffCallback) {
+class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapter.MyViewHolder>(DiffCallback) {
     class MyViewHolder(private val binding: ItemDiseaseHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
        val date = binding.tvDate
@@ -34,23 +34,22 @@ class DiseaseHistoryAdapter: ListAdapter<Disease,DiseaseHistoryAdapter.MyViewHol
         val properties = getItem(position)
         holder.date.text = properties.createdAt
         holder.slider2.value = properties.probability!!.toFloat()
-        if(properties.probability!!>=15.99&&properties.probability!!<=43.99) {
-            holder.risk.text = "Low Risk"
+        holder.risk.text = properties.probabilityDesc
+        if(properties.probabilityDesc=="Low Risk") {
+
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
         }
-        else if (properties.probability!!<=15.00){
-            holder.risk.text = "NIll"
+        else if (properties.probabilityDesc=="Nil"){
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_gray)
         }
-        else if (properties.probability!!>=44&&properties.probability!!<=72.99){
+        else if (properties.probabilityDesc=="Medium Risk"){
             holder.risk.text = "Medium Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
         }
         else {
-            holder.risk.text = "High Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
         }
-        Glide.with(holder.itemView.context).load(properties.disease.diseaseImg).into(holder.image)
+        Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(holder.image)
         holder.image.setOnClickListener() {
             val dialog = Dialog(holder.itemView.context)
 
@@ -59,30 +58,30 @@ class DiseaseHistoryAdapter: ListAdapter<Disease,DiseaseHistoryAdapter.MyViewHol
             // val body = dialog.findViewById(R.id.body) as TextView
             val close = dialog.findViewById(R.id.closeImage) as ImageView
             val image = dialog.findViewById(R.id.large_image) as ImageView
-            Glide.with(holder.itemView.context).load(properties.disease.diseaseImg).into(image)
+            Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(image)
             close.setOnClickListener { dialog.dismiss() }
             dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
             dialog.show()
 
         }
-        holder.name.text = properties.disease.diseaseName
+        holder.name.text = properties.disease?.diseaseName
     }
 
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Disease>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<DiseaseHistoricData>() {
 
         override fun areItemsTheSame(
-            oldItem: Disease,
-            newItem: Disease
+            oldItem: DiseaseHistoricData,
+            newItem: DiseaseHistoricData
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: Disease,
-            newItem: Disease
+            oldItem: DiseaseHistoricData,
+            newItem: DiseaseHistoricData
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.diseaseId == newItem.diseaseId
         }
     }
 

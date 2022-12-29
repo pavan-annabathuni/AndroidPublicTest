@@ -491,5 +491,12 @@ interface ApiInterface {
         @Query("date")date:String
     ):Response<UpdateCropStage>
 
+    @GET("api/v1/view-crop-disease")
+    suspend fun getDisease(
+        @HeaderMap map: Map<String, String>?,
+        @Query("account_id")accountId: Int,
+        @Query("plot_id")plotId: Int
+    ):Response<PestAndDiseaseModel>
+
 
 }

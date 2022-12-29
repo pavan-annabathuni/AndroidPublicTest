@@ -145,15 +145,16 @@ class MandiFragment : Fragment() {
         //translation()
 
         binding.recycleViewDis.isNestedScrollingEnabled = true
+        mandiApiCall()
+
         apiErrorHandlingBinding.clInternetError.setOnClickListener {
             mandiApiCall()
         }
-        mandiApiCall()
 
     }
 
     private fun mandiApiCall() {
-        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+        if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
             binding.progressBar.visibility = View.GONE
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
@@ -167,6 +168,10 @@ class MandiFragment : Fragment() {
             }
         } else {
             getMandiData(cropCategory, state, crop, sortBy, orderBy)
+            binding.progressBar.visibility = View.GONE
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            binding.addFab.visibility = View.VISIBLE
         }
 
     }
@@ -346,8 +351,9 @@ class MandiFragment : Fragment() {
                 val text = binding.spinner3.selectedItem.toString()
                 if (position > 0) {
                     state = text
+                    getMandiData(cropCategory, state, crop, sortBy, orderBy)
                 } else {
-                    if (state != null) {
+                    if (state == null) {
                         state = ""
                         getMandiData(cropCategory, state, crop, sortBy, orderBy)
                     }
@@ -508,11 +514,8 @@ class MandiFragment : Fragment() {
                     .observe(requireActivity()) {
                         adapterMandi.submitData(lifecycle, it)
                         Handler().postDelayed({
-                            binding.clInclude.visibility = View.GONE
-                            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
                             binding.llPorgressBar.visibility = View.GONE
 
-                            binding.addFab.visibility = View.VISIBLE
 
                         }, 1500)
 

@@ -491,8 +491,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 is Resource.Loading -> {
                                     binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                                 }
                             }

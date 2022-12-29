@@ -634,7 +634,7 @@ class RegistrationFragment : Fragment() {
 
             Log.d("Audio", "audioPlayer: $audioUrl")
             val audio = AudioWife.getInstance()
-                .init(requireContext(), Uri.parse(path))
+                .init(context, Uri.parse(path))
                 .setPlayView(play)
                 .setPauseView(pause)
                 .setSeekBar(mediaSeekbar)

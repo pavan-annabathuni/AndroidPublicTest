@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_nav_farmdetails"
             app:destination="@id/nav_farmdetails" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment3_to_notificationFragment2"
+            app:destination="@id/notificationFragment2" />
     </fragment>
     <fragment
         android:id="@+id/graphsFragment2"
@@ -26,4 +29,9 @@
         tools:layout="@layout/fragment_graphs" />
     <include app:graph="@navigation/irrgation_navigation" />
     <include app:graph="@navigation/nav_farmdetails" />
+    <fragment
+        android:id="@+id/notificationFragment2"
+        android:name="com.waycool.iwap.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
 </navigation>

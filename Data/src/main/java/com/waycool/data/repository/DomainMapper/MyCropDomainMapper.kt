@@ -28,6 +28,8 @@ class MyCropDomainMapper:DomainMapper<MyCropDataDomain,MyCropDataEntity> {
             accountNoId = dto.accountNoId,
             farmId= dto.farmId,
             soilTypeId =dto.soilTypeId,
+            irrigationRequired  =dto.irrigationRequired,
+            disease           =dto.disease,
             cropVarietyId = dto.cropVarietyId,
             idd = dto.cropIdd,
             cropName = dto.cropName,

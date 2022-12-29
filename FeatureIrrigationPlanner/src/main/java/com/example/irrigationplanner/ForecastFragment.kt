@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -88,40 +90,49 @@ class ForecastFragment : Fragment() {
             val data = it.data?.filter {itt->
                 itt.id == plotId
             }
-            if(data!=null) {
+            if(data?.get(0)?.area !=null) {
                 area = data[0].area.toString()
                 length = data.get(0).lenDrip.toString()
                 width = data.get(0).widthDrip.toString()
               areaperPlant = (length.toDouble() * width.toDouble()).toString().trim()
-                mPagerForcastAdapter = PagerForcastAdapter(area,areaperPlant,length,width)
+                mPagerForcastAdapter = PagerForcastAdapter(data.get(0))
             }else{
-                mPagerForcastAdapter = PagerForcastAdapter("","","","")
+                if (data != null) {
+                    mPagerForcastAdapter = PagerForcastAdapter(data.get(0))
+                }
             }
             mPagerForcastAdapter.setListData(irrigation.irrigationForecast!!)
             binding.viewPager.adapter = mPagerForcastAdapter
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                val customView = tab.setCustomView(R.layout.item_tab_irrigation)
-                when (irrigation.irrigationForecast!!.days[position]) {
+               // val customView = tab.setCustomView(R.layout.item_tab_irrigation)
+                val customDate = irrigation.irrigationForecast!!.days[position]
+                val inputDateFormatter: SimpleDateFormat =
+                    SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH)
+                val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("EEE", Locale.ENGLISH)
+                val date: Date = inputDateFormatter.parse(customDate)
+                //Toast.makeText(context, "${outputDateFormatter.format(date)}", Toast.LENGTH_SHORT).show()
+
+                when (outputDateFormatter.format(date)) {
                     "Mon" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Tue" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Wed" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Thu" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Fri" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Sat" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                     "Sun" -> {
-                        tab.text = irrigation.irrigationForecast!!.days[position]
+                        tab.text = outputDateFormatter.format(date).toString()
                     }
                 }
             }.attach()

@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropPremiumBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import java.text.SimpleDateFormat
 import java.util.*
@@ -118,6 +119,8 @@ class AddCropPremiumFragment : Fragment() {
                 accountID = it.data?.accountId
             }
             irrigationTypeSpinner(accountID, crop_id, crop_type)
+
+            irrigationTypeSpinner(crop_id,crop_type)
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
             Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")
         }
@@ -194,7 +197,7 @@ class AddCropPremiumFragment : Fragment() {
         }
     }
 
-    private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
+    private fun irrigationTypeSpinner( crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
         binding.tvSpinner.adapter = arrayAdapter
@@ -263,6 +266,21 @@ class AddCropPremiumFragment : Fragment() {
                             bundle.putString("date", date)
                             bundle.putString("irrigation_selected", irrigation_selected)
                             bundle.putString("numberOfPlanets", numberOfPlanets)
+//                                Toast.makeText(requireContext(), "${account_id} Abd ${accountID}",Toast.LENGTH_SHORT).show()
+
+                                if (accountID != null) {
+                                    bundle.putInt("account_id", accountID!!)
+                                }
+                                if (crop_id != null) {
+                                    bundle.putInt("cropid", crop_id)
+                                }
+                                if (soil_type_id != null) {
+                                    bundle.putInt("crop_type", soil_type_id)
+                                }
+                                bundle.putString("area", area)
+                                bundle.putString("date", date)
+                                bundle.putString("irrigation_selected", irrigation_selected)
+                                bundle.putString("numberOfPlanets", numberOfPlanets)
 
                             findNavController().navigate(
                                 R.id.action_addCropPremiumFragment_to_plantSpacingFragment,
@@ -278,6 +296,20 @@ class AddCropPremiumFragment : Fragment() {
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.setText("Save Crop")
                     itemClicked(account_id, crop_id, soil_type_id, item)
+                                findNavController().navigate(
+                                    R.id.action_addCropPremiumFragment_to_plantSpacingFragment,
+                                    bundle
+                                )
+                            }
+                        }
+                    } else if (colors[2] == (item)) {
+                        Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
+                        Log.d("TAG", "onItemSelectedIrrigationType:$colors")
+                        Log.d("TAG", "onItemSelectedIrrigationType:$item")
+                        binding.clPlotNumber.visibility = View.VISIBLE
+                        binding.plotNumber.visibility = View.VISIBLE
+                        binding.tvCheckCrop.setText("Save Crop")
+                        itemClicked(accountID, crop_id,soil_type_id,item)
 //                    else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 2", Toast.LENGTH_SHORT).show()
 //                    }
@@ -288,6 +320,11 @@ class AddCropPremiumFragment : Fragment() {
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.setText("Save Crop")
                     itemClicked(account_id, crop_id, soil_type_id, item)
+                    } else if (colors[3] == (item)) {
+                        binding.clPlotNumber.visibility = View.VISIBLE
+                        binding.plotNumber.visibility = View.VISIBLE
+                        binding.tvCheckCrop.setText("Save Crop")
+                        itemClicked(accountID, crop_id,soil_type_id,item)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
 //                    }
@@ -327,7 +364,7 @@ class AddCropPremiumFragment : Fragment() {
                 binding.etCalender.error = "Pick up the Date"
                 return@setOnClickListener
             } else if (accountID == null) {
-                Toast.makeText(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT).show()
+                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
             } else if (numberOfPlanets.isEmpty()) {
                 binding.etNoOfAcre.error = "Enter Number of Planets"
                 return@setOnClickListener
@@ -355,19 +392,19 @@ class AddCropPremiumFragment : Fragment() {
                             activity?.finish()
                         }
                         is Resource.Error -> {
-                            Toast.makeText(
+                            ToastStateHandling.toastError(
                                 requireContext(),
                                 it.message.toString(),
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
                             Log.d(
                                 ContentValues.TAG,
                                 "postAddCropExption: ${it.message.toString()}"
                             )
                         }
                         is Resource.Loading -> {
-                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                .show()
+                            ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+
 
                         }
                     }

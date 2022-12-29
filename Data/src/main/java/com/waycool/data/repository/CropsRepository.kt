@@ -2,6 +2,7 @@ package com.waycool.data.repository
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
@@ -47,21 +48,21 @@ object CropsRepository {
     }
 
     fun getSoilType(): Flow<Resource<List<SoilTypeDomain>?>> {
-        return  AddCropTypeSyncer().getData().map {
-                when (it) {
-                    is Resource.Success -> {
-                        Resource.Success(
-                            AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
-                        )
-                    }
-                    is Resource.Loading -> {
-                        Resource.Loading()
-                    }
-                    is Resource.Error -> {
-                        Resource.Error(it.message)
-                    }
+        return AddCropTypeSyncer().getData().map {
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(
+                        AddCropTypeDomainMapper().toDomainList(it.data ?: emptyList())
+                    )
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
                 }
             }
+        }
     }
 
 
@@ -369,7 +370,10 @@ object CropsRepository {
         map: MutableMap<String, Any> = mutableMapOf<String, Any>()
     ): Flow<Resource<AddCropResponseDTO?>> {
         GlobalScope.launch {
-            MyCropSyncer().invalidateSync()
+            MyCropSyncer().apply {
+                invalidateSync()
+                getMyCrop()
+            }
         }
         return NetworkSource.addCropDataPass(map)
     }
@@ -382,20 +386,20 @@ object CropsRepository {
                 DashboardSyncer().invalidateSync()
                 DashboardSyncer().getData()
             }
-        },500)
+        }, 500)
         return NetworkSource.activateDevice(map)
     }
 
     fun verifyQR(deviceNumber: String, isQR: Int): Flow<Resource<VerifyQrDomain?>> {
         return NetworkSource.verifyQR(deviceNumber, isQR).map {
-            when(it){
-                is Resource.Success->{
-                    Resource.Success(VerifyQrDomainMapper().mapToDomain(it.data?:VerifyQrDTO()))
+            when (it) {
+                is Resource.Success -> {
+                    Resource.Success(VerifyQrDomainMapper().mapToDomain(it.data ?: VerifyQrDTO()))
                 }
-                is Resource.Loading->{
+                is Resource.Loading -> {
                     Resource.Loading()
                 }
-                is Resource.Error->{
+                is Resource.Error -> {
                     Resource.Error(it.message)
                 }
             }
@@ -548,14 +552,20 @@ object CropsRepository {
         return MyCropSyncer().getMyCrop().map {
             when (it) {
                 is Resource.Success -> {
+                    Log.d("MyCrops", " ${it.data}")
+
                     Resource.Success(
                         MyCropDomainMapper().toDomainList(it.data ?: emptyList())
                     )
                 }
                 is Resource.Loading -> {
+                    Log.d("MyCrops", " ${it.data}")
+
                     Resource.Loading()
                 }
                 is Resource.Error -> {
+                    Log.d("MyCrops", " ${it.message}")
+
                     Resource.Error(it.message)
                 }
             }

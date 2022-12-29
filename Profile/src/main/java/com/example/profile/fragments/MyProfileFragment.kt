@@ -18,7 +18,10 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
+import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
@@ -62,6 +65,10 @@ class MyProfileFragment : Fragment() {
         //viewModel.getUsers()
         // viewModel.getUserDetails()
 
+        binding.llInviteFarmer.setOnClickListener {
+            shareInviteLink()
+        }
+
         viewModel.viewModelScope.launch {
             appVer = TranslationsManager().getString("str_app_ver")
             binding.version.text = "$appVer ${com.example.profile.BuildConfig.VERSION_NAME}"
@@ -93,6 +100,35 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
+    private fun shareInviteLink() {
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setTitle("Outgrow sends an invitation for you to join us and grow with us")
+                    .setDescription("Outgrow app-Let's grow together")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                }
+            }
+    }
+
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             binding.clInclude.visibility = View.VISIBLE
@@ -118,6 +154,11 @@ class MyProfileFragment : Fragment() {
     fun observer(): Boolean {
         viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
+                  if(it.data?.data?.account?.get(0)?.subscription == 0){
+                      binding.llFarmSupport.visibility = View.GONE
+                  }else{
+                      binding.llFarmSupport.visibility = View.VISIBLE
+                  }
                   binding.username.text = it.data?.data?.name
                   binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
                   if(it.data?.data?.profile?.remotePhotoUrl!=null) {
@@ -132,21 +173,21 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun onClick() {
-        binding.ll1.setOnClickListener() {
+        binding.llMyProfile.setOnClickListener() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToEditProfileFragment())
         }
-        binding.ll3.setOnClickListener() {
+        binding.llFarmSupport.setOnClickListener() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToFarmSupportFragment())
         }
-        binding.ll4.setOnClickListener() {
+   /*     binding.ll4.setOnClickListener() {
             ShareCompat.IntentBuilder.from(requireActivity())
                 .setType("text/plain")
                 .setChooserTitle("Chooser title")
                 .setText("http://play.google.com/store/apps/details?id=" + requireActivity().getPackageName())
                 .startChooser();
-        }
+        }*/
         binding.rateUs.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
             startActivity(intent)
@@ -167,7 +208,7 @@ class MyProfileFragment : Fragment() {
             requireActivity().startActivity(intent)
 
         }
-        binding.ll5.setOnClickListener(){
+        binding.llAboutOutgrow.setOnClickListener(){
             this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
 
@@ -176,74 +217,9 @@ class MyProfileFragment : Fragment() {
 
         binding.cvChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
-//            Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),
-//            AppSecrets.getChatAppId())
-//            val chatConfiguration = ChatConfiguration.builder()
-//                .withAgentAvailabilityEnabled(false)
-//                .withTranscriptEnabled(false)
-//                .build()
-//            val visitorInfo: VisitorInfo = VisitorInfo.builder()
-//                .withName("Bob")
-//                .withEmail("bob@example.com")
-//                .withPhoneNumber("123456") // numeric string
-//                .build();
-
-
-//            var jwtAuthenticator =  JwtAuthenticator {
-//                it.onTokenLoaded("eyJpdiI6IjBGN0lWQ1d3N0tQS0lreHRMNWVKV0E9PSIsInZhbHVlIjoib2VsYU5OVjJqdVBNRWZyMkpJcWVyQT09IiwibWFjIjoiYTJmODA4Y2ExOTg1NWRkNjNhNGUwYWJjZTcyYWJmNTNiNjJiN2I2Y2NiZWRkMWEwZjE2ZGY3ODAyZDViYzlkZiIsInRhZyI6IiJ9")
-//                it.onError()
-//                Log.d("JWT", "onClick: $jwtToken")
-//            }
-
-//           val jwtAuthenticator =
-//                JwtAuthenticator { jwtCompletion -> //Fetch or generate the JWT token at this point
-//                    //OnSuccess
-//                    jwtCompletion.onTokenLoaded("")
-//                    //OnError
-//                    jwtCompletion.onError()
-  //              }
-
-//                Chat.INSTANCE.init(requireContext(),AppSecrets.getAccountKey(),AppSecrets.getChatAppId())
-//                val jwtAuth = JwtAuth()
-//                Chat.INSTANCE.setIdentity(jwtAuth)
-//
-//         //   Chat.INSTANCE.setIdentity(jwtAuthenticator)
-//
-//            val chatProvidersConfiguration: ChatProvidersConfiguration = ChatProvidersConfiguration.builder()
-////                .withVisitorInfo(visitorInfo)
-//                .withDepartment("English Language Group")
-//                .build()
-//
-//            Chat.INSTANCE.setChatProvidersConfiguration(chatProvidersConfiguration)
-//
-//
-//
-//            MessagingActivity.builder()
-//                .withEngines(ChatEngine.engine())
-//                .show(requireContext(), chatConfiguration);
-
         }
-//        binding.rateUs.setOnClickListener(){
-//            val reviewManager = ReviewManagerFactory.create(requireContext())
-//            val requestReviewFlow = reviewManager.requestReviewFlow()
-//            requestReviewFlow.addOnCompleteListener { request ->
-//                if (request.isSuccessful) {
-//                    // We got the ReviewInfo object
-//                    val reviewInfo = request.result
-//                    val flow = reviewManager.launchReviewFlow(requireActivity(), reviewInfo)
-//                    flow.addOnCompleteListener {
-//                        // The flow has finished. The API does not indicate whether the user
-//                        // reviewed or not, or even whether the review dialog was shown. Thus, no
-//                        // matter the result, we continue our app flow.
-//                    }
-//                } else {
-//                    Log.d("Error: ", request.exception.toString())
-//                    // There was some problem, continue regardless of the result.
-//                }
-//            }
-//        }
 
-        binding.ll2.setOnClickListener() {
+        binding.llLanguage.setOnClickListener() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToLanguageFragment3())
         }
@@ -258,11 +234,13 @@ class MyProfileFragment : Fragment() {
                             loginViewModel.setIsLoggedIn(false)
                             FeatureChat.zendeskLogout()
 
-                            Toast.makeText(
-                                context,
-                                "Successfully Logout",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            context?.let { it1 ->
+                                ToastStateHandling.toastSuccess(
+                                    it1,
+                                    "Successfully Logout",
+                                    Toast.LENGTH_LONG
+                                )
+                            }
 
                         }
                     moveToLogin()
@@ -284,6 +262,7 @@ class MyProfileFragment : Fragment() {
             CropInformationSyncer().invalidateSync()
             TagsSyncer().invalidateSync()
             PestDiseaseSyncer().invalidateSync()
+            DataStoreManager.clearData()
 
         }
     }

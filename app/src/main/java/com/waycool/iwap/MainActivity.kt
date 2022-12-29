@@ -21,6 +21,7 @@ import com.example.soiltesting.utils.Constant
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.CropProtectActivity
@@ -133,8 +134,7 @@ class MainActivity : AppCompatActivity() {
                     if (it.data?.status == true) {
 //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                     } else if (it.data?.status == false) {
-                        Toast.makeText(this, "Account Login Anther Device", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(this, "Account Logged in Another Device", Toast.LENGTH_SHORT)
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {
@@ -224,6 +224,7 @@ class MainActivity : AppCompatActivity() {
         // Setup the bottom navigation view with navController
         val bottomNavigationView = binding.activityMainBottomNavigationView
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.itemIconTintList=null
 
         val graphInflater = navHostFragment.navController.navInflater
         val navGraph = graphInflater.inflate(R.navigation.nav_main)

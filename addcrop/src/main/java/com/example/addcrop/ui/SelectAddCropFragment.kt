@@ -17,14 +17,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -146,11 +150,11 @@ class SelectAddCropFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
             }
@@ -209,7 +213,7 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "Error Occurred", Toast.LENGTH_SHORT).show()
+                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
         }
@@ -226,7 +230,9 @@ class SelectAddCropFragment : Fragment() {
             RecognizerIntent.EXTRA_LANGUAGE,
             Locale.getDefault()
         )
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
+        viewModel.viewModelScope.launch {
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, SpeechToText.getLangCode())
+        }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {

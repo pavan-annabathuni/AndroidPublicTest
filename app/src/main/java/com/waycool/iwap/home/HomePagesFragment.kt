@@ -7,6 +7,8 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -41,6 +44,7 @@ import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -49,6 +53,7 @@ import com.waycool.featurecrophealth.CropHealthActivity
 import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
+import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -59,6 +64,9 @@ import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.Dispatchers
 import com.waycool.weather.utils.WeatherIcons
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
@@ -68,7 +76,8 @@ import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
-    private var selectedFarm: MyFarmsDomain?=null
+    private var dashboardDomain: DashboardDomain? = null
+    private var selectedFarm: MyFarmsDomain? = null
     private lateinit var videosBinding: GenericLayoutVideosListBinding
     private lateinit var newsBinding: GenericLayoutNewsListBinding
 
@@ -97,6 +106,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
+    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
+
 
     //    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 //    private val mandiAdapter = MandiHomePageAdapter()
@@ -260,10 +271,21 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         })
 
         mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,0)
+
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory, state,
+                crop,
+                sortBy,
+                orderBy,
+                search,
+                0
+            )
                 .observe(viewLifecycleOwner) {
                     mandiAdapter.submitData(lifecycle, it)
-            }
+
+                }
         }
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -309,12 +331,42 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             mMap?.uiSettings?.setAllGesturesEnabled(false)
             mMap?.uiSettings?.isMapToolbarEnabled = false
         }
+
+        getDashBoard()
+
     }
+
+    private fun getDashBoard() {
+
+        tokenCheckViewModel.getDasBoard().observe(viewLifecycleOwner) {
+
+            dashboardDomain = it.data
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("dashboard", "${it.data?.subscription?.iot}")
+                    if (it.data?.subscription?.iot == true) {
+                        binding.clAddYourFarm.visibility = View.GONE
+                        binding.tvWelcomeName.visibility = View.INVISIBLE
+                        binding.tvGoodMorning.visibility = View.INVISIBLE
+                        binding.IvNotification.visibility = View.GONE
+
+                    }
+                }
+                is Resource.Loading -> {
+
+
+                }
+                is Resource.Error -> {
+                }
+            }
+        }
+    }
+
 
     private fun networkNewsCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             newsBinding.videoCardNoInternet.visibility = View.VISIBLE
-            newsBinding.noDataNews.visibility=View.GONE
+            newsBinding.noDataNews.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
             context?.let {
@@ -333,7 +385,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun networkCall() {
-        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+        if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
             videosBinding.videoCardNoInternet.visibility = View.VISIBLE
             videosBinding.videosListRv.visibility = View.GONE
             videosBinding.viewAllVideos.visibility = View.GONE
@@ -367,7 +419,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         farmsAdapter.submitList(it.data)
                         farmsAdapter.onItemClick = { farm ->
-                            selectedFarm=farm
+                            selectedFarm = farm
                             populateMyFarm()
                         }
                     } else {
@@ -404,9 +456,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
         binding.farmnameHome.text = selectedFarm?.farmName
 
         binding.farmsDetailsCl.setOnClickListener {
-            val bundle=Bundle()
-            bundle.putParcelable("farm",selectedFarm)
-            findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails,bundle)
+            val bundle = Bundle()
+            bundle.putParcelable("farm", selectedFarm)
+            findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
         }
         drawFarmBoundaries(selectedFarm?.farmJson)
 //                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
@@ -522,55 +574,94 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
     private fun setNews() {
         val adapter = NewsGenericAdapter()
         newsBinding.newsListRv.adapter = adapter
-        viewModel.getVansNewsList("49").observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
-            /*     if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)!=0){
-                           newsBinding.noDataNews.visibility=View.VISIBLE
-                       }
-                       else{
-                           newsBinding.noDataNews.visibility=View.GONE
-                           newsBinding.videoCardNoInternet.visibility=View.GONE
-                           newsBinding.newsListRv.visibility=View.VISIBLE
-                           adapter.submitData(lifecycle, it)
-                       }*/
+        lifecycleScope.launch((Dispatchers.Main)) {
+            viewModel.getVansNewsList(module_id).collect {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    newsBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    newsBinding.noDataNews.visibility = View.GONE
+                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                } else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.NotLoading) {
+
+                                    if (adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        newsBinding.noDataNews.visibility = View.GONE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+            newsBinding.viewAllNews.setOnClickListener {
+                val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+                startActivity(intent)
+            }
+
+            adapter.onItemClick = {
+                val bundle = Bundle()
+                bundle.putString("title", it?.title)
+                bundle.putString("content", it?.desc)
+                bundle.putString("image", it?.thumbnailUrl)
+                bundle.putString("audio", it?.audioUrl)
+                bundle.putString("date", it?.startDate)
+                bundle.putString("source", it?.sourceName)
+                findNavController().navigate(
+                    R.id.action_homePagesFragment_to_newsFullviewActivity2,
+                    bundle
+                )
+            }
+
         }
-
-        newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
-            startActivity(intent)
-        }
-
-        adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putString("title", it?.title)
-            bundle.putString("content", it?.desc)
-            bundle.putString("image", it?.thumbnailUrl)
-            bundle.putString("audio", it?.audioUrl)
-            bundle.putString("date", it?.startDate)
-            bundle.putString("source", it?.sourceName)
-
-            findNavController().navigate(R.id.action_homePagesFragment_to_newsFullviewActivity2, bundle)
-        }
-
     }
-
-
     private fun setVideos() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
-            adapter.submitData(lifecycle, it)
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(module_id).collect {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                } else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.NotLoading) {
+                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
+
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
 
 
-//            if (adapter.snapshot().size==0&&NetworkUtil.getConnectivityStatusString(context)!=0){
-//                videosBinding.noDataVideo.visibility=View.VISIBLE
-//            }
-//            else{
-//                videosBinding.noDataVideo.visibility=View.GONE
-//                videosBinding.videoCardNoInternet.visibility=View.GONE
-//                videosBinding.videosListRv.visibility=View.VISIBLE
-//                adapter.submitData(lifecycle, it)
-//            }
+                }
+
+
+
+            }
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
@@ -580,7 +671,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
-              R.id.action_homePagesFragment_to_playVideoFragment4,
+                R.id.action_homePagesFragment_to_playVideoFragment4,
                 bundle
             )
         }
@@ -620,17 +711,31 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 //                    Glide.with(requireContext())
 //                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
 //                        .into(binding.ivWeather)
-                binding.tvHumidityDegree.text =
-                    String.format("%.0f", it.data?.current?.humidity) + "%"
+                    binding.tvHumidityDegree.text =
+                        String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
 
-                    if (!it.data?.current?.weather.isNullOrEmpty()) {
-                        it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
-                            WeatherIcons.setWeatherIcon(
-                                it1, binding.ivWeather
-                            )
+                if (!it.data?.current?.weather.isNullOrEmpty()) {
+                    it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
+                        WeatherIcons.setWeatherIcon(
+                            it1, binding.ivWeather
+                        )
 
+                        val date: Long? = it.data?.current?.dt?.times(1000L)
+                        val dateTime = Date()
+                        if (date != null) {
+                            dateTime.time = date
+                        }
+                        val formatter =
+                            SimpleDateFormat(
+                                "EE d,MMM",
+                                Locale.ENGLISH
+                            )//or use getDateInstance()
+                        val formatedDate = formatter.format(dateTime)
+                        binding.tvDay.text = "Today $formatedDate"
+                    }
+                }
                             val date: Long? = it.data?.current?.dt?.times(1000L)
                             val dateTime = Date()
                             if (date != null) {

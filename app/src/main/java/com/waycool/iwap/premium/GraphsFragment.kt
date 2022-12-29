@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
@@ -44,6 +46,16 @@ class GraphsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@GraphsFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         _binding = FragmentGraphsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -449,7 +461,7 @@ class GraphsFragment : Fragment() {
 //                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                         }
                         is Resource.Loading -> {
-                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                            ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                         }
                     }

@@ -90,12 +90,11 @@ class PestDiseaseFragment : Fragment() {
                             adapter.submitList(it.data)
                     }
                     is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading.", Toast.LENGTH_SHORT).show()
+                        ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-                            .show()
+                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
 
                     }
                 }
