@@ -12,6 +12,7 @@ object WeatherRepository {
 
     fun getWeather(lat:String,lon:String,lang:String="en"): Flow<Resource<WeatherMasterDomain?>> {
         return WeatherSyncer().getData(lat, lon, lang).map {
+            Log.d("Weather","W1")
             when (it) {
                 is Resource.Success -> {
                     Log.d("Weather",it.data.toString())

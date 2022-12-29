@@ -22,11 +22,13 @@ import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.AdBannerImage
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
 import com.waycool.featurechat.FeatureChat
 import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
+import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
@@ -36,7 +38,9 @@ import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlin.math.roundToInt
 
 
-class CropInfoFragment : Fragment() {
+class CropInfoFragment : Fragment(), onItemClick {
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
+    private lateinit var newsBinding: GenericLayoutNewsListBinding
     private lateinit var binding: FragmentCropInfoBinding
     private val ViewModel: TabViewModel by lazy {
         ViewModelProviders.of(this).get(TabViewModel::class.java)
@@ -86,9 +90,20 @@ class CropInfoFragment : Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+         newsBinding = binding.layoutNews
+         videosBinding = binding.layoutVideos
+
         binding.topName.text = cropName
         binding.back.setOnClickListener() {
             findNavController().popBackStack()
+        }
+        newsBinding.viewAllNews.setOnClickListener {
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
         }
 
         setTabs()
@@ -426,8 +441,7 @@ class CropInfoFragment : Fragment() {
     }
 
     private fun setNews() {
-        val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
-        val adapter = NewsGenericAdapter()
+        val adapter = NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         ViewModel.getVansNewsList(cropId,module_id).observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
@@ -442,30 +456,13 @@ class CropInfoFragment : Fragment() {
 
         }
 
-        newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
-            startActivity(intent)
-        }
 
-        adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putString("title", it?.title)
-            bundle.putString("content", it?.desc)
-            bundle.putString("image", it?.thumbnailUrl)
-            bundle.putString("audio", it?.audioUrl)
-            bundle.putString("date", it?.startDate)
-            bundle.putString("source", it?.sourceName)
 
-            findNavController().navigate(
-                R.id.action_cropInfoFragment_to_newsFullviewActivity,
-                bundle
-            )
-        }
+
 
     }
 
     private fun setVideos() {
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         ViewModel.getVansVideosList(cropId.toString(),module_id).observe(requireActivity()) {
@@ -481,10 +478,7 @@ class CropInfoFragment : Fragment() {
                }*/
         }
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
+
 
         adapter.onItemClick = {
             val bundle = Bundle()
@@ -551,6 +545,21 @@ class CropInfoFragment : Fragment() {
     private fun translation(){
         TranslationsManager().loadString("str_title",binding.textView2)
       //  TranslationsManager().loadString("str_video")
+    }
+
+    override fun onItemClickListener(it: VansFeederListDomain?) {
+        val bundle = Bundle()
+        bundle.putString("title", it?.title)
+        bundle.putString("content", it?.desc)
+        bundle.putString("image", it?.thumbnailUrl)
+        bundle.putString("audio", it?.audioUrl)
+        bundle.putString("date", it?.startDate)
+        bundle.putString("source", it?.sourceName)
+
+        findNavController().navigate(
+            R.id.action_cropInfoFragment_to_newsFullviewActivity,
+            bundle
+        )
     }
 
 }
