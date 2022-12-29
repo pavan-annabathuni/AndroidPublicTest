@@ -1,6 +1,7 @@
 package com.waycool.featurelogin.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class LanguageFragment : Fragment() {
         binding.languageRecyclerview.adapter = languageSelectionAdapter
 
 
+
         apiCall(apiErrorHandlingBinding,languageSelectionAdapter!!)
           languageSelectionAdapter!!.onItemClick = {
             selectedLanguage = it
@@ -76,7 +78,8 @@ class LanguageFragment : Fragment() {
         apiErrorHandlingBinding: ApiErrorHandlingBinding,
         languageSelectionAdapter: LanguageSelectionAdapter
     ) {
-        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+        if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+            Log.d("NetworkUtil","NetworkNotString${NetworkUtil.getConnectivityStatusString(context)}")
             binding.clInclude.visibility=View.VISIBLE
             binding.progressBar.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
@@ -86,13 +89,13 @@ class LanguageFragment : Fragment() {
             binding.selectLanguageTv.visibility=View.GONE
         }
         else {
-            binding.progressBar.visibility=View.VISIBLE
+            Log.d("NetworkUtil","NetworkElseString${NetworkUtil.getConnectivityStatusString(context)}")
 
+            binding.progressBar.visibility=View.VISIBLE
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
                         binding.clInclude.visibility=View.GONE
-
                         binding.progressBar.visibility=View.GONE
                         binding.doneBtn.visibility=View.VISIBLE
                         binding.helloTv.visibility=View.VISIBLE
