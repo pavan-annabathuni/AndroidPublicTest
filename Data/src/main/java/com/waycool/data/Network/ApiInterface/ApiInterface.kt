@@ -187,7 +187,8 @@ interface ApiInterface {
         @Field("state") state: String,
         @Field("district") district: String,
         @Field("number") number: String?,
-        @Field("crop_id")crop_id:Int
+        @Field("crop_id")plot_id:Int
+
     ): Response<SoilTestResponseDTO>
 
 

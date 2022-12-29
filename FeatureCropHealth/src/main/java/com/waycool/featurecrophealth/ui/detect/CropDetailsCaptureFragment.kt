@@ -158,7 +158,7 @@ class CropDetailsCaptureFragment : Fragment() {
         else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
             val uri: Uri? = data?.data
             selecteduri = uri!!
-            Log.d(TAG, "onActivityResultDataResultURi:$selecteduri ")
+            Log.d("crophealth", "onActivityResultDataResultURi:$selecteduri ")
 //            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
 
             Log.d(TAG, "onActivityResultUri: $uri")

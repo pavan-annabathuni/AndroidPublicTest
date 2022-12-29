@@ -139,6 +139,8 @@ dependencies {
 
     implementation 'com.github.Gruzer:simple-gauge-android:0.3.1'
 
+    implementation 'net.the4thdimension:audio-wife:1.0.3'
+
 }
 repositories {
     mavenCentral()

@@ -1,6 +1,7 @@
 package com.waycool.iwap.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class FarmsAdapter(val context: Context) :
     inner class ViewHolder(val binding: ItemFlexBoxAddFormBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(farm: MyFarmsDomain) {
+
             binding.skillName.text = farm.farmName
             if (layoutPosition == selectedPosition) {
                 binding.clTop.backgroundTintList =

@@ -45,6 +45,7 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -56,6 +57,7 @@ import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
+import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
@@ -74,7 +76,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-class HomePagesFragment : Fragment(), OnMapReadyCallback {
+class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
     private var dashboardDomain: DashboardDomain? = null
     private var selectedFarm: MyFarmsDomain? = null
@@ -130,8 +132,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             if (value != "true")
                 findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
         }
-        videosBinding = binding.layoutVideos
         newsBinding = binding.layoutNews
+
+        videosBinding = binding.layoutVideos
 
         return binding.root
     }
@@ -153,6 +156,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     args
                 )
         })
+        newsBinding.viewAllNews.setOnClickListener {
+            val intent = Intent(context, NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
 
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
@@ -380,6 +391,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
             newsBinding.videoCardNoInternet.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.VISIBLE
             newsBinding.viewAllNews.visibility = View.VISIBLE
+            newsBinding.viewAllNews.isClickable=true
             setNews()
         }
     }
@@ -572,7 +584,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setNews() {
-        val adapter = NewsGenericAdapter()
+        val  adapter=NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
             viewModel.getVansNewsList(module_id).collect {
@@ -603,24 +615,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-            newsBinding.viewAllNews.setOnClickListener {
-                val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
-                startActivity(intent)
-            }
 
-            adapter.onItemClick = {
-                val bundle = Bundle()
-                bundle.putString("title", it?.title)
-                bundle.putString("content", it?.desc)
-                bundle.putString("image", it?.thumbnailUrl)
-                bundle.putString("audio", it?.audioUrl)
-                bundle.putString("date", it?.startDate)
-                bundle.putString("source", it?.sourceName)
-                findNavController().navigate(
-                    R.id.action_homePagesFragment_to_newsFullviewActivity2,
-                    bundle
-                )
-            }
+
 
         }
     }
@@ -663,10 +659,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
 
             }
         }
+
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
+
         adapter.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
@@ -1121,6 +1119,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                 )
             }
         }
+    }
+
+    override fun onItemClickListener(it: VansFeederListDomain?) {
+        val bundle = Bundle()
+        bundle.putString("title", it?.title)
+        bundle.putString("content", it?.desc)
+        bundle.putString("image", it?.thumbnailUrl)
+        bundle.putString("audio", it?.audioUrl)
+        bundle.putString("date", it?.startDate)
+        bundle.putString("source", it?.sourceName)
+        findNavController().navigate(
+            R.id.action_homePagesFragment_to_newsFullviewActivity2,
+            bundle
+        )
     }
 
 

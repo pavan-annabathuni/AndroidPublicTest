@@ -29,8 +29,13 @@ import kotlin.math.roundToInt
 
 
 class CropHealthFragment : Fragment() {
+
    private lateinit var binding: FragmentCropHealthBinding
 //    private val binding get() = binding!!
+
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
+ 
+
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var module_id = "3"
 
@@ -50,10 +55,19 @@ class CropHealthFragment : Fragment() {
 //        initView()
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        videosBinding = binding.layoutVideos
+
         apiErrorHandlingBinding = binding.errorState
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
+        }
+        binding.tvViewAll.setOnClickListener {
+            findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
+        }
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
         }
 
         historyAdapter = AiCropHistoryAdapter(requireContext())
@@ -69,9 +83,7 @@ class CropHealthFragment : Fragment() {
 
             }
         }
-        binding.tvViewAll.setOnClickListener {
-            findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
-        }
+
 
 
 
@@ -127,7 +139,6 @@ class CropHealthFragment : Fragment() {
 
     private fun getVideos() {
         binding.clProgressBar.visibility=View.VISIBLE
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList(module_id).observe(requireActivity()) {
@@ -157,10 +168,7 @@ class CropHealthFragment : Fragment() {
             )
         }
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
+
 
         videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 

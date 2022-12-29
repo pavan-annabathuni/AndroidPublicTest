@@ -216,26 +216,34 @@ class WeatherFragment : Fragment() {
 
             it.data?.profile?.lat?.let { it1 ->
                 it.data?.profile?.long?.let { it2 ->
-                    viewModel.getWeather(it1, it2).observe(requireActivity()) {
+                    viewModel.getWeather(it1, it2).observe(requireActivity()) { it ->
 
                         if (it?.data != null) {
-                            WeatherIcons.setWeatherIcon(it.data?.current?.weather?.get(0)?.icon.toString(),binding.weatherIcon)
-                            //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
-                            binding.weatherMaster = it.data
+                          /*  if(!it.data?.current?.weather.isNullOrEmpty()) {
+                                WeatherIcons.setWeatherIcon(
+                                    it.data?.current?.weather?.get(0)?.icon.toString(),
+                                    binding.weatherIcon
+                                )
+                                //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
+                                binding.weatherMaster = it.data
+                            }*/
 
-                            if (null != it) {
-                                val date: Long? = it.data?.current?.dt?.times(1000L)
-                                val dateTime = Date()
-                                if (date != null) {
-                                    dateTime.time = date
-                                }
-                                val formatter =
-                                    SimpleDateFormat("EE, d MMMM", Locale.ENGLISH)//or use getDateInstance()
-                                val formatedDate = formatter.format(dateTime)
-                                binding.date.text = formatedDate
+                            val date: Long? = it.data?.current?.dt?.times(1000L)
+                            val dateTime = Date()
+                            if (date != null) {
+                                dateTime.time = date
                             }
-                            // binding.icon22.text = it.data?.current?.weather?.get(0)?.description
-                            if (it.data?.current?.weather?.isEmpty() == false)
+                            val formatter =
+                                SimpleDateFormat("EE, d MMMM", Locale.ENGLISH)//or use getDateInstance()
+                            val formatedDate = formatter.format(dateTime)
+                            binding.date.text = formatedDate
+                            if (!it.data?.current?.weather.isNullOrEmpty()) {
+                                WeatherIcons.setWeatherIcon(
+                                    it.data?.current?.weather?.get(0)?.icon.toString(),
+                                    binding.weatherIcon
+                                )
+                                //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
+                                binding.weatherMaster = it.data
                                 when (it.data?.current?.weather?.get(0)?.id) {
                                     200 -> {
                                         binding.tvTodayTips.text =
@@ -281,7 +289,7 @@ class WeatherFragment : Fragment() {
                                     212 -> {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
-                                      //   binding.icon2.setTextColor(Color.parseColor(red))
+                                        //   binding.icon2.setTextColor(Color.parseColor(red))
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_warning, 0, 0, 0
                                         )
@@ -297,7 +305,7 @@ class WeatherFragment : Fragment() {
                                     230 -> {
                                         binding.tvTodayTips.text =
                                             it.data?.current?.weather?.get(0)?.description
-                                      //  binding.icon2.setTextColor(Color.parseColor(yellow))
+                                        //  binding.icon2.setTextColor(Color.parseColor(yellow))
                                         binding.icon2.setCompoundDrawablesWithIntrinsicBounds(
                                             R.drawable.ic_circle_exclamation_brown, 0, 0, 0
                                         )
@@ -571,6 +579,7 @@ class WeatherFragment : Fragment() {
 
                                     }
                                 }
+                            }
                         }
                     }
                 }

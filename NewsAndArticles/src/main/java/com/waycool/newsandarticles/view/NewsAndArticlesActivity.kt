@@ -28,8 +28,8 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -38,18 +38,17 @@ import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.AdsAdapter
-import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
+import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import kotlinx.coroutines.launch
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 
-class NewsAndArticlesActivity : AppCompatActivity() {
+class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     private var searchTag: CharSequence? = ""
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
@@ -88,7 +87,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
 
         binding.videosVideoListRv.layoutManager = LinearLayoutManager(this)
 
-        newsAdapter = NewsPagerAdapter(this)
+        newsAdapter = NewsPagerAdapter(this,this)
         binding.videosVideoListRv.adapter = newsAdapter
 
         handler = Handler(Looper.myLooper()!!)
@@ -146,61 +145,7 @@ class NewsAndArticlesActivity : AppCompatActivity() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        newsAdapter.onItemShareClick = {
-            FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
-                .setAndroidParameters(
-                    DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                        .build()
-                )
-                .setSocialMetaTagParameters(
-                    DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
-                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
-                        .setDescription("Watch more videos and learn with Outgrow")
-                        .build()
-                )
-                .buildShortDynamicLink().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val shortLink: Uri? = task.result.shortLink
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        sendIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-                    }
-                }
-
-            Firebase.dynamicLinks
-                .getDynamicLink(intent)
-                .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                    // Get deep link from result (may be null if no link is found)
-                    var deepLink: Uri? = null
-                    if (pendingDynamicLinkData != null) {
-                        deepLink = pendingDynamicLinkData.link
-                    }
-                    if (deepLink != null) {
-
-                        val intent =
-                            Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-                .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
-        }
-        newsAdapter.onItemClick = {
-            val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
-            intent.putExtra("title", it?.title)
-            intent.putExtra("content", it?.desc)
-            intent.putExtra("image", it?.thumbnailUrl)
-            intent.putExtra("audio", it?.audioUrl)
-            intent.putExtra("date", it?.startDate)
-            intent.putExtra("source", it?.sourceName)
-            startActivity(intent)
-        }
 
         binding.micBtn.setOnClickListener { speechToText() }
     }
@@ -400,4 +345,62 @@ class NewsAndArticlesActivity : AppCompatActivity() {
     companion object {
         private val REQUEST_CODE_SPEECH_INPUT = 1
     }
+
+    override fun onItemClick(it: VansFeederListDomain?) {
+        val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+        intent.putExtra("title", it?.title)
+        intent.putExtra("content", it?.desc)
+        intent.putExtra("image", it?.thumbnailUrl)
+        intent.putExtra("audio", it?.audioUrl)
+        intent.putExtra("date", it?.startDate)
+        intent.putExtra("source", it?.sourceName)
+        startActivity(intent)
+    }
+
+    override fun onShareItemClick(it: VansFeederListDomain?) {
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                        .setDescription("Watch more videos and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                    }
+                }
+
+            Firebase.dynamicLinks
+                .getDynamicLink(intent)
+                .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+                    // Get deep link from result (may be null if no link is found)
+                    var deepLink: Uri? = null
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.link
+                    }
+                    if (deepLink != null) {
+
+                        val intent =
+                            Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
+        }
+
 }

@@ -2,7 +2,6 @@ package com.waycool.newsandarticles.adapter
 
 import android.R
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,13 +18,14 @@ import com.waycool.newsandarticles.databinding.ViewholderNewsArticlesListBinding
 
 class NewsPagerAdapter(
     private val context: Context,
+    private val onItemClick:onItemClickNews,
     private val selectedNews: VansFeederListDomain? = null
 ) :
     PagingDataAdapter<VansFeederListDomain, NewsPagerAdapter.VideosViewHolder>(COMPARATOR) {
     private var lastPosition = -1
 
-    var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
-    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null
+   /* var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
+    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null*/
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
@@ -59,19 +59,11 @@ class NewsPagerAdapter(
                 .into(itemBinding.newsListImage)
 
             itemBinding.share.setOnClickListener {
-                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
-          /*      val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                val sharetext =
-                    """Hi, Checkout the video on ${vans?.title}. For more videos Download Outgrow App from PlayStore 
-https://play.google.com/store/apps/details?id=${it.context.packageName}"""
-                sendIntent.putExtra(Intent.EXTRA_TEXT, sharetext)
-                sendIntent.type = "text/plain"
-                it.context.startActivity(Intent.createChooser(sendIntent, "share"))*/
+                onItemClick.onShareItemClick(vans)
             }
 
             itemBinding.newsCv.setOnClickListener {
-                onItemClick?.invoke(getItem(absoluteAdapterPosition))
+                onItemClick.onItemClick(vans)
 
             }
 
@@ -111,4 +103,9 @@ https://play.google.com/store/apps/details?id=${it.context.packageName}"""
     }
 
 
+}
+
+interface onItemClickNews{
+    fun onItemClick(vans:VansFeederListDomain?)
+    fun onShareItemClick(vans: VansFeederListDomain?)
 }

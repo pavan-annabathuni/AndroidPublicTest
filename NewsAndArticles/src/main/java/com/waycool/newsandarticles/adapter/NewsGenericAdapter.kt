@@ -1,5 +1,6 @@
 package com.waycool.newsandarticles.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,10 +13,9 @@ import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ViewholderNewsGenricBinding
 
-class NewsGenericAdapter :
+class NewsGenericAdapter (private val context: Context?, private val onItemClick: onItemClick):
     PagingDataAdapter<VansFeederListDomain, NewsGenericAdapter.VideosViewHolder>(COMPARATOR) {
 
-    var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
@@ -47,7 +47,8 @@ class NewsGenericAdapter :
                 .into(itemBinding.newsUpdateImage)
 
             itemBinding.newsRoot.setOnClickListener {
-                onItemClick?.invoke(getItem(absoluteAdapterPosition))
+                onItemClick.onItemClickListener(vans)
+//                onItemClick?.invoke(getItem(absoluteAdapterPosition))
             }
 
 
@@ -78,4 +79,8 @@ class NewsGenericAdapter :
     }
 
 
+}
+
+interface onItemClick{
+    fun onItemClickListener(vans: VansFeederListDomain?)
 }
