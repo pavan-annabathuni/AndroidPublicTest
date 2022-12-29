@@ -1,7 +1,6 @@
 package com.waycool.videos.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,12 +14,13 @@ import com.waycool.videos.databinding.ViewholderVideosListBinding
 
 class VideosPagerAdapter(
     private val context: Context,
+    private val onItemClickOne: itemClick,
     private val selectedVideo: VansFeederListDomain? = null
 ) :
     PagingDataAdapter<VansFeederListDomain, VideosPagerAdapter.VideosViewHolder>(COMPARATOR) {
 
-    var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
-    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null
+//    var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
+//    var onItemShareClick: ((VansFeederListDomain?) -> Unit)? = null
 
 
 
@@ -32,11 +32,8 @@ class VideosPagerAdapter(
 
     override fun onBindViewHolder(holder: VideosViewHolder, position: Int) {
         val item = getItem(position)
-        Log.d("VansFeeder", "Vans: ${item?.title}")
         holder.bind(item)
     }
-
-
     inner class VideosViewHolder(private val itemBinding: ViewholderVideosListBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
@@ -47,12 +44,20 @@ class VideosPagerAdapter(
                 .load(   "https://img.youtube.com/vi/${vans?.contentUrl}/hqdefault.jpg")
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(itemBinding.videosListVideoImage)
-            itemBinding.share.setOnClickListener {
-                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
-            }
 
+            itemBinding.share.setOnClickListener {
+                Log.d("ItemPos","ItemPosShare${absoluteAdapterPosition}")
+                onItemClickOne.onShareItemClick(vans)
+
+//                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
+            }
             itemBinding.videosListVideoCardview.setOnClickListener {
-                onItemClick?.invoke(getItem(absoluteAdapterPosition))
+                Log.d("ItemPos","ItemPosItem${absoluteAdapterPosition}")
+                onItemClickOne.onItemClick(vans)
+
+//                onItemClick?.invoke(getItem(absoluteAdapterPosition))
+                Log.d("ItemPos","ItemPosItemClick${absoluteAdapterPosition}")
+
             }
 
         }
@@ -76,5 +81,11 @@ class VideosPagerAdapter(
         }
     }
 
+
+
+}
+interface itemClick{
+    fun onItemClick(van:VansFeederListDomain?)
+    fun onShareItemClick(van:VansFeederListDomain?)
 
 }

@@ -786,6 +786,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         data.id?.let { bundle.putInt("plotId", it) }
         data.cropLogo?.let { bundle.putString("cropLogo",it) }
         data.cropName?.let { bundle.putString("cropName",it) }
+        data.cropId?.let { bundle.putInt("cropId",it) }
         this.findNavController().navigate(R.id.action_homePagePremiumFragment3_to_navigation_irrigation,bundle)
     }
 
