@@ -49,7 +49,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var currentMarker: Marker? = null
     private var _binding: FragmentAddDeviceBinding? = null
     private val binding get() = _binding!!
-    var nickName: String = ""
+    private var nickName: String = ""
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     private var myFarm: MyFarmsDomain? = null
@@ -58,12 +58,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var scanResult: String? = null
     private var plotId: Int? = null
 
-    val requestPermissionLauncher = registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
-
-
-        Log.d("permission", "test" + result)
         var allAreGranted = true
         for (b in result.values) {
             allAreGranted = allAreGranted && b
@@ -77,10 +74,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private val viewModel by lazy { ViewModelProvider(this)[AddDeviceViewModel::class.java] }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null)
-            myFarm = arguments?.getParcelable<MyFarmsDomain>("farm")
+        myFarm = if (arguments != null)
+            arguments?.getParcelable("farm")
         else
-            myFarm = requireActivity().intent?.extras?.getParcelable("farm")
+            requireActivity().intent?.extras?.getParcelable("farm")
     }
 
     override fun onCreateView(
@@ -88,9 +85,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddDeviceBinding.inflate(inflater, container, false)
-        binding.topAppBar.setNavigationOnClickListener() {
-            this.findNavController().navigateUp()
-        }
+        binding.topAppBar.setNavigationOnClickListener{
+            this.findNavController().navigateUp() }
         return binding.root
     }
 
@@ -118,16 +114,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 map["device_name"] = binding.device1.text
                 map["farm_id"] = myFarm?.id!!
                 if (latitude != null)
-                    map.put("device_lat", latitude!!)
+                    map["device_lat"] = latitude!!
                 if (longitutde != null)
-                    map.put("device_long", longitutde!!)
+                    map["device_long"] = longitutde!!
                 map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
                 activityDevice(map)
             }
         }
 
-        binding.btScanner.setOnClickListener() {
+        binding.btScanner.setOnClickListener {
             val intentIntegrator = IntentIntegrator.forSupportFragment(this)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
             intentIntegrator.setPrompt("Scan")
@@ -315,7 +311,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("registerresponse2", "test" + requestCode)
+        Log.d("registerresponse2", "test $requestCode")
         if (requestCode == 2) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLocation()

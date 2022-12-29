@@ -1,5 +1,7 @@
 package com.waycool.videos.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -22,9 +26,11 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.VideosPagerAdapter
+import com.waycool.videos.adapter.itemClick
 import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
-class PlayVideoFragment : Fragment() {
+@Suppress("DEPRECATION")
+class PlayVideoFragment : Fragment() ,itemClick{
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private lateinit var binding: FragmentPlayVideoBinding
@@ -44,10 +50,7 @@ class PlayVideoFragment : Fragment() {
     ): View {
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
         apiErrorHandlingBinding=binding.errorState
-        networkCall()
-        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
-            networkCall()
-        }
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -86,9 +89,8 @@ class PlayVideoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
-            if (arguments?.containsKey("video") == true){
+            if (arguments?.containsKey("video") == true)
                 videoSelected = requireArguments().getParcelable("video")
-        }
             else {
                 videoTitle=arguments?.getString("title")
                 videoDesc=arguments?.getString("description")
@@ -105,13 +107,15 @@ class PlayVideoFragment : Fragment() {
             binding.ytTitleTv.text = videoTitle
             binding.ytDescriptionTv.text =videoDesc
         }
-//        adapterVideo = VideosPagerAdapter(requireContext())
-//        binding.ytBottomsheetRv.adapter = adapterVideo
+
 
         Handler(Looper.myLooper()!!).postDelayed({
             getVideos()
         }, 600)
-
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
+        }
 
         val frag = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
 
@@ -146,14 +150,6 @@ class PlayVideoFragment : Fragment() {
 
 
 
-        adapterVideo.onItemClick = {
-            if (player != null) {
-                player!!.loadVideo(it?.contentUrl)
-                player!!.play()
-                binding.ytTitleTv.text = it?.title
-                binding.ytDescriptionTv.text = it?.desc
-            }
-        }
     }
 
 
@@ -185,11 +181,55 @@ class PlayVideoFragment : Fragment() {
         tags: String? = null,
         categoryId: Int? = null
     ) {
-        adapterVideo = VideosPagerAdapter(requireContext())
+        adapterVideo = VideosPagerAdapter(requireContext(),this)
         binding.ytBottomsheetRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
         }
     }
+
+    override fun onItemClick(van: VansFeederListDomain?) {
+        if (player != null) {
+            player!!.loadVideo(van?.contentUrl)
+            player!!.play()
+            binding.ytTitleTv.text = van?.title
+            binding.ytDescriptionTv.text = van?.desc
+
+
+        }
+    }
+
+    override fun onShareItemClick(it: VansFeederListDomain?) {
+
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                    .setDescription("Watch more videos and learn with Outgrow")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                }
+
+            }
+
+    }
+
 
 }

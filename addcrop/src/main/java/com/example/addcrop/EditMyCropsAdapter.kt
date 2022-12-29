@@ -10,7 +10,7 @@ import com.example.addcrop.databinding.ItemEditCropBinding
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 
 class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCropDataDomain,EditMyCropsAdapter.MyViewHolder>(DiffCallback) {
-    class MyViewHolder(private val binding:ItemEditCropBinding):
+    class MyViewHolder(binding:ItemEditCropBinding):
     RecyclerView.ViewHolder(binding.root) {
      val cropImg = binding.imageView
         val cropName = binding.tvCrops
