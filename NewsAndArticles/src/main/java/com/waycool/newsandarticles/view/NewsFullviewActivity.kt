@@ -60,7 +60,6 @@ class NewsFullviewActivity : AppCompatActivity() {
             newsDate = bundle.getString("date")
             source = bundle.getString("source")
         }
-        Log.d("NewsFulldata0", "${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}")
 
         binding.newsHeading.text = "News Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
@@ -71,8 +70,6 @@ class NewsFullviewActivity : AppCompatActivity() {
 
 
         binding.shareBtn.setOnClickListener {
-
-            Log.d("NewsFulldata1", "${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}")
             FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
                 .setDomainUriPrefix("https://outgrowdev.page.link")

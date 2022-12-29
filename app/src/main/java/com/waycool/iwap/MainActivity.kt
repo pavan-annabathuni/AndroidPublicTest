@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 if (deepLink?.lastPathSegment != null) {
-                    Log.d("DeepLink", "Deeplink ${deepLink.lastPathSegment}")
                     if (deepLink.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
