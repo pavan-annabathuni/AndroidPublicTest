@@ -1,5 +1,6 @@
 package com.waycool.iwap.myfarms
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -45,6 +47,11 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerview.adapter=adapter
+
+        binding.addFarmFab.setOnClickListener {
+            val intent=Intent(requireActivity(),AddFarmActivity::class.java)
+            startActivity(intent)
+        }
 
         viewModel.getMyFarms().observe(viewLifecycleOwner){
             when(it){

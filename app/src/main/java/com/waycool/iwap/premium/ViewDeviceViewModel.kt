@@ -17,8 +17,8 @@ class ViewDeviceViewModel :ViewModel() {
         CropsRepository.getIotDevice().asLiveData()
     fun getGraphsViewDevice(serial_no_id:Int?,device_model_id:Int?,value:String?): LiveData<Resource<GraphsViewDataDTO?>> =
         CropsRepository.getGraphsViewDevice(serial_no_id,device_model_id,value).asLiveData()
-    fun farmDetailsDelta(): LiveData<Resource<FarmDetailsDTO?>> =
-        CropsRepository.farmDetailsDelta().asLiveData()
+    fun farmDetailsDelta(farmId:Int): LiveData<Resource<FarmDetailsDTO?>> =
+        CropsRepository.farmDetailsDelta(farmId =farmId).asLiveData()
 
 //    fun getSoilTestHistory(): LiveData<Resource<List<ViewDeviceDTO>?>> {
 //        return CropsRepository.getIotDevice().asLiveData()

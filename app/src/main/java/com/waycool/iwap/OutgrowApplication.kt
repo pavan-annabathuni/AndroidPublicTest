@@ -6,8 +6,11 @@ import com.google.firebase.FirebaseApp
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.Sync.syncer.DashboardSyncer
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class OutgrowApplication : Application() {
     override fun onCreate() {
@@ -22,7 +25,11 @@ class OutgrowApplication : Application() {
         FirebaseApp.initializeApp(this)
 
         //Refresh UserDetails If Required
-        UserDetailsSyncer().getData()
-
+        GlobalScope.launch {
+            UserDetailsSyncer().invalidateSync()
+            UserDetailsSyncer().getData()
+            DashboardSyncer().invalidateSync()
+            DashboardSyncer().getData()
+        }
     }
 }
