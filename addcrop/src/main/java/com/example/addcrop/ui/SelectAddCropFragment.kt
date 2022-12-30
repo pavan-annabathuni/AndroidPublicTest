@@ -44,7 +44,7 @@ class SelectAddCropFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
-    private var dashboardDomain:DashboardDomain?=null
+    private var dashboardDomain: DashboardDomain? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,13 +52,13 @@ class SelectAddCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSelectAddCropBinding.inflate(inflater)
-        val add_crop= arguments?.getString("userId")
+        val add_crop = arguments?.getString("userId")
         Log.d("TAG", "onCreateViewadd_crop: $add_crop")
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
@@ -87,8 +87,8 @@ class SelectAddCropFragment : Fragment() {
         })
 
 
-        viewModel.getDasBoard().observe(viewLifecycleOwner){
-            dashboardDomain=it?.data
+        viewModel.getDasBoard().observe(viewLifecycleOwner) {
+            dashboardDomain = it?.data
         }
 
         adapter.onItemClick = {
@@ -96,21 +96,31 @@ class SelectAddCropFragment : Fragment() {
             val response = it
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
-            it?.cropName?.let { it1 -> args.putString("cropname", it1)
+            it?.cropName?.let { it1 ->
+                args.putString("cropname", it1)
             }
-            if(dashboardDomain?.subscription?.iot==true) {
+            if (dashboardDomain?.subscription?.iot == true) {
                 Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
                 when (it?.cropId) {
-                    67-> {
+                    67 -> {
                         Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+                        findNavController().navigate(
+                            R.id.action_selectAddCropFragment_to_veriatyCropFragment,
+                            args
+                        )
                     }
                     97 -> {
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_veriatyCropFragment,args)
+                        findNavController().navigate(
+                            R.id.action_selectAddCropFragment_to_veriatyCropFragment,
+                            args
+                        )
                     }
                     else -> {
                         Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
-                        findNavController().navigate(R.id.action_selectAddCropFragment_to_addCropFragment, args)
+                        findNavController().navigate(
+                            R.id.action_selectAddCropFragment_to_addCropFragment,
+                            args
+                        )
                     }
                 }
 
@@ -118,7 +128,7 @@ class SelectAddCropFragment : Fragment() {
 //            findNavController().navigate(
 //                R.id.action_selectAddCropFragment_to_addCropFragment, args
 //            )
-            }else{
+            } else {
                 findNavController().navigate(
                     R.id.action_selectAddCropFragment_to_addCropDetailsFragment2,
                     args
@@ -213,7 +223,11 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Error Occurred",
+                        Toast.LENGTH_SHORT
+                    )
                 }
             }
         }
