@@ -113,19 +113,14 @@ class WeatherFragment : Fragment() {
     }
 
     private fun networkCall() {
-        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            binding.clInclude.visibility = View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check your internet connectivity",
-                    Toast.LENGTH_SHORT
-                )
-            }
-        } else {
-            binding.clInclude.visibility = View.GONE
-            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+        if(NetworkUtil.getConnectivityStatusString(context)==0){
+            binding.clInclude.visibility=View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
+            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        }
+        else{
+            binding.clInclude.visibility=View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
 
             observer()
             setBanners()
@@ -166,7 +161,7 @@ class WeatherFragment : Fragment() {
 
     private fun observer() {
         viewModel.viewModelScope.launch {
-            viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
+            viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
                 binding.location.text = it.data?.data?.profile?.village
             }
         }
@@ -301,7 +296,7 @@ class WeatherFragment : Fragment() {
                 //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
                 binding.weatherMaster = it.data
 
-                if (null != it) {
+                if (null != it?.data) {
                     val date: Long? = it.data?.current?.dt?.times(1000L)
                     val dateTime = Date()
                     if (date != null) {
@@ -314,9 +309,15 @@ class WeatherFragment : Fragment() {
                         )//or use getDateInstance()
                     val formatedDate = formatter.format(dateTime)
                     binding.date.text = formatedDate
-                }
-                // binding.icon22.text = it.data?.current?.weather?.get(0)?.description
-                if (it.data?.current?.weather?.isEmpty() == false)
+
+                if (!it.data?.current?.weather.isNullOrEmpty()) {
+                    WeatherIcons.setWeatherIcon(
+                        it.data?.current?.weather?.get(0)?.icon.toString(),
+                        binding.weatherIcon
+                    )
+                    //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
+                    binding.weatherMaster = it.data
+
                     when (it.data?.current?.weather?.get(0)?.id) {
                         200 -> {
                             binding.tvTodayTips.text =
@@ -650,12 +651,15 @@ class WeatherFragment : Fragment() {
                                 R.drawable.ic_circle_exclamation_brown, 0, 0, 0
                             )
 
+                                    }
+                                }
+                            }
                         }
                     }
             }
         }
 
-    }
+
 
     private fun setBanners() {
 
@@ -689,18 +693,17 @@ class WeatherFragment : Fragment() {
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
-
-    fun translation() {
-        TranslationsManager().loadString("str_Weather", binding.textView)
-        TranslationsManager().loadString("str_share", binding.imgShare)
-        TranslationsManager().loadString("str_today", binding.icon2)
-        TranslationsManager().loadString("str_today", binding.today)
-        TranslationsManager().loadString("str_humidity", binding.lableHumidity)
-        TranslationsManager().loadString("str_vsibility", binding.lableVisibility)
-        TranslationsManager().loadString("str_wind", binding.lableWind)
-        TranslationsManager().loadString("str_rain", binding.lableRain)
-        TranslationsManager().loadString("str_hourly", binding.tvHouly)
-        TranslationsManager().loadString("str_next", binding.tvDaily)
+    fun translation(){
+        TranslationsManager().loadString("str_Weather",binding.textView)
+        TranslationsManager().loadString("str_share",binding.imgShare)
+        TranslationsManager().loadString("str_today",binding.icon2)
+        TranslationsManager().loadString("str_today",binding.today)
+        TranslationsManager().loadString("str_humidity",binding.lableHumidity)
+        TranslationsManager().loadString("str_vsibility",binding.lableVisibility)
+        TranslationsManager().loadString("str_wind",binding.lableWind)
+        TranslationsManager().loadString("str_rain",binding.lableRain)
+        TranslationsManager().loadString("str_hourly",binding.tvHouly)
+        TranslationsManager().loadString("str_next",binding.tvDaily)
 
     }
 }

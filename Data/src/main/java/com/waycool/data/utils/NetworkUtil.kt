@@ -3,7 +3,7 @@ package com.waycool.data.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
+import android.util.Log
 
 object NetworkUtil {
     var TYPE_WIFI = 1
@@ -30,26 +30,20 @@ object NetworkUtil {
         return result
     }
 
-//    private fun getConnectivityStatus(context: Context?): Int {
-//        val cm = context
-//            ?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val activeNetwork = cm.activeNetworkInfo
-//        if (null != activeNetwork && activeNetwork.isConnectedOrConnecting) {
-//            if (activeNetwork.type == ConnectivityManager.TYPE_WIFI) return TYPE_WIFI
-//            if (activeNetwork.type == ConnectivityManager.TYPE_MOBILE) return TYPE_MOBILE
-//        }
-//        return TYPE_NOT_CONNECTED
-//    }
-
     fun getConnectivityStatusString(context: Context?): Int {
         val conn = isInternetAvailable(context)
+        Log.d("NetworkUtil","Con${conn}")
         var status = 0
-        if (conn == TYPE_WIFI) {
-            status = TYPE_WIFI
-        } else if (conn == TYPE_MOBILE) {
-            status = TYPE_MOBILE
-        } else if (conn == TYPE_NOT_CONNECTED) {
-            status = TYPE_NOT_CONNECTED
+        when (conn) {
+            TYPE_WIFI -> {
+                status = TYPE_WIFI
+            }
+            TYPE_MOBILE -> {
+                status = TYPE_MOBILE
+            }
+            TYPE_NOT_CONNECTED -> {
+                status = TYPE_NOT_CONNECTED
+            }
         }
         return status
     }

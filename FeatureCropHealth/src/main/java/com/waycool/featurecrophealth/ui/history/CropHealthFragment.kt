@@ -29,8 +29,13 @@ import kotlin.math.roundToInt
 
 
 class CropHealthFragment : Fragment() {
-    private var _binding: FragmentCropHealthBinding? = null
-    private val binding get() = _binding!!
+
+   private lateinit var binding: FragmentCropHealthBinding
+//    private val binding get() = binding!!
+
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
+ 
+
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var module_id = "3"
 
@@ -41,8 +46,7 @@ class CropHealthFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCropHealthBinding.inflate(inflater, container, false)
-
+        binding = FragmentCropHealthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,10 +55,19 @@ class CropHealthFragment : Fragment() {
 //        initView()
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        videosBinding = binding.layoutVideos
+
         apiErrorHandlingBinding = binding.errorState
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
+        }
+        binding.tvViewAll.setOnClickListener {
+            findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
+        }
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
         }
 
         historyAdapter = AiCropHistoryAdapter(requireContext())
@@ -70,9 +83,7 @@ class CropHealthFragment : Fragment() {
 
             }
         }
-        binding.tvViewAll.setOnClickListener {
-            findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
-        }
+
 
 
 
@@ -128,7 +139,6 @@ class CropHealthFragment : Fragment() {
 
     private fun getVideos() {
         binding.clProgressBar.visibility=View.VISIBLE
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         viewModel.getVansVideosList(module_id).observe(requireActivity()) {
@@ -158,10 +168,7 @@ class CropHealthFragment : Fragment() {
             )
         }
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
+
 
         videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
@@ -245,10 +252,10 @@ class CropHealthFragment : Fragment() {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
     private fun fabButton(){
         var isVisible = false
         binding.addFab.setOnClickListener(){

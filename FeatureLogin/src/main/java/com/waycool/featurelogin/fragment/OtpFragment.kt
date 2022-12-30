@@ -156,7 +156,7 @@ class OtpFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-//                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
 
                 }
             }

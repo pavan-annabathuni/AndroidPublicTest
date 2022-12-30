@@ -529,7 +529,6 @@
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_ans"
                         android:visibility="gone"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/clMyForm"
@@ -1682,7 +1681,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clCardBackground" />
-
                 <include
                     android:id="@+id/layout_news"
                     layout="@layout/generic_layout_news_list"
@@ -1693,8 +1691,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

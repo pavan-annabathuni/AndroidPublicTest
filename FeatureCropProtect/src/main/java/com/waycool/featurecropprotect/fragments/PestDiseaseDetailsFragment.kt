@@ -36,6 +36,7 @@ import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -46,6 +47,7 @@ import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
+import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
@@ -63,8 +65,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-class PestDiseaseDetailsFragment : Fragment() {
+class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
+    private lateinit var newsBinding: GenericLayoutNewsListBinding
+    private lateinit var videosBinding: GenericLayoutVideosListBinding
     private var audio: AudioWife? = null
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
@@ -95,7 +99,17 @@ class PestDiseaseDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+         videosBinding = binding.layoutVideos
+         newsBinding = binding.layoutNews
 
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        newsBinding.viewAllNews.setOnClickListener {
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
         arguments?.let {
             cropId = it.getInt("cropId")
 
@@ -284,8 +298,7 @@ class PestDiseaseDetailsFragment : Fragment() {
     }
 
     private fun setNews() {
-        val newsBinding: GenericLayoutNewsListBinding = binding.layoutNews
-        val adapter = NewsGenericAdapter()
+        val adapter = NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.getVansNewsList(cropId, module_id).collect() {
@@ -320,30 +333,13 @@ class PestDiseaseDetailsFragment : Fragment() {
 
         }
 
-        newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
-            startActivity(intent)
-        }
 
-        adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putString("title", it?.title)
-            bundle.putString("content", it?.desc)
-            bundle.putString("image", it?.thumbnailUrl)
-            bundle.putString("audio", it?.audioUrl)
-            bundle.putString("date", it?.startDate)
-            bundle.putString("source", it?.sourceName)
 
-            findNavController().navigate(
-                R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
-                bundle
-            )
-        }
+
 
     }
 
     private fun setVideos() {
-        val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
@@ -381,10 +377,6 @@ class PestDiseaseDetailsFragment : Fragment() {
             }
         }
 
-            videosBinding.viewAllVideos.setOnClickListener {
-                val intent = Intent(requireActivity(), VideoActivity::class.java)
-                startActivity(intent)
-            }
 
             adapter.onItemClick = {
                 val bundle = Bundle()
@@ -531,4 +523,19 @@ class PestDiseaseDetailsFragment : Fragment() {
             super.onPause()
             audio?.release()
         }
+
+    override fun onItemClickListener(it: VansFeederListDomain?) {
+        val bundle = Bundle()
+        bundle.putString("title", it?.title)
+        bundle.putString("content", it?.desc)
+        bundle.putString("image", it?.thumbnailUrl)
+        bundle.putString("audio", it?.audioUrl)
+        bundle.putString("date", it?.startDate)
+        bundle.putString("source", it?.sourceName)
+
+        findNavController().navigate(
+            R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
+            bundle
+        )
     }
+}

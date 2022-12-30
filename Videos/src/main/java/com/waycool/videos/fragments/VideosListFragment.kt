@@ -8,6 +8,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
@@ -41,11 +43,13 @@ import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.FragmentVideosListBinding
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.AdsAdapter
+import com.waycool.videos.adapter.itemClick
+
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class VideosListFragment : Fragment() {
+class VideosListFragment : Fragment(), itemClick {
 
     private lateinit var binding: FragmentVideosListBinding
     private var selectedCategory: VansCategoryDomain? = null
@@ -99,39 +103,11 @@ class VideosListFragment : Fragment() {
         fabButton()
 
         binding.videosVideoListRv.layoutManager = LinearLayoutManager(requireContext())
-        adapterVideo = VideosPagerAdapter(requireContext())
+        adapterVideo = VideosPagerAdapter(requireContext(),this)
         binding.videosVideoListRv.adapter = adapterVideo
 
-        adapterVideo.onItemShareClick = {
-            FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
-                .setAndroidParameters(
-                    DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                        .build()
-                )
-                .setSocialMetaTagParameters(
-                    DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
-                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
-                        .setDescription("Watch more videos and learn with Outgrow")
-                        .build()
-                )
-                .buildShortDynamicLink().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val shortLink: Uri? = task.result.shortLink
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        sendIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(sendIntent, "choose one"))
-
-                    }
-                }
-        }
-
-        adapterVideo.onItemClick = {
+/*
+        adapterVideo.onItemClick = { it->
             val bundle = Bundle()
             bundle.putParcelable("video", it)
            this.findNavController().navigate(
@@ -139,7 +115,7 @@ class VideosListFragment : Fragment() {
 
             )
 
-        }
+        }*/
 
 
         binding.search.addTextChangedListener(object : TextWatcher {
@@ -243,7 +219,7 @@ class VideosListFragment : Fragment() {
         tags: String? = "",
         categoryId: Int? = null
     ) {
-        adapterVideo=VideosPagerAdapter(requireContext())
+        adapterVideo=VideosPagerAdapter(requireContext(),this)
         binding.videosVideoListRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
@@ -349,6 +325,47 @@ class VideosListFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
+    }
+
+    override fun onItemClick(van: VansFeederListDomain?) {
+        val bundle = Bundle()
+        bundle.putParcelable("video", van)
+        this.findNavController().navigate(
+            R.id.action_videosListFragment_to_playVideoFragment,bundle
+
+        )
+    }
+
+    override fun onShareItemClick(it: VansFeederListDomain?) {
+
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setAndroidParameters(
+                    DynamicLink.AndroidParameters.Builder()
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .build()
+                )
+                .setSocialMetaTagParameters(
+                    DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                        .setDescription("Watch more videos and learn with Outgrow")
+                        .build()
+                )
+                .buildShortDynamicLink().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val shortLink: Uri? = task.result.shortLink
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        sendIntent.type = "text/plain"
+                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+
+                    }
+
+        }
+
     }
 
 }
