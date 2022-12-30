@@ -1,4 +1,4 @@
-package com.waycool.iwap.premium
+package com.waycool.iwap.myfarms
 
 import android.content.Context
 import android.graphics.Color
@@ -13,8 +13,8 @@ import com.google.android.libraries.maps.model.Polygon
 import com.google.android.libraries.maps.model.PolygonOptions
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.iwap.R
-import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 import com.waycool.iwap.databinding.ItemPremiumMyfarmsBinding
+import com.waycool.iwap.premium.Farmdetailslistener
 import kotlin.collections.ArrayList
 
 class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val context: Context) :

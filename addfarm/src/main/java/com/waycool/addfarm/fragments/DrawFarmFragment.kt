@@ -135,6 +135,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             activity?.finish()
         }
 
+        if(arguments!=null){
+            if(arguments?.getBoolean("isedit")==true){
+                editFarm()
+            }
+        }
 
         binding.placesRv.adapter = adapter
 
@@ -426,6 +431,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 )
             }
         }
+    }
+
+    private fun editFarm() {
+
+
     }
 
     private fun networkCall() {

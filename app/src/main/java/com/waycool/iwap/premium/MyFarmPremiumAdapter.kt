@@ -11,17 +11,21 @@ import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.LatLngBounds
 import com.google.android.libraries.maps.model.Polygon
 import com.google.android.libraries.maps.model.PolygonOptions
+import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.data.repository.domainModels.MyCropsDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
+import com.waycool.iwap.home.FarmCropsAdapter
 import kotlin.collections.ArrayList
 
 class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val context: Context) :
     RecyclerView.Adapter<MyFarmPremiumAdapter.MyFarmPremiumViewHolder>() {
-    //    val context: Context,
+
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
-
+    private var cropList:MutableList<MyCropDataDomain> = mutableListOf()
+    private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
     var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
     fun setMovieList(movies: List<MyFarmsDomain>?) {
@@ -42,7 +46,10 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
-        holder.binding.tvEnableAddDevice.text = ""
+        holder.binding.cropFarmRv.adapter=farmsCropsAdapter
+
+        farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
+//        holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {
             holder.binding.ivFeedback.visibility = View.VISIBLE
         } else
@@ -104,6 +111,11 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
         return details.size
     }
 
+    fun updateCropsList(list:List<MyCropDataDomain>){
+        cropList.clear()
+        cropList.addAll(list)
+        notifyDataSetChanged()
+    }
 
     inner class MyFarmPremiumViewHolder(val binding: ItemPremiumAddFarmBinding) :
         RecyclerView.ViewHolder(binding.root), OnMapReadyCallback {

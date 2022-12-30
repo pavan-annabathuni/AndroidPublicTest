@@ -503,7 +503,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_speed_meter"
+        android:id="@+id/card_speed_meter_deltat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -612,7 +612,7 @@
         android:background="@drawable/bg_device_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_speed_meter">
+        app:layout_constraintTop_toBottomOf="@+id/card_speed_meter_deltat">
 
         <ImageView
             android:id="@+id/iv_lux"

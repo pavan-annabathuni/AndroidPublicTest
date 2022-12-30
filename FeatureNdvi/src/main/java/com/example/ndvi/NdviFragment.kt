@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -22,12 +20,11 @@ import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
 import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.waycool.data.Network.NetworkModels.NdviData
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
@@ -35,26 +32,31 @@ import java.net.URL
 
 
 class NdviFragment : Fragment(), OnMapReadyCallback {
+    private var polygon: Polygon? = null
     private lateinit var binding: FragmentNdviBinding
     private val viewModel: NdviViewModel by lazy {
         ViewModelProvider(this)[NdviViewModel::class.java]
     }
-    private lateinit var googleMap: GoogleMap
-    private var farmjson: String? = null
+    private var googleMap: GoogleMap? = null
+    private var myFarm: MyFarmsDomain? = null
+
     private enum class TileType {
         NDVI, TRUE_COLOR
     }
-    lateinit var ndviTile:String
-    lateinit var trueColor:String
+
+    lateinit var ndviTile: String
+    lateinit var trueColor: String
+    private var accountId: Int? = null
 
     private var selectedTileType = TileType.NDVI
-    private var tileOverlayTransparent: TileOverlay? = null
+    private var tileOverlay: TileOverlay? = null
+    private var selectedNdvi: NdviData? = null
+    private var ndviDataList: List<NdviData>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             if (arguments != null) {
-                farmjson = arguments?.getString("farm_json")
-              //  farmCentroid = arguments?.getString("farm_center")
+                myFarm = arguments?.getParcelable("farm")
             }
         }
     }
@@ -65,31 +67,40 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentNdviBinding.inflate(inflater)
+        binding.farmName.text=myFarm?.farmName
+
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map_ndvi) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        viewModel.getNdvi(2, 2).observe(viewLifecycleOwner) {
-            Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
-             ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
-             trueColor = it.data?.data?.get(0)?.truecolorTile.toString()
 
-
-            //cloud data
-            val cloud = it.data?.data?.get(0)?.cloudCoverage?.toInt()
-            if(cloud!=null)
-            if(cloud < 30){
-            val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
-            dialog.setContentView(R.layout.item_cloud)
-            val close = dialog.findViewById<ImageView>(R.id.img_close)
-            close?.setOnClickListener(){
-                dialog.dismiss()
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if (accountId == null) {
+                accountId = it.data?.accountId
+                getNdviFromAPI()
             }
-        }}
+        }
+//        viewModel.getNdvi(myFarm?.id, 2).observe(viewLifecycleOwner) {
+//            Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
+//             ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
+//             trueColor = it.data?.data?.get(0)?.truecolorTile.toString()
+//
+//
+//            //cloud data
+//            val cloud = it.data?.data?.get(0)?.cloudCoverage?.toInt()
+//            if(cloud!=null)
+//            if(cloud < 30){
+//            val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
+//            dialog.setContentView(R.layout.item_cloud)
+//            val close = dialog.findViewById<ImageView>(R.id.img_close)
+//            close?.setOnClickListener(){
+//                dialog.dismiss()
+//            }
+//        }}
 
         onClicks()
         tabs()
-        observer()
-        spinner()
+//        observer()
+//        spinner()
         opacity()
         translation()
 
@@ -112,20 +123,32 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         binding.floatingActionButton1.setOnClickListener() {
             this.findNavController().navigate(R.id.action_ndviFragment_to_infoSheetFragment)
         }
-        binding.topAppBar.setOnClickListener(){
+        binding.topAppBar.setOnClickListener() {
             this.findNavController().navigateUp()
+        }
+
+        binding.floatingActionButton2.setOnClickListener {
+            if (myFarm != null && googleMap != null) {
+                val points = myFarm?.farmJson as ArrayList
+                googleMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        getLatLnBounds(points),
+                        50
+                    )
+                )
+            }
         }
 
     }
 
     private fun tabs() {
-         viewModel.viewModelScope.launch {
-             val vegIndex = TranslationsManager().getString("vegetation_index")
-             binding.tabLayout.addTab(
-                 binding.tabLayout.newTab().setText(vegIndex)
-                     .setCustomView(R.layout.item_tab)
-             )
-         }
+        viewModel.viewModelScope.launch {
+            val vegIndex = TranslationsManager().getString("vegetation_index")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(vegIndex)
+                    .setCustomView(R.layout.item_tab)
+            )
+        }
         viewModel.viewModelScope.launch {
             val TranTureColor = TranslationsManager().getString("true_colour")
             binding.tabLayout.addTab(
@@ -134,153 +157,211 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-               when(binding.tabLayout.selectedTabPosition){
-                   0-> {
-                       selectedTileType = TileType.NDVI
-                       Log.d("select", "onTabSelected: $selectedTileType")
-                   }
-                   1-> {
-                      // Toast.makeText(context, "WORKED2", Toast.LENGTH_SHORT).show()
-                       selectedTileType = TileType.TRUE_COLOR
-                       Log.d("select", "onTabSelected: $selectedTileType")
-//                       Toast(context, "WORKED", Toast.LENGTH_SHORT).show()
-                   }
+                when (binding.tabLayout.selectedTabPosition) {
+                    0 -> {
+                        selectedTileType = TileType.NDVI
+                        showTileNDVI()
+                    }
+                    1 -> {
+                        selectedTileType = TileType.TRUE_COLOR
+                        showTileNDVI()
+                    }
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                onMapReady(googleMap)
-                googleMap.clear()
+//                onMapReady(googleMap)
+//                googleMap?.clear()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
     }
+
     override fun onMapReady(map: GoogleMap?) {
-           // val url = it.data?.data?.get(0)?.truecolorTile
+        // val url = it.data?.data?.get(0)?.truecolorTile
 
-            map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
-            polyGone(map)
+        googleMap = map
+        map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        drawFarmPolygon(map)
 
-            map.let {itt->
-                googleMap = itt!!
-                var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
-                        var url: String?
-                        url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
-//                        if(selectedTileType == TileType.NDVI) {
-//                           // url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120636aed80/6391d44c50d9ff43ef5568a1?appid=071e58db72985a51f8f5da4ab1969561&paletteid=4"
-//                         //   url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
-//                        }else{
-//                           url = trueColor
-//                       }
-                       url= url?.replace("{z}", "${zoom}")
-                        url=url?.replace("{x}", "${x}")
-                        url=url?.replace("{y}", "${y}")
-                        Log.d("g56", "NDVI Url: $url")
-                        try {
-                            return URL(url)
-                        } catch (e: MalformedURLException) {
-                            throw AssertionError(e)
-                        }
-                    }
+        getNdviFromAPI()
 
-                    private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
-                        val minZoom = 12
-                        val maxZoom = 16
-                        return zoom in minZoom..maxZoom
-                    }
-
-                }
-
-                if(tileOverlayTransparent!=null)
-                    tileOverlayTransparent?.remove()
-
-                tileOverlayTransparent = googleMap.addTileOverlay(
-                    TileOverlayOptions()
-                        .tileProvider(tileProvider)
-                )
-
-                // tileOverlayTransparent.remove()
-            }
+//        map.let { itt ->
+//            googleMap = itt!!
+//            var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+//                override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+//                    var url: String?
+//                    url =
+//                        "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
+////                        if(selectedTileType == TileType.NDVI) {
+////                           // url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120636aed80/6391d44c50d9ff43ef5568a1?appid=071e58db72985a51f8f5da4ab1969561&paletteid=4"
+////                         //   url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
+////                        }else{
+////                           url = trueColor
+////                       }
+//                    url = url?.replace("{z}", "${zoom}")
+//                    url = url?.replace("{x}", "${x}")
+//                    url = url?.replace("{y}", "${y}")
+//                    Log.d("g56", "NDVI Url: $url")
+//                    try {
+//                        return URL(url)
+//                    } catch (e: MalformedURLException) {
+//                        throw AssertionError(e)
+//                    }
+//                }
+//
+//                private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
+//                    val minZoom = 12
+//                    val maxZoom = 16
+//                    return zoom in minZoom..maxZoom
+//                }
+//
+//            }
+//
+//            if (tileOverlay != null)
+//                tileOverlay?.remove()
+//
+//            tileOverlay = googleMap.addTileOverlay(
+//                TileOverlayOptions()
+//                    .tileProvider(tileProvider)
+//            )
+//
+//            // tileOverlayTransparent.remove()
+//        }
 
 
     }
 
+    private fun getNdviFromAPI() {
+        myFarm?.id?.let {
+            accountId?.let { it1 ->
+                viewModel.getNdvi(it, it1).observe(viewLifecycleOwner) {
 
-        fun observer() {
-            viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
-               // binding.slider.value = it.data?.data?.get(0)?.meanNdvi?.toFloat() ?: 0.0.toFloat()
-                Log.d("Ndvi", "observer: ${it.data.toString()}")
-                binding.ndviMean.text = it.data?.data?.get(0)?.meanNdvi?.toString()
+                    ndviDataList = it?.data?.data
+                        ?.filter { ndviData -> ndviData.tileDate != null }
+
+                    val list: List<String?> = ndviDataList
+                        ?.map { data -> data.tileDate } ?: mutableListOf()
+
+                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, list)
+                    binding.dateSpinner.adapter = arrayAdapter
+                    binding.dateSpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                p0: AdapterView<*>?,
+                                p1: View?,
+                                position: Int,
+                                p3: Long
+                            ) {
+                                selectedNdvi = ndviDataList?.get(position)
+                                showTileNDVI()
+
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                            }
+                        }
+                }
             }
         }
-            private fun spinner(){
-                viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
-                val list: MutableList<String?> = (it?.data?.data
-                    ?.filter { ndviData -> ndviData.tileDate!=null }
-                    ?.map { data -> data.tileDate }?: mutableListOf()) as MutableList<String?>
 
-                val arrayAdapter = ArrayAdapter(requireContext(),R.layout.item_spinner, list)
-                binding.dateSpinner.adapter = arrayAdapter
-                binding.dateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            p0: AdapterView<*>?,
-                            p1: View?,
-                            p2: Int,
-                            p3: Long
-                        ) {
+    }
 
-                           // onMapReady(googleMap)
-                        }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
+    private fun showTileNDVI() {
+        if (tileOverlay != null) {
+            tileOverlay?.remove()
+        }
+        if (selectedNdvi != null) {
+            binding.ndviMean.text = String.format("%.2f", selectedNdvi?.meanNdvi)
 
-                        }
+            val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+                override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
+                    var url: String = if (selectedTileType == TileType.NDVI) {
+                        selectedNdvi?.ndviTile + "&paletteid=4"
+                    } else {
+                        selectedNdvi?.truecolorTile + ""
                     }
-            }}
+                    url = url.replace("{x}", x.toString() + "")
+                    url = url.replace("{y}", y.toString() + "")
+                    url = url.replace("{z}", zoom.toString() + "")
+                    Log.d("g56", "NDVI Url: $url")
+                    return try {
+                        URL(url)
+                    } catch (e: MalformedURLException) {
+                        throw java.lang.AssertionError(e)
+                    }
+                }
+            }
+            if (googleMap != null) tileOverlay = googleMap?.addTileOverlay(
+                TileOverlayOptions()
+                    .tileProvider(tileProvider)
+            )
+        }
+    }
 
-    fun polyGone(mMap: GoogleMap?){
-        farmjson = "[{\"latitude\":12.949531401598282,\"longitude\":77.58231740444899},{\"latitude\":12.948163298404053,\"longitude\":77.58753832429647},{\"latitude\":12.944272315664866,\"longitude\":77.58126463741064},{\"latitude\":12.947535935459252,\"longitude\":77.58129380643368},{\"latitude\":12.949531401598282,\"longitude\":77.58231740444899}]"
-        if (farmjson != null) {
-            val points = convertStringToLatLnList(farmjson)
+
+//    fun observer() {
+//        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
+//            // binding.slider.value = it.data?.data?.get(0)?.meanNdvi?.toFloat() ?: 0.0.toFloat()
+//            Log.d("Ndvi", "observer: ${it.data.toString()}")
+//            binding.ndviMean.text = it.data?.data?.get(0)?.meanNdvi?.toString()
+//        }
+//    }
+//
+//    private fun spinner() {
+//        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
+//            val list: MutableList<String?> = (it?.data?.data
+//                ?.filter { ndviData -> ndviData.tileDate != null }
+//                ?.map { data -> data.tileDate } ?: mutableListOf()) as MutableList<String?>
+//
+//            val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, list)
+//            binding.dateSpinner.adapter = arrayAdapter
+//            binding.dateSpinner.onItemSelectedListener =
+//                object : AdapterView.OnItemSelectedListener {
+//                    override fun onItemSelected(
+//                        p0: AdapterView<*>?,
+//                        p1: View?,
+//                        p2: Int,
+//                        p3: Long
+//                    ) {
+//
+//                        // onMapReady(googleMap)
+//                    }
+//
+//                    override fun onNothingSelected(parent: AdapterView<*>?) {
+//
+//                    }
+//                }
+//        }
+//    }
+
+    private fun drawFarmPolygon(mMap: GoogleMap?) {
+        if (myFarm != null) {
+            val points = myFarm?.farmJson
             if (points != null) {
                 if (points.size >= 3) {
-                    mMap?.addPolygon(
+                    if (polygon != null)
+                        polygon!!.remove()
+                    polygon = mMap?.addPolygon(
                         PolygonOptions().addAll(points).fillColor(Color.argb(0, 58, 146, 17))
                             .strokeColor(
                                 Color.argb(255, 255, 255, 255)
                             )
                     )
                 }
-//                for (latLng in points) {
-//                    val marker = mMap!!.addMarker(
-//                        MarkerOptions().position(
-//                            latLng!!
-//                        )
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
-//                            .anchor(0.5f, .5f)
-//                            .draggable(false)
-//                            .flat(true)
-//                    )
-//                }
                 mMap?.animateCamera(
                     CameraUpdateFactory.newLatLngBounds(
                         getLatLnBounds(points), 50
                     )
                 )
-//                val area: Double =
-//                    getArea(points) / 4046.86
-               // binding.farmareaEtAddfarm.setText((String.format("%.2f", area)).trim { it <= ' ' })
             }
         }
     }
 
-    fun convertStringToLatLnList(s: String?): List<LatLng?>? {
-        val listType = object : TypeToken<List<LatLng?>?>() {}.type
-        return Gson().fromJson(s, listType)
-    }
 
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
@@ -294,19 +375,20 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 //        return SphericalUtil.computeArea(latLngs)
 //    }
 
-    fun opacity(){
+    fun opacity() {
 
         binding.slider.setLabelFormatter(LabelFormatter { value ->
             Math.round(value).toString() + "%"
         })
         binding.slider.addOnChangeListener(Slider.OnChangeListener { slider: Slider?, value: Float, fromUser: Boolean ->
-            if (tileOverlayTransparent != null) {
+            if (tileOverlay != null) {
                 Log.d("g56", "slider:$value")
-                tileOverlayTransparent?.transparency = if (value == 100f) 0f else 1 - value / 100f
+                tileOverlay?.transparency = if (value == 100f) 0f else 1 - value / 100f
             }
         })
     }
-    private fun translation(){
+
+    private fun translation() {
         TranslationsManager().loadString("str_date", binding.textView8)
         TranslationsManager().loadString("str_low", binding.textView3)
         TranslationsManager().loadString("str_high", binding.textView4)
@@ -321,9 +403,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             binding.topAppBar.title = title
         }
 
-        binding.topAppBar.setOnClickListener(){
+        binding.topAppBar.setOnClickListener() {
             this.findNavController().navigateUp()
         }
 
     }
-    }
+}

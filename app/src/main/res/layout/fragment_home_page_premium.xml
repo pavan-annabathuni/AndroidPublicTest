@@ -829,6 +829,7 @@ more details."
                         android:id="@+id/titleMyDevice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="My Devices"
                         android:textColor="@color/textdark"
                         android:textSize="20sp"
@@ -868,6 +869,7 @@ more details."
                         android:text="Add Device"
                         android:textColor="@color/primaryColor"
                         android:textSize="14sp"
+                        android:visibility="gone"
                         app:drawableEndCompat="@drawable/ic_add"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -882,7 +884,7 @@ more details."
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/MyDevice"
+                        app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"
                         tools:itemCount="6"
                         tools:listitem="@layout/item_flex_box_add_form" />
                     <!--                        <androidx.viewpager2.widget.ViewPager2-->
@@ -1736,7 +1738,7 @@ more details."
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/card_top_Parent"
-                            tools:visibility="gone">
+                            tools:visibility="visible">
 
                             <ImageView
                                 android:id="@+id/iv_lux_one"

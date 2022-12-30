@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -29,24 +30,24 @@ class AddFarmActivity : AppCompatActivity() {
                 val intent = Intent(this@AddFarmActivity, LoginMainActivity::class.java)
                 startActivity(intent)
                 this@AddFarmActivity.finish()
-            }
-            else{
+            } else {
                 Firebase.dynamicLinks
                     .getDynamicLink(intent)
-                    .addOnSuccessListener {pendingDynamicLinkData: PendingDynamicLinkData? ->
+                    .addOnSuccessListener { pendingDynamicLinkData: PendingDynamicLinkData? ->
                         var deepLink: Uri? = null
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.link
                         }
-                        if (deepLink?.lastPathSegment!= null) {
+                        if (deepLink?.lastPathSegment != null) {
                             if (deepLink?.lastPathSegment!! == "addfarm") {
-                                this@AddFarmActivity.findNavController(R.id.fragmentContainerView).navigate(R.id.drawFarmFragment)
+                                this@AddFarmActivity.findNavController(R.id.fragmentContainerView)
+                                    .navigate(R.id.drawFarmFragment)
 
                             }
                         }
                     }
-                    .addOnFailureListener {
-                            e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+                    .addOnFailureListener { e ->
+                        Log.w("TAG", "getDynamicLink:onFailure", e)
                     }
             }
         }

@@ -1,4 +1,4 @@
-package com.waycool.iwap.premium
+package com.waycool.iwap.graphs
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,18 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.utils.Constant
-import com.github.mikephil.charting.components.IMarker
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.Resource
-import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
+import com.waycool.iwap.premium.ViewDeviceViewModel
 import com.waycool.iwap.utils.Constant.TAG
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -295,7 +293,7 @@ class GraphsFragment : Fragment() {
                                         lineDataSet.circleHoleColor =
                                             resources.getColor(com.example.mandiprice.R.color.DarkGreen)
                                         lineDataSet.circleRadius = 6f
-                                        lineDataSet.mode = LineDataSet.Mode.LINEAR
+                                        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
                                         lineDataSet.setDrawFilled(true)
                                         binding.lineChart.setDrawGridBackground(false)
                                         binding.lineChart.setDrawBorders(true)
@@ -357,7 +355,7 @@ class GraphsFragment : Fragment() {
                                         lineDataSet.circleRadius = 6f
                                         binding.lineChart.fitScreen()
 //                                        binding.lineChart.setScaleEnabled(false)
-                                        lineDataSet.mode = LineDataSet.Mode.LINEAR
+                                        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
                                         lineDataSet.setDrawFilled(true)
                                         binding.lineChart.setDrawGridBackground(false)
                                         binding.lineChart.setDrawBorders(true)
@@ -422,7 +420,7 @@ class GraphsFragment : Fragment() {
                                         lineDataSet.circleHoleColor =
                                             resources.getColor(com.example.mandiprice.R.color.DarkGreen)
                                         lineDataSet.circleRadius = 6f
-                                        lineDataSet.mode = LineDataSet.Mode.LINEAR
+                                        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
                                         lineDataSet.setDrawFilled(true)
 //                                        binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                                         binding.lineChart.fitScreen()

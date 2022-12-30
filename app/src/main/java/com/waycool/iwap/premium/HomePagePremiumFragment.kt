@@ -48,10 +48,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private var mMap: GoogleMap? = null
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
-    private var myCropPremiumAdapter = MyCropPremiumAdapter(this)
+    private val myCropPremiumAdapter by lazy {   MyCropPremiumAdapter(this)}
+    private val myFarmPremiumAdapter by lazy {   MyFarmPremiumAdapter(this,requireContext())}
+
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
-    var deviceDataAdapter = DeviceDataAdapter()
 
     //    private var accountID: Int? = null
     override fun onCreateView(
@@ -75,17 +76,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initViewPager()
         fabButton()
         setBanners()
-        val fragment: ArrayList<Fragment> = arrayListOf(
-            DeviceFragmentOne(),
-            DeviceFragmentTwo()
-
-        )
-
-        val map = mutableMapOf<String, Any>()
-        map.put("serial_no_id", 1)
-        map.put("device_model_id", 2)
-        val adapter = ViewPagerAdapter(fragment, requireParentFragment())
-//        binding.idViewPager.adapter=adapter
 
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
@@ -226,6 +216,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val response = it.data as ArrayList<MyCropDataDomain>
             myCropPremiumAdapter.setMovieList(response)
 
+            myFarmPremiumAdapter.updateCropsList(response)
+
             if (it.data.isNullOrEmpty()) {
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
@@ -308,7 +300,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     private fun initObserveMYFarm() {
-        var myFarmPremiumAdapter = MyFarmPremiumAdapter(this,requireContext())
 //        val mapFragment = childFragmentManager
 //            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
 //        mapFragment!!.requireView().isClickable = false
@@ -333,6 +324,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("TAG", "initObserveMYFarmPraveen: ")
                     } else if (it.data != null)
                         if (it.data!!.isNotEmpty()) {
+                            myCropPremiumAdapter.updateMyfarms(it.data)
                             binding.clAddForm.visibility = View.GONE
                             binding.cardMYFarm.visibility = View.VISIBLE
                             myFarmPremiumAdapter.setMovieList(it.data)
@@ -463,8 +455,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvLastUpdate.text = data.dataTimestamp.toString()
             binding.soilMoistureOne.clearSections()
             binding.soilMoistureTwo.clearSections()
-            binding.kpaOne.text = data.soilMoisture1 + " kPa"
-            binding.kpaTwo.text = data.soilMoisture2 + " kPa"
+            binding.kpaOne.text = "${data.soilMoisture1} kPa"
+            binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
             binding.soilMoistureOne.addSections(
                 Section(0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
@@ -690,7 +682,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_1")
                     bundle.putString("toolbar","Soil Moisture Top")
-                    bundle.putString("temp_value", data.soilMoisture1)
+                    bundle.putString("temp_value", data.soilMoisture1.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -706,7 +698,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_2")
                     bundle.putString("toolbar","Soil Moisture Bottom")
-                    bundle.putString("temp_value", data.soilMoisture2)
+                    bundle.putString("temp_value", data.soilMoisture2?.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
