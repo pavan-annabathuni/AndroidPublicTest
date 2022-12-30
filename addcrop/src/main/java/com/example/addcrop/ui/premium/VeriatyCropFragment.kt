@@ -17,7 +17,7 @@ import com.example.addcrop.ui.CategoryAdapter
 import com.waycool.data.error.ToastStateHandling
 
 
-class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
+class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
     private var _binding: FragmentVeriatyCropBinding? = null
     private val binding get() = _binding!!
     var crop_id: Int? = null
@@ -56,10 +56,11 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
             if (!isSuccess) requireActivity().onBackPressed()
         }
     }
-        private fun initViewGraphs() {
+
+    private fun initViewGraphs() {
         binding.recyclerviewSand.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        val adapter = GraphsAdapter(MockListGraphs.getModel() as ArrayList<GraphsModel>,this)
+        val adapter = GraphsAdapter(MockListGraphs.getModel() as ArrayList<GraphsModel>, this)
         binding.recyclerviewSand.adapter = adapter
 
         binding.backBtn.setOnClickListener {
@@ -75,14 +76,18 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
             binding.cardCheckHealth.setOnClickListener {
 //                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Please Select Soil Type",
+                        Toast.LENGTH_SHORT
+                    )
 
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
 //                    bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
-                    bundle.putString("pom",name.name)
+                    bundle.putString("pom", name.name)
                     findNavController().navigate(
                         R.id.action_veriatyCropFragment_to_addCropFragment, bundle
                     )
@@ -102,7 +107,11 @@ class VeriatyCropFragment : Fragment(),ItemSelectedListener,ItemGraphsClicked {
             binding.cardCheckHealth.setOnClickListener {
 //                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
-                    ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Please Select Soil Type",
+                        Toast.LENGTH_SHORT
+                    )
                 } else {
                     Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()

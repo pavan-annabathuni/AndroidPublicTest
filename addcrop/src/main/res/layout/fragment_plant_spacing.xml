@@ -112,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
-                        android:hint="e.g 50"
+                        android:hint="e.g 5"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
@@ -124,7 +124,7 @@
                         android:id="@+id/constraintLayout3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space8"
+                        android:layout_margin="4dp"
                         android:background="@drawable/bg_selected"
                         app:justifyContent="center"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -135,8 +135,11 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn1"
-                            android:layout_width="40dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginStart="@dimen/space4"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -144,8 +147,10 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn2"
-                            android:layout_width="40dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -153,8 +158,11 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn3"
-                            android:layout_width="45dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginEnd="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -275,7 +283,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
-                        android:hint="e.g 50"
+                        android:hint="e.g 5"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayoutBedWidth"
@@ -287,7 +295,7 @@
                         android:id="@+id/constraintLayoutBedWidth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space8"
+                        android:layout_margin="4dp"
                         android:background="@drawable/bg_selected"
                         app:justifyContent="center"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -298,8 +306,11 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthFt"
-                            android:layout_width="40dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginStart="@dimen/space4"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -307,8 +318,11 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthCm"
-                            android:layout_width="40dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -316,8 +330,12 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthMtr"
-                            android:layout_width="45dp"
-                            android:layout_height="38dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginEnd="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
