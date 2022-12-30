@@ -294,7 +294,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                     val account = it.data?.accountId
                     accountID = it.data?.accountId
                     it.data.also { userDetails ->
-                        binding.tvWelcome.text = userDetails?.profile?.district
+                        binding.tvWelcome.text = userDetails?.profile?.village
                         binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -349,6 +349,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback {
                         binding.tvWelcomeName.visibility = View.INVISIBLE
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
+                        binding.ll.visibility=View.GONE
 
                     }
                 }

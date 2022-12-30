@@ -4,12 +4,10 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.Network.NetworkModels.UserDetailsDTO
+import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.data.repository.domainModels.WeatherMasterDomain
-import com.waycool.data.repository.LoginRepository
-import com.waycool.data.repository.ProfileRepository
-import com.waycool.data.repository.VansRepository
-import com.waycool.data.repository.WeatherRepository
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.repository.domainModels.weather.DailyDomain
 import com.waycool.data.utils.Resource
@@ -106,4 +104,7 @@ class WeatherViewModel : ViewModel() {
         queryMap["vans_type"] = "banners"
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
+
+    fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
+        FarmsRepository.getMyFarms().asLiveData()
 }

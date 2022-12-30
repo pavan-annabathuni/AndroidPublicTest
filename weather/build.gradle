@@ -98,6 +98,8 @@ dependencies {
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
 
+    implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
+
     //Firebase
 //    implementation platform(firebase.bom)
 //    implementation(firebase.analytics)

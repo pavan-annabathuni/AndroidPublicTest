@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -83,25 +84,30 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/ivFeedback"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space50"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="12dp"
-                android:text="GWX Farm 1"
+                android:ellipsize="end"
+                tools:text="GWX Farm 1"
                 android:textColor="#585858"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/tvEnableAddDevice"
+                app:layout_constraintTop_toBottomOf="@+id/tvEnableAddDevice" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvEnableAddDevice"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:text="Krishna farm"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="Krishna farm"
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/tvAddDeviceStart"
                 app:layout_constraintStart_toEndOf="@+id/clImage"
                 app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
 
@@ -130,17 +136,21 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCloudyNoDisease"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space12"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="@dimen/txt12"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
                     android:text="Ideal spraying : Required for this week"
                     android:textColor="#070D09"
                     android:textSize="@dimen/txt12"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ivCloudyNoDisease"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -171,17 +181,21 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCloudy"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space12"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="@dimen/txt12"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
                     android:text="No Disease found"
                     android:textColor="#070D09"
                     android:textSize="@dimen/txt12"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ivCloudy"
                     app:layout_constraintTop_toTopOf="parent" />
 

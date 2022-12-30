@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".farmdetails.DeltaTInfoBottomDialogFragment">
+
+
+    <ImageView
+        android:id="@+id/close_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:padding="4dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.waycool.uicomponents.Text.Title2Bold
+        android:id="@+id/textView267"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="Spraying Condition (Delta T)"
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.waycool.uicomponents.Text.ParagraphSemiBold
+        android:id="@+id/textView268"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="Delta T is an important indicator to evaluate conditions suitable for spraying in agricultural and horticultural crops. Delta T is the difference between the wet bulb temperature and the dry bulb temperature. If the Delta T value is too high, the spray droplet will evaporate very fast. On the other hand, if the value is very low, then droplet survival will be longer and leading to increased potential for drift or washing off in case of rains.."
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView267" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/green400"
+        app:layout_constraintBottom_toBottomOf="@+id/textView269"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView269" />
+
+    <com.waycool.uicomponents.Text.ParagraphSemiBold
+        android:id="@+id/textView269"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="The ideal Delta T for spraying is between 2 and 8"
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view4"
+        app:layout_constraintTop_toBottomOf="@+id/textView268" />
+
+    <com.waycool.uicomponents.Text.ParagraphSemiBold
+        android:id="@+id/textView270"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Marginal Delta T (between 8.01-10.00) conditions, having the correct boom setup is important."
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="@+id/textView269"
+        app:layout_constraintStart_toStartOf="@+id/textView269"
+        app:layout_constraintTop_toBottomOf="@+id/textView269" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/textView270"
+        app:layout_constraintEnd_toEndOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="@+id/view4"
+        app:layout_constraintTop_toTopOf="@+id/textView270" />
+
+    <com.waycool.uicomponents.Text.ParagraphSemiBold
+        android:id="@+id/textView271"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Very higher or very low values Delta T (less than 2 or more than 8.00), is unfavourable for spraying"
+        android:textColor="@color/textdark"
+        app:layout_constraintEnd_toEndOf="@+id/textView270"
+        app:layout_constraintStart_toStartOf="@+id/textView270"
+        app:layout_constraintTop_toBottomOf="@+id/textView270" />
+
+    <View
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/red"
+        app:layout_constraintBottom_toBottomOf="@+id/textView271"
+        app:layout_constraintEnd_toEndOf="@+id/view5"
+        app:layout_constraintStart_toStartOf="@+id/view5"
+        app:layout_constraintTop_toTopOf="@+id/textView271" />
+
+    <com.waycool.uicomponents.Text.ParagraphMedium
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="Disclaimer: Please also look at recommendations from the manufacturer of spray, as recommendations may vary based on chemical used. Actual field conditions may vary from the above, and do rely on your practical experience first."
+        android:textColor="@color/textdark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView271" />
+</androidx.constraintlayout.widget.ConstraintLayout>

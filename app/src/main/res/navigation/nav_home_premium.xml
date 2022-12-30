@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/graphsFragment2"
-        android:name="com.waycool.iwap.premium.GraphsFragment"
+        android:name="com.waycool.iwap.graphs.GraphsFragment"
         android:label="fragment_graphs"
         tools:layout="@layout/fragment_graphs" />
     <include app:graph="@navigation/irrgation_navigation" />

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".premium.FarmDetailsFragment">
+    tools:context=".farmdetails.FarmDetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -191,13 +191,13 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/add_crop_cl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@drawable/bg_add_form"
 
+                            android:background="@drawable/bg_add_form"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
 
@@ -1060,6 +1060,7 @@
 
                     </androidx.cardview.widget.CardView>
 
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_speed_meter"
                         android:layout_width="match_parent"
@@ -1070,7 +1071,7 @@
                         app:cardCornerRadius="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+                        app:layout_constraintTop_toBottomOf="@+id/cl_Temp_view">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_speed_meter"
@@ -1087,7 +1088,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space16"
                                 android:layout_marginTop="@dimen/space16"
-                                android:text="Spraying Condition (Delta T)"
+                                android:text="Soil Moisture"
                                 android:textColor="#000000"
                                 android:textSize="@dimen/txt18"
                                 android:textStyle="bold"
@@ -1096,10 +1097,365 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_top"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toStartOf="@+id/bottom_top"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
+
+                                <TextView
+                                    android:id="@+id/tv_top"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Top"
+                                    android:textColor="#070D09"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                                <!--                                    <com.github.anastr.speedviewlib.SpeedView-->
+                                <!--                                        android:id="@+id/speedView"-->
+                                <!--                                        android:layout_width="wrap_content"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        />-->
+
+                                <!--                                    <ProgressBar-->
+                                <!--                                        android:id="@+id/soil_moisture_one"-->
+                                <!--                                        android:layout_width="100dp"-->
+                                <!--                                        android:layout_height="100dp"-->
+                                <!--                                        android:indeterminateOnly="false"-->
+                                <!--                                        android:max="240"-->
+                                <!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
+                                <!--                                        android:rotation="-120"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                <!--                                        />-->
+                                <!--                                    <com.github.anastr.speedviewlib.SpeedView-->
+                                <!--                                        android:id="@+id/soil_moisture_one"-->
+                                <!--                                        android:layout_width="150dp"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                <!--                                        />-->
+                                <!--                                    <com.github.anastr.speedviewlib.SpeedView-->
+                                <!--                                        android:id="@+id/soil_moisture_one"-->
+                                <!--                                        android:layout_width="100dp"-->
+                                <!--                                        android:layout_height="100dp"-->
+                                <!--                                        android:layout_gravity="center_horizontal"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                <!--                                        app:sv_centerCircleRadius="7dp"-->
+                                <!--                                        app:sv_indicatorColor="#683C13"-->
+                                <!--                                        app:sv_tickNumber="10"-->
+                                <!--                                        app:sv_withIndicatorLight="false"-->
+                                <!--                                        />-->
+                                <com.github.anastr.speedviewlib.SpeedView
+                                    android:id="@+id/soil_moisture_one"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tv_top"
+                                    app:sv_centerCircleRadius="7dp"
+                                    app:sv_endDegree="360"
+                                    app:sv_indicator="NeedleIndicator"
+                                    app:sv_indicatorColor="#070D09"
+                                    app:sv_speedTextFormat="FLOAT"
+                                    app:sv_speedTextSize="0dp"
+                                    app:sv_startDegree="180"
+                                    app:sv_tickNumber="0"
+                                    app:sv_unitTextSize="0dp"
+                                    app:sv_withTremble="false" />
+
+
+                                <!--                                    <View-->
+                                <!--                                        android:layout_width="100dp"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        android:layout_marginTop="70dp"-->
+                                <!--                                        android:background="#ffffff"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top"-->
+                                <!--                                        android:layout_height="20dp"/>-->
+
+                                <TextView
+                                    android:id="@+id/kpa_one"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/space20"
+                                    android:text="100 KPa"
+                                    android:textColor="#171717"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/soil_moisture_one" />
+                                <!--                                    <ProgressBar-->
+                                <!--                                        style="@android:style/Widget.ProgressBar.Horizontal"-->
+                                <!--                                        android:id="@+id/progressBar1"-->
+                                <!--                                        android:layout_width="match_parent"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        android:padding="10dp"-->
+                                <!--                                        android:progress="0"/>-->
+
+                                <!--                                    <com.github.anastr.speedviewlib.TubeSpeedometer-->
+                                <!--                                        android:id="@+id/tubeSpeedometer"-->
+                                <!--                                        android:layout_width="80dp"-->
+                                <!--                                        android:layout_height="80dp"-->
+                                <!--                                        android:layout_marginTop="8dp"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_top" />-->
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/bottom_top"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/cl_top"
+                                app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
+
+                                <TextView
+                                    android:id="@+id/tv_bottom"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Bottom"
+                                    android:textColor="#070D09"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <!--                                    <ProgressBar-->
+                                <!--                                        android:id="@+id/soil_moisture_two"-->
+                                <!--                                        android:layout_width="100dp"-->
+                                <!--                                        android:layout_height="100dp"-->
+                                <!--                                        android:indeterminateOnly="false"-->
+                                <!--                                        android:max="140"-->
+                                <!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
+                                <!--                                        android:rotation="-120"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom"-->
+                                <!--                                        />-->
+                                <!--                                    <com.github.anastr.speedviewlib.SpeedView-->
+                                <!--                                        android:id="@+id/soil_moisture_two"-->
+                                <!--                                        android:layout_width="150dp"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom" -->
+                                <!--                                        />-->
+
+                                <com.github.anastr.speedviewlib.SpeedView
+                                    android:id="@+id/soil_moisture_two"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tv_bottom"
+                                    app:sv_centerCircleRadius="7dp"
+                                    app:sv_endDegree="360"
+                                    app:sv_indicator="NeedleIndicator"
+                                    app:sv_indicatorColor="#070D09"
+                                    app:sv_speedTextFormat="FLOAT"
+                                    app:sv_speedTextSize="0dp"
+                                    app:sv_startDegree="180"
+                                    app:sv_tickNumber="0"
+                                    app:sv_unitTextSize="0dp"
+                                    app:sv_withTremble="false" />
+                                <!--                                    <View-->
+                                <!--                                        android:layout_width="100dp"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        android:layout_marginTop="70dp"-->
+                                <!--                                        android:background="#ffffff"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom"-->
+                                <!--                                        android:layout_height="20dp"/>-->
+
+                                <TextView
+                                    android:id="@+id/kpa_Two"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/space20"
+                                    android:text="100 KPa"
+                                    android:textColor="#171717"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/soil_moisture_two" />
+
+                                <!--                                    <com.github.anastr.speedviewlib.TubeSpeedometer-->
+                                <!--                                        android:id="@+id/tubeSpeedometerTwo"-->
+                                <!--                                        android:layout_width="80dp"-->
+                                <!--                                        android:layout_height="80dp"-->
+                                <!--                                        android:layout_marginTop="8dp"-->
+                                <!--                                        app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                        app:layout_constraintStart_toStartOf="parent"-->
+                                <!--                                        app:layout_constraintTop_toBottomOf="@+id/tv_bottom" />-->
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_soil_temp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_ans"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/card_speed_meter">
+
+                        <ImageView
+                            android:id="@+id/iv_lux"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:src="@drawable/ic_soil_tempuretur_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/iv_soil_temp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Soil Temperature"
+                            android:textColor="#585858"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_lux"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/iv_soil_degree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:text="20 C"
+                            android:textColor="#171717"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_Temp_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_ans"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/card_top_Parent"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/iv_lux_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+
+                            android:src="@drawable/ic_lux"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/iv_soil_temp_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Light Intensity"
+                            android:textColor="#585858"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_lux_one"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/iv_soil_degree_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:text="20 C"
+                            android:textColor="#171717"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_speed_meter_deltat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/bg_ans"
+                        android:elevation="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_soil_temp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_ans"
+                            app:layout_constraintEnd_toStartOf="@+id/clWind"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/card_top_Parent">
+
+                            <TextView
+                                android:id="@+id/deltat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space16"
+                                android:layout_marginTop="@dimen/space16"
+                                android:text="Spraying Condition (Delta T)"
+                                android:textColor="#000000"
+                                android:textSize="@dimen/txt18"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/cl_top_deltat"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/Soil_moisture">
+                                app:layout_constraintTop_toBottomOf="@+id/deltat">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/cl_progress_spreying"
@@ -1207,7 +1563,8 @@
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/line_one">
+                                        app:layout_constraintTop_toBottomOf="@+id/line_one"
+                                        app:layout_constraintVertical_bias="0.0">
 
                                         <TextView
                                             android:id="@+id/textView159"
@@ -1253,6 +1610,20 @@
                                             tools:itemCount="10"
                                             tools:listitem="@layout/item_delta_progress_bar" />
                                     </LinearLayout>
+
+                                    <com.waycool.uicomponents.Text.ParagraphMedium
+                                        android:id="@+id/delta_t_info"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="16dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginBottom="8dp"
+                                        android:padding="4dp"
+                                        android:text="How does this work?"
+                                        android:textColor="@color/primaryColor"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1616,7 +1987,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearDetails"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -1732,11 +2103,10 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_one">
+                app:layout_constraintTop_toBottomOf="@+id/ndvi_cl">
 
                 <TextView
                     android:id="@+id/tvMyformDetails"
@@ -1807,10 +2177,9 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space100"
-                        android:layout_marginTop="24dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvNdviBanner" />
+                        app:layout_constraintTop_toBottomOf="parent" />
 
                     <TextView
                         android:id="@+id/tvPump"
@@ -1936,20 +2305,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dottedFour" />
 
-                    <ImageView
-                        android:id="@+id/tvNdviBanner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space16"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/addcrop"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvNDVi" />
-
                     <TextView
                         android:id="@+id/tvPumpFlowRateNUmber"
                         android:layout_width="wrap_content"
@@ -1985,19 +2340,6 @@
                         android:textSize="@dimen/txt14"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dottedThree" />
-
-                    <TextView
-                        android:id="@+id/tvNDVi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="NDVI"
-                        android:textColor="#070D09"
-                        android:textSize="@dimen/txt14"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
 
                     <ImageView
                         android:id="@+id/dottedTwo"
@@ -2073,6 +2415,96 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/farmdetails_premium_cl" />
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ndvi_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_one">
+
+
+                <com.waycool.uicomponents.Text.Title2Bold
+                    android:id="@+id/tvNDVi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Farm Health Monitoring (NDVI)"
+                    android:textColor="@color/textdark"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvNDVi" >
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent=".7" />
+
+                        <ImageView
+                            android:id="@+id/imageView15"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_satellite_image"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline7"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.waycool.uicomponents.Text.Title3Bold
+                            android:id="@+id/title3Bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@color/textdark"
+                            android:text="Get Satellite imagery for your crops"
+                            app:layout_constraintEnd_toStartOf="@+id/imageView15"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/ndvi_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_marginBottom="16dp"
+                            app:strokeColor="@color/green"
+                            app:strokeWidth="2dp"
+                            android:text="Know more"
+                            android:textAllCaps="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/title3Bold"
+                            app:layout_constraintTop_toBottomOf="@+id/title3Bold" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

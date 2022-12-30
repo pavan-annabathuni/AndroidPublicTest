@@ -1,4 +1,4 @@
-package com.waycool.iwap.premium
+package com.waycool.iwap.myfarms
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,17 +12,16 @@ import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
-import com.waycool.iwap.databinding.FragmentDeviceOneBinding
-import com.waycool.iwap.databinding.FragmentDeviceTwoBinding
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
+import com.waycool.iwap.premium.Farmdetailslistener
 
 
-class MyFarmFragment : Fragment(),Farmdetailslistener {
+class MyFarmFragment : Fragment(), Farmdetailslistener {
     private var _binding: FragmentMyFarmBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel:MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
-    private val adapter:MyFarmFragmentAdapter by lazy { MyFarmFragmentAdapter(this,requireContext()) }
+    private val adapter: MyFarmFragmentAdapter by lazy { MyFarmFragmentAdapter(this,requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
