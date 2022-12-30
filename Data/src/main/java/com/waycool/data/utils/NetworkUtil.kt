@@ -3,6 +3,7 @@ package com.waycool.data.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 
 object NetworkUtil {
     var TYPE_WIFI = 1
@@ -31,6 +32,7 @@ object NetworkUtil {
 
     fun getConnectivityStatusString(context: Context?): Int {
         val conn = isInternetAvailable(context)
+        Log.d("NetworkUtil","Con${conn}")
         var status = 0
         when (conn) {
             TYPE_WIFI -> {

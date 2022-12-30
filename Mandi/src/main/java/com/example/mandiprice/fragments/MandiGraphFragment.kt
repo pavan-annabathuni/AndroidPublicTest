@@ -97,8 +97,7 @@ class MandiGraphFragment : Fragment() {
         binding.tvMarket.text = marketName
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
-        binding.recycleViewDis.adapter = mDateAdapter
-        viewModel.viewModelScope.launch {
+/*        viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
                 .observe(viewLifecycleOwner) { it2 ->
 //                 val data2 = (it2.data?.data?.map { data ->
@@ -109,7 +108,7 @@ class MandiGraphFragment : Fragment() {
                     mDateAdapter.submitList(it2.data?.data)
                     //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
                 }
-        }
+        }*/
         binding.imgShare.setOnClickListener() {
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
         }
@@ -145,6 +144,7 @@ class MandiGraphFragment : Fragment() {
                                 binding.viewModel = it.data
                                 binding.clInclude.visibility = View.GONE
                                 apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+                                binding.recycleViewDis.adapter = mDateAdapter
                                 graph()
                                 setBanners()
 

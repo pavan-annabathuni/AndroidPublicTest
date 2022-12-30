@@ -598,16 +598,27 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.NotLoading) {
 
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    newsBinding.noDataNews.visibility = View.VISIBLE
+                                    newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    newsBinding.viewAllNews.visibility=View.GONE
+                                }
+
+                                if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility=View.GONE
+
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
+                                        newsBinding.viewAllNews.visibility=View.VISIBLE
+
 
                                     }
                                 }
@@ -635,6 +646,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
+
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
+
                                 if (it1 is LoadState.NotLoading) {
                                     Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
 
