@@ -42,24 +42,41 @@ class LanguageFragment : Fragment() {
         languageSelectionAdapter = LanguageSelectionAdapter()
         binding.languageRecyclerview.adapter = languageSelectionAdapter
 
-
-
         apiCall(apiErrorHandlingBinding,languageSelectionAdapter!!)
           languageSelectionAdapter!!.onItemClick = {
             selectedLanguage = it
         }
 
         binding.doneBtn.setOnClickListener {
-            if (selectedLanguage == null)
-                context?.let { it1 -> ToastStateHandling.toastError(it1,"Please select Language", Toast.LENGTH_SHORT) }
+            if (selectedLanguage == null) {
+                if(NetworkUtil.getConnectivityStatusString(context)==NetworkUtil.TYPE_NOT_CONNECTED){
+                    apiCall(apiErrorHandlingBinding, languageSelectionAdapter!!)
+
+                }
+                else{
+                    context?.let { it1 ->
+                        ToastStateHandling.toastError(
+                            it1,
+                            "Please select Language",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+                }
+            }
             else {
-                languageViewModel.setSelectedLanguage(
-                    selectedLanguage!!.langCode,
-                    selectedLanguage!!.id,
-                    selectedLanguage!!.langNative
-                )
-                Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_languageFragment_to_login_nav)
+                if(NetworkUtil.getConnectivityStatusString(context)==NetworkUtil.TYPE_NOT_CONNECTED){
+                    apiCall(apiErrorHandlingBinding, languageSelectionAdapter!!)
+                }
+                else{
+                    languageViewModel.setSelectedLanguage(
+                        selectedLanguage!!.langCode,
+                        selectedLanguage!!.id,
+                        selectedLanguage!!.langNative
+                    )
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_languageFragment_to_login_nav)
+                }
+
             }
         }
 
@@ -79,7 +96,6 @@ class LanguageFragment : Fragment() {
         languageSelectionAdapter: LanguageSelectionAdapter
     ) {
         if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
-            Log.d("NetworkUtil","NetworkNotString${NetworkUtil.getConnectivityStatusString(context)}")
             binding.clInclude.visibility=View.VISIBLE
             binding.progressBar.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
@@ -89,8 +105,6 @@ class LanguageFragment : Fragment() {
             binding.selectLanguageTv.visibility=View.GONE
         }
         else {
-            Log.d("NetworkUtil","NetworkElseString${NetworkUtil.getConnectivityStatusString(context)}")
-
             binding.progressBar.visibility=View.VISIBLE
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {

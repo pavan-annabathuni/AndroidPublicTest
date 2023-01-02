@@ -222,7 +222,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         vansType: String? = null,
         tags: String? = null
     ) {
-
         viewModel.getVansNewsList(vansType, tags).observe(this) {
             newsAdapter.submitData(lifecycle, it)
         }
@@ -368,7 +367,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow - Hi, Checkout the News and Articles on ${it?.title}.")
                     .setDescription("Watch more News and Articles and learn with Outgrow")
                     .build()

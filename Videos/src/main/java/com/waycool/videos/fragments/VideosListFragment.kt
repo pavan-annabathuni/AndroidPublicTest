@@ -106,16 +106,6 @@ class VideosListFragment : Fragment(), itemClick {
         adapterVideo = VideosPagerAdapter(requireContext(),this)
         binding.videosVideoListRv.adapter = adapterVideo
 
-/*
-        adapterVideo.onItemClick = { it->
-            val bundle = Bundle()
-            bundle.putParcelable("video", it)
-           this.findNavController().navigate(
-               R.id.action_videosListFragment_to_playVideoFragment,bundle
-
-            )
-
-        }*/
 
 
         binding.search.addTextChangedListener(object : TextWatcher {
@@ -348,7 +338,7 @@ class VideosListFragment : Fragment(), itemClick {
                 )
                 .setSocialMetaTagParameters(
                     DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                         .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
                         .setDescription("Watch more videos and learn with Outgrow")
                         .build()

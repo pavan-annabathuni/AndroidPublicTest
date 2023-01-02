@@ -16,7 +16,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
@@ -45,6 +47,11 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -209,22 +216,49 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun getVideos() {
         binding.clProgressBar.visibility = View.VISIBLE
-
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
-        videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
-       /*     if (adapter.snapshot().size==0){
-                videosBinding.noDataVideo.visibility=View.VISIBLE
-            }
-            else{
-                videosBinding.noDataVideo.visibility=View.GONE
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(module_id).collect {
                 adapter.submitData(lifecycle, it)
-                            binding.clProgressBar.visibility = View.GONE
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
 
-            }*/
-            adapter.submitData(lifecycle, it)
+                                if (it1 is LoadState.NotLoading) {
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
+
+
+                }
+
+            }
         }
+
+
 
 
         adapter.onItemClick = {
