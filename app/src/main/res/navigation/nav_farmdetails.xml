@@ -7,12 +7,36 @@
 
     <fragment
         android:id="@+id/farmDetailsFragment4"
-        android:name="com.waycool.iwap.premium.FarmDetailsFragment"
+        android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
         android:label="fragment_farm_details2"
         tools:layout="@layout/fragment_farm_details2" >
         <action
             android:id="@+id/action_farmDetailsFragment4_to_navigation_adddevice"
             app:destination="@id/navigation_adddevice" />
+        <action
+            android:id="@+id/action_farmDetailsFragment4_to_navigation"
+            app:destination="@id/navigation" />
+        <action
+            android:id="@+id/action_farmDetailsFragment4_to_graphsFragment3"
+            app:destination="@id/graphsFragment3" />
+        <action
+            android:id="@+id/action_farmDetailsFragment4_to_deltaTInfoBottomDialogFragment"
+            app:destination="@id/deltaTInfoBottomDialogFragment" />
+        <action
+            android:id="@+id/action_farmDetailsFragment4_to_nav_add_farm"
+            app:destination="@id/nav_add_farm" />
     </fragment>
     <include app:graph="@navigation/navigation_add_device" />
+    <include app:graph="@navigation/ndvi_navigation" />
+    <fragment
+        android:id="@+id/graphsFragment3"
+        android:name="com.waycool.iwap.graphs.GraphsFragment"
+        android:label="fragment_graphs"
+        tools:layout="@layout/fragment_graphs" />
+    <dialog
+        android:id="@+id/deltaTInfoBottomDialogFragment"
+        android:name="com.waycool.iwap.farmdetails.DeltaTInfoBottomDialogFragment"
+        android:label="fragment_delta_t_info_bottom_dialog"
+        tools:layout="@layout/fragment_delta_t_info_bottom_dialog" />
+    <include app:graph="@navigation/nav_add_farm" />
 </navigation>

@@ -371,7 +371,7 @@ interface ApiInterface {
     @GET("api/v1/get-delta-t-data")
     suspend fun farmDetailsDelta(
         @HeaderMap map: Map<String, String>?,
-//        @Query("")
+        @Query("farm_id")farmId:Int
     ): Response<FarmDetailsDTO>
 
     @GET("api/v1/app-translations")

@@ -259,11 +259,11 @@ object CropsRepository {
         }
     }
 
-    fun farmDetailsDelta(): Flow<Resource<FarmDetailsDTO?>> {
-        GlobalScope.launch {
-            MyCropSyncer().invalidateSync()
-        }
-        return NetworkSource.farmDetailsDelta()
+    fun farmDetailsDelta(farmId:Int): Flow<Resource<FarmDetailsDTO?>> {
+//        GlobalScope.launch {
+//            MyCropSyncer().invalidateSync()
+//        }
+        return NetworkSource.farmDetailsDelta(farmId)
     }
 
 

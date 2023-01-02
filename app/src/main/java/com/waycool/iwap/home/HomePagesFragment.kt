@@ -305,7 +305,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                     val account = it.data?.accountId
                     accountID = it.data?.accountId
                     it.data.also { userDetails ->
-                        binding.tvWelcome.text = userDetails?.profile?.district
+                        binding.tvWelcome.text = userDetails?.profile?.village
                         binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -360,6 +360,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         binding.tvWelcomeName.visibility = View.INVISIBLE
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
+                        binding.ll.visibility=View.GONE
 
                     }
                 }
@@ -598,16 +599,27 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.NotLoading) {
 
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    newsBinding.noDataNews.visibility = View.VISIBLE
+                                    newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    newsBinding.viewAllNews.visibility=View.GONE
+                                }
+
+                                if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility=View.GONE
+
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
+                                        newsBinding.viewAllNews.visibility=View.VISIBLE
+
 
                                     }
                                 }
@@ -635,6 +647,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
+
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
+
                                 if (it1 is LoadState.NotLoading) {
                                     Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
 

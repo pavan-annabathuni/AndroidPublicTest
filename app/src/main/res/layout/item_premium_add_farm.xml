@@ -54,12 +54,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:text=" Total Area: 5 Acre"
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivFeedback"
                 app:layout_constraintStart_toEndOf="@+id/map_card"
                 app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
 
@@ -67,24 +69,41 @@
                 android:id="@+id/ivFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="16dp"
                 android:padding="4dp"
                 android:src="@drawable/ic_awesome_star"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
+                app:layout_constraintTop_toTopOf="@+id/totalAreea" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvEnableAddDevice"
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:id="@+id/tvEnableAddDevice"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="6dp"-->
+<!--                android:text="Bangalore"-->
+<!--                android:textColor="#5D6571"-->
+<!--                android:textSize="@dimen/txt14"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/totalAreea"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/map_card"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/crop_farm_rv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:text="Bangalore"
-                android:textColor="#5D6571"
-                android:textSize="@dimen/txt14"
-                app:layout_constraintEnd_toEndOf="@+id/totalAreea"
-                app:layout_constraintStart_toEndOf="@+id/map_card"
-                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
+                app:layout_constraintTop_toBottomOf="@+id/totalAreea"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:itemCount="5"
+                tools:listitem="@layout/viewholder_farm_crops" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCloudy"
@@ -132,12 +151,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space16"
-                android:layout_marginTop="@dimen/space16"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/space12"
                 android:layout_marginBottom="@dimen/space16"
                 android:background="@drawable/bg_add_form"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/map_card"
