@@ -233,7 +233,7 @@ class MandiFragment : Fragment() {
         viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
             val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
-                data.categoryName
+                data.categoryTagName
             } ?: emptyList()) as MutableList<String>
             if (cropCategoryList.isNotEmpty())
                 cropCategoryList[0] = "Category"
@@ -275,7 +275,7 @@ class MandiFragment : Fragment() {
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
                         val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                         val cropNameList = (filter?.map { data ->
-                            data.cropName
+                            data.cropNameTag
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.isNotEmpty())
