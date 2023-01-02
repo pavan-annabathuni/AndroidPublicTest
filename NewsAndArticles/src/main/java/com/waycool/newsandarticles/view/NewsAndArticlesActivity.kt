@@ -222,7 +222,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         vansType: String? = null,
         tags: String? = null
     ) {
-
         viewModel.getVansNewsList(vansType, tags).observe(this) {
             newsAdapter.submitData(lifecycle, it)
         }
