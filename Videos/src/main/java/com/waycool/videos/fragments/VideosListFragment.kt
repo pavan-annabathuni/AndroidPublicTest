@@ -338,7 +338,7 @@ class VideosListFragment : Fragment(), itemClick {
                 )
                 .setSocialMetaTagParameters(
                     DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                         .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
                         .setDescription("Watch more videos and learn with Outgrow")
                         .build()

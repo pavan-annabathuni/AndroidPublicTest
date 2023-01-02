@@ -269,7 +269,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
                     .setDescription("Find Pest Management and more on Outgrow app")
                     .build()
