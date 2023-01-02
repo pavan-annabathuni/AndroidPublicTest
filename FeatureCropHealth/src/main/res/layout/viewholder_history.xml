@@ -23,16 +23,28 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/iVHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/space12"
-                android:src="@drawable/disease"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardHistory"
+                android:layout_width="80dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:cardCornerRadius="@dimen/space8"
+                android:layout_margin="@dimen/space12"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="80dp">
+                <ImageView
+                    android:id="@+id/iVHistory"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/disease"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.cardview.widget.CardView>
+
+
+
 
             <TextView
                 android:id="@+id/tvRequest"
@@ -44,7 +56,7 @@
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/iVHistory"
+                app:layout_constraintStart_toEndOf="@+id/cardHistory"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -53,10 +65,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/powdery_mildew"
+
                 android:textColor="#000000"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/iVHistory"
+                app:layout_constraintStart_toEndOf="@+id/cardHistory"
                 app:layout_constraintTop_toBottomOf="@+id/tvRequest" />
             <TextView
                 android:id="@+id/tvCropID"
@@ -88,7 +100,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/space5"
                 android:src="@drawable/ic_status_crop"
-                app:layout_constraintStart_toEndOf="@+id/iVHistory"
+                app:layout_constraintStart_toEndOf="@+id/cardHistory"
                 app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />
 
             <TextView

@@ -126,7 +126,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun setBanners() {
-        binding.clProgressBar.visibility=View.VISIBLE
+        binding.progressBar.visibility=View.VISIBLE
 
         val bannerAdapter = AdsAdapter()
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
@@ -200,10 +200,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
 
-        binding.cardCheckHealth.setOnClickListener {
-            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
-
-        }
+//        binding.cardCheckHealth.setOnClickListener {
+//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
+//
+//        }
     }
 
 
@@ -385,7 +385,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
-        bundle.putInt("s", data.id!!)
+        bundle.putInt("id", data.id!!)
         bundle.putString("soil_test_number", data.soil_test_number)
         findNavController().navigate(
             R.id.action_soilTestingHomeFragment_to_statusTrackerFragment,

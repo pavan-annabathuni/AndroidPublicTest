@@ -791,11 +791,12 @@
 
 
     </androidx.core.widget.NestedScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clProgressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="#070D09"
         android:visibility="gone"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
