@@ -63,7 +63,7 @@ class PlantSpacingFragment : Fragment() {
 //            }
 //        }
         val bundle = Bundle()
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             val accountID = it.data?.accountId
             if (arguments != null) {
                 nickname = arguments?.getString("nick_name")
@@ -109,22 +109,31 @@ class PlantSpacingFragment : Fragment() {
 //            var length=binding.et
                 map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
-                map["len_drip"] = binding.etNumber.text
-                map["width_drip"] = binding.etNumberWidth.text
-
-                if (binding.btn1.equals("ft")) {
-                    map.put("len_drip", binding.etNumber.text.toString().toInt() * 0.3048)
-                } else if (binding.btn2.equals("cm")) {
-                    map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                } else if (binding.btn3.equals("mtr")) {
-                    map["len_drip"] = binding.etNumber.text
+//                map["len_drip"] = binding.etNumber.text
+//                map["width_drip"] = binding.etNumberWidth.text
+                binding.constraintLayout3.setOnSelectListener {
+                    Log.d("TAG", "onViewCreatedBtnselect: $it")
+                    Toast.makeText(requireContext(), it.text, Toast.LENGTH_SHORT).show()
+                    if (it.text == "ft") {
+                        map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                    } else if (it.text == "cm") {
+                        map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                    } else if ((it.text == "mtr")) {
+                        map["len_drip"] = binding.etNumber.text
+                    }else {
+                        map["len_drip"] = binding.etNumber.text
+                    }
                 }
-                if (binding.BedWidthFt.equals("ft")) {
-                    map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.3048
-                } else if (binding.BedWidthCm.equals("cm")) {
-                    map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                } else if (binding.BedWidthMtr.equals("mtr")) {
-                    map["width_drip"] = binding.etNumber.text
+                binding.constraintLayoutBedWidth.setOnSelectListener {
+                    if (it.text == "ft") {
+                        map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                    } else if (it.text == "cm") {
+                        map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                    } else if (it.text == "mtr") {
+                        map["width_drip"] = binding.etNumber.text
+                    }else{
+                        map["width_drip"] = binding.etNumber.text
+                    }
                 }
                 binding.cardCheckHealth.setOnClickListener {
                     plantToPlant = binding.etNumber.text.toString().trim()

@@ -136,28 +136,33 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         var deltaTomAdapter = DeltaTomAdapter(requireContext())
         binding.sparayingRv.adapter = deltaAdapter
         binding.sparayingRv2.adapter = deltaTomAdapter
-        viewDevice.farmDetailsDelta().observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    if (it.data?.data!!.isNotEmpty()) {
-                        deltaAdapter.setMovieList(it.data?.data)
+        if (myFarm?.id != null) {
+            viewDevice.farmDetailsDelta(myFarm?.id!!).observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Success -> {
+
+                            deltaAdapter.setMovieList(it.data?.data?.Today)
 //                        binding.soilMoistureOne.progress=60
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
 //                        deltaAdapter.notifyDataSetChanged()
-                        deltaTomAdapter.setMovieList(it.data?.data)
+                            deltaTomAdapter.setMovieList(it.data?.data?.Tomorrow)
 //                        deltaAdapter.update(getSprayingItems(sprayingTime.getToday()))
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data[0].Today} ")
 
+
+
                     }
+                    is Resource.Error -> {
+                        ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                    }
+                    is Resource.Loading -> {
+                        ToastStateHandling.toastWarning(
+                            requireContext(),
+                            "Loading",
+                            Toast.LENGTH_SHORT
+                        )
 
-
-                }
-                is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
-                }
-                is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    }
                 }
             }
         }
@@ -231,14 +236,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         binding.farmdetailsPremiumCl.visibility = View.VISIBLE
                         binding.cardMYDevice.visibility = View.VISIBLE
                         binding.freeAddDeviceCv.visibility = View.GONE
-                        binding.ndviCl.visibility=View.VISIBLE
+                        binding.ndviCl.visibility = View.VISIBLE
                         initObserveDevice()
                         initiFarmDeltT()
                     } else {
                         binding.farmdetailsPremiumCl.visibility = View.GONE
                         binding.cardMYDevice.visibility = View.GONE
                         binding.freeAddDeviceCv.visibility = View.VISIBLE
-                        binding.ndviCl.visibility=View.GONE
+                        binding.ndviCl.visibility = View.GONE
 
                     }
                 }
@@ -290,14 +295,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             )
         }
         binding.ndviCl.setOnClickListener {
-            val bundle =Bundle()
-            bundle.putParcelable("farm",myFarm)
-           findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation,bundle)
+            val bundle = Bundle()
+            bundle.putParcelable("farm", myFarm)
+            findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation, bundle)
         }
-         binding.ndviButton.setOnClickListener {
-             val bundle =Bundle()
-             bundle.putParcelable("farm",myFarm)
-             findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation,bundle)
+        binding.ndviButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("farm", myFarm)
+            findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation, bundle)
         }
 
         binding.callDevice.setOnClickListener() {
@@ -324,11 +329,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             startActivity(intent)
         }
 
-        binding.editFarmFarmsSingle.setOnClickListener{
-            val bundle=Bundle()
-            bundle.putParcelable("farm",myFarm)
-            bundle.putBoolean("isedit",true)
-            findNavController().navigate(R.id.action_farmDetailsFragment4_to_nav_add_farm,bundle)
+        binding.editFarmFarmsSingle.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("farm", myFarm)
+            bundle.putBoolean("isedit", true)
+            findNavController().navigate(R.id.action_farmDetailsFragment4_to_nav_add_farm, bundle)
 
 //            val intent=Intent(requireActivity(),AddFarmActivity::class.java)
 //            intent.putExtras(bundle)
@@ -773,7 +778,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
         }
     }
-
 
 
     private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {

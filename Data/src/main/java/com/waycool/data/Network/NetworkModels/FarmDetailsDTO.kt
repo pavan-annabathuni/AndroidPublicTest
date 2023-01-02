@@ -5,18 +5,13 @@ import com.google.gson.annotations.SerializedName
 data class FarmDetailsDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
-    @SerializedName("data") var data: ArrayList<FarmDetailsData> = arrayListOf()
+    @SerializedName("data") var data: FarmDetailsData = FarmDetailsData()
 )
 data class FarmDetailsData(
-    @SerializedName("Today"    ) var Today    : ArrayList<Today>    = arrayListOf(),
-    @SerializedName("Tomorrow" ) var Tomorrow : ArrayList<Tomorrow> = arrayListOf()
+    @SerializedName("Today"    ) var Today    : ArrayList<DeltaT>    = arrayListOf(),
+    @SerializedName("Tomorrow" ) var Tomorrow : ArrayList<DeltaT> = arrayListOf()
 )
-data class Today(
-    @SerializedName("datetime"  ) var datetime  : String? = null,
-    @SerializedName("delta_t"   ) var deltaT    : Double? = null,
-    @SerializedName("condition" ) var condition : String? = null
-)
-data class Tomorrow(
+data class DeltaT(
     @SerializedName("datetime"  ) var datetime  : String? = null,
     @SerializedName("delta_t"   ) var deltaT    : Double? = null,
     @SerializedName("condition" ) var condition : String? = null

@@ -580,12 +580,12 @@ object NetworkSource {
             }
         }
 
-    fun farmDetailsDelta() =
+    fun farmDetailsDelta(farmId:Int) =
         flow<Resource<FarmDetailsDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 //                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
-                val response = apiInterface.farmDetailsDelta(headerMap)
+                val response = apiInterface.farmDetailsDelta(headerMap, farmId)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
