@@ -458,6 +458,8 @@ class CropInfoFragment : Fragment(), onItemClick {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
+                    newsBinding.viewAllNews.visibility=View.GONE
+
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
@@ -469,6 +471,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility=View.GONE
+
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -521,6 +524,8 @@ class CropInfoFragment : Fragment(), onItemClick {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
+                    videosBinding.viewAllVideos.visibility=View.GONE
+
                 }
                 else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -531,6 +536,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    videosBinding.viewAllVideos.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -540,10 +546,13 @@ class CropInfoFragment : Fragment(), onItemClick {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
+                                        videosBinding.viewAllVideos.visibility=View.GONE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility=View.VISIBLE
+
 
                                     }
                                 }

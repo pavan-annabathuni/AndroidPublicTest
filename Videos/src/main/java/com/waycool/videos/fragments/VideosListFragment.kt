@@ -106,16 +106,6 @@ class VideosListFragment : Fragment(), itemClick {
         adapterVideo = VideosPagerAdapter(requireContext(),this)
         binding.videosVideoListRv.adapter = adapterVideo
 
-/*
-        adapterVideo.onItemClick = { it->
-            val bundle = Bundle()
-            bundle.putParcelable("video", it)
-           this.findNavController().navigate(
-               R.id.action_videosListFragment_to_playVideoFragment,bundle
-
-            )
-
-        }*/
 
 
         binding.search.addTextChangedListener(object : TextWatcher {
