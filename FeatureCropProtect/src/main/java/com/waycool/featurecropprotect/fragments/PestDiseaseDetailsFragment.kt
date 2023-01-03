@@ -111,6 +111,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
 
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

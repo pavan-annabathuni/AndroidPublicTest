@@ -210,19 +210,22 @@ class CropSelectionFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         binding.clProgressBar.visibility=View.VISIBLE
-
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
-                    binding.clProgressBar.visibility=View.GONE
-
                     if (categoryId == null) {
                         adapter.submitList(res.data)
-                    } else
+                    } else {
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+                    }
+                    binding.clProgressBar.visibility=View.GONE
+
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.clProgressBar.visibility=View.VISIBLE
+                }
                 is Resource.Error -> {
+                    binding.clProgressBar.visibility=View.GONE
                     ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
