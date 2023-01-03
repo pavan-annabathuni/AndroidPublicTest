@@ -182,11 +182,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         binding.cardCheckHealth.setOnClickListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
+                binding.clProgressBar.visibility = View.VISIBLE
+
                 accountID = it.data?.accountId
                 if (accountID != null) {
-                    Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                     isLocationPermissionGranted(accountID!!)
                     binding.cardCheckHealth.isClickable = false
 
@@ -200,15 +199,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
 
-//        binding.cardCheckHealth.setOnClickListener {
-//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
-//
-//        }
     }
 
 
     private fun getVideos() {
-        binding.clProgressBar.visibility = View.VISIBLE
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
@@ -362,8 +356,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.clProgressBar.visibility=View.GONE
-
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility = View.VISIBLE
 
@@ -424,10 +416,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 100
             )
             // use your location object
-            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
             false
         } else {
-            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
@@ -439,10 +429,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             latitude,
                             longitutde
                         ).observe(requireActivity()) {
+                            binding.clProgressBar.visibility = View.VISIBLE
                             when (it) {
                                 is Resource.Success -> {
-                                    binding.clProgressBar.visibility = View.GONE
-                                    binding.progressBar.isVisible = false
                                     if (it.data!!.isEmpty()) {
 
                                         CustomeDialogFragment.newInstance().show(
@@ -452,10 +441,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
-                                        Log.d(
-                                            TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response"
-                                        )
                                         val bundle = Bundle().apply {
                                             putParcelableArrayList(
                                                 "list",
@@ -465,7 +450,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
-//                                        bundle.putString("lab_name",it.data)
+
                                         try {
                                             findNavController().navigate(
                                                 R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
@@ -473,6 +458,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }catch (e:Exception){
                                         }
+
+                                        binding.clProgressBar.visibility = View.GONE
 
 
                                     }
@@ -495,14 +482,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                     }
 
                                     binding.clProgressBar.visibility = View.GONE
-
                                     binding.cardCheckHealth.isClickable = true
 
                                 }
                                 is Resource.Loading -> {
-                                    binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-                                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                                 }
                             }
