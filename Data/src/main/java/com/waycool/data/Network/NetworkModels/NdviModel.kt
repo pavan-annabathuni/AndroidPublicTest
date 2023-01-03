@@ -8,19 +8,38 @@ data class NdviModel(
     @SerializedName("data"    ) var data    : ArrayList<NdviData> = arrayListOf()
 )
 data class NdviData(
-    @SerializedName("id"             ) var id            : Int?    = null,
-    @SerializedName("polygon_name"   ) var polygonName   : String? = null,
-    @SerializedName("polygon_id"     ) var polygonId     : String? = null,
-    @SerializedName("no_of_images"   ) var noOfImages    : Int?    = null,
-    @SerializedName("tile_date"      ) var tileDate      : String? = null,
-    @SerializedName("cloud_coverage" ) var cloudCoverage : Double? = null,
-    @SerializedName("satellite_type" ) var satelliteType : String? = null,
-    @SerializedName("truecolor_tile" ) var truecolorTile : String? = null,
-    @SerializedName("ndvi_tile"      ) var ndviTile      : String? = null,
-    @SerializedName("min_ndvi"       ) var minNdvi       : Double? = null,
-    @SerializedName("max_ndvi"       ) var maxNdvi       : Double? = null,
-    @SerializedName("mean_ndvi"      ) var meanNdvi      : Double? = null,
-    @SerializedName("created_at"     ) var createdAt     : String? = null,
-    @SerializedName("account_no_id"  ) var accountNoId   : Int?    = null,
-    @SerializedName("farm_id"        ) var farmId        : Int?    = null
+    @SerializedName("dt"    ) var dt    : Long?    = null,
+    @SerializedName("type"  ) var type  : String? = null,
+    @SerializedName("dc"    ) var dc    : Double?    = null,
+    @SerializedName("cl"    ) var cl    : Double? = null,
+    @SerializedName("tile"  ) var tile  : Tile?   = Tile(),
+    @SerializedName("stats" ) var stats : Stats?  = Stats()
 )
+
+data class Stats (
+
+    @SerializedName("ndvi" ) var ndvi : String? = null,
+    @SerializedName("evi"  ) var evi  : String? = null,
+    @SerializedName("evi2" ) var evi2 : String? = null,
+    @SerializedName("nri"  ) var nri  : String? = null,
+    @SerializedName("dswi" ) var dswi : String? = null,
+    @SerializedName("ndwi" ) var ndwi : String? = null
+
+)
+
+data class Tile (
+
+    @SerializedName("truecolor"  ) var truecolor  : String? = null,
+    @SerializedName("falsecolor" ) var falsecolor : String? = null,
+    @SerializedName("ndvi"       ) var ndvi       : String? = null,
+    @SerializedName("evi"        ) var evi        : String? = null,
+    @SerializedName("evi2"       ) var evi2       : String? = null,
+    @SerializedName("nri"        ) var nri        : String? = null,
+    @SerializedName("dswi"       ) var dswi       : String? = null,
+    @SerializedName("ndwi"       ) var ndwi       : String? = null
+
+)
+
+data class NDVIMean(
+    @SerializedName("mean"  ) var mean  : Double? = null,
+    )

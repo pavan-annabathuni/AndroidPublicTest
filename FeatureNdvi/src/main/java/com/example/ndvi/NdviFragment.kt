@@ -1,5 +1,6 @@
 package com.example.ndvi
 
+import android.animation.LayoutTransition
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -23,12 +24,15 @@ import com.google.android.libraries.maps.model.*
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
+import com.google.maps.android.PolyUtil
 import com.waycool.data.Network.NetworkModels.NdviData
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class NdviFragment : Fragment(), OnMapReadyCallback {
@@ -67,7 +71,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentNdviBinding.inflate(inflater)
-        binding.farmName.text=myFarm?.farmName
+        binding.farmName.text = myFarm?.farmName
 
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map_ndvi) as SupportMapFragment
@@ -79,6 +83,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 getNdviFromAPI()
             }
         }
+
+        binding.roolLlNdvi.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+
 //        viewModel.getNdvi(myFarm?.id, 2).observe(viewLifecycleOwner) {
 //            Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
 //             ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
@@ -148,13 +155,12 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 binding.tabLayout.newTab().setText(vegIndex)
                     .setCustomView(R.layout.item_tab)
             )
-        }
-        viewModel.viewModelScope.launch {
             val TranTureColor = TranslationsManager().getString("true_colour")
             binding.tabLayout.addTab(
                 binding.tabLayout.newTab().setText(TranTureColor).setCustomView(R.layout.item_tab)
             )
         }
+
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -240,12 +246,13 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 viewModel.getNdvi(it, it1).observe(viewLifecycleOwner) {
 
                     ndviDataList = it?.data?.data
-                        ?.filter { ndviData -> ndviData.tileDate != null }
+                        ?.filter { ndviData -> ndviData.dt != null }
 
-                    val list: List<String?> = ndviDataList
-                        ?.map { data -> data.tileDate } ?: mutableListOf()
+                    val datesList: List<String?> = ndviDataList
+                        ?.map { data -> changeDateFormat(data.dt) } ?: mutableListOf()
 
-                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, list)
+                    val arrayAdapter =
+                        ArrayAdapter(requireContext(), R.layout.item_spinner, datesList)
                     binding.dateSpinner.adapter = arrayAdapter
                     binding.dateSpinner.onItemSelectedListener =
                         object : AdapterView.OnItemSelectedListener {
@@ -270,20 +277,40 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+    private fun changeDateFormat(dt: Long?): String {
+        val simpleDateFormat = SimpleDateFormat("dd MMM yy", Locale.ENGLISH)
+        val date = Date(dt?.times(1000) ?: 0)
+        Log.d("NDVI", "dateFormat: $date")
+        return simpleDateFormat.format(date)
+    }
+
 
     private fun showTileNDVI() {
         if (tileOverlay != null) {
             tileOverlay?.remove()
         }
         if (selectedNdvi != null) {
-            binding.ndviMean.text = String.format("%.2f", selectedNdvi?.meanNdvi)
+//            binding.ndviMean.text = String.format("%.2f", selectedNdvi?.meanNdvi)
+            binding.cardView2.visibility = View.GONE
+            if (selectedNdvi?.cl != null)
+                if (selectedNdvi?.cl!! > 50) {
+                    binding.cardView2.visibility = View.VISIBLE
+                    binding.tvTextAlert.text =
+                        "The Cloud Cover for Satellite Image is ${selectedNdvi?.cl}%. This Imagery may not be an accurate representation of Crop Health."
+                }
+
+            selectedNdvi?.stats?.ndvi?.let {
+                viewModel.getNdviMean(it).observe(viewLifecycleOwner) {it1->
+                    binding.ndviMean.text = String.format("%.2f", it1?.data?.mean)
+                }
+            }
 
             val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                 override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
                     var url: String = if (selectedTileType == TileType.NDVI) {
-                        selectedNdvi?.ndviTile + "&paletteid=4"
+                        "${selectedNdvi?.tile?.ndvi}&paletteid=4"
                     } else {
-                        selectedNdvi?.truecolorTile + ""
+                        "${selectedNdvi?.tile?.truecolor}"
                     }
                     url = url.replace("{x}", x.toString() + "")
                     url = url.replace("{y}", y.toString() + "")
