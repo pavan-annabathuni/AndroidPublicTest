@@ -373,8 +373,7 @@ class MandiFragment : Fragment() {
             binding.tabLayout.addTab(
                 binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
             )
-        }
-        viewModel.viewModelScope.launch {
+
             price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)

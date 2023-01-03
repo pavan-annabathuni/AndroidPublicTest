@@ -213,9 +213,11 @@ class IrrigationFragment : Fragment() {
 //                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
                 //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
 //                }
-                if(it.data?.data?.irrigation?.currentData?.irrigation !=null)
-                    binding.irrigationReq.text = "Irrigation Not Required"
-                else binding.irrigationReq.text = "Irrigation Required"
+                viewModel.viewModelScope.launch {
+                    if (it.data?.data?.irrigation?.currentData?.irrigation != null)
+                        binding.irrigationReq.text = TranslationsManager().getString("str_irrigation_not_req")
+                    else binding.irrigationReq.text = TranslationsManager().getString("str_Irrigation_req")
+                }
 
                 when(it){
                     is Resource.Loading ->{

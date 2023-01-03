@@ -136,6 +136,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView3">
 
                 <TextView
+                    android:id="@+id/tvFarmer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -168,6 +169,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/farm_manger">
 
                 <TextView
+                    android:id="@+id/tvFarmerSupport"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

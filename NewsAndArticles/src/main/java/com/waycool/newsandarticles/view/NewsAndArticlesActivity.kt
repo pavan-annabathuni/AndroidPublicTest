@@ -30,6 +30,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -74,7 +75,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        binding.toolbarTitle.text = "News & Articles"
+       // binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -100,6 +101,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         setBanners()
         getNewsCategories()
         fabButton()
+        translation()
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
@@ -384,5 +386,11 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
                 }
             }
+    }
+    private fun translation(){
+        viewModel.viewModelScope.launch {
+            binding.toolbarTitle.text = TranslationsManager().getString("str_news")
+            binding.search.hint = TranslationsManager().getString("search")
+        }
     }
 }

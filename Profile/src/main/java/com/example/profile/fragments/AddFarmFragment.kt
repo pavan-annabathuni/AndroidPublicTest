@@ -171,9 +171,11 @@ class AddFarmFragment : Fragment() {
     }
     private fun translation(){
         TranslationsManager().loadString("str_farmer_name",binding.textView1)
-       // TranslationsManager().loadString("delete_farm_support",binding.textView3)
+        TranslationsManager().loadString("str_role_type",binding.textView3)
         TranslationsManager().loadString("str_farm_location",binding.textView5)
         TranslationsManager().loadString("str_mobile_number",binding.textView4)
+        TranslationsManager().loadString("str_farmer",binding.tvFarmer)
+        TranslationsManager().loadString("str_farmer_support",binding.tvFarmerSupport)
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
         viewModel.viewModelScope.launch{
