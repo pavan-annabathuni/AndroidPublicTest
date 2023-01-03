@@ -6,4 +6,5 @@ data class CropCategoryEntity(
     var id: Int? = null,
     var categoryName: String? = null,
     var translation: String? = null,
+    val categoryTagName:String?=null
 )

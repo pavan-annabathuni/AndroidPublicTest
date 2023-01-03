@@ -3,7 +3,9 @@ package com.waycool.weather.adapters
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.weather.DailyDomain
@@ -15,7 +17,7 @@ import java.util.*
 
 class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.widget.ListAdapter<DailyDomain,WeatherAdapter.ViewHolder>(DiffCallback) {
 
-
+    private val differ = AsyncListDiffer(this, DiffCallback)
     class ViewHolder(private var binding: ItemDailyBinding):
     RecyclerView.ViewHolder(binding.root){
         fun bind(data:DailyDomain){
@@ -53,6 +55,9 @@ class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.
          holder.itemView.setOnClickListener(){
              onClickListener.clickListener(properties)
          }
+
+//        notifyItemRemoved(0)
+
         val yellow = "#070D09"
         val lightYellow = "#FFFAF0"
         val red = "#FF2C23"

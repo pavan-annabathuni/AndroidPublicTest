@@ -12,5 +12,7 @@ data class CropCategoryData(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("category_name") var categoryName: String? = null,
     @SerializedName("translation") var translation: String? = null,
-    @SerializedName("updated_at") var updatedAt: String? = null
+    @SerializedName("updated_at") var updatedAt: String? = null,
+    @SerializedName("category_name_tag") var categoryNameTag: String? = null
+
 )

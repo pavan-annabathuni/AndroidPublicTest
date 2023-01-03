@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
@@ -73,7 +74,12 @@ class NotificationFragment : Fragment() {
     }
 
     private fun newNotification(){
+        viewModel.viewModelScope.launch {
+            val title = TranslationsManager().getString("str_alerts_and_notification")
+            val new = TranslationsManager().getString("str_new")
+            binding.topAppBar.text = title
         viewModel.getNotification().observe(viewLifecycleOwner){
+
             when(it){
                 is Resource.Success ->{
                     binding.progressBar.visibility = View.GONE
@@ -81,7 +87,7 @@ class NotificationFragment : Fragment() {
                         itt.readAt== null
                     }
                     data?.size
-                    binding.tvSize.text = "New ${data?.size}"
+                    binding.tvSize.text = "$new ${data?.size}"
                     Log.d("Notifcation", "setAdapter: ${it.data?.data?.size}")
                 }
                 is Resource.Loading->{
@@ -93,6 +99,7 @@ class NotificationFragment : Fragment() {
             }
 
         }
-    }
+    }}
+
 
 }

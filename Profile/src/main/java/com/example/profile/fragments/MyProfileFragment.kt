@@ -23,6 +23,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
@@ -257,11 +258,8 @@ class MyProfileFragment : Fragment() {
             LocalSource.deleteCropMaster()
             LocalSource.deleteCropInformation()
             LocalSource.deletePestDisease()
-            MyCropSyncer().invalidateSync()
-            CropMasterSyncer().invalidateSync()
-            CropInformationSyncer().invalidateSync()
-            TagsSyncer().invalidateSync()
-            PestDiseaseSyncer().invalidateSync()
+            LocalSource.deleteMyFarms()
+           SyncManager.invalidateAll()
             DataStoreManager.clearData()
 
         }

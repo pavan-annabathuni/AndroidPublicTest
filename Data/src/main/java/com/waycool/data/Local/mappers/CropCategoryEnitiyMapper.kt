@@ -9,7 +9,8 @@ class CropCategoryEnitiyMapper : EntityMapper<CropCategoryEntity, CropCategoryDa
         return CropCategoryData(
             id = entity.id,
             categoryName = entity.categoryName,
-            translation = entity.translation
+            translation = entity.translation,
+            categoryNameTag  = entity.categoryTagName
         )
     }
 
@@ -17,7 +18,8 @@ class CropCategoryEnitiyMapper : EntityMapper<CropCategoryEntity, CropCategoryDa
         return CropCategoryEntity(
             id = dto.id,
             categoryName = dto.categoryName,
-            translation = dto.translation
+            translation = dto.translation,
+            categoryTagName = dto.categoryNameTag
         )
     }
 

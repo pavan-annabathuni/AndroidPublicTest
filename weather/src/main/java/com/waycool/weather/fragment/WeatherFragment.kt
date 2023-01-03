@@ -51,6 +51,7 @@ class WeatherFragment : Fragment() {
     private var selectedFarm: MyFarmsDomain? = null
     private lateinit var binding: FragmentWeatherBinding
     private lateinit var shareLayout: LinearLayout
+    lateinit var mWeatherAdapter: WeatherAdapter
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     val yellow = "#070D09"
@@ -92,9 +93,10 @@ class WeatherFragment : Fragment() {
         observer()
         setBanners()
 
-        binding.recycleView.adapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
+        mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             viewModel.displayPropertyDaily(it)
         })
+        binding.recycleView.adapter = mWeatherAdapter
         binding.recycleViewHourly.adapter = HourlyAdapter(HourlyAdapter.OnClickListener {
             viewModel.displayPropertyHourly(it)
         })

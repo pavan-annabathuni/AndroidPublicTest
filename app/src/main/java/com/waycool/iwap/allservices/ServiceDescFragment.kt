@@ -77,7 +77,7 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
                     binding.play.visibility = View.VISIBLE
                 }
 
-                Log.d("Audio", "audioPlayer: $audioUrl")
+
                 audio = AudioWife.getInstance()
                     .init(requireContext(), Uri.parse(audioUrl))
                     .setPlayView(binding.play)
@@ -86,7 +86,10 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
                     .setRuntimeView(binding.totalTime)
                 // .setTotalTimeView(mTotalTime);
                 audio?.play()
-            } else Toast.makeText(requireContext(), "Audio is not there", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Audio is not there", Toast.LENGTH_SHORT).show()
+                Log.d("Audio", "audioPlayer: $audioUrl")
+            }
 
         }
     }

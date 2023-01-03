@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.videos.Util.AppUtil
 import com.waycool.videos.databinding.ViewholderVideosListBinding
 
@@ -59,6 +60,8 @@ class VideosPagerAdapter(
                 Log.d("ItemPos","ItemPosItemClick${absoluteAdapterPosition}")
 
             }
+
+            TranslationsManager().loadString("share",itemBinding.share)
 
         }
     }

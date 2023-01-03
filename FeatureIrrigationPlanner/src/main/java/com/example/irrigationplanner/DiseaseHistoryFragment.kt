@@ -69,7 +69,8 @@ class DiseaseHistoryFragment : Fragment() {
         }
         //translation
         viewModel.viewModelScope.launch{
-            val title = TranslationsManager().getString("")
+            val title = TranslationsManager().getString("str_disease_his")
+            binding.topAppBar.title = title
         }
         tabs()
 

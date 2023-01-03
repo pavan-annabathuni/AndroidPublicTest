@@ -33,6 +33,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
@@ -85,7 +86,10 @@ class VideosListFragment : Fragment(), itemClick {
         }
 
 
-        binding.toolbarTitle.text = "Videos"
+        videoViewModel.viewModelScope.launch {
+            binding.toolbarTitle.text = TranslationsManager().getString("videos")
+            binding.search.hint = TranslationsManager().getString("search")
+        }
         binding.toolbar.setNavigationOnClickListener {
             activity?.let {
                 it.finish()
