@@ -107,7 +107,6 @@ class AllServicesFragment : Fragment() {
                     })
                     binding.recyclerviewServicePremium.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {

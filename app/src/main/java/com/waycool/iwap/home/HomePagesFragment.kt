@@ -134,8 +134,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerview.layoutManager =
-            GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+
+        binding.recyclerview.layoutManager = GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -145,6 +145,119 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             this.findNavController()
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
+
+
+        setWishes()
+        checkNetwork()
+        initClick()
+        binding.recyclerview.adapter = mandiAdapter
+        binding.farmsRv.adapter = farmsAdapter
+        binding.cropFarmRv.adapter = farmsCropsAdapter
+
+        binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
+
+        binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                binding.videosScroll.value =
+                    calculateScrollPercentage2(binding).toFloat()
+            }
+        })
+
+        mandiDetailCall()
+        userDetailsCall()
+        if (accountID != null) {
+            getFarms()
+        }
+        setVideos()
+        setNews()
+        fabButton()
+        myCrop()
+        setBanners()
+
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
+
+        mapFragment!!.requireView().isClickable = false
+        mapFragment.getMapAsync { googleMap: GoogleMap ->
+            mMap = googleMap
+            mMap?.uiSettings?.setAllGesturesEnabled(false)
+            mMap?.uiSettings?.isMapToolbarEnabled = false
+        }
+
+        getDashBoard()
+
+    }
+
+    private fun setWishes() {
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
+            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
+            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
+            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
+            else -> binding.tvGoodMorning.text = "Namaste"
+        }
+    }
+
+    private fun checkNetwork() {
+        networkCall()
+        videosBinding.imgRetry.setOnClickListener {
+            networkCall()
+        }
+        networkNewsCall()
+        newsBinding.imgRetry.setOnClickListener {
+            networkNewsCall()
+        }
+    }
+
+    private fun userDetailsCall() {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    accountID = it.data?.accountId
+                    it.data.also { userDetails ->
+                        binding.tvWelcome.text = userDetails?.profile?.village
+                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
+                        userDetails?.profile?.lat?.let { it1 ->
+                            userDetails.profile?.long?.let { it2 ->
+                                weather(it1, it2)
+                                lat = it.data?.profile?.lat.toString()
+                                long = it.data?.profile?.long.toString()
+//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        getFarms()
+                    }
+                }
+                is Resource.Error -> {}
+                is Resource.Loading -> {}
+            }
+            binding.tvAddress.text = it.data?.profile?.district
+        }
+
+    }
+
+    private fun mandiDetailCall() {
+        mandiViewModel.viewModelScope.launch {
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory, state,
+                crop,
+                sortBy,
+                orderBy,
+                search,
+                0
+            )
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
+
+                }
+        }
+    }
+
+    private fun initClick() {
+
         newsBinding.viewAllNews.setOnClickListener {
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
@@ -153,30 +266,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
-
-        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
-            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
-            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
-            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
-            else -> binding.tvGoodMorning.text = "Namaste"
-        }
-        networkCall()
-        videosBinding.imgRetry.setOnClickListener {
-            networkCall()
-        }
-
-        networkNewsCall()
-        newsBinding.imgRetry.setOnClickListener {
-            networkNewsCall()
-        }
-
-
-
-        binding.recyclerview.adapter = mandiAdapter
-        binding.farmsRv.adapter = farmsAdapter
-        binding.cropFarmRv.adapter = farmsCropsAdapter
-
         binding.soilTestingCv.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
@@ -248,89 +337,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
         }
 
-        binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
-
-        binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                binding.videosScroll.value =
-                    calculateScrollPercentage2(binding).toFloat()
-            }
-        })
-
-        mandiViewModel.viewModelScope.launch {
-
-            mandiViewModel.getMandiDetails(
-                lat,
-                long,
-                cropCategory, state,
-                crop,
-                sortBy,
-                orderBy,
-                search,
-                0
-            )
-                .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle, it)
-
-                }
-        }
-
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    accountID = it.data?.accountId
-                    it.data.also { userDetails ->
-                        binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
-                        userDetails?.profile?.lat?.let { it1 ->
-                            userDetails.profile?.long?.let { it2 ->
-                                weather(it1, it2)
-                                lat = it.data?.profile?.lat.toString()
-                                long = it.data?.profile?.long.toString()
-//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        getFarms()
-                    }
-                }
-                is Resource.Error -> {}
-                is Resource.Loading -> {}
-            }
-            binding.tvAddress.text = it.data?.profile?.district
-        }
-
-        if (accountID != null) {
-            getFarms()
-        }
-        setVideos()
-        setNews()
-        fabButton()
-        myCrop()
-        setBanners()
-
-        val mapFragment = childFragmentManager
-            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
-
-        mapFragment!!.requireView().isClickable = false
-        mapFragment.getMapAsync { googleMap: GoogleMap ->
-            mMap = googleMap
-            mMap?.uiSettings?.setAllGesturesEnabled(false)
-            mMap?.uiSettings?.isMapToolbarEnabled = false
-        }
-
-        getDashBoard()
 
     }
 
     private fun getDashBoard() {
-
         tokenCheckViewModel.getDasBoard().observe(viewLifecycleOwner) {
-
             dashboardDomain = it.data
             when (it) {
                 is Resource.Success -> {
-                    Log.d("dashboard", "${it.data?.subscription?.iot}")
                     if (it.data?.subscription?.iot == true) {
                         binding.clAddYourFarm.visibility = View.GONE
                         binding.tvWelcomeName.visibility = View.INVISIBLE
@@ -400,9 +414,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         viewModel.getMyFarms().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("farm", "step3")
                     if (!it.data.isNullOrEmpty()) {
-                        Log.d("farm", "step9 ${it.data}")
                         binding.clAddForm.visibility = View.GONE
                         binding.clMyForm.visibility = View.VISIBLE
                         binding.farmsDetailsCl.visibility = View.VISIBLE
@@ -418,23 +430,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
 
                     }
-//                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
-//                        .show()
+
                 }
                 is Resource.Loading -> {
-                    Log.d("farm", "step5")
                 }
                 is Resource.Error -> {
-//                    Toast.makeText(
-//                        context,
-//                        "Farm Api called Error ${it.message}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
 
-                    Log.d("farm", "step6 " + it.message)
                 }
                 else -> {
-                    Log.d("farm", "step7")
 
                 }
             }
@@ -450,7 +453,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
         }
         drawFarmBoundaries(selectedFarm?.farmJson)
-//                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
         (selectedFarm?.farmCenter)?.get(0)?.latitude?.let { lat ->
             (selectedFarm?.farmCenter)?.get(0)?.longitude?.let { lng ->
                 getFarmLocation(
