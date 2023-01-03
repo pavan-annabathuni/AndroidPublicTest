@@ -53,7 +53,7 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         holder.  binding.tvRequest.text = "Plot Number : " + details.plot_no
         holder.  binding.tvDesiessName.text = "Id : " + details.soil_test_number
         holder. binding.tvDate.text = details.updated_at
-        holder.   binding.clTracker.setOnClickListener {
+        holder.binding.clTracker.setOnClickListener {
            statusTrackerListener.statusTracker(details)
 
         }

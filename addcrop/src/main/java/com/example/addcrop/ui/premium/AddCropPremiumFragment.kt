@@ -96,11 +96,16 @@ class AddCropPremiumFragment : Fragment() {
         initViewClicks()
         noOFYear()
         noOFYearBahar()
-        getFarms()
+//        getFarms()
         year_selected= "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
 //        }
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            accountID = it.data?.accountId
+            getFarms()
+
+        }
     }
 
     private fun getFarms() {
