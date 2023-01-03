@@ -23,13 +23,11 @@ class AllServicesFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var allServiceAdapter: SoilTestingLabsAdapter
     private lateinit var premiumServiceAdapter: PremiumServiceAdapter
-//    private var allServiceAdapter=SoilTestingLabsAdapter(requireContext())
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -65,22 +63,14 @@ class AllServicesFragment : Fragment() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    //val response = it.data as ArrayList<ModuleMasterDomain>
                     val data = it.data?.filter {
                         it.subscription!=1
                     }
                     premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener {
-//                        val bundle =Bundle()
-//                        bundle.getString("title",it.tittle)
-//                        bundle.getString("desc",it.moduleDesc)
-//                        bundle.getString("audioUrl",it.audioURl)
-//                        bundle.getString("icon",it.moduleIcon)
-                        //this.findNavController().navigate(R.id.action_allServicesFragment_to_serviceDescFragment,bundle)
                     })
                     binding.recyclerviewService.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)
-                  //  allServiceAdapter.setMovieList(data as java.util.ArrayList<ModuleMasterDomain>)
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+
                 }
 
                 is Resource.Loading -> {
@@ -113,7 +103,6 @@ class AllServicesFragment : Fragment() {
                         bundle.putString("desc",it.moduleDesc)
                         bundle.putString("audioUrl",it.audioUrl)
                         bundle.putString("icon",it.moduleIcon)
-                        //if(findNavController().currentDestination?.id==R.id.allServicesFragment)
                         findNavController().navigate(R.id.action_allServicesFragment_to_serviceDescFragment,bundle)
                     })
                     binding.recyclerviewServicePremium.adapter = premiumServiceAdapter
