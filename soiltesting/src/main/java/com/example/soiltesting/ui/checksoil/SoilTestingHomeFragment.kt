@@ -471,9 +471,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
                                                 bundle
                                             )
-                                            Log.d("TAGPraveen", "isLocationPermissionGranted: SetPass")
                                         }catch (e:Exception){
-                                            Log.d("TAGPraveenAade", "isLocationPermissionGranted: NotPassed $e")
                                         }
 
 
@@ -491,7 +489,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                     else{
                                         ToastStateHandling.toastError(
                                             requireContext(),
-                                            "Server Error",
+                                           "Too many attempts.Try again later",
                                             Toast.LENGTH_SHORT
                                         )
                                     }
