@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -71,15 +72,15 @@ class AddFarmFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.farmManger.setOnClickListener(){
-            binding.farmManger.background = resources.getDrawable(R.drawable.text_border_gray)
-            binding.mandiBench.background = resources.getDrawable(R.drawable.text_border)
+            binding.farmManger.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border_gray)
+            binding.mandiBench.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border)
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
             roleid = 30
         }
         binding.mandiBench.setOnClickListener(){
-            binding.mandiBench.background = resources.getDrawable(R.drawable.text_border_gray)
-            binding.farmManger.background = resources.getDrawable(R.drawable.text_border)
+            binding.mandiBench.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border_gray)
+            binding.farmManger.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border)
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
             roleid = 31

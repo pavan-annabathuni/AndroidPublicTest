@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -308,7 +309,7 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.axisRight.isEnabled = false
 
                                         lineDataSet.fillDrawable =
-                                            resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+                                            ContextCompat.getDrawable(requireContext(),com.example.mandiprice.R.drawable.bg_graph)
                                         binding.lineChart.xAxis.spaceMax = 0.1f
                                         binding.lineChart.fitScreen()
                                         // binding.lineChart.axisLeft.isEnabled = false;
@@ -369,7 +370,7 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                                         binding.lineChart.axisRight.isEnabled = false
                                         lineDataSet.fillDrawable =
-                                            resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+                                            ContextCompat.getDrawable(requireContext(),com.example.mandiprice.R.drawable.bg_graph)
                                         binding.lineChart.xAxis.spaceMax = .1f
                                         binding.lineChart.fitScreen()
                                         binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
@@ -438,7 +439,7 @@ class GraphsFragment : Fragment() {
                                         binding.lineChart.axisRight.isEnabled = false
                                         binding.lineChart.setAutoScaleMinMaxEnabled(true)
                                         lineDataSet.fillDrawable =
-                                            resources.getDrawable(com.example.mandiprice.R.drawable.bg_graph)
+                                            ContextCompat.getDrawable(requireContext(),com.example.mandiprice.R.drawable.bg_graph)
                                         binding.lineChart.xAxis.spaceMax = 0.1f
                                         // binding.lineChart.axisLeft.isEnabled = false;
 //                                        binding.lineChart.isScaleXEnabled = false

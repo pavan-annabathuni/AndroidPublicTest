@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -145,7 +146,6 @@ class CropHealthFragment : Fragment() {
     }
 
     private fun getVideos() {
-        binding.clProgressBar.visibility=View.VISIBLE
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
 
@@ -250,7 +250,6 @@ class CropHealthFragment : Fragment() {
 //    }
 
     private fun bindObservers() {
-        binding.clProgressBar.visibility=View.VISIBLE
 
         viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
@@ -313,7 +312,7 @@ class CropHealthFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener(){
             if(!isVisible){
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -321,7 +320,7 @@ class CropHealthFragment : Fragment() {
             }else{
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

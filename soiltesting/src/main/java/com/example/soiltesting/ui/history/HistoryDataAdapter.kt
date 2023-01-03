@@ -27,7 +27,6 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
             "0" -> {
                 holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
                 holder. binding.tvStatus.text = "Pending"
-    //                    binding.ivStatus.setBackground(R.drawable.ic_pending)
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
             }
             "1" -> {
@@ -50,30 +49,7 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         }
 
 
-//        when (details.status.length) {
-//            7 -> {
-//                //pending
-//               holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
-//                holder. binding.tvStatus.text = details.status
-////                    binding.ivStatus.setBackground(R.drawable.ic_pending)
-//                holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
-//
-//            }
-//            8 -> {
-//                //rejected
-//                holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
-//                holder.   binding.tvStatus.text = details.status
-//                holder. binding.ivStatus.setImageResource(R.drawable.ic_rejected)
-//            }
-//            9 -> {
-//                //Completed
-//                holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
-//                holder.  binding.tvStatus.text = details.status
-//                holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
-//
-//
-//            }
-//        }
+
         holder.  binding.tvRequest.text = "Plot Number : " + details.plot_no
         holder.  binding.tvDesiessName.text = "Id : " + details.soil_test_number
         holder. binding.tvDate.text = details.updated_at

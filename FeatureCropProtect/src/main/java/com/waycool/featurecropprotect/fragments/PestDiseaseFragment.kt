@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -27,12 +27,11 @@ import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseBinding
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlin.math.abs
 
 
 class PestDiseaseFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
-    private var selectedCategory: CropCategoryMasterDomain? = null
     private lateinit var binding: FragmentPestDiseaseBinding
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
@@ -160,7 +159,7 @@ class PestDiseaseFragment : Fragment() {
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
+            val r = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
@@ -168,9 +167,9 @@ class PestDiseaseFragment : Fragment() {
 
     private fun fabButton(){
         var isVisible = false
-        binding.addFab.setOnClickListener(){
+        binding.addFab.setOnClickListener {
             if(!isVisible){
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -178,17 +177,17 @@ class PestDiseaseFragment : Fragment() {
             }else{
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

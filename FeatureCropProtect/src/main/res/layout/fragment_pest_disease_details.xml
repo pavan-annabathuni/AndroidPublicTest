@@ -381,20 +381,6 @@
                         app:tabTextAppearance="@style/TabTextAppearance2"
                         app:tabTextColor="@color/textlight">
 
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Chemical" />-->
-
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Biological" />-->
-
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Cultural" />-->
                     </com.google.android.material.tabs.TabLayout>
 
                     <com.waycool.uicomponents.Text.ParagraphMedium
@@ -423,6 +409,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
+
+
             <include
                 android:id="@+id/layout_news"
                 layout="@layout/generic_layout_news_list"
@@ -433,6 +421,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
+
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

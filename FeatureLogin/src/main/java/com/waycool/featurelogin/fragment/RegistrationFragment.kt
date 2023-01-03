@@ -184,8 +184,8 @@ class RegistrationFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {
                 if (binding.nameEt.text.toString().trim().isNotEmpty()) {
-                    //TODO Implement Reverse Geocoder
-                    binding.registerDoneBtn.isEnabled = binding.locationEt.text.toString().trim().length != 0
+                    binding.registerDoneBtn.isEnabled =
+                        binding.locationEt.text.toString().trim().isNotEmpty()
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -210,7 +210,6 @@ class RegistrationFragment : Fragment() {
         })
         binding.registerDoneBtn.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-//                AppUtil.Toast(context, "cliked")
                 userCreater()
             }
         })
@@ -442,12 +441,10 @@ class RegistrationFragment : Fragment() {
     }
 
     fun userCreater() {
-        if (latitude.length > 0 && longitutde.length > 0) {
+        if (latitude.isNotEmpty() && longitutde.isNotEmpty()) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                context?.let { ToastStateHandling.toastError(it,"No Internet",Toast.LENGTH_LONG) }
+                context?.let { ToastStateHandling.toastError(it,"Please check your Internet connection",Toast.LENGTH_LONG) }
             } else {
-                binding.progressBar.visibility=View.VISIBLE
-                Log.d("reg", "userCreater: ${selectedLanguage?.id}")
                 query = HashMap()
                 query["name"] = binding.nameEt.text.toString().trim()
                 query["contact"] = mobileNumber.toString()
@@ -465,25 +462,22 @@ class RegistrationFragment : Fragment() {
                 query["state"] = state
                 query["district"] = district
                 query["sub_district_id"] = ""
-                Log.d(
-                    "register",
-                    "test" + binding.nameEt.text.toString()
-                        .trim() + " " + mobileNumber + " " + latitude + " " + longitutde + " " + pincode + " " + village
-                );
-
+                binding.progressBarSubmit.visibility=View.VISIBLE
+                binding.registerDoneBtn.visibility=View.GONE
                 viewModel.getUserData(query).observe(this) {
-                    //registerMaster.data.approved
-
                     when (it) {
                         is Resource.Success -> {
-                            binding.progressBar.visibility=View.GONE
+                            binding.progressBarSubmit.visibility=View.GONE
+                            binding.registerDoneBtn.visibility=View.VISIBLE
                             context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"SuccessFully Registered",Toast.LENGTH_SHORT) }
                             lifecycleScope.launch {
                                 userLogin()
                             }
                         }
                         is Resource.Loading -> {
-                            binding.progressBar.visibility=View.VISIBLE
+                            binding.progressBarSubmit.visibility=View.GONE
+                            binding.registerDoneBtn.visibility=View.VISIBLE
+
                         }
                         is Resource.Error -> {
                             it.message?.let { it1 ->
@@ -493,6 +487,8 @@ class RegistrationFragment : Fragment() {
                                         it1,Toast.LENGTH_SHORT)
                                 }
                             }
+                            binding.progressBarSubmit.visibility=View.VISIBLE
+                            binding.registerDoneBtn.visibility=View.GONE
 
                         }
                     }
