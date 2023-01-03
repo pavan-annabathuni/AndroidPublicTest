@@ -17,10 +17,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.AddCropActivity
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
@@ -69,7 +69,10 @@ class CropSelectionFragment : Fragment() {
 
         apiErrorHandlingBinding=binding.errorState
 
-
+        binding.toolbar.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -168,14 +171,14 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(context)
+        val chip = Chip(requireContext())
         chip.text = category.categoryName
         chip.isCheckable = true
         chip.isClickable = true
         chip.isCheckedIconVisible = false
         chip.setTextColor(
             AppCompatResources.getColorStateList(
-                requireContext(),
+               requireContext(),
                 com.waycool.uicomponents.R.color.bg_chip_text
             )
         )
@@ -207,19 +210,22 @@ class CropSelectionFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         binding.clProgressBar.visibility=View.VISIBLE
-
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
-                    binding.clProgressBar.visibility=View.GONE
-
                     if (categoryId == null) {
                         adapter.submitList(res.data)
-                    } else
+                    } else {
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+                    }
+                    binding.clProgressBar.visibility=View.GONE
+
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.clProgressBar.visibility=View.VISIBLE
+                }
                 is Resource.Error -> {
+                    binding.clProgressBar.visibility=View.GONE
                     ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
@@ -273,7 +279,7 @@ class CropSelectionFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -281,7 +287,7 @@ class CropSelectionFragment : Fragment() {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

@@ -81,28 +81,16 @@ class SelectCropSoilTestFragment : Fragment() {
             it.idd?.let { it1 -> args.putInt("crop_id", it1) }
             it.cropName?.let { it1 -> args.putString("name", it1) }
             it.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
-//            findNavController().navigateUp()
             findNavController().navigate(
                 R.id.action_selectCropSoilTestFragment_to_checkSoilTestFragment,
                 args
             )
-//           val action=SelectCropSoilTestFragmentDirections.actionSelectCropSoilTestFragmentToCheckSoilTestFragment(it.idd.toString().toInt(),it.cropName.toString(),it.cropLogo.toString())
-//            findNavController().navigate(action)
-//            findNavController().navigate(
-//                        R.id.action_selectCropSoilTestFragment_to_checkSoilTestFragment,
-//                        args)
             viewModel.getCropMaster().observe(viewLifecycleOwner) {
                 for (i in 0 until it.data?.size!!) {
-                    Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
                     if (it.data?.get(i)?.cropId == id) {
                         id2 = it.data?.get(i)?.cropId!!
                     }
                 }
-//                if(id==id2){
-//                    findNavController().navigate(
-//                        R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
-//                        args)
-//                }else  dialog()
 
             }
 
@@ -113,8 +101,6 @@ class SelectCropSoilTestFragment : Fragment() {
     }
 
     fun myCrops() {
-
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
@@ -122,7 +108,6 @@ class SelectCropSoilTestFragment : Fragment() {
             } else {
                 binding.tvCount.text = "0"
             }
-            // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 
         }
 
@@ -145,7 +130,6 @@ class SelectCropSoilTestFragment : Fragment() {
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data

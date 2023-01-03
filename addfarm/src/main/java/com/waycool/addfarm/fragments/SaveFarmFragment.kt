@@ -28,6 +28,7 @@ import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
@@ -181,7 +182,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                     context?.let { it1 -> ToastStateHandling.toastError(it1, "Farm name is mandatory", Toast.LENGTH_SHORT) }
                 } else {
                     binding.saveProgressBar.visibility = View.VISIBLE
-                    binding.saveFarmBtn.visibility = View.INVISIBLE
+                    binding.saveFarmBtn.visibility = View.GONE
                     viewModel.addFarm(
                         accountId!!,
                         binding.farmnameEtAddfarm.text.toString(),
@@ -197,17 +198,34 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                         if (binding.pipesizeSpinner.selectedItem.toString() == "--Select--") null else binding.pipesizeSpinner.selectedItem.toString(),
                         binding.flowrateEtAddfarm.text.toString()
                     ).observe(viewLifecycleOwner) {
-                        viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
+                        when(it){
+                            is Resource.Success->{
+                                binding.saveProgressBar.visibility = View.GONE
+                                binding.saveFarmBtn.visibility = View.VISIBLE
+                                viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
+                                accountId?.let { it1 ->
+                                    viewModel.getFarms().observe(viewLifecycleOwner) {}
+                                }
+                                ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
+                                activity?.finish()
+                            }
+                            is Resource.Loading->{
+                                binding.saveProgressBar.visibility = View.VISIBLE
+                                binding.saveFarmBtn.visibility = View.GONE
+                            }
+                            is Resource.Error->{
+                                binding.saveProgressBar.visibility = View.GONE
+                                binding.saveFarmBtn.visibility = View.VISIBLE
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,it.message.toString(),Toast.LENGTH_SHORT) }
+                            }
 
-
-                        accountId?.let { it1 ->
-                            viewModel.getFarms().observe(viewLifecycleOwner) {}
+                            else -> {}
                         }
-                        ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
-                        activity?.finish()
+
                     }
-                    ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
-                    activity?.finish()
+
+                   /* ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
+                    activity?.finish()*/
                 }
 
             }

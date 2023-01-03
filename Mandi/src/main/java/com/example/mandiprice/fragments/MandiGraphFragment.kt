@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -263,7 +264,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.description.isEnabled = false
                     binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                     binding.lineChart.axisRight.isEnabled = false
-                    lineDataSet.fillDrawable = resources.getDrawable(R.drawable.bg_graph)
+                    lineDataSet.fillDrawable = ContextCompat.getDrawable(requireContext(),R.drawable.bg_graph)
                     // binding.lineChart.xAxis.spaceMax = 1f
                     binding.lineChart.fitScreen()
                     binding.lineChart.setScaleEnabled(false)
