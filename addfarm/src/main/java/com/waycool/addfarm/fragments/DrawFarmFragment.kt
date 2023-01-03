@@ -435,8 +435,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     private fun editFarm() {
 
-
     }
+
 
     private fun networkCall() {
         if(NetworkUtil.getConnectivityStatusString(context)==0){
@@ -509,13 +509,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     if (points.size>=3) {
                         binding.savemapBtn.background.setTint(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.primaryColor)))
                         binding.savemapBtn.setTextColor(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.white)))
-
-                  /*      mMap?.addPolygon(
-                            PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
-                                .strokeColor(
-                                    Color.argb(255, 255, 255, 255)
-                                )
-                        )*/
                         showAreaCard()
 
                     }
@@ -917,18 +910,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     private fun showAreaCard() {
         binding.areaCard.visibility = View.VISIBLE
-        //binding.savemapBtn.visibility = View.VISIBLE
         val area: Double =
             getArea(points) / 4046.86
         val perimeter: Double = getLength(points)
         binding.areaDisplayTv.text = (String.format("%.2f", area) + " Acre").trim { it <= ' ' }
         binding.perimeterTv.text = (String.format("%.2f", perimeter) + " Mtrs").trim { it <= ' ' }
-//        if (area > 200) {
-//            Toast.makeText(requireContext(), "Select smaller Area.", Toast.LENGTH_SHORT).show()
-//            //binding.savemapBtn.setEnabled(false)
-//        } else {
-//            //binding.savemapBtn.setEnabled(true)
-//        }
     }
 
     private fun getArea(latLngs: List<LatLng?>?): Double {

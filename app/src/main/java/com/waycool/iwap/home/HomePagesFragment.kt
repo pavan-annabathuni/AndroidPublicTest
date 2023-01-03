@@ -7,13 +7,12 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.bumptech.glide.Glide
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
@@ -66,7 +64,6 @@ import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.Dispatchers
 import com.waycool.weather.utils.WeatherIcons
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -84,7 +81,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     private lateinit var newsBinding: GenericLayoutNewsListBinding
 
     private var district: String? = null
-    private var jsonString: String? = null
     private var polygon: Polygon? = null
     private var mMap: GoogleMap? = null
     private var _binding: FragmentHomePagesBinding? = null
@@ -97,13 +93,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     private var sortBy: String = "asc"
     private var accountID: Int? = null
     private var farmjson: String? = null
-    private var farmCentroid: String? = null
     private var lat: String = ""
     private var long: String = ""
-
-    private var module_id = "49"
-
-
+    private var moduleId = "49"
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
@@ -114,12 +106,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     //    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 //    private val mandiAdapter = MandiHomePageAdapter()
     private lateinit var mandiAdapter: MandiHomePageAdapter
-    val yellow = "#070D09"
-    val lightYellow = "#FFFAF0"
-    val red = "#FF2C23"
-    val lightRed = "#FFD7D0"
+    private val yellow = "#070D09"
+    private val lightYellow = "#FFFAF0"
+    private val red = "#FF2C23"
+    private val lightRed = "#FFD7D0"
     val green = "#146133"
-    val lightGreen = "#DEE9E2"
+    private val lightGreen = "#DEE9E2"
     private lateinit var myCropAdapter: MyCropsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,7 +120,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
 
         lifecycleScope.launch {
-            var value: String? = DataStoreManager.read("FirstTime")
+            val value: String? = DataStoreManager.read("FirstTime")
             if (value != "true")
                 findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
         }
@@ -142,8 +134,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerview.layoutManager =
-            GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+
+        binding.recyclerview.layoutManager = GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -151,126 +143,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             it?.crop?.let { it1 -> args.putString("cropName", it1) }
             it?.market?.let { it1 -> args.putString("market", it1) }
             this.findNavController()
-                .navigate(
-                    com.waycool.iwap.R.id.action_homePagesFragment_to_mandiGraphFragment22,
-                    args
-                )
+                .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
-        newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(context, NewsAndArticlesActivity::class.java)
-            startActivity(intent)
-        }
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
-
-        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
-            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
-            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
-            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
-            else -> binding.tvGoodMorning.text = "Namaste"
-        }
-        networkCall()
-        videosBinding.imgRetry.setOnClickListener {
-            networkCall()
-        }
-
-        networkNewsCall()
-        newsBinding.imgRetry.setOnClickListener {
-            networkNewsCall()
-        }
 
 
-
+        setWishes()
+        checkNetwork()
+        initClick()
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
 
-        binding.soilTestingCv.setOnClickListener {
-            val intent = Intent(activity, SoilTestActivity::class.java)
-            startActivity(intent)
-        }
-        binding.tvAddFromService.setOnClickListener {
-            val intent = Intent(activity, SoilTestActivity::class.java)
-            startActivity(intent);
-        }
-
-        binding.cardCropHealth.setOnClickListener {
-            val intent = Intent(activity, CropHealthActivity::class.java)
-            startActivity(intent)
-        }
-        binding.tvAddFromServiceCropHealth.setOnClickListener {
-            val intent = Intent(activity, CropHealthActivity::class.java)
-            startActivity(intent);
-        }
-
-        binding.clCropProtect.setOnClickListener {
-            findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
-//            val intent = Intent(activity, CropProtectActivity::class.java)
-//            startActivity(intent)
-        }
-
-        binding.tvAddFromServiceCropProtect.setOnClickListener {
-            val intent = Intent(activity, CropProtectActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.clCropInformation.setOnClickListener {
-            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
-            startActivity(intent);
-        }
-        binding.clAddFromServiceCropInformation.setOnClickListener {
-            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
-            startActivity(intent);
-        }
-
-        binding.tvAddFrom.setOnClickListener {
-            val intent = Intent(activity, AddCropActivity::class.java)
-            startActivity(intent)
-        }
-        binding.tvViewAllMandi.setOnClickListener {
-            this.findNavController().navigate(R.id.navigation_mandi)
-        }
-        binding.cvWeather.setOnClickListener() {
-            val intent = Intent(activity, WeatherActivity::class.java)
-            startActivity(intent)
-        }
-//        binding.tvGoodMorning.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagesFragment_to_homePagePremiumFragment2)
-//        }
-//        binding.farmsDetailsCl.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagesFragment_to_farmDetailsFragment3)
-//        }
-        binding.tvOurServiceViewAll.setOnClickListener {
-            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_allServicesFragment)
-        }
-        binding.tvMyCrops.setOnClickListener {
-            findNavController().navigate(com.waycool.iwap.R.id.action_homePagesFragment_to_editCropFragment)
-        }
-        binding.cvAddCrop.setOnClickListener {
-            val intent = Intent(activity, AddCropActivity::class.java)
-            startActivity(intent)
-        }
-        binding.clAddForm.setOnClickListener {
-            val intent = Intent(activity, AddFarmActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.tvOurAddFormData.setOnClickListener {
-            val intent = Intent(activity, AddFarmActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.IvNotification.setOnClickListener() {
-            this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
-        }
-
-//        binding.IvNotification.setOnClickListener{
-//            val intent = Intent(activity, AddDeviceActivity::class.java)
-//            startActivity(intent)
-//        }
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
         binding.recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -281,49 +164,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             }
         })
 
-        mandiViewModel.viewModelScope.launch {
-
-            mandiViewModel.getMandiDetails(
-                lat,
-                long,
-                cropCategory, state,
-                crop,
-                sortBy,
-                orderBy,
-                search,
-                0
-            )
-                .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle, it)
-
-                }
-        }
-
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    val account = it.data?.accountId
-                    accountID = it.data?.accountId
-                    it.data.also { userDetails ->
-                        binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
-                        userDetails?.profile?.lat?.let { it1 ->
-                            userDetails.profile?.long?.let { it2 ->
-                                weather(it1, it2)
-                                lat = it.data?.profile?.lat.toString()
-                                long = it.data?.profile?.long.toString()
-//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        getFarms()
-                    }
-                }
-                is Resource.Error -> {}
-                is Resource.Loading -> {}
-            }
-            binding.tvAddress.text = it.data?.profile?.district
-        }
-
+        mandiDetailCall()
+        userDetailsCall()
         if (accountID != null) {
             getFarms()
         }
@@ -347,14 +189,162 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
     }
 
+    private fun setWishes() {
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
+            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
+            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
+            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
+            else -> binding.tvGoodMorning.text = "Namaste"
+        }
+    }
+
+    private fun checkNetwork() {
+        networkCall()
+        videosBinding.imgRetry.setOnClickListener {
+            networkCall()
+        }
+        networkNewsCall()
+        newsBinding.imgRetry.setOnClickListener {
+            networkNewsCall()
+        }
+    }
+
+    private fun userDetailsCall() {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    accountID = it.data?.accountId
+                    it.data.also { userDetails ->
+                        binding.tvWelcome.text = userDetails?.profile?.village
+                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
+                        userDetails?.profile?.lat?.let { it1 ->
+                            userDetails.profile?.long?.let { it2 ->
+                                weather(it1, it2)
+                                lat = it.data?.profile?.lat.toString()
+                                long = it.data?.profile?.long.toString()
+//                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        getFarms()
+                    }
+                }
+                is Resource.Error -> {}
+                is Resource.Loading -> {}
+            }
+            binding.tvAddress.text = it.data?.profile?.district
+        }
+
+    }
+
+    private fun mandiDetailCall() {
+        mandiViewModel.viewModelScope.launch {
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory, state,
+                crop,
+                sortBy,
+                orderBy,
+                search,
+                0
+            )
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
+
+                }
+        }
+    }
+
+    private fun initClick() {
+
+        newsBinding.viewAllNews.setOnClickListener {
+            val intent = Intent(context, NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        binding.soilTestingCv.setOnClickListener {
+            val intent = Intent(activity, SoilTestActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvAddFromService.setOnClickListener {
+            val intent = Intent(activity, SoilTestActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.cardCropHealth.setOnClickListener {
+            val intent = Intent(activity, CropHealthActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvAddFromServiceCropHealth.setOnClickListener {
+            val intent = Intent(activity, CropHealthActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.clCropProtect.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
+        }
+
+        binding.tvAddFromServiceCropProtect.setOnClickListener {
+            val intent = Intent(activity, CropProtectActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.clCropInformation.setOnClickListener {
+            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
+            startActivity(intent)
+        }
+        binding.clAddFromServiceCropInformation.setOnClickListener {
+            val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvAddFrom.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvViewAllMandi.setOnClickListener {
+            this.findNavController().navigate(R.id.navigation_mandi)
+        }
+        binding.cvWeather.setOnClickListener {
+            val intent = Intent(activity, WeatherActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvOurServiceViewAll.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_allServicesFragment)
+        }
+        binding.tvMyCrops.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
+        }
+        binding.cvAddCrop.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+        binding.clAddForm.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvOurAddFormData.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.IvNotification.setOnClickListener {
+            this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
+        }
+
+
+    }
+
     private fun getDashBoard() {
-
         tokenCheckViewModel.getDasBoard().observe(viewLifecycleOwner) {
-
             dashboardDomain = it.data
             when (it) {
                 is Resource.Success -> {
-                    Log.d("dashboard", "${it.data?.subscription?.iot}")
                     if (it.data?.subscription?.iot == true) {
                         binding.clAddYourFarm.visibility = View.GONE
                         binding.tvWelcomeName.visibility = View.INVISIBLE
@@ -424,9 +414,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         viewModel.getMyFarms().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("farm", "step3")
                     if (!it.data.isNullOrEmpty()) {
-                        Log.d("farm", "step9 ${it.data}")
                         binding.clAddForm.visibility = View.GONE
                         binding.clMyForm.visibility = View.VISIBLE
                         binding.farmsDetailsCl.visibility = View.VISIBLE
@@ -442,23 +430,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
 
                     }
-//                    Toast.makeText(context, "Farm Api called Sucessfully", Toast.LENGTH_SHORT)
-//                        .show()
+
                 }
                 is Resource.Loading -> {
-                    Log.d("farm", "step5")
                 }
                 is Resource.Error -> {
-//                    Toast.makeText(
-//                        context,
-//                        "Farm Api called Error ${it.message}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
 
-                    Log.d("farm", "step6 " + it.message)
                 }
                 else -> {
-                    Log.d("farm", "step7")
 
                 }
             }
@@ -474,7 +453,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
         }
         drawFarmBoundaries(selectedFarm?.farmJson)
-//                                            weather((farm?.farmCenter)?.get(0)?.latitude.toString(),(farm?.farmCenter)?.get(0)?.longitude.toString())
         (selectedFarm?.farmCenter)?.get(0)?.latitude?.let { lat ->
             (selectedFarm?.farmCenter)?.get(0)?.longitude?.let { lng ->
                 getFarmLocation(
@@ -488,9 +466,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 crops.data?.filter { filter ->
                     filter.farmId == selectedFarm?.id
                 }
-            if (croplist?.isEmpty() == true) {
-
-            }
             farmsCropsAdapter.submitList(croplist)
         }
 
@@ -588,8 +563,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         val  adapter=NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            viewModel.getVansNewsList(module_id).collect {
-                adapter.submitData(lifecycle, it)
+            viewModel.getVansNewsList(moduleId).collect { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
@@ -636,8 +611,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansVideosList(module_id).collect {
-                adapter.submitData(lifecycle, it)
+            viewModel.getVansVideosList(moduleId).collect { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
@@ -1052,9 +1027,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -1062,17 +1037,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
 
@@ -1106,7 +1081,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     }
 
 
-    fun convertStringToLatLnList(s: String?): List<LatLng?>? {
+    private fun convertStringToLatLnList(s: String?): List<LatLng?>? {
         val listType = object : TypeToken<List<LatLng?>?>() {}.type
         return Gson().fromJson(s, listType)
     }

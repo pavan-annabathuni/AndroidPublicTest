@@ -1,4 +1,9 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="share">Share</string>
+    <string name="disease">Disease</string>
+    <string name="related_images">Related Images</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="control_measures">Control Measures</string>
 </resources>
