@@ -25,7 +25,6 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
     private var cropList:MutableList<MyCropDataDomain> = mutableListOf()
-    private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
     var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
     fun setMovieList(movies: List<MyFarmsDomain>?) {
@@ -46,6 +45,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
+        val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
 
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
