@@ -51,6 +51,7 @@ import com.waycool.addfarm.utils.DrawingOption
 import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.PlacesSearchEventError
 import com.waycool.data.utils.PlacesSearchEventFound
@@ -62,10 +63,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-@Suppress("DEPRECATION")
 class DrawFarmFragment : Fragment(), OnMapReadyCallback {
-    private var viewCase: GuideView?=null
-    private var pos: Int=0
+    private var viewCase: GuideView? = null
+    private var pos: Int = 0
     private var isLocationFabPressed: Boolean = false
     private var currentMarker: Marker? = null
     private var searchLocationMarker: Marker? = null
@@ -86,13 +86,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private lateinit var placesClient: PlacesClient
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
-    private val showCaseDataList:ArrayList<ShowCaseViewModel> = ArrayList<ShowCaseViewModel>()
-
+    private val showCaseDataList: ArrayList<ShowCaseViewModel> = ArrayList<ShowCaseViewModel>()
+    private var myFarmEdit: MyFarmsDomain? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
-
 
         Log.d("permission", "test$result")
         var allAreGranted = true
@@ -100,7 +99,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             allAreGranted = allAreGranted && b
         }
 
-        if (allAreGranted) {
+        if (checkPermissions()) {
             getLocation()
         }
     }
@@ -114,7 +113,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        retainInstance = true
         if (!Places.isInitialized()) {
             Places.initialize(requireContext().applicationContext, AppSecrets.getMapsKey())
         }
@@ -135,29 +133,48 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             activity?.finish()
         }
 
-        if(arguments!=null){
-            if(arguments?.getBoolean("isedit")==true){
-                editFarm()
+        if (requireActivity().intent.extras != null) {
+            val bundle = requireActivity().intent.extras
+            if (bundle?.getBoolean("isedit") == true) {
+                myFarmEdit = bundle.getParcelable("farm")
             }
         }
 
         binding.placesRv.adapter = adapter
 
         (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)?.getMapAsync(this)
-        showCaseDataList.add(ShowCaseViewModel(binding.gpsFab,"Get Current Location","Click on the Location Button \nto view current location on google maps."))
-        showCaseDataList.add(ShowCaseViewModel(binding.pointA,"Mark Point 1","NEXT"))
-        showCaseDataList.add(ShowCaseViewModel(binding.pointB,"Mark Point 2","NEXT"))
-        showCaseDataList.add(ShowCaseViewModel(binding.pointC,"Mark alteast 3 Points to plot a farm","NEXT"))
-        showCaseDataList.add(ShowCaseViewModel(binding.undoFab,"Click this to Undo point","NEXT"))
-        showCaseDataList.add(ShowCaseViewModel(binding.resetFab,"Click this to Reset all points","NEXT"))
+        showCaseDataList.add(
+            ShowCaseViewModel(
+                binding.gpsFab,
+                "Get Current Location",
+                "Click on the Location Button \nto view current location on google maps."
+            )
+        )
+        showCaseDataList.add(ShowCaseViewModel(binding.pointA, "Mark Point 1", "NEXT"))
+        showCaseDataList.add(ShowCaseViewModel(binding.pointB, "Mark Point 2", "NEXT"))
+        showCaseDataList.add(
+            ShowCaseViewModel(
+                binding.pointC,
+                "Mark alteast 3 Points to plot a farm",
+                "NEXT"
+            )
+        )
+        showCaseDataList.add(ShowCaseViewModel(binding.undoFab, "Click this to Undo point", "NEXT"))
+        showCaseDataList.add(
+            ShowCaseViewModel(
+                binding.resetFab,
+                "Click this to Reset all points",
+                "NEXT"
+            )
+        )
 
 
 
 
         binding.tutorial.setOnClickListener {
-            binding.pointA.visibility=View.VISIBLE
-            binding.pointB.visibility=View.VISIBLE
-            binding.pointC.visibility=View.VISIBLE
+            binding.pointA.visibility = View.VISIBLE
+            binding.pointB.visibility = View.VISIBLE
+            binding.pointC.visibility = View.VISIBLE
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 guideView(showCaseDataList[pos])
@@ -193,7 +210,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 binding.markerImageview.setVisibility(View.INVISIBLE)
                 isMarkerSelected = false
             }
-            if (markerList != null && !markerList.isEmpty()) {
+            if (!markerList.isNullOrEmpty()) {
                 for (m in markerList) {
                     m.remove()
                 }
@@ -388,7 +405,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 }
                 .addOnFailureListener { exception ->
                     if (exception is ApiException) {
-                        ToastStateHandling.toastError(requireContext(), exception.message + "", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            exception.message + "",
+                            Toast.LENGTH_SHORT
+                        )
                     }
                 }
         }
@@ -401,14 +422,20 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     "Please Mark your Farm or nearest location of your farm.",
                     Toast.LENGTH_LONG
                 )
-            } else if(points.size<3){
+            } else if (points.size < 3) {
                 ToastStateHandling.toastError(
                     requireContext(),
                     "Please Mark more than 2 points to plot your Farm or nearest location of your farm.",
                     Toast.LENGTH_LONG
                 )
 
-            }else {
+            } else if (getAreaInAcre(points) > 100) {
+                ToastStateHandling.toastError(
+                    requireContext(),
+                    "Farm Area is large. Draw smaller Farm.",
+                    Toast.LENGTH_LONG
+                )
+            } else {
                 val bundle = Bundle()
                 if (points.isNotEmpty()) {
                     if (points[points.size - 1].latitude != points[0].latitude || points[points.size - 1].longitude != points[0].longitude)
@@ -425,6 +452,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         Gson().toJson(listOf(searchLocationMarker?.position))
                     )
                 }
+                if(myFarmEdit!=null)
+                    bundle.putParcelable("farm",myFarmEdit)
+
                 findNavController().navigate(
                     R.id.action_drawFarmFragment_to_saveFarmFragment,
                     bundle
@@ -434,27 +464,95 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun editFarm() {
+        if (myFarmEdit != null) {
+                val pnts: ArrayList<LatLng>? = myFarmEdit?.farmJson
+                polygon = mMap!!.addPolygon(
+                    PolygonOptions().addAll(pnts).fillColor(Color.argb(100, 58, 146, 17))
+                        .strokeColor(
+                            Color.argb(180, 58, 146, 17)
+                        )
+                )
+                mMap!!.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        pnts?.let { getLatLnBounds(it) },
+                        250
+                    )
+                )
+                val state = MapState()
+                isPolygonDraw = true
+            if (pnts != null) {
+                for (latLng in pnts) {
+                    val marker = mMap!!.addMarker(
+                        MarkerOptions().position(
+                            latLng!!
+                        )
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
+                            .anchor(0.5f, .5f)
+                            .draggable(false)
+                            .flat(true)
+                    )
+                    marker.tag = latLng
+                    markerList.add(marker)
+                    points.add(latLng)
+                }
+            }
 
+            if (points != null) {
+                if (points.size >= 3) {
+                    binding.savemapBtn.background.setTint(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            (com.waycool.uicomponents.R.color.primaryColor)
+                        )
+                    )
+                    binding.savemapBtn.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            (com.waycool.uicomponents.R.color.white)
+                        )
+                    )
 
+                    /*      mMap?.addPolygon(
+                              PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                                  .strokeColor(
+                                      Color.argb(255, 255, 255, 255)
+                                  )
+                          )*/
+                    showAreaCard()
+
+                }
+            }
+
+            addCenterMarkersToPolygon(polygon)
+                showAreaCard()
+                state.isPolygonDrawn=(isPolygonDraw)
+                state.copyArrayList(pnts)
+                previousStateStack.push(state)
+        }
     }
 
     private fun networkCall() {
-        if(NetworkUtil.getConnectivityStatusString(context)==0){
-            binding.tutorial.isClickable=false
-            binding.clInclude.visibility=View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
-        }
-        else{
-            binding.tutorial.isClickable=true
-            binding.clInclude.visibility=View.GONE
-            apiErrorHandlingBinding.clInternetError.visibility=View.GONE
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.tutorial.isClickable = false
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            context?.let {
+                ToastStateHandling.toastError(
+                    it,
+                    "Please check your internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.tutorial.isClickable = true
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
             getLocation()
         }
     }
 
     private fun guideView(showCaseData: ShowCaseViewModel) {
-       viewCase= GuideView.Builder(requireContext())
+        viewCase = GuideView.Builder(requireContext())
             .setTitle(showCaseData.title)
             .setContentText(showCaseData.content)
             .setTargetView(showCaseData.view)
@@ -462,14 +560,14 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             .setTitleTextSize(14)
             .setDismissType(DismissType.anywhere)//optional
             .setGuideListener {
-                if(pos+1<=(showCaseDataList.size-1)) {
+                if (pos + 1 <= (showCaseDataList.size - 1)) {
                     pos += 1
                     guideView(showCaseDataList[pos])
                 }
-                if(pos+1==showCaseDataList.size-1){
-                    binding.pointA.visibility=View.GONE
-                    binding.pointB.visibility=View.GONE
-                    binding.pointC.visibility=View.GONE
+                if (pos + 1 == showCaseDataList.size - 1) {
+                    binding.pointA.visibility = View.GONE
+                    binding.pointB.visibility = View.GONE
+                    binding.pointC.visibility = View.GONE
                 }
 
             }
@@ -479,13 +577,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
-        mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+        mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
         getLocation()
-        mMap!!.setOnMapClickListener { latLng ->
+        mMap?.setOnMapClickListener { latLng ->
             if (!isMarkerSelected && !isPolygonDraw) {
                 if (markerList == null) {
                     markerList =
@@ -506,16 +603,26 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
                 points.add(latLng)
                 if (points != null) {
-                    if (points.size>=3) {
-                        binding.savemapBtn.background.setTint(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.primaryColor)))
-                        binding.savemapBtn.setTextColor(ContextCompat.getColor(requireContext(),(com.waycool.uicomponents.R.color.white)))
+                    if (points.size >= 3) {
+                        binding.savemapBtn.background.setTint(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                (com.waycool.uicomponents.R.color.primaryColor)
+                            )
+                        )
+                        binding.savemapBtn.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                (com.waycool.uicomponents.R.color.white)
+                            )
+                        )
 
-                  /*      mMap?.addPolygon(
-                            PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
-                                .strokeColor(
-                                    Color.argb(255, 255, 255, 255)
-                                )
-                        )*/
+                        /*      mMap?.addPolygon(
+                                  PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                                      .strokeColor(
+                                          Color.argb(255, 255, 255, 255)
+                                      )
+                              )*/
                         showAreaCard()
 
                     }
@@ -565,7 +672,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        mMap!!.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener { marker1 ->
+        mMap?.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener { marker1 ->
             if (marker1 == currentMarker) return@OnMarkerClickListener true
             if (isMarkerSelected) {
                 isMarkerSelected = false
@@ -623,7 +730,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 polyline = null
                 isPolygonDraw = true
                 polygon = mMap!!.addPolygon(
-                    PolygonOptions().addAll(points).fillColor(drawingOption!!.fillColor)
+                    PolygonOptions().addAll(points).fillColor(drawingOption.fillColor)
                         .strokeColor(drawingOption.strokeColor)
                 )
                 addCenterMarkersToPolygon(polygon)
@@ -636,10 +743,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
             marker1.isVisible = false
             val ll = marker1.position
-            val p = mMap!!.projection.toScreenLocation(ll)
-            binding.markerImageview.setX((p.x - binding.markerImageview.getWidth() / 2).toFloat())
-            binding.markerImageview.setY((p.y - binding.markerImageview.getHeight() / 2).toFloat())
-            binding.markerImageview.setVisibility(View.VISIBLE)
+            val p = mMap?.projection?.toScreenLocation(ll)
+            (p?.x?.minus(binding.markerImageview.width / 2))?.toFloat()
+                ?.let { binding.markerImageview.x = it }
+            (p?.y?.minus(binding.markerImageview.height / 2))?.toFloat()
+                ?.let { binding.markerImageview.y = it }
+            binding.markerImageview.visibility = View.VISIBLE
             true
         })
 
@@ -651,6 +760,10 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 binding.markerImageview.setX((markerPointOnScreen.x - binding.markerImageview.getWidth() / 2).toFloat())
                 binding.markerImageview.setY((markerPointOnScreen.y - binding.markerImageview.getHeight() / 2).toFloat())
             }
+        }
+
+        if (myFarmEdit != null) {
+            editFarm()
         }
     }
 
@@ -668,17 +781,29 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     }
                     .addOnFailureListener {
                         it.message?.let { it1 ->
-                            ToastStateHandling.toastError(requireContext(),
-                                it1, Toast.LENGTH_SHORT)
+                            ToastStateHandling.toastError(
+                                requireContext(),
+                                it1, Toast.LENGTH_SHORT
+                            )
                         }
                         Log.d("Registration", "" + it.message)
                     }
                     .addOnCanceledListener {
-                        ToastStateHandling.toastError(requireContext(), "Cancelled", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Cancelled",
+                            Toast.LENGTH_SHORT
+                        )
 
                     }
             } else {
-                context?.let { ToastStateHandling.toastError(it, "Please turn on location", Toast.LENGTH_LONG) }
+                context?.let {
+                    ToastStateHandling.toastError(
+                        it,
+                        "Please turn on location",
+                        Toast.LENGTH_LONG
+                    )
+                }
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -919,7 +1044,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         binding.areaCard.visibility = View.VISIBLE
         //binding.savemapBtn.visibility = View.VISIBLE
         val area: Double =
-            getArea(points) / 4046.86
+            getAreaInAcre(points)
         val perimeter: Double = getLength(points)
         binding.areaDisplayTv.text = (String.format("%.2f", area) + " Acre").trim { it <= ' ' }
         binding.perimeterTv.text = (String.format("%.2f", perimeter) + " Mtrs").trim { it <= ' ' }
@@ -931,8 +1056,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 //        }
     }
 
-    private fun getArea(latLngs: List<LatLng?>?): Double {
-        return SphericalUtil.computeArea(latLngs)
+    private fun getAreaInAcre(latLngs: List<LatLng?>?): Double {
+        return SphericalUtil.computeArea(latLngs) / 4046.86
     }
 
     private fun getLength(latLngs: List<LatLng?>?): Double {

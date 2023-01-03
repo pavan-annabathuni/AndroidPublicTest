@@ -16,7 +16,6 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
-import java.io.File
 import java.util.*
 
 interface ApiInterface {
@@ -187,7 +186,7 @@ interface ApiInterface {
         @Field("state") state: String,
         @Field("district") district: String,
         @Field("number") number: String?,
-        @Field("crop_id")plot_id:Int
+        @Field("crop_id") plot_id: Int
 
     ): Response<SoilTestResponseDTO>
 
@@ -202,7 +201,7 @@ interface ApiInterface {
     @FormUrlEncoded
     suspend fun updateProfile(
         @HeaderMap map: Map<String, String>,
-        @FieldMap date: Map<String,String>
+        @FieldMap date: Map<String, String>
 //        @Field("name") name: String,
 //        @Field("address") address: String,
 //        @Field("village") village: String,
@@ -289,7 +288,27 @@ interface ApiInterface {
         @Field("farm_pump_type") farm_pump_type: String? = null,
         @Field("farm_pump_depth") farm_pump_depth: String? = null,
         @Field("farm_pump_pipe_size") farm_pump_pipe_size: String? = null,
-        @Field("farm_pump_flow_rate") farm_pump_flow_rate: String? = null
+        @Field("farm_pump_flow_rate") farm_pump_flow_rate: String? = null,
+    ): Response<ResponseBody>
+
+    @PUT("api/v1/farms/{farmId}")
+    @FormUrlEncoded
+    suspend fun updateFarm(
+        @HeaderMap map: Map<String, String>?,
+        @Field("account_no_id") accountId: Int,
+        @Field("farm_name") farmName: String,
+        @Field("farm_center") farm_center: String,
+        @Field("farm_area") farm_area: String,
+        @Field("farm_json") farm_json: String,
+        @Field("plot_ids") plot_ids: String? = null,
+        @Field("is_primary") is_primary: Int? = null,
+        @Field("farm_water_source") farm_water_source: String? = null,
+        @Field("farm_pump_hp") farm_pump_hp: String? = null,
+        @Field("farm_pump_type") farm_pump_type: String? = null,
+        @Field("farm_pump_depth") farm_pump_depth: String? = null,
+        @Field("farm_pump_pipe_size") farm_pump_pipe_size: String? = null,
+        @Field("farm_pump_flow_rate") farm_pump_flow_rate: String? = null,
+        @Path("farmId") farmId:Int?
     ): Response<ResponseBody>
 
 
@@ -371,7 +390,7 @@ interface ApiInterface {
     @GET("api/v1/get-delta-t-data")
     suspend fun farmDetailsDelta(
         @HeaderMap map: Map<String, String>?,
-        @Query("farm_id")farmId:Int
+        @Query("farm_id") farmId: Int
     ): Response<FarmDetailsDTO>
 
     @GET("api/v1/app-translations")
@@ -432,8 +451,8 @@ interface ApiInterface {
     @GET("api/v1/get-crop-stage-masters")
     suspend fun getCropStage(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_no_id")account:Int?,
-        @Query("plot_id")plotId: Int
+        @Query("account_no_id") account: Int?,
+        @Query("plot_id") plotId: Int
     ): Response<CropStageModel>
 
     @POST("api/v1/add-farm-support")
@@ -471,6 +490,10 @@ interface ApiInterface {
         @Query("account_no_id") account_no_id: Int
     ): Response<NdviModel>
 
+    @GET
+    suspend fun getNDVIMean(@Url url: String): Response<NDVIMean>
+
+
     @GET("api/v1/user-notifications")
     suspend fun getNotification(
         @HeaderMap map: Map<String, String>?,
@@ -481,23 +504,23 @@ interface ApiInterface {
     suspend fun updateNotification(
         @HeaderMap map: Map<String, String>?,
         @Field("notification_id") Nid: String
-    ):Response<UpdateNotification>
+    ): Response<UpdateNotification>
 
     @POST("api/v1/plot-stage-calender")
     suspend fun updateCropStage(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_no_id")accountId: Int,
-        @Query("crop_stage_master_id")stageId:Int,
-        @Query("plot_id")plotId: Int,
-        @Query("date")date:String
-    ):Response<UpdateCropStage>
+        @Query("account_no_id") accountId: Int,
+        @Query("crop_stage_master_id") stageId: Int,
+        @Query("plot_id") plotId: Int,
+        @Query("date") date: String
+    ): Response<UpdateCropStage>
 
     @GET("api/v1/view-crop-disease")
     suspend fun getDisease(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_id")accountId: Int,
-        @Query("plot_id")plotId: Int
-    ):Response<PestAndDiseaseModel>
+        @Query("account_id") accountId: Int,
+        @Query("plot_id") plotId: Int
+    ): Response<PestAndDiseaseModel>
 
 
 }
