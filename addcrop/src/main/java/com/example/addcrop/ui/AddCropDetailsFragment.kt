@@ -92,9 +92,10 @@ class AddCropDetailsFragment : Fragment() {
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
+            getFarms()
 
         }
-        getFarms()
+
         binding.cardCheckHealth.setOnClickListener {
             postAddCrop()
         }
@@ -169,9 +170,9 @@ class AddCropDetailsFragment : Fragment() {
                     else -> {
                         Log.d("farm", "step7")
 
-                    }
                 }
             }
+        }
     }
 
     private fun createChip(farm: MyFarmsDomain) {

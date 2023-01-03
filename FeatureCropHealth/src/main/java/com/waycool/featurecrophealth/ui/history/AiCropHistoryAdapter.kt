@@ -43,13 +43,13 @@ class AiCropHistoryAdapter(private val context: Context) :
         fun bind(note: AiCropHistoryDomain) {
             binding.tvCropID.text = "id : " + note.crop_id.toString()
 //            binding.tvRequest.text = note.prediction
-//            binding.tvDesiessName.text = note.disease_id.toString()
+//            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text = note.cropdata.cropName.toString()
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()
-                .placeholder(com.waycool.featurecrophealth.R.drawable.disease)
+                .placeholder(com.waycool.featurecrophealth.R.drawable.background_selected_item)
                 .thumbnail(0.5f)
                 .into(binding.iVHistory);
 //            binding.title.text = note.title

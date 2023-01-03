@@ -138,7 +138,7 @@ class RegistrationFragment : Fragment() {
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
         toolbarLayoutBinding.toolbarTile.text = "Profile"
         toolbarLayoutBinding.backBtn.setOnClickListener {
-            Navigation.findNavController(binding.root).popBackStack()
+            Navigation.findNavController(binding.root).popBackStack(R.id.loginFragment,false)
         }
 
         if (arguments?.getString("mobile_number") != null) {

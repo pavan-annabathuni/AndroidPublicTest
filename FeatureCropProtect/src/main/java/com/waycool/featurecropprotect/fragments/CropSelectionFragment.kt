@@ -41,11 +41,11 @@ import java.util.*
 
 class CropSelectionFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
     private var selectedCategory: CropCategoryMasterDomain? = null
     private var _binding: FragmentCropSelectionBinding? = null
     private val binding get() = _binding!!
     private lateinit var myCropAdapter: MyCropsAdapter
+
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
     }
@@ -53,10 +53,6 @@ class CropSelectionFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,20 +83,13 @@ class CropSelectionFragment : Fragment() {
         )
 
         binding.toolbar.setNavigationOnClickListener {
-//            activity?.finish()
             findNavController().navigateUp()
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
         TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
         TranslationsManager().loadString("my_crops",binding.myCropsTitle)
 
-
-//        binding.toolbarTitle.text = "Protect Your Crop"
-
         binding.cropsRv.adapter = adapter
-
-
-
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("cropid", it1) }
@@ -132,7 +121,6 @@ class CropSelectionFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-
         adapter.onItemClick = {
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
@@ -314,10 +302,8 @@ class CropSelectionFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data?.size!=0)) {
                 binding.cvMyCrops.visibility=View.VISIBLE
-//                binding.cvAddCrop.visibility=View.GONE
                 binding.tvCount.text = it.data!!.size.toString()
             } else {
-//                binding.cvAddCrop.visibility=View.GONE
                 binding.cvMyCrops.visibility=View.GONE
             }
         }

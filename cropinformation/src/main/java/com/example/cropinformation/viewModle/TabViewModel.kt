@@ -17,6 +17,8 @@ import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.CropMasterDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class TabViewModel:ViewModel {
@@ -61,7 +63,7 @@ class TabViewModel:ViewModel {
         module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
@@ -75,7 +77,7 @@ class TabViewModel:ViewModel {
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
     fun getVansNewsList(
@@ -83,7 +85,7 @@ class TabViewModel:ViewModel {
         module_id:String?=null,
         vansType: String? = null,
         tags: String? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["lang_id"] = "1"
@@ -102,7 +104,7 @@ class TabViewModel:ViewModel {
 //        if (categoryId != null)
 //            queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
     fun getTabItem(){

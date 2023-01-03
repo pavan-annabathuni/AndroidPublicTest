@@ -3,13 +3,16 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.error.ToastStateHandling
@@ -25,6 +28,10 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -141,11 +148,55 @@ class CropHealthFragment : Fragment() {
         binding.clProgressBar.visibility=View.VISIBLE
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(module_id).collect {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
+
+                                if (it1 is LoadState.NotLoading) {
+
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
+
+
+                }
+
+            }
+        }
+
+/*
         viewModel.getVansVideosList(module_id).observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
             binding.clProgressBar.visibility=View.GONE
 
-            /*       if (adapter.snapshot().size==0){
+            */
+/*       if (adapter.snapshot().size==0){
                        videosBinding.noDataVideo.visibility=View.VISIBLE
                        binding.clProgressBar.visibility=View.GONE
 
@@ -155,9 +206,11 @@ class CropHealthFragment : Fragment() {
                        adapter.submitData(lifecycle, it)
                        binding.clProgressBar.visibility=View.GONE
 
-                   }*/
+                   }*//*
+
 
         }
+*/
 
         adapter.onItemClick = {
             val bundle = Bundle()
