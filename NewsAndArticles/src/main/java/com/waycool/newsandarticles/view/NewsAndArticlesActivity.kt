@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -74,7 +76,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        binding.toolbarTitle.text = "News & Articles"
+       // binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -100,6 +102,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         setBanners()
         getNewsCategories()
         fabButton()
+        translation()
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
@@ -222,7 +225,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         vansType: String? = null,
         tags: String? = null
     ) {
-
         viewModel.getVansNewsList(vansType, tags).observe(this) {
             newsAdapter.submitData(lifecycle, it)
         }
@@ -319,7 +321,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(this,com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -327,7 +329,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(this,com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -368,7 +370,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow - Hi, Checkout the News and Articles on ${it?.title}.")
                     .setDescription("Watch more News and Articles and learn with Outgrow")
                     .build()
@@ -384,5 +386,11 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
                 }
             }
+    }
+    private fun translation(){
+        viewModel.viewModelScope.launch {
+            binding.toolbarTitle.text = TranslationsManager().getString("str_news")
+            binding.search.hint = TranslationsManager().getString("search")
+        }
     }
 }

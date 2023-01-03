@@ -26,14 +26,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
-import com.stfalcon.imageviewer.loader.ImageLoader
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -54,7 +51,6 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -62,7 +58,7 @@ import nl.changer.audiowife.AudioWife
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment(), onItemClick {
@@ -75,12 +71,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     private val viewModel: CropProtectViewModel by lazy { ViewModelProvider(requireActivity())[CropProtectViewModel::class.java] }
     private val adapter: DiseasesChildAdapter by lazy { DiseasesChildAdapter() }
+    private var moduleId = "2"
 
-    //banners
-    var bannerImageList: MutableList<AdBannerImage> = ArrayList()
-    private var module_id = "2"
-
-    var mediaPlayer: MediaPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
 
     private var diseaseId: Int? = null
     private var cropId: Int? = null
@@ -112,11 +105,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
         arguments?.let {
             cropId = it.getInt("cropId")
-
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
         }
+
 
 
         binding.toolbar.setNavigationOnClickListener {
@@ -126,8 +119,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.cropProtectDiseaseName.text = diseaseName
 
         shareLayout = binding.shareScreen
-        binding.imgShare.setOnClickListener() {
-            screenShot(diseaseId, diseaseName, audioUrl)
+        binding.imgShare.setOnClickListener {
+            screenShot(diseaseId, diseaseName)
         }
 
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
@@ -148,7 +141,6 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             viewModel.getSelectedDisease(diseaseId).observe(requireActivity()) {
                 when (it) {
                     is Resource.Success -> {
-
                         binding.toolbarTitle.text = it.data?.diseaseName
                         binding.cropProtectDiseaseName.text = it.data?.diseaseName
 
@@ -161,14 +153,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 .into(binding.cropProtectDiseaseImage)
                         }
 
-                        binding.cropProtectDiseaseImage.setOnClickListener { view ->
+                        binding.cropProtectDiseaseImage.setOnClickListener { _ ->
                             StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context,
-                                listOf(it.data?.thumb),
-                                ImageLoader { imageView: ImageView, image: String? ->
-                                    Glide.with(binding.cropProtectDiseaseImage.context)
-                                        .load(image)
-                                        .into(imageView)
-                                }).allowSwipeToDismiss(true)
+                                listOf(it.data?.thumb)
+                            ) { imageView: ImageView, image: String? ->
+                                Glide.with(binding.cropProtectDiseaseImage.context)
+                                    .load(image)
+                                    .into(imageView)
+                            }.allowSwipeToDismiss(true)
                                 .allowZooming(true)
                                 .withTransitionFrom(binding.cropProtectDiseaseImage)
                                 .show(true)
@@ -199,14 +191,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
                         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
-                            override fun onTabSelected(tab: TabLayout.Tab?) {
+                            override fun onTabSelected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
 
-                            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                            override fun onTabUnselected(tab: Tab?) {
+
                             }
 
-                            override fun onTabReselected(tab: TabLayout.Tab?) {
+                            override fun onTabReselected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
                         })
@@ -252,7 +245,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         audioPlayer()
     }
 
-    fun screenShot(diseaseId: Int?, diseaseName: String?, audioUrl: String?) {
+    private fun screenShot(diseaseId: Int?, diseaseName: String?) {
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
@@ -265,7 +258,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
         outputFile.flush()
         outputFile.close()
-        val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
+        val uri = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -276,7 +269,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
                     .setDescription("Find Pest Management and more on Outgrow app")
                     .build()
@@ -288,7 +281,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
                     sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
                 }
@@ -301,12 +294,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         val adapter = NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansNewsList(cropId, module_id).collect() {
-                adapter.submitData(lifecycle, it)
+            viewModel.getVansNewsList(cropId, moduleId).collect{ pagingData ->
+                adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
+                    newsBinding.viewAllNews.visibility=View.GONE
+
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
@@ -318,10 +313,13 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility=View.GONE
+
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
+                                        newsBinding.viewAllNews.visibility=View.VISIBLE
 
                                     }
                                 }
@@ -329,13 +327,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     }
                 }
             }
-
-
         }
-
-
-
-
 
     }
 
@@ -343,12 +335,13 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansVideosList(cropId, module_id).collect() {
-                adapter.submitData(lifecycle, it)
+            viewModel.getVansVideosList(cropId, moduleId).collect { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
+                    videosBinding.viewAllVideos.visibility=View.GONE
                 }
                 else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -362,10 +355,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
+                                        videosBinding.viewAllVideos.visibility=View.GONE
+
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility=View.VISIBLE
+
 
                                     }
                                 }
@@ -414,13 +411,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             if (binding.tabLayout.tabCount == 1) {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
             }
-            Log.d("PestDisease", "TabCount:${binding.tabLayout.tabCount}")
         }
 
         private fun populateTabText(tab: Tab?, pestDisease: PestDiseaseDomain?) {
             when (tab?.text) {
                 "Chemical" -> {
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         binding.measuresTv.text = Html.fromHtml(
                             pestDisease?.chemical!!,
@@ -466,16 +461,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 bannerAdapter.submitData(lifecycle, it)
                 TabLayoutMediator(
                     binding.bannerIndicators, binding.bannerViewpager
-                ) { tab: TabLayout.Tab, position: Int ->
+                ) { tab: Tab, position: Int ->
                     tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
                 }.attach()
             }
             binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
 
             binding.bannerViewpager.clipToPadding = false
             binding.bannerViewpager.clipChildren = false
@@ -485,16 +475,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             val compositePageTransformer = CompositePageTransformer()
             compositePageTransformer.addTransformer(MarginPageTransformer(40))
             compositePageTransformer.addTransformer { page, position ->
-                val r = 1 - Math.abs(position)
+                val r = 1 - abs(position)
                 page.scaleY = 0.85f + r * 0.15f
             }
             binding.bannerViewpager.setPageTransformer(compositePageTransformer)
         }
 
         private fun audioPlayer() {
-            binding.playPauseLayout.setOnClickListener() {
+            binding.playPauseLayout.setOnClickListener {
                 if (audioUrl != null) {
-                    mediaPlayer = MediaPlayer();
+                    mediaPlayer = MediaPlayer()
                     mediaPlayer!!.setOnCompletionListener {
                         binding.mediaSeekbar.progress = 0
                         binding.pause.visibility = View.GONE
@@ -524,14 +514,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             audio?.release()
         }
 
-    override fun onItemClickListener(it: VansFeederListDomain?) {
+    override fun onItemClickListener(vans: VansFeederListDomain?) {
         val bundle = Bundle()
-        bundle.putString("title", it?.title)
-        bundle.putString("content", it?.desc)
-        bundle.putString("image", it?.thumbnailUrl)
-        bundle.putString("audio", it?.audioUrl)
-        bundle.putString("date", it?.startDate)
-        bundle.putString("source", it?.sourceName)
+        bundle.putString("title", vans?.title)
+        bundle.putString("content", vans?.desc)
+        bundle.putString("image", vans?.thumbnailUrl)
+        bundle.putString("audio", vans?.audioUrl)
+        bundle.putString("date", vans?.startDate)
+        bundle.putString("source", vans?.sourceName)
 
         findNavController().navigate(
             R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,

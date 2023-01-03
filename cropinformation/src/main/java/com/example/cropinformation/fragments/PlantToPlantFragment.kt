@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentPlantToPlantBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 class PlantToPlantFragment : Fragment() {
     private lateinit var binding: FragmentPlantToPlantBinding
@@ -30,6 +31,7 @@ class PlantToPlantFragment : Fragment() {
         binding = FragmentPlantToPlantBinding.inflate(inflater)
        // ViewModel.cropAdvisory()
         observer()
+        TranslationsManager().loadString("str_spacing",binding.labelName)
         return binding.root
 
     }

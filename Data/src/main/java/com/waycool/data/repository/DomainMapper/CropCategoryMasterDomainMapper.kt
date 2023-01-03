@@ -10,6 +10,7 @@ class CropCategoryMasterDomainMapper : DomainMapper<CropCategoryMasterDomain, Cr
             id = dto.id,
             categoryName = dto.categoryName,
             translation = dto.translation,
+            categoryTagName = dto.categoryTagName
         )
     }
 

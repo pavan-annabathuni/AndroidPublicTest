@@ -12,6 +12,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentSoilPhBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 class SoilPhFragment : Fragment() {
 
@@ -55,6 +56,7 @@ class SoilPhFragment : Fragment() {
 
         }}
         }
+        TranslationsManager().loadString("str_plant_nutrient",binding.textView3)
         return binding.root
 
 

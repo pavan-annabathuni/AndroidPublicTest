@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ViewholderNewsArticlesListBinding
 
@@ -65,6 +66,8 @@ class NewsPagerAdapter(
             itemBinding.newsCv.setOnClickListener {
                 onItemClick.onItemClick(vans)
             }
+
+            TranslationsManager().loadString("share",itemBinding.share)
 
         }
 

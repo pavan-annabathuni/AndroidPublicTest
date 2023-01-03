@@ -3,13 +3,17 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.error.ToastStateHandling
@@ -25,6 +29,10 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -138,14 +146,57 @@ class CropHealthFragment : Fragment() {
     }
 
     private fun getVideos() {
-        binding.clProgressBar.visibility=View.VISIBLE
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(module_id).collect {
+                adapter.submitData(lifecycle, it)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
+
+                                if (it1 is LoadState.NotLoading) {
+
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
+
+
+                }
+
+            }
+        }
+
+/*
         viewModel.getVansVideosList(module_id).observe(requireActivity()) {
             adapter.submitData(lifecycle, it)
             binding.clProgressBar.visibility=View.GONE
 
-            /*       if (adapter.snapshot().size==0){
+            */
+/*       if (adapter.snapshot().size==0){
                        videosBinding.noDataVideo.visibility=View.VISIBLE
                        binding.clProgressBar.visibility=View.GONE
 
@@ -155,9 +206,11 @@ class CropHealthFragment : Fragment() {
                        adapter.submitData(lifecycle, it)
                        binding.clProgressBar.visibility=View.GONE
 
-                   }*/
+                   }*//*
+
 
         }
+*/
 
         adapter.onItemClick = {
             val bundle = Bundle()
@@ -197,7 +250,6 @@ class CropHealthFragment : Fragment() {
 //    }
 
     private fun bindObservers() {
-        binding.clProgressBar.visibility=View.VISIBLE
 
         viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
@@ -260,7 +312,7 @@ class CropHealthFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener(){
             if(!isVisible){
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -268,7 +320,7 @@ class CropHealthFragment : Fragment() {
             }else{
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

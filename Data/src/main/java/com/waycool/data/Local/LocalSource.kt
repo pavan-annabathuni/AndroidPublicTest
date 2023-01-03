@@ -211,5 +211,6 @@ object LocalSource {
     fun deleteCropMaster() = outgrowDao.deleteCropMaster()
     fun deletePestDisease() = outgrowDao.deletePestDiseases()
     fun deleteCropInformation() = outgrowDao.deleteCropInformation()
+    fun deleteMyFarms()= outgrowDao.getDeleteAllMyFarms()
 
 }

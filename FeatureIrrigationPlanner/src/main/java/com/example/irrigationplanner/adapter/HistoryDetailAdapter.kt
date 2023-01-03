@@ -11,6 +11,8 @@ import com.example.irrigationplanner.databinding.ItemHistoryBinding
 import com.example.irrigationplanner.databinding.ItemHistoryDetailsBinding
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class HistoryDetailAdapter(val onClickListener:OnClickListener):
     ListAdapter<HistoricData, HistoryDetailAdapter.MyViewHolder>(HistoryAdapter) {
@@ -39,8 +41,12 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
             onClickListener.clickListener
 
         }
+        var irrigated = ""
+        GlobalScope.launch {
+          irrigated   = TranslationsManager().getString("str_Irrigated ")
+        }
         holder.date.text = properties.createdAt
-        holder.irrigation.text = "Irrigated ${properties.irrigation}L"
+        holder.irrigation.text = "$irrigated ${properties.irrigation}L"
         holder.eto.text = properties.etoCurrent.toString()
         holder.etc.text = properties.etc.toString()
 
@@ -56,6 +62,7 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         }
         //translation
         TranslationsManager().loadString("str_evapotranspiration",holder.eva)
+        TranslationsManager().loadString("str_rainfall",holder.rainfall)
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<HistoricData>() {

@@ -39,7 +39,8 @@
                 android:drawableStart="@drawable/ic_share_protect"
                 android:drawablePadding="8dp"
                 android:gravity="center"
-                android:text="share"
+                android:text="@string/share"
+                android:fontFamily="@font/notosans_medium"
                 android:textColor="@color/textdark" />
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -91,7 +92,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/notosans_semibold"
-                            android:text="Disease"
+                            android:text="@string/disease"
                             android:textColor="@color/textdark"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/notosans_semibold"
-                            android:text="Related Images"
+                            android:text="@string/related_images"
                             android:textColor="@color/textdark"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/materialCardView4" />
@@ -174,7 +175,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="24dp"
                             android:layout_marginEnd="16dp"
-                            android:text="Symptoms"
+                            android:text="@string/symptoms"
                             android:textColor="@color/textdark"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -358,7 +359,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Control Measures"
+                        android:text="@string/control_measures"
                         android:textColor="@color/textdark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -381,20 +382,6 @@
                         app:tabTextAppearance="@style/TabTextAppearance2"
                         app:tabTextColor="@color/textlight">
 
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Chemical" />-->
-
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Biological" />-->
-
-                        <!--                        <com.google.android.material.tabs.TabItem-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Cultural" />-->
                     </com.google.android.material.tabs.TabLayout>
 
                     <com.waycool.uicomponents.Text.ParagraphMedium
@@ -423,6 +410,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
+
+
             <include
                 android:id="@+id/layout_news"
                 layout="@layout/generic_layout_news_list"
@@ -433,6 +422,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
+
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

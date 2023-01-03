@@ -13,22 +13,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
-import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHistoryBinding
-
 import com.waycool.featurecrophealth.utils.Constant
-import com.waycool.featurecrophealth.utils.NetworkResult
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -69,7 +67,6 @@ class CropHistoryFragment : Fragment() {
             } else {
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
-//            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
                 findNavController().navigate(
                     R.id.action_cropHistoryFragment_to_pestDiseaseDetailsFragment2,
                     bundle
@@ -81,7 +78,7 @@ class CropHistoryFragment : Fragment() {
     }
 
     private fun speechToText() {
-        binding.textToSpeach.setOnClickListener() {
+        binding.textToSpeach.setOnClickListener {
             binding.searchView.text.clear()
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
@@ -153,7 +150,7 @@ class CropHistoryFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.getAiCropHistory().observe(viewLifecycleOwner, Observer {
+        viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
 
             when (it) {
                 is Resource.Success -> {
@@ -168,14 +165,18 @@ class CropHistoryFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        it.message.toString(),
+                        Toast.LENGTH_SHORT
+                    )
                 }
                 is Resource.Loading -> {
 
                 }
                 else -> {}
             }
-        })
+        }
     }
 
     private fun clickSearch() {
@@ -198,7 +199,7 @@ class CropHistoryFragment : Fragment() {
 
                 val temp = ArrayList<AiCropHistoryDomain>()
 //                filteredList.clear()
-                if (charSequence.length > 0) {
+                if (charSequence.isNotEmpty()) {
                     filteredList.forEach {
                         if (it.cropdata.cropName.toString().lowercase()
                                 .contains(charSequence.toString().lowercase())
@@ -242,9 +243,9 @@ class CropHistoryFragment : Fragment() {
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -252,17 +253,17 @@ class CropHistoryFragment : Fragment() {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

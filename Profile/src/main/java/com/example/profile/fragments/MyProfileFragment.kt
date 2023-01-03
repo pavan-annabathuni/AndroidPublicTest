@@ -23,6 +23,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
@@ -111,7 +112,7 @@ class MyProfileFragment : Fragment() {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow sends an invitation for you to join us and grow with us")
                     .setDescription("Outgrow app-Let's grow together")
                     .build()
@@ -257,11 +258,8 @@ class MyProfileFragment : Fragment() {
             LocalSource.deleteCropMaster()
             LocalSource.deleteCropInformation()
             LocalSource.deletePestDisease()
-            MyCropSyncer().invalidateSync()
-            CropMasterSyncer().invalidateSync()
-            CropInformationSyncer().invalidateSync()
-            TagsSyncer().invalidateSync()
-            PestDiseaseSyncer().invalidateSync()
+            LocalSource.deleteMyFarms()
+           SyncManager.invalidateAll()
             DataStoreManager.clearData()
 
         }

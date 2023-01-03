@@ -11,6 +11,8 @@ import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import okhttp3.MultipartBody
 
 class CropHealthViewModel : ViewModel() {
@@ -47,7 +49,7 @@ class CropHealthViewModel : ViewModel() {
         module_id:String?=null,
         tags: String? = null,
         categoryId: Int? = null
-    ): LiveData<PagingData<VansFeederListDomain>> {
+    ): Flow<PagingData<VansFeederListDomain>> {
 
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "videos"
@@ -58,6 +60,6 @@ class CropHealthViewModel : ViewModel() {
         if (categoryId != null)
             queryMap["category_id"] = categoryId.toString()
 
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 }

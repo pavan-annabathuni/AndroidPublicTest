@@ -118,13 +118,9 @@ class CropDetailsCaptureFragment : Fragment() {
             binding.closeImage?.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(selecteduri)
             binding.cardCheckHealth.setOnClickListener {
-                Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
-                Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
                 binding.closeImage?.visibility = View.GONE
-//            val userRequest = AiCropPostResponse()
                 binding.uploadedImg.isEnabled = true
                 val file:File=File(selecteduri?.path)
-//                val file=selecteduri?.toFile()
 
                 val requestFile: RequestBody =
                     RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
@@ -141,35 +137,22 @@ class CropDetailsCaptureFragment : Fragment() {
                 binding.progressBar?.visibility = View.VISIBLE
                 binding.cardCheckHealth.visibility = View.GONE
 
-
-//                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
-//                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
-
                 postImage(
                     crop_id!!,
                     crop_name!!,
                     profileImageBody
                 )
-                Log.d(TAG, "onViewCreatedStringPrint: $file")
-                Log.d(TAG, "onViewCreatedStringPrint: $profileImage")
-                Log.d(TAG, "onViewCreatedStringPrint: $file")
+
             }
         }
         else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
             val uri: Uri? = data?.data
             selecteduri = uri!!
-            Log.d("crophealth", "onActivityResultDataResultURi:$selecteduri ")
-//            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
-
-            Log.d(TAG, "onActivityResultUri: $uri")
             binding.closeImage?.visibility = View.VISIBLE
             binding.previewImage.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(uri)
             binding.cardCheckHealth.setOnClickListener {
                 binding.closeImage?.visibility = View.GONE
-                Log.d(TAG, "onViewCreatedStringPrint: $crop_name")
-                Log.d(TAG, "onViewCreatedStringPrint: $crop_id")
-//            val userRequest = AiCropPostResponse()
                 val file = selecteduri?.toFile()
                 binding.uploadedImg.isEnabled = true
                 val requestFile: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
@@ -185,33 +168,14 @@ class CropDetailsCaptureFragment : Fragment() {
                         file.name, profileImage
                     )
 
-                Log.d("aidetect", selecteduri.toString())
-                Log.d("aidetect", file.name.toString())
-                Log.d("aidetect", profileImage.toString())
                 binding.progressBar?.visibility = View.VISIBLE
                 binding.cardCheckHealth.visibility = View.GONE
-//                val body: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.getName(), requestFile)
-//                Log.d(TAG, "onViewCreatedStringPrintBody: ${body}")
-
 
                 postImage(
                     crop_id!!,
                     crop_name!!,
                     profileImageBody
                 )
-
-//                viewModel.aiResponse.observe(requireActivity()) {
-//                    Toast.makeText(requireContext(), "Check your crop type", Toast.LENGTH_SHORT)
-//                        .show()
-//
-//
-//                    if (it?.data?.message != null)
-//                        Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT)
-//                            .show()
-//                }
-//                if (crop_name.equals("The image has invalid image dimensions.")){
-//                    Toast.makeText(requireContext(),"The image has invalid image dimensions.", Toast.LENGTH_SHORT).show()
-//                }
 
             }
 
@@ -236,29 +200,11 @@ class CropDetailsCaptureFragment : Fragment() {
                     val data = it.data
                     data?.diseaseId
                     if (data?.diseaseId == null) {
-//                        Toast.makeText(requireContext(),data?.message.toString() , Toast.LENGTH_SHORT).show()
                         MaterialAlertDialogBuilder(requireContext()).setTitle(" Alert ")
                             .setMessage(it.data?.message)
-//                            .setNeutralButton("Remder later") { dialog, which ->
-//                                showSnackbar("")
-//                            }
-//                            .setNegativeButton("No") { dialog, which ->
-//                                showSnackbar("")
-//                            }
                             .setPositiveButton("Ok") { dialog, which ->
                                 showSnackbar("")
                             }.show()
-//                            .setNeutralButton("later"){dialog,which->
-//                                showSneak
-//
-//                            }
-//                        val bundle=Bundle()
-//                        bundle.putString("message",data?.message.toString())
-//                        CustomeDialogFragment.newInstance().show(
-//                            requireActivity().supportFragmentManager,
-//                            CustomeDialogFragment.TAG,bundle
-//                        )
-
                         binding.progressBar?.visibility = View.GONE
                         binding.cardCheckHealth.visibility = View.VISIBLE
                     } else {
