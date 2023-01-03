@@ -123,11 +123,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        apiErrorHandlingBinding = binding.errorState
-        networkCall()
-        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
-            networkCall()
-        }
+
         binding.toolbarTitle.text = "Add Farm"
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
@@ -138,6 +134,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             if (bundle?.getBoolean("isedit") == true) {
                 myFarmEdit = bundle.getParcelable("farm")
             }
+        }
+
+        apiErrorHandlingBinding = binding.errorState
+        networkCall()
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            networkCall()
         }
 
         binding.placesRv.adapter = adapter
@@ -452,8 +454,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         Gson().toJson(listOf(searchLocationMarker?.position))
                     )
                 }
-                if(myFarmEdit!=null)
-                    bundle.putParcelable("farm",myFarmEdit)
+                if (myFarmEdit != null)
+                    bundle.putParcelable("farm", myFarmEdit)
 
                 findNavController().navigate(
                     R.id.action_drawFarmFragment_to_saveFarmFragment,
@@ -465,21 +467,21 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     private fun editFarm() {
         if (myFarmEdit != null) {
-                val pnts: ArrayList<LatLng>? = myFarmEdit?.farmJson
-                polygon = mMap!!.addPolygon(
-                    PolygonOptions().addAll(pnts).fillColor(Color.argb(100, 58, 146, 17))
-                        .strokeColor(
-                            Color.argb(180, 58, 146, 17)
-                        )
-                )
-                mMap!!.animateCamera(
-                    CameraUpdateFactory.newLatLngBounds(
-                        pnts?.let { getLatLnBounds(it) },
-                        250
+            val pnts: ArrayList<LatLng>? = myFarmEdit?.farmJson
+            polygon = mMap!!.addPolygon(
+                PolygonOptions().addAll(pnts).fillColor(Color.argb(100, 58, 146, 17))
+                    .strokeColor(
+                        Color.argb(180, 58, 146, 17)
                     )
+            )
+            mMap!!.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    pnts?.let { getLatLnBounds(it) },
+                    250
                 )
-                val state = MapState()
-                isPolygonDraw = true
+            )
+            val state = MapState()
+            isPolygonDraw = true
             if (pnts != null) {
                 for (latLng in pnts) {
                     val marker = mMap!!.addMarker(
@@ -524,10 +526,10 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
 
             addCenterMarkersToPolygon(polygon)
-                showAreaCard()
-                state.isPolygonDrawn=(isPolygonDraw)
-                state.copyArrayList(pnts)
-                previousStateStack.push(state)
+            showAreaCard()
+            state.isPolygonDrawn = (isPolygonDraw)
+            state.copyArrayList(pnts)
+            previousStateStack.push(state)
         }
     }
 
@@ -547,7 +549,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.tutorial.isClickable = true
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
-            getLocation()
+            if (myFarmEdit == null)
+                getLocation()
         }
     }
 
@@ -581,7 +584,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         mMap = p0
         mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
-        getLocation()
+
         mMap?.setOnMapClickListener { latLng ->
             if (!isMarkerSelected && !isPolygonDraw) {
                 if (markerList == null) {
@@ -764,6 +767,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
         if (myFarmEdit != null) {
             editFarm()
+        }else{
+            getLocation()
         }
     }
 

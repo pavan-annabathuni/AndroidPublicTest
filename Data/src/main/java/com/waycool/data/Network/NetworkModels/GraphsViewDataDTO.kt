@@ -11,8 +11,7 @@ data class GraphsViewDataDTO(
 data class GraphViewData(
     @SerializedName("12_hours_data") var last12HrsData: Map<String, Double>?= emptyMap(),
     @SerializedName("30_days_data") var last30DaysData: Map<String, Double>?= emptyMap(),
-    @SerializedName("7_days_data") var last7DaysData: Map<String, Double>?= emptyMap()
-
+//    @SerializedName("7_days_data") var last7DaysData: Map<String, Double>?= emptyMap()
 )
 
 //data class LastTodayData(

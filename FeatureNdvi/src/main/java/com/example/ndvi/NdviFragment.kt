@@ -293,7 +293,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 //            binding.ndviMean.text = String.format("%.2f", selectedNdvi?.meanNdvi)
             binding.cardView2.visibility = View.GONE
             if (selectedNdvi?.cl != null)
-                if (selectedNdvi?.cl!! > 50) {
+                if (selectedNdvi?.cl!! > 85) {
                     binding.cardView2.visibility = View.VISIBLE
                     binding.tvTextAlert.text =
                         "The Cloud Cover for Satellite Image is ${selectedNdvi?.cl}%. This Imagery may not be an accurate representation of Crop Health."

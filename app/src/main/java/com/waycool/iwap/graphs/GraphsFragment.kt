@@ -141,7 +141,11 @@ class GraphsFragment : Fragment() {
             lDataSet.setCircleColor(Color.WHITE)
             lDataSet.lineWidth = 4f
             lDataSet.setDrawValues(false)
-            if (paramType.equals("leaf_wetness", ignoreCase = true) && duration == GraphSelection.LAST12HRS) {
+            if (paramType.equals(
+                    "leaf_wetness",
+                    ignoreCase = true
+                ) && duration == GraphSelection.LAST12HRS
+            ) {
                 lDataSet.mode = LineDataSet.Mode.STEPPED
                 val yAxisVals = ArrayList(Arrays.asList("Dry", "Wet"))
                 binding.lineChart.getAxisLeft()
@@ -197,7 +201,16 @@ class GraphsFragment : Fragment() {
     private fun getKeyList(duration: GraphSelection): List<String>? {
         return when (duration) {
             GraphSelection.LAST12HRS -> graphsData?.last12HrsData?.keys?.toList()
-            GraphSelection.LAST7DAYS -> graphsData?.last7DaysData?.keys?.toList()
+            GraphSelection.LAST7DAYS -> {
+                val totalList = graphsData?.last30DaysData?.keys?.toList()
+                if (!totalList.isNullOrEmpty()) {
+                    if (totalList?.size!! >= 15) {
+                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    } else {
+                        totalList
+                    }
+                }else emptyList()
+            }
             GraphSelection.LAST30DAYS -> graphsData?.last30DaysData?.keys?.toList()
         }
     }
@@ -206,7 +219,16 @@ class GraphsFragment : Fragment() {
         return when (duration) {
             GraphSelection.LAST12HRS -> graphsData?.last12HrsData?.values?.toList()
             GraphSelection.LAST30DAYS -> graphsData?.last30DaysData?.values?.toList()
-            GraphSelection.LAST7DAYS -> graphsData?.last7DaysData?.values?.toList()
+            GraphSelection.LAST7DAYS -> {
+                val totalList = graphsData?.last30DaysData?.values?.toList()
+                if (!totalList.isNullOrEmpty()) {
+                    if (totalList?.size!! >= 15) {
+                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    } else {
+                        totalList
+                    }
+                }else emptyList()
+            }
         }
     }
 
@@ -249,13 +271,13 @@ class GraphsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
                     0 -> {
-                       populateGraph(paramType,GraphSelection.LAST12HRS)
+                        populateGraph(paramType, GraphSelection.LAST12HRS)
                     }
                     1 -> {
-                        populateGraph(paramType,GraphSelection.LAST7DAYS)
+                        populateGraph(paramType, GraphSelection.LAST7DAYS)
                     }
                     2 -> {
-                        populateGraph(paramType,GraphSelection.LAST30DAYS)
+                        populateGraph(paramType, GraphSelection.LAST30DAYS)
                     }
                 }
             }
@@ -272,13 +294,13 @@ class GraphsFragment : Fragment() {
 
     private fun getUnits(paramType: String): String? {
         return when (paramType) {
-            "temperature" ,"soil_temperature_1"-> " °C"
+            "temperature", "soil_temperature_1" -> " °C"
             "rainfall" -> " mm"
             "humidity" -> " %"
             "windspeed" -> " Kmph"
-            "pressure","soil_moisture_1", "soil_moisture_2"->" KPa"
+            "pressure", "soil_moisture_1", "soil_moisture_2" -> " KPa"
             "lux" -> " lux"
-            "leaf_wetness"->" Hrs"
+            "leaf_wetness" -> " Hrs"
             else -> " "
         }
     }
@@ -289,7 +311,7 @@ class GraphsFragment : Fragment() {
         duration: GraphSelection
     ): String? {
         return when (paramType) {
-            "temperature","soil_temperature_1" -> "Avg Temperature: " + String.format(
+            "temperature", "soil_temperature_1" -> "Avg Temperature: " + String.format(
                 Locale.ENGLISH,
                 "%.2f",
                 calculateAvg(valList)
@@ -326,7 +348,7 @@ class GraphsFragment : Fragment() {
                 "%.2f",
                 calculateAvg(valList)
             ) + getUnits(paramType)
-            "pressure"->"Avg Pressure: " + String.format(
+            "pressure" -> "Avg Pressure: " + String.format(
                 Locale.ENGLISH,
                 "%.2f",
                 calculateAvg(valList)
@@ -361,7 +383,8 @@ class GraphsFragment : Fragment() {
     private fun graphApiData(
         serialNo: Int?,
         deviceModelId: Int?,
-        value: String?) {
+        value: String?
+    ) {
         viewDevice.viewModelScope.launch {
             viewDevice.getGraphsViewDevice(serialNo, deviceModelId, value)
                 .observe(requireActivity()) {
@@ -369,7 +392,7 @@ class GraphsFragment : Fragment() {
                         is Resource.Success -> {
                             if (it.data?.data != null) {
                                 graphsData = it.data?.data
-                                populateGraph(paramType,GraphSelection.LAST12HRS)
+                                populateGraph(paramType, GraphSelection.LAST12HRS)
                             }
                         }
                         is Resource.Error -> {
