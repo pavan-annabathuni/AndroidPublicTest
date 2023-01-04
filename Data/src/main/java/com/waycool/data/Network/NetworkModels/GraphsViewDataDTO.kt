@@ -9,10 +9,9 @@ data class GraphsViewDataDTO(
 )
 
 data class GraphViewData(
-    @SerializedName("12_hours_data" ) var LastTodayData : Map<String,Double>? ,
-    @SerializedName("30_days_data"  ) var MonthDaysData  : Map<String,Double>?,
-    @SerializedName("7_days_data")var sevenDaysData:Map<String,Double>
-
+    @SerializedName("12_hours_data") var last12HrsData: Map<String, Double>?= emptyMap(),
+    @SerializedName("30_days_data") var last30DaysData: Map<String, Double>?= emptyMap(),
+//    @SerializedName("7_days_data") var last7DaysData: Map<String, Double>?= emptyMap()
 )
 
 //data class LastTodayData(

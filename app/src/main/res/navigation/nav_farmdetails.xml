@@ -22,9 +22,6 @@
         <action
             android:id="@+id/action_farmDetailsFragment4_to_deltaTInfoBottomDialogFragment"
             app:destination="@id/deltaTInfoBottomDialogFragment" />
-        <action
-            android:id="@+id/action_farmDetailsFragment4_to_nav_add_farm"
-            app:destination="@id/nav_add_farm" />
     </fragment>
     <include app:graph="@navigation/navigation_add_device" />
     <include app:graph="@navigation/ndvi_navigation" />
@@ -38,5 +35,4 @@
         android:name="com.waycool.iwap.farmdetails.DeltaTInfoBottomDialogFragment"
         android:label="fragment_delta_t_info_bottom_dialog"
         tools:layout="@layout/fragment_delta_t_info_bottom_dialog" />
-    <include app:graph="@navigation/nav_add_farm" />
 </navigation>

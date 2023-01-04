@@ -28,7 +28,7 @@ import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
-import com.waycool.data.utils.Resource
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
@@ -50,6 +50,8 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
     private val pipeSizeList = arrayOf("--Select--", "1.5", " 2", "2.5", "3", "3.5", "4")
     private val pumpHeightList =
         arrayOf("--Select--", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500")
+
+    private var myFarmEdit: MyFarmsDomain? = null
 
 
     override fun onCreateView(
@@ -82,13 +84,45 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         if (arguments != null) {
             farmjson = arguments?.getString("farm_json")
             farmCentroid = arguments?.getString("farm_center")
+            myFarmEdit = arguments?.getParcelable("farm")
+        }
+
+        if (myFarmEdit != null) {
+            binding.farmnameEtAddfarm.setText("${myFarmEdit?.farmName}")
+            binding.setPrimaryFarm.isChecked = myFarmEdit?.isPrimary == 1
+
+            waterSourcesSelected = myFarmEdit?.farmWaterSource?.toMutableList()!!
+            for (i in waterSourcesSelected.indices) {
+                when (waterSourcesSelected[i]) {
+                    "Rain" -> binding.rainSource.isChecked = true
+                    "River" -> binding.riverSource.isChecked = true
+                    "Canal" -> binding.canalSource.isChecked = true
+                    "Lake" -> binding.lakeSource.isChecked = true
+                    "Borewell" -> binding.borewellSource.isChecked = true
+                }
+            }
+
+            if (pumpHpList.indexOf(myFarmEdit?.farmPumpHp) != -1) binding.pumphpSpinner.setSelection(
+                pumpHpList.indexOf(myFarmEdit?.farmPumpHp)
+            )
+            if (pumpTypesList.indexOf(myFarmEdit?.farmPumpType) != -1) binding.pumptypeSpinner.setSelection(
+                pumpTypesList.indexOf(myFarmEdit?.farmPumpType)
+            )
+            if (pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize) != -1) binding.pipesizeSpinner.setSelection(
+                pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize)
+            )
+            if (pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth) != -1) binding.pumpheightSpinner.setSelection(
+                pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth)
+            )
+
+            binding.flowrateEtAddfarm.setText("${myFarmEdit?.farmPumpFlowRate ?: ""}")
+
         }
 
         binding.mycropsRv.adapter = myCropsAdapter
 
         viewModel.viewModelScope.launch {
             accountId = LocalSource.getUserDetailsEntity()?.accountId
-
         }
 
         viewModel.getDashBoard().observe(viewLifecycleOwner) {
@@ -179,53 +213,72 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 } else watersources = null
 
                 if (binding.farmnameEtAddfarm.text.toString().isEmpty()) {
-                    context?.let { it1 -> ToastStateHandling.toastError(it1, "Farm name is mandatory", Toast.LENGTH_SHORT) }
+                    context?.let { it1 ->
+                        ToastStateHandling.toastError(
+                            it1,
+                            "Farm name is mandatory",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
                 } else {
                     binding.saveProgressBar.visibility = View.VISIBLE
-                    binding.saveFarmBtn.visibility = View.GONE
-                    viewModel.addFarm(
-                        accountId!!,
-                        binding.farmnameEtAddfarm.text.toString(),
-                        farmCentroid!!,
-                        binding.farmareaEtAddfarm.text.toString(),
-                        farmjson!!,
-                        checkedcrops,
-                        isPrimary,
-                        watersources,
-                        if (binding.pumphpSpinner.selectedItem.toString() == "--Select--") null else binding.pumphpSpinner.selectedItem.toString(),
-                        if (binding.pumptypeSpinner.selectedItem.toString() == "--Select--") null else binding.pumptypeSpinner.selectedItem.toString(),
-                        if (binding.pumpheightSpinner.selectedItem.toString() == "--Select--") null else binding.pumpheightSpinner.selectedItem.toString(),
-                        if (binding.pipesizeSpinner.selectedItem.toString() == "--Select--") null else binding.pipesizeSpinner.selectedItem.toString(),
-                        binding.flowrateEtAddfarm.text.toString()
-                    ).observe(viewLifecycleOwner) {
-                        when(it){
-                            is Resource.Success->{
-                                binding.saveProgressBar.visibility = View.GONE
-                                binding.saveFarmBtn.visibility = View.VISIBLE
-                                viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
-                                accountId?.let { it1 ->
-                                    viewModel.getFarms().observe(viewLifecycleOwner) {}
-                                }
-                                ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
-                                activity?.finish()
+                    binding.saveFarmBtn.visibility = View.INVISIBLE
+                    if (myFarmEdit == null) {
+                        viewModel.addFarm(
+                            accountId!!,
+                            binding.farmnameEtAddfarm.text.toString(),
+                            farmCentroid!!,
+                            binding.farmareaEtAddfarm.text.toString(),
+                            farmjson!!,
+                            checkedcrops,
+                            isPrimary,
+                            watersources,
+                            if (binding.pumphpSpinner.selectedItem.toString() == "--Select--") null else binding.pumphpSpinner.selectedItem.toString(),
+                            if (binding.pumptypeSpinner.selectedItem.toString() == "--Select--") null else binding.pumptypeSpinner.selectedItem.toString(),
+                            if (binding.pumpheightSpinner.selectedItem.toString() == "--Select--") null else binding.pumpheightSpinner.selectedItem.toString(),
+                            if (binding.pipesizeSpinner.selectedItem.toString() == "--Select--") null else binding.pipesizeSpinner.selectedItem.toString(),
+                            binding.flowrateEtAddfarm.text.toString()
+                        ).observe(viewLifecycleOwner) {
+                            viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
+                            accountId?.let { it1 ->
+                                viewModel.getFarms().observe(viewLifecycleOwner) {}
                             }
-                            is Resource.Loading->{
-                                binding.saveProgressBar.visibility = View.VISIBLE
-                                binding.saveFarmBtn.visibility = View.GONE
-                            }
-                            is Resource.Error->{
-                                binding.saveProgressBar.visibility = View.GONE
-                                binding.saveFarmBtn.visibility = View.VISIBLE
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,it.message.toString(),Toast.LENGTH_SHORT) }
-                            }
-
-                            else -> {}
+                            ToastStateHandling.toastSuccess(
+                                requireContext(),
+                                "Farm Saved",
+                                Toast.LENGTH_SHORT
+                            )
+                            activity?.finish()
                         }
-
+                    }else{
+                        viewModel.updateFarm(
+                            accountId!!,
+                            binding.farmnameEtAddfarm.text.toString(),
+                            farmCentroid!!,
+                            binding.farmareaEtAddfarm.text.toString(),
+                            farmjson!!,
+                            checkedcrops,
+                            isPrimary,
+                            watersources,
+                            if (binding.pumphpSpinner.selectedItem.toString() == "--Select--") null else binding.pumphpSpinner.selectedItem.toString(),
+                            if (binding.pumptypeSpinner.selectedItem.toString() == "--Select--") null else binding.pumptypeSpinner.selectedItem.toString(),
+                            if (binding.pumpheightSpinner.selectedItem.toString() == "--Select--") null else binding.pumpheightSpinner.selectedItem.toString(),
+                            if (binding.pipesizeSpinner.selectedItem.toString() == "--Select--") null else binding.pipesizeSpinner.selectedItem.toString(),
+                            binding.flowrateEtAddfarm.text.toString(),
+                            myFarmEdit?.id
+                        ).observe(viewLifecycleOwner) {
+                            viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
+                            accountId?.let { it1 ->
+                                viewModel.getFarms().observe(viewLifecycleOwner) {}
+                            }
+                            ToastStateHandling.toastSuccess(
+                                requireContext(),
+                                "Farm Updated",
+                                Toast.LENGTH_SHORT
+                            )
+                            activity?.finish()
+                        }
                     }
-
-                   /* ToastStateHandling.toastSuccess(requireContext(), "Farm Saved", Toast.LENGTH_SHORT)
-                    activity?.finish()*/
                 }
 
             }

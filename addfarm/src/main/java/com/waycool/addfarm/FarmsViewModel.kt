@@ -62,7 +62,7 @@ class FarmsViewModel : ViewModel() {
         farm_pump_type: String?=null,
         farm_pump_depth: String?=null,
         farm_pump_pipe_size: String?=null,
-        farm_pump_flow_rate: String?=null
+        farm_pump_flow_rate: String?=null,
     ) =
         FarmsRepository.addFarm(
             accountId,
@@ -77,7 +77,42 @@ class FarmsViewModel : ViewModel() {
             farm_pump_type,
             farm_pump_depth,
             farm_pump_pipe_size,
-            farm_pump_flow_rate
+            farm_pump_flow_rate,
+        ).asLiveData()
+
+
+
+    fun updateFarm(
+        accountId: Int,
+        farmName: String,
+        farm_center: String,
+        farm_area: String,
+        farm_json: String,
+        plot_ids: String?,
+        is_primary: Int?=null,
+        farm_water_source: String?=null,
+        farm_pump_hp: String?=null,
+        farm_pump_type: String?=null,
+        farm_pump_depth: String?=null,
+        farm_pump_pipe_size: String?=null,
+        farm_pump_flow_rate: String?=null,
+        farmid:Int?
+    ) =
+        FarmsRepository.updateFarm(
+            accountId,
+            farmName,
+            farm_center,
+            farm_area,
+            farm_json,
+            plot_ids,
+            is_primary,
+            farm_water_source,
+            farm_pump_hp,
+            farm_pump_type,
+            farm_pump_depth,
+            farm_pump_pipe_size,
+            farm_pump_flow_rate,
+            farmid
         ).asLiveData()
 
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =

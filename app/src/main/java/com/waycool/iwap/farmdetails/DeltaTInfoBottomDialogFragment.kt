@@ -14,19 +14,18 @@ import com.waycool.iwap.databinding.FragmentDeltaTInfoBottomDialogBinding
 
 class DeltaTInfoBottomDialogFragment : BottomSheetDialogFragment() {
 
-    val binding:FragmentDeltaTInfoBottomDialogBinding by lazy { FragmentDeltaTInfoBottomDialogBinding.inflate(layoutInflater) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_delta_t_info_bottom_dialog, container, false)
+        val binding=FragmentDeltaTInfoBottomDialogBinding.inflate(inflater)
+        binding.closeDialog.setOnClickListener(){
+            this.dismiss()
+        }
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.closeDialog.setOnClickListener { findNavController().navigateUp() }
-    }
 
     override fun getTheme(): Int {
         return com.waycool.uicomponents.R.style.AppBottomSheetDialogTheme

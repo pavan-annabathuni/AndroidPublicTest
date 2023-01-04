@@ -80,14 +80,16 @@
             />
 
         <TextView
-            android:id="@+id/degree"
+            android:id="@+id/param_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:text="24°C"
-            android:textColor="#111827"
+            android:textColor="@color/textdark"
             android:textSize="32sp"
-            android:textStyle="bold"
+            android:fontFamily="@font/notosans_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date" />
@@ -124,7 +126,7 @@
             app:tabTextColor="@color/black"
             tools:ignore="SpeakableTextPresentCheck" />
         <TextView
-            android:id="@+id/tvDramatic"
+            android:id="@+id/tv_param_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -136,19 +138,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="300dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:background="@color/white"
-            android:layout_marginEnd="@dimen/space16"
             android:padding="10dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDramatic" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_param_note" />
+
+        <ProgressBar
+            android:id="@+id/param_progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/lineChart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lineChart"
+            tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

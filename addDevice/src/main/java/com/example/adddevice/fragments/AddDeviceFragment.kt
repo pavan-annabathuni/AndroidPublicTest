@@ -66,7 +66,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             allAreGranted = allAreGranted && b
         }
 
-        if (allAreGranted) {
+        if (checkPermissions()) {
             getLocation()
         }
     }
@@ -85,8 +85,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddDeviceBinding.inflate(inflater, container, false)
-        binding.topAppBar.setNavigationOnClickListener{
-            this.findNavController().navigateUp() }
+        binding.topAppBar.setNavigationOnClickListener {
+            this.findNavController().navigateUp()
+        }
         return binding.root
     }
 
@@ -99,7 +100,27 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
         binding.submit.setOnClickListener {
             nickName = binding.device1.text.toString().trim()
-            if (nickName.isEmpty()) {
+            if (longitutde == null || latitude == null) {
+                ToastStateHandling.toastError(
+                    requireContext(),
+                    "Error getting current Location",
+                    Toast.LENGTH_SHORT
+                )
+            } else if (checkDistanceBetweenLatLng(
+                    myFarm?.farmCenter?.get(0) ?: null,
+                    latitude?.toDouble()?.let { it1 ->
+                        longitutde?.toDouble()
+                            ?.let { it2 -> LatLng(it1, it2) }
+                    }
+                ) > 500
+            ) {
+                ToastStateHandling.toastError(
+                    requireContext(),
+                    "Device Location is far from your Farm",
+                    Toast.LENGTH_SHORT
+                )
+
+            } else if (nickName.isEmpty()) {
                 binding.device1.error = "Device Name should not be empty"
                 return@setOnClickListener
             } else if (scanResult.isNullOrEmpty()) {
@@ -130,6 +151,21 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             intentIntegrator.setOrientationLocked(false)
             intentIntegrator.initiateScan()
         }
+    }
+
+    private fun checkDistanceBetweenLatLng(latLng1: LatLng?, latLng2: LatLng?): Float {
+        if (latLng1 == null || latLng2 == null)
+            return 1000f
+        val distance = FloatArray(2)
+        Location.distanceBetween(
+            latLng1.latitude,
+            latLng1.longitude,
+            latLng2.latitude,
+            latLng2.longitude,
+            distance
+        )
+        Log.d("Add Device","Distance Calculated: ${distance[0]}")
+        return distance[0]
     }
 
     private fun activityDevice(map: MutableMap<String, Any>) {
@@ -233,14 +269,28 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     .addOnFailureListener {
-                        ToastStateHandling.toastError(requireContext(), "Failed", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Failed",
+                            Toast.LENGTH_SHORT
+                        )
                     }
                     .addOnCanceledListener {
-                        ToastStateHandling.toastError(requireContext(), "Cancelled", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Cancelled",
+                            Toast.LENGTH_SHORT
+                        )
 
                     }
             } else {
-                context?.let { ToastStateHandling.toastError(it, "Please turn on location", Toast.LENGTH_LONG) }
+                context?.let {
+                    ToastStateHandling.toastError(
+                        it,
+                        "Please turn on location",
+                        Toast.LENGTH_LONG
+                    )
+                }
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -338,17 +388,17 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                                 )
                         )
                     }
-                    for (latLng in points) {
-                        val marker = map.addMarker(
-                            MarkerOptions().position(
-                                latLng
-                            )
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
-                                .anchor(0.5f, .5f)
-                                .draggable(false)
-                                .flat(true)
-                        )
-                    }
+//                    for (latLng in points) {
+//                        val marker = map.addMarker(
+//                            MarkerOptions().position(
+//                                latLng
+//                            )
+//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
+//                                .anchor(0.5f, .5f)
+//                                .draggable(false)
+//                                .flat(true)
+//                        )
+//                    }
                     map.animateCamera(
                         CameraUpdateFactory.newLatLngBounds(
                             getLatLnBounds(points), 20
@@ -373,7 +423,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             currentMarker?.setPosition(latLng)
         } else {
             if (mMap != null) {
-                val circleDrawable = ContextCompat.getDrawable(requireContext(),R.drawable.ic_weather_device_small)
+                val circleDrawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_weather_device_small)
                 val markerIcon = circleDrawable?.let { getMarkerIconFromDrawable(it) }
 
                 currentMarker = mMap?.addMarker(

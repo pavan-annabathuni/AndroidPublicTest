@@ -103,7 +103,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun initObserveDevice() {
         viewDevice.getIotDevice().observe(requireActivity()) {
             if (it.data?.data.isNullOrEmpty()) {
-                binding.cardAddDevice.visibility = View.VISIBLE
+                binding.cardAddDevice.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
@@ -181,10 +181,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
-        binding.cardAddDevice.setOnClickListener {
-            val intent = Intent(activity, AddDeviceActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.cardAddDevice.setOnClickListener {
+//            val intent = Intent(activity, AddDeviceActivity::class.java)
+//            startActivity(intent)
+//        }
         binding.clAddForm.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)

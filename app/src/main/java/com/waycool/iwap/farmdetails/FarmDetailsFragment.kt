@@ -333,11 +333,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             val bundle = Bundle()
             bundle.putParcelable("farm", myFarm)
             bundle.putBoolean("isedit", true)
-            findNavController().navigate(R.id.action_farmDetailsFragment4_to_nav_add_farm, bundle)
+//            findNavController().navigate(R.id.action_farmDetailsFragment4_to_nav_add_farm, bundle)
 
-//            val intent=Intent(requireActivity(),AddFarmActivity::class.java)
-//            intent.putExtras(bundle)
-//            startActivity(intent)
+            val intent=Intent(requireActivity(),AddFarmActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
     }
 
@@ -413,13 +413,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.soilMoistureTwo.marksNumber = 0
 
 //            binding.soilMoistureOne.speedTo()
-            binding.soilMoistureOne.maxSpeed = 100F
-            binding.soilMoistureTwo.maxSpeed = 100F
+            binding.soilMoistureOne.maxSpeed = 60F
+            binding.soilMoistureTwo.maxSpeed = 60F
 //            binding.soilMoistureOne.ticks  = listOf(10.0F)
 //            binding.soilMoistureTwo.ticks = 10
-            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
-            Log.d("TAG", "viewDevice:$data.soilMoisture1!!.toFloat() ")
-            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
+//            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
+//            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
 
 
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
@@ -489,7 +488,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //            it.tubeSpeedometer.speedTo(140f)
 //            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
             it.tvLastUpdateRefresh.setOnClickListener {
-                viewDeviceListAdapter.upDateList()
+               initObserveDevice()
             }
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
@@ -693,6 +692,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.currentDelta.visibility = View.VISIBLE
             binding.deltaText.visibility = View.VISIBLE
             binding.updateDate.visibility = View.VISIBLE
+            binding.updateDate.text="Last Updated: ${data.dataTimestamp}"
         }
 
         binding.currentDelta.clearSections()

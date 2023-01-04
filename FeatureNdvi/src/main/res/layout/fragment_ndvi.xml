@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rool_ll_ndvi"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
     tools:context=".NdviFragment">
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-android:theme="@style/Theme.MaterialComponents.Light"
+        android:theme="@style/Theme.MaterialComponents.Light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,12 +25,11 @@ android:theme="@style/Theme.MaterialComponents.Light"
             android:layout_height="64dp"
             android:layout_gravity="center"
             android:background="@color/white"
-            android:elevation="0dp"
             android:gravity="center"
-            android:theme="@style/Theme.MaterialComponents.Light"
             android:textAlignment="center"
-            app:navigationIcon="@drawable/ic_back"
+            android:theme="@style/Theme.MaterialComponents.Light"
             app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/ic_back"
             app:title="NDVI"
             app:titleCentered="true"
             app:titleTextColor="@color/black" />
@@ -39,8 +41,8 @@ android:theme="@style/Theme.MaterialComponents.Light"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@color/white"
-        android:orientation="vertical"
         android:fillViewport="true"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
@@ -49,18 +51,17 @@ android:theme="@style/Theme.MaterialComponents.Light"
             android:layout_height="wrap_content">
 
 
-
             <TextView
                 android:id="@+id/farm_name"
                 style="@style/Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                tools:text="Krishna farm plot 1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Krishna farm plot 1" />
 
             <TextView
                 android:id="@+id/farm_location"
@@ -68,21 +69,22 @@ android:theme="@style/Theme.MaterialComponents.Light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                tools:text="Bangalore"
                 android:textColor="#5D6571"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/farm_name" />
+                app:layout_constraintTop_toBottomOf="@+id/farm_name"
+                tools:text="Bangalore" />
 
             <Spinner
                 android:id="@+id/dateSpinner"
                 android:layout_width="130dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
-                android:textSize="14sp"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
                 android:spinnerMode="dropdown"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -98,6 +100,7 @@ android:theme="@style/Theme.MaterialComponents.Light"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/dateSpinner"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +118,7 @@ android:theme="@style/Theme.MaterialComponents.Light"
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
-                android:layout_height="328dp"
+                android:layout_height="350dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -135,7 +138,7 @@ android:theme="@style/Theme.MaterialComponents.Light"
                         android:id="@+id/map_ndvi"
                         android:name="com.google.android.libraries.maps.SupportMapFragment"
                         android:layout_width="0dp"
-                        android:layout_height="328dp"
+                        android:layout_height="350dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -148,8 +151,8 @@ android:theme="@style/Theme.MaterialComponents.Light"
                         android:layout_margin="16dp"
                         android:backgroundTint="@color/white"
                         android:src="@drawable/ic_location_ndvi"
-                        app:fabSize="mini"
                         android:theme="@style/Theme.MaterialComponents.Light"
+                        app:fabSize="mini"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:tint="@color/DarkGreen" />
@@ -162,12 +165,59 @@ android:theme="@style/Theme.MaterialComponents.Light"
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@color/white"
                         android:src="@drawable/ic_zoom"
-                        app:fabSize="mini"
                         android:theme="@style/Theme.MaterialComponents.Light"
+                        app:fabSize="mini"
                         app:layout_constraintBottom_toTopOf="@+id/floating_action_button1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:tint="@color/DarkGreen" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="#FFF3F1"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView"
+                app:layout_constraintStart_toStartOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/tv_textAlert"
+                        style="@style/Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Cloudy with a thunderstorm this afternoon"
+                        android:textColor="#FF2C23"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_clouds"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.cardview.widget.CardView>
 
 
@@ -182,20 +232,19 @@ android:theme="@style/Theme.MaterialComponents.Light"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
             <TextView
                 android:id="@+id/textView3"
                 style="@style/Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="High"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -388,8 +437,8 @@ android:theme="@style/Theme.MaterialComponents.Light"
                 android:layout_height="2dp"
                 android:layout_marginTop="32dp"
                 android:background="@color/LightGray"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardView3" />
 
@@ -416,9 +465,9 @@ android:theme="@style/Theme.MaterialComponents.Light"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3"
                 tools:listitem="@layout/item_dates" />
