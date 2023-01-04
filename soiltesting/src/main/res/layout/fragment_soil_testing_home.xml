@@ -48,20 +48,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <!--            <androidx.constraintlayout.widget.Guideline-->
-            <!--                android:id="@+id/startGuideLine"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                -->
-            <!--                android:orientation="vertical"-->
-            <!--                app:layout_constraintGuide_begin="@dimen/space16" />-->
-
-            <!--            <androidx.constraintlayout.widget.Guideline-->
-            <!--                android:id="@+id/endGuideLine"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:orientation="vertical"-->
-            <!--                app:layout_constraintGuide_end="@dimen/space16" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clOurAll"
@@ -395,6 +381,7 @@
                 android:layout_marginTop="@dimen/space16"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/space16"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view">
 
@@ -468,7 +455,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:background="#F5F5F5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -503,62 +489,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/clRequest" />
 
 
-            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                android:id="@+id/clVideo"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:visibility="visible"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/clRequest">-->
-
-            <!--                <TextView-->
-            <!--                    android:id="@+id/tvVideos"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:text="Videos"-->
-            <!--                    android:textColor="#111827"-->
-            <!--                    android:textSize="@dimen/space20"-->
-            <!--                    android:textStyle="bold"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                <TextView-->
-            <!--                    android:id="@+id/tvViewAllVideos"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_marginEnd="5dp"-->
-            <!--                    android:text="View All"-->
-            <!--                    android:textColor="#146133"-->
-            <!--                    android:textSize="14sp"-->
-            <!--                    android:textStyle="bold"-->
-            <!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAllVideos"-->
-            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                <ImageView-->
-            <!--                    android:id="@+id/ivViewAllVideos"-->
-            <!--                    android:layout_width="20dp"-->
-            <!--                    android:layout_height="20dp"-->
-            <!--                    android:src="@drawable/ic_viewall"-->
-            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                <androidx.recyclerview.widget.RecyclerView-->
-            <!--                    android:id="@+id/recyclerviewVideo"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_marginTop="@dimen/space16"-->
-            <!--                    android:layout_marginEnd="16dp"-->
-            <!--                    android:orientation="horizontal"-->
-            <!--                    android:visibility="visible"-->
-            <!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-            <!--                    app:layout_constraintStart_toStartOf="parent"-->
-            <!--                    app:layout_constraintTop_toBottomOf="@+id/tvVideos"-->
-            <!--                    tools:listitem="@layout/item_video" />-->
-
-            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
             <TextView
                 android:id="@+id/tvFAQ"
                 android:layout_width="wrap_content"
@@ -579,6 +509,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvFAQ">
@@ -587,7 +519,6 @@
                     android:id="@+id/clFAQAnsOne"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_ans"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
@@ -595,7 +526,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
-                        android:text="1 .Why should I do a soil test?"
+                        android:text="1. Why should I do a soil test?"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
@@ -648,6 +579,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardData">
@@ -656,7 +589,6 @@
                     android:id="@+id/clFAQAnsTwo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_ans"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
@@ -664,7 +596,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
-                        android:text=" What is the ideal time for soil sampling?"
+                        android:text="2. What is the ideal time for soil sampling?"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
@@ -717,6 +649,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toTopOf="@id/endView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardDataTwo">
@@ -725,7 +661,6 @@
                     android:id="@+id/clFAQAnsThree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_ans"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
@@ -733,7 +668,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
-                        android:text="How often do I soil Test? "
+                        android:text="3. How often do I soil Test? "
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
@@ -755,6 +690,7 @@
                         android:id="@+id/ExViewThree"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/txt20"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvSoilTextThree" />
@@ -780,12 +716,11 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!--            <View-->
-            <!--                android:id="@+id/viewData"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="100dp"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/cardDataThree" />-->
-
+            <View
+                android:id="@+id/endView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

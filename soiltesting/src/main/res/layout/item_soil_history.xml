@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space2"
-        android:background="@drawable/bg_ans"
         android:elevation="8dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/space8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,17 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space16">
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/iVHistory"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="@dimen/space12"-->
-            <!--                android:src="@drawable/disease"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
             <TextView
                 android:id="@+id/tvRequest"
                 android:layout_width="wrap_content"
@@ -58,29 +47,6 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRequest" />
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvCropID"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="16dp"-->
-            <!--                android:layout_marginEnd="@dimen/space12"-->
-            <!--                android:text="Id : 110012"-->
-            <!--                android:textColor="#000000"-->
-            <!--                android:textSize="12sp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvRequestID"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="12dp"-->
-            <!--                android:layout_marginTop="4dp"-->
-            <!--                android:text="Request Id : 110012"-->
-            <!--                android:textColor="#2B2B2B"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/iVHistory"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />-->
 
             <ImageView
                 android:id="@+id/ivStatus"
