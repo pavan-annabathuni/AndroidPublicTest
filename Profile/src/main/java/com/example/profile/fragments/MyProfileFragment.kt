@@ -182,13 +182,6 @@ class MyProfileFragment : Fragment() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToFarmSupportFragment())
         }
-   /*     binding.ll4.setOnClickListener() {
-            ShareCompat.IntentBuilder.from(requireActivity())
-                .setType("text/plain")
-                .setChooserTitle("Chooser title")
-                .setText("http://play.google.com/store/apps/details?id=" + requireActivity().getPackageName())
-                .startChooser();
-        }*/
         binding.rateUs.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
             startActivity(intent)
@@ -197,13 +190,13 @@ class MyProfileFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.textView.setOnClickListener(){
-            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
             intent.putExtra("tittle", "Privacy Policy")
             requireActivity().startActivity(intent)
         }
         binding.textView2.setOnClickListener(){
-            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
             intent.putExtra("tittle", "Terms and Conditions")
             requireActivity().startActivity(intent)
@@ -212,9 +205,6 @@ class MyProfileFragment : Fragment() {
         binding.llAboutOutgrow.setOnClickListener(){
             this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
-
-
-
 
         binding.cvChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
