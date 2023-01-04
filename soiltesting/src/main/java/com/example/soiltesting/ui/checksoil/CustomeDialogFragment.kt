@@ -11,6 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentCustomeDialogBinding
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
+import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class CustomeDialogFragment : DialogFragment() {
@@ -39,11 +43,16 @@ class CustomeDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
+        translationSoilTesting()
     }
     private fun setupClickListeners() {
         binding.tvOk .setOnClickListener {
             dismiss()
         }
+    }
+    fun translationSoilTesting() {
+        TranslationsManager().loadString("thank_you", binding.tvDescription)
+//        TranslationsManager().loadString("soil_sample_n_collection", binding.SoilSample)
     }
 
 //    override fun onResume() {

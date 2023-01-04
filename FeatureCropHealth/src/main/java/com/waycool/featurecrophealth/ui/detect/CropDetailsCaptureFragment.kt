@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
@@ -27,6 +28,9 @@ import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBindi
 import com.waycool.featurecrophealth.utils.Constant.TAG
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -83,6 +87,16 @@ class CropDetailsCaptureFragment : Fragment() {
         binding.clCameraButton.setOnClickListener {
             selectImageInAlbum()
         }
+        translationSoilTesting()
+    }
+    fun translationSoilTesting() {
+        TranslationsManager().loadString("affected_region", binding.tvCropEffect)
+        TranslationsManager().loadString("leaf", binding.rb1)
+        TranslationsManager().loadString("add_image", binding.addPhotoTxt)
+        TranslationsManager().loadString("how_to_capture", binding.howTo)
+        TranslationsManager().loadString("capture_image", binding.camptureImage)
+        TranslationsManager().loadString("upload_image", binding.camptureImageCamera)
+        TranslationsManager().loadString("detect", binding.tvCheckCrop)
     }
 
     fun selectImageInAlbum() {

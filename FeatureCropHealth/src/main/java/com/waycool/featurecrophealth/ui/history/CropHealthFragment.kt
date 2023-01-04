@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -25,6 +26,9 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -90,7 +94,7 @@ class CropHealthFragment : Fragment() {
         bindObservers()
         getVideos()
         fabButton()
-
+        binding.tvCheckCrop.isSelected = true
         historyAdapter.onItemClick = {
             if (it?.disease_id==null) {
                 ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
@@ -105,10 +109,29 @@ class CropHealthFragment : Fragment() {
             }
 
         }
-
+        translationSoilTesting()
         binding.backBtn.setOnClickListener() {
             activity?.finish()
         }
+
+
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("crop_health")
+            binding.tvToolBar.text = title
+//            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+//            binding.etNickName.hint =NickNamehint
+//            var areaHint = TranslationsManager().getString("e_g_50")
+//            binding.etAreaNumber.hint =areaHint
+        }
+        TranslationsManager().loadString("crop_health_info", binding.tvOurAll)
+        TranslationsManager().loadString("take_picture", binding.tvTakeImage)
+        TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo)
+        TranslationsManager().loadString("get_measures", binding.tvTextSoilThree)
+        TranslationsManager().loadString("request_history", binding.tvRequest)
+        TranslationsManager().loadString("check_crop_health", binding.tvCheckCrop)
+        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
 
     }
 
@@ -206,7 +229,7 @@ class CropHealthFragment : Fragment() {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.takeGuide.visibility = View.GONE
+                        binding.clTopGuide.visibility = View.GONE
                         binding.clProgressBar.visibility=View.GONE
 
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())

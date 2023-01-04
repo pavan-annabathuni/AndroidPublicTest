@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -29,6 +30,9 @@ import com.waycool.featurecrophealth.databinding.FragmentCropHistoryBinding
 
 import com.waycool.featurecrophealth.utils.Constant
 import com.waycool.featurecrophealth.utils.NetworkResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,6 +65,7 @@ class CropHistoryFragment : Fragment() {
         bindObservers()
         onclick()
         fabButton()
+        translationSoilTesting()
 
 
         historyAdapter.onItemClick = {
@@ -176,6 +181,14 @@ class CropHistoryFragment : Fragment() {
                 else -> {}
             }
         })
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val search = TranslationsManager().getString("peast_diease")
+            binding.searchView.hint = search
+        }
+        TranslationsManager().loadString("request_history", binding.tvToolBarTest)
+//        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
     private fun clickSearch() {

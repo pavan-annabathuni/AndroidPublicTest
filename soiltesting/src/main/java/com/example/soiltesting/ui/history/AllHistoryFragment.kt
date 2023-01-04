@@ -31,7 +31,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 import java.util.*
 import kotlin.collections.ArrayList
@@ -84,6 +88,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 bindObserversSoilTestHistory(accountID!!)
             }
         }
+        translationSoilTesting()
+
+
 //        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
 //            override fun handleOnBackPressed() {
 //                findNavController().navigateUp()
@@ -93,6 +100,14 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
 
 //        clickSearch()
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val search = TranslationsManager().getString("search")
+            binding.searchView.hint = search
+        }
+        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar)
+//        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
 //    private fun initSearchView() {
