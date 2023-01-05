@@ -17,7 +17,8 @@ class ModuleMasterDomainMapper : DomainMapper<ModuleMasterDomain, ModuleMasterEn
             audioUrl = dto.audioUrl,
             mobileDisplay = dto.mobileDisplay,
             translation = dto.translation,
-            updatedAt = dto.updatedAt
+            updatedAt = dto.updatedAt,
+            deepLink = dto.deepLink
         )
     }
 

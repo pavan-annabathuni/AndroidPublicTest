@@ -469,7 +469,10 @@ object DataStoreManager {
              it.clear()
          }
         context?.userPreferences?.edit {
-            it.clear()
+            it.remove(StoreKey.USER_DETAILS)
+            it.remove(StoreKey.USER_TOKEN)
+            it.remove(StoreKey.MOBILE_NUMBER)
+            it.remove(StoreKey.IS_LOGGED_IN)
         }
         context?.vansCategory?.edit {
             it.clear()

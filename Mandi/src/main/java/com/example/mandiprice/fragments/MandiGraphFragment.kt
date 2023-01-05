@@ -112,7 +112,9 @@ class MandiGraphFragment : Fragment() {
  //               }
  //       }
         binding.imgShare.setOnClickListener() {
+            binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
+            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -364,6 +366,7 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
+                    binding.imgShare.isEnabled = true
 
                 }
             }

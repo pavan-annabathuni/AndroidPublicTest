@@ -1,6 +1,8 @@
 package com.waycool.iwap.notification
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -59,6 +61,13 @@ class NotificationFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun setAdapter(){
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener {
+            viewModel.getNotification().observe(viewLifecycleOwner){
+                val deepLink = it.data?.data?.get(0)?.data2?.link
+                    if(deepLink!=null) {
+                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
+                        startActivity(i)
+                }
+            }
             if(it.readAt == null){
             viewModel.updateNotification(it.id!!).observe(viewLifecycleOwner){
               setAdapter()
@@ -88,10 +97,12 @@ class NotificationFragment : Fragment() {
                     }
                     data?.size
                     binding.tvSize.text = "$new ${data?.size}"
+                    binding.tvSize.visibility = View.VISIBLE
                     Log.d("Notifcation", "setAdapter: ${it.data?.data?.size}")
                 }
                 is Resource.Loading->{
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.tvSize.visibility = View.GONE
                 }
                 is Resource.Error->{
 

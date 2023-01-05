@@ -2,16 +2,21 @@ package com.example.irrigationplanner
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.irrigationplanner.databinding.FragmentCropOverviewBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.translations.TranslationsManager
+import org.joda.time.DateTime
+import org.joda.time.Weeks
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.temporal.TemporalQueries.zone
+import java.util.*
+
 
 class CropOverviewFragment : BottomSheetDialogFragment() {
     private val viewModel by lazy { ViewModelProvider(this)[IrrigationViewModel::class.java] }
@@ -78,7 +83,18 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                 else tvWeek.text = "NA"
 
                 if (data?.get(0)?.expectedHarvestDate != null)
-                    tvYield.text = data!![0].expectedHarvestDate
+                    try {
+                     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                        val sowindate: Date =
+                            dateFormat.parse(data?.get(0)?.expectedHarvestDate)
+                        val currentdate = Date()
+                        val dateTime1 = DateTime(sowindate)
+                        val dateTime2 = DateTime(currentdate)
+                        val weeksOld = Weeks.weeksBetween(dateTime1, dateTime2).getWeeks()
+                        tvYield.setText(weeksOld.toString() + " Weeks Old")
+                    } catch (e: ParseException) {
+                        tvYield.setText("")
+                    }
                 else tvYield.text = "NA"
             }
         }

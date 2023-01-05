@@ -38,7 +38,7 @@ class IrrigationFragment : Fragment() {
     private lateinit var mHistoryAdapter: HistoryAdapter
     private lateinit var mDiseaseAdapter: DiseaseAdapter
     private lateinit var mWeeklyAdapter: WeeklyAdapter
-    private lateinit var irrigation: Irrigation
+    private var irrigation: Irrigation?=null
     private var irrigationReq = 1
     private var plotId:Int = 0
     var accountId:Int?= null
@@ -163,8 +163,10 @@ class IrrigationFragment : Fragment() {
 
         binding.btForecast.setOnClickListener(){
             val args = Bundle()
-            args.putParcelable("IrrigationHis",irrigation)
-            args.putInt("plotId",plotId)
+            if(irrigation!=null) {
+                args.putParcelable("IrrigationHis", irrigation)
+                args.putInt("plotId", plotId)
+            }
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             this.findNavController().navigate(R.id.action_irrigationFragment_to_forecastFragment,args)
         }
@@ -181,6 +183,8 @@ class IrrigationFragment : Fragment() {
         binding.btHarvest.setOnClickListener(){
             val args = Bundle()
             args.putInt("plotId",plotId)
+            accountId?.let { it1 -> args.putInt("accountId", it1) }
+            cropId?.let { it1 -> args.putInt("cropId", it1) }
             this.findNavController().navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment,args)
 
         }
@@ -222,9 +226,15 @@ class IrrigationFragment : Fragment() {
                 when(it){
                     is Resource.Loading ->{
                         binding.progressBar.visibility = View.VISIBLE
+                        binding.btForecast.visibility = View.GONE
+                        binding.btDisease.visibility = View.GONE
+                        binding.btHistory.visibility = View.GONE
                     }
                     is Resource.Error->{
-
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.btForecast.visibility = View.GONE
+                        binding.btDisease.visibility = View.GONE
+                        binding.btHistory.visibility = View.GONE
                     }
                     is Resource.Success->{
                         //history
@@ -237,6 +247,9 @@ class IrrigationFragment : Fragment() {
                         }
                         irrigation = it.data?.data?.irrigation!!
                         binding.progressBar.visibility = View.GONE
+                        binding.btForecast.visibility = View.VISIBLE
+                        binding.btDisease.visibility = View.VISIBLE
+                        binding.btHistory.visibility = View.VISIBLE
                     }
                 }
                 //weekly
@@ -276,8 +289,8 @@ class IrrigationFragment : Fragment() {
             Disease = TranslationsManager().getString("str_disease")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(Disease).setCustomView(R.layout.item_tab)
-        )}
-        viewModel.viewModelScope.launch {
+        )
+
             var pest:String
             pest = TranslationsManager().getString("str_pest")
         binding.tabLayout.addTab(
@@ -355,15 +368,15 @@ class IrrigationFragment : Fragment() {
         val save = dialog.findViewById<Button>(R.id.savePreDayL) as Button
         val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
         val irrigationDone = dialog.findViewById<TextView>(R.id.textView13)
-        val irrigationPer = dialog.findViewById<TextView>(R.id.textView13)
+
 
         //translation
         if (irrigationDone != null) {
             TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone)
         }
-            if (irrigationPer != null) {
-                TranslationsManager().loadString("str_enter_water",irrigationPer)
-            }
+//            if (irrigationPer != null) {
+//                TranslationsManager().loadString("str_enter_water",irrigationPer)
+//            }
             viewModel.viewModelScope.launch {
                 val saveTv = TranslationsManager().getString("str_save")
                 save.text = saveTv
@@ -371,17 +384,17 @@ class IrrigationFragment : Fragment() {
 
 
         save.setOnClickListener() {
+           // context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Worked", Toast.LENGTH_SHORT) }
             val value = irrigation?.text.toString().toInt()
-            irrigationId?.let { it1 ->
-                viewModel.updateIrrigation(it1, value).observe(viewLifecycleOwner) {
+            if(irrigationId!=null){
+                viewModel.updateIrrigation(irrigationId!!, value).observe(viewLifecycleOwner) {
                binding.textViewL.text = value.toString()+"L"
-                }
-            }
+            }}
             dialog.dismiss()
         }
         close!!.setOnClickListener() {
             dialog.dismiss()
-            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Worked", Toast.LENGTH_SHORT) }
+            //context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Worked", Toast.LENGTH_SHORT) }
         }
         dialog.show()
 
@@ -401,6 +414,7 @@ class IrrigationFragment : Fragment() {
 
             delete.setOnClickListener {
              viewModel.getEditMyCrop(plotId).observe(viewLifecycleOwner){
+                 this.findNavController().navigateUp()
              }
                 dialog.dismiss()
             }

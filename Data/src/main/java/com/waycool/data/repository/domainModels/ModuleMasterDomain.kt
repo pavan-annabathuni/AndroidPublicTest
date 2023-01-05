@@ -10,6 +10,8 @@ data class ModuleMasterDomain(
     var audioUrl           : String? = null,
     var mobileDisplay      : Int?    = null,
     var translation        : String? = null,
-    var updatedAt          : String? = null
+    var updatedAt          : String? = null,
+    var deepLink           : String? = null
+
 )
 

@@ -70,7 +70,7 @@
                     android:id="@+id/tv_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New 3"
+                    android:text="New 0"
                     android:padding="4dp"
                     android:textColor="#683C13"
                     android:textSize="14sp" />

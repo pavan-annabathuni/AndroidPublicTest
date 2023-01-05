@@ -77,6 +77,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initViewPager()
         fabButton()
         setBanners()
+        notification()
 
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
@@ -810,5 +811,16 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
-
+    private fun notification(){
+        viewModel.getNotification().observe(viewLifecycleOwner){
+            var data = it.data?.data?.filter { itt->
+                itt.readAt== null
+            }
+            if(data?.size!=0){
+                binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
+            }else{
+                binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
+            }
+        }
+    }
 }

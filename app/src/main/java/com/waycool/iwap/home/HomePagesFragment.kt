@@ -150,6 +150,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         setWishes()
         checkNetwork()
         initClick()
+        notification()
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
@@ -164,8 +165,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             }
         })
 
-        mandiDetailCall()
+
         userDetailsCall()
+        //mandiDetailCall()
         if (accountID != null) {
             getFarms()
         }
@@ -226,6 +228,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        mandiDetailCall()
                         getFarms()
                     }
                 }
@@ -477,7 +480,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                 val list: List<Address> =
                     geocoder.getFromLocation(lat, lng, 1) as List<Address>
-                district = list[0].locality + "," + list[0].adminArea
+                if(list.size>0) {
+                    district = list[0].locality + "," + list[0].adminArea
+                }
             } catch (e: InvocationTargetException) {
 
             }
@@ -1133,6 +1138,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         )
     }
 
+    private fun notification(){
+        viewModel.getNotification().observe(viewLifecycleOwner){
+            var data = it.data?.data?.filter { itt->
+                itt.readAt== null
+            }
+            if(data?.size!=0){
+                binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
+            }else{
+                binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
+            }
+        }
+    }
 
 }
 
