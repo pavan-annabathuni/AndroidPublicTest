@@ -113,10 +113,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun farmDetailsObserve() {
         binding.toolbarTextFarm.text = myFarm?.farmName
-        binding.tvPempDate.text = myFarm?.farmPumpHp
-        binding.totalFormDate.text = myFarm?.farmPumpType
-        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize
-        binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate
+        binding.tvPempDate.text = myFarm?.farmPumpHp?:"NA"
+        binding.totalFormDate.text = myFarm?.farmPumpType?:"NA"
+        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize?:"NA"
+        binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate?:"NA"
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE
             binding.waterChipGroup.visibility = View.VISIBLE
@@ -207,6 +207,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         viewDeviceListAdapter.setMovieList(response as ArrayList<ViewDeviceData>)
 
                         if (response.isNullOrEmpty()) {
+                            binding.ndviCl.visibility = View.GONE
                             binding.farmdetailsPremiumCl.visibility = View.GONE
                             binding.cardMYDevice.visibility = View.GONE
                             binding.freeAddDeviceCv.visibility = View.VISIBLE
@@ -242,6 +243,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     } else {
                         binding.farmdetailsPremiumCl.visibility = View.GONE
                         binding.cardMYDevice.visibility = View.GONE
+                        binding.ndviCl.visibility=View.GONE
                         binding.freeAddDeviceCv.visibility = View.VISIBLE
                         binding.ndviCl.visibility = View.GONE
 
