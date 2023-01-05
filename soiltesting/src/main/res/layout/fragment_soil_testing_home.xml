@@ -448,37 +448,95 @@
                 android:layout_marginEnd="16dp"
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/clBanner">
-
-
-                <TextView
-                    android:id="@+id/tvRequest"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clHeadingRequestHistory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/request_history"
-                    android:textColor="#111827"
-                    android:textSize="@dimen/space20"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <TextView
-                    android:id="@+id/tvViewAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:text="View All"
-                    android:textColor="#146133"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/ivViewAll"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ivViewAll"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_viewall"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivViewAll"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:src="@drawable/ic_viewall"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/linearView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toStartOf="@id/ivViewAll"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tvRequest"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="Request History"
+                            android:textColor="#111827"
+                            android:textSize="@dimen/space20"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvViewAll"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="0.3"
+                            android:gravity="end"
+                            android:maxWidth="@dimen/space150"
+                            android:text="View All"
+                            android:textAlignment="textEnd"
+                            android:textColor="#146133"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvRequest"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="@string/request_history"-->
+                <!--                    android:textColor="#111827"-->
+                <!--                    android:textSize="@dimen/space20"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvViewAll"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginEnd="5dp"-->
+                <!--                    android:text="View All"-->
+                <!--                    android:textColor="#146133"-->
+                <!--                    android:textSize="14sp"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAll"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivViewAll"-->
+                <!--                    android:layout_width="20dp"-->
+                <!--                    android:layout_height="20dp"-->
+                <!--                    android:src="@drawable/ic_viewall"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview"
@@ -489,7 +547,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvRequest"
+                    app:layout_constraintTop_toBottomOf="@+id/clHeadingRequestHistory"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_soil_history" />
 

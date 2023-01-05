@@ -24,7 +24,11 @@ import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,6 +100,7 @@ class AddCropPremiumFragment : Fragment() {
         initViewClicks()
         noOFYear()
         noOFYearBahar()
+        translationSoilTesting()
 //        getFarms()
         year_selected= "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
@@ -421,6 +426,28 @@ class AddCropPremiumFragment : Fragment() {
             }
 
         }
+
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNickName.hint =NickNamehint
+            var areaHint = TranslationsManager().getString("e_g_50")
+            binding.etAreaNumber.hint =areaHint
+            var hitnPlant = TranslationsManager().getString("e_g_50")
+            binding.etNoOfAcre.hint =hitnPlant
+        }
+        TranslationsManager().loadString("add_crop_information", binding.plot)
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
+        TranslationsManager().loadString("sowing_date", binding.Address)
+        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_irrigation", binding.tvselectIrrigation)
+        TranslationsManager().loadString("irrigation_type", binding.City)
+        TranslationsManager().loadString("no_of_plants_per_acre", binding.State)
+        TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
 
     }
 

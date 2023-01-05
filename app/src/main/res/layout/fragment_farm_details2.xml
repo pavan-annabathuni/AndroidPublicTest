@@ -196,7 +196,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="16dp"
-
                             android:background="@drawable/bg_add_form"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
@@ -234,7 +233,7 @@
                         <ImageView
                             android:id="@+id/imageView10"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitXY"
                             android:src="@drawable/add_crop"
@@ -2212,7 +2211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:text="Pump Height (in Mtrs)"
+                        android:text="Pump Flow Rate (in Ltre per hr)"
                         android:textColor="#070D09"
                         android:textSize="@dimen/txt14"
                         app:layout_constraintStart_toStartOf="parent"

@@ -88,6 +88,8 @@ class CropDetailsCaptureFragment : Fragment() {
             selectImageInAlbum()
         }
         translationSoilTesting()
+        binding.camptureImage.isSelected = true
+        binding.camptureImageCamera.isSelected = true
     }
     fun translationSoilTesting() {
         TranslationsManager().loadString("affected_region", binding.tvCropEffect)

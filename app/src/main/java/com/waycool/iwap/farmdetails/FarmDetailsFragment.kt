@@ -28,6 +28,7 @@ import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -36,6 +37,9 @@ import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
 import com.waycool.iwap.premium.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,6 +99,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         initMyObserve()
         myCrop()
         farmDetailsObserve()
+        translationSoilTesting()
 
 
         binding.backBtn.setOnClickListener {
@@ -107,6 +112,37 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //        val color = -0xff0100
 //        progressbar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
 //        progressbar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
+
+
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+//            val title = TranslationsManager().getString("add_crop")
+//            binding.toolbarTextFarm.text = title
+//            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+//            binding.etNickName.hint =NickNamehint
+//            var areaHint = TranslationsManager().getString("e_g_50")
+//            binding.etAreaNumber.hint =areaHint
+//            var hitnPlant = TranslationsManager().getString("e_g_50")
+//            binding.etNoOfAcre.hint =hitnPlant
+        }
+        TranslationsManager().loadString("farm", binding.tvMyform)
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm)
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom)
+        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle)
+        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle)
+        TranslationsManager().loadString("farm_details", binding.tvMyformDetails)
+        TranslationsManager().loadString("water_source", binding.tvWaterSource)
+        TranslationsManager().loadString("pump_hp", binding.tvPump)
+        TranslationsManager().loadString("pump_type", binding.tvShowingDateTotalFoem)
+        TranslationsManager().loadString("pump_size", binding.tvPempSize)
+        TranslationsManager().loadString("pipe_height", binding.tvPempHeight)
+        TranslationsManager().loadString("pump_flow", binding.tvPumpFlowRate)
+        TranslationsManager().loadString("submersible", binding.totalFormDate)
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle)
+        TranslationsManager().loadString("add_crops", binding.tvMyCrops)
+        TranslationsManager().loadString("", binding.titleMyDevice)
+
 
 
     }

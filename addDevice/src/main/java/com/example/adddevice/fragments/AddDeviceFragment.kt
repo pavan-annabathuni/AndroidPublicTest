@@ -38,7 +38,11 @@ import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -130,6 +134,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             intentIntegrator.setOrientationLocked(false)
             intentIntegrator.initiateScan()
         }
+        translationSoilTesting()
     }
 
     private fun activityDevice(map: MutableMap<String, Any>) {
@@ -398,5 +403,22 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("str_add_device")
+            binding.topAppBar.title = title
+            var areaHint = TranslationsManager().getString("e_g_50")
+            binding.imeiAddress.hint =areaHint
+        }
+        TranslationsManager().loadString("str_device_name", binding.textView)
+        TranslationsManager().loadString("str_device_details", binding.textView2)
+        TranslationsManager().loadString("str_scan", binding.tvScanned)
+        TranslationsManager().loadString("str_device_name", binding.textView3)
+        TranslationsManager().loadString("submit", binding.submit)
+//        TranslationsManager().loadString("faq_s", binding.tvFAQ)
+//        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
+//        TranslationsManager().loadString("_2_when_do_i_sample", binding.tvSoilText)
+//        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
     }
 }

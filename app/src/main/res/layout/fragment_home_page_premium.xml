@@ -170,7 +170,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
-                                    android:src="@drawable/ic_add"
+                                    android:src="@drawable/ic_add_home"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -332,7 +332,7 @@
                                 android:text="Add Crop"
                                 android:textColor="@color/primaryColor"
                                 android:textSize="14sp"
-                                app:drawableEndCompat="@drawable/ic_add"
+                                app:drawableEndCompat="@drawable/ic_add_home"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -494,21 +494,81 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/titleMyFarm"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clHeadingRequestHistory"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:padding="4dp"
-                            android:text="My Farm"
-                            android:textColor="@color/textdark"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toStartOf="@+id/MyFarm"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/ivViewAll"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:src="@drawable/ic_add_home"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/linearView"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="1"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintEnd_toStartOf="@id/ivViewAll"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:id="@+id/titleMyFarm"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.6"
+                                    android:text="Request History"
+                                    android:textColor="#111827"
+                                    android:textSize="@dimen/space20"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                                <TextView
+                                    android:id="@+id/MyFarm"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:layout_marginEnd="5dp"
+                                    android:layout_weight="0.4"
+                                    android:gravity="end"
+                                    android:maxWidth="@dimen/space150"
+                                    android:text="Add Farm"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="#146133"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/titleMyFarm"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="16dp"-->
+<!--                            android:layout_marginEnd="16dp"-->
+<!--                            android:padding="4dp"-->
+<!--                            android:text="My Farm"-->
+<!--                            android:textColor="@color/textdark"-->
+<!--                            android:textSize="16sp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            app:layout_constraintEnd_toStartOf="@+id/MyFarm"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <!--                            <androidx.cardview.widget.CardView-->
                         <!--                                android:id="@+id/cardView6"-->
@@ -531,21 +591,21 @@
                         <!--                                    android:textSize="14sp" />-->
                         <!--                            </androidx.cardview.widget.CardView>-->
 
-                        <TextView
-                            android:id="@+id/MyFarm"
-                            style="@style/SemiBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="16dp"
-                            android:drawablePadding="4dip"
-                            android:padding="4dp"
-                            android:text="Add Farm"
-                            android:textColor="@color/primaryColor"
-                            android:textSize="14sp"
-                            app:drawableEndCompat="@drawable/ic_add"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/MyFarm"-->
+<!--                            style="@style/SemiBold"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginEnd="16dp"-->
+<!--                            android:drawablePadding="4dip"-->
+<!--                            android:padding="4dp"-->
+<!--                            android:text="Add Farm"-->
+<!--                            android:textColor="@color/primaryColor"-->
+<!--                            android:textSize="14sp"-->
+<!--                            app:drawableEndCompat="@drawable/ic_add"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
@@ -554,7 +614,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/titleMyFarm">
+                            app:layout_constraintTop_toBottomOf="@+id/clHeadingRequestHistory">
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/rvMyFarm"

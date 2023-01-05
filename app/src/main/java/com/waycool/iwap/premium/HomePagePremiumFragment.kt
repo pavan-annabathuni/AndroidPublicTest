@@ -30,12 +30,16 @@ import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -73,7 +77,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initObserveMYFarm()
         initObserveDevice()
         progressColor()
-        initViewPager()
+        translationSoilTesting()
         fabButton()
         setBanners()
 
@@ -91,12 +95,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     }
 
-    private fun initViewPager() {
-//        binding.tvWelcomeName.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_deviceFragmentOne)
-//        }
-
-
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+//            val title = TranslationsManager().getString("str_add_device")
+//            binding.topAppBar.title = title
+//            var areaHint = TranslationsManager().getString("e_g_50")
+//            binding.imeiAddress.hint =areaHint
+        }
+        TranslationsManager().loadString("welcome", binding.tvWelcomeName)
+        TranslationsManager().loadString("my_farm", binding.title3SemiBold)
+        TranslationsManager().loadString("add_crop", binding.tvMyCrops)
+        TranslationsManager().loadString("my_farm", binding.titleMyFarm)
+        TranslationsManager().loadString("add_farm", binding.MyFarm)
+//        TranslationsManager().loadString("my_device", binding.titleMyDevice)
+//        TranslationsManager().loadString("add_farm", binding.)
+//        TranslationsManager().loadString("submit", binding.submit)
     }
 
     private fun initObserveDevice() {
