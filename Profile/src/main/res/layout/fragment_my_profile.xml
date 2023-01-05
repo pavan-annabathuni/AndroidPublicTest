@@ -52,14 +52,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="My Profile"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                style="@style/Bold"
+                android:text="@string/my_profile"
+                style="@style/BoldBlack20"
                 app:layout_constraintBottom_toBottomOf="@+id/back"
                 app:layout_constraintStart_toEndOf="@+id/back"
                 app:layout_constraintTop_toTopOf="@+id/back" />
-
             <ImageView
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
@@ -98,17 +95,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_marginTop="10dp">
 
                         <TextView
-                            style="@style/Bold"
+                            style="@style/BoldBlack18"
                             android:id="@+id/username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            tools:text = "@string/str_farmer_name"
-                            android:textColor="@color/black"
-                            android:textSize="18sp" />
+                            tools:text = "@string/str_farmer_name" />
 
                         <TextView
                             style="@style/SemiBold"
@@ -158,7 +154,7 @@
 
                 <TextView
                     android:id="@+id/tv_farmer"
-                    style="@style/SemiBold"
+                    style="@style/SemiBoldBlack16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -167,8 +163,7 @@
                     android:drawableEnd="@drawable/ic_vector"
                     android:drawablePadding="8dp"
                     android:text="My Profile"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -193,14 +188,13 @@
 
                 <TextView
                     android:id="@+id/tv_lang"
-                    style="@style/SemiBold"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="16dp"
                     android:text="Language"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    style="@style/SemiBoldBlack16"
+                    />
 
                 <TextView
                     android:id="@+id/language"
@@ -214,7 +208,6 @@
                     android:drawablePadding="8dp"
                     android:text="English"
                     android:textAlignment="center"
-
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -242,7 +235,7 @@
 
                 <TextView
                     android:id="@+id/tv_support"
-                    style="@style/SemiBold"
+                    style="@style/SemiBoldBlack16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -250,9 +243,8 @@
                     android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_vector"
                     android:drawablePadding="8dp"
-                    android:text="Farm Support"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:text="@string/farm_support"
+                   />
             </LinearLayout>
 
             <LinearLayout
@@ -277,7 +269,7 @@
 
                 <TextView
                     android:id="@+id/tv_about"
-                    style="@style/SemiBold"
+                    style="@style/SemiBoldBlack16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -285,9 +277,8 @@
                     android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_vector"
                     android:drawablePadding="8dp"
-                    android:text="About Outgrow"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:text="@string/about_outgrow"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -312,7 +303,7 @@
 
                 <TextView
                     android:id="@+id/tv_invite"
-                    style="@style/SemiBold"
+                    style="@style/SemiBoldBlack16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -320,9 +311,8 @@
                     android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_vector"
                     android:drawablePadding="8dp"
-                    android:text="Invite Farmer "
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:text="@string/invite_farmer"
+            />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -469,7 +459,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Logout"
+                    android:text="@string/logout"
                     android:textAlignment="center"
                     android:textColor="#EC4544"
                     android:textSize="16sp" />
@@ -491,8 +481,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
-                    android:text="Privacy Policy"
-                    android:textColor="@color/darkGray"
+                    android:text="@string/privacy_policy"
+                    android:textColor="#535870"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/logout" />
@@ -504,8 +494,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Terms of Use"
-                    android:textColor="@color/darkGray"
+                    android:text="@string/terms_of_use"
+                    android:textColor="#535870"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/logout" />
@@ -519,14 +509,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="55dp"
-                android:text="App Ver. 2.5.10"
-                android:textColor="@color/darkGray"
+                android:text="@string/app_ver_2_5_10"
+                android:textColor="#535870"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_tc" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>
