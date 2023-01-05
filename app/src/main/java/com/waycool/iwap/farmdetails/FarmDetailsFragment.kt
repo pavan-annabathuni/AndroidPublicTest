@@ -200,6 +200,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.ndviCl.visibility = View.GONE
         binding.farmdetailsPremiumCl.visibility = View.GONE
         binding.cardMYDevice.visibility = View.GONE
+        binding.freeAddDeviceCv.visibility = View.VISIBLE
         viewDevice.getIotDevice().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
@@ -292,7 +293,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
 
     private fun initViewClick() {
-        binding.tvMyCrops.setOnClickListener {
+        binding.tvEditMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
@@ -590,7 +591,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "leaf_wetness")
+                    bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
                     bundle.putString("temp_value", data.leafWetness)

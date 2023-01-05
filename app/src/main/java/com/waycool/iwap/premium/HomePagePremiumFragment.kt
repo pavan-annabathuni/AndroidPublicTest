@@ -677,7 +677,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "leaf_wetness")
+                    bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
                     bundle.putString("temp_value", data.leafWetness)

@@ -54,6 +54,7 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
+import com.waycool.iwap.premium.FarmSelectedListener
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -74,7 +75,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
+class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick,FarmSelectedListener {
 
     private var dashboardDomain: DashboardDomain? = null
     private var selectedFarm: MyFarmsDomain? = null
@@ -99,7 +100,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     private var moduleId = "49"
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
+    private val farmsAdapter by lazy { FarmsAdapter(requireContext(),this) }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -488,10 +489,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         binding.clMyForm.visibility = View.VISIBLE
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         farmsAdapter.submitList(it.data)
-                        farmsAdapter.onItemClick = { farm ->
-                            selectedFarm = farm
-                            populateMyFarm()
-                        }
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
                         binding.clMyForm.visibility = View.GONE
@@ -1215,6 +1212,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
             }
         }
+    }
+
+    override fun onFarmSelected(data: MyFarmsDomain) {
+        selectedFarm = data
+        populateMyFarm()
     }
 
 }

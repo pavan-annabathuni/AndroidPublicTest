@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.databinding.ItemFlexBoxAddFormBinding
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.iwap.premium.FarmSelectedListener
 
-class FarmsAdapter(val context: Context) :
+class FarmsAdapter(val context: Context,val farmSelectedListener: FarmSelectedListener) :
     ListAdapter<MyFarmsDomain, FarmsAdapter.ViewHolder>(DiffCallback) {
 
-    var onItemClick: ((MyFarmsDomain?) -> Unit)? = null
+//    var onItemClick: ((MyFarmsDomain?) -> Unit)? = null
     var selectedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,7 +28,8 @@ class FarmsAdapter(val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (selectedPosition == -1) {
             selectedPosition = position
-            onItemClick?.invoke(getItem(position))
+            farmSelectedListener.onFarmSelected(getItem(position))
+//            onItemClick?.invoke(getItem(position))
         }
 
         holder.bind(getItem(position))
@@ -72,7 +74,8 @@ class FarmsAdapter(val context: Context) :
                 selectedPosition = layoutPosition
                 notifyItemChanged(temp)
                 notifyItemChanged(selectedPosition)
-                onItemClick?.invoke(getItem(layoutPosition))
+                farmSelectedListener.onFarmSelected(getItem(layoutPosition))
+//                onItemClick?.invoke(getItem(layoutPosition))
             }
         }
 

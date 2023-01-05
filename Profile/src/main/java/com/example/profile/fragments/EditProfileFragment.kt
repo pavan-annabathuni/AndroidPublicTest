@@ -6,7 +6,9 @@ import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -28,10 +31,14 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentEditProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.featurelogin.fragment.RegistrationFragment
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -46,6 +53,8 @@ import kotlin.collections.HashMap
 
 
 class EditProfileFragment : Fragment() {
+    private var longitutde: String?=null
+    private  var latitude: String?=null
     private var selecteduri: Uri? = null
     val requestImageId = 1
     lateinit var field: java.util.HashMap<String, String>
@@ -58,31 +67,41 @@ class EditProfileFragment : Fragment() {
     private lateinit var lat:String
     lateinit var mLocationRequest: LocationRequest
     private lateinit var long:String
-    internal var mFusedLocationClient: FusedLocationProviderClient? = null
 
-    internal var mLocationCallback: LocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            val locationList = locationResult.locations
-            if (locationList.isNotEmpty()) {
-                //The last location in the list is the newest
-                val location = locationList.last()
-                Log.d("resultOk", "onLocationResult: ${location.longitude}")
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
 
-
-                //Place current location marker
-                val latLng = LatLng(location.latitude, location.longitude)
-            }else{
-                Log.d("result", "onLocationResult: ")
-            }
+        var allAreGranted = true
+        for (b in result.values) {
+            allAreGranted = allAreGranted && b
         }
 
-        override fun onLocationAvailability(p0: LocationAvailability) {
-            super.onLocationAvailability(p0)
-            Log.d("result", "onLocationResult:${p0.isLocationAvailable} ")
-
+        if (allAreGranted) {
+            getLocation()
         }
     }
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private val locationRequest = LocationRequest
+        .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+        .build()
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            getLocation()
+            locationResult.lastLocation?.let {
+                removeLocationCallback()
+                getGeocodeFromLocation(it)
+            }
+        }
+    }
+
+    private fun removeLocationCallback() {
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -262,74 +281,144 @@ class EditProfileFragment : Fragment() {
 
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLocation() {
-        var task = fusedLocationProviderClient.lastLocation
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity() as Activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                101
-            )
-            return
-        }
-        task.addOnSuccessListener {
-            Log.d("locationCheckScucces", "location: ${it}")
-            if(isLocationEnabled()){
-            if (it != null) {
-                //Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+                fusedLocationProviderClient?.lastLocation!!
+                    .addOnSuccessListener {
+                        if (it != null) {
+                            getGeocodeFromLocation(it)
 
-                  lat = String.format("%.5f",it.latitude)
-                 long = String.format("%.5f",it.longitude)
-                viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
-                    .observe(viewLifecycleOwner) {
-                        if (it.results.isNotEmpty()) {
-                            val result = it.results[0]
-                            if (result.subLocality != null)
-                                binding.tvAddress2.setText("${result.subLocality}")
-                            else
-                                binding.tvAddress2.setText("${result.locality}")
-                            binding.tvState.setText("${result.state}")
-
-                            binding.tvAddress1.setText("${result.formattedAddress ?: ""}")
-                            binding.tvAddress1.setSelection(0)
-                            binding.tvCity.setText("${result.district}")
-
-                            binding.tvPincode.setText(result.pincode ?: "")
-                            Log.d("locationCheckScucces", "location: ${result.formattedAddress}")
                         }
                     }
-            } else{
-                fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
-                Log.d("locationCheckScucces", "location:$mLocationRequest")
-            }}else{
-                ToastStateHandling.toastError(requireContext(),
-                    "Please turn on location",Toast.LENGTH_SHORT)
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+                fusedLocationProviderClient?.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+                )
+            } else {
+
+                val builder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .setAlwaysShow(true)
+
+                val locationResponseTask: Task<LocationSettingsResponse> =
+                    LocationServices.getSettingsClient(requireContext().applicationContext)
+                        .checkLocationSettings(builder.build())
+                locationResponseTask.addOnCompleteListener {
+                    try {
+                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                            val apiException: ResolvableApiException = e as ResolvableApiException
+                            try {
+                                apiException.startResolutionForResult(
+                                    requireActivity(), REQUEST_CODE_GPS
+                                )
+                            } catch (sendIntent: IntentSender.SendIntentException) {
+                                sendIntent.printStackTrace()
+                            }
+                        }
+                    }
+
+                }
+
+//                context?.let {
+//                    ToastStateHandling.toastError(
+//                        it,
+//                        "Please turn on location",
+//                        Toast.LENGTH_LONG
+//                    )
+//                }
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
             }
-//                val bounds = RectangularBounds.newInstance(
-//                    LatLng(-33.880490, it.latitude),
-//                    LatLng(-33.858754,it.longitude)
-//                )
-
-
+        } else {
+            requestPermission()
         }
-        task.addOnFailureListener{
-            mFusedLocationClient?.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+    }
 
-            Log.d("locationCheck", "getLocation: ${it.message}")
+    private fun getGeocodeFromLocation(it: Location) {
+         latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
+        longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+
+        viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
+            .observe(viewLifecycleOwner) {
+                if (it.results.isNotEmpty()) {
+                    val result = it.results[0]
+                    if (result.subLocality != null)
+                        binding.tvAddress2.setText("${result.subLocality}")
+                    else
+                        binding.tvAddress2.setText("${result.locality}")
+                    binding.tvState.setText("${result.state}")
+
+                    binding.tvAddress1.setText("${result.formattedAddress ?: ""}")
+                    binding.tvAddress1.setSelection(0)
+                    binding.tvCity.setText("${result.district}")
+
+                    binding.tvPincode.setText(result.pincode ?: "")
+                    Log.d("locationCheckScucces", "location: ${result.formattedAddress}")
+                }
+            }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
         }
+        return false
+    }
 
+    private fun requestPermission() {
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+
+//        requestPermissions(
+//            arrayOf(
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ),
+//            permissionId
+//        )
+        //requestPermissions(String[] {android.Manifest.permission.READ_CONTACTS}, REQUEST_CONTACT);
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("registerresponse2", "test" + requestCode)
+        if (requestCode == 2) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getLocation()
+            }
+        }
     }
 
     private var mGetContent = registerForActivityResult(
@@ -440,11 +529,14 @@ class EditProfileFragment : Fragment() {
         TranslationsManager().loadString("str_district",binding.textView7)
 
     }
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
+
+    companion object {
+        private const val REQUEST_CODE_GPS = 1011
     }
 }

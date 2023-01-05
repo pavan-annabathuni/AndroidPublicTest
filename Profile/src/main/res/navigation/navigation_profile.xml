@@ -43,9 +43,9 @@
     </fragment>
     <fragment
         android:id="@+id/addFarmFragment"
-        android:name="com.example.profile.fragments.AddFarmFragment"
+        android:name="com.example.profile.fragments.AddFarmSupportFragment"
         android:label="fragment_add_farm"
-        tools:layout="@layout/fragment_add_farm" />
+        tools:layout="@layout/fragment_add_farm_support" />
     <fragment
         android:id="@+id/languageFragment3"
         android:name="com.example.profile.ProfileLanguageFragment"
