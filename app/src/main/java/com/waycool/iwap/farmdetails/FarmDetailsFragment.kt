@@ -286,6 +286,17 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
+
+        binding.addCropCl.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.cardAddForm.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.MyDevice.setOnClickListener {
             val bundle = Bundle()
             bundle.putParcelable("farm", myFarm)
@@ -304,6 +315,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             bundle.putParcelable("farm", myFarm)
             findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation, bundle)
         }
+
 
         binding.callDevice.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
