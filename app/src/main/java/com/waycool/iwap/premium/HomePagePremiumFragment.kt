@@ -37,10 +37,12 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
 class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailslistener,
+    FarmSelectedListener,
     myCropListener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
@@ -48,8 +50,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private var mMap: GoogleMap? = null
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
-    private val myCropPremiumAdapter by lazy {   MyCropPremiumAdapter(this)}
-    private val myFarmPremiumAdapter by lazy {   MyFarmPremiumAdapter(this,requireContext())}
+    private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
+    private val myFarmPremiumAdapter by lazy { MyFarmPremiumAdapter(this, this, requireContext()) }
 
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
@@ -71,7 +73,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initViewAddCrop()
         initMyCropObserve()
         initObserveMYFarm()
-        initObserveDevice()
+//        initObserveDevice()
         progressColor()
         initViewPager()
         fabButton()
@@ -99,19 +101,30 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     }
 
-    private fun initObserveDevice() {
+    private fun initObserveDevice(farmId: Int) {
         viewDevice.getIotDevice().observe(requireActivity()) {
             if (it.data?.data.isNullOrEmpty()) {
-                binding.cardAddDevice.visibility = View.GONE
+                binding.cardMYDevice.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
                         if (it.data?.data != null) {
-                            binding.cardAddDevice.visibility = View.GONE
-                            binding.cardMYDevice.visibility = View.VISIBLE
-                            val response = it.data!!.data as ArrayList<ViewDeviceData>
-                            binding.deviceFarm.adapter = viewDeviceListAdapter
-                            viewDeviceListAdapter.setMovieList(response)
+                            val deviceListForFarm =
+                                it.data?.data?.filter { it1 -> it1.farmId == farmId }
+                            if (!deviceListForFarm.isNullOrEmpty()) {
+                                binding.cardMYDevice.visibility = View.VISIBLE
+                                binding.deviceParamsCL.visibility=View.VISIBLE
+                                binding.deviceFarm.visibility=View.VISIBLE
+                                binding.devicesEmptyText.visibility=View.GONE
+                                binding.deviceFarm.adapter = viewDeviceListAdapter
+                                viewDeviceListAdapter.setMovieList(deviceListForFarm as ArrayList<ViewDeviceData>)
+                            }else{
+                                binding.cardMYDevice.visibility = View.VISIBLE
+                                binding.deviceParamsCL.visibility=View.GONE
+                                binding.deviceFarm.visibility=View.GONE
+                                binding.devicesEmptyText.visibility=View.VISIBLE
+
+                            }
                         }
 
                     }
@@ -119,7 +132,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                     }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastWarning(
+                            requireContext(),
+                            "Loading",
+                            Toast.LENGTH_SHORT
+                        )
 
                     }
                 }
@@ -222,10 +239,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
             } else {
-                if(it.data?.size!! >1){
-                    binding.videosScroll.visibility=View.VISIBLE
-                }else{
-                    binding.videosScroll.visibility=View.GONE
+                if (it.data?.size!! > 1) {
+                    binding.videosScroll.visibility = View.VISIBLE
+                } else {
+                    binding.videosScroll.visibility = View.GONE
 
                 }
                 binding.cvEditCrop.visibility = View.VISIBLE
@@ -245,7 +262,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_cross
+                    )
+                )
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -253,7 +275,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_chat_call
+                    )
+                )
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -328,10 +355,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                             binding.clAddForm.visibility = View.GONE
                             binding.cardMYFarm.visibility = View.VISIBLE
                             myFarmPremiumAdapter.setMovieList(it.data)
-                            if(it.data?.size!! >1){
-                                binding.videosScrollMyFarm.visibility=View.VISIBLE
-                            }else
-                                binding.videosScrollMyFarm.visibility=View.GONE
+                            if (it.data?.size!! > 1) {
+                                binding.videosScrollMyFarm.visibility = View.VISIBLE
+                            } else
+                                binding.videosScrollMyFarm.visibility = View.GONE
 
                         } else {
                             binding.clAddForm.visibility = View.VISIBLE
@@ -423,12 +450,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceData) {
 
-        if(data.model?.series=="GSX"){
-            binding.cardTopParent.visibility=View.GONE
-            binding.clTempView.visibility=View.GONE
-        }else{
-            binding.cardTopParent.visibility=View.VISIBLE
-            binding.clTempView.visibility=View.VISIBLE
+        if (data.model?.series == "GSX") {
+            binding.cardTopParent.visibility = View.GONE
+            binding.clTempView.visibility = View.GONE
+        } else {
+            binding.cardTopParent.visibility = View.VISIBLE
+            binding.clTempView.visibility = View.VISIBLE
         }
 
         binding.let {
@@ -439,7 +466,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            if (data.leafWetness!=null && data.leafWetness!!.equals(1)) {
+            if (data.leafWetness != null && data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
             } else {
@@ -577,7 +604,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "temperature")
-                    bundle.putString("toolbar","Temperature")
+                    bundle.putString("toolbar", "Temperature")
                     bundle.putString("temp_value", data.temperature)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -592,7 +619,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "rainfall")
-                    bundle.putString("toolbar","Rainfall")
+                    bundle.putString("toolbar", "Rainfall")
                     bundle.putString("temp_value", data.rainfall)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -619,7 +646,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "humidity")
-                    bundle.putString("toolbar","Humidity")
+                    bundle.putString("toolbar", "Humidity")
                     bundle.putString("temp_value", data.humidity)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -634,7 +661,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "windspeed")
-                    bundle.putString("toolbar","Wind Speed")
+                    bundle.putString("toolbar", "Wind Speed")
                     bundle.putString("temp_value", data.windspeed)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -650,10 +677,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "leaf_wetness")
-                    bundle.putString("toolbar","Leaf wetness")
+                    bundle.putString("toolbar", "Leaf wetness")
 
-                    bundle.putString("temp_value",data.leafWetness)
-                    bundle.putString("date_time",data.dataTimestamp)
+                    bundle.putString("temp_value", data.leafWetness)
+                    bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
                         bundle
@@ -666,7 +693,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "pressure")
-                    bundle.putString("toolbar","Pressure")
+                    bundle.putString("toolbar", "Pressure")
                     bundle.putString("temp_value", data.pressure)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -681,7 +708,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_1")
-                    bundle.putString("toolbar","Soil Moisture Top")
+                    bundle.putString("toolbar", "Soil Moisture Top")
                     bundle.putString("temp_value", data.soilMoisture1.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -697,7 +724,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_2")
-                    bundle.putString("toolbar","Soil Moisture Bottom")
+                    bundle.putString("toolbar", "Soil Moisture Bottom")
                     bundle.putString("temp_value", data.soilMoisture2?.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -707,13 +734,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
                 }
             }
-            binding.clTempView .setOnClickListener {
+            binding.clTempView.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "lux")
-                    bundle.putString("toolbar","Light Intensity")
+                    bundle.putString("toolbar", "Light Intensity")
                     bundle.putString("temp_value", data.lux)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -730,7 +757,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_temperature_1")
-                    bundle.putString("toolbar","Soil Temperature")
+                    bundle.putString("toolbar", "Soil Temperature")
                     bundle.putString("temp_value", data.soilTemperature1)
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
@@ -764,7 +791,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //        deviceDataAdapter.notifyDataSetChanged()
     }
 
-    override fun farmDetails(data: MyFarmsDomain) {
+    override fun onFarmDetailsClicked(data: MyFarmsDomain) {
         val bundle = Bundle()
         bundle.putParcelable("farm", data)
         findNavController().navigate(
@@ -776,10 +803,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     override fun myCropListener(data: MyCropDataDomain) {
         val bundle = Bundle()
         data.id?.let { bundle.putInt("plotId", it) }
-        data.cropLogo?.let { bundle.putString("cropLogo",it) }
-        data.cropName?.let { bundle.putString("cropName",it) }
-        data.cropId?.let { bundle.putInt("cropId",it) }
-        this.findNavController().navigate(R.id.action_homePagePremiumFragment3_to_navigation_irrigation,bundle)
+        data.cropLogo?.let { bundle.putString("cropLogo", it) }
+        data.cropName?.let { bundle.putString("cropName", it) }
+        data.cropId?.let { bundle.putInt("cropId", it) }
+        this.findNavController()
+            .navigate(R.id.action_homePagePremiumFragment3_to_navigation_irrigation, bundle)
     }
 
     private fun setBanners() {
@@ -807,6 +835,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+    }
+
+    override fun onFarmSelected(data: MyFarmsDomain) {
+        data.id?.let { initObserveDevice(it) }
     }
 
 
