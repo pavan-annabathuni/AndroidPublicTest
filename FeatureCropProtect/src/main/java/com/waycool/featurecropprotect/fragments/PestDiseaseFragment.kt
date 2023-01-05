@@ -77,7 +77,6 @@ class PestDiseaseFragment : Fragment() {
         fabButton()
     }
 
-
     private fun pestDiseaseApiCall() {
         cropId?.let { cropId ->
             viewModel.getPestDiseaseListForCrop(cropId).observe(requireActivity()) {
@@ -87,13 +86,14 @@ class PestDiseaseFragment : Fragment() {
                             adapter.submitList(emptyList())
                         else
                             adapter.submitList(it.data)
+
                     }
                     is Resource.Loading -> {
                         ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
 
                     }
                 }
