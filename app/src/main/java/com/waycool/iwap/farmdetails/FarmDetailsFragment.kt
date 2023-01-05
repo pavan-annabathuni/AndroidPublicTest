@@ -197,6 +197,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     }
 
     private fun initObserveDevice() {
+        binding.ndviCl.visibility = View.GONE
+        binding.farmdetailsPremiumCl.visibility = View.GONE
+        binding.cardMYDevice.visibility = View.GONE
         viewDevice.getIotDevice().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
@@ -211,12 +214,17 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             binding.farmdetailsPremiumCl.visibility = View.GONE
                             binding.cardMYDevice.visibility = View.GONE
                             binding.freeAddDeviceCv.visibility = View.VISIBLE
+                        }else{
+                            binding.ndviCl.visibility = View.VISIBLE
+                            binding.farmdetailsPremiumCl.visibility = View.VISIBLE
+                            binding.cardMYDevice.visibility = View.VISIBLE
+                            binding.freeAddDeviceCv.visibility = View.GONE
                         }
                     }
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+//                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
                     ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
