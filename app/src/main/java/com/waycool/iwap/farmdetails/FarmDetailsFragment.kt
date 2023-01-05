@@ -282,10 +282,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
 
     private fun initViewClick() {
-        binding.tvMyCrops.setOnClickListener {
+        binding.tvEditMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
+
         binding.MyDevice.setOnClickListener {
             val bundle = Bundle()
             bundle.putParcelable("farm", myFarm)

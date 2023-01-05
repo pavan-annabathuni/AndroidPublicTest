@@ -85,42 +85,10 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.roolLlNdvi.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-
-//        viewModel.getNdvi(myFarm?.id, 2).observe(viewLifecycleOwner) {
-//            Log.d("MapUrl", "onMapReady: ${it.data?.data?.get(0)?.ndviTile}")
-//             ndviTile = it.data?.data?.get(0)?.ndviTile+"&paletteid=4"
-//             trueColor = it.data?.data?.get(0)?.truecolorTile.toString()
-//
-//
-//            //cloud data
-//            val cloud = it.data?.data?.get(0)?.cloudCoverage?.toInt()
-//            if(cloud!=null)
-//            if(cloud < 30){
-//            val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
-//            dialog.setContentView(R.layout.item_cloud)
-//            val close = dialog.findViewById<ImageView>(R.id.img_close)
-//            close?.setOnClickListener(){
-//                dialog.dismiss()
-//            }
-//        }}
-
         onClicks()
         tabs()
-//        observer()
-//        spinner()
         opacity()
         translation()
-
-
-//        binding.slider.setLabelFormatter(LabelFormatter { value ->
-//            Math.round(value).toString() + "%"
-//        })
-//        binding.slider.addOnChangeListener { slider, value, fromUser ->
-//            tileOverlayTransparent?.setTransparency(
-//                (if (value == 100f) 0 else 1 - value / 100).toFloat().toInt().toFloat()
-//            )
-//
-//        }
 
         binding.recycleView.adapter = DateAdapter()
         return binding.root
