@@ -1071,12 +1071,12 @@ object NetworkSource {
     }
 
     fun updateHarvest(
-        id: Int, harvest_date: String, actual_yield: Int
+        id: Int,account_id: Int,crop_id: Int,harvest_date: String, actual_yield: Int
     ) = flow<Resource<HarvestDateModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.harvestDate(map, id, harvest_date, actual_yield, "PUT")
+            val response = apiInterface.harvestDate(map, id,account_id,crop_id, harvest_date, actual_yield, "PUT")
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
@@ -1226,7 +1226,7 @@ object NetworkSource {
         }
     }
 
-    fun updateFarmSupport(
+    fun updateFarmSupport( account_id: Int,
         name: String, contact: Long,
         lat: Double, lon: Double, roleId: Int,
         pincode: Int, village: String, address: String,
@@ -1236,7 +1236,7 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.updateFarmSupport(
-                map, name, contact, lat, lon, roleId, pincode,
+                map,account_id,name, contact, lat, lon, roleId, pincode,
                 village, address, state, district
             )
             if (response.isSuccessful)

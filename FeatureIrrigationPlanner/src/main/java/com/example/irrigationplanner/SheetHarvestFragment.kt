@@ -16,7 +16,9 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.MyCropSyncer
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -24,18 +26,22 @@ import java.util.*
 
 
 class SheetHarvestFragment : BottomSheetDialogFragment() {
-   private lateinit var binding:FragmentSheetHarvestBinding
+    private lateinit var binding: FragmentSheetHarvestBinding
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
-    private var plotId:Int? = null
+    private var plotId: Int? = null
+    private var accountId: Int? = null
+    private var cropId: Int? = null
     var dateCrop: String = ""
     val myCalendar = Calendar.getInstance()
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-         plotId = it.getInt("plotId")
+            plotId = it.getInt("plotId")
+            accountId = it.getInt("plotId")
+            cropId = it.getInt("plotId")
         }
     }
 
@@ -46,36 +52,63 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = FragmentSheetHarvestBinding.inflate(inflater)
 
-        binding.close.setOnClickListener(){
+        binding.close.setOnClickListener() {
             this.dismiss()
         }
-        binding.save.setOnClickListener(){
-            var yield_tone = binding.editText.text.toString().toInt()
-            var date  = binding.editText2.text.toString()
+        binding.save.setOnClickListener() {
 
+            var date = binding.editText2.text.toString()
+            if (binding.editText.text.toString() != "" || date != "") {
+                var yield_tone = binding.editText.text.toString().toInt()
                 plotId?.let { it1 ->
-                    viewModel.updateHarvest(it1,date,yield_tone).observe(viewLifecycleOwner){
+                    viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone).observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Success -> {
+                                this.dismiss()
+                            }
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {
+                                context?.let { it1 ->
+                                    ToastStateHandling.toastError(
+                                        it1,
+                                        "Enter Valid Date",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            }
+                        }
                         Log.d("Harvest", "onCreateView: ${it.message}")
                     }
                 }
-               // Toast.makeText(context,"Enter the data",Toast.LENGTH_SHORT).show()
+            } else {
+                context?.let { it1 ->
+                    ToastStateHandling.toastError(
+                        it1,
+                        "Enter All Fields",
+                        Toast.LENGTH_SHORT
+                    )
+                }
+            }
+            // Toast.makeText(context,"Enter the data",Toast.LENGTH_SHORT).show()
 //                GlobalScope.launch {
 //                    LocalSource.deleteAllMyCrops()
 //                    MyCropSyncer().invalidateSync()
 //
 //            }
-            this.dismiss()
+            //this.dismiss()
 
         }
-        binding.cal.setOnClickListener(){
+        binding.cal.setOnClickListener() {
             showCalender()
         }
         translation()
         return binding.root
     }
+
     override fun getTheme(): Int {
         return R.style.BottomSheetDialog
     }
+
     private fun showCalender() {
 
 
@@ -112,15 +145,17 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             Color.parseColor("#7946A9")
         )
     }
+
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.editText2.setText(dateFormat.format(myCalendar.getTime()))
     }
-    private fun translation(){
-        TranslationsManager().loadString("str_harvest_details",binding.textView13)
-        TranslationsManager().loadString("str_actual_yeild",binding.textView14)
-        TranslationsManager().loadString("str_actual_harvest_date",binding.textView2)
+
+    private fun translation() {
+        TranslationsManager().loadString("str_harvest_details", binding.textView13)
+        TranslationsManager().loadString("str_actual_yeild", binding.textView14)
+        TranslationsManager().loadString("str_actual_harvest_date", binding.textView2)
 
         viewModel.viewModelScope.launch {
             val save = TranslationsManager().getString("str_save")

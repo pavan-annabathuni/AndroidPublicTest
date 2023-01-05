@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/txt20"
                     android:layout_marginEnd="@dimen/txt10"
-                    android:src="@drawable/ic_notification"
+                    android:src="@drawable/ic_simple_notification"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -19,8 +19,8 @@ class IrrigationViewModel:ViewModel() {
     suspend fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
         AdvIrrigationRepository.getAdvIrrigation(account_id,plot_id).asLiveData()
 
-    fun updateHarvest(plot_id: Int,harvestDate:String,Yield:Int):LiveData<Resource<HarvestDateModel?>> =
-        AdvIrrigationRepository.updateHarvest(plot_id, harvestDate, Yield).asLiveData()
+    fun updateHarvest(plot_id: Int,account_id: Int,cropId:Int,harvestDate:String,Yield:Int):LiveData<Resource<HarvestDateModel?>> =
+        AdvIrrigationRepository.updateHarvest(plot_id,account_id,cropId, harvestDate, Yield).asLiveData()
 
     fun updateIrrigation(irrigation_id: Int,irrigation:Int):LiveData<Resource<IrrigationPerDay?>> =
         AdvIrrigationRepository.updateIrrigation(irrigation_id, irrigation).asLiveData()

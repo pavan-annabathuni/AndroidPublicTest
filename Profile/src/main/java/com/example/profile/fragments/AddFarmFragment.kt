@@ -41,6 +41,7 @@ class AddFarmFragment : Fragment() {
     var address = ""
     var state = ""
     var district = ""
+    var accountId:Int?=null
     private lateinit var submit:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ class AddFarmFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         location()
-        binding.imgLocation.setOnClickListener(){
+        binding.imgLocation.setOnClickListener() {
             location()
         }
         translation()
@@ -67,6 +68,9 @@ class AddFarmFragment : Fragment() {
             }
 
     private fun onClick() {
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            accountId = it.data?.accountId
+        }
         var roleid = 30
         binding.topAppBar.setNavigationOnClickListener(){
             this.findNavController().navigateUp()
@@ -86,24 +90,26 @@ class AddFarmFragment : Fragment() {
             roleid = 31
         }
         binding.submit.setOnClickListener() {
-
+            var contact:Long? = null
             val name = binding.tvName.text.toString()
-            var contact = binding.mobilenoEt.text.toString().toLong()
+
             val lat2 = binding.tvLat.text
             var long2 = binding.tvLong.text
+            if(!binding.mobilenoEt.text.isNullOrEmpty()){
+                contact = binding.mobilenoEt.text.toString().toLong()
+            }
 
             if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
                 context?.let { it1 -> ToastStateHandling.toastError(it1, "Fill all Fields", Toast.LENGTH_SHORT) }
             }
             else if(binding.mobilenoEt.text.toString()
-                    .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10||
-                binding.mobilenoEt.text.toString().length <= 0){
+                    .isNullOrEmpty()){
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             }
                 else {
                     binding.mobileNo.isErrorEnabled = false
-                viewModel.updateFarmSupport(
-                    name, contact, lat, long, roleid, pinCode,
+                viewModel.updateFarmSupport(accountId!!,
+                    name, contact!!, lat, long, roleid, pinCode,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
                     when(it){
@@ -111,7 +117,7 @@ class AddFarmFragment : Fragment() {
                             findNavController().navigateUp()
                         }
                         is Resource.Error->{
-                            Toast.makeText(context,"Enter Valid Mobile Number", Toast.LENGTH_SHORT).show()
+                            context?.let { it1 -> ToastStateHandling.toastError(it1, "Enter Valid Mobile Number", Toast.LENGTH_SHORT) }
                         }
                         is Resource.Loading->{}
                     }

@@ -16,6 +16,7 @@ data class ModuleData(
     @SerializedName("audio_url"           ) var audioUrl           : String? = null,
     @SerializedName("mobile_display"      ) var mobileDisplay      : Int?    = null,
     @SerializedName("translation"         ) var translation        : String? = null,
-    @SerializedName("updated_at"          ) var updatedAt          : String? = null
+    @SerializedName("updated_at"          ) var updatedAt          : String? = null,
+    @SerializedName("deep_link"         ) var deepLink        : String? = null
 
 )

@@ -28,6 +28,7 @@ import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
+import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
@@ -155,6 +156,14 @@ class MyProfileFragment : Fragment() {
     fun observer(): Boolean {
         viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
+                  when(it){
+                      is Resource.Success->{
+                          binding.progressBar.visibility = View.GONE
+                      } is Resource.Loading->{
+                      binding.progressBar.visibility = View.VISIBLE
+                      }
+                      is Resource.Error->{}
+                  }
                   if(it.data?.data?.account?.get(0)?.subscription == 0){
                       binding.llFarmSupport.visibility = View.GONE
                   }else{

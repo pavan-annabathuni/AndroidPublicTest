@@ -13,8 +13,8 @@ object AdvIrrigationRepository {
         val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
         return NetworkSource.getAdvIrrigation(map,account_id,plot_id)
     }
-     fun updateHarvest(plot_id: Int,harvest_date:String,actual_yield:Int):Flow<Resource<HarvestDateModel?>>{
-        return NetworkSource.updateHarvest(plot_id,harvest_date,actual_yield)
+     fun updateHarvest(plot_id: Int,account_id: Int,cropId: Int,harvest_date:String,actual_yield:Int):Flow<Resource<HarvestDateModel?>>{
+        return NetworkSource.updateHarvest(plot_id,account_id,cropId,harvest_date,actual_yield)
     }
     fun updateIrrigation(irrigation_id: Int,irrigation:Int):Flow<Resource<IrrigationPerDay?>>{
         return NetworkSource.updateIrrigation(irrigation_id,irrigation)

@@ -42,7 +42,7 @@ class ForecastFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            if(accountId!=null) {
+            if(accountId!=null&&irrigation!=null) {
                 irrigation = it.getParcelable("IrrigationHis")!!
                 accountId = it.getInt("accountId")!!
                 plotId = it.getInt("plotId")!!
@@ -73,6 +73,7 @@ class ForecastFragment : Fragment() {
 //            viewModel.getIrrigationHis(2,3).observe(viewLifecycleOwner){
 //                it.data?.data?.irrigation?.irrigationForecast?.let { it1 -> mForecastAdapter.setList(it1) }
 //            }}
+        if(irrigation!=null)
         irrigation.irrigationForecast?.let { mForecastAdapter.setList(it) }
 
         tabs()
