@@ -362,6 +362,7 @@ interface ApiInterface {
     @GET("api/v1/view-devices")
     suspend fun getIotDevice(
         @HeaderMap headerMap: Map<String, String>,
+        @Query("account_no_id")accountNo:Int
     ): Response<ViewDeviceDTO>
 
     @GET("api/v1/view-devices")
