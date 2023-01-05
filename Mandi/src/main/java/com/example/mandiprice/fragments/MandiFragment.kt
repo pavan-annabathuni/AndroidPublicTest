@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -233,7 +234,7 @@ class MandiFragment : Fragment() {
         viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
             val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
-                data.categoryName
+                data.categoryTagName
             } ?: emptyList()) as MutableList<String>
             if (cropCategoryList.isNotEmpty())
                 cropCategoryList[0] = "Category"
@@ -275,7 +276,7 @@ class MandiFragment : Fragment() {
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
                         val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                         val cropNameList = (filter?.map { data ->
-                            data.cropName
+                            data.cropNameTag
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.isNotEmpty())
@@ -373,8 +374,7 @@ class MandiFragment : Fragment() {
             binding.tabLayout.addTab(
                 binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
             )
-        }
-        viewModel.viewModelScope.launch {
+
             price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
@@ -468,7 +468,7 @@ class MandiFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -476,7 +476,7 @@ class MandiFragment : Fragment() {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

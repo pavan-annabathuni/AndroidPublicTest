@@ -58,14 +58,12 @@ class CheckSoilTestFragment : Fragment() {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         if (arguments != null) {
-            var your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
-            Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
+            val your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
             binding.tvLabTitle.text = your_list?.get(0)?.onpName.toString()
             binding.tvName.text = your_list?.get(0)?.onpAddress.toString()
             binding.tvCheckCrop.text =
                 your_list?.get(0)?.onpDistanceKm.toString() + " from your location"
             binding.pinCode.text = your_list?.get(0)?.onpPincode.toString()
-            Log.d(Constant.TAG, "jdbfvdsghugifjdha$your_list?.get(0)?.onpName .toString()")
             binding.btnSelectCrop.setOnClickListener {
                 findNavController().navigate(R.id.action_checkSoilTestFragment_to_selectCropSoilTestFragment)
             }
@@ -77,7 +75,6 @@ class CheckSoilTestFragment : Fragment() {
             binding.cardCheckHealth.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putString("onp_id", your_list?.get(0)?.onpName.toString())
-//            Log.d(Constant.TAG, "initViewsendingId: "+your_list[0]..toString())
                 findNavController().navigate(
                     R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
                     bundle
@@ -136,11 +133,8 @@ class CheckSoilTestFragment : Fragment() {
                 ),
                 100
             )
-            // use your location object
-            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
             false
         } else {
-            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
@@ -148,8 +142,6 @@ class CheckSoilTestFragment : Fragment() {
                         val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
 
-                        Log.d("TAG", "isLocationPermissionGrantedhdcbhjbdj:$latitude ")
-                        Log.d("TAG", "isLocationPermissionGrantedhdcbhjbdj:$longitutde ")
 
                         viewModel.getCheckSoilTestLab(
                             account_id,
@@ -159,7 +151,6 @@ class CheckSoilTestFragment : Fragment() {
                             when (it) {
                                 is Resource.Success -> {
                                     var your_list = it.data
-//                                    Log.d("TAG", "onCreateViewGettingList: ${your_list.toString()}")
                                     binding.tvLabTitle.text = your_list?.get(0)?.onpName.toString()
                                     binding.tvName.text = your_list?.get(0)?.onpAddress.toString()
                                     binding.tvCheckCrop.text =
@@ -184,17 +175,12 @@ class CheckSoilTestFragment : Fragment() {
 
                                     ) {
                                         binding.btnSelectCrop.visibility = View.VISIBLE
-//                                        binding.selectCropEdit.visibility=View.GONE
-//                                        binding.imageView.visibility=View.GONE
-//                                        binding.tvCrops.visibility=View.GONE
                                     } else {
                                         binding.imageView.visibility = View.VISIBLE
-//                                        binding.tvCrops.visibility = View.VISIBLE
                                         binding.editImage.visibility = View.VISIBLE
                                         binding.cardCheckHealth.isEnabled = true
                                         binding.editImage.visibility = View.VISIBLE
                                         binding.btnSelectCrop.visibility = View.GONE
-//                                        binding.selectCropEdit.visibility=View.VISIBLE
                                         binding.selectCrop.text = "Selected Crop"
                                         binding.selectCropEdit.setTextColor(Color.parseColor("#146133"))
                                         Glide.with(requireContext()).load(idImage)

@@ -31,7 +31,7 @@ open class HowToClickFragment() :  BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textView285 .setOnClickListener {
+        binding.tvclose.setOnClickListener {
             dismiss()
         }
         translationSoilTesting()

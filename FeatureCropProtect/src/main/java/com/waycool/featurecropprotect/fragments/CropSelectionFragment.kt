@@ -17,10 +17,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.AddCropActivity
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
@@ -41,11 +41,11 @@ import java.util.*
 
 class CropSelectionFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
     private var selectedCategory: CropCategoryMasterDomain? = null
     private var _binding: FragmentCropSelectionBinding? = null
     private val binding get() = _binding!!
     private lateinit var myCropAdapter: MyCropsAdapter
+
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
     }
@@ -53,10 +53,6 @@ class CropSelectionFragment : Fragment() {
 
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +69,10 @@ class CropSelectionFragment : Fragment() {
 
         apiErrorHandlingBinding=binding.errorState
 
-
+        binding.toolbar.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -87,20 +86,13 @@ class CropSelectionFragment : Fragment() {
         )
 
         binding.toolbar.setNavigationOnClickListener {
-//            activity?.finish()
             findNavController().navigateUp()
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
         TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
         TranslationsManager().loadString("my_crops",binding.myCropsTitle)
 
-
-//        binding.toolbarTitle.text = "Protect Your Crop"
-
         binding.cropsRv.adapter = adapter
-
-
-
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("cropid", it1) }
@@ -132,7 +124,6 @@ class CropSelectionFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-
         adapter.onItemClick = {
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
@@ -180,14 +171,14 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(context)
+        val chip = Chip(requireContext())
         chip.text = category.categoryName
         chip.isCheckable = true
         chip.isClickable = true
         chip.isCheckedIconVisible = false
         chip.setTextColor(
             AppCompatResources.getColorStateList(
-                requireContext(),
+               requireContext(),
                 com.waycool.uicomponents.R.color.bg_chip_text
             )
         )
@@ -219,19 +210,22 @@ class CropSelectionFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         binding.clProgressBar.visibility=View.VISIBLE
-
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
-                    binding.clProgressBar.visibility=View.GONE
-
                     if (categoryId == null) {
                         adapter.submitList(res.data)
-                    } else
+                    } else {
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+                    }
+                    binding.clProgressBar.visibility=View.GONE
+
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.clProgressBar.visibility=View.VISIBLE
+                }
                 is Resource.Error -> {
+                    binding.clProgressBar.visibility=View.GONE
                     ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }
@@ -285,7 +279,7 @@ class CropSelectionFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -293,7 +287,7 @@ class CropSelectionFragment : Fragment() {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -314,10 +308,8 @@ class CropSelectionFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data?.size!=0)) {
                 binding.cvMyCrops.visibility=View.VISIBLE
-//                binding.cvAddCrop.visibility=View.GONE
                 binding.tvCount.text = it.data!!.size.toString()
             } else {
-//                binding.cvAddCrop.visibility=View.GONE
                 binding.cvMyCrops.visibility=View.GONE
             }
         }

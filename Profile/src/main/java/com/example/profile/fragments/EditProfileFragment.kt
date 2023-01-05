@@ -4,10 +4,14 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +28,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentEditProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.yalantis.ucrop.UCrop
@@ -52,8 +56,32 @@ class EditProfileFragment : Fragment() {
     private lateinit var title:String
     private lateinit var submit:String
     private lateinit var lat:String
+    lateinit var mLocationRequest: LocationRequest
     private lateinit var long:String
+    internal var mFusedLocationClient: FusedLocationProviderClient? = null
 
+    internal var mLocationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val locationList = locationResult.locations
+            if (locationList.isNotEmpty()) {
+                //The last location in the list is the newest
+                val location = locationList.last()
+                Log.d("resultOk", "onLocationResult: ${location.longitude}")
+
+
+                //Place current location marker
+                val latLng = LatLng(location.latitude, location.longitude)
+            }else{
+                Log.d("result", "onLocationResult: ")
+            }
+        }
+
+        override fun onLocationAvailability(p0: LocationAvailability) {
+            super.onLocationAvailability(p0)
+            Log.d("result", "onLocationResult:${p0.isLocationAvailable} ")
+
+        }
+    }
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +102,7 @@ class EditProfileFragment : Fragment() {
         //viewModel.getUsers()
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
-
+        mLocationRequest = LocationRequest()
         //getLocation()
         onClick()
         observerName()
@@ -92,6 +120,7 @@ class EditProfileFragment : Fragment() {
             binding.submit.text = submit
 
         }
+
 
         return binding.root
 
@@ -117,6 +146,8 @@ class EditProfileFragment : Fragment() {
             if (it.data?.profile?.remotePhotoUrl != null && selecteduri == null) {
                 Glide.with(this).load(it.data?.profile?.remotePhotoUrl).into(binding.imageView)
             }
+            lat = it.data?.profile?.lat.toString()
+            long = it.data?.profile?.long.toString()
         }
 
         if (selecteduri != null) {
@@ -161,6 +192,7 @@ class EditProfileFragment : Fragment() {
                     }
             }
             if (selecteduri != null) {
+
                 val fileDir = context?.filesDir
                 val file: File = File(fileDir, ".png")
                 val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
@@ -205,6 +237,7 @@ class EditProfileFragment : Fragment() {
 //           }
         }
         binding.imgAutoText.setOnClickListener() {
+
             getLocation()
 //            val pla: List<Place.Field> =
 //                Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS)
@@ -230,26 +263,28 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun getLocation() {
-        val task = fusedLocationProviderClient.lastLocation
+        var task = fusedLocationProviderClient.lastLocation
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
+                requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
             != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(
-                requireContext(),
+                requireActivity(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                requireContext() as Activity,
+                requireActivity() as Activity,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 101
             )
             return
         }
         task.addOnSuccessListener {
+            Log.d("locationCheckScucces", "location: ${it}")
+            if(isLocationEnabled()){
             if (it != null) {
                 //Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
 
@@ -270,10 +305,17 @@ class EditProfileFragment : Fragment() {
                             binding.tvCity.setText("${result.district}")
 
                             binding.tvPincode.setText(result.pincode ?: "")
+                            Log.d("locationCheckScucces", "location: ${result.formattedAddress}")
                         }
                     }
-
-
+            } else{
+                fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+                Log.d("locationCheckScucces", "location:$mLocationRequest")
+            }}else{
+                ToastStateHandling.toastError(requireContext(),
+                    "Please turn on location",Toast.LENGTH_SHORT)
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
             }
 //                val bounds = RectangularBounds.newInstance(
 //                    LatLng(-33.880490, it.latitude),
@@ -281,6 +323,11 @@ class EditProfileFragment : Fragment() {
 //                )
 
 
+        }
+        task.addOnFailureListener{
+            mFusedLocationClient?.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+
+            Log.d("locationCheck", "getLocation: ${it.message}")
         }
 
     }
@@ -303,6 +350,7 @@ class EditProfileFragment : Fragment() {
                     .withMaxResultSize(1000, 1000)
                     .withOptions(options)
                     .start(requireContext(), this)
+            Log.d("ProfilePicImage2", "editProfile: $selecteduri")
 
         }
 
@@ -334,7 +382,8 @@ class EditProfileFragment : Fragment() {
 //            binding.tvState.setText(lstValues[1])
 //
 //        } else
-            if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId) {
+            if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId)
+            {
             // Toast.makeText(context, "$requestCode", Toast.LENGTH_SHORT).show()
 //            val selectedImage: Uri? = data?.data// handle chosen image
 //            val pic = File(requireContext().cacheDir, "pic")
@@ -377,20 +426,6 @@ class EditProfileFragment : Fragment() {
             val uri: Uri? = data?.let { UCrop.getOutput(it) }
             binding.imageView.setImageURI(uri)
             selecteduri = uri
-//            val file = selecteduri?.toFile()
-//            val profileImage: RequestBody = RequestBody.create(
-//                "image/jpg".toMediaTypeOrNull(),
-//                file!!
-//            )
-//
-//            val profileImageBody: MultipartBody.Part =
-//                MultipartBody.Part.createFormData(
-//                    "profile_pic",
-//                    file.name, profileImage
-//                )
-//            viewModel.viewModelScope.launch {
-//                selecteduri?.let { viewModel.getUserProfilePic(profileImageBody) }
-//            }
             Log.d("ProfilePicImage2", "editProfile: $selecteduri")
         }
     }
@@ -402,6 +437,14 @@ class EditProfileFragment : Fragment() {
         TranslationsManager().loadString("str_city",binding.textView6)
         TranslationsManager().loadString("str_state",binding.textView8)
         TranslationsManager().loadString("str_pincode",binding.textView9)
+        TranslationsManager().loadString("str_district",binding.textView7)
 
+    }
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
     }
 }

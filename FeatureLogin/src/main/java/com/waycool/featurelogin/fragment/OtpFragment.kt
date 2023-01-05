@@ -91,18 +91,7 @@ class OtpFragment : Fragment() {
 
         }
 
-//        if (arguments?.getString("mobile_number") != null)˳˳
-//            mobileNumber = arguments?.getString("mobile_number")!!
-//        if (arguments?.getString("existing_user") != null)
-//            existingUser = arguments?.getString("existing_user")
-//        if (arguments?.getString("fcmToken") != null)
-//            fcmToken = arguments?.getString("fcmToken")
-//        validator = Validator(2)
-        binding.receiveMsgTv.setText(getString(R.string.opt_text2) + " +91- " + mobileNumber)
-        //binding.doneBtn.isEnabled=false
-        /*  binding.otpPassword.isEnabled  = true
-          binding.otpPassword.isClickable = true
-          binding.otpPassword.requestFocus()*/
+        binding.receiveMsgTv.text = getString(R.string.opt_text2) + " +91- " + mobileNumber
         startSmsUserConsent()
         if (!isSmsPermissionGranted) {
             requestReadAndSendSmsPermission()
@@ -144,14 +133,6 @@ class OtpFragment : Fragment() {
                 is Resource.Success -> {
                     val otpResponse: OTPResponseDomain? = it.data
                     if (otpResponse?.type == "success") {
-                    } else if (otpResponse?.type == "error") {
-                       /* ToastStateHandling.toast
-                       (
-                            requireContext(),
-                            "${it.data?.message}",
-                            Toast.LENGTH_SHORT
-                        )*/
-
                     }
                 }
                 is Resource.Loading -> {}
@@ -171,7 +152,6 @@ class OtpFragment : Fragment() {
             onOtpTextChange = {
                 otpValue = it
                 OTP = it
-                Log.d("Actual Value", otpValue)
                 if (it.length == 4)
                     validateOTP()
             },
@@ -197,7 +177,7 @@ class OtpFragment : Fragment() {
             SMS_PERMISSION_CODE -> {
 
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0
+                if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                 }
@@ -234,7 +214,6 @@ class OtpFragment : Fragment() {
 
 
     private fun validateOTP() {
-
         if (OTP.length == 4) {
             loginViewModel.verifyOtp(requireContext(), OTP, mobileNumber)
                 .observe(viewLifecycleOwner) {
@@ -243,15 +222,16 @@ class OtpFragment : Fragment() {
                             val otpResponse: OTPResponseDomain? = it.data
                             if (otpResponse?.type == "success") {
                                 verifyUser()
-
-                            } else if (otpResponse?.type == "error") {
-                                /*ToastStateHandling.toastError(
+                            }
+                            else if (otpResponse?.type == "error") {
+                                ToastStateHandling.toastError(
                                     requireContext(),
-                                    "Error occurred",
+                                    "Wrong Otp",
                                     Toast.LENGTH_SHORT
-                                )*/
+                                )
 
                             }
+
                         }
                         is Resource.Loading -> {}
                         is Resource.Error -> {

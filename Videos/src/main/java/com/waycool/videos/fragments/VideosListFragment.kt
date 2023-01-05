@@ -17,6 +17,7 @@ import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
@@ -84,7 +86,10 @@ class VideosListFragment : Fragment(), itemClick {
         }
 
 
-        binding.toolbarTitle.text = "Videos"
+        videoViewModel.viewModelScope.launch {
+            binding.toolbarTitle.text = TranslationsManager().getString("videos")
+            binding.search.hint = TranslationsManager().getString("search")
+        }
         binding.toolbar.setNavigationOnClickListener {
             activity?.let {
                 it.finish()
@@ -106,16 +111,6 @@ class VideosListFragment : Fragment(), itemClick {
         adapterVideo = VideosPagerAdapter(requireContext(),this)
         binding.videosVideoListRv.adapter = adapterVideo
 
-/*
-        adapterVideo.onItemClick = { it->
-            val bundle = Bundle()
-            bundle.putParcelable("video", it)
-           this.findNavController().navigate(
-               R.id.action_videosListFragment_to_playVideoFragment,bundle
-
-            )
-
-        }*/
 
 
         binding.search.addTextChangedListener(object : TextWatcher {
@@ -300,7 +295,7 @@ class VideosListFragment : Fragment(), itemClick {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -308,7 +303,7 @@ class VideosListFragment : Fragment(), itemClick {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -348,7 +343,7 @@ class VideosListFragment : Fragment(), itemClick {
                 )
                 .setSocialMetaTagParameters(
                     DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://gramworkx.com/PromotionalImages/gramworkx_roundlogo_white_outline.png"))
+                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                         .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
                         .setDescription("Watch more videos and learn with Outgrow")
                         .build()

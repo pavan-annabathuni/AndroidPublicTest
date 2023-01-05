@@ -14,10 +14,13 @@ import android.view.ViewGroup
 import android.view.translation.TranslationManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
@@ -30,13 +33,11 @@ import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
-import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -47,11 +48,16 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
@@ -59,17 +65,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private lateinit var binding: FragmentSoilTestingHomeBinding
 
     //    private val binding get() = _binding!!
+    private lateinit  var binding: FragmentSoilTestingHomeBinding
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
-    private var module_id = "22"
-
-
+    private var moduleId = "22"
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
-    private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilLabViewModel::class.java] }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -120,10 +123,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 )
             }
         } else {
-            binding.clInclude.visibility = View.GONE
+            binding.clInclude.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
             binding.cardCheckHealth.visibility = View.VISIBLE
-            binding.addFab.visibility = View.VISIBLE
+            binding.addFab.visibility=View.VISIBLE
             setBanners()
             getAllHistory()
             getVideos()
@@ -162,7 +165,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
+            val r = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
@@ -189,11 +192,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         binding.cardCheckHealth.setOnClickListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
+                binding.clProgressBar.visibility = View.VISIBLE
+
                 accountID = it.data?.accountId
                 if (accountID != null) {
-                    Log.d(ContentValues.TAG, "onCreateViewAccountIDAA:$accountID")
                     isLocationPermissionGranted(accountID!!)
                     binding.cardCheckHealth.isClickable = false
 
@@ -207,31 +209,56 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
 
-//        binding.cardCheckHealth.setOnClickListener {
-//            findNavController().navigate(R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment)
-//
-//        }
     }
 
 
     private fun getVideos() {
-        binding.clProgressBar.visibility = View.VISIBLE
-
         val videosBinding: GenericLayoutVideosListBinding = binding.layoutVideos
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
-        viewModel.getVansVideosList(module_id).observe(requireActivity()) {
-            /*     if (adapter.snapshot().size==0){
-                     videosBinding.noDataVideo.visibility=View.VISIBLE
-                 }
-                 else{
-                     videosBinding.noDataVideo.visibility=View.GONE
-                     adapter.submitData(lifecycle, it)
-                                 binding.clProgressBar.visibility = View.GONE
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.getVansVideosList(moduleId).collect { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+                if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
+                    videosBinding.videoCardNoInternet.visibility = View.VISIBLE
+                    videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        adapter.loadStateFlow.map { it.refresh }
+                            .distinctUntilChanged()
+                            .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                }
 
+                                if (it1 is LoadState.NotLoading) {
+                                    if (adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    } else {
+                                        videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.VISIBLE
+
+                                    }
+                                }
+                            }
+                    }
+
+
+                }
+
+            }
                  }*/
             adapter.submitData(lifecycle, it)
         }
+
+
 
 
         adapter.onItemClick = {
@@ -244,7 +271,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
-            intent.putExtra("module_id", module_id)
+            intent.putExtra("module_id",moduleId)
             startActivity(intent)
         }
 
@@ -320,6 +347,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+
+    private fun locationClick() {
+        binding.cardCheckHealth.setOnClickListener {
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                accountID = it.data?.accountId
+                isLocationPermissionGranted(accountID!!)
+
+            }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("soil_testing")
@@ -373,13 +408,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1,
-                                "Error",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                        context?.let { it1 -> ToastStateHandling.toastError(it1, "Error", Toast.LENGTH_SHORT) }
 
                     }
                     is Resource.Loading -> {
@@ -389,6 +418,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
         }
     }
+    override fun statusTracker(data: SoilTestHistoryDomain) {
+        val bundle = Bundle()
+        bundle.putInt("id", data.id!!)
+        bundle.putString("soil_test_number", data.soil_test_number)
+        findNavController().navigate(
+            R.id.action_soilTestingHomeFragment_to_statusTrackerFragment,
+            bundle
+        )
+    }
+
     private fun isLocationPermissionGranted(account_id: Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -407,10 +446,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 100
             )
             // use your location object
-            Log.d("checkLocation", "isLocationPermissionGranted:1 ")
             false
         } else {
-            Log.d("checkLocation", "isLocationPermissionGranted:2 ")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
@@ -422,10 +459,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             latitude,
                             longitutde
                         ).observe(requireActivity()) {
+                            binding.clProgressBar.visibility = View.VISIBLE
                             when (it) {
                                 is Resource.Success -> {
-                                    binding.clProgressBar.visibility = View.GONE
-                                    binding.progressBar.isVisible = false
                                     if (it.data!!.isEmpty()) {
 
                                         CustomeDialogFragment.newInstance().show(
@@ -435,11 +471,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
-                                        Log.d(
-                                            TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response"
-                                        )
-                                        var bundle = Bundle().apply {
+                                        val bundle = Bundle().apply {
                                             putParcelableArrayList(
                                                 "list",
                                                 ArrayList<Parcelable>(response)
@@ -448,12 +480,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
-//                                        bundle.putString("lab_name",it.data)
+
                                         try {
                                             findNavController().navigate(
                                                 R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
                                                 bundle
                                             )
+                                        }catch (e:Exception){
                                             Log.d(
                                                 "TAGPraveen",
                                                 "isLocationPermissionGranted: SetPass"
@@ -465,32 +498,33 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
+                                        binding.clProgressBar.visibility = View.GONE
+
 
                                     }
 
                                 }
                                 is Resource.Error -> {
-                                    if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
                                         ToastStateHandling.toastError(
                                             requireContext(),
                                             "Please check you internet connectivity",
                                             Toast.LENGTH_SHORT
                                         )
-                                    } else {
+                                    }
+                                    else{
                                         ToastStateHandling.toastError(
                                             requireContext(),
-                                            "Server Error",
+                                           "Too many attempts.Try again later",
                                             Toast.LENGTH_SHORT
                                         )
                                     }
 
                                     binding.clProgressBar.visibility = View.GONE
-
                                     binding.cardCheckHealth.isClickable = true
 
                                 }
                                 is Resource.Loading -> {
-                                    binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
                                     ToastStateHandling.toastWarning(
                                         requireContext(),
@@ -521,9 +555,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -531,17 +565,17 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
     }

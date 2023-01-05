@@ -10,6 +10,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentIrrigationTypeBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 class IrrigationTypeFragment : Fragment() {
       private lateinit var binding: FragmentIrrigationTypeBinding
@@ -32,6 +33,7 @@ class IrrigationTypeFragment : Fragment() {
         binding = FragmentIrrigationTypeBinding.inflate(inflater)
         //ViewModel.cropAdvisory()
         observer()
+        translation()
         return binding.root
 
     }
@@ -72,5 +74,11 @@ class IrrigationTypeFragment : Fragment() {
                 }}
 
         }
+    }
+    private fun translation(){
+        TranslationsManager().loadString("str_floading",binding.floading)
+        TranslationsManager().loadString("str_drip",binding.drip)
+        TranslationsManager().loadString("str_sprinker",binding.sprinker)
+        TranslationsManager().loadString("str_rain_gun",binding.rainGun)
     }
 }

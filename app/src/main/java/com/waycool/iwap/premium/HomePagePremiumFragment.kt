@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -115,7 +116,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun initObserveDevice() {
         viewDevice.getIotDevice().observe(requireActivity()) {
             if (it.data?.data.isNullOrEmpty()) {
-                binding.cardAddDevice.visibility = View.VISIBLE
+                binding.cardAddDevice.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
@@ -193,10 +194,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
-        binding.cardAddDevice.setOnClickListener {
-            val intent = Intent(activity, AddDeviceActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.cardAddDevice.setOnClickListener {
+//            val intent = Intent(activity, AddDeviceActivity::class.java)
+//            startActivity(intent)
+//        }
         binding.clAddForm.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
@@ -258,7 +259,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -266,7 +267,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(resources.getDrawable(com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

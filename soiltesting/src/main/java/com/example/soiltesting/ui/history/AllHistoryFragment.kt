@@ -110,35 +110,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
-//    private fun initSearchView() {
-//        binding.searchView.addTextChangedListener(object :TextWatcher{
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//
-//            }
-//
-//            override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                objectListNew.clear()
-//                Log.d("TAG", "::::str " + charSequence.toString())
-//                for (j in filteredList.indices) {
-//                    if (filteredList[0].soil_test_number .lowercase().contains(
-//                            charSequence.toString().lowercase(
-//                            )
-//                        )
-//                    ) {
-//                        objectListNew.add(filteredList.)
-//
-//                    }
-//                }
-////                areaAdapter.upDateList(objectListNew)
-//                soilHistoryAdapter.upDateList(filteredList)
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        })
-//    }
 
     private fun speechToText() {
         binding.textToSpeach.setOnClickListener() {
@@ -227,7 +198,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
     private fun bindObserversSoilTestHistory(account_id: Int) {
         viewModel.getSoilTestHistory(account_id).observe(requireActivity()) {
-
             when (it) {
                 is Resource.Success -> {
                     val response = it.data as ArrayList<SoilTestHistoryDomain>
@@ -262,7 +232,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 i2: Int
             ) {
                 val temp= ArrayList<SoilTestHistoryDomain>()
-//                filteredList.clear()
                 if (charSequence.length>0){
                     filteredList.forEach {
                         if (it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())){
@@ -274,30 +243,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 soilHistoryAdapter.upDateList(temp)
                 Log.d("TAG", "::::stderr  $temp")
                 }
-//                if (temp.isEmpty()){
-//                    soilHistoryAdapter.upDateList(filteredList)
-//                }
             }
-//                filteredList.forEach {
-//                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
-//                     filteredList.add(filteredList)
-//                 }
-//                }
 
-//                for (item in filteredList[].soil_test_number!!.indices) {
-//                    Log.d("TAG", "::::stderr $charSequence")
-//                    if (filteredList[0].soil_test_number!!.lowercase()
-//                            .startsWith(charSequence.toString().lowercase())
-//                    ) {
-////                        filteredList.add(filteredList)
-//                        Log.d(TAG, "onTextChangedList:$filteredList")
-//                        Log.d("TAG", "::::::::stderr $charSequence")
-//                    }
-//
-//                }
-
-//                binding.etSearchItem.getText().clear();
-//            }
 
             override fun afterTextChanged(editable: Editable) {}
         })

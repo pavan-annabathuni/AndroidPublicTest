@@ -18,7 +18,7 @@ object Constant {
     }
     fun changeDateFormatSpraying(d: String?): String? {
         if (d == null || d.isEmpty()) return null
-        val dateFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH)
         //        SimpleDateFormat outputFormat1 = new SimpleDateFormat("hh:mm aa");
         val outputFormat2 = SimpleDateFormat("hh a", Locale.ENGLISH)
         return try {

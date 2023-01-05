@@ -34,19 +34,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-<!--    <TextView-->
-<!--        android:id="@+id/plot"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="@dimen/space12"-->
-<!--        android:text="@string/soil_sample_will_be_collected_by_the_selected_lab"-->
-<!--        android:textColor="#000000"-->
-<!--        android:textSize="14sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_top_onp"
         android:layout_width="match_parent"
@@ -54,21 +41,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
-        <!--        <CheckBox-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"/>-->
-
-        <!--            <CheckBox-->
-        <!--                android:id="@+id/iv_Check"-->
-        <!--                android:layout_width="24dp"-->
-        <!--                android:layout_height="24dp"-->
-        <!--                android:layout_marginStart="@dimen/space16"-->
-        <!--                android:layout_marginTop="@dimen/space16"-->
-        <!--                android:checked="true"-->
-        <!--                android:button="@drawable/check_box"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="parent" />-->
-        <!--        android:button="@drawable/check_box"-->
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLabTitle"
@@ -306,37 +278,6 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/btn_select_crop"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
-    <!--    <TextView-->
-    <!--        android:id="@+id/tvSoil"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/btn_select_crop"-->
-    <!--        android:text="SetData"-->
-    <!--        android:layout_margin="@dimen/space20"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:textSize="@dimen/space16"-->
-    <!--        android:layout_height="wrap_content"/>-->
-    <!--    <ImageView-->
-    <!--        android:id="@+id/tvSoil_image"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/tvSoil"-->
-    <!--        android:text="SetData"-->
-    <!--        android:src="@drawable/ic_add_crop_card"-->
-    <!--        android:layout_margin="@dimen/space20"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:textSize="@dimen/space16"-->
-    <!--        android:layout_height="wrap_content"/>-->
-
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/recyclerview_status_lab"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="@dimen/space16"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:layout_marginEnd="@dimen/space16"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/plot"-->
-    <!--        tools:itemCount="1"-->
-    <!--        tools:listitem="@layout/item_labs_sample" />-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cardCheckHealth"

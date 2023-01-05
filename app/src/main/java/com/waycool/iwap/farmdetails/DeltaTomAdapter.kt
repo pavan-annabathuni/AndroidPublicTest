@@ -33,7 +33,7 @@ class DeltaTomAdapter(val context: Context) : RecyclerView.Adapter<DeltaTomHolde
             )
         )
         if (position == details.size - 1) {
-            holder.binding.timeTvSprayingVh.text = "08 PM"
+            holder.binding.timeTvSprayingVh.text = "12 AM"
             holder.binding.timeTvSprayingVh.visibility = View.VISIBLE
         } else {
             holder.binding.timeTvSprayingVh.visibility = View.GONE

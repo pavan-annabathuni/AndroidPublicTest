@@ -616,16 +616,6 @@
             android:layout_height="50dp"
             android:background="@drawable/bg_button">
 
-            <!--            <ImageView-->
-            <!--                android:id="@+id/ivClick"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:src="@drawable/ic_add_button"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/tvCheckCrop"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
             <TextView
                 android:id="@+id/tvCheckCrop"
                 android:layout_width="wrap_content"

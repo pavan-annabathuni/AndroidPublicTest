@@ -10,6 +10,7 @@ import com.example.cropinformation.databinding.FragmentCropVarityBinding
 import com.example.cropinformation.databinding.FragmentNurseryBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 import org.json.JSONArray
 
 class NurseryFragment : Fragment() {
@@ -33,6 +34,7 @@ class NurseryFragment : Fragment() {
         binding = FragmentNurseryBinding.inflate(inflater)
         //ViewModel.cropAdvisory()
         observer()
+        translation()
         return binding.root
 
     }
@@ -54,4 +56,12 @@ class NurseryFragment : Fragment() {
                     binding.tvTime3.text = jsonArray.getJSONObject(2).get("value").toString()
                     binding.tv4.text = jsonArray.getJSONObject(3).get("title").toString()
                     binding.tvTime4.text = jsonArray.getJSONObject(3).get("value").toString()
-                }}}}}
+                }}}}
+    private fun translation(){
+        TranslationsManager().loadString("str_germination_period",binding.Germination)
+        TranslationsManager().loadString("str_nursery_period",binding.tv2)
+        TranslationsManager().loadString("hardening_period",binding.tv3)
+        TranslationsManager().loadString("str_transplanting",binding.tv4)
+    }
+
+}

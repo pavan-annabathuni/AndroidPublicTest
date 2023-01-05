@@ -976,7 +976,54 @@ object NetworkSource {
                 farm_pump_type,
                 farm_pump_depth,
                 farm_pump_pipe_size,
-                farm_pump_flow_rate
+                farm_pump_flow_rate,
+            )
+
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    fun updateFarm(
+        accountId: Int,
+        farmName: String,
+        farm_center: String,
+        farm_area: String,
+        farm_json: String,
+        plot_ids: String?,
+        is_primary: Int?,
+        farm_water_source: String?,
+        farm_pump_hp: String?,
+        farm_pump_type: String?,
+        farm_pump_depth: String?,
+        farm_pump_pipe_size: String?,
+        farm_pump_flow_rate: String?,
+        farmId: Int?
+    ) = flow<Resource<ResponseBody?>> {
+
+        try {
+            val headerMap = LocalSource.getHeaderMapSanctum()
+            val response = apiInterface.updateFarm(
+                headerMap,
+                accountId,
+                farmName,
+                farm_center,
+                farm_area,
+                farm_json,
+                plot_ids,
+                is_primary,
+                farm_water_source,
+                farm_pump_hp,
+                farm_pump_type,
+                farm_pump_depth,
+                farm_pump_pipe_size,
+                farm_pump_flow_rate,
+                farmId
             )
 
             if (response.isSuccessful)
@@ -1153,6 +1200,21 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNdvi(map,farmId,accountId)
+            if(response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getNdviMean(url:String)
+            = flow<Resource<NDVIMean?>> {
+        try {
+            val response = apiInterface.getNDVIMean(url)
             if(response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

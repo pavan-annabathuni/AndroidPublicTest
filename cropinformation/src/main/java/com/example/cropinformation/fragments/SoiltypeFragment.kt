@@ -11,6 +11,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentSoiltypeBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 
 class SoiltypeFragment : Fragment() {
@@ -34,6 +35,7 @@ class SoiltypeFragment : Fragment() {
         binding = FragmentSoiltypeBinding.inflate(inflater)
         //ViewModel.cropAdvisory()
         observer()
+        translation()
         return binding.root
     }
 
@@ -86,4 +88,11 @@ class SoiltypeFragment : Fragment() {
 
         }
     }}
+    private fun translation(){
+        TranslationsManager().loadString("str_sandy_loam",binding.tvLabelValue)
+        TranslationsManager().loadString("str_loam",binding.tvLabelValue2)
+        TranslationsManager().loadString("str_still_loam",binding.tvStill)
+        TranslationsManager().loadString("clay_loam",binding.tvClay)
+        TranslationsManager().loadString("str_alluvial",binding.tvAllu)
+    }
 }

@@ -50,7 +50,7 @@ class DeltaAdapter(val context:Context) : RecyclerView.Adapter<DeltaViewHolder>(
 
 
         if (position == details.size - 1) {
-            holder.binding.timeTvSprayingVh .setText("08 PM")
+            holder.binding.timeTvSprayingVh .setText("12 AM")
             holder.binding.timeTvSprayingVh.setVisibility(View.VISIBLE)
         } else {
             holder.binding.timeTvSprayingVh.setVisibility(View.GONE)
