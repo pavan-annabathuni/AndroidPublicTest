@@ -9,23 +9,16 @@ import com.squareup.picasso.Picasso
 import com.waycool.newsandarticles.R
 import android.media.MediaPlayer.OnCompletionListener
 import android.net.Uri
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.VansFeederListDomain
-import com.waycool.data.utils.NetworkUtil
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
-import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 
 class NewsFullviewActivity : AppCompatActivity() {
 

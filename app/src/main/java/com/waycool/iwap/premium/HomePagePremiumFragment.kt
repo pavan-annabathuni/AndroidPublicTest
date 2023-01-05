@@ -198,7 +198,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
-        binding.tvMyCrops.setOnClickListener {
+        binding.tvEditMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }

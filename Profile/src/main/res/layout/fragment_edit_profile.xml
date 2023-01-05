@@ -85,7 +85,7 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    style="@style/Medium"
+                    style="@style/MediumBlack14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -100,7 +100,7 @@
                     android:id="@+id/tv_name"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -123,7 +123,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_mobile_number"
-                    android:textColor="@color/black"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -132,7 +132,7 @@
                     android:id="@+id/tv_phone_no"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -140,6 +140,7 @@
                     android:drawablePadding="4dp"
                     android:enabled="false"
                     android:paddingStart="16dp"
+                    android:drawableStart="@drawable/ic_flag"
                     android:text='@{"+91 "+viewModel.response2.contact}'
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -155,7 +156,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_address_line_1"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_phone_no" />
@@ -163,9 +164,10 @@
                 <LinearLayout
                     android:id="@+id/ll_address1"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/text_border"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +178,7 @@
                         android:id="@+id/tv_address1"
                         style="@style/SemiBold"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="50dp"
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="2dp"
                         android:layout_weight="1"
@@ -208,7 +210,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/address_line_2"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ll_address1" />
@@ -217,7 +219,7 @@
                     android:id="@+id/tv_address2"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -240,7 +242,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_city"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_address2" />
@@ -249,7 +251,7 @@
                     android:id="@+id/tv_city"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -272,7 +274,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_state"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_city" />
@@ -281,7 +283,7 @@
                     android:id="@+id/tv_state"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -304,7 +306,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/str_pincode"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/lightBlack"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_state" />
@@ -313,7 +315,7 @@
                     android:id="@+id/tv_pincode"
                     style="@style/SemiBold"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -331,11 +333,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <!--    <fragment android:id="@+id/autocomplete_fragment"-->
-            <!--        android:layout_width="match_parent"-->
-            <!--        android:layout_height="wrap_content"-->
-            <!--        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"-->
-            <!--        />-->
+
         </androidx.core.widget.NestedScrollView>
 
         <FrameLayout
