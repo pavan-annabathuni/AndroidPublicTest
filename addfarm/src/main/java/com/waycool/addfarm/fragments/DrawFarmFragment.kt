@@ -177,6 +177,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.pointA.visibility = View.VISIBLE
             binding.pointB.visibility = View.VISIBLE
             binding.pointC.visibility = View.VISIBLE
+            pos=0
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 guideView(showCaseDataList[pos])

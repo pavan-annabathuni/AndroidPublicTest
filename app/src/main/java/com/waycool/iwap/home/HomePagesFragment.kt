@@ -43,6 +43,7 @@ import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -150,9 +151,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         setWishes()
         checkNetwork()
         initClick()
+        notification()
         binding.recyclerview.adapter = mandiAdapter
         binding.farmsRv.adapter = farmsAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
+
+        binding.tvAddFromOne.isSelected = true
+
+
 
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
@@ -164,8 +170,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             }
         })
 
-        mandiDetailCall()
+
         userDetailsCall()
+        //mandiDetailCall()
         if (accountID != null) {
             getFarms()
         }
@@ -174,6 +181,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         fabButton()
         myCrop()
         setBanners()
+        setTranslation()
 
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
@@ -186,6 +194,57 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         }
 
         getDashBoard()
+
+    }
+
+    private fun setTranslation() {
+        TranslationsManager().loadString("welcome",binding.tvName)
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm)
+        TranslationsManager().loadString("add_crop",binding.tvAddFrom)
+        TranslationsManager().loadString("add_farm",binding.tvAddFromOne)
+        TranslationsManager().loadString("my_farm",binding.tvMyform)
+//        TranslationsManager().loadString("my_farm",binding.tvOurAddFormData)
+        TranslationsManager().loadString("str_today",binding.tvDays)
+
+        TranslationsManager().loadString("temperature",binding.tvTemp)
+        TranslationsManager().loadString("str_humidity",binding.tvHumidity)
+        TranslationsManager().loadString("str_wind",binding.tvWind)
+        TranslationsManager().loadString("str_rain",binding.tvRain)
+        TranslationsManager().loadString("our_services",binding.tvOurService)
+        TranslationsManager().loadString("str_viewall",binding.tvOurServiceViewAll)
+
+        TranslationsManager().loadString("soil_testing",binding.tvSoilTesting)
+        TranslationsManager().loadString("soil_testing_info",binding.tvSoilTestingDesc)
+        TranslationsManager().loadString("txt_know_more",binding.tvSoilTestingKnowMore)
+
+        TranslationsManager().loadString("crop_health",binding.tvCropHealth)
+        TranslationsManager().loadString("crop_health_info",binding.tvCropHealthDesc)
+        TranslationsManager().loadString("txt_know_more",binding.tvCropHealthKnowMore)
+
+        TranslationsManager().loadString("crop_information",binding.tvCropInformation)
+        TranslationsManager().loadString("crop_information_info",binding.tvCropInformationDesc)
+        TranslationsManager().loadString("txt_know_more",binding.tvCropInformationKnowMore)
+
+        TranslationsManager().loadString("crop_protection",binding.tvCropProtect)
+        TranslationsManager().loadString("crop_protection_info",binding.tvCropProtectDesc)
+        TranslationsManager().loadString("txt_know_more",binding.tvCropProtectKnowMore)
+
+        TranslationsManager().loadString("videos",videosBinding.videosTitle)
+        TranslationsManager().loadString("str_viewall",videosBinding.viewAllVideos)
+        TranslationsManager().loadString("news_articles",newsBinding.newsTitle)
+        TranslationsManager().loadString("str_viewall",newsBinding.viewAllNews)
+
+        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
+        TranslationsManager().loadString("str_edit",binding.tvEditMyCrops)
+
+        TranslationsManager().loadString("add_crop",binding.AddCrop)
+        TranslationsManager().loadString("mandi_prices",binding.tvRequest)
+        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi)
+
+
+
+
+
 
     }
 
@@ -217,7 +276,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                     accountID = it.data?.accountId
                     it.data.also { userDetails ->
                         binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name}"
+                        binding.tvWelcomeName.text = ", ${it.data?.name}"
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 weather(it1, it2)
@@ -226,6 +285,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        mandiDetailCall()
                         getFarms()
                     }
                 }
@@ -270,7 +330,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
-        binding.tvAddFromService.setOnClickListener {
+        binding.tvSoilTestingKnowMore.setOnClickListener {
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
@@ -279,7 +339,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
-        binding.tvAddFromServiceCropHealth.setOnClickListener {
+        binding.tvCropHealthKnowMore.setOnClickListener {
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
@@ -288,7 +348,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
         }
 
-        binding.tvAddFromServiceCropProtect.setOnClickListener {
+        binding.tvCropProtectKnowMore.setOnClickListener {
             val intent = Intent(activity, CropProtectActivity::class.java)
             startActivity(intent)
         }
@@ -316,7 +376,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         binding.tvOurServiceViewAll.setOnClickListener {
             findNavController().navigate(R.id.action_homePagesFragment_to_allServicesFragment)
         }
-        binding.tvMyCrops.setOnClickListener {
+        binding.tvEditMyCrops.setOnClickListener {
+            findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
+        }
+        binding.ivEditCrop.setOnClickListener {
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.cvAddCrop.setOnClickListener {
@@ -332,6 +395,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
+
+        binding.ivViewAll.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+
 
         binding.IvNotification.setOnClickListener {
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
@@ -477,7 +546,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                 val list: List<Address> =
                     geocoder.getFromLocation(lat, lng, 1) as List<Address>
-                district = list[0].locality + "," + list[0].adminArea
+                if(list.size>0) {
+                    district = list[0].locality + "," + list[0].adminArea
+                }
             } catch (e: InvocationTargetException) {
 
             }
@@ -729,7 +800,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                                     Locale.ENGLISH
                                 )//or use getDateInstance()
                             val formatedDate = formatter.format(dateTime)
-                            binding.tvDay.text = "Today $formatedDate"
+                            binding.tvDay.text = " $formatedDate"
                         }
                     }
 
@@ -1133,6 +1204,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         )
     }
 
+    private fun notification(){
+        viewModel.getNotification().observe(viewLifecycleOwner){
+            var data = it.data?.data?.filter { itt->
+                itt.readAt== null
+            }
+            if(data?.size!=0){
+                binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
+            }else{
+                binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
+            }
+        }
+    }
 
 }
 

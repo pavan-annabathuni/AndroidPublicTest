@@ -53,7 +53,6 @@ class SelectAddCropFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSelectAddCropBinding.inflate(inflater)
         val add_crop = arguments?.getString("userId")
-        Log.d("TAG", "onCreateViewadd_crop: $add_crop")
         return binding.root
     }
 
@@ -92,18 +91,14 @@ class SelectAddCropFragment : Fragment() {
         }
 
         adapter.onItemClick = {
-
-            val response = it
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 ->
                 args.putString("cropname", it1)
             }
             if (dashboardDomain?.subscription?.iot == true) {
-                Log.d("TAG", "onViewCreatedbdjvb: ${it?.cropId}")
                 when (it?.cropId) {
                     67 -> {
-                        Log.d("TAG", "onViewCreatedbdjvb: ${it.cropName}")
                         findNavController().navigate(
                             R.id.action_selectAddCropFragment_to_veriatyCropFragment,
                             args
@@ -116,7 +111,6 @@ class SelectAddCropFragment : Fragment() {
                         )
                     }
                     else -> {
-                        Log.d("TAG", "onViewCreatedbdjvbsss: ${it?.cropId}")
                         findNavController().navigate(
                             R.id.action_selectAddCropFragment_to_addCropFragment,
                             args
@@ -145,9 +139,9 @@ class SelectAddCropFragment : Fragment() {
 
     private fun setUpCropCategories() {
         viewModel.getCropCategory().observe(requireActivity()) {
+            binding.clProgressBar.visibility=View.VISIBLE
             when (it) {
                 is Resource.Success -> {
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data
@@ -158,12 +152,16 @@ class SelectAddCropFragment : Fragment() {
                             createChip(category)
                         }
                     }
+                    binding.clProgressBar.visibility=View.GONE
+
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                    binding.clProgressBar.visibility=View.GONE
+                    ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
 
                 }
                 is Resource.Loading -> {
+                    binding.clProgressBar.visibility=View.VISIBLE
                     ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
@@ -214,12 +212,16 @@ class SelectAddCropFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
+            binding.clProgressBar.visibility=View.VISIBLE
             when (res) {
                 is Resource.Success -> {
+
                     if (categoryId == null) {
                         adapter.submitList(res.data)
-                    } else
-                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+                    } else{
+                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })}
+                    binding.clProgressBar.visibility=View.GONE
+
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {

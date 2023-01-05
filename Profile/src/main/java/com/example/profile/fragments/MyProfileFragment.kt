@@ -28,6 +28,7 @@ import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
+import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
@@ -155,6 +156,14 @@ class MyProfileFragment : Fragment() {
     fun observer(): Boolean {
         viewModel.viewModelScope.launch {
               viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
+                  when(it){
+                      is Resource.Success->{
+                          binding.progressBar.visibility = View.GONE
+                      } is Resource.Loading->{
+                      binding.progressBar.visibility = View.VISIBLE
+                      }
+                      is Resource.Error->{}
+                  }
                   if(it.data?.data?.account?.get(0)?.subscription == 0){
                       binding.llFarmSupport.visibility = View.GONE
                   }else{
@@ -182,13 +191,6 @@ class MyProfileFragment : Fragment() {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToFarmSupportFragment())
         }
-   /*     binding.ll4.setOnClickListener() {
-            ShareCompat.IntentBuilder.from(requireActivity())
-                .setType("text/plain")
-                .setChooserTitle("Chooser title")
-                .setText("http://play.google.com/store/apps/details?id=" + requireActivity().getPackageName())
-                .startChooser();
-        }*/
         binding.rateUs.setOnClickListener(){
             val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
             startActivity(intent)
@@ -197,13 +199,13 @@ class MyProfileFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.textView.setOnClickListener(){
-            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
             intent.putExtra("tittle", "Privacy Policy")
             requireActivity().startActivity(intent)
         }
         binding.textView2.setOnClickListener(){
-            val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+            val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
             intent.putExtra("tittle", "Terms and Conditions")
             requireActivity().startActivity(intent)
@@ -212,9 +214,6 @@ class MyProfileFragment : Fragment() {
         binding.llAboutOutgrow.setOnClickListener(){
             this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
-
-
-
 
         binding.cvChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())

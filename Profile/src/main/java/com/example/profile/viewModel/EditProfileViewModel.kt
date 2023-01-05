@@ -53,11 +53,11 @@ class EditProfileViewModel:ViewModel() {
 
     fun getReverseGeocode(latlon:String):LiveData<GeocodeDomain> = GeocodeRepository.getReverseGeocode(latlon).asLiveData()
 
-    fun updateFarmSupport(name: String,contact:Long,
+    fun updateFarmSupport(account_id: Int,name: String,contact:Long,
     lat:Double,lon:Double, roleId:Int,
     pincode:Int,village: String,address: String,
     state: String,district: String):LiveData<Resource<FarmSupportModel?>> =
-        ProfileRepository.updateFarmSupport(name,contact,lat,lon,roleId,pincode,
+        ProfileRepository.updateFarmSupport(account_id,name,contact,lat,lon,roleId,pincode,
             village,address,state,district).asLiveData()
 
     fun getFarmSupport(accountId:Int): LiveData<Resource<GetFarmSupport?>> =
