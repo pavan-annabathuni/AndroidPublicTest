@@ -341,6 +341,7 @@ class AddCropDetailsFragment : Fragment() {
         TranslationsManager().loadString("crop_area", binding.pincodeNumber)
         TranslationsManager().loadString("sowing_date", binding.Address)
         TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
     }
 
     private fun updateLabel(myCalendar: Calendar) {

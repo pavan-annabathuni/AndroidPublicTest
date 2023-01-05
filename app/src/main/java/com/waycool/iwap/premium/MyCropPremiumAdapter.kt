@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.databinding.ItemPremiumCropsBinding
 
 import java.util.ArrayList
@@ -58,6 +59,8 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
             holder.binding.tvCloudy.text = "Irrigation not required"
 
         }
+            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
+        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
 
         holder.binding.tvCloudyNoDisease.isSelected = true
         if (myCrop.disease == true) {

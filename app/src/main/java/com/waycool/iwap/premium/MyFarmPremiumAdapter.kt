@@ -14,6 +14,7 @@ import com.google.android.libraries.maps.model.PolygonOptions
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyCropsDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 import com.waycool.iwap.home.FarmCropsAdapter
@@ -45,6 +46,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
+        TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice)
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
 
@@ -67,6 +69,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
             selectedFarmPosition = position
             onFarmSelected?.invoke(details[position])
         }
+
 
 //        if (position == selectedFarmPosition) {
 //            holder.binding.farmcl.setBackgroundResource(com.example.soiltesting.R.drawable.bg_add_form)

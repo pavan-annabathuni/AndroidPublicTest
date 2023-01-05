@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.translation.TranslationManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,11 +32,13 @@ import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
+import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -48,12 +49,10 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -62,7 +61,6 @@ import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
-    private lateinit var binding: FragmentSoilTestingHomeBinding
 
     //    private val binding get() = _binding!!
     private lateinit  var binding: FragmentSoilTestingHomeBinding
@@ -105,6 +103,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         fabButton()
         getAllHistory()
         setBanners()
+        locationClick()
         translationSoilTesting()
     }
 
@@ -254,8 +253,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 }
 
             }
-                 }*/
-            adapter.submitData(lifecycle, it)
         }
 
 
@@ -355,6 +352,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 isLocationPermissionGranted(accountID!!)
 
             }
+        }
+    }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("soil_testing")
@@ -543,16 +542,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             true
         }
     }
-    override fun statusTracker(data: SoilTestHistoryDomain) {
-        val bundle = Bundle()
-        bundle.putInt("id", data.id!!)
-        bundle.putString("soil_test_number", data.soil_test_number)
-        findNavController().navigate(
-            R.id.action_soilTestingHomeFragment_to_statusTrackerFragment,
-            bundle
-        )
-    }
-
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener {

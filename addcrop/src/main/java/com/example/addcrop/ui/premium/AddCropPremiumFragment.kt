@@ -180,8 +180,15 @@ class AddCropPremiumFragment : Fragment() {
             crop_id = arguments?.getInt("cropid")
             crop_type = arguments?.getInt("soil_type_id")
 
-            if (crop_id == 2) {
+            if (crop_id == 97) {
 //                binding.clSwitch.visibility = View.VISIBLE
+                binding.EnterDateoffruitPruning.visibility = View.VISIBLE
+                binding.Address.visibility = View.INVISIBLE
+                binding.tvYearShow.visibility = View.VISIBLE
+                binding.clSpinnerYear.visibility = View.VISIBLE
+
+            } else if (crop_id == 67) {
+
                 binding.FirstIrrigationDate.visibility = View.VISIBLE
                 binding.Address.visibility = View.INVISIBLE
                 binding.tvBahar.visibility = View.VISIBLE
@@ -189,11 +196,6 @@ class AddCropPremiumFragment : Fragment() {
                 binding.tvYearShow.visibility = View.VISIBLE
                 binding.clSpinnerYear.visibility = View.VISIBLE
                 binding.clSwitchMulching.visibility = View.VISIBLE
-            } else if (crop_id == 67) {
-                binding.EnterDateoffruitPruning.visibility = View.VISIBLE
-                binding.Address.visibility = View.INVISIBLE
-                binding.tvYearShow.visibility = View.VISIBLE
-                binding.clSpinnerYear.visibility = View.VISIBLE
 
             }
 
@@ -448,6 +450,12 @@ class AddCropPremiumFragment : Fragment() {
         TranslationsManager().loadString("irrigation_type", binding.City)
         TranslationsManager().loadString("no_of_plants_per_acre", binding.State)
         TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
+        TranslationsManager().loadString("bahar", binding.tvBahar)
+        TranslationsManager().loadString("crop_year", binding.tvYearShow)
+        TranslationsManager().loadString("first_irrigation", binding.FirstIrrigationDate)
+        TranslationsManager().loadString("mulching", binding.tvShapeInFarmMulching)
+        TranslationsManager().loadString("enter_date", binding.EnterDateoffruitPruning)
 
     }
 

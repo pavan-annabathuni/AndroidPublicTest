@@ -104,13 +104,25 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            binding.imeiAddress.hint =areaHint
         }
         TranslationsManager().loadString("welcome", binding.tvWelcomeName)
-        TranslationsManager().loadString("my_farm", binding.title3SemiBold)
+        TranslationsManager().loadString("my_crops", binding.title3SemiBold)
         TranslationsManager().loadString("add_crop", binding.tvMyCrops)
         TranslationsManager().loadString("my_farm", binding.titleMyFarm)
-        TranslationsManager().loadString("add_farm", binding.MyFarm)
-//        TranslationsManager().loadString("my_device", binding.titleMyDevice)
-//        TranslationsManager().loadString("add_farm", binding.)
-//        TranslationsManager().loadString("submit", binding.submit)
+        TranslationsManager().loadString("add_farm_top", binding.MyFarm)
+        TranslationsManager().loadString("my_device", binding.titleMyDevice)
+        TranslationsManager().loadString("view_tepm", binding.tvTemp)
+        TranslationsManager().loadString("view_rainfall", binding.tvWind)
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed)
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness)
+        TranslationsManager().loadString("view_pressure", binding.tvPressure)
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText)
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture)
+        TranslationsManager().loadString("view_top", binding.tvTop)
+        TranslationsManager().loadString("view_bottom", binding.tvBottom)
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp)
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice)
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo)
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh)
     }
 
     private fun initObserveDevice() {
