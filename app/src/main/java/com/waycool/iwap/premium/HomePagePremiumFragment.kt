@@ -19,8 +19,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
-import com.example.irrigationplanner.IrrigationPlannerActivity
-import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.github.anastr.speedviewlib.components.Section
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.model.Polygon
@@ -37,6 +35,7 @@ import com.waycool.featurechat.FeatureChat
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
+import com.waycool.videos.adapter.AdsAdapter
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -785,7 +784,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

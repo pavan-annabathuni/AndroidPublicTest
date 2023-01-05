@@ -44,6 +44,7 @@ import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
@@ -128,7 +129,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private fun setBanners() {
         binding.progressBar.visibility=View.VISIBLE
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

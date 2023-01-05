@@ -15,25 +15,22 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.weather.R
-import com.waycool.weather.adapters.AdsAdapter
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
@@ -665,7 +662,7 @@ class WeatherFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

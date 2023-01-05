@@ -21,12 +21,12 @@ import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesParentAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseBinding
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.videos.adapter.AdsAdapter
 import kotlin.math.abs
 
 
@@ -134,7 +134,7 @@ class PestDiseaseFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

@@ -37,7 +37,6 @@ import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
@@ -48,6 +47,7 @@ import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
@@ -455,7 +455,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         private fun setBanners() {
 
-            val bannerAdapter = AdsAdapter()
+            val bannerAdapter = AdsAdapter(requireContext())
             viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
                 bannerAdapter.submitData(lifecycle, it)

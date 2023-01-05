@@ -28,7 +28,6 @@ import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 
 import com.example.soiltesting.SoilTestActivity
-import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -59,6 +58,7 @@ import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
@@ -522,7 +522,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
