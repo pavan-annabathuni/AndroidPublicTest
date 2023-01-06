@@ -223,6 +223,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/label3"
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -291,6 +292,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/label4"
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -358,6 +360,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/label5"
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -425,6 +428,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/label6"
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

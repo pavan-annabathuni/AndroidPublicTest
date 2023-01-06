@@ -272,15 +272,17 @@ class MandiFragment : Fragment() {
                         }
                     }
                     binding.recycleViewDis.adapter = adapterMandi
-
+                    if(position>0){
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
                         val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
-                        val cropNameList = (filter?.map { data ->
+                        var cropNameList = (filter?.map { data ->
                             data.cropNameTag
                         } ?: emptyList()).toMutableList()
 
-                        if (cropNameList.isNotEmpty())
-                            cropNameList[0] = "Crops"
+                        if (cropNameList.size==0)
+                            cropNameList = (it.data?.map { data ->
+                                data.cropNameTag
+                            } ?: emptyList()).toMutableList()
 
                         val arrayAdapter2 =
                             ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
@@ -319,9 +321,103 @@ class MandiFragment : Fragment() {
                             }
 
                     }
+                    }else{
+                        viewModel.getAllCrops().observe(viewLifecycleOwner) {
+                            // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
+                            var cropNameList = (it.data?.map { data ->
+                                data.cropNameTag
+                            } ?: emptyList()).toMutableList()
+
+//            if (cropNameList.size==0)
+//                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
+
+                            val arrayAdapter2 =
+                                ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
+                            binding.spinner2.adapter = arrayAdapter2
+                            binding.spinner2?.onItemSelectedListener =
+                                object : AdapterView.OnItemSelectedListener {
+                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                    }
+
+                                    override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                    ) {
+
+                                        val text = binding.spinner2.selectedItem.toString()
+                                        if (position > 0) {
+                                            crop = text
+                                            mandiApiCall()
+
+//                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+
+                                        } else {
+                                            if (crop != null) {
+                                                crop = ""
+                                                mandiApiCall()
+
+//                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                            }
+                                        }
+                                        binding.recycleViewDis.adapter = adapterMandi
+
+                                    }
+                                }
+
+                        }
+                    }}
                 }
 
             }
+
+        viewModel.getAllCrops().observe(viewLifecycleOwner) {
+           // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
+            var cropNameList = (it.data?.map { data ->
+                data.cropNameTag
+            } ?: emptyList()).toMutableList()
+
+//            if (cropNameList.size==0)
+//                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
+
+            val arrayAdapter2 =
+                ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
+            binding.spinner2.adapter = arrayAdapter2
+            binding.spinner2?.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+
+                        val text = binding.spinner2.selectedItem.toString()
+                        if (position > 0) {
+                            crop = text
+                            mandiApiCall()
+
+//                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+
+                        } else {
+                            if (crop != null) {
+                                crop = ""
+                                mandiApiCall()
+
+//                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                            }
+                        }
+                        binding.recycleViewDis.adapter = adapterMandi
+
+                    }
+                }
+
         }
 
         viewModel.viewModelScope.launch {
@@ -338,6 +434,7 @@ class MandiFragment : Fragment() {
                 binding.spinner3.adapter = arrayAdapter3
             }
         }
+
         binding.spinner3?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
