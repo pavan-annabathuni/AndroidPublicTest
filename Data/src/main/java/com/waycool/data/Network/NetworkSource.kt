@@ -538,8 +538,9 @@ object NetworkSource {
 
     //add crop
     fun getAddCropType(headerMap: Map<String, String>) = flow<Resource<AddCropTypeDTO?>> {
+        val langCode = LocalSource.getLanguageCode() ?: "en"
         try {
-            val response = apiInterface.getAddCropType(headerMap)
+            val response = apiInterface.getAddCropType(headerMap,lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -623,7 +624,7 @@ object NetworkSource {
 //                    ?.firstOrNull { it.accountType == "outgrow" }
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-                val response = apiInterface.getIotDevice(headerMap!!)
+                val response = apiInterface.getIotDevice(headerMap!!,5)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {

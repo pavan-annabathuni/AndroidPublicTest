@@ -25,6 +25,7 @@
             tools:layout_editor_absoluteY="20dp" />
 
         <TextView
+            android:id="@+id/toolBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

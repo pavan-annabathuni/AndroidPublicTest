@@ -147,7 +147,8 @@ class CaptureImageFragment : Fragment() {
         val imageCapture = imageCapture ?: return
 
 
-        val fileName = "JPEG_Image.jpg"
+//        val fileName = "JPEG_Image.jpg"
+        val fileName = "JPEG_Image_${System.currentTimeMillis()}.jpg"
         val file = File(requireActivity().externalCacheDir, fileName)
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(file)

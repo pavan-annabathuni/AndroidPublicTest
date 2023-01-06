@@ -111,6 +111,12 @@ class AddCropPremiumFragment : Fragment() {
             getFarms()
 
         }
+        binding.toolbar.setOnClickListener{
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+        }
+
+
     }
 
     private fun getFarms() {
@@ -320,7 +326,8 @@ class AddCropPremiumFragment : Fragment() {
                         ).show()
                     }
                 } else if (colors[1] == (irrigation_selected)) {
-                    binding.tvCheckCrop.setText("Next")
+//                    binding.tvCheckCrop.setText("Next")
+                    TranslationsManager().loadString("next", binding.tvCheckCrop)
                     binding.cardCheckHealth.setOnClickListener {
                         it.hideSoftInput()
                         nickName = binding.etNickName.text.toString().trim()
@@ -399,6 +406,7 @@ class AddCropPremiumFragment : Fragment() {
                         }
                     }
                 } else if (colors[2] == (item)) {
+                    TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
                     Log.d("TAG", "onItemSelectedIrrigationType:$colors")
                     Log.d("TAG", "onItemSelectedIrrigationType:$item")
@@ -412,6 +420,7 @@ class AddCropPremiumFragment : Fragment() {
 
 
                 } else if (colors[3] == (item)) {
+                    TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     binding.clPlotNumber.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.setText("Save Crop")

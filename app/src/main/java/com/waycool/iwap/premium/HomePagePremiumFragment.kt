@@ -104,8 +104,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            binding.imeiAddress.hint =areaHint
         }
         TranslationsManager().loadString("welcome", binding.tvWelcomeName)
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm)
+        TranslationsManager().loadString("add_crop",binding.tvAddFrom)
         TranslationsManager().loadString("my_crops", binding.title3SemiBold)
-        TranslationsManager().loadString("add_crop", binding.tvMyCrops)
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops)
         TranslationsManager().loadString("my_farm", binding.titleMyFarm)
         TranslationsManager().loadString("add_farm_top", binding.MyFarm)
         TranslationsManager().loadString("my_device", binding.titleMyDevice)
@@ -215,6 +217,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             startActivity(intent)
         }
         binding.MyFarm.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+        binding.ivViewAll.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }

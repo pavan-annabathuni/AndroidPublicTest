@@ -164,8 +164,9 @@ class CropDetailsCaptureFragment : Fragment() {
         else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
             val uri: Uri? = data?.data
             selecteduri = uri!!
-            binding.closeImage?.visibility = View.VISIBLE
             binding.previewImage.visibility = View.VISIBLE
+            Log.d(TAG, "onActivityResultvhhbbhb: $selecteduri ")
+            binding.closeImage?.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(uri)
             binding.cardCheckHealth.setOnClickListener {
                 binding.closeImage?.visibility = View.GONE

@@ -124,12 +124,10 @@
                         android:id="@+id/cardAddForm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_margin="2dp"
                         android:elevation="15dp"
-                        app:cardCornerRadius="@dimen/txt10"
-                        tools:visibility="visible">
+                        app:cardCornerRadius="@dimen/txt10">
+
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -144,11 +142,11 @@
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
                                 android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/notosans_bold"
                                 android:text="Add your Crop and get more details."
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt18"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toStartOf="@+id/imageView10"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline6"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -159,8 +157,8 @@
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="16dp"
                                 android:layout_marginBottom="16dp"
-
                                 android:background="@drawable/bg_add_form"
+                                android:padding="4dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
@@ -170,7 +168,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
-                                    android:src="@drawable/ic_add_home"
+                                    android:src="@drawable/add"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -179,13 +177,14 @@
                                     android:id="@+id/tvAddFrom"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
                                     android:layout_marginTop="6dp"
                                     android:layout_marginEnd="6dp"
                                     android:layout_marginBottom="@dimen/space6"
+                                    android:fontFamily="@font/notosans_bold"
                                     android:text="Add crops"
                                     android:textColor="#146133"
-                                    android:textSize="@dimen/txt18"
-                                    android:textStyle="bold"
+                                    android:textSize="@dimen/txt14"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/ivAdd"
@@ -218,7 +217,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="gone"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:visibility="gone">
 
                             <TextView
                                 android:id="@+id/tvMyCrop"
@@ -247,28 +247,166 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/space16"
                                 android:layout_marginEnd="5dp"
+                                android:fontFamily="@font/notosans_bold"
                                 android:text="Add Farm"
                                 android:textColor="#146133"
                                 android:textSize="14sp"
                                 app:layout_constraintEnd_toStartOf="@+id/ivMyForm"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <!--                        <androidx.recyclerview.widget.RecyclerView-->
-                            <!--                            android:id="@+id/recyclerviewCategory"-->
-                            <!--                            android:layout_width="wrap_content"-->
-                            <!--                            android:layout_height="wrap_content"-->
-                            <!--                            android:background="#FFFFFF"-->
-                            <!--                            android:orientation="horizontal"-->
-                            <!--                            android:layout_marginTop="30dp"-->
-                            <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-                            <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                            <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                            <!--                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"-->
-                            <!--                            tools:listitem="@layout/item_flex_box_add_form" />-->
-
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
+
+                    <!--                    <androidx.cardview.widget.CardView-->
+                    <!--                        android:id="@+id/cardAddForm"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="16dp"-->
+                    <!--                        android:layout_marginTop="2dp"-->
+                    <!--                        android:layout_marginEnd="16dp"-->
+                    <!--                        android:elevation="15dp"-->
+                    <!--                        app:cardCornerRadius="@dimen/txt10"-->
+                    <!--                        tools:visibility="visible">-->
+
+                    <!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:visibility="visible"-->
+                    <!--                            app:layout_constraintTop_toTopOf="parent">-->
+
+                    <!--                            <androidx.appcompat.widget.AppCompatTextView-->
+                    <!--                                android:id="@+id/tvYourForm"-->
+                    <!--                                android:layout_width="0dp"-->
+                    <!--                                android:layout_height="wrap_content"-->
+                    <!--                                android:layout_marginStart="@dimen/txt16"-->
+                    <!--                                android:layout_marginTop="@dimen/txt16"-->
+                    <!--                                android:layout_marginEnd="8dp"-->
+                    <!--                                android:text="Add your Crop and get more details."-->
+                    <!--                                android:textColor="#111827"-->
+                    <!--                                android:textSize="@dimen/txt18"-->
+                    <!--                                android:textStyle="bold"-->
+                    <!--                                app:layout_constraintEnd_toStartOf="@+id/imageView10"-->
+                    <!--                                app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            <androidx.constraintlayout.widget.ConstraintLayout-->
+                    <!--                                android:id="@+id/clAddCropData"-->
+                    <!--                                android:layout_width="wrap_content"-->
+                    <!--                                android:layout_height="wrap_content"-->
+                    <!--                                android:layout_marginStart="@dimen/txt16"-->
+                    <!--                                android:layout_marginTop="16dp"-->
+                    <!--                                android:layout_marginBottom="16dp"-->
+
+                    <!--                                android:background="@drawable/bg_add_form"-->
+                    <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                                app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                                app:layout_constraintTop_toBottomOf="@+id/tvYourForm">-->
+
+                    <!--                                <ImageView-->
+                    <!--                                    android:id="@+id/ivAdd"-->
+                    <!--                                    android:layout_width="wrap_content"-->
+                    <!--                                    android:layout_height="wrap_content"-->
+                    <!--                                    android:layout_margin="@dimen/txt8"-->
+                    <!--                                    android:src="@drawable/ic_add_home"-->
+                    <!--                                    app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                                    app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                                <androidx.appcompat.widget.AppCompatTextView-->
+                    <!--                                    android:id="@+id/tvAddFrom"-->
+                    <!--                                    android:layout_width="wrap_content"-->
+                    <!--                                    android:layout_height="wrap_content"-->
+                    <!--                                    android:layout_marginTop="6dp"-->
+                    <!--                                    android:layout_marginEnd="6dp"-->
+                    <!--                                    android:layout_marginBottom="@dimen/space6"-->
+                    <!--                                    android:text="Add crops"-->
+                    <!--                                    android:textColor="#146133"-->
+                    <!--                                    android:textSize="@dimen/txt18"-->
+                    <!--                                    android:textStyle="bold"-->
+                    <!--                                    app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                                    app:layout_constraintStart_toEndOf="@+id/ivAdd"-->
+                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+                    <!--                            <ImageView-->
+                    <!--                                android:id="@+id/imageView10"-->
+                    <!--                                android:layout_width="0dp"-->
+                    <!--                                android:layout_height="0dp"-->
+                    <!--                                android:adjustViewBounds="true"-->
+                    <!--                                android:scaleType="fitXY"-->
+                    <!--                                android:src="@drawable/add_crop"-->
+                    <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                                app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                                app:layout_constraintStart_toStartOf="@+id/guideline6"-->
+                    <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            <androidx.constraintlayout.widget.Guideline-->
+                    <!--                                android:id="@+id/guideline6"-->
+                    <!--                                android:layout_width="wrap_content"-->
+                    <!--                                android:layout_height="wrap_content"-->
+                    <!--                                android:orientation="vertical"-->
+                    <!--                                app:layout_constraintGuide_percent=".7" />-->
+
+                    <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+                    <!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:visibility="gone"-->
+                    <!--                            app:layout_constraintTop_toTopOf="parent">-->
+
+                    <!--                            <TextView-->
+                    <!--                                android:id="@+id/tvMyCrop"-->
+                    <!--                                android:layout_width="wrap_content"-->
+                    <!--                                android:layout_height="wrap_content"-->
+                    <!--                                android:layout_margin="@dimen/space16"-->
+                    <!--                                android:text="My Crop"-->
+                    <!--                                android:textColor="#111827"-->
+                    <!--                                android:textSize="@dimen/txt14"-->
+                    <!--                                android:textStyle="bold"-->
+                    <!--                                app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            <ImageView-->
+                    <!--                                android:id="@+id/ivMyForm"-->
+                    <!--                                android:layout_width="20dp"-->
+                    <!--                                android:layout_height="20dp"-->
+                    <!--                                android:layout_margin="@dimen/space16"-->
+                    <!--                                android:src="@drawable/ic_add"-->
+                    <!--                                app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            <TextView-->
+                    <!--                                android:id="@+id/tvMyForm"-->
+                    <!--                                android:layout_width="wrap_content"-->
+                    <!--                                android:layout_height="wrap_content"-->
+                    <!--                                android:layout_marginTop="@dimen/space16"-->
+                    <!--                                android:layout_marginEnd="5dp"-->
+                    <!--                                android:text="Add Farm"-->
+                    <!--                                android:textColor="#146133"-->
+                    <!--                                android:textSize="14sp"-->
+                    <!--                                app:layout_constraintEnd_toStartOf="@+id/ivMyForm"-->
+                    <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <!--                            &lt;!&ndash;                        <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:id="@+id/recyclerviewCategory"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:background="#FFFFFF"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:orientation="horizontal"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            android:layout_marginTop="30dp"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"&ndash;&gt;-->
+                    <!--                            &lt;!&ndash;                            tools:listitem="@layout/item_flex_box_add_form" />&ndash;&gt;-->
+
+
+                    <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
+                    <!--                    </androidx.cardview.widget.CardView>-->
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvEditCrop"
@@ -494,6 +632,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/clHeadingRequestHistory"
                             android:layout_width="0dp"
@@ -506,9 +645,9 @@
                                 android:id="@+id/ivViewAll"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:src="@drawable/ic_add_home"
                                 android:layout_marginEnd="16dp"
+                                android:src="@drawable/ic_add_home"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -516,10 +655,10 @@
                                 android:id="@+id/linearView"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:weightSum="1"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="8dp"
+                                android:orientation="horizontal"
+                                android:weightSum="1"
                                 app:layout_constraintEnd_toStartOf="@id/ivViewAll"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
@@ -555,20 +694,20 @@
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/titleMyFarm"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="16dp"-->
-<!--                            android:layout_marginEnd="16dp"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:text="My Farm"-->
-<!--                            android:textColor="@color/textdark"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:textStyle="bold"-->
-<!--                            app:layout_constraintEnd_toStartOf="@+id/MyFarm"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"-->
-<!--                            app:layout_constraintTop_toTopOf="parent" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/titleMyFarm"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginStart="16dp"-->
+                        <!--                            android:layout_marginEnd="16dp"-->
+                        <!--                            android:padding="4dp"-->
+                        <!--                            android:text="My Farm"-->
+                        <!--                            android:textColor="@color/textdark"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            app:layout_constraintEnd_toStartOf="@+id/MyFarm"-->
+                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <!--                            <androidx.cardview.widget.CardView-->
                         <!--                                android:id="@+id/cardView6"-->
@@ -591,21 +730,21 @@
                         <!--                                    android:textSize="14sp" />-->
                         <!--                            </androidx.cardview.widget.CardView>-->
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/MyFarm"-->
-<!--                            style="@style/SemiBold"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginEnd="16dp"-->
-<!--                            android:drawablePadding="4dip"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:text="Add Farm"-->
-<!--                            android:textColor="@color/primaryColor"-->
-<!--                            android:textSize="14sp"-->
-<!--                            app:drawableEndCompat="@drawable/ic_add"-->
-<!--                            app:layout_constraintEnd_toEndOf="parent"-->
-<!--                            app:layout_constraintTop_toTopOf="parent" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/MyFarm"-->
+                        <!--                            style="@style/SemiBold"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_gravity="center"-->
+                        <!--                            android:layout_marginEnd="16dp"-->
+                        <!--                            android:drawablePadding="4dip"-->
+                        <!--                            android:padding="4dp"-->
+                        <!--                            android:text="Add Farm"-->
+                        <!--                            android:textColor="@color/primaryColor"-->
+                        <!--                            android:textSize="14sp"-->
+                        <!--                            app:drawableEndCompat="@drawable/ic_add"-->
+                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
@@ -1033,9 +1172,9 @@ more details."
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="6dp"
                                         android:text="Battery"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:textColor="#5D6571"
                                         android:textSize="@dimen/txt14"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/battery"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
 
@@ -1080,8 +1219,8 @@ more details."
                                         android:layout_marginStart="6dp"
                                         android:text="Elevation"
                                         android:textColor="#5D6571"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:textSize="@dimen/txt14"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/batteryTwo"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreeaTwo" />
 
@@ -1222,8 +1361,11 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvTemp"
-                                        android:layout_width="wrap_content"
+
                                         android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginTop="4dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Temprature"
@@ -1273,11 +1415,15 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvWind"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Rainfall"
+
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
@@ -1321,8 +1467,11 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvHumidity"
-                                        android:layout_width="wrap_content"
+
                                         android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginTop="4dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Humidity"
@@ -1370,9 +1519,11 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvWindSpeed"
-                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Wind Speed"
                                         android:textColor="#585858"
@@ -1420,8 +1571,11 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvLeafWetness"
-                                        android:layout_width="wrap_content"
+
                                         android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginTop="4dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Leaf wetness"
@@ -1468,8 +1622,11 @@ more details."
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvPressure"
-                                        android:layout_width="wrap_content"
+
                                         android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_marginEnd="8dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginTop="4dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Pressure"
@@ -1918,18 +2075,18 @@ more details."
 
             </LinearLayout>
 
-<!--            <ImageView-->
-<!--                android:id="@+id/bottom_banner"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:src="@drawable/ads"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/linearmyDevice" />-->
+            <!--            <ImageView-->
+            <!--                android:id="@+id/bottom_banner"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:scaleType="fitXY"-->
+            <!--                android:src="@drawable/ads"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/linearmyDevice" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clBanner"
@@ -2040,7 +2197,6 @@ more details."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

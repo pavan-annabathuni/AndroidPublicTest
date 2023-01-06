@@ -92,7 +92,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
 
         binding.recyclerview.adapter = soilHistoryAdapter
-
+        binding.tvCheckCrop.isSelected = true
         initViewClick()
         initViewBackClick()
         expandableView()
@@ -369,9 +369,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         TranslationsManager().loadString("detailed_n_report", binding.tvDetaols)
         TranslationsManager().loadString("request_history", binding.tvRequest)
         TranslationsManager().loadString("faq_s", binding.tvFAQ)
-        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
-        TranslationsManager().loadString("_2_when_do_i_sample", binding.tvSoilText)
+        TranslationsManager().loadString("soil_test_q_one", binding.tvSoilText)
+        TranslationsManager().loadString("soil_test_a_one", binding.clExpandeble)
+        TranslationsManager().loadString("soil_test_q_two", binding.tvSoilTextTwo)
+        TranslationsManager().loadString("soil_test_a_two", binding.clExpandebleTwo)
+        TranslationsManager().loadString("soil_test_q_three", binding.tvSoilTextThree)
+        TranslationsManager().loadString("soil_test_a_three", binding.clExpandebleThree)
         TranslationsManager().loadString("str_viewall", binding.tvViewAll)
+        TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop)
     }
 
 
@@ -498,6 +503,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         }
 
                                         binding.clProgressBar.visibility = View.GONE
+                                        binding.view.visibility=View.GONE
 
 
                                     }

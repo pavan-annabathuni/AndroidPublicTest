@@ -127,7 +127,8 @@ interface ApiInterface {
 
     @GET("api/v1/soil-types")
     suspend fun getAddCropType(
-        @HeaderMap headerMap: Map<String, String>
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("lang") lang: String = "en"
     ): Response<AddCropTypeDTO>
 
 
@@ -362,6 +363,7 @@ interface ApiInterface {
     @GET("api/v1/view-devices")
     suspend fun getIotDevice(
         @HeaderMap headerMap: Map<String, String>,
+        @Query("account_no_id")account_no_id:Int
     ): Response<ViewDeviceDTO>
 
     @GET("api/v1/view-devices")

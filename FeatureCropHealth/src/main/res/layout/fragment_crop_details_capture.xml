@@ -277,9 +277,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:gravity="center_horizontal"
-                            android:text="Upload Image"
-                            android:textColor="#146133"
                             android:ellipsize="marquee"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
@@ -287,10 +284,12 @@
                             android:maxLines="1"
                             android:scrollHorizontally="true"
                             android:singleLine="true"
+                            android:text="Upload Image"
+                            android:textColor="#146133"
                             android:textSize="@dimen/txt16"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/iv_campture_image_camera"
-
                             app:layout_constraintTop_toTopOf="parent" />
 
 

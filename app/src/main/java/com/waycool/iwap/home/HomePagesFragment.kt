@@ -215,11 +215,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         TranslationsManager().loadString("soil_testing_info",binding.tvSoilTestingDesc)
         TranslationsManager().loadString("txt_know_more",binding.tvSoilTestingKnowMore)
 
-        TranslationsManager().loadString("crop_health",binding.tvCropHealth)
+        TranslationsManager().loadString("peast_diease",binding.tvCropHealth)
         TranslationsManager().loadString("crop_health_info",binding.tvCropHealthDesc)
         TranslationsManager().loadString("txt_know_more",binding.tvCropHealthKnowMore)
 
-        TranslationsManager().loadString("crop_information",binding.tvCropInformation)
+        TranslationsManager().loadString("str_title",binding.tvCropInformation)
         TranslationsManager().loadString("crop_information_info",binding.tvCropInformationDesc)
         TranslationsManager().loadString("txt_know_more",binding.tvCropInformationKnowMore)
 

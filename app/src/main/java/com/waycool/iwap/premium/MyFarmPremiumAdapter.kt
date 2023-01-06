@@ -44,6 +44,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener, val con
     override fun onBindViewHolder(holder: MyFarmPremiumViewHolder, position: Int) {
         val detail = details[position]
         holder.binding.tvAddDeviceStart.text = detail.farmName
+       holder. binding.tvAddDevice .isSelected = true
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
         TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice)

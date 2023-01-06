@@ -366,7 +366,7 @@
                                         android:layout_weight="0.25"
                                         android:gravity="end"
                                         android:layout_gravity="center_vertical"
-                                     />
+                                        />
 
                                 </LinearLayout>
 
@@ -1476,7 +1476,7 @@
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
                                 android:layout_marginEnd="8dp"
-                                android:text="Crop Health Detection"
+                                android:text="Pest &amp; Disease Detection"
                                 android:textColor="#111827"
                                 android:textSize="@dimen/txt16"
                                 app:fontFamily="@font/notosans_bold"
@@ -1588,7 +1588,7 @@
                                 android:layout_marginStart="@dimen/txt16"
                                 android:layout_marginTop="@dimen/txt16"
                                 android:layout_marginEnd="8dp"
-                                android:text="Crop Info."
+                                android:text="Crop Information"
                                 android:textColor="#111827"
                                 android:textSize="16sp"
                                 app:fontFamily="@font/notosans_bold"

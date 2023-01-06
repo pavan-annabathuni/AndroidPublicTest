@@ -12,6 +12,7 @@ import com.google.android.libraries.maps.model.LatLngBounds
 import com.google.android.libraries.maps.model.Polygon
 import com.google.android.libraries.maps.model.PolygonOptions
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumMyfarmsBinding
 import com.waycool.iwap.premium.Farmdetailslistener
@@ -42,6 +43,8 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         val detail = details[position]
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
+        holder.binding.tvAddDevice.isSelected=true
+        TranslationsManager().loadString("view_farm_detail",holder. binding.tvAddDevice)
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
         holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {
