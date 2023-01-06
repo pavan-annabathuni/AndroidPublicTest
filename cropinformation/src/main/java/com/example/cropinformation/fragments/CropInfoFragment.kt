@@ -19,25 +19,23 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.cropinformation.R
-import com.example.cropinformation.adapter.AdsAdapter
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
 import com.waycool.featurechat.FeatureChat
-import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +108,15 @@ class CropInfoFragment : Fragment(), onItemClick {
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
+        newsBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -460,18 +466,29 @@ class CropInfoFragment : Fragment(), onItemClick {
                     newsBinding.noDataNews.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
                     newsBinding.viewAllNews.visibility=View.GONE
+                    newsBinding.ivViewAll.visibility=View.GONE
+
 
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility=View.GONE
+                                    newsBinding.ivViewAll.visibility=View.GONE
+
+                                }
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    newsBinding.noDataNews.visibility = View.VISIBLE
+                                    newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    newsBinding.viewAllNews.visibility=View.GONE
+                                    newsBinding.ivViewAll.visibility=View.GONE
+
 
                                 }
 
@@ -481,12 +498,16 @@ class CropInfoFragment : Fragment(), onItemClick {
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility=View.GONE
+                                        newsBinding.ivViewAll.visibility=View.GONE
+
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
                                         newsBinding.viewAllNews.visibility=View.VISIBLE
+                                        newsBinding.ivViewAll.visibility=View.VISIBLE
+
 
 
                                     }
@@ -526,6 +547,8 @@ class CropInfoFragment : Fragment(), onItemClick {
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                     videosBinding.viewAllVideos.visibility=View.GONE
+                    videosBinding.ivViewAll.visibility=View.GONE
+
 
                 }
                 else {
@@ -538,6 +561,16 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                     videosBinding.viewAllVideos.visibility=View.GONE
+                                    videosBinding.ivViewAll.visibility=View.GONE
+
+                                }
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    videosBinding.viewAllVideos.visibility=View.GONE
+                                    videosBinding.ivViewAll.visibility=View.GONE
+
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -548,11 +581,15 @@ class CropInfoFragment : Fragment(), onItemClick {
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility=View.GONE
+                                        videosBinding.ivViewAll.visibility=View.GONE
+
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
                                         videosBinding.viewAllVideos.visibility=View.VISIBLE
+                                        videosBinding.ivViewAll.visibility=View.VISIBLE
+
 
 
                                     }
@@ -601,7 +638,7 @@ class CropInfoFragment : Fragment(), onItemClick {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

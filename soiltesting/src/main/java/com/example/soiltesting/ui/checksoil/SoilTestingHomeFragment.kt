@@ -1,17 +1,26 @@
 package com.example.soiltesting.ui.checksoil
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.os.Parcelable
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -32,6 +41,10 @@ import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.example.soiltesting.ui.history.StatusTrackerListener
 import com.example.soiltesting.utils.Constant.TAG
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.example.soiltesting.utils.NetworkResult
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -45,8 +58,10 @@ import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.featurelogin.fragment.RegistrationFragment
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +85,41 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var accountID: Int? = null
     private var moduleId = "22"
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+
+
+    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private val locationRequest = LocationRequest
+        .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+        .build()
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            getLocation()
+            locationResult.lastLocation?.let {
+                removeLocationCallback()
+                checkForONP(it)
+            }
+        }
+    }
+
+    private fun removeLocationCallback() {
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
+
+        var allAreGranted = true
+        for (b in result.values) {
+            allAreGranted = allAreGranted && b
+        }
+
+        if (allAreGranted) {
+            getLocation()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -137,7 +187,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private fun setBanners() {
         binding.progressBar.visibility = View.VISIBLE
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
@@ -221,6 +271,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 }
                 else {
@@ -230,6 +284,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.ivViewAll.visibility = View.GONE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                 }
@@ -237,10 +293,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
 
@@ -267,6 +327,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             )
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            intent.putExtra("module_id",moduleId)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             intent.putExtra("module_id",moduleId)
             startActivity(intent)
@@ -467,11 +532,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             when (it) {
                                 is Resource.Success -> {
                                     if (it.data!!.isEmpty()) {
-
-                                        CustomeDialogFragment.newInstance().show(
-                                            requireActivity().supportFragmentManager,
-                                            CustomeDialogFragment.TAG
-                                        )
+                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+                                        binding.clProgressBar.visibility = View.GONE
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
@@ -481,9 +543,147 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 ArrayList<Parcelable>(response)
                                             )
                                         }
-
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
+
+                                        try {
+                                            findNavController().navigate(
+                                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+                                                bundle
+                                            )
+                                        }catch (e:Exception){
+                                        }
+
+                                        binding.clProgressBar.visibility = View.GONE
+                                    }
+
+                                }
+                                is Resource.Error -> {
+                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+                                        ToastStateHandling.toastError(
+                                            requireContext(),
+                                            "Please check you internet connectivity",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                    else{
+                                        ToastStateHandling.toastError(
+                                            requireContext(),
+                                           "Server Error. Try again later",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+
+                                    binding.clProgressBar.visibility = View.GONE
+                                    binding.cardCheckHealth.isClickable = true
+
+                                }
+                                is Resource.Loading -> {
+                                    binding.clProgressBar.visibility = View.VISIBLE
+
+                                }
+                            }
+
+                        }
+
+
+                    }
+                }
+            true
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+                fusedLocationProviderClient?.lastLocation!!
+                    .addOnSuccessListener {
+                        if (it != null) {
+                            checkForONP(it)
+
+                        }
+                    }
+                fusedLocationProviderClient?.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+                )
+            } else {
+
+                val builder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .setAlwaysShow(true)
+
+                val locationResponseTask: Task<LocationSettingsResponse> =
+                    LocationServices.getSettingsClient(requireContext().applicationContext)
+                        .checkLocationSettings(builder.build())
+                locationResponseTask.addOnCompleteListener {
+                    try {
+                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                            val apiException: ResolvableApiException = e as ResolvableApiException
+                            try {
+                                apiException.startResolutionForResult(
+                                    requireActivity(),
+                                    REQUEST_CODE_GPS
+                                )
+                            } catch (sendIntent: IntentSender.SendIntentException) {
+                                sendIntent.printStackTrace()
+                            }
+                        }
+                    }
+
+                }
+
+//                context?.let {
+//                    ToastStateHandling.toastError(
+//                        it,
+//                        "Please turn on location",
+//                        Toast.LENGTH_LONG
+//                    )
+//                }
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
+            }
+        } else {
+            requestPermission()
+        }
+    }
+
+    private fun checkForONP(it: Location) {
+        val latitude = String.format(Locale.ENGLISH, "%.2f", it.latitude)
+        val longitutde = String.format(Locale.ENGLISH, "%.2f", it.longitude)
+
+        viewModel.getCheckSoilTestLab(
+            accountID!!,
+            latitude,
+            longitutde
+        ).observe(requireActivity()) {
+            binding.clProgressBar.visibility = View.VISIBLE
+            when (it) {
+                is Resource.Success -> {
+                    if (it.data!!.isEmpty()) {
+
+                        CustomeDialogFragment.newInstance().show(
+                            requireActivity().supportFragmentManager,
+                            CustomeDialogFragment.TAG
+                        )
+                        binding.cardCheckHealth.isClickable = true
+                    } else if (it.data!!.isNotEmpty()) {
+                        val response = it.data
+                        val bundle = Bundle().apply {
+                            putParcelableArrayList(
+                                "list",
+                                ArrayList<Parcelable>(response)
+                            )
+                        }
+
+                        bundle.putString("lat", latitude)
+                        bundle.putString("lon", longitutde)
 
                                         try {
                                             findNavController().navigate(
@@ -502,50 +702,100 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                             )
                                         }
 
-                                        binding.clProgressBar.visibility = View.GONE
+                        binding.clProgressBar.visibility = View.GONE
                                         binding.view.visibility=View.GONE
 
 
-                                    }
+                    }
 
-                                }
-                                is Resource.Error -> {
-                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                            "Please check you internet connectivity",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                    else{
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                           "Too many attempts.Try again later",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
+                }
+                is Resource.Error -> {
+                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Please check you internet connectivity",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+                    else{
+                        ToastStateHandling.toastError(
+                            requireContext(),
+                            "Too many attempts.Try again later",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
 
-                                    binding.clProgressBar.visibility = View.GONE
-                                    binding.cardCheckHealth.isClickable = true
+                    binding.clProgressBar.visibility = View.GONE
+                    binding.cardCheckHealth.isClickable = true
 
-                                }
-                                is Resource.Loading -> {
-                                    binding.clProgressBar.visibility = View.VISIBLE
+                }
+                is Resource.Loading -> {
+                    binding.clProgressBar.visibility = View.VISIBLE
                                     ToastStateHandling.toastWarning(
                                         requireContext(),
                                         "Loading",
                                         Toast.LENGTH_SHORT
                                     )
 
-                                }
-                            }
-
-                        }
-
-
-                    }
                 }
-            true
+            }
+
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermission() {
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+
+//        requestPermissions(
+//            arrayOf(
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ),
+//            permissionId
+//        )
+        //requestPermissions(String[] {android.Manifest.permission.READ_CONTACTS}, REQUEST_CONTACT);
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d("registerresponse2", "test" + requestCode)
+        if (requestCode == 2) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getLocation()
+            }
         }
     }
     private fun fabButton() {
@@ -575,4 +825,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+
+    }
+
+    companion object {
+        private const val REQUEST_CODE_GPS = 1011
+    }
 }

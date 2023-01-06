@@ -28,7 +28,6 @@ import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 
 import com.example.soiltesting.SoilTestActivity
-import com.example.soiltesting.ui.checksoil.AdsAdapter
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -55,11 +54,13 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentHomePagesBinding
+import com.waycool.iwap.premium.FarmSelectedListener
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
@@ -74,7 +75,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
+class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
 
     private var dashboardDomain: DashboardDomain? = null
     private var selectedFarm: MyFarmsDomain? = null
@@ -99,7 +100,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     private var moduleId = "49"
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
-    private val farmsAdapter by lazy { FarmsAdapter(requireContext()) }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -136,7 +136,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerview.layoutManager = GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        binding.recyclerview.layoutManager =
+            GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -151,12 +152,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         setWishes()
         checkNetwork()
         initClick()
+        notification()
         binding.recyclerview.adapter = mandiAdapter
-        binding.farmsRv.adapter = farmsAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
 
         binding.tvAddFromOne.isSelected = true
-
+        binding.tvViewFarmDetails.isSelected = true
 
 
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
@@ -169,8 +170,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             }
         })
 
-        mandiDetailCall()
+
         userDetailsCall()
+        //mandiDetailCall()
         if (accountID != null) {
             getFarms()
         }
@@ -196,54 +198,52 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
     }
 
     private fun setTranslation() {
-        TranslationsManager().loadString("welcome",binding.tvName)
-        TranslationsManager().loadString("add_crop_info",binding.tvYourForm)
-        TranslationsManager().loadString("add_crop",binding.tvAddFrom)
-        TranslationsManager().loadString("add_farm",binding.tvAddFromOne)
-        TranslationsManager().loadString("my_farm",binding.tvMyform)
-//        TranslationsManager().loadString("my_farm",binding.tvOurAddFormData)
-        TranslationsManager().loadString("str_today",binding.tvDays)
+        TranslationsManager().loadString("welcome", binding.tvName)
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm)
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom)
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne)
+        TranslationsManager().loadString("my_farm", binding.tvMyform)
+        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData)
+        TranslationsManager().loadString("str_today", binding.tvDays)
 
-        TranslationsManager().loadString("temperature",binding.tvTemp)
-        TranslationsManager().loadString("str_humidity",binding.tvHumidity)
-        TranslationsManager().loadString("str_wind",binding.tvWind)
-        TranslationsManager().loadString("str_rain",binding.tvRain)
-        TranslationsManager().loadString("our_services",binding.tvOurService)
-        TranslationsManager().loadString("str_viewall",binding.tvOurServiceViewAll)
+        TranslationsManager().loadString("view_tepm", binding.tvTemp)
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
+        TranslationsManager().loadString("str_wind", binding.tvWind)
+        TranslationsManager().loadString("str_rain", binding.tvRain)
+        TranslationsManager().loadString("our_services", binding.tvOurService)
+        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll)
 
-        TranslationsManager().loadString("soil_testing",binding.tvSoilTesting)
-        TranslationsManager().loadString("soil_testing_info",binding.tvSoilTestingDesc)
-        TranslationsManager().loadString("txt_know_more",binding.tvSoilTestingKnowMore)
+        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails)
 
-        TranslationsManager().loadString("peast_diease",binding.tvCropHealth)
-        TranslationsManager().loadString("crop_health_info",binding.tvCropHealthDesc)
-        TranslationsManager().loadString("txt_know_more",binding.tvCropHealthKnowMore)
 
-        TranslationsManager().loadString("str_title",binding.tvCropInformation)
-        TranslationsManager().loadString("crop_information_info",binding.tvCropInformationDesc)
-        TranslationsManager().loadString("txt_know_more",binding.tvCropInformationKnowMore)
+        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting)
+        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc)
+        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore)
 
-        TranslationsManager().loadString("crop_protection",binding.tvCropProtect)
-        TranslationsManager().loadString("crop_protection_info",binding.tvCropProtectDesc)
-        TranslationsManager().loadString("txt_know_more",binding.tvCropProtectKnowMore)
+        TranslationsManager().loadString("peast_diease", binding.tvCropHealth)
+        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc)
+        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore)
 
-        TranslationsManager().loadString("videos",videosBinding.videosTitle)
-        TranslationsManager().loadString("str_viewall",videosBinding.viewAllVideos)
-        TranslationsManager().loadString("news_articles",newsBinding.newsTitle)
-        TranslationsManager().loadString("str_viewall",newsBinding.viewAllNews)
+        TranslationsManager().loadString("str_title", binding.tvCropInformation)
+        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc)
+        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore)
 
-        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
-        TranslationsManager().loadString("str_edit",binding.tvEditMyCrops)
+        TranslationsManager().loadString("crop_protection", binding.tvCropProtect)
+        TranslationsManager().loadString("crop_protection_info", binding.tvCropProtectDesc)
+        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore)
+
+        TranslationsManager().loadString("videos", videosBinding.videosTitle)
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos)
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle)
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews)
+
+        TranslationsManager().loadString("my_crops", binding.myCropsTitle)
+        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops)
 
         TranslationsManager().loadString("add_crop",binding.AddCrop)
+
         TranslationsManager().loadString("mandi_prices",binding.tvRequest)
         TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi)
-
-
-
-
-
-
     }
 
     private fun setWishes() {
@@ -283,6 +283,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        mandiDetailCall()
                         getFarms()
                     }
                 }
@@ -319,7 +320,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
+        newsBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(context, NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -416,7 +425,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         binding.tvWelcomeName.visibility = View.INVISIBLE
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
-                        binding.ll.visibility=View.GONE
+                        binding.ll.visibility = View.GONE
 
                     }
                 }
@@ -437,6 +446,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             newsBinding.noDataNews.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
+            newsBinding.ivViewAll.visibility = View.GONE
+
             context?.let {
                 ToastStateHandling.toastError(
                     it,
@@ -448,7 +459,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             newsBinding.videoCardNoInternet.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.VISIBLE
             newsBinding.viewAllNews.visibility = View.VISIBLE
-            newsBinding.viewAllNews.isClickable=true
+            newsBinding.ivViewAll.visibility = View.VISIBLE
+
+            newsBinding.viewAllNews.isClickable = true
+            newsBinding.ivViewAll.isClickable=true
             setNews()
         }
     }
@@ -458,6 +472,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             videosBinding.videoCardNoInternet.visibility = View.VISIBLE
             videosBinding.videosListRv.visibility = View.GONE
             videosBinding.viewAllVideos.visibility = View.GONE
+            videosBinding.ivViewAll.visibility = View.GONE
             videosBinding.videosScroll.visibility = View.GONE
             context?.let {
                 ToastStateHandling.toastError(
@@ -470,6 +485,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             videosBinding.videoCardNoInternet.visibility = View.GONE
             videosBinding.videosListRv.visibility = View.VISIBLE
             videosBinding.viewAllVideos.visibility = View.VISIBLE
+            videosBinding.ivViewAll.visibility = View.VISIBLE
+
             videosBinding.videosScroll.visibility = View.VISIBLE
             setVideos()
         }
@@ -484,11 +501,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                         binding.clAddForm.visibility = View.GONE
                         binding.clMyForm.visibility = View.VISIBLE
                         binding.farmsDetailsCl.visibility = View.VISIBLE
+                        val farmsAdapter = FarmsAdapter(requireContext(), this)
+                        binding.farmsRv.adapter = farmsAdapter
                         farmsAdapter.submitList(it.data)
-                        farmsAdapter.onItemClick = { farm ->
-                            selectedFarm = farm
-                            populateMyFarm()
-                        }
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
                         binding.clMyForm.visibility = View.GONE
@@ -588,7 +603,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
@@ -626,7 +641,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
 
     private fun setNews() {
-        val  adapter=NewsGenericAdapter(context,this)
+        val adapter = NewsGenericAdapter(context, this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
             viewModel.getVansNewsList(moduleId).collect { pagingData ->
@@ -634,6 +649,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
+                    newsBinding.viewAllNews.visibility = View.GONE
+                    newsBinding.ivViewAll.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -645,7 +662,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
+                                    newsBinding.viewAllNews.visibility = View.GONE
+                                    newsBinding.ivViewAll.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -653,13 +671,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
-                                        newsBinding.viewAllNews.visibility=View.GONE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility=View.GONE
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
-                                        newsBinding.viewAllNews.visibility=View.VISIBLE
+                                        newsBinding.viewAllNews.visibility = View.VISIBLE
+                                        newsBinding.ivViewAll.visibility=View.VISIBLE
 
 
                                     }
@@ -670,9 +690,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             }
 
 
-
         }
     }
+
     private fun setVideos() {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
@@ -682,6 +702,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -693,7 +716,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    videosBinding.viewAllVideos.visibility=View.GONE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -703,12 +727,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
-                                        videosBinding.viewAllVideos.visibility=View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility=View.GONE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility=View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility=View.VISIBLE
 
 
                                     }
@@ -718,13 +744,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 
 
                 }
-
-
-
             }
         }
 
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -773,31 +800,31 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
 //                    Glide.with(requireContext())
 //                        .load("https://openweathermap.org/img/wn/${it.data!!.current!!.weather[0].icon}@4x.png")
 //                        .into(binding.ivWeather)
-                binding.tvHumidityDegree.text =
-                    String.format("%.0f", it.data?.current?.humidity) + "%"
+                    binding.tvHumidityDegree.text =
+                        String.format("%.0f", it.data?.current?.humidity) + "%"
                 // binding.weatherMaster = it.data
 
 
-                    if (!it.data?.current?.weather.isNullOrEmpty()) {
-                        it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
-                            WeatherIcons.setWeatherIcon(
-                                it1, binding.ivWeather
-                            )
+                if (!it.data?.current?.weather.isNullOrEmpty()) {
+                    it.data!!.current?.weather?.get(0)?.icon?.let { it1 ->
+                        WeatherIcons.setWeatherIcon(
+                            it1, binding.ivWeather
+                        )
 
-                            val date: Long? = it.data?.current?.dt?.times(1000L)
-                            val dateTime = Date()
-                            if (date != null) {
-                                dateTime.time = date
-                            }
-                            val formatter =
-                                SimpleDateFormat(
-                                    "EE d,MMM",
-                                    Locale.ENGLISH
-                                )//or use getDateInstance()
-                            val formatedDate = formatter.format(dateTime)
-                            binding.tvDay.text = " $formatedDate"
+                        val date: Long? = it.data?.current?.dt?.times(1000L)
+                        val dateTime = Date()
+                        if (date != null) {
+                            dateTime.time = date
                         }
+                        val formatter =
+                            SimpleDateFormat(
+                                "EE d,MMM",
+                                Locale.ENGLISH
+                            )//or use getDateInstance()
+                        val formatedDate = formatter.format(dateTime)
+                        binding.tvDay.text = " $formatedDate"
                     }
+                }
 
             }
             if (it.data?.current?.weather?.isEmpty() == false)
@@ -1095,7 +1122,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         var isVisible = false
         binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_cross
+                    )
+                )
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -1103,7 +1135,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_chat_call
+                    )
+                )
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -1199,6 +1236,23 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick {
         )
     }
 
+    private fun notification() {
+        viewModel.getNotification().observe(viewLifecycleOwner) {
+            var data = it.data?.data?.filter { itt ->
+                itt.readAt == null
+            }
+            if (data?.size != 0) {
+                binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
+            } else {
+                binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
+            }
+        }
+    }
+
+    override fun onFarmSelected(data: MyFarmsDomain) {
+        selectedFarm = data
+        populateMyFarm()
+    }
 
 }
 

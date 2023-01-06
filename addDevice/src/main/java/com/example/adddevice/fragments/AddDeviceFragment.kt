@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -13,6 +14,7 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,8 +30,10 @@ import com.example.adddevice.R
 import com.example.adddevice.adapter.SelectCropAdapter
 import com.example.adddevice.databinding.FragmentAddDeviceBinding
 import com.example.adddevice.viewmodel.AddDeviceViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -61,6 +65,27 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
     private var scanResult: String? = null
     private var plotId: Int? = null
+
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+
+    private val locationRequest = LocationRequest
+        .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+        .build()
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+
+            locationResult.lastLocation?.let {
+                latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
+                longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+                myLocationMarker(LatLng(it.latitude, it.longitude))
+                binding.latitude.text = "${it.latitude} , ${it.longitude}"
+                updateBounds(LatLng(it.latitude, it.longitude))
+            }
+        }
+    }
+
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -169,7 +194,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             latLng2.longitude,
             distance
         )
-        Log.d("Add Device","Distance Calculated: ${distance[0]}")
+        Log.d("Add Device", "Distance Calculated: ${distance[0]}")
         return distance[0]
     }
 
@@ -259,49 +284,71 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         if (checkPermissions()) {
-            if (isLocationEnabled()) {
 
-                mFusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-                mFusedLocationClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
-                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
-                            myLocationMarker(LatLng(location.latitude, location.longitude))
-                            binding.latitude.text = "${location.latitude} , ${location.longitude}"
-                            updateBounds(LatLng(location.latitude, location.longitude))
+            if (isLocationEnabled()) {
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+
+                fusedLocationProviderClient?.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+                )
+
+                fusedLocationProviderClient?.lastLocation!!
+                    .addOnSuccessListener {
+                        if (it != null) {
+                            latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
+                            longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+                            myLocationMarker(LatLng(it.latitude, it.longitude))
+                            binding.latitude.text = "${it.latitude} , ${it.longitude}"
+                            updateBounds(LatLng(it.latitude, it.longitude))
                         }
                     }
-                    .addOnFailureListener {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Failed",
-                            Toast.LENGTH_SHORT
-                        )
-                    }
-                    .addOnCanceledListener {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Cancelled",
-                            Toast.LENGTH_SHORT
-                        )
 
-                    }
+
             } else {
-                context?.let {
-                    ToastStateHandling.toastError(
-                        it,
-                        "Please turn on location",
-                        Toast.LENGTH_LONG
-                    )
+
+                val builder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .setAlwaysShow(true)
+
+                val locationResponseTask: Task<LocationSettingsResponse> =
+                    LocationServices.getSettingsClient(requireContext().applicationContext)
+                        .checkLocationSettings(builder.build())
+                locationResponseTask.addOnCompleteListener {
+                    try {
+                        val response: LocationSettingsResponse =
+                            it.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                            val apiException: ResolvableApiException = e as ResolvableApiException
+                            try {
+                                apiException.startResolutionForResult(
+                                    requireActivity(),
+                                    REQUEST_CODE_GPS
+                                )
+                            } catch (sendIntent: IntentSender.SendIntentException) {
+                                sendIntent.printStackTrace()
+                            }
+                        }
+                    }
+
                 }
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
             }
         } else {
             requestPermission()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+
+    }
+
+    companion object {
+        private const val REQUEST_CODE_GPS = 1011
     }
 
     private fun updateBounds(latLng: LatLng) {

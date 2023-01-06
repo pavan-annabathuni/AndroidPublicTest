@@ -82,7 +82,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
 //            }
 //        }
         holder.binding.viewFarmDetails.setOnClickListener {
-            farmdetailslistener.farmDetails(detail)
+            farmdetailslistener.onFarmDetailsClicked(detail)
         }
 
 

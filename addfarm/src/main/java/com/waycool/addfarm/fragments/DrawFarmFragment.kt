@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
@@ -31,7 +32,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -60,10 +63,11 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import smartdevelop.ir.eram.showcaseviewlib.GuideView
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class DrawFarmFragment : Fragment(), OnMapReadyCallback {
+
+    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
     private var viewCase: GuideView? = null
     private var pos: Int = 0
     private var isLocationFabPressed: Boolean = false
@@ -89,6 +93,23 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private val showCaseDataList: ArrayList<ShowCaseViewModel> = ArrayList<ShowCaseViewModel>()
     private var myFarmEdit: MyFarmsDomain? = null
 
+
+    private val locationRequest = LocationRequest
+        .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+        .build()
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            locationResult.lastLocation?.let {
+                moveMapToCenter(it)
+                removeLocationCallback()
+            }
+        }
+    }
+    private fun removeLocationCallback() {
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
@@ -124,7 +145,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarTitle.text = "Add Farm"
+        binding.toolbarTitle.text = buildString {
+        append("Add Farm")
+    }
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
@@ -177,7 +200,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.pointA.visibility = View.VISIBLE
             binding.pointB.visibility = View.VISIBLE
             binding.pointC.visibility = View.VISIBLE
-            pos=0
+            pos = 0
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 guideView(showCaseDataList[pos])
@@ -768,7 +791,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
         if (myFarmEdit != null) {
             editFarm()
-        }else{
+        } else {
             getLocation()
         }
     }
@@ -777,41 +800,44 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                val mFusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-                mFusedLocationClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            moveMapToCenter(location)
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+                fusedLocationProviderClient?.lastLocation!!
+                    .addOnSuccessListener {
+                        if (it != null){
+                            moveMapToCenter(it)
                         }
                     }
-                    .addOnFailureListener {
-                        it.message?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                requireContext(),
-                                it1, Toast.LENGTH_SHORT
-                            )
-                        }
-                        Log.d("Registration", "" + it.message)
-                    }
-                    .addOnCanceledListener {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Cancelled",
-                            Toast.LENGTH_SHORT
-                        )
+                fusedLocationProviderClient?.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+                )
 
-                    }
             } else {
-                context?.let {
-                    ToastStateHandling.toastError(
-                        it,
-                        "Please turn on location",
-                        Toast.LENGTH_LONG
-                    )
+
+                val builder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .setAlwaysShow(true)
+
+                val locationResponseTask: Task<LocationSettingsResponse> =
+                    LocationServices.getSettingsClient(requireContext().applicationContext)
+                        .checkLocationSettings(builder.build())
+                locationResponseTask.addOnCompleteListener {
+                    try {
+                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                            val apiException: ResolvableApiException = e as ResolvableApiException
+                            try {
+                                apiException.startResolutionForResult(requireActivity(),REQUEST_CODE_GPS )
+                            } catch (sendIntent: IntentSender.SendIntentException) {
+                                sendIntent.printStackTrace()
+                            }
+                        }
+                    }
+
                 }
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
             }
         } else {
             requestPermission()
@@ -1204,10 +1230,14 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
             }
         }
+        if(resultCode==REQUEST_CODE_GPS && resultCode==AppCompatActivity.RESULT_OK){
+            getLocation()
+        }
     }
 
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 10110
+        private const val REQUEST_CODE_GPS = 1011
     }
 
     private fun computeCentroid(points: List<LatLng>): LatLng? {
@@ -1232,6 +1262,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
         }
         return LatLng(latitude, longitude)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+
     }
 
 }

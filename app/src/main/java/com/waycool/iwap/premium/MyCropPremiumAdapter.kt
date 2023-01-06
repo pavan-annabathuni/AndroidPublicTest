@@ -55,9 +55,10 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         holder.binding.tvCloudy.isSelected = true
         if (myCrop.irrigationRequired == true) {
             holder.binding.tvCloudy.text = "Irrigation required"
-        } else {
+        } else if (myCrop.irrigationRequired == false){
             holder.binding.tvCloudy.text = "Irrigation not required"
-
+        }else{
+            holder.binding.tvCloudy.text = "-NA-"
         }
             TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
         TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
@@ -65,9 +66,10 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         holder.binding.tvCloudyNoDisease.isSelected = true
         if (myCrop.disease == true) {
             holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
-        } else {
+        } else if (myCrop.disease == false){
             holder.binding.tvCloudyNoDisease.text = "No diseases alerts today"
-
+        }else {
+            holder.binding.tvCloudyNoDisease.text = "-NA-"
         }
 
 //        holder.binding.tvCloudy.text=details.

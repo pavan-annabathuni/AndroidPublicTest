@@ -28,8 +28,8 @@ class AddCropFragment : Fragment(), AddCropItemClick {
     private val binding get() = _binding!!
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
     private var categoryAdapter = CategoryAdapter(this)
-    var crop_id_selected:Int?=null
-    var pomo:String?=""
+    private var crop_id_selected:Int?=null
+    private var pomo:String?=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,7 +95,6 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         if (arguments != null) {
             crop_id_selected = arguments?.getInt("cropid")
             pomo= arguments?.getString("pom")
-            Log.d("TAG", "clickOnCategoryJCNjsnjcv: $pomo")
             binding.cardCheckHealth.isEnabled = true
             binding.cardCheckHealth.setOnClickListener {
                 categoryAdapter.upDateList()

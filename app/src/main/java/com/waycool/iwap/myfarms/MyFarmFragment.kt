@@ -80,7 +80,7 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
 //        TranslationsManager().loadString("farm", binding.)
     }
 
-    override fun farmDetails(farm: MyFarmsDomain) {
+    override fun onFarmDetailsClicked(farm: MyFarmsDomain) {
         val bundle=Bundle()
         bundle.putParcelable("farm",farm)
         findNavController().navigate(R.id.action_myFarmFragment_to_nav_farmdetails,bundle)

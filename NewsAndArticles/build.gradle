@@ -40,6 +40,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureLogin')
+    implementation project(path: ':Videos')
 
 
     implementation 'androidx.appcompat:appcompat:1.5.1'

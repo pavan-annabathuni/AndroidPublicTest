@@ -37,7 +37,6 @@ import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.featurecropprotect.Adapter.AdsAdapter
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
@@ -48,6 +47,7 @@ import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
@@ -99,7 +99,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
+        videosBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
         newsBinding.viewAllNews.setOnClickListener {
+            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
+        newsBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
@@ -301,12 +309,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     newsBinding.noDataNews.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
                     newsBinding.viewAllNews.visibility=View.GONE
+                    newsBinding.ivViewAll.visibility=View.GONE
+
 
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    newsBinding.noDataNews.visibility = View.VISIBLE
+                                    newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.newsListRv.visibility = View.INVISIBLE
+                                    newsBinding.viewAllNews.visibility=View.GONE
+                                    newsBinding.ivViewAll.visibility=View.GONE
+
+                                }
                                 if (it1 is LoadState.NotLoading) {
 
                                     if (adapter.itemCount == 0) {
@@ -314,12 +332,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility=View.GONE
+                                        newsBinding.ivViewAll.visibility=View.GONE
+
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
                                         newsBinding.viewAllNews.visibility=View.VISIBLE
+                                        newsBinding.ivViewAll.visibility=View.VISIBLE
+
 
                                     }
                                 }
@@ -342,26 +364,40 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                     videosBinding.viewAllVideos.visibility=View.GONE
+                    videosBinding.ivViewAll.visibility=View.GONE
+
                 }
                 else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
+                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                    videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    videosBinding.viewAllVideos.visibility=View.GONE
+                                    videosBinding.ivViewAll.visibility=View.GONE
+
+                                }
                                 if (it1 is LoadState.NotLoading) {
                                     Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
+
 
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility=View.GONE
+                                        videosBinding.ivViewAll.visibility=View.GONE
 
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
                                         videosBinding.viewAllVideos.visibility=View.VISIBLE
+                                        videosBinding.ivViewAll.visibility=View.VISIBLE
+
 
 
                                     }
@@ -455,7 +491,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         private fun setBanners() {
 
-            val bannerAdapter = AdsAdapter()
+            val bannerAdapter = AdsAdapter(requireContext())
             viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
                 bannerAdapter.submitData(lifecycle, it)

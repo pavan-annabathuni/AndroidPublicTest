@@ -44,7 +44,9 @@ class TagsSyncer : SyncInterface {
                         when (it) {
                             is Resource.Success -> {
                                 LocalSource.insertTags(TagsEntityMapper().toEntityList(it.data?.data!!))
-                                setSyncStatus(true)
+                                if (it.data.data!!.isNotEmpty())
+                                    setSyncStatus(true)
+                                else setSyncStatus(false)
                             }
 
                             is Resource.Loading -> {

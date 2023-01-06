@@ -363,7 +363,7 @@ interface ApiInterface {
     @GET("api/v1/view-devices")
     suspend fun getIotDevice(
         @HeaderMap headerMap: Map<String, String>,
-        @Query("account_no_id")account_no_id:Int
+        @Query("account_no_id")accountNo:Int
     ): Response<ViewDeviceDTO>
 
     @GET("api/v1/view-devices")
@@ -412,6 +412,8 @@ interface ApiInterface {
     suspend fun harvestDate(
         @HeaderMap map: Map<String, String>?,
         @Path("plot") plots: Int,
+        @Field("account_no_id")accountId: Int,
+        @Field("crop_id")crop_id: Int,
         @Field("actual_harvest_date") actual_harvest_date: String,
         @Field("actual_yield") actual_yield: Int,
         @Field("_method") method: String
@@ -461,6 +463,7 @@ interface ApiInterface {
     @FormUrlEncoded
     suspend fun updateFarmSupport(
         @HeaderMap map: Map<String, String>?,
+        @Field("account_no_id")accountId: Int,
         @Field("name") name: String,
         @Field("contact") contact: Long,
         @Field("lat") lat: Double,

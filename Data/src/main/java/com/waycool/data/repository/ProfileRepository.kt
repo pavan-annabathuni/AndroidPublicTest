@@ -23,11 +23,11 @@ object ProfileRepository {
         val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
         return NetworkSource.getUserProfilePic(map,file)
     }
-    fun updateFarmSupport(name: String,contact:Long,
+    fun updateFarmSupport(account_id: Int,name: String,contact:Long,
                           lat:Double,lon:Double, roleId:Int,
                           pincode:Int,village: String,address: String,
                           state: String,district: String):Flow<Resource<FarmSupportModel?>>{
-        return NetworkSource.updateFarmSupport(name,contact,lat,lon,roleId,pincode,
+        return NetworkSource.updateFarmSupport(account_id,name,contact,lat,lon,roleId,pincode,
             village,address,state,district)
     }
     fun getFarmSupport(accountId:Int): Flow<Resource<GetFarmSupport?>> {

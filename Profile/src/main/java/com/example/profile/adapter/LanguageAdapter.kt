@@ -13,7 +13,7 @@ import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.featurelogin.databinding.ViewholderLanguageCardviewBinding
 import com.waycool.featurelogin.support.LanguageDiffCallback
 
-class LanguageAdapter(val langCode: String?) : RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
+class LanguageAdapter(private val langCode: String?) : RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
 
     private val languageList: MutableList<LanguageMasterDomain> = mutableListOf()
 
@@ -31,16 +31,15 @@ class LanguageAdapter(val langCode: String?) : RecyclerView.Adapter<LanguageAdap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        context = parent.context;
+        context = parent.context
         val binding =
             ViewholderLanguageCardviewBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nativeNameTv.setText(languageList.get(position).langNative)
-        holder.languageNameTv.setText(languageList.get(position).lang.toString().trim())
+        holder.nativeNameTv.text = languageList[position].langNative
+        holder.languageNameTv.text = languageList[position].lang.toString().trim()
 
         if (selectedPos == -1 && langCode != null && languageList[position].langCode!! == langCode) {
             selectedPos = holder.layoutPosition
@@ -48,12 +47,9 @@ class LanguageAdapter(val langCode: String?) : RecyclerView.Adapter<LanguageAdap
         }
 
         if (position == selectedPos) {
-//            holder.mLanguageParent.setBackground(context.resources.getDrawable(R.drawable.selector_revamp_language_selected))
             holder.mLanguageParent.backgroundTintList =
                 ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.green)
-            holder.tickLayout.setVisibility(View.VISIBLE)
-            // holder.checkbox.setChecked(true);
-            // holder.checkbox.setChecked(true);
+            holder.tickLayout.visibility = View.VISIBLE
             holder.nativeNameTv.setTextColor(
                 ContextCompat.getColor(
                     context,
