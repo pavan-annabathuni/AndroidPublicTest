@@ -19,25 +19,23 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.cropinformation.R
-import com.example.cropinformation.adapter.AdsAdapter
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.Network.NetworkModels.AdBannerImage
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants.Companion.CALL_NUMBER
 import com.waycool.featurechat.FeatureChat
-import com.waycool.newsandarticles.adapter.BannerAdapter
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
+import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.Dispatchers
@@ -640,7 +638,7 @@ class CropInfoFragment : Fragment(), onItemClick {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

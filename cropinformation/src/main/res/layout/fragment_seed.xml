@@ -35,9 +35,12 @@
             <TextView
                 android:id="@+id/tv_seedRate"
                 style="@style/Bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="center"
                 android:text="130-150 gm/ac"
                 android:textColor="@color/WoodBrown"
                 android:textSize="16sp"
@@ -57,12 +60,15 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginBottom="32dp"
+                android:theme="@style/Theme.MaterialComponents.Light"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:strokeColor="@color/WoodBrown"
                 app:strokeWidth="2dp">
 

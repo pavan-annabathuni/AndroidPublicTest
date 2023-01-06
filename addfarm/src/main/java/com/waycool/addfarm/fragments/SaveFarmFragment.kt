@@ -91,7 +91,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
             binding.farmnameEtAddfarm.setText("${myFarmEdit?.farmName}")
             binding.setPrimaryFarm.isChecked = myFarmEdit?.isPrimary == 1
 
-            waterSourcesSelected = myFarmEdit?.farmWaterSource?.toMutableList()!!
+            waterSourcesSelected = myFarmEdit?.farmWaterSource?.toMutableList()?: mutableListOf()
             for (i in waterSourcesSelected.indices) {
                 when (waterSourcesSelected[i]) {
                     "Rain" -> binding.rainSource.isChecked = true

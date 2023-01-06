@@ -1,16 +1,21 @@
 package com.waycool.videos.adapter
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.uicomponents.R
 import com.waycool.uicomponents.databinding.ViewholderBannerBinding
 
-class AdsAdapter :
+class AdsAdapter(val context: Context) :
     PagingDataAdapter<VansFeederListDomain, AdsAdapter.AdsViewHolder>(COMPARATOR) {
 
     var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
@@ -44,7 +49,16 @@ class AdsAdapter :
                 .into(itemBinding.vhBannerIv)
 
             itemBinding.vhBannerIv.setOnClickListener {
-                onItemClick?.invoke(getItem(layoutPosition))
+                val packageName = "com.android.chrome"
+                val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
+                    .setToolbarColor(ContextCompat.getColor(context,R.color.primaryColor))
+                    .build()
+                customTabIntent.intent.setPackage(packageName)
+                customTabIntent.launchUrl(
+                    context,
+                    Uri.parse(vans?.contentUrl)
+                )
+
             }
 
 

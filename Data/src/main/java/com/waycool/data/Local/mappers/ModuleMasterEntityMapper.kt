@@ -30,7 +30,8 @@ class ModuleMasterEntityMapper : EntityMapper<ModuleMasterEntity, ModuleData> {
             audioUrl = dto.audioUrl,
             mobileDisplay = dto.mobileDisplay,
             translation = dto.translation,
-            updatedAt = dto.updatedAt
+            updatedAt = dto.updatedAt,
+            deepLink = dto.deepLink
         )
     }
 

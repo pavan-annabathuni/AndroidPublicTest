@@ -1,17 +1,18 @@
 package com.waycool.iwap.allservices
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
@@ -60,13 +61,17 @@ class AllServicesFragment : Fragment() {
         })
     }
     private fun freeUser() {
-        viewModel.getModuleMaster().observe(viewLifecycleOwner) {
+        viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->
             when (it) {
                 is Resource.Success -> {
                     val data = it.data?.filter {
                         it.subscription!=1
                     }
                     premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener {
+                        if(it.deepLink!=null) {
+                            val i = Intent(Intent.ACTION_VIEW, Uri.parse(it.deepLink))
+                            startActivity(i)
+                        }
                     })
                     binding.recyclerviewService.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)

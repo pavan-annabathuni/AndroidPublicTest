@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/txt20"
                     android:layout_marginEnd="@dimen/txt10"
-                    android:src="@drawable/ic_notification"
+                    android:src="@drawable/ic_simple_notification"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -495,13 +495,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
+                        <com.waycool.uicomponents.Text.Title3Bold
                             android:id="@+id/titleMyFarm"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:padding="4dp"
                             android:text="My Farm"
                             android:textColor="@color/textdark"
                             android:textSize="16sp"
@@ -655,155 +654,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearmyFarm">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardAddDevice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:elevation="10dp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="@dimen/txt10"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:visibility="visible">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvAddDevice"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/txt16"
-                            android:layout_marginTop="@dimen/txt16"
-                            android:layout_marginEnd="8dp"
-                            android:text="Add your Device and get \n
-more details."
-                            android:textColor="#111827"
-                            android:textSize="@dimen/txt18"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toStartOf="@+id/imageViewDevice"
-
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/txt16"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@drawable/bg_add_form"
-
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvAddDevice">
-
-                            <ImageView
-                                android:id="@+id/ivAddDevice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/txt8"
-                                android:src="@drawable/ic_add"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvAddDeviceData"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_marginEnd="6dp"
-                                android:layout_marginBottom="@dimen/space6"
-                                android:text="Add Device"
-                                android:textColor="#146133"
-                                android:textSize="@dimen/txt18"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/ivAddDevice"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <ImageView
-                            android:id="@+id/imageViewDevice"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/adddevice"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/guideline6Device"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guideline6Device"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent=".6" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/tvMyCropDevice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/space16"
-                            android:text="My Crop"
-                            android:textColor="#111827"
-                            android:textSize="@dimen/txt14"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/ivMyFormDevice"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_margin="@dimen/space16"
-                            android:src="@drawable/ic_add"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvMyFormDevice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space16"
-                            android:layout_marginEnd="5dp"
-                            android:text="Add Farm"
-                            android:textColor="#146133"
-                            android:textSize="14sp"
-                            app:layout_constraintEnd_toStartOf="@+id/ivMyFormDevice"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
-                        <!--                            android:id="@+id/recyclerviewCategory"-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:background="#FFFFFF"-->
-                        <!--                            android:orientation="horizontal"-->
-                        <!--                            android:layout_marginTop="30dp"-->
-                        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-                        <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                        <!--                            app:layout_constraintTop_toBottomOf="@+id/tvMyform"-->
-                        <!--                            tools:listitem="@layout/item_flex_box_add_form" />-->
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
                 <!--                <androidx.cardview.widget.CardView-->
                 <!--                    android:id="@+id/cardMYDevice"-->
                 <!--                    android:layout_width="match_parent"-->
@@ -825,7 +675,20 @@ more details."
                     app:cardCornerRadius="12dp"
                     tools:visibility="visible">
 
-                    <TextView
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/devices_empty_text"
+                        android:layout_width="0dp"
+                        android:textColor="@color/textdark"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:text="No Devices added for this farm"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/titleMyDevice" />
+
+                    <com.waycool.uicomponents.Text.Title3Bold
                         android:id="@+id/titleMyDevice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -898,6 +761,7 @@ more details."
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/deviceParamsCL"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"

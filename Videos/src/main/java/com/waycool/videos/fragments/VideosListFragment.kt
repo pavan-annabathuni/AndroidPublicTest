@@ -222,7 +222,7 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

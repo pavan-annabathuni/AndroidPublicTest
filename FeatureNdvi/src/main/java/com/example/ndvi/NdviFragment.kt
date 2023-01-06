@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -26,6 +27,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import com.google.maps.android.PolyUtil
 import com.waycool.data.Network.NetworkModels.NdviData
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
@@ -268,33 +270,47 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 }
 
             selectedNdvi?.stats?.ndvi?.let {
-                viewModel.getNdviMean(it).observe(viewLifecycleOwner) {it1->
+                viewModel.getNdviMean(it).observe(viewLifecycleOwner) { it1 ->
                     binding.ndviMean.text = String.format("%.2f", it1?.data?.mean)
                 }
             }
 
-            val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-                override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
-                    var url: String = if (selectedTileType == TileType.NDVI) {
-                        "${selectedNdvi?.tile?.ndvi}&paletteid=4"
-                    } else {
-                        "${selectedNdvi?.tile?.truecolor}"
-                    }
-                    url = url.replace("{x}", x.toString() + "")
-                    url = url.replace("{y}", y.toString() + "")
-                    url = url.replace("{z}", zoom.toString() + "")
-                    Log.d("g56", "NDVI Url: $url")
-                    return try {
-                        URL(url)
-                    } catch (e: MalformedURLException) {
-                        throw java.lang.AssertionError(e)
+            var tileUrl: String? = if (selectedTileType == TileType.NDVI) {
+                selectedNdvi?.tile?.ndvi
+            } else {
+                selectedNdvi?.tile?.truecolor
+            }
+            if (tileUrl.isNullOrEmpty()) {
+                ToastStateHandling.toastError(
+                    requireContext(),
+                    "Image Not Available",
+                    Toast.LENGTH_LONG
+                )
+            } else {
+
+                val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
+                        var url: String = if (selectedTileType == TileType.NDVI) {
+                            "${selectedNdvi?.tile?.ndvi}&paletteid=4"
+                        } else {
+                            "${selectedNdvi?.tile?.truecolor}"
+                        }
+                        url = url.replace("{x}", x.toString() + "")
+                        url = url.replace("{y}", y.toString() + "")
+                        url = url.replace("{z}", zoom.toString() + "")
+                        Log.d("g56", "NDVI Url: $url")
+                        return try {
+                            URL(url)
+                        } catch (e: MalformedURLException) {
+                            throw java.lang.AssertionError(e)
+                        }
                     }
                 }
+                if (googleMap != null) tileOverlay = googleMap?.addTileOverlay(
+                    TileOverlayOptions()
+                        .tileProvider(tileProvider)
+                )
             }
-            if (googleMap != null) tileOverlay = googleMap?.addTileOverlay(
-                TileOverlayOptions()
-                    .tileProvider(tileProvider)
-            )
         }
     }
 

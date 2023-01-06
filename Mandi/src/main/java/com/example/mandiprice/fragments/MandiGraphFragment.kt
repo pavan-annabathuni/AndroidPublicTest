@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
-import com.example.mandiprice.adapter.AdsAdapter
 import com.example.mandiprice.adapter.DateAdapter
 import com.example.mandiprice.databinding.FragmentMandiGraphBinding
 import com.example.mandiprice.viewModel.MandiViewModel
@@ -41,8 +40,8 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
-import okhttp3.internal.toImmutableList
 import java.io.File
 import java.io.FileOutputStream
 import java.text.ParseException
@@ -112,7 +111,9 @@ class MandiGraphFragment : Fragment() {
  //               }
  //       }
         binding.imgShare.setOnClickListener() {
+            binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
+            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -285,7 +286,7 @@ class MandiGraphFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
@@ -364,6 +365,7 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
+                    binding.imgShare.isEnabled = true
 
                 }
             }
