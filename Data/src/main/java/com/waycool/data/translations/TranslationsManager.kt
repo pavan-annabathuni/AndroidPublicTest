@@ -28,9 +28,9 @@ class TranslationsManager {
     }
 
 
-    fun loadString(stringId: String, textview: TextView) {
+    fun loadString(stringId: String, textview: TextView,defaultValue:String?="") {
         GlobalScope.launch(Dispatchers.Main) {
-            textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
+            textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: defaultValue
         }
     }
 }
