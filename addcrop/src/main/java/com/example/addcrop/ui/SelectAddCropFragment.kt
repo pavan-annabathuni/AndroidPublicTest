@@ -7,7 +7,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,7 +51,6 @@ class SelectAddCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSelectAddCropBinding.inflate(inflater)
-        val add_crop = arguments?.getString("userId")
         return binding.root
     }
 
@@ -61,7 +59,9 @@ class SelectAddCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = "Add Crop"
+        binding.toolbarTitle.text = buildString {
+        append("Add Crop")
+    }
 
         binding.cropsRv.adapter = adapter
 

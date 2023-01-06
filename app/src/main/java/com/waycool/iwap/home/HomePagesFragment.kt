@@ -157,7 +157,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         binding.cropFarmRv.adapter = farmsCropsAdapter
 
         binding.tvAddFromOne.isSelected = true
-
+        binding.tvViewFarmDetails.isSelected = true
 
 
         binding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
@@ -203,15 +203,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("add_crop", binding.tvAddFrom)
         TranslationsManager().loadString("add_farm", binding.tvAddFromOne)
         TranslationsManager().loadString("my_farm", binding.tvMyform)
-//        TranslationsManager().loadString("my_farm",binding.tvOurAddFormData)
+        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData)
         TranslationsManager().loadString("str_today", binding.tvDays)
 
-        TranslationsManager().loadString("temperature", binding.tvTemp)
+        TranslationsManager().loadString("view_tepm", binding.tvTemp)
         TranslationsManager().loadString("str_humidity", binding.tvHumidity)
         TranslationsManager().loadString("str_wind", binding.tvWind)
         TranslationsManager().loadString("str_rain", binding.tvRain)
         TranslationsManager().loadString("our_services", binding.tvOurService)
         TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll)
+
+        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails)
+
 
         TranslationsManager().loadString("soil_testing", binding.tvSoilTesting)
         TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc)
@@ -237,11 +240,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("my_crops", binding.myCropsTitle)
         TranslationsManager().loadString("str_edit", binding.tvEditMyCrops)
 
-        TranslationsManager().loadString("add_crop", binding.AddCrop)
-        TranslationsManager().loadString("mandi_prices", binding.tvRequest)
-        TranslationsManager().loadString("str_viewall", binding.tvViewAllMandi)
+        TranslationsManager().loadString("add_crop",binding.AddCrop)
 
-
+        TranslationsManager().loadString("mandi_prices",binding.tvRequest)
+        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi)
     }
 
     private fun setWishes() {
@@ -318,7 +320,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
+        newsBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(context, NewsAndArticlesActivity::class.java)
+            startActivity(intent)
+        }
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -436,6 +446,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             newsBinding.noDataNews.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
+            newsBinding.ivViewAll.visibility = View.GONE
+
             context?.let {
                 ToastStateHandling.toastError(
                     it,
@@ -447,7 +459,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             newsBinding.videoCardNoInternet.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.VISIBLE
             newsBinding.viewAllNews.visibility = View.VISIBLE
+            newsBinding.ivViewAll.visibility = View.VISIBLE
+
             newsBinding.viewAllNews.isClickable = true
+            newsBinding.ivViewAll.isClickable=true
             setNews()
         }
     }
@@ -457,6 +472,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             videosBinding.videoCardNoInternet.visibility = View.VISIBLE
             videosBinding.videosListRv.visibility = View.GONE
             videosBinding.viewAllVideos.visibility = View.GONE
+            videosBinding.ivViewAll.visibility = View.GONE
             videosBinding.videosScroll.visibility = View.GONE
             context?.let {
                 ToastStateHandling.toastError(
@@ -469,6 +485,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             videosBinding.videoCardNoInternet.visibility = View.GONE
             videosBinding.videosListRv.visibility = View.VISIBLE
             videosBinding.viewAllVideos.visibility = View.VISIBLE
+            videosBinding.ivViewAll.visibility = View.VISIBLE
+
             videosBinding.videosScroll.visibility = View.VISIBLE
             setVideos()
         }
@@ -540,9 +558,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                 val list: List<Address> =
                     geocoder.getFromLocation(lat, lng, 1) as List<Address>
-                if (list.size > 0) {
-                    district = list[0].locality + "," + list[0].adminArea
-                }
+                district = list[0].locality + "," + list[0].adminArea
             } catch (e: InvocationTargetException) {
 
             }
@@ -633,6 +649,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
+                    newsBinding.viewAllNews.visibility = View.GONE
+                    newsBinding.ivViewAll.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -645,6 +663,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility = View.GONE
+                                    newsBinding.ivViewAll.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -653,12 +672,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility=View.GONE
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
                                         newsBinding.viewAllNews.visibility = View.VISIBLE
+                                        newsBinding.ivViewAll.visibility=View.VISIBLE
 
 
                                     }
@@ -681,6 +702,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -693,6 +717,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                     videosBinding.viewAllVideos.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -703,11 +728,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility=View.GONE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
                                         videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility=View.VISIBLE
 
 
                                     }
@@ -717,12 +744,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
 
                 }
-
-
             }
         }
 
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }

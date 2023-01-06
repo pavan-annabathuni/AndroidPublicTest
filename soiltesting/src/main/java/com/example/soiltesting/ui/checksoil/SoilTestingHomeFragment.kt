@@ -260,6 +260,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 }
                 else {
@@ -269,6 +273,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.ivViewAll.visibility = View.GONE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                 }
@@ -276,10 +282,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
 
@@ -306,6 +316,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             )
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            intent.putExtra("module_id",moduleId)
+            startActivity(intent)
+        }
+        videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             intent.putExtra("module_id",moduleId)
             startActivity(intent)
@@ -471,11 +486,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             when (it) {
                                 is Resource.Success -> {
                                     if (it.data!!.isEmpty()) {
-
-                                        CustomeDialogFragment.newInstance().show(
-                                            requireActivity().supportFragmentManager,
-                                            CustomeDialogFragment.TAG
-                                        )
+                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+                                        binding.clProgressBar.visibility = View.GONE
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
@@ -485,7 +497,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 ArrayList<Parcelable>(response)
                                             )
                                         }
-
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
 
@@ -498,8 +509,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         }
 
                                         binding.clProgressBar.visibility = View.GONE
-
-
                                     }
 
                                 }
@@ -514,7 +523,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                     else{
                                         ToastStateHandling.toastError(
                                             requireContext(),
-                                           "Too many attempts.Try again later",
+                                           "Server Error. Try again later",
                                             Toast.LENGTH_SHORT
                                         )
                                     }

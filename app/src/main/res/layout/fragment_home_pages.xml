@@ -539,7 +539,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginEnd="16dp"
-                            android:src="@drawable/ic_view_more"
+                            android:src="@drawable/add"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/linearView"
                             app:layout_constraintBottom_toBottomOf="@+id/linearView"/>
@@ -561,7 +561,7 @@
                                 android:id="@+id/tvMyform"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="My Farm"
+                                android:text="My Farms"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
                                 android:layout_weight="0.7"
@@ -577,7 +577,7 @@
                                 android:layout_weight="0.3"
                                 android:gravity="end"
                                 android:layout_gravity="center_vertical"
-                                android:text="View all"
+                                android:text="Add Farm"
                                 android:textSize="14sp"
                                 android:textColor="@color/primaryColor"
                                 android:fontFamily="@font/notosans_bold" />
@@ -701,30 +701,37 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/cardView7">
 
+                            <ImageView
+                                android:id="@+id/ivViewFarmDetails"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="70dp"
+                                android:src="@drawable/ic_know_more"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvViewFarmDetails"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/txt8"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="8dp"
+                                android:gravity="center_horizontal"
                                 android:fontFamily="@font/notosans_bold"
                                 android:text="View Farm Details"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt18"
-                                android:textStyle="bold"
+                                android:ellipsize="marquee"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:marqueeRepeatLimit="marquee_forever"
+                                android:maxLines="1"
+                                android:scrollHorizontally="true"
+                                android:singleLine="true"
+                                app:layout_constraintEnd_toStartOf="@id/ivViewFarmDetails"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/txt8"
-                                android:layout_marginEnd="@dimen/txt8"
-                                android:src="@drawable/ic_know_more"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/tvViewFarmDetails"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
