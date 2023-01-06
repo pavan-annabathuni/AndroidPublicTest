@@ -24,6 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
@@ -100,6 +101,7 @@ class GraphsFragment : Fragment() {
 
         }
         initClicks()
+        setTranslation()
 
         tabs()
 
@@ -303,6 +305,9 @@ class GraphsFragment : Fragment() {
             "leaf_wetness" -> " Hrs"
             else -> " "
         }
+    }
+    private fun setTranslation() {
+        TranslationsManager().loadString("str_today",binding.today)
     }
 
     private fun getParamNote(

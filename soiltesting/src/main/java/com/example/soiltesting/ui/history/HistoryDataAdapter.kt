@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemSoilHistoryBinding
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 
 class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
 
@@ -26,24 +27,28 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         when (details.approve_status) {
             "0" -> {
                 holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
-                holder. binding.tvStatus.text = "Pending"
+//                holder. binding.tvStatus.text = "Pending"
+                TranslationsManager().loadString("pending",holder. binding.tvStatus)
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
             }
             "1" -> {
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
-                holder. binding.tvStatus.text = "Accepted"
+//                holder. binding.tvStatus.text = "Accepted"
+                TranslationsManager().loadString("txt_accepted",holder. binding.tvStatus)
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
             }
             "2" -> {
                 //rejected
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
-                holder. binding.tvStatus.text = "Completed"
+//                holder. binding.tvStatus.text = "Completed"
+                TranslationsManager().loadString("txt_complete",holder. binding.tvStatus)
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
             }
             "3" -> {
                 //rejected
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
-                holder. binding.tvStatus.text = "Rejected"
+//                holder. binding.tvStatus.text = "Rejected"
+                TranslationsManager().loadString("txt_rejected",holder. binding.tvStatus)
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_rejected)
             }
         }
@@ -53,6 +58,7 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         holder.  binding.tvRequest.text = "Plot Number : " + details.plot_no
         holder.  binding.tvDesiessName.text = "Id : " + details.soil_test_number
         holder. binding.tvDate.text = details.updated_at
+        TranslationsManager().loadString("view_status",holder.binding.tvViewStatus)
         holder.binding.clTracker.setOnClickListener {
            statusTrackerListener.statusTracker(details)
 

@@ -29,7 +29,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -92,8 +96,17 @@ class CheckSoilTestFragment : Fragment() {
                 isLocationPermissionGranted(accountID!!)
             }
         }
+        translationSoilTesting()
 
     }
+    fun translationSoilTesting() {
+        TranslationsManager().loadString("next", binding.cardCheckHealth)
+//        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
+//        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
+//        TranslationsManager().loadString("sowing_date", binding.Address)
+//        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+    }
+
 
 
     private fun initViewBackClick() {
@@ -103,12 +116,6 @@ class CheckSoilTestFragment : Fragment() {
 //            soilTestingLabsAdapter.upDateList()
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun isLocationPermissionGranted(account_id: Int): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -216,5 +223,11 @@ class CheckSoilTestFragment : Fragment() {
             true
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }

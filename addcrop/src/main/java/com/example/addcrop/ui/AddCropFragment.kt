@@ -16,7 +16,11 @@ import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class AddCropFragment : Fragment(), AddCropItemClick {
@@ -39,6 +43,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bindObserversCategory()
+        translationSoilTesting()
 
 
     }
@@ -47,7 +52,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         binding.recyclerviewSand.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewSand.adapter = categoryAdapter
-        binding.backBtn.setOnClickListener {
+        binding.toolbar .setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
@@ -75,6 +80,15 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             }
 
         }
+    }
+
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+        }
+        TranslationsManager().loadString("select_soil_type", binding.textSelectType)
+        TranslationsManager().loadString("next", binding.tvCheckCrop)
     }
     @SuppressLint("NotifyDataSetChanged")
     override fun clickOnCategory(name: SoilTypeDomain) {

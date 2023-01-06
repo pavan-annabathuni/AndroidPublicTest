@@ -15,7 +15,11 @@ import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PlantSpacingFragment : Fragment() {
     private var _binding: FragmentPlantSpacingBinding? = null
@@ -46,22 +50,7 @@ class PlantSpacingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        binding.constraintLayout3.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
-//
-//            if (isChecked) {
-//                when (checkedId) {
-////                    binding.tvMtr. = true
-////                    R.id.tvMtr ->   binding.tvMtr.setBackgroundResource(R.drawable.bg_button)
-////                    R.id.tvCm -> binding.tvCm.setBackgroundResource(R.drawable.bg_button)
-////                    R.id.tvFt -> binding.tvFt.setBackgroundResource(R.drawable.bg_button)
-//                }
-//            } else {
-//                if (toggleButtonGroup.checkedButtonId == View.NO_ID) {
-////                    binding.tvFt.setBackgroundResource(R.drawable.bg_selected)
-//                }
-//            }
-//        }
+        translationSoilTesting()
         val bundle = Bundle()
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             val accountID = it.data?.accountId
@@ -175,13 +164,28 @@ class PlantSpacingFragment : Fragment() {
 
 
             }
-            binding.backBtn.setOnClickListener {
+            binding.toolbar.setOnClickListener {
                 val isSuccess = findNavController().navigateUp()
                 if (!isSuccess) requireActivity().onBackPressed()
             }
 
 
         }
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNumber.hint =NickNamehint
+            binding.etNumberWidth.hint=NickNamehint
+            binding.etNumberWidthDistance.hint=NickNamehint
+        }
+        TranslationsManager().loadString("plant_spacing_details", binding.plot)
+        TranslationsManager().loadString("plant_to_plant_distance", binding.plantDistnce)
+        TranslationsManager().loadString("plant_bed_width", binding.plantDistnceWidth)
+        TranslationsManager().loadString("drip_emitter_rate_per_plant", binding.plantDistnceWidthDistance)
+        TranslationsManager().loadString("save", binding.tvCheckCrop)
     }
 
     private fun passDataDripIrrigation(map: String) {

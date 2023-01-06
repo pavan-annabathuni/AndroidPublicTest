@@ -23,7 +23,10 @@ import com.example.soiltesting.utils.Constant.TAG
 import com.example.soiltesting.utils.NetworkResult
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewSoilTestFormFragment : Fragment() {
@@ -47,6 +50,16 @@ class NewSoilTestFormFragment : Fragment() {
     ): View? {
         _binding = FragmentNewSoilTestFormBinding.inflate(inflater, container, false)
 
+
+//            if (account!=null){
+//                itemClicked(account!!, lat!!, long!!, onp_id!!)
+//            }
+
+
+//        binding.cardCheckHealth.setOnClickListener {
+
+
+//        }
         return binding.root
     }
 
@@ -58,6 +71,11 @@ class NewSoilTestFormFragment : Fragment() {
             val long = arguments?.getString("long")
             val crop_id = arguments?.getInt("plot_id")
 
+            Log.d(TAG, "onCreateViewONPID:$onp_id ")
+            Log.d(TAG, "onCreateViewONPID:$lat ")
+            Log.d(TAG, "onCreateViewONPID:$long ")
+
+            traslationSoilTesting()
             soilViewModel.getReverseGeocode("${lat},${long}")
                 .observe(viewLifecycleOwner) {
                     if (it.results.isNotEmpty()) {
@@ -96,19 +114,27 @@ class NewSoilTestFormFragment : Fragment() {
 
     }
 
-    private fun onBottomButtonBackPress() {
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
 
-            }
-
-        })
-
-    }
 
 
 
     private fun mvvm() {
+
+
+    }
+    fun traslationSoilTesting() {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val title = TranslationsManager().getString("soil_testing")
+//            binding.toolText.text = title
+//        }
+        TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot)
+        TranslationsManager().loadString("plot_number", binding.plotNumber)
+        TranslationsManager().loadString("pincode", binding.pincodeNumber)
+        TranslationsManager().loadString("Address", binding.Address)
+        TranslationsManager().loadString("city_village", binding.City)
+        TranslationsManager().loadString("state", binding.State)
+        TranslationsManager().loadString("mobile", binding.Mobile)
+        TranslationsManager().loadString("submit", binding.tvCheckCrop)
 
 
     }

@@ -224,7 +224,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc)
         TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore)
 
-        TranslationsManager().loadString("crop_information", binding.tvCropInformation)
+        TranslationsManager().loadString("str_title", binding.tvCropInformation)
         TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc)
         TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore)
 

@@ -11,11 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
 import com.waycool.iwap.premium.Farmdetailslistener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MyFarmFragment : Fragment(), Farmdetailslistener {
@@ -64,6 +68,16 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                 is Resource.Error ->{}
             }
         }
+        translationSoilTesting()
+    }
+
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("my_farm")
+            binding.toolBar.text = title
+
+        }
+//        TranslationsManager().loadString("farm", binding.)
     }
 
     override fun onFarmDetailsClicked(farm: MyFarmsDomain) {

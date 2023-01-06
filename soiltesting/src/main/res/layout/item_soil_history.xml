@@ -48,27 +48,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRequest" />
 
-            <ImageView
-                android:id="@+id/ivStatus"
-                android:layout_width="@dimen/space16"
-                android:layout_height="@dimen/space16"
-                android:layout_marginStart="@dimen/space16"
-                android:layout_marginTop="@dimen/space12"
-                android:src="@drawable/ic_pending"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="@dimen/txt9"
-                android:padding="@dimen/space2"
-                android:text="@string/pending"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/ivStatus"
-                app:layout_constraintTop_toBottomOf="@+id/tvDesiessName" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -86,11 +65,21 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clTracker"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space8"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDate">
+                <ImageView
+                    android:id="@+id/ivStatus"
+                    android:layout_width="@dimen/space16"
+                    android:layout_height="@dimen/space16"
+                    android:layout_marginStart="@dimen/space16"
+                    android:src="@drawable/ic_pending"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/ivStatusTracker"
@@ -102,22 +91,56 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvViewStatus"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/llStatus"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/txt8"
-                    android:text="@string/view_status"
-                    android:textColor="#146133"
-                    android:textSize="@dimen/txt14"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ivStatusTracker"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
 
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivStatus"
+                    app:layout_constraintEnd_toStartOf="@id/ivStatusTracker">
 
-                    />
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:padding="@dimen/space2"
+                        android:text="@string/pending"
+                        android:textSize="12sp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_weight="0.7"
+                        app:layout_constraintStart_toEndOf="@+id/ivStatus"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/tvViewStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_status"
+                        android:textColor="#146133"
+                        android:textSize="@dimen/txt14"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="0.3"
+                        android:gravity="end"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivStatusTracker"
+                        app:layout_constraintStart_toStartOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent"
+
+                        />
+
+                </LinearLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

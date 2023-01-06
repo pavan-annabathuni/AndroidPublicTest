@@ -127,7 +127,8 @@ interface ApiInterface {
 
     @GET("api/v1/soil-types")
     suspend fun getAddCropType(
-        @HeaderMap headerMap: Map<String, String>
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("lang") lang: String = "en"
     ): Response<AddCropTypeDTO>
 
 
@@ -154,7 +155,9 @@ interface ApiInterface {
     @GET("api/v1/soil-test-tracker")
     suspend fun getTracker(
         @HeaderMap headerMap: Map<String, String>,
-        @Query("soil_test_request_id") soil_test_request_id: Int
+        @Query("soil_test_request_id") soil_test_request_id: Int,
+        @Query("lang") lang: String = "en"
+
     ): Response<TrackerDTO>
 
     @FormUrlEncoded

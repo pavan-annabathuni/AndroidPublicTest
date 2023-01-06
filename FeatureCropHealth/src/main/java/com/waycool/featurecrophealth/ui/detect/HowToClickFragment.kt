@@ -9,6 +9,7 @@ import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentHowToClickBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.translations.TranslationsManager
 
 
 open class HowToClickFragment() :  BottomSheetDialogFragment() {
@@ -33,6 +34,15 @@ open class HowToClickFragment() :  BottomSheetDialogFragment() {
         binding.tvclose.setOnClickListener {
             dismiss()
         }
+        translationSoilTesting()
+    }
+    fun translationSoilTesting() {
+        TranslationsManager().loadString("how_to_capture", binding.textView285)
+        TranslationsManager().loadString("capture_info_1", binding.imageOne)
+        TranslationsManager().loadString("capture_info_2", binding.imageTwo)
+        TranslationsManager().loadString("capture_info_3", binding.imageThree)
+        TranslationsManager().loadString("capture_info_4", binding.imageFour)
+
     }
 
 }

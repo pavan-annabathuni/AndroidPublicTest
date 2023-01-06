@@ -23,9 +23,13 @@ import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -101,10 +105,11 @@ class AddCropDetailsFragment : Fragment() {
 
 //        spinner()
         spinnerYear()
+        translationSoilTesting()
         binding.clCalender.setOnClickListener {
             showCalender()
         }
-        binding.backBtn.setOnClickListener {
+        binding.toolbar.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
@@ -319,6 +324,22 @@ class AddCropDetailsFragment : Fragment() {
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
         )
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNickName.hint =NickNamehint
+            var areaHint = TranslationsManager().getString("e_g_50")
+            binding.etAreaNumber.hint =areaHint
+        }
+        TranslationsManager().loadString("add_crop_information", binding.plot)
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
+        TranslationsManager().loadString("sowing_date", binding.Address)
+        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
     }
 
     private fun updateLabel(myCalendar: Calendar) {
