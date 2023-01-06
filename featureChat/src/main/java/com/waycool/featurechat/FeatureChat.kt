@@ -7,15 +7,35 @@ import com.waycool.data.Local.LocalSource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import zendesk.android.Zendesk
+import zendesk.android.events.ZendeskEvent
+import zendesk.android.events.ZendeskEventListener
 import zendesk.messaging.android.DefaultMessagingFactory
+import zendesk.messaging.android.push.PushNotifications
 
 object FeatureChat {
+
+    var UNREAD_MESSAGES_COUNT = 0
+    val zendeskEventListener: ZendeskEventListener = ZendeskEventListener { zendeskEvent ->
+        when (zendeskEvent) {
+            is ZendeskEvent.UnreadMessageCountChanged -> {
+                // Your custom action...
+                UNREAD_MESSAGES_COUNT=zendeskEvent.currentUnreadCount
+            }
+            is ZendeskEvent.AuthenticationFailed -> {
+                // Your custom action...
+            }
+            else -> {
+                // Default branch for forward compatibility with Zendesk SDK and its `ZendeskEvent` expansion
+            }
+        }
+    }
 
     fun zenDeskInit(context: Context) {
 
 
         GlobalScope.launch {
             val jwt = getJwtToken() ?: ""
+
             Zendesk.initialize(
 
                 context = context,
@@ -47,8 +67,17 @@ object FeatureChat {
                 messagingFactory = DefaultMessagingFactory()
 
             )
-
+            addZendeskEventListener()
         }
+    }
+
+    suspend fun addZendeskEventListener() {
+        Zendesk.instance.addEventListener(zendeskEventListener)
+        PushNotifications.updatePushNotificationToken(getFCMToken())
+    }
+
+    fun removeZendeskEventListener(){
+        Zendesk.instance.removeEventListener(zendeskEventListener)
     }
 
     fun zendeskLogout() {
@@ -57,6 +86,11 @@ object FeatureChat {
             failureCallback = { error -> Log.d("zendesktest", "zendeskChat: ${error.message} ") }
         )
     }
+
+    private suspend fun getFCMToken(): String {
+        return LocalSource.getFcmToken()
+    }
+
 
     private suspend fun getJwtToken(): String? {
         return LocalSource.getUserDetailsEntity()?.jwt

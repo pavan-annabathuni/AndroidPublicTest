@@ -15,6 +15,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.waycool.iwap.R
 import com.waycool.iwap.splash.SplashActivity
 import org.json.JSONObject
+import zendesk.messaging.android.push.PushNotifications
+import zendesk.messaging.android.push.PushResponsibility
 import java.io.IOException
 import java.lang.Exception
 import java.net.HttpURLConnection
@@ -25,20 +27,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(s: String) {
         super.onNewToken(s)
+        PushNotifications.updatePushNotificationToken(s)
         token = s
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        sendMyNotification(message)
+        when (PushNotifications.shouldBeDisplayed(message.data)) {
+            PushResponsibility.MESSAGING_SHOULD_DISPLAY -> {
+                // This push belongs to Messaging and the SDK is able to display it to the end user
+                PushNotifications.setNotificationSmallIconId(R.drawable.ic_outgrow_logo)
+                PushNotifications.displayNotification(context = this, messageData = message.data)
+            }
+            PushResponsibility.MESSAGING_SHOULD_NOT_DISPLAY -> {
+                // This push belongs to Messaging but it should not be displayed to the end user
+            }
+            PushResponsibility.NOT_FROM_MESSAGING -> {
+                // This push does not belong to Messaging
+                sendMyNotification(message)
+            }
+        }
+
     }
 
     private fun sendMyNotification(message: RemoteMessage) {
         Log.d(TAG, "Message Notification Body: NULL")
         if (message.notification != null) {
-            Log.d(
-                TAG, "Message Notification Body: " + message.notification!!
-                    .body
-            )
+            Log.d(TAG, "Message Notification Body: " + message.notification!!.link)
+            Log.d(TAG, "Message Notification Body: " + message.notification!!.body)
         }
         var intent = Intent(this, SplashActivity::class.java)
         if (message.notification!!.link != null) {

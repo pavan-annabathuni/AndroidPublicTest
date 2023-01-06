@@ -4,8 +4,6 @@ import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
 
-import com.waycool.data.Network.NetworkModels.DashBoardDTO
-
 import kotlinx.coroutines.flow.Flow
 
 
@@ -183,6 +181,7 @@ object LocalSource {
     fun getCropInformation(crop_id: Int) = outgrowDao.getCropInformation(crop_id)
 
     fun insertMyCrop(MyCrops: List<MyCropDataEntity>) {
+        outgrowDao.getDeleteAllMyCrops()
         outgrowDao.insertMyCrops(MyCrops)
     }
 
@@ -200,6 +199,7 @@ object LocalSource {
 
 
     fun insertMyFarms(farms: List<MyFarmsEntity>) {
+        outgrowDao.deleteAllMyFarms()
         outgrowDao.insertMyFarms(farms)
     }
 
@@ -211,6 +211,6 @@ object LocalSource {
     fun deleteCropMaster() = outgrowDao.deleteCropMaster()
     fun deletePestDisease() = outgrowDao.deletePestDiseases()
     fun deleteCropInformation() = outgrowDao.deleteCropInformation()
-    fun deleteMyFarms()= outgrowDao.getDeleteAllMyFarms()
+    fun deleteMyFarms()= outgrowDao.deleteAllMyFarms()
 
 }

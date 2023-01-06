@@ -39,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.regex.Pattern
 
 class LoginFragment : Fragment() {
     private var trueCallerFullName: String? = null
@@ -109,6 +110,8 @@ class LoginFragment : Fragment() {
                     .isEmpty() || binding.mobilenoEt.text.toString().length != 10
             ) {
                 binding.mobileNoTextlayout.error = "Please enter valid mobile number"
+            } else if (!checkForValidMobileNumber(binding.mobilenoEt.text.toString())) {
+                binding.mobileNoTextlayout.error = "Please enter valid mobile number"
             } else {
 
                 loginViewModel.setMobileNumber(binding.mobilenoEt.text.toString())
@@ -126,7 +129,12 @@ class LoginFragment : Fragment() {
 
         setTermsText()
 
+    }
 
+    private fun checkForValidMobileNumber(mobileno:String):Boolean{
+        val pattern = Pattern.compile("^[6-9]\\d{9}\$")
+        val matcher = pattern.matcher(mobileno)
+       return matcher.find()
     }
 
     private fun setTermsText() {
@@ -179,7 +187,13 @@ class LoginFragment : Fragment() {
      */
     fun AuthorizeMobileNumber(mobileNo: String) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let { ToastStateHandling.toastError(it,"Please check your Internet connection",Toast.LENGTH_SHORT) }
+            context?.let {
+                ToastStateHandling.toastError(
+                    it,
+                    "Please check your Internet connection",
+                    Toast.LENGTH_SHORT
+                )
+            }
         } else {
             loginViewModel.setMobileNumber(mobileNo)
 

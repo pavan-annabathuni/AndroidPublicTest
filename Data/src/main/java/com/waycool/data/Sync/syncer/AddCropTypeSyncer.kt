@@ -47,8 +47,7 @@ class AddCropTypeSyncer : SyncInterface {
         GlobalScope.launch(Dispatchers.IO) {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             if (headerMap != null) {
-                NetworkSource.
-                getAddCropType(headerMap)
+                NetworkSource.getAddCropType(headerMap)
                     .collect {
                         when (it) {
                             is Resource.Success -> {
@@ -57,7 +56,9 @@ class AddCropTypeSyncer : SyncInterface {
                                         it.data?.data!!
                                     )
                                 )
-                                setSyncStatus(true)
+                                if (it.data.data.isNotEmpty())
+                                    setSyncStatus(true)
+                                else setSyncStatus(false)
                             }
 
                             is Resource.Loading -> {

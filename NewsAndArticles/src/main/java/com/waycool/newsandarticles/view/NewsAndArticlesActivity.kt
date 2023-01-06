@@ -39,12 +39,12 @@ import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.newsandarticles.Util.AppUtil
-import com.waycool.newsandarticles.adapter.AdsAdapter
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import kotlinx.coroutines.launch
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
@@ -244,7 +244,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
         viewModel.getVansAdsList().observe(this) {
 
             bannerAdapter.submitData(lifecycle, it)

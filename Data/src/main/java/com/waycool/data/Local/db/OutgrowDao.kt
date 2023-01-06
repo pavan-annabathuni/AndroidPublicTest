@@ -97,5 +97,5 @@ interface OutgrowDao {
     fun getMyFarms(): Flow<List<MyFarmsEntity>>
 
     @Query("DELETE FROM my_farms")
-    fun getDeleteAllMyFarms()
+    fun deleteAllMyFarms()
 }
