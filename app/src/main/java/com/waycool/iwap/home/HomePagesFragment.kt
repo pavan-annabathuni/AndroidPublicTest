@@ -558,7 +558,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                 val list: List<Address> =
                     geocoder.getFromLocation(lat, lng, 1) as List<Address>
-                district = list[0].locality + "," + list[0].adminArea
+                if (!list.isNullOrEmpty()) {
+                    district = list[0].locality + "," + list[0].adminArea
+                }
             } catch (e: InvocationTargetException) {
 
             }
@@ -702,9 +704,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
-                    videosBinding.viewAllVideos.visibility = View.GONE
                     videosBinding.ivViewAll.visibility = View.GONE
-
+                    videosBinding.viewAllVideos.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -714,28 +715,25 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.ivViewAll.visibility = View.GONE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    videosBinding.viewAllVideos.visibility = View.GONE
-                                    videosBinding.ivViewAll.visibility=View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
-                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
-
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
-                                        videosBinding.viewAllVideos.visibility = View.GONE
-                                        videosBinding.ivViewAll.visibility=View.GONE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
-                                        videosBinding.ivViewAll.visibility=View.VISIBLE
-
 
                                     }
                                 }
