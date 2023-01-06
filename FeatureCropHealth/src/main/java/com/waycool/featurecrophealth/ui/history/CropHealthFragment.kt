@@ -77,7 +77,10 @@ class CropHealthFragment : Fragment() {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
-
+        videosBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
         historyAdapter = AiCropHistoryAdapter(requireContext())
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
@@ -155,6 +158,9 @@ class CropHealthFragment : Fragment() {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 }
                 else {
@@ -164,6 +170,9 @@ class CropHealthFragment : Fragment() {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility = View.GONE
+
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                 }
@@ -172,10 +181,15 @@ class CropHealthFragment : Fragment() {
 
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
 

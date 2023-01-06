@@ -9,22 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.profile.BuildConfig
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
-import com.waycool.data.Sync.syncer.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
@@ -43,9 +41,9 @@ class MyProfileFragment : Fragment() {
 
     private val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val viewModel: EditProfileViewModel by lazy {
-        ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
+        ViewModelProviders.of(this)[EditProfileViewModel::class.java]
     }
-    private lateinit var appVer:String
+    private lateinit var appVer: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,7 +58,7 @@ class MyProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMyProfileBinding.inflate(inflater)
 
-        apiErrorHandlingBinding=binding.errorState
+        apiErrorHandlingBinding = binding.errorState
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         //viewModel.getUsers()
@@ -72,15 +70,16 @@ class MyProfileFragment : Fragment() {
 
         viewModel.viewModelScope.launch {
             appVer = TranslationsManager().getString("str_app_ver")
-            binding.version.text = "$appVer ${com.example.profile.BuildConfig.VERSION_NAME}"
+            binding.version.text = buildString {
+                append(appVer)
+                append(" ")
+                append(BuildConfig.VERSION_NAME)
+            }
         }
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
-
-
-        binding.version.text = "App Ver ${com.example.profile.BuildConfig.VERSION_NAME}"
 
         viewModel.viewModelScope.launch {
             binding.language.text = LocalSource.getLanguage()
@@ -152,94 +151,103 @@ class MyProfileFragment : Fragment() {
     }
 
 
-    fun observer(): Boolean {
+    private fun observer(): Boolean {
         viewModel.viewModelScope.launch {
-              viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
-                  if(it.data?.data?.account?.get(0)?.subscription == 0){
-                      binding.llFarmSupport.visibility = View.GONE
-                  }else{
-                      binding.llFarmSupport.visibility = View.VISIBLE
-                  }
-                  binding.username.text = it.data?.data?.name
-                  binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
-                  if(it.data?.data?.profile?.remotePhotoUrl!=null) {
-                      Glide.with(requireContext()).load(it.data?.data?.profile?.remotePhotoUrl).into(binding.proPic)
-                      Log.d("ProfilePic", "observer: $it")
+            viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
+                if (it.data?.data?.account?.get(0)?.subscription == 0) {
+                    binding.llFarmSupport.visibility = View.GONE
+                } else {
+                    binding.llFarmSupport.visibility = View.VISIBLE
+                }
+                binding.username.text = it.data?.data?.name
+                binding.phoneNo.text = buildString {
+                    append("+91 ")
+                    append(it.data?.data?.contact)
+                }
+                if (it.data?.data?.profile?.remotePhotoUrl != null) {
+                    Glide.with(requireContext()).load(it.data?.data?.profile?.remotePhotoUrl)
+                        .into(binding.proPic)
+                    Log.d("ProfilePic", "observer: $it")
 
-                  }
-              }
-          }
+                }
+            }
+        }
 
-         return true
+        return true
     }
 
     private fun onClick() {
-        binding.llMyProfile.setOnClickListener() {
+        binding.llMyProfile.setOnClickListener {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToEditProfileFragment())
         }
-        binding.llFarmSupport.setOnClickListener() {
+        binding.llFarmSupport.setOnClickListener {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToFarmSupportFragment())
         }
-        binding.rateUs.setOnClickListener(){
-            val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+        binding.rateUs.setOnClickListener {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+            )
             startActivity(intent)
         }
-        binding.back.setOnClickListener(){
+        binding.back.setOnClickListener {
             this.findNavController().navigateUp()
         }
-        binding.textView.setOnClickListener(){
+        binding.textView.setOnClickListener {
             val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
             intent.putExtra("tittle", "Privacy Policy")
             requireActivity().startActivity(intent)
         }
-        binding.textView2.setOnClickListener(){
+        binding.textView2.setOnClickListener {
             val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
             intent.putExtra("tittle", "Terms and Conditions")
             requireActivity().startActivity(intent)
 
         }
-        binding.llAboutOutgrow.setOnClickListener(){
-            this.findNavController().navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
+        binding.llAboutOutgrow.setOnClickListener {
+            this.findNavController()
+                .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
 
         binding.cvChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
 
-        binding.llLanguage.setOnClickListener() {
+        binding.llLanguage.setOnClickListener {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToLanguageFragment3())
         }
-            val mobileno = loginViewModel.getMobileNumber()
-            if (mobileno != null)
-                binding.logout.setOnClickListener {
+        val mobileNo = loginViewModel.getMobileNumber()
+        if (mobileNo != null)
+            binding.logout.setOnClickListener {
 
-                    loginViewModel.logout(mobileno)
-                        .observe(viewLifecycleOwner) {
+                loginViewModel.logout(mobileNo)
+                    .observe(viewLifecycleOwner) {
 
-                           // loginViewModel.setUserToken(null)
-                            loginViewModel.setIsLoggedIn(false)
-                            FeatureChat.zendeskLogout()
+                        // loginViewModel.setUserToken(null)
+                        loginViewModel.setIsLoggedIn(false)
+                        FeatureChat.zendeskLogout()
 
-                            context?.let { it1 ->
-                                ToastStateHandling.toastSuccess(
-                                    it1,
-                                    "Successfully Logout",
-                                    Toast.LENGTH_LONG
-                                )
-                            }
-
+                        context?.let { it1 ->
+                            ToastStateHandling.toastSuccess(
+                                it1,
+                                "Successfully Logout",
+                                Toast.LENGTH_LONG
+                            )
                         }
-                    moveToLogin()
-                }
 
-        }
+                    }
+                moveToLogin()
+            }
+
+    }
+
     private fun moveToLogin() {
-        val intent:Intent = Intent(context, LoginMainActivity::class.java)
+        val intent = Intent(context, LoginMainActivity::class.java)
         startActivity(intent)
         activity?.finish()
         GlobalScope.launch {
@@ -249,23 +257,24 @@ class MyProfileFragment : Fragment() {
             LocalSource.deleteCropInformation()
             LocalSource.deletePestDisease()
             LocalSource.deleteMyFarms()
-           SyncManager.invalidateAll()
+            SyncManager.invalidateAll()
             DataStoreManager.clearData()
 
         }
     }
-      private fun translation(){
-          TranslationsManager().loadString("str_farmer_profile",binding.tvFarmer)
-          TranslationsManager().loadString("str_myProfile",binding.tvMyProfile)
-          TranslationsManager().loadString("str_language",binding.tvLang)
-          TranslationsManager().loadString("str_about",binding.tvAbout)
-          TranslationsManager().loadString("str_invite_farmer",binding.tvInvite)
-          TranslationsManager().loadString("str_ask_chat",binding.tvAsk)
-          TranslationsManager().loadString("str_rate_us",binding.tvRate)
-          TranslationsManager().loadString("str_logout",binding.tvLogout)
-          TranslationsManager().loadString("str_privacy_policy",binding.textView)
-          TranslationsManager().loadString("str_terms",binding.textView2)
-          TranslationsManager().loadString("str_farm_support",binding.tvSupport)
-      }
 
-   }
+    private fun translation() {
+        TranslationsManager().loadString("str_farmer_profile", binding.tvFarmer)
+        TranslationsManager().loadString("str_myProfile", binding.tvMyProfile)
+        TranslationsManager().loadString("str_language", binding.tvLang)
+        TranslationsManager().loadString("str_about", binding.tvAbout)
+        TranslationsManager().loadString("str_invite_farmer", binding.tvInvite)
+        TranslationsManager().loadString("str_ask_chat", binding.tvAsk)
+        TranslationsManager().loadString("str_rate_us", binding.tvRate)
+        TranslationsManager().loadString("str_logout", binding.tvLogout)
+        TranslationsManager().loadString("str_privacy_policy", binding.textView)
+        TranslationsManager().loadString("str_terms", binding.textView2)
+        TranslationsManager().loadString("str_farm_support", binding.tvSupport)
+    }
+
+}

@@ -58,20 +58,16 @@ class CropProtectActivity : AppCompatActivity() {
                         }
                     }*/
                     else{
-                        Log.d("CropProtect","$deepLink")
                         val diseaseId = deepLink.getQueryParameter ("disease_id")
                         val diseaseName = deepLink.getQueryParameter ("disease_name")
 
                         if (!diseaseId.isNullOrEmpty()&&!diseaseName.isNullOrEmpty()) {
                             val args = Bundle()
-
                             args.putInt("diseaseid", diseaseId.toInt())
                             args.putString("diseasename", diseaseName)
-
                             this.findNavController(R.id.fragmentContainerView).navigate(
                                 R.id.action_cropSelectionFragment_to_pestDiseaseDetailsFragment,
                                 args)
-
                         }
                     }
 

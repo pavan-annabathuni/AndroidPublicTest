@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,19 +23,17 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
-import kotlin.math.log
-
 
 class AddFarmFragment : Fragment() {
   private lateinit var binding: FragmentAddFarmBinding
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val viewModel: EditProfileViewModel by lazy {
-        ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
+        ViewModelProviders.of(this)[EditProfileViewModel::class.java]
     }
     var lat = 12.22
     var long = 78.22
-    var pinCode = 1
+    private var pinCode = 1
     var village = ""
     var address = ""
     var state = ""
@@ -58,7 +55,7 @@ class AddFarmFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         location()
-        binding.imgLocation.setOnClickListener(){
+        binding.imgLocation.setOnClickListener {
             location()
         }
         translation()
@@ -67,43 +64,44 @@ class AddFarmFragment : Fragment() {
             }
 
     private fun onClick() {
-        var roleid = 30
-        binding.topAppBar.setNavigationOnClickListener(){
+        var roleId = 30
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
-        binding.farmManger.setOnClickListener(){
+        binding.farmManger.setOnClickListener {
             binding.farmManger.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border_gray)
             binding.mandiBench.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border)
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
-            roleid = 30
+            roleId = 30
         }
-        binding.mandiBench.setOnClickListener(){
+        binding.mandiBench.setOnClickListener {
             binding.mandiBench.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border_gray)
             binding.farmManger.background = ContextCompat.getDrawable(requireContext(),R.drawable.text_border)
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
-            roleid = 31
+            roleId = 31
         }
-        binding.submit.setOnClickListener() {
+        binding.submit.setOnClickListener {
 
             val name = binding.tvName.text.toString()
-            var contact = binding.mobilenoEt.text.toString().toLong()
+            val contact = binding.mobilenoEt.text.toString().toLong()
             val lat2 = binding.tvLat.text
-            var long2 = binding.tvLong.text
+            val long2 = binding.tvLong.text
 
             if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
                 context?.let { it1 -> ToastStateHandling.toastError(it1, "Fill all Fields", Toast.LENGTH_SHORT) }
             }
             else if(binding.mobilenoEt.text.toString()
                     .isNullOrEmpty() || binding.mobilenoEt.text.toString().length != 10||
-                binding.mobilenoEt.text.toString().length <= 0){
+                binding.mobilenoEt.text.toString().isEmpty()
+            ){
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             }
                 else {
                     binding.mobileNo.isErrorEnabled = false
                 viewModel.updateFarmSupport(
-                    name, contact, lat, long, roleid, pinCode,
+                    name, contact, lat, long, roleId, pinCode,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
                     when(it){
@@ -140,7 +138,7 @@ class AddFarmFragment : Fragment() {
             )
             return
         }
-        task.addOnSuccessListener {
+        task.addOnSuccessListener { it ->
             if (it != null) {
 //                Toast.makeText(context, "${it.longitude} ${it.latitude}", Toast.LENGTH_LONG).show()
                 lat = String.format("%.6f",it.latitude).toDouble()
@@ -180,7 +178,6 @@ class AddFarmFragment : Fragment() {
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
         viewModel.viewModelScope.launch{
-            var title = ""
             submit = TranslationsManager().getString("str_submit")
             binding.submit.text = submit
 //            title = TranslationsManager().getString("str_submit")

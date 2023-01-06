@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class FarmSupportFragment : Fragment() {
  private lateinit var binding: FragmentFarmSupportBinding
     private val viewModel: EditProfileViewModel by lazy {
-        ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
+        ViewModelProviders.of(this)[EditProfileViewModel::class.java]
     }
     var name  = ""
     private lateinit var title:String
@@ -54,15 +54,14 @@ class FarmSupportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
-            var accountId:Int? = null
-            accountId = it.data?.accountId!!
+        viewModel.getUserDetails().observe(viewLifecycleOwner){ resource ->
+            val accountId: Int? = resource.data?.accountId!!
             mAddUseAdapter = AddUseAdapter(AddUseAdapter.OnClickListener {
                 name = it.name.toString()
                 it.id?.let { it1 -> accountId?.let { it2 -> deleteDialog(it1, it2) } }
-            }, it.data!!)
+            }, resource.data!!)
             binding.recycleView.adapter = mAddUseAdapter
-            accountId?.let {
+            accountId?.let { it ->
                 viewModel.getFarmSupport(it).observe(viewLifecycleOwner){
                     mAddUseAdapter.submitList(it.data?.data)
 
@@ -74,7 +73,7 @@ class FarmSupportFragment : Fragment() {
                 addUser = TranslationsManager().getString("str_add_user")
                 binding.addUser.text = addUser
             }
-            Log.d("Clicked", "onCreateView: ${it.data?.accountId.toString()}")
+            Log.d("Clicked", "onCreateView: ${resource.data?.accountId.toString()}")
         }
 
 
@@ -82,10 +81,10 @@ class FarmSupportFragment : Fragment() {
     }
 
     private fun onClick() {
-        binding.addUser.setOnClickListener() {
+        binding.addUser.setOnClickListener {
             this.findNavController().navigate(FarmSupportFragmentDirections.actionFarmSupportFragmentToAddFarmFragment())
         }
-        binding.topAppBar.setNavigationOnClickListener(){
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
     }
@@ -97,7 +96,7 @@ class FarmSupportFragment : Fragment() {
         // val body = dialog.findViewById(R.id.body) as TextView
         val cancel = dialog.findViewById(R.id.cancel) as Button
         val delete = dialog.findViewById(R.id.delete) as Button
-        val Username = dialog.findViewById(R.id.textView15) as TextView
+        val username = dialog.findViewById(R.id.textView15) as TextView
         val areYouSure = dialog.findViewById(R.id.textView14)as TextView
         delete.setOnClickListener {
             viewModel.deleteFarmSupport(id).observe(viewLifecycleOwner) {
@@ -120,7 +119,7 @@ class FarmSupportFragment : Fragment() {
         }
         viewModel.viewModelScope.launch {
            deleteDes = TranslationsManager().getString("str_delete_desc")
-            Username.text = deleteDes
+            username.text = deleteDes
 
         }
         TranslationsManager().loadString("delete_farm_support",areYouSure)
