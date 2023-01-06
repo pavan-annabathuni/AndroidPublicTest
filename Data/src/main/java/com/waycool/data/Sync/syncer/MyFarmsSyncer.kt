@@ -50,7 +50,9 @@ class MyFarmsSyncer:SyncInterface {
                                     MyFarmsEntityMapper().toEntityList(it.data?.data!!)
                                     //  CropInformationEntityMapper().toEntityList(it.data?.data!!)
                                 )
-                                setSyncStatus(true)
+                                if (it.data.data.isNotEmpty())
+                                    setSyncStatus(true)
+                                else setSyncStatus(false)
                             }
 
                             is Resource.Loading -> {

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -13,7 +14,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.InputFilter
@@ -27,6 +27,7 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,15 +35,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
-import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -64,10 +66,9 @@ class RegistrationFragment : Fragment() {
     //    var dummylist: MutableList<ModuleMasterDomain> = mutableListOf()
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
-    private val REQUEST_CODE_SPEECH_INPUT = 101
     var latitude: String = ""
     var longitutde: String = ""
-    var address:String?=""
+    var address: String? = ""
     var village: String? = ""
     var state = ""
     var district = ""
@@ -92,6 +93,26 @@ class RegistrationFragment : Fragment() {
 
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
     private var audioUrl: String? = null
+
+    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private val locationRequest = LocationRequest
+        .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+        .build()
+
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            getLocation()
+            locationResult.lastLocation?.let { 
+                removeLocationCallback()
+                getGeocodeFromLocation(it)
+            }
+        }
+    }
+
+    private fun removeLocationCallback() {
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
 
     private val filter: InputFilter =
         InputFilter { source, start, end, dest, dstart, dend ->
@@ -138,7 +159,7 @@ class RegistrationFragment : Fragment() {
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
         toolbarLayoutBinding.toolbarTile.text = "Profile"
         toolbarLayoutBinding.backBtn.setOnClickListener {
-            Navigation.findNavController(binding.root).popBackStack(R.id.loginFragment,false)
+            Navigation.findNavController(binding.root).popBackStack(R.id.loginFragment, false)
         }
 
         if (arguments?.getString("mobile_number") != null) {
@@ -202,7 +223,8 @@ class RegistrationFragment : Fragment() {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.locationEt.text.toString().trim().length != 0) {
-                    binding.registerDoneBtn.isEnabled = binding.nameEt.text.toString().trim().length != 0
+                    binding.registerDoneBtn.isEnabled =
+                        binding.nameEt.text.toString().trim().length != 0
                 } else {
                     binding.registerDoneBtn.isEnabled = false
                 }
@@ -239,11 +261,10 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun networkCall() {
-        if(NetworkUtil.getConnectivityStatusString(context)==0){
-            binding.clInclude.visibility=View.VISIBLE
-        }
-        else{
-            binding.clInclude.visibility=View.GONE
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+        } else {
+            binding.clInclude.visibility = View.GONE
         }
     }
 
@@ -252,7 +273,7 @@ class RegistrationFragment : Fragment() {
         desc: String?,
         audiourl: String?,
         type: String,
-        imageUrl:String?,
+        imageUrl: String?,
         context: Context
     ) {
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -268,8 +289,8 @@ class RegistrationFragment : Fragment() {
         val pause = bottomSheetDialog.findViewById<ImageView>(R.id.pause)
         val seekbar = bottomSheetDialog.findViewById<SeekBar>(R.id.media_seekbar)
         val totalTime = bottomSheetDialog.findViewById<TextView>(R.id.total_time)
-        headerTv!!.text = tittle?:""
-        descTV!!.text = desc?:""
+        headerTv!!.text = tittle ?: ""
+        descTV!!.text = desc ?: ""
         if (type.equals("0")) {
 //            UserTYpeTV!!.setText("Free User")
             icon!!.visibility = View.GONE
@@ -283,7 +304,7 @@ class RegistrationFragment : Fragment() {
             audioLayout!!.visibility = View.VISIBLE
         }
         if (imageUrl != null) {
-           Glide.with(context).load(imageUrl).into(descImage)
+            Glide.with(context).load(imageUrl).into(descImage)
         }
 
         descTV.movementMethod = ScrollingMovementMethod()
@@ -305,83 +326,183 @@ class RegistrationFragment : Fragment() {
         play!!.setOnClickListener { view ->
             if (audiourl != null) {
                 if (pause != null) {
-                    playAudio(context,audiourl, play, pause, seekbar!!, totalTime!!)
+                    playAudio(context, audiourl, play, pause, seekbar!!, totalTime!!)
                 }
             } else {
-                context?.let { ToastStateHandling.toastError(it,"Audio file not found",Toast.LENGTH_SHORT) }
+                context?.let {
+                    ToastStateHandling.toastError(
+                        it,
+                        "Audio file not found",
+                        Toast.LENGTH_SHORT
+                    )
+                }
 
             }
         }
 
-   }
+    }
+
+//    @SuppressLint("MissingPermission")
+//    private fun getLocation() {
+//        if (checkPermissions()) {
+//            if (isLocationEnabled()) {
+//
+//                mFusedLocationClient =
+//                    LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
+//
+//                binding.locationTextlayout.helperText = "Detecting your location.."
+//
+//                mFusedLocationClient.lastLocation
+//                    .addOnSuccessListener { location: Location? ->
+//                        if (location != null) {
+//                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
+//                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
+//
+//                            viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
+//                                .observe(viewLifecycleOwner) {
+//                                    binding.locationEt.setText("")
+//                                    if (it.results.isNotEmpty()) {
+//                                        val result = it.results[0]
+//                                        if (result.subLocality != null)
+//                                            binding.locationEt.append("${result.subLocality},")
+//                                        if (result.locality != null)
+//                                            binding.locationEt.append("${result.locality},")
+//                                        if (result.district != null)
+//                                            binding.locationEt.append(" ${result.district}")
+//                                        binding.locationEt.setSelection(0)
+//                                        binding.locationTextlayout.helperText = ""
+//
+//                                        address = result.formattedAddress.toString()
+//                                        village = result.subLocality.toString()
+//                                        pincode = result.pincode.toString()
+//                                        state = result.state.toString()
+//                                        district = result.district.toString()
+//                                    } else {
+////                                        binding.locationEt.setText("$village, $district")
+//                                        binding.locationTextlayout.helperText =
+//                                            "Could not find your location. " +
+//                                                    "Enter Manually."
+//                                    }
+//
+//                                }
+//
+//                        }
+//                    }
+//                    .addOnFailureListener {
+//                        it.message?.let { it1 ->
+//                            ToastStateHandling.toastError(requireContext(),
+//                                it1,Toast.LENGTH_SHORT)
+//                        }
+//                        Log.d("Registration", "" + it.message)
+//                    }
+//                    .addOnCanceledListener {
+//                        ToastStateHandling.toastError(requireContext(),
+//                            "Cancelled",Toast.LENGTH_SHORT)
+//
+//                    }
+//            } else {
+//                ToastStateHandling.toastError(requireContext(),
+//                    "Please turn on location",Toast.LENGTH_SHORT)
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
+//            }
+//        } else {
+//            requestPermission()
+//        }
+//    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-
-                mFusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-
-                binding.locationTextlayout.helperText = "Detecting your location.."
-
-                mFusedLocationClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
-                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
-
-                            viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
-                                .observe(viewLifecycleOwner) {
-                                    binding.locationEt.setText("")
-                                    if (it.results.isNotEmpty()) {
-                                        val result = it.results[0]
-                                        if (result.subLocality != null)
-                                            binding.locationEt.append("${result.subLocality},")
-                                        if (result.locality != null)
-                                            binding.locationEt.append("${result.locality},")
-                                        if (result.district != null)
-                                            binding.locationEt.append(" ${result.district}")
-                                        binding.locationEt.setSelection(0)
-                                        binding.locationTextlayout.helperText = ""
-
-                                        address = result.formattedAddress.toString()
-                                        village = result.subLocality.toString()
-                                        pincode = result.pincode.toString()
-                                        state = result.state.toString()
-                                        district = result.district.toString()
-                                    } else {
-//                                        binding.locationEt.setText("$village, $district")
-                                        binding.locationTextlayout.helperText =
-                                            "Could not find your location. " +
-                                                    "Enter Manually."
-                                    }
-
-                                }
+                fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+                fusedLocationProviderClient?.lastLocation!!
+                    .addOnSuccessListener {
+                        if (it != null) {
+                            getGeocodeFromLocation(it)
 
                         }
                     }
-                    .addOnFailureListener {
-                        it.message?.let { it1 ->
-                            ToastStateHandling.toastError(requireContext(),
-                                it1,Toast.LENGTH_SHORT)
-                        }
-                        Log.d("Registration", "" + it.message)
-                    }
-                    .addOnCanceledListener {
-                        ToastStateHandling.toastError(requireContext(),
-                            "Cancelled",Toast.LENGTH_SHORT)
-
-                    }
+                fusedLocationProviderClient?.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+                )
             } else {
-                ToastStateHandling.toastError(requireContext(),
-                    "Please turn on location",Toast.LENGTH_SHORT)
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+
+                val builder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                    .setAlwaysShow(true)
+
+                val locationResponseTask: Task<LocationSettingsResponse> =
+                    LocationServices.getSettingsClient(requireContext().applicationContext)
+                        .checkLocationSettings(builder.build())
+                locationResponseTask.addOnCompleteListener {
+                    try {
+                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                            val apiException: ResolvableApiException = e as ResolvableApiException
+                            try {
+                                apiException.startResolutionForResult(
+                                    requireActivity(),
+                                    REQUEST_CODE_GPS
+                                )
+                            } catch (sendIntent: IntentSender.SendIntentException) {
+                                sendIntent.printStackTrace()
+                            }
+                        }
+                    }
+
+                }
+
+//                context?.let {
+//                    ToastStateHandling.toastError(
+//                        it,
+//                        "Please turn on location",
+//                        Toast.LENGTH_LONG
+//                    )
+//                }
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
             }
         } else {
             requestPermission()
         }
+    }
+
+    private fun getGeocodeFromLocation(it: Location) {
+        latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
+        longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+
+        viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
+            .observe(viewLifecycleOwner) {
+                binding.locationEt.setText("")
+                if (it.results.isNotEmpty()) {
+                    val result = it.results[0]
+                    if (result.subLocality != null)
+                        binding.locationEt.append("${result.subLocality},")
+                    if (result.locality != null)
+                        binding.locationEt.append("${result.locality},")
+                    if (result.district != null)
+                        binding.locationEt.append(" ${result.district}")
+                    binding.locationEt.setSelection(0)
+                    binding.locationTextlayout.helperText = ""
+
+                    address = result.formattedAddress.toString()
+                    village = result.subLocality.toString()
+                    pincode = result.pincode.toString()
+                    state = result.state.toString()
+                    district = result.district.toString()
+                } else {
+//                                        binding.locationEt.setText("$village, $district")
+                    binding.locationTextlayout.helperText =
+                        "Could not find your location. " +
+                                "Enter Manually."
+                }
+
+            }
     }
 
     private fun isLocationEnabled(): Boolean {
@@ -443,7 +564,13 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.isNotEmpty() && longitutde.isNotEmpty()) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                context?.let { ToastStateHandling.toastError(it,"Please check your Internet connection",Toast.LENGTH_LONG) }
+                context?.let {
+                    ToastStateHandling.toastError(
+                        it,
+                        "Please check your Internet connection",
+                        Toast.LENGTH_LONG
+                    )
+                }
             } else {
                 query = HashMap()
                 query["name"] = binding.nameEt.text.toString().trim()
@@ -453,30 +580,36 @@ class RegistrationFragment : Fragment() {
                 query["lang_id"] = "1"
                 query["email"] = ""
                 query["pincode"] = pincode
-                if(village!=null) {
+                if (village != null) {
                     query["village"] = village!!
                 }
-                if(address!=null) {
+                if (address != null) {
                     query["address"] = address!!
                 }
                 query["state"] = state
                 query["district"] = district
                 query["sub_district_id"] = ""
-                binding.progressBarSubmit.visibility=View.VISIBLE
-                binding.registerDoneBtn.visibility=View.GONE
+                binding.progressBarSubmit.visibility = View.VISIBLE
+                binding.registerDoneBtn.visibility = View.GONE
                 viewModel.getUserData(query).observe(this) {
                     when (it) {
                         is Resource.Success -> {
-                            binding.progressBarSubmit.visibility=View.GONE
-                            binding.registerDoneBtn.visibility=View.VISIBLE
-                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"SuccessFully Registered",Toast.LENGTH_SHORT) }
+                            binding.progressBarSubmit.visibility = View.GONE
+                            binding.registerDoneBtn.visibility = View.VISIBLE
+                            context?.let { it1 ->
+                                ToastStateHandling.toastSuccess(
+                                    it1,
+                                    "SuccessFully Registered",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
                             lifecycleScope.launch {
                                 userLogin()
                             }
                         }
                         is Resource.Loading -> {
-                            binding.progressBarSubmit.visibility=View.GONE
-                            binding.registerDoneBtn.visibility=View.VISIBLE
+                            binding.progressBarSubmit.visibility = View.GONE
+                            binding.registerDoneBtn.visibility = View.VISIBLE
 
                         }
                         is Resource.Error -> {
@@ -484,11 +617,12 @@ class RegistrationFragment : Fragment() {
                                 context?.let { it2 ->
                                     ToastStateHandling.toastSuccess(
                                         it2,
-                                        it1,Toast.LENGTH_SHORT)
+                                        it1, Toast.LENGTH_SHORT
+                                    )
                                 }
                             }
-                            binding.progressBarSubmit.visibility=View.VISIBLE
-                            binding.registerDoneBtn.visibility=View.GONE
+                            binding.progressBarSubmit.visibility = View.VISIBLE
+                            binding.registerDoneBtn.visibility = View.GONE
 
                         }
                     }
@@ -560,7 +694,11 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Error: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    )
 
                 }
             }
@@ -589,9 +727,9 @@ class RegistrationFragment : Fragment() {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
             ToastStateHandling.toastError(
-                    requireContext(), " " + e.message,
-                    Toast.LENGTH_SHORT
-                )
+                requireContext(), " " + e.message,
+                Toast.LENGTH_SHORT
+            )
         }
     }
 
@@ -610,6 +748,9 @@ class RegistrationFragment : Fragment() {
 
             }
         }
+        if (resultCode == REQUEST_CODE_GPS && resultCode == AppCompatActivity.RESULT_OK) {
+            getLocation()
+        }
     }
 
     private fun playAudio(
@@ -622,20 +763,31 @@ class RegistrationFragment : Fragment() {
     ) {
 
         mediaPlayer = MediaPlayer()
-            mediaPlayer!!.setOnCompletionListener {
-                mediaSeekbar.progress = 0
-               pause.visibility = View.GONE
-                play.visibility = View.VISIBLE
-            }
+        mediaPlayer!!.setOnCompletionListener {
+            mediaSeekbar.progress = 0
+            pause.visibility = View.GONE
+            play.visibility = View.VISIBLE
+        }
 
-            Log.d("Audio", "audioPlayer: $audioUrl")
-            val audio = AudioWife.getInstance()
-                .init(context, Uri.parse(path))
-                .setPlayView(play)
-                .setPauseView(pause)
-                .setSeekBar(mediaSeekbar)
-                .setRuntimeView(totalTime)
-            audio.play()
+        Log.d("Audio", "audioPlayer: $audioUrl")
+        val audio = AudioWife.getInstance()
+            .init(context, Uri.parse(path))
+            .setPlayView(play)
+            .setPauseView(pause)
+            .setSeekBar(mediaSeekbar)
+            .setRuntimeView(totalTime)
+        audio.play()
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+
+    }
+
+    companion object {
+        private const val REQUEST_CODE_SPEECH_INPUT = 101
+        private const val REQUEST_CODE_GPS = 1011
     }
 }

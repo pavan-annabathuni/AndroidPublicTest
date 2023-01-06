@@ -296,7 +296,7 @@ object NetworkSource {
 
     fun postNewSoil(
         account_id: Int, lat: Double, long: Double, org_id: Int, plot_no: String, pincode: String,
-        address: String, state: String, district: String, number: String,crop_id:Int
+        address: String, state: String, district: String, number: String, crop_id: Int
     ) =
         flow<Resource<SoilTestResponseDTO?>> {
             try {
@@ -580,7 +580,7 @@ object NetworkSource {
             }
         }
 
-    fun farmDetailsDelta(farmId:Int) =
+    fun farmDetailsDelta(farmId: Int) =
         flow<Resource<FarmDetailsDTO?>> {
             try {
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
@@ -622,8 +622,8 @@ object NetworkSource {
 //                LocalSource.getUserDetailsEntity()?.account
 //                    ?.firstOrNull { it.accountType == "outgrow" }
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-
-                val response = apiInterface.getIotDevice(headerMap!!)
+                val accountId = LocalSource.getUserDetailsEntity()?.accountId
+                val response = apiInterface.getIotDevice(headerMap!!,accountId!!)
                 if (response.isSuccessful) {
                     emit(Resource.Success(response.body()))
                 } else {
@@ -701,7 +701,7 @@ object NetworkSource {
 
         emit(Resource.Loading())
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
+            val langCode = LocalSource.getLanguageCode() ?: "en"
             val response = apiInterface.getCropInformation(headerMap, lang = langCode)
 
             if (response.isSuccessful)
@@ -714,7 +714,8 @@ object NetworkSource {
         }
     }
 
-    fun updateProfile(headerMap: Map<String, String>,field:Map<String,String>
+    fun updateProfile(
+        headerMap: Map<String, String>, field: Map<String, String>
     ) = flow<Resource<profile?>> {
 
         emit(Resource.Loading())
@@ -791,14 +792,14 @@ object NetworkSource {
 //    }
     fun getMandiList(
         lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
-        sortBy: String?, orderBy: String?, search: String?,accountId: Int?
+        sortBy: String?, orderBy: String?, search: String?, accountId: Int?
     ): Flow<PagingData<MandiDomainRecord>> {
         return Pager(
             config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
             pagingSourceFactory = {
                 MandiPagingSource(
                     apiInterface, lat, lon, crop_category,
-                    state, crop, sortBy, orderBy, search,accountId
+                    state, crop, sortBy, orderBy, search, accountId
                 )
             }
         ).flow
@@ -888,7 +889,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            Log.d("MyCrops","error: ${e.message}")
+            Log.d("MyCrops", "error: ${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -940,7 +941,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-          //  emit(Resource.Error(e.message))
+            //  emit(Resource.Error(e.message))
         }
     }
 
@@ -1049,14 +1050,14 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-           // emit(Resource.Error(e.message))
+            // emit(Resource.Error(e.message))
         }
     }
 
     fun getAppTranslations() = flow<Resource<AppTranlationsDTO?>> {
         try {
-            val langCode=LocalSource.getLanguageCode()?:"en"
-            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()?: emptyMap()
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic() ?: emptyMap()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 
@@ -1160,29 +1161,12 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getCropStage(account_id: Int,plot_id: Int)
-            = flow<Resource<CropStageModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
-        emit(Resource.Loading())
-        try {
-            val response = apiInterface.getCropStage(map,account_id,plot_id)
-            if(response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-            }
 
-        } catch (e: Exception) {
-            //   emit(Resource.Error(e.message))
-        }
-    }
-
-    fun updateCropStage(accountId: Int,stageId:Int,plotId: Int,date:String)
-        = flow<Resource<UpdateCropStage?>> {
+    fun getCropStage(account_id: Int, plot_id: Int) = flow<Resource<CropStageModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.updateCropStage(map, accountId, stageId, plotId, date)
+            val response = apiInterface.getCropStage(map, account_id, plot_id)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
@@ -1194,13 +1178,29 @@ object NetworkSource {
         }
     }
 
-    fun getNdvi(farmId: Int,accountId: Int)
-            = flow<Resource<NdviModel?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+    fun updateCropStage(accountId: Int, stageId: Int, plotId: Int, date: String) =
+        flow<Resource<UpdateCropStage?>> {
+            val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+            emit(Resource.Loading())
+            try {
+                val response = apiInterface.updateCropStage(map, accountId, stageId, plotId, date)
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+
+            } catch (e: Exception) {
+                //   emit(Resource.Error(e.message))
+            }
+        }
+
+    fun getNdvi(farmId: Int, accountId: Int) = flow<Resource<NdviModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getNdvi(map,farmId,accountId)
-            if(response.isSuccessful)
+            val response = apiInterface.getNdvi(map, farmId, accountId)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1211,11 +1211,10 @@ object NetworkSource {
         }
     }
 
-    fun getNdviMean(url:String)
-            = flow<Resource<NDVIMean?>> {
+    fun getNdviMean(url: String) = flow<Resource<NDVIMean?>> {
         try {
             val response = apiInterface.getNDVIMean(url)
-            if(response.isSuccessful)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1299,13 +1298,13 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun updateNotification(id: String)
-            = flow<Resource<UpdateNotification?>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+    fun updateNotification(id: String) = flow<Resource<UpdateNotification?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.updateNotification(map,id)
-            if(response.isSuccessful)
+            val response = apiInterface.updateNotification(map, id)
+            if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
@@ -1315,11 +1314,12 @@ object NetworkSource {
             //   emit(Resource.Error(e.message))
         }
     }
-    fun getDisease(account_id: Int,plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
+
+    fun getDisease(account_id: Int, plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getDisease(map,account_id,plot_id)
+            val response = apiInterface.getDisease(map, account_id, plot_id)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

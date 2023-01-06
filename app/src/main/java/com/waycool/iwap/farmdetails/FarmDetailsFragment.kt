@@ -113,10 +113,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun farmDetailsObserve() {
         binding.toolbarTextFarm.text = myFarm?.farmName
-        binding.tvPempDate.text = myFarm?.farmPumpHp
-        binding.totalFormDate.text = myFarm?.farmPumpType
-        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize
-        binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate
+        binding.tvPempDate.text = myFarm?.farmPumpHp?:"NA"
+        binding.totalFormDate.text = myFarm?.farmPumpType?:"NA"
+        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize?:"NA"
+        binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate?:"NA"
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE
             binding.waterChipGroup.visibility = View.VISIBLE
@@ -197,6 +197,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     }
 
     private fun initObserveDevice() {
+        binding.ndviCl.visibility = View.GONE
+        binding.farmdetailsPremiumCl.visibility = View.GONE
+        binding.cardMYDevice.visibility = View.GONE
+        binding.freeAddDeviceCv.visibility = View.VISIBLE
         viewDevice.getIotDevice().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
@@ -207,15 +211,21 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         viewDeviceListAdapter.setMovieList(response as ArrayList<ViewDeviceData>)
 
                         if (response.isNullOrEmpty()) {
+                            binding.ndviCl.visibility = View.GONE
                             binding.farmdetailsPremiumCl.visibility = View.GONE
                             binding.cardMYDevice.visibility = View.GONE
                             binding.freeAddDeviceCv.visibility = View.VISIBLE
+                        }else{
+                            binding.ndviCl.visibility = View.VISIBLE
+                            binding.farmdetailsPremiumCl.visibility = View.VISIBLE
+                            binding.cardMYDevice.visibility = View.VISIBLE
+                            binding.freeAddDeviceCv.visibility = View.GONE
                         }
                     }
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+//                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                 }
                 is Resource.Loading -> {
                     ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
@@ -242,6 +252,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     } else {
                         binding.farmdetailsPremiumCl.visibility = View.GONE
                         binding.cardMYDevice.visibility = View.GONE
+                        binding.ndviCl.visibility=View.GONE
                         binding.freeAddDeviceCv.visibility = View.VISIBLE
                         binding.ndviCl.visibility = View.GONE
 
@@ -287,6 +298,16 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             startActivity(intent)
         }
 
+        binding.addCropCl.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.cardAddForm.setOnClickListener {
+            val intent = Intent(activity, AddCropActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.MyDevice.setOnClickListener {
             val bundle = Bundle()
             bundle.putParcelable("farm", myFarm)
@@ -305,6 +326,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             bundle.putParcelable("farm", myFarm)
             findNavController().navigate(R.id.action_farmDetailsFragment4_to_navigation, bundle)
         }
+
 
         binding.callDevice.setOnClickListener() {
             val intent = Intent(Intent.ACTION_DIAL)
@@ -569,7 +591,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "leaf_wetness")
+                    bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
                     bundle.putString("temp_value", data.leafWetness)

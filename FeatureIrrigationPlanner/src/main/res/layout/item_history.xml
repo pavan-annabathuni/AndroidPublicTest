@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="12dp"
+    android:theme="@style/Theme.MaterialComponents.Light"
     app:cardUseCompatPadding="true"
     app:layout_constraintTop_toTopOf="parent">
 

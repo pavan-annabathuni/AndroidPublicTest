@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
-import com.example.mandiprice.adapter.AdsAdapter
 import com.example.mandiprice.adapter.DateAdapter
 import com.example.mandiprice.databinding.FragmentMandiGraphBinding
 import com.example.mandiprice.viewModel.MandiViewModel
@@ -41,8 +40,8 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
-import okhttp3.internal.toImmutableList
 import java.io.File
 import java.io.FileOutputStream
 import java.text.ParseException
@@ -287,7 +286,7 @@ class MandiGraphFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter()
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
