@@ -342,8 +342,8 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun getGeocodeFromLocation(it: Location) {
-         latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
-        longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+         lat = String.format(Locale.ENGLISH, "%.5f", it.latitude)
+        long = String.format(Locale.ENGLISH, "%.5f", it.longitude)
 
         viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
             .observe(viewLifecycleOwner) {

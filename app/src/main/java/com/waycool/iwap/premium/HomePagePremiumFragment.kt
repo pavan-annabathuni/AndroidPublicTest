@@ -51,7 +51,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
-    private val myFarmPremiumAdapter by lazy { MyFarmPremiumAdapter(this, this, requireContext()) }
+    private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
+
 
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
@@ -234,7 +235,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val response = it.data as ArrayList<MyCropDataDomain>
             myCropPremiumAdapter.setMovieList(response)
 
-            myFarmPremiumAdapter.updateCropsList(response)
+            if(myFarmPremiumAdapter==null)
+                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
+
+            myFarmPremiumAdapter?.updateCropsList(response)
 
             if (it.data.isNullOrEmpty()) {
                 binding.cvEditCrop.visibility = View.GONE
@@ -336,7 +340,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            mMap?.uiSettings?.setAllGesturesEnabled(false)
 //            mMap?.uiSettings?.isMapToolbarEnabled = false
 //        }
-        binding.rvMyFarm.adapter = myFarmPremiumAdapter
         binding.videosScrollMyFarm.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
         binding.rvMyFarm.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -352,10 +355,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("TAG", "initObserveMYFarmPraveen: ")
                     } else if (it.data != null)
                         if (it.data!!.isNotEmpty()) {
+                            if(myFarmPremiumAdapter==null)
+                                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
+                            binding.rvMyFarm.adapter = myFarmPremiumAdapter
                             myCropPremiumAdapter.updateMyfarms(it.data)
                             binding.clAddForm.visibility = View.GONE
                             binding.cardMYFarm.visibility = View.VISIBLE
-                            myFarmPremiumAdapter.setMovieList(it.data)
+                            myFarmPremiumAdapter?.setMovieList(it.data)
                             if (it.data?.size!! > 1) {
                                 binding.videosScrollMyFarm.visibility = View.VISIBLE
                             } else

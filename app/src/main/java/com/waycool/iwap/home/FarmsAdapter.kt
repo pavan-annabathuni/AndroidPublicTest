@@ -27,8 +27,8 @@ class FarmsAdapter(val context: Context,val farmSelectedListener: FarmSelectedLi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (selectedPosition == -1) {
-            selectedPosition = position
-            farmSelectedListener.onFarmSelected(getItem(position))
+            selectedPosition = holder.layoutPosition
+            farmSelectedListener.onFarmSelected(getItem(holder.layoutPosition))
 //            onItemClick?.invoke(getItem(position))
         }
 

@@ -101,10 +101,15 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
-            locationResult.lastLocation?.let { moveMapToCenter(it) }
+            locationResult.lastLocation?.let {
+                moveMapToCenter(it)
+                removeLocationCallback()
+            }
         }
     }
-
+    private fun removeLocationCallback() {
+        fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
