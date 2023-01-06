@@ -136,7 +136,7 @@ class CropHealthFragment : Fragment() {
 //            var areaHint = TranslationsManager().getString("e_g_50")
 //            binding.etAreaNumber.hint =areaHint
         }
-        TranslationsManager().loadString("crop_health_info", binding.tvOurAll)
+        TranslationsManager().loadString("pestdisease_description", binding.tvOurAll)
         TranslationsManager().loadString("take_picture", binding.tvTakeImage)
         TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo)
         TranslationsManager().loadString("get_measures", binding.tvTextSoilThree)
