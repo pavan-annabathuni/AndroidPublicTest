@@ -220,7 +220,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc)
         TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore)
 
-        TranslationsManager().loadString("peast_diease", binding.tvCropHealth)
+        TranslationsManager().loadString("crop_health", binding.tvCropHealth)
         TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc)
         TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore)
 

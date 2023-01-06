@@ -78,7 +78,7 @@ import kotlin.math.roundToInt
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     //    private val binding get() = _binding!!
-    private lateinit  var binding: FragmentSoilTestingHomeBinding
+    private lateinit var binding: FragmentSoilTestingHomeBinding
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -87,7 +87,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
 
-    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
         .build()
@@ -172,10 +172,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 )
             }
         } else {
-            binding.clInclude.visibility=View.GONE
+            binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
             binding.cardCheckHealth.visibility = View.VISIBLE
-            binding.addFab.visibility=View.VISIBLE
+            binding.addFab.visibility = View.VISIBLE
             setBanners()
             getAllHistory()
             getVideos()
@@ -276,8 +276,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                }
-                else {
+                } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
@@ -328,12 +327,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
-            intent.putExtra("module_id",moduleId)
+            intent.putExtra("module_id", moduleId)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
-            intent.putExtra("module_id",moduleId)
+            intent.putExtra("module_id", moduleId)
             startActivity(intent)
         }
 
@@ -477,7 +476,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        context?.let { it1 -> ToastStateHandling.toastError(it1, "Error", Toast.LENGTH_SHORT) }
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1,
+                                "Error",
+                                Toast.LENGTH_SHORT
+                            )
+                        }
 
                     }
                     is Resource.Loading -> {
@@ -487,6 +492,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
         }
     }
+
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
@@ -622,7 +628,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         .checkLocationSettings(builder.build())
                 locationResponseTask.addOnCompleteListener {
                     try {
-                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                        val response: LocationSettingsResponse =
+                            it.getResult(ApiException::class.java)
                     } catch (e: ApiException) {
                         if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                             val apiException: ResolvableApiException = e as ResolvableApiException
@@ -685,23 +692,23 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         bundle.putString("lat", latitude)
                         bundle.putString("lon", longitutde)
 
-                                        try {
-                                            findNavController().navigate(
-                                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-                                                bundle
-                                            )
-                                        }catch (e:Exception){
-                                            Log.d(
-                                                "TAGPraveen",
-                                                "isLocationPermissionGranted: SetPass"
-                                            )
-                                        } catch (e: Exception) {
-                                            Log.d(
-                                                "TAGPraveenAade",
-                                                "isLocationPermissionGranted: NotPassed $e"
-                                            )
-                                        }
-
+                        try {
+                            findNavController().navigate(
+                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+                                bundle
+                            )
+                        } catch (e: Exception) {
+                            binding.clProgressBar.visibility = View.GONE
+                            Log.d(
+                                "TAGPraveen",
+                                "isLocationPermissionGranted: SetPass"
+                            )
+                        } catch (e: Exception) {
+                            Log.d(
+                                "TAGPraveenAade",
+                                "isLocationPermissionGranted: NotPassed $e"
+                            )
+                        }
                         binding.clProgressBar.visibility = View.GONE
                                         binding.view.visibility=View.GONE
 
@@ -710,14 +717,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                 }
                 is Resource.Error -> {
-                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+                    if (NetworkUtil.getConnectivityStatusString(context) == 0) {
                         ToastStateHandling.toastError(
                             requireContext(),
                             "Please check you internet connectivity",
                             Toast.LENGTH_SHORT
                         )
-                    }
-                    else{
+                    } else {
                         ToastStateHandling.toastError(
                             requireContext(),
                             "Too many attempts.Try again later",
@@ -728,14 +734,15 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                     binding.clProgressBar.visibility = View.GONE
                     binding.cardCheckHealth.isClickable = true
 
+
                 }
                 is Resource.Loading -> {
                     binding.clProgressBar.visibility = View.VISIBLE
-                                    ToastStateHandling.toastWarning(
-                                        requireContext(),
-                                        "Loading",
-                                        Toast.LENGTH_SHORT
-                                    )
+                    ToastStateHandling.toastWarning(
+                        requireContext(),
+                        "Loading",
+                        Toast.LENGTH_SHORT
+                    )
 
                 }
             }
@@ -802,7 +809,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         var isVisible = false
         binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_cross
+                    )
+                )
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -810,7 +822,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_chat_call
+                    )
+                )
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

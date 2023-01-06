@@ -661,12 +661,13 @@ object NetworkSource {
 
     fun getTracker(soil_test_request_id: Int) = flow<Resource<TrackerDTO?>> {
         try {
+            val langCode = LocalSource.getLanguageCode() ?: "en"
 //            val header =
 //                LocalSource.getUserDetailsEntity()?.account
 //                    ?.firstOrNull { it.accountType == "outgrow" }
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 
-            val response = apiInterface.getTracker(headerMap!!, soil_test_request_id)
+            val response = apiInterface.getTracker(headerMap!!, soil_test_request_id, lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
