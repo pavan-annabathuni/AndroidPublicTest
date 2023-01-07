@@ -350,7 +350,7 @@ class SearchFragment : Fragment() {
     fun autoComplete() {
         viewModel.getAllCrops().observe(viewLifecycleOwner) {
             val cropName = it?.data?.map { data ->
-                data.cropName
+                data.cropNameTag
             } ?: emptyList()
             val text = resources.getStringArray(R.array.autoComplete)
             val arrayAdapter =

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -29,7 +30,10 @@ import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -77,7 +81,10 @@ class CropHealthFragment : Fragment() {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
-
+        videosBinding.ivViewAll.setOnClickListener {
+            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            startActivity(intent)
+        }
         historyAdapter = AiCropHistoryAdapter(requireContext())
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
@@ -98,7 +105,7 @@ class CropHealthFragment : Fragment() {
         bindObservers()
         getVideos()
         fabButton()
-
+        binding.tvCheckCrop.isSelected = true
         historyAdapter.onItemClick = {
             if (it?.disease_id==null) {
                 ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
@@ -113,10 +120,29 @@ class CropHealthFragment : Fragment() {
             }
 
         }
-
+        translationSoilTesting()
         binding.backBtn.setOnClickListener() {
             activity?.finish()
         }
+
+
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("crop_health")
+            binding.tvToolBar.text = title
+//            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+//            binding.etNickName.hint =NickNamehint
+//            var areaHint = TranslationsManager().getString("e_g_50")
+//            binding.etAreaNumber.hint =areaHint
+        }
+        TranslationsManager().loadString("pestdisease_description", binding.tvOurAll)
+        TranslationsManager().loadString("take_picture", binding.tvTakeImage)
+        TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo)
+        TranslationsManager().loadString("get_measures", binding.tvTextSoilThree)
+        TranslationsManager().loadString("request_history", binding.tvRequest)
+        TranslationsManager().loadString("check_crop_health", binding.tvCheckCrop)
+        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
 
     }
 
@@ -155,6 +181,9 @@ class CropHealthFragment : Fragment() {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
+
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 }
                 else {
@@ -164,6 +193,9 @@ class CropHealthFragment : Fragment() {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.viewAllVideos.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility = View.GONE
+
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                 }
@@ -172,10 +204,15 @@ class CropHealthFragment : Fragment() {
 
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
 
@@ -258,7 +295,7 @@ class CropHealthFragment : Fragment() {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.takeGuide.visibility = View.GONE
+                        binding.clTopGuide.visibility = View.GONE
                         binding.clProgressBar.visibility=View.GONE
 
 //                        Log.d(TAG, "bindObserversData:" + model.data.toString())

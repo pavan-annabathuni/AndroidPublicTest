@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
+import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 import com.waycool.iwap.home.FarmCropsAdapter
 
@@ -34,8 +36,10 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
     override fun onBindViewHolder(holder: MyFarmPremiumViewHolder, position: Int) {
         val detail = details[position]
         holder.binding.tvAddDeviceStart.text = detail.farmName
+       holder. binding.tvAddDevice .isSelected = true
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
+        TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice)
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
 
@@ -58,6 +62,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
             selectedFarmPosition = position
             farmSelectedListener.onFarmSelected(detail)
         }
+
 
         if (position == selectedFarmPosition) {
             holder.binding.farmcl.setBackgroundResource(com.example.soiltesting.R.drawable.bg_add_form)

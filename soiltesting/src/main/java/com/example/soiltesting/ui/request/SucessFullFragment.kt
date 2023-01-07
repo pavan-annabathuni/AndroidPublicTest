@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSucessFullBinding
 import com.example.soiltesting.utils.Constant.TAG
+import com.waycool.data.translations.TranslationsManager
 
 
 class SucessFullFragment : Fragment() {
@@ -40,6 +41,19 @@ class SucessFullFragment : Fragment() {
 //            }
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        traslationSoilTesting()
+    }
+
+    fun traslationSoilTesting() {
+        TranslationsManager().loadString("successfully_completed", binding.tvRequestID)
+        TranslationsManager().loadString("Request Successful!", binding.tvRequestIDText)
+        TranslationsManager().loadString("successfully_completed", binding.tvRequestIDTextStatus)
+
+
     }
 
     override fun onDestroyView() {

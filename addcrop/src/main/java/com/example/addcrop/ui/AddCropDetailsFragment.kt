@@ -23,9 +23,13 @@ import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,17 +42,15 @@ class AddCropDetailsFragment : Fragment() {
 
     private var _binding: FragmentAddCropDetailsBinding? = null
     private val binding get() = _binding!!
-    val myCalendar = Calendar.getInstance()
-    var dateCrop: String = ""
-    var nickName: String = ""
+    private val myCalendar = Calendar.getInstance()
+    private var dateCrop: String = ""
+    private var nickName: String = ""
     var area: String = ""
-    var numberOfPlanets: String = ""
     var date: String = ""
     val arrayList = ArrayList<String>()
-    lateinit var irrigation_selected: String
     lateinit var areaTypeSelected: String
 
-    var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
+    private var dateOfBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
 
@@ -58,7 +60,7 @@ class AddCropDetailsFragment : Fragment() {
         "Sprinkler Irrigation",
         "Flood Irrigation"
     )
-    val years = arrayOf(
+    private val years = arrayOf(
         "Acres",
         "Gunta",
         "Cent",
@@ -103,10 +105,11 @@ class AddCropDetailsFragment : Fragment() {
 
 //        spinner()
         spinnerYear()
+        translationSoilTesting()
         binding.clCalender.setOnClickListener {
             showCalender()
         }
-        binding.backBtn.setOnClickListener {
+        binding.toolbar.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
@@ -289,12 +292,12 @@ class AddCropDetailsFragment : Fragment() {
     private fun showCalender() {
 
 
-        var date: DatePickerDialog.OnDateSetListener? =
+        val date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, 0);
+                myCalendar.add(Calendar.YEAR, 0)
                 view.minDate = myCalendar.timeInMillis
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 0)
@@ -309,27 +312,43 @@ class AddCropDetailsFragment : Fragment() {
             myCalendar.get(Calendar.MONTH),
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
-        dateCrop = dateofBirthFormat.format(myCalendar.time)
-        myCalendar.add(Calendar.YEAR, -1);
+        dateCrop = dateOfBirthFormat.format(myCalendar.time)
+        myCalendar.add(Calendar.YEAR, -1)
         dialog.datePicker.minDate = myCalendar.timeInMillis
-        myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
-        dialog.datePicker.maxDate = myCalendar.timeInMillis;
+        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+        dialog.datePicker.maxDate = myCalendar.timeInMillis
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")
-        );
+        )
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
         )
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNickName.hint =NickNamehint
+            var areaHint = TranslationsManager().getString("e_g_50")
+            binding.etAreaNumber.hint =areaHint
+        }
+        TranslationsManager().loadString("add_crop_information", binding.plot)
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
+        TranslationsManager().loadString("sowing_date", binding.Address)
+        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
     }
 
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        binding.etCalender.text = dateFormat.format(myCalendar.getTime())
+        binding.etCalender.text = dateFormat.format(myCalendar.time)
     }
 
-    fun View.hideSoftInput() {
+    private fun View.hideSoftInput() {
         val inputMethodManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)

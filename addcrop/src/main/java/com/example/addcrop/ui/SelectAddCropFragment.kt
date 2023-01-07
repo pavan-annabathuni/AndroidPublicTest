@@ -7,7 +7,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,11 @@ import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -52,7 +54,6 @@ class SelectAddCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSelectAddCropBinding.inflate(inflater)
-        val add_crop = arguments?.getString("userId")
         return binding.root
     }
 
@@ -61,7 +62,9 @@ class SelectAddCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = "Add Crop"
+        binding.toolbarTitle.text = buildString {
+        append("Add Crop")
+    }
 
         binding.cropsRv.adapter = adapter
 
@@ -135,6 +138,10 @@ class SelectAddCropFragment : Fragment() {
             speechToText()
         }
         setUpCropCategories()
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+        }
     }
 
     private fun setUpCropCategories() {

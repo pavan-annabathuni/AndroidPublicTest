@@ -24,6 +24,7 @@
             android:src="@drawable/ic_back_btn_toolbar" />
 
         <TextView
+            android:id="@+id/toolText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,8 +43,7 @@
         app:layout_constraintBottom_toTopOf="@id/cardCheckHealth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,8 +64,8 @@
                     android:layout_width="88dp"
                     android:layout_height="82dp"
                     android:layout_marginStart="16dp"
-                    android:src="@drawable/soiltesttop"
                     android:scaleType="fitXY"
+                    android:src="@drawable/soiltesttop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -259,14 +259,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space20"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/takeGuide">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clTextSoil"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clTextSoilTwo"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -274,89 +276,95 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
+                            android:id="@+id/tvRaise"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space20"
-                            android:maxLines="2"
                             android:minLines="2"
-                            android:text="@string/raise_the_n_request"
+                            android:text="Raise the Request"
                             android:textColor="#000000"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clTextSoilTwo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space16"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clTextSoilThree"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/clTextSoil"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
+                            android:id="@+id/SoilSample"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space20"
-                            android:maxLines="2"
                             android:minLines="2"
-                            android:text="@string/soil_sample_n_collection"
+                            android:text="Soil Sample Collection"
                             android:textColor="#000000"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clTextSoilThree"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space16"
                         app:layout_constraintEnd_toStartOf="@+id/clTextSoilFour"
                         app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/clTextSoilTwo"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
+                            android:id="@+id/tvSoilLab"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space20"
-                            android:maxLines="2"
                             android:minLines="2"
-                            android:text="@string/lab_n_testing"
+                            android:text="Lab Testing"
                             android:textColor="#000000"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clTextSoilFour"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space16"
                         android:layout_marginEnd="@dimen/space16"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/clTextSoilThree"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
+                            android:id="@+id/tvDetaols"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space20"
-                            android:maxLines="2"
                             android:minLines="2"
-                            android:text="@string/detailed_n_report"
+                            android:text="Detailed Report"
                             android:textColor="#000000"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -370,6 +378,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:visibility="visible"
                 android:layout_marginTop="@dimen/space20"
                 android:background="#EBECF2"
                 app:layout_constraintTop_toBottomOf="@+id/clTopGuide" />
@@ -378,10 +387,10 @@
                 android:id="@+id/clBanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space16"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/space16"
+                android:layout_marginTop="@dimen/space16"
                 android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view">
 
@@ -431,24 +440,95 @@
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/clBanner">
 
-                <TextView
-                    android:id="@+id/tvRequest"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clHeadingRequestHistory"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/request_history"
-                    android:textColor="#111827"
-                    android:textSize="@dimen/space20"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ivViewAll"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_viewall"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivViewAll"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_viewall"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/linearView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        app:layout_constraintEnd_toStartOf="@id/ivViewAll"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tvRequest"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="Request History"
+                            android:textColor="#111827"
+                            android:textSize="@dimen/space20"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvViewAll"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="0.3"
+                            android:gravity="end"
+                            android:maxWidth="@dimen/space150"
+                            android:text="View All"
+                            android:textAlignment="textEnd"
+                            android:textColor="#146133"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvRequest"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="@string/request_history"-->
+                <!--                    android:textColor="#111827"-->
+                <!--                    android:textSize="@dimen/space20"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvViewAll"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginEnd="5dp"-->
+                <!--                    android:text="View All"-->
+                <!--                    android:textColor="#146133"-->
+                <!--                    android:textSize="14sp"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    app:layout_constraintEnd_toStartOf="@+id/ivViewAll"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivViewAll"-->
+                <!--                    android:layout_width="20dp"-->
+                <!--                    android:layout_height="20dp"-->
+                <!--                    android:src="@drawable/ic_viewall"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview"
@@ -458,23 +538,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvRequest"
+                    app:layout_constraintTop_toBottomOf="@+id/clHeadingRequestHistory"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_soil_history" />
-
-                <TextView
-                    android:id="@+id/tvViewAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:text="View All"
-                    android:textColor="#146133"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/ivViewAll"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -642,6 +708,7 @@
 
 
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDataThree"
                 android:layout_width="match_parent"
@@ -720,7 +787,7 @@
                 android:id="@+id/endView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -732,8 +799,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99656866"
-        android:visibility="gone"
         android:elevation="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -743,27 +810,29 @@
             android:id="@+id/progressBar"
             android:layout_width="@dimen/space90"
             android:layout_height="@dimen/space90"
-            android:visibility="visible"
             android:background="@drawable/ic_logo_loader"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clInclude"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#fff"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="#fff">
-        <include layout="@layout/api_error_handling"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
             android:id="@+id/errorState"
-            />
+            layout="@layout/api_error_handling" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -775,7 +844,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"
         app:layout_constraintEnd_toEndOf="parent" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
@@ -784,48 +852,99 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_button">
+            android:layout_height="wrap_content"
+            android:background="#0A651C">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/ivClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_add_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCheckCrop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Check your Soil health"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/ivClick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_add_button"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvCheckCrop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Check your Soil health"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/ivClick"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                app:layout_constraintStart_toEndOf="@+id/ivClick"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardCheckHealth"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/space25"-->
+<!--        app:cardCornerRadius="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="@drawable/bg_button">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ivClick"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    android:src="@drawable/ic_add_button"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tvCheckCrop"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:text="Check your Soil health"-->
+<!--                    android:textColor="#FFFFFF"-->
+<!--                    android:textSize="16sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ivClick"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_call"
@@ -836,12 +955,12 @@
         android:layout_gravity="end"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/primaryColor"
+        android:src="@drawable/ic_fab_call"
         android:text="Chat"
         android:textColor="@color/white"
         android:theme="@style/Theme.MaterialComponents.Light"
         android:visibility="gone"
         app:fabSize="normal"
-        android:src="@drawable/ic_fab_call"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/add_chat"
         app:layout_constraintEnd_toEndOf="@+id/add_chat"
@@ -857,12 +976,12 @@
         android:layout_gravity="end"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/primaryColor"
+        android:src="@drawable/ic_fab_chat"
         android:text="Chat"
         android:textColor="@color/white"
         android:theme="@style/Theme.MaterialComponents.Light"
         android:visibility="gone"
         app:fabSize="normal"
-        android:src="@drawable/ic_fab_chat"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/add_fab"
         app:layout_constraintEnd_toEndOf="@+id/add_fab"

@@ -145,7 +145,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarTitle.text = "Add Farm"
+        binding.toolbarTitle.text = buildString {
+        append("Add Farm")
+    }
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }

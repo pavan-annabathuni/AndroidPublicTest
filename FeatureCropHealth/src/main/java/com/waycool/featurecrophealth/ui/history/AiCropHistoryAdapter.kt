@@ -46,6 +46,7 @@ class AiCropHistoryAdapter(private val context: Context) :
 //            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text = note.cropdata.cropName.toString()
+            binding.tvStatus
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()

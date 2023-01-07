@@ -29,6 +29,7 @@ import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -36,6 +37,9 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -76,7 +80,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initObserveMYFarm()
 //        initObserveDevice()
         progressColor()
-        initViewPager()
+        translationSoilTesting()
         fabButton()
         setBanners()
         notification()
@@ -95,12 +99,35 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     }
 
-    private fun initViewPager() {
-//        binding.tvWelcomeName.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_deviceFragmentOne)
-//        }
-
-
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+//            val title = TranslationsManager().getString("str_add_device")
+//            binding.topAppBar.title = title
+//            var areaHint = TranslationsManager().getString("e_g_50")
+//            binding.imeiAddress.hint =areaHint
+        }
+        TranslationsManager().loadString("welcome", binding.tvWelcomeName)
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm)
+        TranslationsManager().loadString("add_crop",binding.tvAddFrom)
+        TranslationsManager().loadString("my_crops", binding.title3SemiBold)
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops)
+        TranslationsManager().loadString("my_farm", binding.titleMyFarm)
+        TranslationsManager().loadString("add_farm_top", binding.MyFarm)
+        TranslationsManager().loadString("my_device", binding.titleMyDevice)
+        TranslationsManager().loadString("view_tepm", binding.tvTemp)
+        TranslationsManager().loadString("view_rainfall", binding.tvWind)
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed)
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness)
+        TranslationsManager().loadString("view_pressure", binding.tvPressure)
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText)
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture)
+        TranslationsManager().loadString("view_top", binding.tvTop)
+        TranslationsManager().loadString("view_bottom", binding.tvBottom)
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp)
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice)
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo)
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh)
     }
 
     private fun initObserveDevice(farmId: Int) {
@@ -208,6 +235,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             startActivity(intent)
         }
         binding.MyFarm.setOnClickListener {
+            val intent = Intent(activity, AddFarmActivity::class.java)
+            startActivity(intent)
+        }
+        binding.ivViewAll.setOnClickListener {
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }

@@ -24,7 +24,11 @@ import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,6 +100,7 @@ class AddCropPremiumFragment : Fragment() {
         initViewClicks()
         noOFYear()
         noOFYearBahar()
+        translationSoilTesting()
 //        getFarms()
         year_selected= "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
@@ -106,6 +111,12 @@ class AddCropPremiumFragment : Fragment() {
             getFarms()
 
         }
+        binding.toolbar.setOnClickListener{
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) requireActivity().onBackPressed()
+        }
+
+
     }
 
     private fun getFarms() {
@@ -175,8 +186,15 @@ class AddCropPremiumFragment : Fragment() {
             crop_id = arguments?.getInt("cropid")
             crop_type = arguments?.getInt("soil_type_id")
 
-            if (crop_id == 2) {
+            if (crop_id == 97) {
 //                binding.clSwitch.visibility = View.VISIBLE
+                binding.EnterDateoffruitPruning.visibility = View.VISIBLE
+                binding.Address.visibility = View.INVISIBLE
+                binding.tvYearShow.visibility = View.VISIBLE
+                binding.clSpinnerYear.visibility = View.VISIBLE
+
+            } else if (crop_id == 67) {
+
                 binding.FirstIrrigationDate.visibility = View.VISIBLE
                 binding.Address.visibility = View.INVISIBLE
                 binding.tvBahar.visibility = View.VISIBLE
@@ -184,11 +202,6 @@ class AddCropPremiumFragment : Fragment() {
                 binding.tvYearShow.visibility = View.VISIBLE
                 binding.clSpinnerYear.visibility = View.VISIBLE
                 binding.clSwitchMulching.visibility = View.VISIBLE
-            } else if (crop_id == 67) {
-                binding.EnterDateoffruitPruning.visibility = View.VISIBLE
-                binding.Address.visibility = View.INVISIBLE
-                binding.tvYearShow.visibility = View.VISIBLE
-                binding.clSpinnerYear.visibility = View.VISIBLE
 
             }
 
@@ -313,7 +326,8 @@ class AddCropPremiumFragment : Fragment() {
                         ).show()
                     }
                 } else if (colors[1] == (irrigation_selected)) {
-                    binding.tvCheckCrop.setText("Next")
+//                    binding.tvCheckCrop.setText("Next")
+                    TranslationsManager().loadString("next", binding.tvCheckCrop)
                     binding.cardCheckHealth.setOnClickListener {
                         it.hideSoftInput()
                         nickName = binding.etNickName.text.toString().trim()
@@ -392,6 +406,7 @@ class AddCropPremiumFragment : Fragment() {
                         }
                     }
                 } else if (colors[2] == (item)) {
+                    TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
                     Log.d("TAG", "onItemSelectedIrrigationType:$colors")
                     Log.d("TAG", "onItemSelectedIrrigationType:$item")
@@ -405,6 +420,7 @@ class AddCropPremiumFragment : Fragment() {
 
 
                 } else if (colors[3] == (item)) {
+                    TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     binding.clPlotNumber.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.setText("Save Crop")
@@ -421,6 +437,34 @@ class AddCropPremiumFragment : Fragment() {
             }
 
         }
+
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNickName.hint =NickNamehint
+            var areaHint = TranslationsManager().getString("e_g_50")
+            binding.etAreaNumber.hint =areaHint
+            var hitnPlant = TranslationsManager().getString("e_g_50")
+            binding.etNoOfAcre.hint =hitnPlant
+        }
+        TranslationsManager().loadString("add_crop_information", binding.plot)
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
+        TranslationsManager().loadString("sowing_date", binding.Address)
+        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_irrigation", binding.tvselectIrrigation)
+        TranslationsManager().loadString("irrigation_type", binding.City)
+        TranslationsManager().loadString("no_of_plants_per_acre", binding.State)
+        TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
+        TranslationsManager().loadString("bahar", binding.tvBahar)
+        TranslationsManager().loadString("crop_year", binding.tvYearShow)
+        TranslationsManager().loadString("first_irrigation", binding.FirstIrrigationDate)
+        TranslationsManager().loadString("mulching", binding.tvShapeInFarmMulching)
+        TranslationsManager().loadString("enter_date", binding.EnterDateoffruitPruning)
 
     }
 

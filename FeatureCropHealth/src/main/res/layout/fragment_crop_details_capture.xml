@@ -188,11 +188,11 @@
                         android:drawablePadding="@dimen/space16"
                         android:paddingLeft="@dimen/space20"
                         android:paddingRight="@dimen/space20"
-                        android:visibility="visible"
                         android:text="Capture Image"
                         android:textAllCaps="false"
                         android:textColor="#171717"
                         android:textSize="@dimen/txt14"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/add_photo_txt">
@@ -201,23 +201,31 @@
                             android:id="@+id/iv_campture_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="80dp"
                             android:layout_marginEnd="@dimen/space10"
                             android:src="@drawable/ic_gallery"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/campture_image"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/campture_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:text="Capture Image"
                             android:textColor="#146133"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:textSize="@dimen/txt16"
+                            android:layout_marginStart="10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_campture_image"
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -258,23 +266,30 @@
                             android:id="@+id/iv_campture_image_camera"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/space10"
+                            android:layout_marginStart="80dp"
                             android:src="@drawable/ic_galleryup"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/campture_image_camera"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/campture_image_camera"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
+                            android:layout_marginStart="10dp"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="Upload Image"
                             android:textColor="#146133"
                             android:textSize="@dimen/txt16"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_campture_image_camera"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -287,10 +302,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
                         android:layout_marginTop="16dp"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/space16"
                         android:layout_marginBottom="32dp"
                         android:background="@drawable/camera_corner"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -303,10 +318,9 @@
                             android:scaleType="fitXY"
                             android:src="@drawable/ic_close"
                             android:visibility="gone"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@+id/uploaded_img"
                             app:layout_constraintEnd_toEndOf="parent"
-                            />
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                         <ImageView
@@ -366,12 +380,12 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:indeterminate="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCheckHealth"
         android:layout_width="match_parent"
