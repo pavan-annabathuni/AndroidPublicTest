@@ -1,7 +1,7 @@
 package com.waycool.data.Network.NetworkModels
 
-class MandiModel(
-    val `data`: MandiData,
+class MandiDTO(
+    val data: MandiData,
     val message: String,
     val status: String
 )
@@ -9,13 +9,13 @@ class MandiModel(
 data class MandiData(
     val numberOfRecordsPerPage: Int?,
     val page: Int?,
-    val records: List<MandiRecord>,
+    val records: List<MandiRecordNetwork>,
     val startFrom: Int?,
     val total_pages: Int?,
     val total_results: Int?
 )
 
-data class MandiRecord(
+data class MandiRecordNetwork(
     val arrival_date: String?,
     val avg_price: Double?,
     val created_at: String?,
@@ -24,7 +24,7 @@ data class MandiRecord(
     val crop_logo: String?,
     val crop_master_id: Int?,
     val district: String?,
-    val id: String?,
+    val id: String,
     val last_price: Double?,
     val location: String?,
     val mandi_master_id: Int?,

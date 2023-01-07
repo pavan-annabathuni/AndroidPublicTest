@@ -1,23 +1,10 @@
 package com.waycool.data.Local.Entity
 
-import com.waycool.data.repository.domainModels.MandiDomainRecord
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class MandiEntity(
-    val `data`: MandiEntityData,
-    val message: String,
-    val status: String
-)
-
-data class MandiEntityData(
-    val numberOfRecordsPerPage: Int?,
-    val page: Int?,
-    val records: List<MandiEntityRecord>,
-    val startFrom: Int?,
-    val total_pages: Int?,
-    val total_results: Int?
-)
-
-data class MandiEntityRecord(
+@Entity
+data class MandiRecordEntity(
     val arrival_date: String?,
     val avg_price: Double?,
     val created_at: String?,
@@ -26,7 +13,8 @@ data class MandiEntityRecord(
     val crop_logo: String?,
     val crop_master_id: Int?,
     val district: String?,
-    val id: String?,
+    @PrimaryKey(autoGenerate = false)
+    val id: String,
     val last_price: Double?,
     val location: String?,
     val mandi_master_id: Int?,

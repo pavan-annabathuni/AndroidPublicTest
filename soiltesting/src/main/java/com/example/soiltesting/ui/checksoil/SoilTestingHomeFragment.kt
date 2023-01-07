@@ -234,7 +234,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                 accountID = it.data?.accountId
                 if (accountID != null) {
-                    isLocationPermissionGranted(accountID!!)
+                    getLocation()
                     binding.cardCheckHealth.isClickable = false
 
                 }
@@ -436,107 +436,107 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         )
     }
 
-    private fun isLocationPermissionGranted(account_id: Int): Boolean {
-        return if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                100
-            )
-            // use your location object
-            false
-        } else {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    if (location != null && account_id != null) {
-                        val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
-                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
-
-                        viewModel.getCheckSoilTestLab(
-                            account_id,
-                            latitude,
-                            longitutde
-                        ).observe(requireActivity()) {
-                            binding.clProgressBar.visibility = View.VISIBLE
-                            when (it) {
-                                is Resource.Success -> {
-                                    if (it.data!!.isEmpty()) {
-
-                                        CustomeDialogFragment.newInstance().show(
-                                            requireActivity().supportFragmentManager,
-                                            CustomeDialogFragment.TAG
-                                        )
-                                        binding.cardCheckHealth.isClickable = true
-                                    } else if (it.data!!.isNotEmpty()) {
-                                        val response = it.data
-                                        val bundle = Bundle().apply {
-                                            putParcelableArrayList(
-                                                "list",
-                                                ArrayList<Parcelable>(response)
-                                            )
-                                        }
-
-                                        bundle.putString("lat", latitude)
-                                        bundle.putString("lon", longitutde)
-
-                                        try {
-                                            findNavController().navigate(
-                                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
-                                                bundle
-                                            )
-                                        }catch (e:Exception){
-                                        }
-
-                                        binding.clProgressBar.visibility = View.GONE
-
-
-                                    }
-
-                                }
-                                is Resource.Error -> {
-                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                            "Please check you internet connectivity",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                    else{
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                           "Too many attempts.Try again later",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-
-                                    binding.clProgressBar.visibility = View.GONE
-                                    binding.cardCheckHealth.isClickable = true
-
-                                }
-                                is Resource.Loading -> {
-                                    binding.clProgressBar.visibility = View.VISIBLE
-
-                                }
-                            }
-
-                        }
-
-
-                    }
-                }
-            true
-        }
-    }
+//    private fun isLocationPermissionGranted(account_id: Int): Boolean {
+//        return if (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            ActivityCompat.requestPermissions(
+//                requireActivity(),
+//                arrayOf(
+//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+//                ),
+//                100
+//            )
+//            // use your location object
+//            false
+//        } else {
+//            fusedLocationClient.lastLocation
+//                .addOnSuccessListener { location ->
+//                    if (location != null && account_id != null) {
+//                        val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
+//                        val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
+//
+//                        viewModel.getCheckSoilTestLab(
+//                            account_id,
+//                            latitude,
+//                            longitutde
+//                        ).observe(requireActivity()) {
+//                            binding.clProgressBar.visibility = View.VISIBLE
+//                            when (it) {
+//                                is Resource.Success -> {
+//                                    if (it.data!!.isEmpty()) {
+//
+//                                        CustomeDialogFragment.newInstance().show(
+//                                            requireActivity().supportFragmentManager,
+//                                            CustomeDialogFragment.TAG
+//                                        )
+//                                        binding.cardCheckHealth.isClickable = true
+//                                    } else if (it.data!!.isNotEmpty()) {
+//                                        val response = it.data
+//                                        val bundle = Bundle().apply {
+//                                            putParcelableArrayList(
+//                                                "list",
+//                                                ArrayList<Parcelable>(response)
+//                                            )
+//                                        }
+//
+//                                        bundle.putString("lat", latitude)
+//                                        bundle.putString("lon", longitutde)
+//
+//                                        try {
+//                                            findNavController().navigate(
+//                                                R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
+//                                                bundle
+//                                            )
+//                                        }catch (e:Exception){
+//                                        }
+//
+//                                        binding.clProgressBar.visibility = View.GONE
+//
+//
+//                                    }
+//
+//                                }
+//                                is Resource.Error -> {
+//                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+//                                        ToastStateHandling.toastError(
+//                                            requireContext(),
+//                                            "Please check you internet connectivity",
+//                                            Toast.LENGTH_SHORT
+//                                        )
+//                                    }
+//                                    else{
+//                                        ToastStateHandling.toastError(
+//                                            requireContext(),
+//                                           "Too many attempts.Try again later",
+//                                            Toast.LENGTH_SHORT
+//                                        )
+//                                    }
+//
+//                                    binding.clProgressBar.visibility = View.GONE
+//                                    binding.cardCheckHealth.isClickable = true
+//
+//                                }
+//                                is Resource.Loading -> {
+//                                    binding.clProgressBar.visibility = View.VISIBLE
+//
+//                                }
+//                            }
+//
+//                        }
+//
+//
+//                    }
+//                }
+//            true
+//        }
+//    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {

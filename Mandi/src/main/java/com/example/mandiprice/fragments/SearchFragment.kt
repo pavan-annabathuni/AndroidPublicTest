@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mandiprice.R
@@ -34,6 +35,7 @@ import kotlinx.coroutines.plus
 import java.text.SimpleDateFormat
 import java.util.*
 
+@ExperimentalPagingApi
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
@@ -43,10 +45,10 @@ class SearchFragment : Fragment() {
     }
     private var sortBy: String = "asc"
     private var orderBy: String = "distance"
-    private var search: String? = null
-    private var cropCategory: String? = null
-    private var state: String? = null
-    private var crop: String? = null
+    private var search: String = ""
+    private var cropCategory: String = ""
+    private var state: String = ""
+    private var crop: String = ""
     private var lat= "12.22"
     private var long= "78.22"
     private var accountId = 0
@@ -115,7 +117,7 @@ class SearchFragment : Fragment() {
         })
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountId)
+            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(viewLifecycleOwner) {
                     // binding.viewModel = it
                     adapterMandi.submitData(lifecycle, it)
@@ -362,9 +364,9 @@ class SearchFragment : Fragment() {
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                search = binding.searchBar.text.toString()
+                search = charSequence.toString()
                     //binding.filter.text = "Sort By"
-                        if (!search.isNullOrEmpty())
+                        if (search.isNotEmpty())
                             binding.recycleViewDis.adapter = adapterMandi
                 submitAdapter()
                         if (binding.searchBar.text.isNullOrEmpty())
@@ -406,7 +408,7 @@ class SearchFragment : Fragment() {
                 crop,
                 sortBy,
                 orderBy,
-                search,accountId).observe(viewLifecycleOwner) {
+                search).observe(viewLifecycleOwner) {
                 // binding.viewModel = it
                 adapterMandi.submitData(lifecycle, it)
                 // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()

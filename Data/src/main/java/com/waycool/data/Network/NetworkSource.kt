@@ -19,7 +19,7 @@ import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
-import com.waycool.data.repository.domainModels.MandiDomainRecord
+import com.waycool.data.repository.domainModels.MandiRecordDomain
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -28,12 +28,11 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import java.util.*
 import kotlin.Exception
 
 object NetworkSource {
 
-    private val apiInterface: ApiInterface
+    val apiInterface: ApiInterface
     private val weatherInterface: WeatherApiInterface
     private val headerMapPublic: Map<String, String>
     private val otpInterface: OTPApiInterface
@@ -771,7 +770,7 @@ object NetworkSource {
         }
     }
 
-    //    fun getFullMandiList(
+//        fun getFullMandiList(
 //        headerMap: Map<String, String>?,crop_category:String?,state:String?,crop:String?,
 //         sortBy: String, orderBy: String?
 //    ) = flow<Resource<MandiDomain?>> {
@@ -793,7 +792,7 @@ object NetworkSource {
     fun getMandiList(
         lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
         sortBy: String?, orderBy: String?, search: String?, accountId: Int?
-    ): Flow<PagingData<MandiDomainRecord>> {
+    ): Flow<PagingData<MandiRecordDomain>> {
         return Pager(
             config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
             pagingSourceFactory = {

@@ -8,15 +8,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mandiprice.R
-import com.example.mandiprice.adapter.DistanceAdapter
-import com.example.mandiprice.databinding.ItemDistanceBinding
-import com.example.soiltesting.databinding.ItemLabsSampleBinding
 import com.example.soiltesting.databinding.ItemMandiBinding
-import com.example.soiltesting.ui.checksoil.SoilTestingLabsHolder
-import com.waycool.data.repository.domainModels.MandiDomainRecord
+import com.waycool.data.repository.domainModels.MandiRecordDomain
 
 class MandiHomePageAdapter(val onClickListener:OnClickListener):
-    PagingDataAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
+    PagingDataAdapter<MandiRecordDomain, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
 
 
     class MandiHomePageHolder(private val binding: ItemMandiBinding):
@@ -25,7 +21,7 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
        val imageView = binding.ivPriceIndex
         val source = binding.tvSource
          val image = binding.ivMandi
-        fun bind(data: MandiDomainRecord?) {
+        fun bind(data: MandiRecordDomain?) {
             binding.property = data
             binding.executePendingBindings()
 
@@ -80,18 +76,18 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
         return if(size>=5) 5
         else size
     }
-    companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<MandiRecordDomain>() {
 
-        override fun areItemsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
+        override fun areItemsTheSame(oldItem: MandiRecordDomain, newItem: MandiRecordDomain): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
+        override fun areContentsTheSame(oldItem: MandiRecordDomain, newItem: MandiRecordDomain): Boolean {
             return oldItem.id == newItem.id
         }
 
-        class OnClickListener(val clickListener: (data: MandiDomainRecord) -> Unit) {
-            fun onClick(data: MandiDomainRecord) = clickListener(data)
+        class OnClickListener(val clickListener: (data: MandiRecordDomain) -> Unit) {
+            fun onClick(data: MandiRecordDomain) = clickListener(data)
         }
     }
 }

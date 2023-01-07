@@ -229,7 +229,7 @@ interface ApiInterface {
         @Query("sort_by") sort_by: String?,
         @Query("order_by") orderBy: String?,
         @Query("search") search: String?
-    ): Response<MandiDomain>
+    ): Response<MandiDTO>
 
     @GET("api/v1/get-mandi-history")
     suspend fun getMandiHistory(

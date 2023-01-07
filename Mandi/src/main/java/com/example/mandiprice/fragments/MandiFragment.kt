@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+@ExperimentalPagingApi
 class MandiFragment : Fragment() {
 //    private var long: String? = null
 //    private var lat: String? = null
@@ -52,17 +54,17 @@ class MandiFragment : Fragment() {
     private lateinit var adapterMandi: DistanceAdapter
     private var sortBy: String = "asc"
     private var orderBy: String = "distance"
-    private var cropCategory: String? = null
-    private var state: String? = null
-    private var crop: String? = null
-    private var search: String? = null
+    private var cropCategory: String = ""
+    private var state: String = ""
+    private var crop: String = ""
+    private var search: String = ""
     private var cropCategoryId: Int? = 1
     private var count = 0
     private var lat= "12.22"
     private var long= "78.22"
     var distance = "Distance"
     private var price = "Price"
-    var accountID = 0
+
 
     val arrayCat = ArrayList<String>()
 
@@ -134,7 +136,7 @@ class MandiFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
-            accountID = it.data?.accountId!!
+//            accountID = it.data?.accountId!!
         }
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
@@ -491,37 +493,36 @@ class MandiFragment : Fragment() {
     }
 
     private fun getMandiData(
-        cropCategory: String? = null,
-        state: String? = null,
-        crop: String? = null,
-        sortBy: String? = "Distance",
-        orderBy: String? = "Asc",
-        search: String? = null
+        cropCategory: String = "",
+        state: String = "",
+        crop: String = "",
+        sortBy: String = "Distance",
+        orderBy: String = "Asc",
+        search: String = ""
     ) {
-        viewModel.viewModelScope.launch {
-            if (lat != null && long != null)
-                viewModel.getMandiDetails(
-                    lat!!,
-                    long!!,
-                    cropCategory,
-                    state,
-                    crop,
-                    sortBy,
-                    orderBy,
-                    search
-                )
-                    .observe(requireActivity()) {
-                        adapterMandi.submitData(lifecycle, it)
-                        Handler().postDelayed({
-                            binding.llPorgressBar.visibility = View.GONE
+
+        viewModel.getMandiDetails(
+            lat,
+            long,
+            cropCategory,
+            state,
+            crop,
+            sortBy,
+            orderBy,
+            search
+        )
+            .observe(requireActivity()) {
+                adapterMandi.submitData(lifecycle, it)
+                Handler().postDelayed({
+                    binding.llPorgressBar.visibility = View.GONE
 
 
-                        }, 1500)
+                }, 1500)
 
 
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                }
+            // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun translation(){

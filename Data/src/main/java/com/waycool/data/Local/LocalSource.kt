@@ -1,5 +1,6 @@
 package com.waycool.data.Local
 
+import androidx.paging.PagingSource
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 object LocalSource {
 
     private val outgrowDao = OutgrowDB.getDatabase().outgrowDao()
+    private val mandiDao = OutgrowDB.getDatabase().mandiDao()
 
     fun insertTags(tags: List<TagsEntity>) {
         outgrowDao.insertTags(tags)
@@ -79,6 +81,7 @@ object LocalSource {
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropsInfo(searchQuery)
     }
+
     fun getIrrigationCrops(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getIrrigationCrops(searchQuery)
     }
@@ -206,11 +209,27 @@ object LocalSource {
     fun getMyFarms(): Flow<List<MyFarmsEntity>> {
         return outgrowDao.getMyFarms()
     }
+
     fun deleteAllMyCrops() = outgrowDao.getDeleteAllMyCrops()
     fun deleteTags() = outgrowDao.deleteTags()
     fun deleteCropMaster() = outgrowDao.deleteCropMaster()
     fun deletePestDisease() = outgrowDao.deletePestDiseases()
     fun deleteCropInformation() = outgrowDao.deleteCropInformation()
-    fun deleteMyFarms()= outgrowDao.deleteAllMyFarms()
+    fun deleteMyFarms() = outgrowDao.deleteAllMyFarms()
 
+    fun getMandiRecords(
+        crop_category: String = "", crop: String = "",
+        stateIndia: String = "",
+        orderBy: String = "",
+        sortBy: String = "",
+        search: String = "",
+        isSearch: Boolean
+    ): PagingSource<Int, MandiRecordEntity> {
+     return   when (orderBy) {
+            "price" -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, "avg_price", sortBy, search, isSearch)
+            "distance" -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, "distance", sortBy, search, isSearch)
+            else -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, orderBy, sortBy, search, isSearch)
+        }
+
+    }
 }
