@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class UserDetailsSyncer : SyncInterface {
+object UserDetailsSyncer : SyncInterface {
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.USER_DETAILS
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())

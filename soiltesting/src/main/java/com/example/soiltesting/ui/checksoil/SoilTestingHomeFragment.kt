@@ -187,7 +187,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private fun setBanners() {
         binding.progressBar.visibility = View.VISIBLE
 
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

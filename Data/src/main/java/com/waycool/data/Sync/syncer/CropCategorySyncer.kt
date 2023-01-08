@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class CropCategorySyncer : SyncInterface {
+object CropCategorySyncer : SyncInterface {
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.CROPS_CATEGORY_MASTER
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())

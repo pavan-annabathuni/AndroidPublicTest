@@ -37,7 +37,7 @@ object MandiSyncer : SyncInterface {
 
         return Pager(
             config = PagingConfig(
-                pageSize = 50,
+                pageSize = 25,
                 prefetchDistance = 2, initialLoadSize = 2
             ),
             remoteMediator = MandiRemoteMediator(
@@ -46,7 +46,7 @@ object MandiSyncer : SyncInterface {
                 orderBy,
                 sortBy, search,
             ),
-            pagingSourceFactory = { LocalSource.getMandiRecords(crop_category, crop, stateIndia, orderBy, sortBy, search, search.isNotEmpty()) }
+            pagingSourceFactory = { LocalSource.getMandiRecords(crop_category, crop, stateIndia, orderBy, sortBy, search, search!="") }
         ).flow
     }
 

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class LanguageSyncer : SyncInterface {
+object LanguageSyncer : SyncInterface {
 
 
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.LANGUAGE_MASTER

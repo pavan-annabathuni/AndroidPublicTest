@@ -11,16 +11,26 @@ import com.waycool.data.Local.Entity.MandiRecordEntity
 @Dao
 interface MandiDao {
 
-    @Query("SELECT * FROM MandiRecordEntity WHERE CASE WHEN :isSearch = 1 THEN crop_category = :crop_category AND crop = :crop AND state = :stateIndia ELSE crop LIKE '%' || :search || '%' OR market LIKE '%' || :search || '%' END  ORDER BY CASE WHEN :sortBy = 'desc' then :orderBy END DESC, CASE WHEN :sortBy = 'desc' then :orderBy END ASC ")
-    fun getMandiRecords(
+    @Query("SELECT * FROM MandiRecordEntity WHERE crop_category LIKE '%' || :crop_category || '%' AND crop LIKE '%' || :crop || '%' AND state LIKE '%' || :stateIndia || '%' ORDER BY avg_price ASC ")
+    fun getMandiRecordsForFiltersOrderByPrice(
         crop_category: String = "",
         crop: String = "",
-        stateIndia: String = "",
-        orderBy: String = "",
-        sortBy: String = "",
-        search: String = "",
-        isSearch:Boolean
+        stateIndia: String = ""
     ): PagingSource<Int, MandiRecordEntity>
+
+    @Query("SELECT * FROM MandiRecordEntity WHERE crop_category LIKE '%' || :crop_category || '%' AND crop LIKE '%' || :crop || '%' AND state LIKE '%' || :stateIndia || '%' ORDER BY distance ASC ")
+    fun getMandiRecordsForFiltersOrderByDistance(
+        crop_category: String = "",
+        crop: String = "",
+        stateIndia: String = ""
+    ): PagingSource<Int, MandiRecordEntity>
+
+
+    @Query("SELECT * FROM MandiRecordEntity WHERE crop LIKE '%' || :search || '%' OR market LIKE '%' || :search || '%' ORDER BY crop ASC")
+    fun getMandiRecordsForSearch(
+        search: String = ""
+    ): PagingSource<Int, MandiRecordEntity>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMandiRecords(quotes: List<MandiRecordEntity>)

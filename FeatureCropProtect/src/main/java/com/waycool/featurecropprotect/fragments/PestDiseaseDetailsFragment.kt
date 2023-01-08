@@ -491,7 +491,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         private fun setBanners() {
 
-            val bannerAdapter = AdsAdapter(requireContext())
+            val bannerAdapter = AdsAdapter(activity?:requireContext())
             viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
                 bannerAdapter.submitData(lifecycle, it)

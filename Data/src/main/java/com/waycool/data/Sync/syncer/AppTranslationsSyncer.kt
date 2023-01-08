@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class AppTranslationsSyncer : SyncInterface {
+object AppTranslationsSyncer : SyncInterface {
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.APP_TRANSLATIONS
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())

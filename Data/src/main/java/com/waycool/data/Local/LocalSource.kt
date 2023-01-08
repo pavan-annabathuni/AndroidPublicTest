@@ -1,5 +1,6 @@
 package com.waycool.data.Local
 
+import android.util.Log
 import androidx.paging.PagingSource
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
@@ -225,10 +226,17 @@ object LocalSource {
         search: String = "",
         isSearch: Boolean
     ): PagingSource<Int, MandiRecordEntity> {
-     return   when (orderBy) {
-            "price" -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, "avg_price", sortBy, search, isSearch)
-            "distance" -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, "distance", sortBy, search, isSearch)
-            else -> mandiDao.getMandiRecords(crop_category, crop, stateIndia, orderBy, sortBy, search, isSearch)
+
+        Log.d("Mandi","crop: $crop")
+        Log.d("Mandi","cropCategory: $crop_category")
+        Log.d("Mandi","state: $stateIndia")
+        Log.d("Mandi","orderBy: $orderBy")
+        Log.d("Mandi","search: $search")
+
+     return when (orderBy) {
+            "price" -> mandiDao.getMandiRecordsForFiltersOrderByPrice(crop_category, crop, stateIndia)
+            "distance" -> mandiDao.getMandiRecordsForFiltersOrderByDistance(crop_category, crop, stateIndia)
+            else -> mandiDao.getMandiRecordsForSearch(search)
         }
 
     }

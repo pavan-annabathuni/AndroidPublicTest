@@ -68,8 +68,7 @@ import java.lang.Exception
 
             val response = apiInterface.getMandiList(headerMap,lat,lon,
                 crop_category,stateIndia, crop, currentPage,
-                orderBy,
-                sortBy,search).body()
+                sortBy,orderBy,search).body()
             val endOfPaginationReached = response?.data?.total_pages == currentPage
 
             val prevPage = if(currentPage == 1) null else currentPage -1

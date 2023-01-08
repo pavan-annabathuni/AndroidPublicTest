@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
@@ -49,16 +50,17 @@ class AdsAdapter(val context: Context) :
                 .into(itemBinding.vhBannerIv)
 
             itemBinding.vhBannerIv.setOnClickListener {
-                val packageName = "com.android.chrome"
-                val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
-                    .setToolbarColor(ContextCompat.getColor(context,R.color.primaryColor))
-                    .build()
-                customTabIntent.intent.setPackage(packageName)
-                customTabIntent.launchUrl(
-                    context,
-                    Uri.parse(vans?.contentUrl)
-                )
-
+                if (vans?.contentUrl != null && context != null && URLUtil.isValidUrl(vans.contentUrl)) {
+                    val packageName = "com.android.chrome"
+                    val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(context, R.color.primaryColor))
+                        .build()
+                    customTabIntent.intent.setPackage(packageName)
+                    customTabIntent.launchUrl(
+                        context,
+                        Uri.parse(vans?.contentUrl)
+                    )
+                }
             }
 
 

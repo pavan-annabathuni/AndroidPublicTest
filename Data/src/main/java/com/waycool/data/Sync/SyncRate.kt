@@ -21,7 +21,7 @@ object SyncRate {
         SyncKey.PEST_DISEASE_MASTER to 30,
         SyncKey.CROP_INFORMATION_MASTER to 60,
         SyncKey.MY_CROPS to 30,
-        SyncKey.APP_TRANSLATIONS to 30,
+        SyncKey.APP_TRANSLATIONS to 60,
         SyncKey.DASH_BOARD to 5,
         SyncKey.MY_FARMS to 5,
         SyncKey.MANDI to 5

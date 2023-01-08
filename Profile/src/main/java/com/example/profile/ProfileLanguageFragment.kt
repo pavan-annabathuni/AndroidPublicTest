@@ -88,7 +88,7 @@ class ProfileLanguageFragment : Fragment() {
                 LocalSource.deleteCropInformation()
                 LocalSource.deletePestDisease()
                 MyCropSyncer().invalidateSync()
-                CropMasterSyncer().invalidateSync()
+                CropMasterSyncer.invalidateSync()
                 CropInformationSyncer().invalidateSync()
                 TagsSyncer().invalidateSync()
                 PestDiseaseSyncer().invalidateSync()
