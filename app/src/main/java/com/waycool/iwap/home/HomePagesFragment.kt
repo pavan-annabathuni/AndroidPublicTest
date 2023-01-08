@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -296,17 +295,23 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
     }
 
-    @OptIn(ExperimentalPagingApi::class)
     private fun mandiDetailCall() {
-        mandiViewModel.getMandiDetails(
-            lat = lat,
-            long = long,
-            sortBy = sortBy,
-            orderBy = orderBy
-        ).observe(viewLifecycleOwner) {
-            mandiAdapter.submitData(lifecycle, it)
-        }
+        mandiViewModel.viewModelScope.launch {
+            mandiViewModel.getMandiDetails(
+                lat,
+                long,
+                cropCategory, state,
+                crop,
+                sortBy,
+                orderBy,
+                search,
+                0
+            )
+                .observe(viewLifecycleOwner) {
+                    mandiAdapter.submitData(lifecycle, it)
 
+                }
+        }
     }
 
     private fun initClick() {

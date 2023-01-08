@@ -1,37 +1,32 @@
 package com.waycool.data.repository
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.Network.NetworkModels.MandiModel
+import com.waycool.data.Network.NetworkModels.profile
 import com.waycool.data.Network.NetworkSource
-import com.waycool.data.Sync.syncer.mandiSyncer.MandiSyncer
-import com.waycool.data.repository.DomainMapper.MandiRecordDomainMapper
-import com.waycool.data.repository.domainModels.MandiRecordDomain
+import com.waycool.data.repository.domainModels.MandiDomain
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 object MandiRepository {
-    fun getMandiList(lat: String, long: String, crop_category: String = "", state: String = "", crop: String = "",
-        sortBy: String = "", orderBy: String = "", search: String = ""): Flow<PagingData<MandiRecordDomain>> {
-
-       return MandiSyncer.getMandiData(lat, long, crop_category, state, crop, sortBy, orderBy, search).map {
-           it.map { mandi->
-               MandiRecordDomainMapper().mapToDomain(mandi)
-           }
-       }
-
-//        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
-//
-//        Log.d("HeaderMap", "getMandiList: $map")
-//        return NetworkSource.getMandiList(lat,long,crop_category,
-//            state,crop,sortBy,orderBy,search)
+    suspend fun getMandiList(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
+                             sortBy: String?, orderBy: String?,search:String?,accountId:Int?):
+            Flow<PagingData<MandiDomainRecord>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        Log.d("HeaderMap", "getMandiList: $map")
+        return NetworkSource.getMandiList(lat,long,crop_category,
+            state,crop,sortBy,orderBy,search,accountId)
     }
 
-    suspend fun getMandiHistory(crop_master_id: Int?, mandi_master_id: Int?): Flow<Resource<MandiHistoryDomain?>> {
-        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
-        return NetworkSource.getMandiHistory(map, crop_master_id, mandi_master_id)
+    suspend fun getMandiHistory(crop_master_id:Int?,mandi_master_id:Int?): Flow<Resource<MandiHistoryDomain?>> {
+        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+        return NetworkSource.getMandiHistory(map,crop_master_id,mandi_master_id)
     }
 }
 

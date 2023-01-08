@@ -6,7 +6,7 @@
     <data>
         <variable
             name="property"
-            type="com.waycool.data.repository.domainModels.MandiRecordDomain"/>
+            type="com.waycool.data.repository.domainModels.MandiDomainRecord"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView

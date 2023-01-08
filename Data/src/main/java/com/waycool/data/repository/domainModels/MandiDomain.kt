@@ -8,13 +8,13 @@ data class MandiDomain(val `data`: MandiDomainData,
 data class MandiDomainData(
     val numberOfRecordsPerPage: Int?,
     val page: Int?,
-    val records: List<MandiRecordDomain>,
+    val records: List<MandiDomainRecord>,
     val startFrom: Int?,
     val total_pages: Int?,
     val total_results: Int?
 )
 
-data class MandiRecordDomain(
+data class MandiDomainRecord(
     val arrival_date: String?,
     val avg_price: Double?,
     val created_at: String?,

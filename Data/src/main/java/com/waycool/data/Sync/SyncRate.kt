@@ -23,8 +23,7 @@ object SyncRate {
         SyncKey.MY_CROPS to 30,
         SyncKey.APP_TRANSLATIONS to 60,
         SyncKey.DASH_BOARD to 5,
-        SyncKey.MY_FARMS to 5,
-        SyncKey.MANDI to 5
+        SyncKey.MY_FARMS to 5
     )
 
 

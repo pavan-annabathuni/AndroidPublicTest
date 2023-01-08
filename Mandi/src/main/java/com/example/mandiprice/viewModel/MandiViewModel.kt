@@ -1,7 +1,6 @@
 package com.example.mandiprice.viewModel
 
 import androidx.lifecycle.*
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.mandiprice.api.MandiApi
@@ -49,12 +48,11 @@ class MandiViewModel : ViewModel() {
     }
 
 
-    @ExperimentalPagingApi
-    fun getMandiDetails(lat:String,long:String,crop_category:String="",state:String="",crop:String="",
-                                sortBy: String="", orderBy: String="",search:String=""
-    ): LiveData<PagingData<MandiRecordDomain>> =
+    suspend fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
+                                sortBy: String?, orderBy: String?,search:String?,accountId:Int?=null
+    ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(lat,long,crop_category,
-            state,crop,sortBy,orderBy,search).asLiveData()
+            state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
 
 
     suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?):

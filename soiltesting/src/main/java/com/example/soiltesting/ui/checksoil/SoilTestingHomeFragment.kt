@@ -45,15 +45,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
-import com.example.soiltesting.utils.NetworkResult
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -64,7 +59,6 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -76,9 +70,7 @@ import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
-
-    //    private val binding get() = _binding!!
-    private lateinit var binding: FragmentSoilTestingHomeBinding
+    private lateinit  var binding: FragmentSoilTestingHomeBinding
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var soilHistoryAdapter = HistoryDataAdapter(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -87,7 +79,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
 
-    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
         .build()
@@ -142,27 +134,24 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
 
         binding.recyclerview.adapter = soilHistoryAdapter
-        binding.tvCheckCrop.isSelected = true
+
         initViewClick()
         initViewBackClick()
         expandableView()
         expandableViewTWo()
-        binding.clProgressBar.visibility = View.VISIBLE
         expandableViewThree()
         getVideos()
         fabButton()
         getAllHistory()
         setBanners()
-        locationClick()
-        translationSoilTesting()
     }
 
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            binding.clInclude.visibility = View.VISIBLE
+            binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
-            binding.addFab.visibility = View.GONE
+            binding.addFab.visibility=View.GONE
 
             context?.let {
                 ToastStateHandling.toastError(
@@ -172,10 +161,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 )
             }
         } else {
-            binding.clInclude.visibility = View.GONE
+            binding.clInclude.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
             binding.cardCheckHealth.visibility = View.VISIBLE
-            binding.addFab.visibility = View.VISIBLE
+            binding.addFab.visibility=View.VISIBLE
             setBanners()
             getAllHistory()
             getVideos()
@@ -185,13 +174,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun setBanners() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility=View.VISIBLE
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
-            binding.clProgressBar.visibility = View.GONE
+            binding.clProgressBar.visibility=View.GONE
 
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
@@ -221,7 +210,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun getAllHistory() {
-        binding.clProgressBar.visibility = View.VISIBLE
+        binding.clProgressBar.visibility=View.VISIBLE
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
@@ -271,20 +260,15 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
-                    videosBinding.ivViewAll.visibility = View.GONE
-                    videosBinding.viewAllVideos.visibility = View.GONE
-
-
                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                } else {
+                }
+                else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.ivViewAll.visibility = View.GONE
-                                    videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                 }
@@ -292,14 +276,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
-                                        videosBinding.ivViewAll.visibility = View.GONE
-                                        videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
-                                        videosBinding.ivViewAll.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
 
@@ -327,12 +307,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
-            intent.putExtra("module_id", moduleId)
-            startActivity(intent)
-        }
-        videosBinding.ivViewAll.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            intent.putExtra("module_id", moduleId)
+            intent.putExtra("module_id",moduleId)
             startActivity(intent)
         }
 
@@ -409,39 +384,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
     }
 
-    private fun locationClick() {
-        binding.cardCheckHealth.setOnClickListener {
-            viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                accountID = it.data?.accountId
-                isLocationPermissionGranted(accountID!!)
-
-            }
-        }
-    }
-    fun translationSoilTesting() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val title = TranslationsManager().getString("soil_testing")
-            binding.toolText.text = title
-        }
-        TranslationsManager().loadString(
-            "our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield",
-            binding.tvOurAll
-        )
-        TranslationsManager().loadString("raise_the_n_request", binding.tvRaise)
-        TranslationsManager().loadString("soil_sample_n_collection", binding.SoilSample)
-        TranslationsManager().loadString("lab_n_testing", binding.tvSoilLab)
-        TranslationsManager().loadString("detailed_n_report", binding.tvDetaols)
-        TranslationsManager().loadString("request_history", binding.tvRequest)
-        TranslationsManager().loadString("faq_s", binding.tvFAQ)
-        TranslationsManager().loadString("soil_test_q_one", binding.tvSoilText)
-        TranslationsManager().loadString("soil_test_a_one", binding.clExpandeble)
-        TranslationsManager().loadString("soil_test_q_two", binding.tvSoilTextTwo)
-        TranslationsManager().loadString("soil_test_a_two", binding.clExpandebleTwo)
-        TranslationsManager().loadString("soil_test_q_three", binding.tvSoilTextThree)
-        TranslationsManager().loadString("soil_test_a_three", binding.clExpandebleThree)
-        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
-        TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop)
-    }
 
 
     private fun bindObserversSoilTestHistory(account_id: Int) {
@@ -452,8 +394,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else
                 when (it) {
                     is Resource.Success -> {
-                        binding.clProgressBar.visibility = View.GONE
-
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility = View.VISIBLE
 
@@ -476,13 +416,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1,
-                                "Error",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                        context?.let { it1 -> ToastStateHandling.toastError(it1, "Error", Toast.LENGTH_SHORT) }
 
                     }
                     is Resource.Loading -> {
@@ -492,7 +426,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
         }
     }
-
     override fun statusTracker(data: SoilTestHistoryDomain) {
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
@@ -538,8 +471,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             when (it) {
                                 is Resource.Success -> {
                                     if (it.data!!.isEmpty()) {
-                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
-                                        binding.clProgressBar.visibility = View.GONE
+
+                                        CustomeDialogFragment.newInstance().show(
+                                            requireActivity().supportFragmentManager,
+                                            CustomeDialogFragment.TAG
+                                        )
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
@@ -549,6 +485,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 ArrayList<Parcelable>(response)
                                             )
                                         }
+
                                         bundle.putString("lat", latitude)
                                         bundle.putString("lon", longitutde)
 
@@ -561,6 +498,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                         }
 
                                         binding.clProgressBar.visibility = View.GONE
+
+
                                     }
 
                                 }
@@ -575,7 +514,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                     else{
                                         ToastStateHandling.toastError(
                                             requireContext(),
-                                           "Server Error. Try again later",
+                                           "Too many attempts.Try again later",
                                             Toast.LENGTH_SHORT
                                         )
                                     }
@@ -628,8 +567,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         .checkLocationSettings(builder.build())
                 locationResponseTask.addOnCompleteListener {
                     try {
-                        val response: LocationSettingsResponse =
-                            it.getResult(ApiException::class.java)
+                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
                     } catch (e: ApiException) {
                         if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                             val apiException: ResolvableApiException = e as ResolvableApiException
@@ -697,33 +635,24 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
                                 bundle
                             )
-                        } catch (e: Exception) {
-                            binding.clProgressBar.visibility = View.GONE
-                            Log.d(
-                                "TAGPraveen",
-                                "isLocationPermissionGranted: SetPass"
-                            )
-                        } catch (e: Exception) {
-                            Log.d(
-                                "TAGPraveenAade",
-                                "isLocationPermissionGranted: NotPassed $e"
-                            )
+                        }catch (e:Exception){
                         }
+
                         binding.clProgressBar.visibility = View.GONE
-                                        binding.view.visibility=View.GONE
 
 
                     }
 
                 }
                 is Resource.Error -> {
-                    if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+                    if(NetworkUtil.getConnectivityStatusString(context)==0){
                         ToastStateHandling.toastError(
                             requireContext(),
                             "Please check you internet connectivity",
                             Toast.LENGTH_SHORT
                         )
-                    } else {
+                    }
+                    else{
                         ToastStateHandling.toastError(
                             requireContext(),
                             "Too many attempts.Try again later",
@@ -734,15 +663,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                     binding.clProgressBar.visibility = View.GONE
                     binding.cardCheckHealth.isClickable = true
 
-
                 }
                 is Resource.Loading -> {
                     binding.clProgressBar.visibility = View.VISIBLE
-                    ToastStateHandling.toastWarning(
-                        requireContext(),
-                        "Loading",
-                        Toast.LENGTH_SHORT
-                    )
 
                 }
             }
@@ -805,16 +728,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+
+
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        com.waycool.uicomponents.R.drawable.ic_cross
-                    )
-                )
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -822,12 +742,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        com.waycool.uicomponents.R.drawable.ic_chat_call
-                    )
-                )
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
                 binding.addFab.isExpanded = false
                 isVisible = false
             }

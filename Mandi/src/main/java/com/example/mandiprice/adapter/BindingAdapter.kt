@@ -5,6 +5,8 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.waycool.data.Network.NetworkModels.MandiRecord
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDataDomain
 
 //@BindingAdapter("listData")

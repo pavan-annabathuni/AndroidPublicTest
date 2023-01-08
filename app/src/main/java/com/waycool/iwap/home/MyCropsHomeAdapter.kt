@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cropinformation.databinding.ItemMycropsBinding
+import com.waycool.data.Local.mappers.MyCropEntityMapper
+import com.waycool.data.Network.NetworkModels.MyCropDataModel
+import com.waycool.data.Network.NetworkModels.MyCropsModel
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 
 class MyCropsHomeAdapter(val onClickListener: OnClickListener):ListAdapter<MyCropDataDomain,MyCropsHomeAdapter.MyViewHolder>(DiffCallback) {

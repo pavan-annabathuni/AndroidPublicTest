@@ -57,7 +57,4 @@ object SyncKey {
 
     //MY FARMS
     val MY_FARMS = stringPreferencesKey("myfarms")
-
-    //MANDI
-    val MANDI = stringPreferencesKey("mandi")
 }
