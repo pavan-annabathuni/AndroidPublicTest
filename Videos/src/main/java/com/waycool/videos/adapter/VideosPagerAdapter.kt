@@ -14,7 +14,7 @@ import com.waycool.videos.Util.AppUtil
 import com.waycool.videos.databinding.ViewholderVideosListBinding
 
 class VideosPagerAdapter(
-    private val context: Context,
+    private val context: Context?=null,
     private val onItemClickOne: itemClick,
     private val selectedVideo: VansFeederListDomain? = null
 ) :

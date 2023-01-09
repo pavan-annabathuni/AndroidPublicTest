@@ -1,5 +1,6 @@
 package com.waycool.videos.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -51,16 +52,9 @@ class PlayVideoFragment : Fragment() ,itemClick{
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
         apiErrorHandlingBinding=binding.errorState
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    this@PlayVideoFragment.findNavController().navigateUp()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+
+
+
         return binding.root
     }
 
@@ -106,7 +100,16 @@ class PlayVideoFragment : Fragment() ,itemClick{
             binding.ytDescriptionTv.text =videoDesc
         }
 
-
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@PlayVideoFragment.findNavController().navigateUp()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         Handler(Looper.myLooper()!!).postDelayed({
             getVideos()
         }, 600)
@@ -118,9 +121,7 @@ class PlayVideoFragment : Fragment() ,itemClick{
         val frag = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
 
         Handler(Looper.myLooper()!!).postDelayed({
-            frag.initialize(
-                AppSecrets.getYoutubeKey(),
-                object : YouTubePlayer.OnInitializedListener {
+            frag.initialize(AppSecrets.getYoutubeKey(), object : YouTubePlayer.OnInitializedListener {
                     override fun onInitializationSuccess(
                         p0: YouTubePlayer.Provider?,
                         youTubePlayer: YouTubePlayer?,
@@ -179,9 +180,9 @@ class PlayVideoFragment : Fragment() ,itemClick{
         tags: String? = null,
         categoryId: Int? = null
     ) {
-        adapterVideo = VideosPagerAdapter(requireContext(),this)
+        adapterVideo = VideosPagerAdapter(context,this)
         binding.ytBottomsheetRv.adapter = adapterVideo
-        videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
+        videoViewModel.getVansVideosList(tags, categoryId).observe(viewLifecycleOwner) {
             adapterVideo.submitData(lifecycle, it)
         }
     }

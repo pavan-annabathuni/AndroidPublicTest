@@ -201,7 +201,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                     }
                     is Resource.Loading -> {
                         ToastStateHandling.toastWarning(
