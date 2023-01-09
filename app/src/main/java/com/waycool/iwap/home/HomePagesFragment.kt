@@ -198,52 +198,52 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     private fun setTranslation() {
-        TranslationsManager().loadString("welcome", binding.tvName)
-        TranslationsManager().loadString("add_crop_info", binding.tvYourForm)
-        TranslationsManager().loadString("add_crop", binding.tvAddFrom)
-        TranslationsManager().loadString("add_farm", binding.tvAddFromOne)
-        TranslationsManager().loadString("my_farm", binding.tvMyform)
-        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData)
-        TranslationsManager().loadString("str_today", binding.tvDays)
+        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm,"Add your Crop and get more details.")
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom,"Add crops")
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne,"Add your farm")
+        TranslationsManager().loadString("my_farm", binding.tvMyform,"My Farms")
+        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData,"Add Farm")
+        TranslationsManager().loadString("str_today", binding.tvDays,"Today")
 
-        TranslationsManager().loadString("view_tepm", binding.tvTemp)
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
-        TranslationsManager().loadString("str_wind", binding.tvWind)
-        TranslationsManager().loadString("str_rain", binding.tvRain)
-        TranslationsManager().loadString("our_services", binding.tvOurService)
-        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll)
+        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
+        TranslationsManager().loadString("str_wind", binding.tvWind,"Wind")
+        TranslationsManager().loadString("str_rain", binding.tvRain,"Rain")
+        TranslationsManager().loadString("our_services", binding.tvOurService,"Our Services")
+        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll,"View All")
 
-        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails)
+        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails,"View Farm Details")
 
 
-        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting)
-        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc)
-        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore)
+        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting,"Soil Testing")
+        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc,"Helps you assess and recommend the nutrition of your soil")
+        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore,"Know more")
 
-        TranslationsManager().loadString("crop_health", binding.tvCropHealth)
-        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc)
-        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore)
+        TranslationsManager().loadString("crop_health", binding.tvCropHealth,getString(R.string.pestdiseasedetection))
+        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc,"Helps you detect crop’s health using Artificial Intelligence")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore,"Know more")
 
-        TranslationsManager().loadString("str_title", binding.tvCropInformation)
-        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc)
-        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore)
+        TranslationsManager().loadString("str_title", binding.tvCropInformation,"Crop Information")
+        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc,"Gives you end to end  information about your crop.")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore,"Know more")
 
-        TranslationsManager().loadString("crop_protection", binding.tvCropProtect)
-        TranslationsManager().loadString("crop_protection_info", binding.tvCropProtectDesc)
-        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore)
+        TranslationsManager().loadString("crop_protection", binding.tvCropProtect,"Crop Protection")
+        TranslationsManager().loadString("crop_protection_info", binding.tvCropProtectDesc,"Complete information to fight against all the possible diseases.")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore,"Know more")
 
-        TranslationsManager().loadString("videos", videosBinding.videosTitle)
-        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos)
-        TranslationsManager().loadString("news_articles", newsBinding.newsTitle)
-        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews)
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,getString(R.string.newsarticles))
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View All")
 
-        TranslationsManager().loadString("my_crops", binding.myCropsTitle)
-        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops)
+        TranslationsManager().loadString("my_crops", binding.myCropsTitle,"My Crops")
+        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops,"Edit Crops")
 
-        TranslationsManager().loadString("add_crop",binding.AddCrop)
+        TranslationsManager().loadString("add_crop",binding.AddCrop,"Add Crop")
 
-        TranslationsManager().loadString("mandi_prices",binding.tvRequest)
-        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi)
+        TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Mandi Prices")
+        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi,"View All")
     }
 
     private fun setWishes() {

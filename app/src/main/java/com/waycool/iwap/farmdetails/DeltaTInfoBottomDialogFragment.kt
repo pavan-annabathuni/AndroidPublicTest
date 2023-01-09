@@ -27,12 +27,12 @@ class DeltaTInfoBottomDialogFragment : BottomSheetDialogFragment() {
         binding.closeDialog.setOnClickListener(){
             this.dismiss()
         }
-        TranslationsManager().loadString("textView267", binding.textView267)
-        TranslationsManager().loadString("textView268", binding.textView268)
-        TranslationsManager().loadString("textView269", binding.textView269)
-        TranslationsManager().loadString("textView270", binding.textView270)
-        TranslationsManager().loadString("textView271", binding.textView271)
-        TranslationsManager().loadString("declare", binding.declare)
+        TranslationsManager().loadString("textView267", binding.textView267,getString(R.string.spraying))
+        TranslationsManager().loadString("textView268", binding.textView268,getString(R.string.delta))
+        TranslationsManager().loadString("textView269", binding.textView269,getString(R.string.ideal))
+        TranslationsManager().loadString("textView270", binding.textView270,getString(R.string.marginal))
+        TranslationsManager().loadString("textView271", binding.textView271,getString(R.string.high))
+        TranslationsManager().loadString("declare", binding.declare,getString(R.string.discalmer))
         return binding.root
     }
 
