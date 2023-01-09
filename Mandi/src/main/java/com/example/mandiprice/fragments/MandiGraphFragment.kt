@@ -98,18 +98,7 @@ class MandiGraphFragment : Fragment() {
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
-//        viewModel.viewModelScope.launch {
-//            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
-//                .observe(viewLifecycleOwner) { it2 ->
-//                 val data2 = (it2.data?.data?.map { data ->
-//                         data.arrivalDate
-//                     } ?: emptyList()).toMutableList()
-//                data2.sort()
 
-
-                    //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
- //               }
- //       }
         binding.imgShare.setOnClickListener() {
             binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
