@@ -421,7 +421,7 @@ class SearchFragment : Fragment() {
             var hint = TranslationsManager().getString("search_crop_mandi")
             binding.searchBar.hint =hint
         }
-        TranslationsManager().loadString("sort_by",binding.filter)
+        TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
     }
 }

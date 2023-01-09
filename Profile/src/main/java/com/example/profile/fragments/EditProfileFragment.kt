@@ -520,13 +520,13 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun translation(){
-        TranslationsManager().loadString("str_farmer_name",binding.textView3)
-        TranslationsManager().loadString("str_mobile_number",binding.textView4)
-        TranslationsManager().loadString("str_addressline_1",binding.textView5)
-        TranslationsManager().loadString("str_city",binding.textView6)
-        TranslationsManager().loadString("str_state",binding.textView8)
-        TranslationsManager().loadString("str_pincode",binding.textView9)
-        TranslationsManager().loadString("str_district",binding.textView7)
+        TranslationsManager().loadString("str_farmer_name",binding.textView3,"Farmer Name ")
+        TranslationsManager().loadString("str_mobile_number",binding.textView4,"Mobile Number")
+        TranslationsManager().loadString("str_addressline_1",binding.textView5,"Address Line 1")
+        TranslationsManager().loadString("str_city",binding.textView6,"City")
+        TranslationsManager().loadString("str_state",binding.textView8,"State")
+        TranslationsManager().loadString("str_pincode",binding.textView9,"Pincode")
+        TranslationsManager().loadString("str_district",binding.textView7,"District")
 
     }
 

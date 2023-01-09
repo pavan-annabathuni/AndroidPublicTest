@@ -54,6 +54,7 @@ class NotificationFragment : Fragment() {
         binding.back.setOnClickListener(){
             findNavController().navigateUp()
         }
+        binding.topAppBar.isSelected = true
         newNotification()
         return binding.root
     }

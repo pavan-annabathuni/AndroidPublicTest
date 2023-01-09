@@ -153,9 +153,9 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_harvest_details", binding.textView13)
-        TranslationsManager().loadString("str_actual_yeild", binding.textView14)
-        TranslationsManager().loadString("str_actual_harvest_date", binding.textView2)
+        TranslationsManager().loadString("str_harvest_details", binding.textView13,"Harvest Details")
+        TranslationsManager().loadString("str_actual_yeild", binding.textView14,"Actual Yeild in Tonne")
+        TranslationsManager().loadString("str_actual_harvest_date", binding.textView2,"Actual Harvest Date")
 
         viewModel.viewModelScope.launch {
             val save = TranslationsManager().getString("str_save")

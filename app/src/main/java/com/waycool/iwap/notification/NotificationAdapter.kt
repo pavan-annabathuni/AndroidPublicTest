@@ -49,14 +49,9 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
         holder.title.text = properties.data2?.title
         holder.des.text = properties.data2?.body
         Glide.with(holder.itemView.context).load(properties.data2?.image).into(holder.image)
+        holder.title.isSelected = true
     }
 
-//    override fun getItemCount(): Int {
-//        if(currentList.size>=7)
-//            return 7
-//        else
-//            return currentList.size
-//    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<DataNotification>() {
 

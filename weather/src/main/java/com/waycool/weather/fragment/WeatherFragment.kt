@@ -101,6 +101,8 @@ class WeatherFragment : Fragment() {
 //        observer()
         setBanners()
         translation()
+        binding.lableRain.isSelected = true
+        binding.lableVisibility.isSelected = true
         //getWeatherData("12.22", "77.32")
 //        ViewModel.getCurrentWeather()
 //        ViewModel.getWeekWeather()
@@ -693,16 +695,17 @@ class WeatherFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
     fun translation(){
-        TranslationsManager().loadString("str_Weather",binding.textView)
-        TranslationsManager().loadString("str_share",binding.imgShare)
-        TranslationsManager().loadString("str_today",binding.icon2)
-        TranslationsManager().loadString("str_today",binding.today)
-        TranslationsManager().loadString("str_humidity",binding.lableHumidity)
-        TranslationsManager().loadString("str_vsibility",binding.lableVisibility)
-        TranslationsManager().loadString("str_wind",binding.lableWind)
-        TranslationsManager().loadString("str_rain",binding.lableRain)
-        TranslationsManager().loadString("str_hourly",binding.tvHouly)
-        TranslationsManager().loadString("str_next",binding.tvDaily)
+
+        TranslationsManager().loadString("str_Weather",binding.textView,"Weather")
+        TranslationsManager().loadString("str_share",binding.imgShare,"Share")
+        TranslationsManager().loadString("str_today",binding.icon2,"Today")
+        TranslationsManager().loadString("str_today",binding.today,"Today")
+        TranslationsManager().loadString("str_humidity",binding.lableHumidity,"Humidity")
+        TranslationsManager().loadString("str_vsibility",binding.lableVisibility,"Visibility")
+        TranslationsManager().loadString("str_wind",binding.lableWind,"Wind")
+        TranslationsManager().loadString("str_rain",binding.lableRain,"Chance of Rain")
+        TranslationsManager().loadString("str_hourly",binding.tvHouly,"Hourly")
+        TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
     }
 }

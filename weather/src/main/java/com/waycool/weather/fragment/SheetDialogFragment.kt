@@ -309,15 +309,15 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun translation(){
-        TranslationsManager().loadString("str_daily_weather",binding.textView2)
-        TranslationsManager().loadString("str_humidity",binding.labelHumidity)
-        TranslationsManager().loadString("str_vsibility",binding.labelVisiblity)
-        TranslationsManager().loadString("str_wind",binding.lableWind)
-        TranslationsManager().loadString("str_rain",binding.labelRain)
-        TranslationsManager().loadString("str_hourly",binding.labelUv)
-        TranslationsManager().loadString("str_rain_intensity",binding.labelRainInt)
-        TranslationsManager().loadString("str_sunrise",binding.labelSunrise)
-        TranslationsManager().loadString("str_sunset",binding.labelSunset)
+        TranslationsManager().loadString("str_daily_weather",binding.textView2,"Daily Weather")
+        TranslationsManager().loadString("str_humidity",binding.labelHumidity,"Humidity")
+        TranslationsManager().loadString("str_vsibility",binding.labelVisiblity,"Visibility")
+        TranslationsManager().loadString("str_wind",binding.lableWind,"Wind")
+        TranslationsManager().loadString("str_rain",binding.labelRain,"Chance of Rain")
+        TranslationsManager().loadString("str_hourly",binding.labelUv,"UV Index")
+        TranslationsManager().loadString("str_rain_intensity",binding.labelRainInt,"Rain Intensity")
+        TranslationsManager().loadString("str_sunrise",binding.labelSunrise,"Sunrise")
+        TranslationsManager().loadString("str_sunset",binding.labelSunset,"Sunset")
 
     }
 }

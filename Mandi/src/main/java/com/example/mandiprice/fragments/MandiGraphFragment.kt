@@ -374,10 +374,10 @@ class MandiGraphFragment : Fragment() {
 
     private fun translation() {
 
-        TranslationsManager().loadString("str_share", binding.imgShare)
-        TranslationsManager().loadString("rate_kg", binding.textView7)
-        TranslationsManager().loadString("rate_kg", binding.tvKg)
-        TranslationsManager().loadString("date", binding.textView8)
+        TranslationsManager().loadString("str_share", binding.imgShare,"Share")
+        TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
+        TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
+        TranslationsManager().loadString("date", binding.textView8,"Date")
 
 
     }
