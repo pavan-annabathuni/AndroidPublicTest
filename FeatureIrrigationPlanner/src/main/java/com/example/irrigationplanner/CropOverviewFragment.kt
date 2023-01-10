@@ -104,14 +104,14 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         return R.style.BottomSheetDialog
     }
     private fun translation(){
-        TranslationsManager().loadString("str_crop_overview",binding.tv1)
-        TranslationsManager().loadString("str_area",binding.tvArea)
-        TranslationsManager().loadString("str_sowing_date",binding.tvSowingDate)
-        TranslationsManager().loadString("str_soil_type",binding.tvSoilType)
-        TranslationsManager().loadString("str_irrigation_type",binding.tvIrrigation)
-        TranslationsManager().loadString("str_harvest_date",binding.tvHarvestDate)
-        TranslationsManager().loadString("str_crop_age",binding.textView12)
-        TranslationsManager().loadString("str_expected_avg",binding.tvExpectedDate)
+        TranslationsManager().loadString("str_crop_overview",binding.tv1,"Crop Overview")
+        TranslationsManager().loadString("str_area",binding.tvArea,"Area")
+        TranslationsManager().loadString("str_sowing_date",binding.tvSowingDate,"Sowing date")
+        TranslationsManager().loadString("str_soil_type",binding.tvSoilType,"Soil Type")
+        TranslationsManager().loadString("str_irrigation_type",binding.tvIrrigation,"Irrigation Type")
+        TranslationsManager().loadString("str_harvest_date",binding.tvHarvestDate,"Harvest Date")
+        TranslationsManager().loadString("str_crop_age",binding.textView12,"Crop Age")
+        TranslationsManager().loadString("str_expected_avg",binding.tvExpectedDate,"Expected Avg Yeild")
 
 
 

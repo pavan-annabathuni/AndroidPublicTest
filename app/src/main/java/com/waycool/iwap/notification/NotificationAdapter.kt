@@ -1,8 +1,12 @@
 package com.waycool.iwap.notification
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +18,7 @@ import com.waycool.iwap.databinding.ItemNotificationBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataNotification,NotificationAdapter.ViewHolder>(DiffCallback) {
+class NotificationAdapter(val onClickListener:OnClickListener,val context: Context):ListAdapter<DataNotification,NotificationAdapter.ViewHolder>(DiffCallback) {
     class ViewHolder (private val binding: ItemNotificationBinding): RecyclerView.ViewHolder(binding.root) {
         val title = binding.title
         val des = binding.description
@@ -33,9 +37,13 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val properties = getItem(position)
         holder.bind(properties)
+        val deepLink = properties.data2.link
         holder.itemView.setOnClickListener() {
+            if(properties.data2.link!=null) {
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
+                context.startActivity(i)
+            }
             onClickListener.clickListener(properties!!)
-            notifyDataSetChanged()
         }
 //        val inputDateFormatter: SimpleDateFormat =
 //            SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ", Locale.ENGLISH)
@@ -49,14 +57,9 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
         holder.title.text = properties.data2?.title
         holder.des.text = properties.data2?.body
         Glide.with(holder.itemView.context).load(properties.data2?.image).into(holder.image)
+        holder.title.isSelected = true
     }
 
-//    override fun getItemCount(): Int {
-//        if(currentList.size>=7)
-//            return 7
-//        else
-//            return currentList.size
-//    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<DataNotification>() {
 

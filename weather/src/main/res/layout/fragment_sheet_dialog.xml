@@ -205,8 +205,10 @@
 
                     <TextView
                         style="@style/Bold"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_weight ="1"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.pop*100)+"%"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
@@ -216,7 +218,14 @@
                         android:id="@+id/label_rain"
                         style="@style/Medium"
                         android:gravity="center"
-                        android:layout_width="60dp"
+                        android:layout_width="match_parent"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"
                         android:text="@string/str_chance_of_rain"
                         android:textColor="@color/darkGray"
@@ -291,8 +300,9 @@
 
                     <TextView
                         style="@style/Bold"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text='@{String.valueOf(viewModel.selectedProperty.rain)+"mm"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
@@ -301,10 +311,17 @@
                     <TextView
                         android:id="@+id/label_rainInt"
                         style="@style/Medium"
-                        android:layout_width="60dp"
+                        android:layout_width="match_parent"
                         android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="Rain Intensity"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />
 
@@ -318,14 +335,15 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLayout5"
-                    app:layout_constraintStart_toStartOf="@+id/linearLayout5"
+                    app:layout_constraintEnd_toStartOf="@+id/view5"
+                    app:layout_constraintStart_toEndOf="@+id/view4"
                     app:layout_constraintTop_toBottomOf="@+id/view6">
 
                     <TextView
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.windSpeed)+" Km/h"}'
                         android:textColor="@color/black"
                         android:textSize="20sp"
@@ -335,8 +353,15 @@
                         android:id="@+id/lable_wind"
                         style="@style/Medium"
                         android:layout_width="60dp"
-                        android:gravity="center"
                         android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:text="Wind Speed"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp" />

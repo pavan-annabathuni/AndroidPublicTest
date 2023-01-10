@@ -202,8 +202,7 @@ class SearchFragment : Fragment() {
             distance = TranslationsManager().getString("distance")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
-        )}
-        viewModel.viewModelScope.launch {
+        )
             price = TranslationsManager().getString("Price")
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
@@ -334,9 +333,14 @@ class SearchFragment : Fragment() {
            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                binding.llNotFound.visibility = View.VISIBLE
                binding.recycleViewDis.visibility = View.GONE
-           }else{
+               binding.progressBar.visibility = View.GONE
+           }else if(loadState.source.refresh is LoadState.Loading){
+               binding.progressBar.visibility = View.VISIBLE
+           }
+           else{
                binding.llNotFound.visibility = View.GONE
            binding.recycleViewDis.visibility = View.VISIBLE
+               binding.progressBar.visibility = View.GONE
            }
        }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
@@ -421,7 +425,7 @@ class SearchFragment : Fragment() {
             var hint = TranslationsManager().getString("search_crop_mandi")
             binding.searchBar.hint =hint
         }
-        TranslationsManager().loadString("sort_by",binding.filter)
+        TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
     }
 }

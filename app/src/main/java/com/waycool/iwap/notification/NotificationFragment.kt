@@ -54,6 +54,7 @@ class NotificationFragment : Fragment() {
         binding.back.setOnClickListener(){
             findNavController().navigateUp()
         }
+        binding.topAppBar.isSelected = true
         newNotification()
         return binding.root
     }
@@ -62,11 +63,6 @@ class NotificationFragment : Fragment() {
     private fun setAdapter(){
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener {
             viewModel.getNotification().observe(viewLifecycleOwner){
-                val deepLink = it.data?.data?.get(0)?.data2?.link
-                    if(deepLink!=null) {
-                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                        startActivity(i)
-                }
             }
             if(it.readAt == null){
             viewModel.updateNotification(it.id!!).observe(viewLifecycleOwner){
@@ -74,7 +70,7 @@ class NotificationFragment : Fragment() {
                 newNotification()
 
             }}
-        })
+        }, requireContext())
         binding.recycleViewHis.adapter = mNotificationAdapter
         viewModel.getNotification().observe(viewLifecycleOwner){
             mNotificationAdapter.submitList(it.data?.data)

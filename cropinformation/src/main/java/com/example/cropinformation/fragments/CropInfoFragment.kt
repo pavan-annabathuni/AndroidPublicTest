@@ -670,7 +670,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     }
 
     private fun translation(){
-        TranslationsManager().loadString("str_title",binding.textView2)
+        TranslationsManager().loadString("str_title",binding.textView2,"Crop information")
       //  TranslationsManager().loadString("str_video")
     }
 
