@@ -58,7 +58,7 @@ class StatusTrackerAdapter(private val feedbackListerner: FeedbackListerner) : R
 //            holder.binding.viewTracker .background.setColorFilter(Color.parseColor("#1FB04B"), PorterDuff.Mode.DARKEN)
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_rejected_status)
         }
-        if (details.title!! == "Report Generated"){
+        if (details.id==5){
             holder.binding.viewTracker.visibility=View.GONE
             if (details.date!=null && details.is_approved==1){
                 feedbackListerner.feedbackApiListener(details)

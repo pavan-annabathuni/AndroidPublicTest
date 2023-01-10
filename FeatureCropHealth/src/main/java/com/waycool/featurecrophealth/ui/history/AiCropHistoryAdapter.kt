@@ -41,7 +41,7 @@ class AiCropHistoryAdapter(private val context: Context) :
 
         @SuppressLint("SetTextI18n")
         fun bind(note: AiCropHistoryDomain) {
-            binding.tvCropID.text = "id : " + note.crop_id.toString()
+            binding.tvCropID.text = "id : " + note.id.toString()
 //            binding.tvRequest.text = note.prediction
 //            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at

@@ -21,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space25"
-        android:padding="8dp"
         android:clickable="true"
+        android:padding="8dp"
         android:src="@drawable/ic_closed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,6 +39,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivStatus" />
+
+    <TextView
+        android:id="@+id/tvSetData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space16"
+        android:text=" "
+        android:textColor="#146133"
+        android:textSize="@dimen/txt18"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRequestIDText" />
 
     <TextView
         android:id="@+id/tvRequestIDText"
@@ -62,7 +75,7 @@
         android:textSize="@dimen/txt14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRequestIDText" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSetData" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

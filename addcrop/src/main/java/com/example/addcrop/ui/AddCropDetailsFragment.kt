@@ -334,12 +334,12 @@ class AddCropDetailsFragment : Fragment() {
             var areaHint = TranslationsManager().getString("e_g_50")
             binding.etAreaNumber.hint =areaHint
         }
-        TranslationsManager().loadString("add_crop_information", binding.plot)
-        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
-        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
-        TranslationsManager().loadString("sowing_date", binding.Address)
-        TranslationsManager().loadString("submit", binding.tvCheckCrop)
-        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
+        TranslationsManager().loadString("add_crop_information", binding.plot,"Add Crop information")
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber,"Crop Nickname")
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber,"Crop Area")
+        TranslationsManager().loadString("sowing_date", binding.Address,"Sowing Date")
+        TranslationsManager().loadString("submit", binding.tvCheckCrop,"Submit")
+        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium,"Select Farm to add this crop")
     }
 
     private fun updateLabel(myCalendar: Calendar) {

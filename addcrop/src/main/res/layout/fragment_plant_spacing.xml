@@ -462,6 +462,7 @@
                         android:layout_marginStart="@dimen/space16"
                         android:background="#fff"
                         android:hint="e.g 50"
+                        android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3WidthDistance"
                         app:layout_constraintHorizontal_bias="0.5"

@@ -28,27 +28,27 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
             "0" -> {
                 holder.binding.tvStatus.setTextColor(Color.parseColor("#FFC24C"))
 //                holder. binding.tvStatus.text = "Pending"
-                TranslationsManager().loadString("pending",holder. binding.tvStatus)
+                TranslationsManager().loadString("pending",holder. binding.tvStatus,"Pending")
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_pending)
             }
             "1" -> {
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
 //                holder. binding.tvStatus.text = "Accepted"
-                TranslationsManager().loadString("txt_accepted",holder. binding.tvStatus)
+                TranslationsManager().loadString("txt_accepted",holder. binding.tvStatus,"Accepted")
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
             }
             "2" -> {
                 //rejected
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#1FB04B"))
 //                holder. binding.tvStatus.text = "Completed"
-                TranslationsManager().loadString("txt_complete",holder. binding.tvStatus)
+                TranslationsManager().loadString("txt_complete",holder. binding.tvStatus,"Completed")
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_completed)
             }
             "3" -> {
                 //rejected
                 holder. binding.tvStatus.setTextColor(Color.parseColor("#EC4544"))
 //                holder. binding.tvStatus.text = "Rejected"
-                TranslationsManager().loadString("txt_rejected",holder. binding.tvStatus)
+                TranslationsManager().loadString("txt_rejected",holder. binding.tvStatus,"Rejected")
                 holder. binding.ivStatus.setImageResource(R.drawable.ic_rejected)
             }
         }
@@ -58,7 +58,7 @@ class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListen
         holder.  binding.tvRequest.text = "Plot Number : " + details.plot_no
         holder.  binding.tvDesiessName.text = "Id : " + details.soil_test_number
         holder. binding.tvDate.text = details.updated_at
-        TranslationsManager().loadString("view_status",holder.binding.tvViewStatus)
+        TranslationsManager().loadString("view_status",holder.binding.tvViewStatus,"View Status")
         holder.binding.clTracker.setOnClickListener {
            statusTrackerListener.statusTracker(details)
 
