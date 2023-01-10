@@ -42,7 +42,13 @@ class CustomeDialogFragment : DialogFragment() {
         return binding.root
     }
     fun translationSoilTesting() {
-        TranslationsManager().loadString("thank_you", binding.tvDescription)
+        TranslationsManager().loadString("info",binding.tvInfo,"Information")
+        TranslationsManager().loadString("thank_you", binding.tvDescription,"Thank you for showing interest.\n" +
+                "Currently, we are not available in your \n" +
+                "location, we look forward to serve you \n" +
+                "shortly.")
+        TranslationsManager().loadString("ok",binding.tvOk,"OK")
+
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.SoilSample)
     }
 

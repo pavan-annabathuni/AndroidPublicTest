@@ -72,12 +72,13 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
     }
 
     fun translationSoilTesting() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val title = TranslationsManager().getString("my_farm")
-            binding.toolBar.text = title
-
-        }
-//        TranslationsManager().loadString("farm", binding.)
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val title = TranslationsManager().getString("my_farm")
+//            binding.toolBar.text = title
+//
+//        }
+        TranslationsManager().loadString("add_farm_top", binding.addFarmFab,"Add Farm")
+        TranslationsManager().loadString("add_farm_top", binding.toolBar,"Add Farm")
     }
 
     override fun onFarmDetailsClicked(farm: MyFarmsDomain) {

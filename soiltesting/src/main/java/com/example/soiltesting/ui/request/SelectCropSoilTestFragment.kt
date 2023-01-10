@@ -27,7 +27,11 @@ import com.example.soiltesting.databinding.FragmentSelectCropSoilTestBinding
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -59,7 +63,7 @@ class SelectCropSoilTestFragment : Fragment() {
         bindObserversCategory()
 //        bindObserversDetails()
         initView()
-
+        translationSoilTesting()
         clickSearch()
 
         adapter.onItemClick = {
@@ -98,6 +102,14 @@ class SelectCropSoilTestFragment : Fragment() {
         binding.rvMyCrops.adapter = myCropAdapter
         myCrops()
 
+    }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val search = TranslationsManager().getString("search")
+            binding.searchView.hint = search
+        }
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Select Crop")
+        TranslationsManager().loadString("", binding.toolbarTitle,"My Crops List")
     }
 
     fun myCrops() {

@@ -102,7 +102,7 @@ class AddCropPremiumFragment : Fragment() {
         noOFYearBahar()
         translationSoilTesting()
 //        getFarms()
-        year_selected= "0".toString().toInt().toString()
+        year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
 //        }
@@ -111,7 +111,7 @@ class AddCropPremiumFragment : Fragment() {
             getFarms()
 
         }
-        binding.toolbar.setOnClickListener{
+        binding.toolbar.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
@@ -294,9 +294,9 @@ class AddCropPremiumFragment : Fragment() {
                     year_selected = "2"
                 } else if (year_selected == "2-3") {
                     year_selected = "3"
-                }else if (year_selected == "3-4") {
+                } else if (year_selected == "3-4") {
                     year_selected = "4"
-                }else if (year_selected == "4-5") {
+                } else if (year_selected == "4-5") {
                     year_selected = "5"
                 }
             }
@@ -317,6 +317,7 @@ class AddCropPremiumFragment : Fragment() {
                 val item = p0?.selectedItem
                 irrigation_selected = item.toString()
 //                arrayList.add(irrigation)
+
                 if (colors[0] == irrigation_selected) {
                     binding.cardCheckHealth.setOnClickListener {
                         Toast.makeText(
@@ -347,22 +348,9 @@ class AddCropPremiumFragment : Fragment() {
                             binding.etNoOfAcre.error = "Enter Number of Planets"
                             return@setOnClickListener
                         } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
-                            Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)
-                                .show()
+//                            Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)
+//                                .show()
                             val bundle = Bundle()
-//                                val map = mutableMapOf<String, Any>()
-//                                Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
-//                                map.put("account_no_id", account_id)
-//                                map.put("crop_id", crop_id)
-//                                map.put("soil_type_id",soil_type_id)
-//                                map.put("plot_nickname", binding.etNickName.text.toString())
-//                                map.put("area", binding.etAreaNumber.text)
-//                                map.put("irrigation_type",item.toString())
-//                                map.put("sowing_date", binding.etCalender.text.toString())
-//                                map.put("no_of_plants", binding.etNoOfAcre.text.toString())
-//                                Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
-//                                bundle.putString("map",map.toString())
-
                             if (account_id != null) {
                                 bundle.putInt("account_id", account_id)
                             }
@@ -372,7 +360,7 @@ class AddCropPremiumFragment : Fragment() {
                             if (soil_type_id != null) {
                                 bundle.putInt("crop_type", soil_type_id)
                             }
-                            bundle.putString("area_type",areaTypeSelected)
+                            bundle.putString("area_type", areaTypeSelected)
                             bundle.putString("nick_name", nickName)
                             bundle.putString("area", area)
                             bundle.putString("date", date)
@@ -389,7 +377,7 @@ class AddCropPremiumFragment : Fragment() {
                             if (soil_type_id != null) {
                                 bundle.putInt("crop_type", soil_type_id)
                             }
-                            if (selectedFarmId!=null){
+                            if (selectedFarmId != null) {
                                 bundle.putInt("farm_id", selectedFarmId!!)
                             }
 
@@ -439,32 +427,57 @@ class AddCropPremiumFragment : Fragment() {
         }
 
     }
+
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
             var NickNamehint = TranslationsManager().getString("e_g_crop_name")
-            binding.etNickName.hint =NickNamehint
+            binding.etNickName.hint = NickNamehint
             var areaHint = TranslationsManager().getString("e_g_50")
-            binding.etAreaNumber.hint =areaHint
+            binding.etAreaNumber.hint = areaHint
             var hitnPlant = TranslationsManager().getString("e_g_50")
-            binding.etNoOfAcre.hint =hitnPlant
+            binding.etNoOfAcre.hint = hitnPlant
         }
-        TranslationsManager().loadString("add_crop_information", binding.plot)
-        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
-        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
-        TranslationsManager().loadString("sowing_date", binding.Address)
-        TranslationsManager().loadString("submit", binding.tvCheckCrop)
-        TranslationsManager().loadString("select_irrigation", binding.tvselectIrrigation)
-        TranslationsManager().loadString("irrigation_type", binding.City)
-        TranslationsManager().loadString("no_of_plants_per_acre", binding.State)
-        TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
-        TranslationsManager().loadString("select_farm_to_add", binding.paragraphMedium)
-        TranslationsManager().loadString("bahar", binding.tvBahar)
-        TranslationsManager().loadString("crop_year", binding.tvYearShow)
-        TranslationsManager().loadString("first_irrigation", binding.FirstIrrigationDate)
-        TranslationsManager().loadString("mulching", binding.tvShapeInFarmMulching)
-        TranslationsManager().loadString("enter_date", binding.EnterDateoffruitPruning)
+        TranslationsManager().loadString(
+            "add_crop_information",
+            binding.plot,
+            "Add Crop information"
+        )
+        TranslationsManager().loadString("crop_nickname", binding.plotNumber, "Crop Nickname")
+        TranslationsManager().loadString("crop_area", binding.pincodeNumber, "Crop Area")
+        TranslationsManager().loadString("sowing_date", binding.Address, "Sowing Date")
+        TranslationsManager().loadString("submit", binding.tvCheckCrop, "Submit")
+        TranslationsManager().loadString(
+            "select_irrigation",
+            binding.tvselectIrrigation,
+            "Select Irrigation"
+        )
+        TranslationsManager().loadString("irrigation_type", binding.City, "Irrigation Type")
+        TranslationsManager().loadString(
+            "no_of_plants_per_acre",
+            binding.State,
+            "No of Plants Per Acre"
+        )
+//        TranslationsManager().loadString("save_crop", binding.tvCheckCrop,"")
+        TranslationsManager().loadString(
+            "select_farm_to_add",
+            binding.paragraphMedium,
+            "Select Farm to add this crop"
+        )
+        TranslationsManager().loadString("bahar", binding.tvBahar, "Bahar")
+        TranslationsManager().loadString("crop_year", binding.tvYearShow, "Crop Year")
+        TranslationsManager().loadString(
+            "first_irrigation",
+            binding.FirstIrrigationDate,
+            "First Irrigation of cycle start"
+        )
+        TranslationsManager().loadString("mulching", binding.tvShapeInFarmMulching, "Mulching")
+        TranslationsManager().loadString(
+            "enter_date",
+            binding.EnterDateoffruitPruning,
+            "Enter Date of fruit Pruning"
+        )
 
     }
 
