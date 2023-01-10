@@ -153,6 +153,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         checkNetwork()
         initClick()
         notification()
+        binding.tvRain.isSelected = true
         binding.recyclerview.adapter = mandiAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
 

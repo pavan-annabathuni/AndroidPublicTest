@@ -252,8 +252,7 @@ class MyProfileFragment : Fragment() {
         }
     private fun moveToLogin() {
         val intent = Intent(context, LoginMainActivity::class.java)
-        startActivity(intent)
-        activity?.finish()
+
         GlobalScope.launch {
             LocalSource.deleteAllMyCrops()
             LocalSource.deleteTags()
@@ -265,6 +264,7 @@ class MyProfileFragment : Fragment() {
             DataStoreManager.clearData()
 
         }
+        startActivity(intent)
     }
 
     private fun translation() {

@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -365,7 +367,10 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-                    binding.imgShare.isEnabled = true
+                    Handler().postDelayed({
+                        binding.imgShare.isEnabled = true
+                    },2500)
+
 
                 }
             }

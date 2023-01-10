@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:orientation="horizontal">
                         <!--                    binding.weatherIcon.setImageResource(R.drawable.ic_wi_thunderstorm)-->
                         <ImageView
@@ -257,7 +257,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@color/LightGray" />
 
                         <androidx.cardview.widget.CardView
@@ -348,10 +348,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
-                                    android:layout_marginTop="36dp"
                                     android:src="@drawable/ic_visibility"
                                     app:layout_constraintStart_toEndOf="@+id/view3"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
                                 <LinearLayout
                                     android:id="@+id/linearLayoutVis"

@@ -23,6 +23,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 
 class SheetHarvestFragment : BottomSheetDialogFragment() {
@@ -58,7 +59,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         binding.save.setOnClickListener() {
 
             var date = binding.editText2.text.toString()
-            if (binding.editText.text.toString() != "" || date != "") {
+            if (binding.editText.text.toString() != "" && date != "") {
                 var yield_tone = binding.editText.text.toString().toInt()
                 plotId?.let { it1 ->
                     viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone).observe(viewLifecycleOwner) {
@@ -71,10 +72,11 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                                 context?.let { it1 ->
                                     ToastStateHandling.toastError(
                                         it1,
-                                        "Enter Valid Date",
+                                        "Error",
                                         Toast.LENGTH_SHORT
                                     )
                                 }
+                                Log.d("cropInfo", "onCreateView: ${it.message}")
                             }
                         }
                         Log.d("Harvest", "onCreateView: ${it.message}")
@@ -98,7 +100,10 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             //this.dismiss()
 
         }
-        binding.cal.setOnClickListener() {
+//        binding.cal.setOnClickListener() {
+//            showCalender()
+//        }
+        binding.editText2.setOnClickListener(){
             showCalender()
         }
         translation()

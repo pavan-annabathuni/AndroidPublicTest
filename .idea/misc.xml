@@ -104,6 +104,7 @@
         <entry key="Profile/src/main/res/layout/dailog_support_delete.xml" value="0.18333333333333332" />
         <entry key="Profile/src/main/res/layout/fragment_about_outgrow.xml" value="0.1175925925925926" />
         <entry key="Profile/src/main/res/layout/fragment_add_farm.xml" value="0.335" />
+        <entry key="Profile/src/main/res/layout/fragment_add_farm_support.xml" value="0.2175925925925926" />
         <entry key="Profile/src/main/res/layout/fragment_edit_profile.xml" value="0.21481481481481482" />
         <entry key="Profile/src/main/res/layout/fragment_farm_support.xml" value="0.2640625" />
         <entry key="Profile/src/main/res/layout/fragment_language.xml" value="0.21481481481481482" />
@@ -189,7 +190,7 @@
         <entry key="app/src/main/res/layout/fragment_farm_details2.xml" value="0.29947089947089944" />
         <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
         <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.32852111816406254" />
+        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.2336038208007813" />
         <entry key="app/src/main/res/layout/fragment_loading.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.335" />
@@ -312,7 +313,7 @@
         <entry key="weather/src/main/res/layout/content_banner_slider.xml" value="0.2833333333333333" />
         <entry key="weather/src/main/res/layout/fragment_sheet_dialog.xml" value="0.335" />
         <entry key="weather/src/main/res/layout/fragment_sheet_hourly.xml" value="0.2640625" />
-        <entry key="weather/src/main/res/layout/fragment_weather.xml" value="0.45" />
+        <entry key="weather/src/main/res/layout/fragment_weather.xml" value="0.17691056910569106" />
         <entry key="weather/src/main/res/layout/item_daily.xml" value="0.21481481481481482" />
         <entry key="weather/src/main/res/layout/item_hourly.xml" value="0.31632334391276046" />
       </map>

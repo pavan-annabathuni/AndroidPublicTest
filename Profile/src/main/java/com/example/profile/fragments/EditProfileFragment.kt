@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.fragment.RegistrationFragment
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
@@ -46,6 +47,7 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.internal.format
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -165,8 +167,9 @@ class EditProfileFragment : Fragment() {
             if (it.data?.profile?.remotePhotoUrl != null && selecteduri == null) {
                 Glide.with(this).load(it.data?.profile?.remotePhotoUrl).into(binding.imageView)
             }
-            lat = it.data?.profile?.lat.toString()
-            long = it.data?.profile?.long.toString()
+            lat = String.format("%.5f",it.data?.profile?.lat?.toDouble())
+            long = String.format("%.5f",it.data?.profile?.long?.toDouble())
+
         }
 
         if (selecteduri != null) {
@@ -198,7 +201,6 @@ class EditProfileFragment : Fragment() {
         field.put("lat",lat)
         field.put("long",long)
 
-
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
@@ -206,8 +208,18 @@ class EditProfileFragment : Fragment() {
             viewModel.viewModelScope.launch {
                 viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
+                        when(it){
+                            is Resource.Success->{
+                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
+                                findNavController().navigateUp()
+                            }
+                            is Resource.Loading->{}
+                            is Resource.Error->{
+                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Error", Toast.LENGTH_SHORT) }
+                            }
+                        }
                         Log.d("ProfileUpdate", "editProfile: $it")
-                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
+
                     }
             }
             if (selecteduri != null) {
@@ -234,7 +246,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
 
-            this.findNavController().navigateUp()
+
 
         } else {
             context?.let { ToastStateHandling.toastError(it, "Please Fill All Fields", Toast.LENGTH_SHORT) }
