@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
                     deepLink = pendingDynamicLinkData.link
 
                 }
-                if (deepLink?.lastPathSegment != null) {
-                    if (deepLink.lastPathSegment!! == "weathershare") {
+                if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
+                    if (deepLink?.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
                     }
@@ -81,9 +81,6 @@ class MainActivity : AppCompatActivity() {
                         val audioUrl = deepLink.getQueryParameter("audio")
                         val newsDate = deepLink.getQueryParameter("date")
                         val source = deepLink.getQueryParameter("source")
-
-
-
                         if (!title.isNullOrEmpty()) {
                             val intent = Intent(this, NewsFullviewActivity::class.java)
                             intent.putExtra("title", title)

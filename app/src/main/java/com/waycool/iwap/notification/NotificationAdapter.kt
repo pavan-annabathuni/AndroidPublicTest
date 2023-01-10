@@ -1,5 +1,6 @@
 package com.waycool.iwap.notification
 
+import android.provider.ContactsContract.Data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.waycool.data.Network.NetworkModels.DataNotification
 import com.waycool.data.Network.NetworkModels.HistoricData
+import com.waycool.data.Network.NetworkModels.Notification
 import com.waycool.iwap.databinding.ItemNotificationBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,7 +36,7 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
         val properties = getItem(position)
         holder.bind(properties)
         holder.itemView.setOnClickListener() {
-            onClickListener.clickListener(properties!!)
+            onClickListener.clickListener(properties.data2,properties)
             notifyDataSetChanged()
         }
 //        val inputDateFormatter: SimpleDateFormat =
@@ -48,6 +50,7 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
         }else holder.circleImg.visibility = View.VISIBLE
         holder.title.text = properties.data2?.title
         holder.des.text = properties.data2?.body
+
         Glide.with(holder.itemView.context).load(properties.data2?.image).into(holder.image)
     }
 
@@ -74,6 +77,8 @@ class NotificationAdapter(val onClickListener:OnClickListener):ListAdapter<DataN
             return oldItem.id == newItem.id
         }
     }
-    class OnClickListener(val clickListener: (data: DataNotification) -> Unit) {
-        fun onClick(data: DataNotification) = clickListener(data)
-    }}
+    class OnClickListener(val clickListener: (data2: Notification,data:DataNotification) -> Unit) {
+        fun onClick(data2: Notification,data:DataNotification) = clickListener(data2,data)
+
+    }
+}

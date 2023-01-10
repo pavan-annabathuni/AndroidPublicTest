@@ -63,37 +63,44 @@ class PestDiseaseFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
+//        pestDiseaseApiCall()
+//        setBanners()
+        fabButton()
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
         binding.toolbarTitle.text = cropName
 
-        binding.diseasesRv.adapter = adapter
 
-
-
-        pestDiseaseApiCall()
-        setBanners()
-        fabButton()
     }
 
     private fun pestDiseaseApiCall() {
+        binding.progressBar.visibility=View.VISIBLE
         cropId?.let { cropId ->
-            viewModel.getPestDiseaseListForCrop(cropId).observe(requireActivity()) {
+            viewModel.getPestDiseaseListForCrop(cropId).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data == null)
-                            adapter.submitList(emptyList())
-                        else
-                            adapter.submitList(it.data)
+                        if (it.data == null){ adapter.submitList(emptyList())
+                            binding.progressBar.visibility=View.GONE
+
+
+                        }
+                        else{ adapter.submitList(it.data)
+                            binding.diseasesRv.adapter = adapter
+                            binding.progressBar.visibility=View.GONE
+
+                        }
+
 
                     }
                     is Resource.Loading -> {
+                        binding.progressBar.visibility=View.VISIBLE
                         ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
                         ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
+                        binding.progressBar.visibility=View.GONE
 
                     }
                 }
