@@ -5,35 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.checksoil.CheckSoilTestFragment">
-
-    <androidx.appcompat.widget.Toolbar
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@drawable/toolbar_background"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/backBtn"
-            android:layout_width="@dimen/space16"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="@dimen/space16"
+            android:paddingEnd="@dimen/space16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_back_btn_toolbar" />
 
         <TextView
-
+            android:id="@+id/toolBarTittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:text="Select Testing Lab"
             android:textColor="#171717"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-    </androidx.appcompat.widget.Toolbar>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_top_onp"
         android:layout_width="match_parent"
@@ -266,17 +273,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_crop" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/tv_crops"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
         android:text="@string/tomato"
-        android:textColor="#ffffff"
         android:textSize="14sp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/btn_select_crop"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <androidx.appcompat.widget.AppCompatButton

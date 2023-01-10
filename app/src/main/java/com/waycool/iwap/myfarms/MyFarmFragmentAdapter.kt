@@ -44,7 +44,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.tvAddDevice.isSelected=true
-        TranslationsManager().loadString("view_farm_detail",holder. binding.tvAddDevice)
+        TranslationsManager().loadString("view_farm_detail",holder. binding.tvAddDevice,"View Farm Details")
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
         holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {

@@ -76,6 +76,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         binding.recyclerviewStatusTracker.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerviewStatusTracker.adapter = soilHistoryAdapter
+        binding.tvCheckCrop.isSelected = true
         speechToText()
         initViewBackClick()
 //        initSearchView()
@@ -106,7 +107,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
         }
-        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar)
+        TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
