@@ -92,13 +92,14 @@ class CropDetailsCaptureFragment : Fragment() {
         binding.camptureImageCamera.isSelected = true
     }
     fun translationSoilTesting() {
-        TranslationsManager().loadString("affected_region", binding.tvCropEffect)
-        TranslationsManager().loadString("leaf", binding.rb1)
-        TranslationsManager().loadString("add_image", binding.addPhotoTxt)
-        TranslationsManager().loadString("how_to_capture", binding.howTo)
-        TranslationsManager().loadString("capture_image", binding.camptureImage)
-        TranslationsManager().loadString("upload_image", binding.camptureImageCamera)
-        TranslationsManager().loadString("detect", binding.tvCheckCrop)
+        TranslationsManager().loadString("affected_region", binding.tvCropEffect,"Please click the affected leaf region \n" +
+                "of your crop")
+        TranslationsManager().loadString("leaf", binding.rb1,"Leaf")
+        TranslationsManager().loadString("add_image", binding.addPhotoTxt,"Add Image")
+        TranslationsManager().loadString("how_to_capture", binding.howTo,"How to capture image?")
+        TranslationsManager().loadString("capture_image", binding.camptureImage,"Capture Image")
+        TranslationsManager().loadString("upload_image", binding.camptureImageCamera,"Upload Image")
+        TranslationsManager().loadString("detect", binding.tvCheckCrop,"Detect")
     }
 
     fun selectImageInAlbum() {

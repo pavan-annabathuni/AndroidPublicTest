@@ -136,13 +136,16 @@ class CropHealthFragment : Fragment() {
 //            var areaHint = TranslationsManager().getString("e_g_50")
 //            binding.etAreaNumber.hint =areaHint
         }
-        TranslationsManager().loadString("pestdisease_description", binding.tvOurAll)
-        TranslationsManager().loadString("take_picture", binding.tvTakeImage)
-        TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo)
-        TranslationsManager().loadString("get_measures", binding.tvTextSoilThree)
-        TranslationsManager().loadString("request_history", binding.tvRequest)
-        TranslationsManager().loadString("check_crop_health", binding.tvCheckCrop)
-        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
+        TranslationsManager().loadString("pestdisease_description", binding.tvOurAll,"Our ‘Pest & Disease Detection’ service helps in detecting pests & diseases and recommends control measures using Artificial Intelligence.")
+        TranslationsManager().loadString("take_picture", binding.tvTakeImage,"Take a Picture")
+        TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo,"Get Diagnosed")
+        TranslationsManager().loadString("get_measures", binding.tvTextSoilThree,"Get Preventive\n" +
+                "Measures")
+        TranslationsManager().loadString("request_history", binding.tvRequest,"Request History")
+        TranslationsManager().loadString("check_crop_health", binding.tvCheckCrop,"Check your Crop health")
+        TranslationsManager().loadString("str_viewall", binding.tvViewAll,"View all")
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
 
     }
 

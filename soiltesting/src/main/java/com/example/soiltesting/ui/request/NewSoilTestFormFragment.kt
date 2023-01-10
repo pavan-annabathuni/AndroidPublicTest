@@ -127,14 +127,14 @@ class NewSoilTestFormFragment : Fragment() {
 //            val title = TranslationsManager().getString("soil_testing")
 //            binding.toolText.text = title
 //        }
-        TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot)
-        TranslationsManager().loadString("plot_number", binding.plotNumber)
-        TranslationsManager().loadString("pincode", binding.pincodeNumber)
-        TranslationsManager().loadString("Address", binding.Address)
-        TranslationsManager().loadString("city_village", binding.City)
-        TranslationsManager().loadString("state", binding.State)
-        TranslationsManager().loadString("mobile", binding.Mobile)
-        TranslationsManager().loadString("submit", binding.tvCheckCrop)
+        TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot,"Plot Number and Sample Collection Address")
+        TranslationsManager().loadString("plot_number", binding.plotNumber,"Plot Number ")
+        TranslationsManager().loadString("pincode", binding.pincodeNumber,"Pincode ")
+        TranslationsManager().loadString("Address", binding.Address,"Address ")
+        TranslationsManager().loadString("city_village", binding.City,"City / Village ")
+        TranslationsManager().loadString("state", binding.State,"State ")
+        TranslationsManager().loadString("mobile", binding.Mobile,"Mobile Number")
+        TranslationsManager().loadString("submit", binding.tvCheckCrop,"Submit")
 
 
     }

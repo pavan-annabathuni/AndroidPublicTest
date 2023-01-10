@@ -96,6 +96,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.IvNotification.setOnClickListener {
             findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
         }
+        binding.tvAddFromOne.isSelected = true
 
     }
 
@@ -106,28 +107,30 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            var areaHint = TranslationsManager().getString("e_g_50")
 //            binding.imeiAddress.hint =areaHint
         }
-        TranslationsManager().loadString("welcome", binding.tvWelcomeName)
-        TranslationsManager().loadString("add_crop_info",binding.tvYourForm)
-        TranslationsManager().loadString("add_crop",binding.tvAddFrom)
-        TranslationsManager().loadString("my_crops", binding.title3SemiBold)
-        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops)
-        TranslationsManager().loadString("my_farm", binding.titleMyFarm)
-        TranslationsManager().loadString("add_farm_top", binding.MyFarm)
-        TranslationsManager().loadString("my_device", binding.titleMyDevice)
-        TranslationsManager().loadString("view_tepm", binding.tvTemp)
-        TranslationsManager().loadString("view_rainfall", binding.tvWind)
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
-        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed)
-        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness)
-        TranslationsManager().loadString("view_pressure", binding.tvPressure)
-        TranslationsManager().loadString("view_light", binding.ivSoilTempText)
-        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture)
-        TranslationsManager().loadString("view_top", binding.tvTop)
-        TranslationsManager().loadString("view_bottom", binding.tvBottom)
-        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp)
-        TranslationsManager().loadString("battery", binding.tvEnableAddDevice)
-        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo)
-        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh)
+        TranslationsManager().loadString("welcome", binding.tvWelcomeName,"Welcome")
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get \n" +
+                "more details.")
+        TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
+        TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add crops")
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne,"Add your farm")
+        TranslationsManager().loadString("my_farm", binding.titleMyFarm,"")
+        TranslationsManager().loadString("add_farm_top", binding.MyFarm,"Add Farm")
+        TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temprature")
+        TranslationsManager().loadString("view_rainfall", binding.tvWind,"Rainfall")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed,"Wind Speed")
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness,"Leaf wetness")
+        TranslationsManager().loadString("view_pressure", binding.tvPressure,"Pressure")
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText,"Light Intensity")
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture,"Soil Moisture")
+        TranslationsManager().loadString("view_top", binding.tvTop,"Top")
+        TranslationsManager().loadString("view_bottom", binding.tvBottom,"Bottom")
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp,"Soil Temperature")
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
     }
 
     private fun initObserveDevice(farmId: Int) {
