@@ -507,13 +507,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         val farmsAdapter = FarmsAdapter(requireContext(), this)
                         binding.farmsRv.adapter = farmsAdapter
+
                         farmsAdapter.submitList(it.data)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
                         binding.clMyForm.visibility = View.GONE
                         binding.farmsDetailsCl.visibility = View.GONE
-
-
                     }
 
                 }

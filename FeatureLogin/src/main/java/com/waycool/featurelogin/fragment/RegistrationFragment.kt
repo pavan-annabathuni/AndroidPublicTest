@@ -656,6 +656,7 @@ class RegistrationFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun userModule() {
