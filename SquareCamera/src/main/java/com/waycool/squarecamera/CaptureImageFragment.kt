@@ -232,6 +232,7 @@ class CaptureImageFragment : Fragment() {
 //        Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
         var bundle = Bundle()
         bundle.putParcelable("uri", uri)
+//        findNavController().navigate(R.id.action_captureImageFragment_to_imagePreviewFragment, bundle)
 
         Navigation.findNavController(binding.root)
             .navigate(R.id.action_captureImageFragment_to_imagePreviewFragment, bundle);

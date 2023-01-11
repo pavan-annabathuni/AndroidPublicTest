@@ -3,18 +3,15 @@ package com.example.addcrop.ui.premium
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
-
 import com.example.addcrop.viewmodel.AddCropViewModel
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
@@ -102,27 +99,54 @@ class PlantSpacingFragment : Fragment() {
 //                map["width_drip"] = binding.etNumberWidth.text
                 binding.constraintLayout3.setOnSelectListener {
                     Log.d("TAG", "onViewCreatedBtnselect: $it")
-                    Toast.makeText(requireContext(), it.text, Toast.LENGTH_SHORT).show()
-                    if (it.text == "ft") {
-                        map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-                    } else if (it.text == "cm") {
-                        map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                    } else if ((it.text == "mtr")) {
-                        map["len_drip"] = binding.etNumber.text
-                    }else {
-                        map["len_drip"] = binding.etNumber.text
+//                    Toast.makeText(requireContext(), it.text, Toast.LENGTH_SHORT).show()
+                    try {
+                        if (it.text.trim().isEmpty()){
+                            Toast.makeText(requireContext(), "Please Enter Plant to Plant Distance", Toast.LENGTH_SHORT).show()
+                        }else{
+                            if (it.text == "ft") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                            } else if (it.text == "cm") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                            } else if ((it.text == "mtr")) {
+                                map["len_drip"] = binding.etNumber.text
+                            }else {
+                                map["len_drip"] = binding.etNumber.text
+                            }
+                        }
+
+                    } catch (e: NumberFormatException) {
+
                     }
+
+
                 }
                 binding.constraintLayoutBedWidth.setOnSelectListener {
-                    if (it.text == "ft") {
-                        map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-                    } else if (it.text == "cm") {
-                        map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                    } else if (it.text == "mtr") {
-                        map["width_drip"] = binding.etNumber.text
-                    }else{
-                        map["width_drip"] = binding.etNumber.text
+                    try {
+                        if (it.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant Bed width",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else{
+                            if (it.text == "ft") {
+                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                            } else if (it.text == "cm") {
+                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                            } else if (it.text == "mtr") {
+                                map["width_drip"] = binding.etNumber.text
+                            }else{
+                                map["width_drip"] = binding.etNumber.text
+                            }
+
+                        }
+                    }catch (e: NumberFormatException) {
+
                     }
+
+
                 }
                 binding.cardCheckHealth.setOnClickListener {
                     plantToPlant = binding.etNumber.text.toString().trim()

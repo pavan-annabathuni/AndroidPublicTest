@@ -30,7 +30,7 @@ class SucessFullFragment : Fragment() {
 //        if (arguments!=null) {
             val soilTestNumber = arguments?.getString("soil_test_number")
             Log.d(TAG, "onCreateViewSoilTestNumber: $soilTestNumber ")
-            binding.tvRequestIDText.text = "Your soil test request for $soilTestNumber"
+            binding.tvSetData.text = soilTestNumber
 
             binding.ivClose.setOnClickListener {
                findNavController().navigateUp()
@@ -49,9 +49,9 @@ class SucessFullFragment : Fragment() {
     }
 
     fun traslationSoilTesting() {
-        TranslationsManager().loadString("successfully_completed", binding.tvRequestID)
-        TranslationsManager().loadString("Request Successful!", binding.tvRequestIDText)
-        TranslationsManager().loadString("successfully_completed", binding.tvRequestIDTextStatus)
+        TranslationsManager().loadString("successfully_completed", binding.tvRequestID,"Request Successful!")
+        TranslationsManager().loadString("Request Successful!", binding.tvRequestIDText,"Your soil test request for")
+        TranslationsManager().loadString("successfully_completed", binding.tvRequestIDTextStatus,"Successfully completed")
 
 
     }

@@ -63,36 +63,54 @@ class PestDiseaseFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
+//        pestDiseaseApiCall()
+//        setBanners()
+        fabButton()
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
         binding.toolbarTitle.text = cropName
 
-        binding.diseasesRv.adapter = adapter
 
-
-
-        pestDiseaseApiCall()
-        setBanners()
-        fabButton()
     }
 
     private fun pestDiseaseApiCall() {
+        binding.progressBar.visibility=View.VISIBLE
+
         cropId?.let { cropId ->
-            viewModel.getPestDiseaseListForCrop(cropId).observe(requireActivity()) {
+            viewModel.getPestDiseaseListForCrop(cropId).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data == null)
-                            adapter.submitList(emptyList())
-                        else
+                        if(!it.data.isNullOrEmpty()){
+                            binding.tvNoData.visibility=View.GONE
+                            binding.progressBar.visibility=View.GONE
                             adapter.submitList(it.data)
+                            binding.diseasesRv.adapter = adapter
+                        }
+                        else{
+                            binding.progressBar.visibility=View.GONE
+                            adapter.submitList(emptyList())
+                            binding.tvNoData.visibility=View.VISIBLE
+                        }
+
+
+                /*        if (it.data.isNullOrEmpty()){ adapter.submitList(emptyList())
+                            binding.progressBar.visibility=View.GONE
+                        }
+                        else{
+                            adapter.submitList(it.data)
+                            binding.diseasesRv.adapter = adapter
+                            binding.progressBar.visibility=View.GONE
+                        }*/
 
                     }
                     is Resource.Loading -> {
+                        binding.progressBar.visibility=View.VISIBLE
                         ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
+                        binding.progressBar.visibility=View.GONE
                         ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
 
                     }
@@ -136,11 +154,8 @@ class PestDiseaseFragment : Fragment() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
-
             bannerAdapter.submitData(lifecycle, it)
-            TabLayoutMediator(
-                binding.bannerIndicators, binding.bannerViewpager
-            ) { tab: TabLayout.Tab, position: Int ->
+            TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
                 tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
             }.attach()
         }

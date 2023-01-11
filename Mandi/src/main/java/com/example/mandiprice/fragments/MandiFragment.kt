@@ -628,8 +628,7 @@ class MandiFragment : Fragment() {
             binding.topAppBar.title = mandi
         }
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("sort_by",binding.filter)
+        TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
     }
 }

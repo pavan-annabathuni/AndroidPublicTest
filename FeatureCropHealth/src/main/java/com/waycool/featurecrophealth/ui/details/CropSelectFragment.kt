@@ -25,12 +25,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -66,6 +69,7 @@ class CropSelectFragment : Fragment() {
         bindObserversCategory()
 //        bindObserversDetails()
         initView()
+        translationSoilTesting()
 
         clickSearch()
 
@@ -121,6 +125,14 @@ class CropSelectFragment : Fragment() {
 
                 }
         }
+    fun translationSoilTesting() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val search = TranslationsManager().getString("search")
+            binding.searchView.hint = search
+        }
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Crop Selection")
+        TranslationsManager().loadString("", binding.toolbarTitle,"My Crops")
+    }
 
 
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +27,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
-
 import com.example.soiltesting.SoilTestActivity
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
@@ -39,9 +39,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -64,15 +64,14 @@ import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.Dispatchers
 import com.waycool.weather.utils.WeatherIcons
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
@@ -102,10 +101,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
-
-
-    //    private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
-//    private val mandiAdapter = MandiHomePageAdapter()
     private lateinit var mandiAdapter: MandiHomePageAdapter
     private val yellow = "#070D09"
     private val lightYellow = "#FFFAF0"
@@ -148,11 +143,21 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
-
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                   activity?.finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+           viewLifecycleOwner,
+            callback
+        )
         setWishes()
         checkNetwork()
         initClick()
         notification()
+        binding.tvRain.isSelected = true
         binding.recyclerview.adapter = mandiAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
 
@@ -503,13 +508,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         val farmsAdapter = FarmsAdapter(requireContext(), this)
                         binding.farmsRv.adapter = farmsAdapter
+
                         farmsAdapter.submitList(it.data)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
                         binding.clMyForm.visibility = View.GONE
                         binding.farmsDetailsCl.visibility = View.GONE
-
-
                     }
 
                 }
@@ -646,7 +650,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = NewsGenericAdapter(context, this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            viewModel.getVansNewsList(moduleId).collect { pagingData ->
+            viewModel.getVansNewsList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -699,7 +703,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansVideosList(moduleId).collect { pagingData ->
+            viewModel.getVansVideosList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -715,6 +719,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.tvVideosLoading.text="Videos are being loaded.Please wait"
                                     videosBinding.ivViewAll.visibility = View.GONE
                                     videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE

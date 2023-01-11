@@ -117,58 +117,45 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
-//            val title = TranslationsManager().getString("add_crop")
-//            binding.toolbarTextFarm.text = title
-//            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
-//            binding.etNickName.hint =NickNamehint
-//            var areaHint = TranslationsManager().getString("e_g_50")
-//            binding.etAreaNumber.hint =areaHint
-//            var hitnPlant = TranslationsManager().getString("e_g_50")
-//            binding.etNoOfAcre.hint =hitnPlant
+
         }
-        TranslationsManager().loadString("farm", binding.tvMyform)
-        TranslationsManager().loadString("add_crop_info", binding.tvYourForm)
-        TranslationsManager().loadString("add_crop", binding.tvAddFrom)
-        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle)
-        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle)
-        TranslationsManager().loadString("farm_details", binding.tvMyformDetails)
-        TranslationsManager().loadString("water_source", binding.tvWaterSource)
-        TranslationsManager().loadString("pump_hp", binding.tvPump)
-        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops)
-        TranslationsManager().loadString("pump_type", binding.tvShowingDateTotalFoem)
-        TranslationsManager().loadString("pump_size", binding.tvPempSize)
-        TranslationsManager().loadString("pipe_height", binding.tvPempHeight)
-        TranslationsManager().loadString("pump_flow", binding.tvPumpFlowRate)
-        TranslationsManager().loadString("submersible", binding.totalFormDate)
-        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle)
-        TranslationsManager().loadString("my_device", binding.titleMyDevice)
-        TranslationsManager().loadString("view_tepm", binding.tvTemp)
-        TranslationsManager().loadString("view_rainfall", binding.tvWind)
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity)
-        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed)
-        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness)
-        TranslationsManager().loadString("view_pressure", binding.tvPressure)
-        TranslationsManager().loadString("view_light", binding.ivSoilTempText)
-        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture)
-        TranslationsManager().loadString("view_top", binding.tvTop)
-        TranslationsManager().loadString("view_bottom", binding.tvBottom)
-        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp)
-        TranslationsManager().loadString("battery", binding.tvEnableAddDevice)
-        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo)
-        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh)
-        TranslationsManager().loadString("deltat", binding.deltat)
-        TranslationsManager().loadString("tvNDVi", binding.tvNDVi)
-        TranslationsManager().loadString("get_sattilate_image", binding.title3Bold)
-        TranslationsManager().loadString("txt_know_more",binding.ndviButton)
-        TranslationsManager().loadString("str_today", binding.textView159)
-        TranslationsManager().loadString("tomorrow",binding.textView164)
-        TranslationsManager().loadString("how_it_work",binding.deltaTInfo)
-        TranslationsManager().loadString("str_add_device",binding.MyDevice)
-
-//        TranslationsManager().loadString("add_crops", binding.tvMyCrops)
-
-
-
+        TranslationsManager().loadString("farm", binding.tvMyform,"Farm")
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm,"Add your Crop and get more details.")
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom,"Add crops")
+        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle,"Edit")
+        TranslationsManager().loadString("farm_details", binding.tvMyformDetails,"Farm Details")
+        TranslationsManager().loadString("water_source", binding.tvWaterSource,"Water Sources")
+        TranslationsManager().loadString("pump_hp", binding.tvPump,"Pump HP")
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add Crop")
+        TranslationsManager().loadString("pump_type", binding.tvShowingDateTotalFoem,"Pump Type")
+        TranslationsManager().loadString("pump_size", binding.tvPempSize,"Pump Size (in Inches)")
+        TranslationsManager().loadString("pipe_height", binding.tvPempHeight,"Pump Height (in Mtrs)")
+        TranslationsManager().loadString("pump_flow", binding.tvPumpFlowRate,"Pump Flow Rate (in Ltre per hr)")
+        TranslationsManager().loadString("submersible", binding.totalFormDate,"Submersible")
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"My Crops")
+        TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
+        TranslationsManager().loadString("view_rainfall", binding.tvWind,"Wind")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed,"Wind Speed")
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness,"Leaf wetness")
+        TranslationsManager().loadString("view_pressure", binding.tvPressure,"Pressure")
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText,"Light Intensity")
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture,"Soil Moisture")
+        TranslationsManager().loadString("view_top", binding.tvTop,"Top")
+        TranslationsManager().loadString("view_bottom", binding.tvBottom,"Bottom")
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp,"Soil Temperature")
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
+        TranslationsManager().loadString("deltat", binding.deltat,"Spraying Condition (Delta T)")
+        TranslationsManager().loadString("tvNDVi", binding.tvNDVi,"Farm Health Monitoring (NDVI)")
+        TranslationsManager().loadString("get_sattilate_image", binding.title3Bold,"Get Satellite imagery for your crops")
+        TranslationsManager().loadString("txt_know_more",binding.ndviButton,"Know more")
+        TranslationsManager().loadString("str_today", binding.textView159,"Today")
+        TranslationsManager().loadString("tomorrow",binding.textView164,"Tomorrow")
+        TranslationsManager().loadString("how_it_work",binding.deltaTInfo,"How does this work?")
+        TranslationsManager().loadString("str_add_device",binding.MyDevice,"Add Device")
 
     }
 
@@ -214,7 +201,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                     }
                     is Resource.Loading -> {
                         ToastStateHandling.toastWarning(
@@ -458,9 +444,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
             }
-//            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
-//
-//            speedometer.indicator = imageIndicator
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
@@ -477,7 +460,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
             )
             //two
-//            binding.soilMoistureOne .indicator.color = Color.RED
             binding.soilMoistureTwo.addSections(
                 Section
                     (0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
@@ -486,99 +468,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
             )
 
-
-//            binding.soilMoistureOne.addSections(
-//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(5f)),
-//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(5f)),
-//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
-//            )
-
-//            binding.soilMoistureOne.setIndicator(Indicator.Indicators.KiteIndicator)
-//            binding.soilMoistureTwo.setIndicator(Indicator.Indicators.KiteIndicator)
-
-//            binding.soilMoistureOne.ticks= arrayListOf(0f,.1f,.3f,.5f,1f)
             binding.soilMoistureOne.tickNumber = 0
             binding.soilMoistureOne.marksNumber = 0
-
             binding.soilMoistureTwo.tickNumber = 0
             binding.soilMoistureTwo.marksNumber = 0
-
-//            binding.soilMoistureOne.speedTo()
             binding.soilMoistureOne.maxSpeed = 60F
             binding.soilMoistureTwo.maxSpeed = 60F
-//            binding.soilMoistureOne.ticks  = listOf(10.0F)
-//            binding.soilMoistureTwo.ticks = 10
-//            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
-//            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
-
-
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
             binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
 
-//            binding.soilMoistureOne.speed(data.sensorValue1?.toFloat())
-//            binding.soilMoistureOne.speedTextListener =
-//                {
-//                        speed: Float? ->
-//                    String.format(data.sensorValue1.toString(), "lol%.0f", speed)
-//                }
-
-//            binding.soilMoistureOne.addSections(
-//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
-//            )
-            //        speedView.getSections().add(new Section(1f, Color.RED));
-//            binding.soilMoistureOne.onSectionChangeListener = { previousSection: Section?, newSection: Section? ->
-//                if (previousSection != null) {
-////                    previousSection.setPadding(10);
-//                    previousSection.width = binding.soilMoistureOne.dpTOpx(20f)
-//                }
-//                if (newSection != null) {
-////                    newSection.setPadding(0);
-//                    newSection.width = binding.soilMoistureOne.dpTOpx(20f)
-//                }
-//                Unit
-//            }
-
-
-            //add color ranges to gauge
-//            binding.soilMoistureOne.addRange(range)
-//            binding.soilMoistureOne.addRange(range2)
-//            binding.soilMoistureOne.addRange(range3)
-//            binding.soilMoistureOne.addRange(range4)
-//
-//            binding.soilMoistureTwo.addRange(range)
-//            binding.soilMoistureTwo.addRange(range2)
-//            binding.soilMoistureTwo.addRange(range3)
-//            binding.soilMoistureTwo.addRange(range4)
-//
-//            //set min max and current value
-//            binding.soilMoistureOne.minValue = 0.0
-//            binding.soilMoistureOne.maxValue = 100.0
-//            binding.soilMoistureOne.value = data.soilMoisture1!!.toDouble()
-//
-//            binding.soilMoistureTwo.minValue = 0.0
-//            binding.soilMoistureTwo.maxValue = 100.0
-//            binding.soilMoistureTwo.value = data.soilMoisture1!!.toDouble()
-
-//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
-//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
-//
-//            if (data.soilMoisture1?.toInt()!! < 30){
-//                binding.soilMoistureOne.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-//            }else if (data.soilMoisture1?.toInt()!! < 30)
-//                if (data.soilMoisture2?.toInt()!! < 30){
-//                    binding.soilMoistureTwo.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-//
-//                }
-//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
-//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
-
-//            it.tubeSpeedometer.maxSpeed = 100f
-//            it.tubeSpeedometer.speedTo(140f)
-//            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
             it.tvLastUpdateRefresh.setOnClickListener {
                initObserveDevice()
             }
@@ -752,23 +650,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
 
             }
-//            binding.clSoilTemp.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "soilmoisture")
-//                    bundle.putString("toolbar","Soil Temperature")
-//                    bundle.putString("temp_value", data.soilTemperature1)
-//                    bundle.putString("date_time", data.dataTimestamp)
-//                    findNavController().navigate(
-//                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
-//                        bundle
-//                    )
-//
-//                }
-//
-//            }
         }
 
 

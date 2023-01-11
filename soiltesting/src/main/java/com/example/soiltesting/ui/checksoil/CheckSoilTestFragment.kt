@@ -70,17 +70,20 @@ class CheckSoilTestFragment : Fragment() {
             binding.editImage.setOnClickListener {
                 findNavController().navigate(R.id.action_checkSoilTestFragment_to_selectCropSoilTestFragment)
             }
+            binding.selectCropEdit.setOnClickListener {
+                findNavController().navigate(R.id.action_checkSoilTestFragment_to_selectCropSoilTestFragment)
+            }
             latitude = arguments?.getString("lat")
             longitude = arguments?.getString("lon")
-            binding.cardCheckHealth.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString("onp_id", your_list?.get(0)?.onpName.toString())
-                findNavController().navigate(
-                    R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
-                    bundle
-                )
-
-            }
+//            binding.cardCheckHealth.setOnClickListener {
+//                val bundle = Bundle()
+//                bundle.putString("onp_id", your_list?.get(0)?.onpName.toString())
+//                findNavController().navigate(
+//                    R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
+//                    bundle
+//                )
+//
+//            }
         }
         return binding.root
     }
@@ -101,6 +104,12 @@ class CheckSoilTestFragment : Fragment() {
     }
     fun translationSoilTesting() {
         TranslationsManager().loadString("next", binding.cardCheckHealth)
+        TranslationsManager().loadString("add", binding.addText,"Add")
+        TranslationsManager().loadString("str_edit", binding.selectCropEdit,"Edit")
+        TranslationsManager().loadString("soil_sample_will_be_collected_by_the_selected_lab", binding.collectedLab,"Soil sample will be collected by the selected Lab")
+        TranslationsManager().loadString("txt_selct_crop", binding.selectCrop,"Select Crop")
+        TranslationsManager().loadString("select_testing_lab", binding.toolBarTittle,"Select Testing Lab")
+
 //        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
 //        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
 //        TranslationsManager().loadString("sowing_date", binding.Address)
@@ -171,22 +180,25 @@ class CheckSoilTestFragment : Fragment() {
                                     val idTwo = arguments?.getString("name")
                                     val idImage = arguments?.getString("crop_logo")
 
-                                    if (idTwo.isNullOrEmpty()
-
-                                    ) {
+                                    if (idTwo.isNullOrEmpty() || idOne ==null) {
                                         binding.btnSelectCrop.visibility = View.VISIBLE
                                     } else {
                                         binding.imageView.visibility = View.VISIBLE
-                                        binding.editImage.visibility = View.VISIBLE
+//                                        binding.editImage.visibility = View.VISIBLE
+                                        binding.tvCrops.visibility=View.VISIBLE
                                         binding.cardCheckHealth.isEnabled = true
                                         binding.editImage.visibility = View.VISIBLE
                                         binding.btnSelectCrop.visibility = View.GONE
-                                        binding.selectCrop.text = "Selected Crop"
+//                                        binding.selectCrop.text = "Selected Crop"
+                                        TranslationsManager().loadString("txt_select_crop", binding.selectCrop,"Selected Crop")
                                         binding.selectCropEdit.setTextColor(Color.parseColor("#146133"))
                                         Glide.with(requireContext()).load(idImage)
                                             .into(binding.imageView)
-                                        binding.tvCrops.text = idTwo
+                                        Log.d("TAG", "isLocationPermissionGrantedvjsdfnv:$idTwo")
+                                        binding.tvCrops.text = idTwo.toString()
                                         binding.tvCrops.setTextColor(Color.parseColor("#5D6571"))
+
+//                                        binding.tvCrops.setTextColor(Color.parseColor("#5D6571"))
                                         binding.cardCheckHealth.setOnClickListener {
                                             val bundle = Bundle()
                                             bundle.putInt(

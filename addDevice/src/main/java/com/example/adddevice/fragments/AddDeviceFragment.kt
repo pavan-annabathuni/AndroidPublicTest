@@ -126,6 +126,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.map_adddevice) as SupportMapFragment
         mapFragment.requireView().isClickable = false
         mapFragment.getMapAsync(this)
+        binding.tvScanned.isSelected = true
 
         binding.submit.setOnClickListener {
             nickName = binding.device1.text.toString().trim()
@@ -241,7 +242,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
         if (scanResult != null) {
             isQRScanned = true
-            binding.tvScanned.text = "QR Scanned."
+//            binding.tvScanned.text = "QR Scanned."
+            TranslationsManager().loadString("str_scanned_device", binding.tvScanned,"QR Scanned.")
+
             binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(
                     requireContext(),
@@ -509,11 +512,11 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             var areaHint = TranslationsManager().getString("e_g_50")
             binding.imeiAddress.hint =areaHint
         }
-        TranslationsManager().loadString("str_device_name", binding.textView)
-        TranslationsManager().loadString("str_device_details", binding.textView2)
-        TranslationsManager().loadString("str_scan", binding.tvScanned)
-        TranslationsManager().loadString("str_device_name", binding.textView3)
-        TranslationsManager().loadString("submit", binding.submit)
+        TranslationsManager().loadString("str_device_name", binding.textView,"Device Name")
+        TranslationsManager().loadString("str_device_details", binding.textView2,"Device Details")
+        TranslationsManager().loadString("str_scan", binding.tvScanned,"Sacn QR code")
+        TranslationsManager().loadString("str_device_name", binding.textView3,"Device Number")
+        TranslationsManager().loadString("str_register", binding.submit,"Register")
 //        TranslationsManager().loadString("faq_s", binding.tvFAQ)
 //        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
 //        TranslationsManager().loadString("_2_when_do_i_sample", binding.tvSoilText)

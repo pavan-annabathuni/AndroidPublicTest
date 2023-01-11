@@ -252,8 +252,7 @@ class MyProfileFragment : Fragment() {
 
     private fun moveToLogin() {
         val intent = Intent(context, LoginMainActivity::class.java)
-        startActivity(intent)
-        activity?.finish()
+
         GlobalScope.launch {
             LocalSource.deleteAllMyCrops()
             LocalSource.deleteTags()
@@ -265,20 +264,21 @@ class MyProfileFragment : Fragment() {
             DataStoreManager.clearData()
 
         }
+        startActivity(intent)
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_farmer_profile", binding.tvFarmer)
-        TranslationsManager().loadString("str_myProfile", binding.tvMyProfile)
-        TranslationsManager().loadString("str_language", binding.tvLang)
-        TranslationsManager().loadString("str_about", binding.tvAbout)
-        TranslationsManager().loadString("str_invite_farmer", binding.tvInvite)
-        TranslationsManager().loadString("str_ask_chat", binding.tvAsk)
-        TranslationsManager().loadString("str_rate_us", binding.tvRate)
-        TranslationsManager().loadString("str_logout", binding.tvLogout)
-        TranslationsManager().loadString("str_privacy_policy", binding.textView)
-        TranslationsManager().loadString("str_terms", binding.textView2)
-        TranslationsManager().loadString("str_farm_support", binding.tvSupport)
+        TranslationsManager().loadString("str_farmer_profile", binding.tvFarmer,"Farmer Profile")
+        TranslationsManager().loadString("str_myProfile", binding.tvMyProfile,"My Profile")
+        TranslationsManager().loadString("str_language", binding.tvLang,"Language")
+        TranslationsManager().loadString("str_about", binding.tvAbout,"About Outgrow")
+        TranslationsManager().loadString("str_invite_farmer", binding.tvInvite,"Invite Farmer")
+        TranslationsManager().loadString("str_ask_chat", binding.tvAsk,"Feel free to Ask, We ready to help \n" + "Contact us")
+        TranslationsManager().loadString("str_rate_us", binding.tvRate,"Rate us")
+        TranslationsManager().loadString("str_logout", binding.tvLogout,"Logout")
+        TranslationsManager().loadString("str_privacy_policy", binding.textView,"Privacy Policy")
+        TranslationsManager().loadString("str_terms", binding.textView2,"Terms & Conditions")
+        TranslationsManager().loadString("str_farm_support", binding.tvSupport,"Farm Support")
     }
 
 }

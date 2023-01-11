@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -98,18 +100,7 @@ class MandiGraphFragment : Fragment() {
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
-//        viewModel.viewModelScope.launch {
-//            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
-//                .observe(viewLifecycleOwner) { it2 ->
-//                 val data2 = (it2.data?.data?.map { data ->
-//                         data.arrivalDate
-//                     } ?: emptyList()).toMutableList()
-//                data2.sort()
 
-
-                    //     Toast.makeText(context,"${it.data}",Toast.LENGTH_SHORT).show()
- //               }
- //       }
         binding.imgShare.setOnClickListener() {
             binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
@@ -365,7 +356,10 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-                    binding.imgShare.isEnabled = true
+                    Handler().postDelayed({
+                        binding.imgShare.isEnabled = true
+                    },2500)
+
 
                 }
             }
@@ -374,10 +368,10 @@ class MandiGraphFragment : Fragment() {
 
     private fun translation() {
 
-        TranslationsManager().loadString("str_share", binding.imgShare)
-        TranslationsManager().loadString("rate_kg", binding.textView7)
-        TranslationsManager().loadString("rate_kg", binding.tvKg)
-        TranslationsManager().loadString("date", binding.textView8)
+        TranslationsManager().loadString("str_share", binding.imgShare,"Share")
+        TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
+        TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
+        TranslationsManager().loadString("date", binding.textView8,"Date")
 
 
     }

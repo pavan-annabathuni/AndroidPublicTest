@@ -122,9 +122,10 @@ class FarmSupportFragment : Fragment() {
             username.text = deleteDes
 
         }
-        TranslationsManager().loadString("delete_farm_support",areYouSure)
-        TranslationsManager().loadString("str_delete",delete)
-        TranslationsManager().loadString("str_cancel",cancel)
+        TranslationsManager().loadString("delete_farm_support",areYouSure,"Are you Sure you want to \n" +
+                "delete this account? ")
+        TranslationsManager().loadString("str_delete",delete,"Delete")
+        TranslationsManager().loadString("str_cancel",cancel,"Cancel")
 
         cancel.setOnClickListener { dialog.dismiss() }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
