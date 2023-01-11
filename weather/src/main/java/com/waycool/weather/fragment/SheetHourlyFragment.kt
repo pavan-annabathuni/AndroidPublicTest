@@ -67,9 +67,9 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
         return com.waycool.weather.R.style.BottomSheetDialog
     }
     fun translation() {
-        TranslationsManager().loadString("str_hourly_weatherr", binding.textView2)
+        TranslationsManager().loadString("str_hourly_weather", binding.textView2,"Hourly Weather")
 //       today = TranslationsManager().loadString("str_today", binding.imgShare).toString()
-        TranslationsManager().loadString("str_humidity", binding.labelHumidity)
-        TranslationsManager().loadString("str_rain", binding.labelRain)
+        TranslationsManager().loadString("str_humidity", binding.labelHumidity,"Humidity")
+        TranslationsManager().loadString("str_rain", binding.labelRain,"Chance of Rain")
     }
 }

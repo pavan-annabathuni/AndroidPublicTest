@@ -124,8 +124,14 @@ object TypeConverter {
 
     fun convertStringToCropVariety(s: String): List<CropVarityDomain>? {
         Log.d("TypeConverterFrom", s)
-        val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
-        return Gson().fromJson(s, listType)
+        try {
+            val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
+            return Gson().fromJson(s, listType)
+        }catch (e:Exception){
+            return emptyList()
+            Log.d("cropVariety", "convertStringToCropVariety: $e")
+        }
+
     }
 
     fun convertWeatherToString(w: WeatherMasterEntity): String {

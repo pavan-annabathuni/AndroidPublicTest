@@ -284,6 +284,7 @@ class WeatherAdapter(val onClickListener:OnClickListener):androidx.recyclerview.
             }
 
         }
+        TranslationsManager().loadString("str_rain",holder.rain,"Chance of Rain")
 
     }
 

@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="veg_info" tools:ignore="ExtraTranslation">The vegetative index help you to understand the growth and health of the plant. Greener it is the better it is</string>
 </resources>

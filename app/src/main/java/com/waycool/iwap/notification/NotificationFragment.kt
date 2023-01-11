@@ -55,6 +55,7 @@ class NotificationFragment : Fragment() {
         binding.back.setOnClickListener(){
             findNavController().popBackStack()
         }
+        binding.topAppBar.isSelected = true
         newNotification()
         return binding.root
     }
@@ -78,7 +79,7 @@ class NotificationFragment : Fragment() {
                 newNotification()
 
             }}
-        })
+        }, requireContext())
         binding.recycleViewHis.adapter = mNotificationAdapter
         viewModel.getNotification().observe(viewLifecycleOwner){
             mNotificationAdapter.submitList(it.data?.data)

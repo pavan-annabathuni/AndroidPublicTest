@@ -108,6 +108,8 @@ class AddFarmSupportFragment : Fragment() {
         binding.imgLocation.setOnClickListener() {
             getLocation()
         }
+        binding.farmManger.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.text_border)
         translation()
         return binding.root
 
@@ -334,12 +336,12 @@ class AddFarmSupportFragment : Fragment() {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_farmer_name", binding.textView1)
-        TranslationsManager().loadString("str_role_type", binding.textView3)
-        TranslationsManager().loadString("str_farm_location", binding.textView5)
-        TranslationsManager().loadString("str_mobile_number", binding.textView4)
-        TranslationsManager().loadString("str_farmer", binding.tvFarmer)
-        TranslationsManager().loadString("str_farmer_support", binding.tvFarmerSupport)
+        TranslationsManager().loadString("str_farmer_name", binding.textView1,"Farmer Name ")
+        TranslationsManager().loadString("str_role_type", binding.textView3,"Role Type")
+        TranslationsManager().loadString("str_farm_location", binding.textView5,"Farm Location Coordinates")
+        TranslationsManager().loadString("str_mobile_number", binding.textView4,"Mobile Number")
+        TranslationsManager().loadString("str_farmer", binding.tvFarmer,"Farmer")
+        TranslationsManager().loadString("str_farmer_support", binding.tvFarmerSupport,"Farmer Support")
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
         viewModel.viewModelScope.launch {

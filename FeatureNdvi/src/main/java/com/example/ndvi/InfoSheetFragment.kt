@@ -36,12 +36,12 @@ class InfoSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_satellite",binding.title)
-        TranslationsManager().loadString("vegetation_index",binding.tvIndex)
-        TranslationsManager().loadString("str_vegitation_info",binding.textView9)
-        TranslationsManager().loadString("true_colour",binding.tvTrueColor)
+        TranslationsManager().loadString("str_satellite",binding.title,"Satellite Imagery Info")
+        TranslationsManager().loadString("vegetation_index",binding.tvIndex,"Vegetation Index")
+        TranslationsManager().loadString("str_vegitation_info",binding.textView9,getString(R.string.veg_info))
+        TranslationsManager().loadString("true_colour",binding.tvTrueColor,"True Colour")
         TranslationsManager().loadString("str_true_info",binding.tvTrueDes)
-        TranslationsManager().loadString("str_disclaimer",binding.tvDis)
+        TranslationsManager().loadString("str_disclaimer",binding.tvDis,"Disclaimer")
         TranslationsManager().loadString("str_disclaimer_details",binding.tvDisDesc)
     }
 }
