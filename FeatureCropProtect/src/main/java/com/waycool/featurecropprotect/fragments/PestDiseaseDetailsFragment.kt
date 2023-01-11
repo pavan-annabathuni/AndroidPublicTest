@@ -130,10 +130,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.imgShare.setOnClickListener {
             screenShot(diseaseId, diseaseName)
         }
-
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
         TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)
+
+        setVideos()
+        setNews()
+        setBanners()
+        audioPlayer()
+
 
         var chemical = "Chemical"
         viewModel.viewModelScope.launch {
@@ -247,10 +252,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             }
         }
 
-        setVideos()
-        setNews()
-        setBanners()
-        audioPlayer()
+
     }
 
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {

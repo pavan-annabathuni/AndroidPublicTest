@@ -1157,7 +1157,7 @@
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/banner_indicators"
-                        android:layout_width="120dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
@@ -1171,10 +1171,10 @@
                         app:tabGravity="center"
                         app:tabIndicator="@null"
                         app:tabIndicatorHeight="0dp"
-                        app:tabMaxWidth="38dp"
+                        app:tabMaxWidth="30dp"
                         app:tabMode="auto"
-                        app:tabPaddingEnd="8dp"
-                        app:tabPaddingStart="8dp"
+                        app:tabPaddingEnd="2dp"
+                        app:tabPaddingStart="2dp"
                         app:tabSelectedTextColor="@color/white"
                         app:tabTextAppearance="@style/TabTextBannerAppearance"
                         app:tabTextColor="@color/transparent" />

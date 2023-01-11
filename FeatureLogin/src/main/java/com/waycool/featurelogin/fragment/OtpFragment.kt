@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mukesh.OTP_VIEW_TYPE_BORDER
@@ -224,12 +225,14 @@ class OtpFragment : Fragment() {
                                 verifyUser()
                             }
                             else if (otpResponse?.type == "error") {
-                                ToastStateHandling.toastError(
-                                    requireContext(),
-                                    "Wrong Otp",
-                                    Toast.LENGTH_SHORT
-                                )
-
+                                if(otpResponse?.message=="Max limit reached for this otp verification"){
+                                    ToastStateHandling.toastError(requireContext(), "You have reached the maximum limit for the otp verification.Get OTP again",Toast.LENGTH_LONG)
+                                    //go to login fragment
+                                    findNavController().popBackStack()
+                                }
+                                else{
+                                    ToastStateHandling.toastError(requireContext(), "Wrong Otp", Toast.LENGTH_SHORT)
+                                }
                             }
 
                         }
@@ -335,9 +338,9 @@ class OtpFragment : Fragment() {
             // adjust the milli seconds here
             @SuppressLint("DefaultLocale", "SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                binding.progressCircular.setVisibility(View.VISIBLE)
-                binding.otpResendLayout.setVisibility(View.GONE)
-                binding.otpCallLayout.setVisibility(View.GONE)
+                binding.progressCircular.visibility = View.VISIBLE
+                binding.otpResendLayout.visibility = View.GONE
+                binding.otpCallLayout.visibility = View.GONE
                 val f: NumberFormat = DecimalFormat("00")
                 val sec = millisUntilFinished / 1000 % 60
                 binding.progressCircular.setText(f.format(sec))
