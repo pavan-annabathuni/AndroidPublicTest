@@ -27,7 +27,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
-
 import com.example.soiltesting.SoilTestActivity
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
@@ -40,9 +39,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -65,15 +64,14 @@ import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.Dispatchers
 import com.waycool.weather.utils.WeatherIcons
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
@@ -148,11 +146,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@HomePagesFragment.findNavController().popBackStack()
+                   activity?.finish()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
+           viewLifecycleOwner,
             callback
         )
         setWishes()
@@ -652,7 +650,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = NewsGenericAdapter(context, this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            viewModel.getVansNewsList(moduleId).collect { pagingData ->
+            viewModel.getVansNewsList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -705,7 +703,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansVideosList(moduleId).collect { pagingData ->
+            viewModel.getVansVideosList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE

@@ -24,7 +24,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +43,6 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -63,18 +61,14 @@ class RegistrationFragment : Fragment() {
     lateinit var binding: FragmentRegistrationBinding
     var k: Int = 4
 
-    //    var dummylist: MutableList<ModuleMasterDomain> = mutableListOf()
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private val permissionId = 2
     var latitude: String = ""
     var longitutde: String = ""
     var address: String? = ""
     var village: String? = ""
     var state = ""
     var district = ""
-    var subDistrict = ""
     var pincode = ""
-    var selectedLanguage: LanguageMasterDomain? = null
     lateinit var knowAdapter: UserProfileKnowServiceAdapter
     lateinit var premiumAdapter: UserProfilePremiumAdapter
     var mobileNumber: String? = ""
@@ -85,7 +79,6 @@ class RegistrationFragment : Fragment() {
         ViewModelProvider(this)[LoginViewModel::class.java]
     }
     lateinit var query: HashMap<String, String>
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
     lateinit var audioWife: AudioWife
     var mediaPlayer: MediaPlayer? = null
 
@@ -230,25 +223,15 @@ class RegistrationFragment : Fragment() {
                 }
             }
         })
-        binding.registerDoneBtn.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                userCreater()
-            }
-        })
-        binding.locationIv.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                Handler(Looper.myLooper()!!).postDelayed({
-                    getLocation()
-                }, 500)
-//                getLocation()
-                binding.locationTextlayout.helperText = "Detecting your location.."
-            }
-        })
-        binding.nameMic.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                speechToText()
-            }
-        })
+        binding.registerDoneBtn.setOnClickListener { userCreater() }
+        binding.locationIv.setOnClickListener {
+            Handler(Looper.myLooper()!!).postDelayed({
+                getLocation()
+            }, 500)
+            //                getLocation()
+            binding.locationTextlayout.helperText = "Detecting your location.."
+        }
+        binding.nameMic.setOnClickListener { speechToText() }
         Handler(Looper.myLooper()!!).postDelayed({
             userModule()
         }, 700)
@@ -316,9 +299,9 @@ class RegistrationFragment : Fragment() {
             audioWife.release()
         }
         audioWife = AudioWife.getInstance()
-        audioWife.addOnCompletionListener(MediaPlayer.OnCompletionListener {
+        audioWife.addOnCompletionListener {
             //                audioWife.release();
-        })
+        }
 
         bottomSheetDialog.setOnDismissListener {
             audioWife.release()
@@ -440,7 +423,7 @@ class RegistrationFragment : Fragment() {
                         .checkLocationSettings(builder.build())
                 locationResponseTask.addOnCompleteListener {
                     try {
-                        val response: LocationSettingsResponse = it.getResult(ApiException::class.java)
+                        it.getResult(ApiException::class.java)
                     } catch (e: ApiException) {
                         if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                             val apiException: ResolvableApiException = e as ResolvableApiException
@@ -553,7 +536,6 @@ class RegistrationFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("registerresponse2", "test" + requestCode)
         if (requestCode == 2) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLocation()
@@ -591,7 +573,7 @@ class RegistrationFragment : Fragment() {
                 query["sub_district_id"] = ""
                 binding.progressBarSubmit.visibility = View.VISIBLE
                 binding.registerDoneBtn.visibility = View.GONE
-                viewModel.getUserData(query).observe(this) {
+                viewModel.getUserData(query).observe(viewLifecycleOwner) {
                     when (it) {
                         is Resource.Success -> {
                             binding.progressBarSubmit.visibility = View.GONE
@@ -631,19 +613,18 @@ class RegistrationFragment : Fragment() {
                 }
             }
         } else {
-            getLocation();
+            getLocation()
 
         }
     }
 
     suspend fun userLogin() {
-
         viewModel.login(
             mobileNumber!!,
             viewModel.getFcmToken(),
             viewModel.getDeviceModel(),
             viewModel.getDeviceManufacturer()
-        ).observe(this) {
+        ).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     val loginDataMaster = it.data
@@ -653,9 +634,10 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                        gotoMainActivity()
+/*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
-                        }
+                        }*/
 
                     }
                 }
@@ -674,7 +656,6 @@ class RegistrationFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun userModule() {
@@ -713,7 +694,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun speechToText() {
-        val intent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM

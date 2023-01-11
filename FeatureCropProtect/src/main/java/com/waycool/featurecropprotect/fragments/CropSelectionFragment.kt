@@ -220,17 +220,12 @@ class CropSelectionFragment : Fragment() {
             when (res) {
                 is Resource.Success -> {
                     if (categoryId == null) {
-                        adapter.submitList(res.data)
-                        binding.clProgressBar.visibility=View.VISIBLE
-
-                    } else {
-                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
                         binding.clProgressBar.visibility=View.GONE
-
+                        adapter.submitList(res.data)
+                    } else {
+                        binding.clProgressBar.visibility=View.GONE
+                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
                     }
-                    binding.clProgressBar.visibility=View.GONE
-
-
                 }
                 is Resource.Loading -> {
                     binding.clProgressBar.visibility=View.VISIBLE
