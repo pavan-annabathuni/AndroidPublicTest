@@ -45,7 +45,7 @@ class EditProfileViewModel:ViewModel() {
      suspend fun getProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
         ProfileRepository.updateProfile(field).asLiveData()
 
-    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
+     fun getUserProfileDetails():LiveData<Resource<UserDetailsDomain?>> =
         ProfileRepository.getUserProfileDet().asLiveData()
 
     suspend fun getUserProfilePic(file:MultipartBody.Part):LiveData<Resource<profilePicModel?>> =

@@ -40,6 +40,8 @@ class MyFarmsSyncer:SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             val accountId=LocalSource.getUserDetailsEntity()?.accountId
             if (accountId != null)
                 NetworkSource.getMyFarms(accountId)

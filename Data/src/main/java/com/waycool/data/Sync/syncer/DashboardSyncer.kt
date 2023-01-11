@@ -43,6 +43,8 @@ object DashboardSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             NetworkSource.dashBoard()
                 .collect {
                     when (it) {

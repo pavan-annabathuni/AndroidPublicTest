@@ -49,6 +49,8 @@ class SoilTestHistorySyncer : SyncInterface {
 
     private fun makeNetworkCall(account_id:Int) {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
 //            val account =
 //                LocalSource.getUserDetailsEntity()?.account

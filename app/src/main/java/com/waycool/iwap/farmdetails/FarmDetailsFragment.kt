@@ -691,7 +691,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soil_moisture_1")
+                    bundle.putString("value", "soil_moisture_1_kpa")
                     bundle.putString("toolbar", "Soil Moisture Top")
                     bundle.putString("temp_value", data.soilMoisture1.toString())
                     bundle.putString("date_time", data.dataTimestamp)
@@ -707,7 +707,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soil_moisture_2")
+                    bundle.putString("value", "soil_moisture_2_kpa")
                     bundle.putString("toolbar", "Soil Moisture Bottom")
                     bundle.putString("temp_value", data.soilMoisture2?.toString())
                     bundle.putString("date_time", data.dataTimestamp)

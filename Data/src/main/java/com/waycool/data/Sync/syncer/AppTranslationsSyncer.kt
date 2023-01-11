@@ -40,6 +40,7 @@ object AppTranslationsSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
             NetworkSource.getAppTranslations()
                 .collect {
                     when (it) {

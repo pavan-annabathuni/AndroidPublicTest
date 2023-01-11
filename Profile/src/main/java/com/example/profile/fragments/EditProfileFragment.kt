@@ -151,13 +151,13 @@ class EditProfileFragment : Fragment() {
         }
         viewModel.viewModelScope.launch {
             viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
-                binding.tvName.setText(it.data?.data?.name)
-                binding.tvPhoneNo.setText("+91 ${it.data?.data?.contact}")
-                binding.tvAddress1.setText(it.data?.data?.profile?.address)
-                binding.tvAddress2.setText(it.data?.data?.profile?.village)
-                binding.tvPincode.setText(it.data?.data?.profile?.pincode)
-                binding.tvState.setText(it.data?.data?.profile?.state)
-                binding.tvCity.setText(it.data?.data?.profile?.district)
+                binding.tvName.setText(it.data?.name)
+                binding.tvPhoneNo.setText("+91 ${it.data?.phone}")
+                binding.tvAddress1.setText(it.data?.profile?.address)
+                binding.tvAddress2.setText(it.data?.profile?.village)
+                binding.tvPincode.setText(it.data?.profile?.pincode)
+                binding.tvState.setText(it.data?.profile?.state)
+                binding.tvCity.setText(it.data?.profile?.district)
 
             }
         }

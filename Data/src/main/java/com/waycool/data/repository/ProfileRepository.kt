@@ -1,10 +1,16 @@
 package com.waycool.data.repository
 
+import android.util.Log
+import com.waycool.data.Local.Entity.UserDetailsEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
+import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.repository.DomainMapper.UserDetailsDomainMapper
+import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 
 object ProfileRepository {
@@ -14,9 +20,21 @@ object ProfileRepository {
        return NetworkSource.updateProfile(map,field)
     }
 
-    suspend fun getUserProfileDet(): Flow<Resource<UserDetailsDTO?>> {
-        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
-        return NetworkSource.getUserProfile(map)
+    fun getUserProfileDet(): Flow<Resource<UserDetailsDomain?>> {
+        return UserDetailsSyncer.getData().map {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("TAG", "getUserDetailsAccountID:${it.data} ")
+                    Resource.Success(UserDetailsDomainMapper().mapToDomain(it.data!!))
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
     }
 
     suspend fun getUserProfilePic(file: MultipartBody.Part): Flow<Resource<profilePicModel?>> {

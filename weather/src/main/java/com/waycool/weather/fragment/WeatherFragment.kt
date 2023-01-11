@@ -161,7 +161,7 @@ class WeatherFragment : Fragment() {
     private fun observer() {
         viewModel.viewModelScope.launch {
             viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
-                binding.location.text = it.data?.data?.profile?.village
+                binding.location.text = it.data?.profile?.village
             }
         }
 

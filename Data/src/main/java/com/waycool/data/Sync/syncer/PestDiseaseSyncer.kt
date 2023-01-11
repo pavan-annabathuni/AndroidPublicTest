@@ -63,6 +63,8 @@ class PestDiseaseSyncer : SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             if (headerMap != null)
                 NetworkSource.getPestDisease()

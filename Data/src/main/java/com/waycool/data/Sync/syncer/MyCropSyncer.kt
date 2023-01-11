@@ -40,6 +40,8 @@ class MyCropSyncer : SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             val accountId: Int? = LocalSource.getUserDetailsEntity()?.accountId
             if (headerMap != null)

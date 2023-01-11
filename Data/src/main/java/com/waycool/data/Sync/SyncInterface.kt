@@ -7,7 +7,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
-@OptIn(ExperimentalCoroutinesApi::class)
 interface SyncInterface {
 
     fun getSyncKey(): Preferences.Key<String>

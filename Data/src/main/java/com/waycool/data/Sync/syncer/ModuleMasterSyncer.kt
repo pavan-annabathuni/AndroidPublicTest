@@ -45,6 +45,8 @@ class ModuleMasterSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             NetworkSource.getModuleMaster()
                 .collect {
                     when (it) {

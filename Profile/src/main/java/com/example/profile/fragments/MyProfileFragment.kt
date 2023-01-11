@@ -153,32 +153,31 @@ class MyProfileFragment : Fragment() {
 
 
     fun observer(): Boolean {
-        viewModel.viewModelScope.launch {
-              viewModel.getUserProfileDetails().observe(viewLifecycleOwner){
-                  when(it){
-                      is Resource.Success->{
-                          binding.progressBar.visibility = View.GONE
-                      } is Resource.Loading->{
-                      binding.progressBar.visibility = View.VISIBLE
-                      }
-                      is Resource.Error->{}
-                  }
-                  if(it.data?.data?.account?.get(0)?.subscription == 0){
-                      binding.llFarmSupport.visibility = View.GONE
-                  }else{
-                      binding.llFarmSupport.visibility = View.VISIBLE
-                  }
-                  binding.username.text = it.data?.data?.name
-                  binding.phoneNo.text = "+91 ${it.data?.data?.contact}"
-                  if(it.data?.data?.profile?.remotePhotoUrl!=null) {
-                      Glide.with(requireContext()).load(it.data?.data?.profile?.remotePhotoUrl).into(binding.proPic)
-                      Log.d("ProfilePic", "observer: $it")
+        viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                }
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Resource.Error -> {}
+            }
+            if (it.data?.subscription == 0) {
+                binding.llFarmSupport.visibility = View.GONE
+            } else {
+                binding.llFarmSupport.visibility = View.VISIBLE
+            }
+            binding.username.text = it.data?.name
+            binding.phoneNo.text = "+91 ${it.data?.phone}"
+            if (it.data?.profile?.remotePhotoUrl != null) {
+                Glide.with(requireContext()).load(it.data?.profile?.remotePhotoUrl).into(binding.proPic)
+                Log.d("ProfilePic", "observer: $it")
 
-                  }
-              }
-          }
+            }
+        }
 
-         return true
+        return true
     }
 
     private fun onClick() {
@@ -249,7 +248,8 @@ class MyProfileFragment : Fragment() {
                 moveToLogin()
             }
 
-        }
+    }
+
     private fun moveToLogin() {
         val intent = Intent(context, LoginMainActivity::class.java)
         startActivity(intent)
