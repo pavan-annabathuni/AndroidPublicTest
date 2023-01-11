@@ -226,19 +226,12 @@ class OtpFragment : Fragment() {
                             }
                             else if (otpResponse?.type == "error") {
                                 if(otpResponse?.message=="Max limit reached for this otp verification"){
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        "You have reached the maximum limit for the otp verification.Get OTP again",
-                                        Toast.LENGTH_LONG
-                                    )
+                                    ToastStateHandling.toastError(requireContext(), "You have reached the maximum limit for the otp verification.Get OTP again",Toast.LENGTH_LONG)
+                                    //go to login fragment
                                     findNavController().popBackStack()
                                 }
                                 else{
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        "Wrong Otp",
-                                        Toast.LENGTH_SHORT
-                                    )
+                                    ToastStateHandling.toastError(requireContext(), "Wrong Otp", Toast.LENGTH_SHORT)
                                 }
                             }
 

@@ -80,17 +80,13 @@ class PestDiseaseFragment : Fragment() {
             viewModel.getPestDiseaseListForCrop(cropId).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data == null){ adapter.submitList(emptyList())
+                        if (it.data.isNullOrEmpty()){ adapter.submitList(emptyList())
                             binding.progressBar.visibility=View.GONE
-
-
                         }
                         else{ adapter.submitList(it.data)
                             binding.diseasesRv.adapter = adapter
                             binding.progressBar.visibility=View.GONE
-
                         }
-
 
                     }
                     is Resource.Loading -> {
@@ -145,9 +141,7 @@ class PestDiseaseFragment : Fragment() {
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
-            TabLayoutMediator(
-                binding.bannerIndicators, binding.bannerViewpager
-            ) { tab: TabLayout.Tab, position: Int ->
+            TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
                 tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
             }.attach()
         }
