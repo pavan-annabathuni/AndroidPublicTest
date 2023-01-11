@@ -1,8 +1,6 @@
 package com.waycool.data.repository
 
 import android.util.Log
-import com.waycool.data.Local.Entity.UserDetailsEntity
-import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
@@ -15,9 +13,8 @@ import okhttp3.MultipartBody
 
 object ProfileRepository {
 
-   suspend fun updateProfile(field:Map<String,String>): Flow<Resource<profile?>> {
-       val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
-       return NetworkSource.updateProfile(map,field)
+    fun updateProfile(field:Map<String,String>): Flow<Resource<ProfileUpdateResponseDTO?>> {
+        return NetworkSource.updateProfile(field)
     }
 
     fun getUserProfileDet(): Flow<Resource<UserDetailsDomain?>> {
@@ -37,9 +34,8 @@ object ProfileRepository {
         }
     }
 
-    suspend fun getUserProfilePic(file: MultipartBody.Part): Flow<Resource<profilePicModel?>> {
-        val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
-        return NetworkSource.getUserProfilePic(map,file)
+     fun getUserProfilePic(file: MultipartBody.Part): Flow<Resource<profilePicModel?>> {
+        return NetworkSource.getUserProfilePic(file)
     }
     fun updateFarmSupport(account_id: Int,name: String,contact:Long,
                           lat:Double,lon:Double, roleId:Int,

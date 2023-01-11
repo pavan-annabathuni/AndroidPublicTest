@@ -211,7 +211,7 @@ interface ApiInterface {
 //        @Field("pincode") pincode: String,
 //        @Field("state") state: String,
 //        @Field("district") district: String
-    ): Response<profile>
+    ): Response<ProfileUpdateResponseDTO>
 
     @Multipart
     @POST("api/v1/update-profile-picture")

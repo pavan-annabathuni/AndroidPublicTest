@@ -19,6 +19,7 @@ import com.waycool.data.Network.ApiInterface.WeatherApiInterface
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
+import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
@@ -28,7 +29,6 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import java.util.*
 import kotlin.Exception
 
 object NetworkSource {
@@ -716,16 +716,18 @@ object NetworkSource {
         }
     }
 
-    fun updateProfile(
-        headerMap: Map<String, String>, field: Map<String, String>
-    ) = flow<Resource<profile?>> {
+    fun updateProfile(field: Map<String, String>
+    ) = flow<Resource<ProfileUpdateResponseDTO?>> {
 
-        emit(Resource.Loading())
         try {
+            val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+
             val response = apiInterface.updateProfile(
-                headerMap,
+                map,
                 field
             )
+            UserDetailsSyncer.invalidateSync()
+            UserDetailsSyncer.getData()
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -755,13 +757,16 @@ object NetworkSource {
         }
     }
 
-    fun getUserProfilePic(
-        headerMap: Map<String, String>, file: MultipartBody.Part
+    fun getUserProfilePic(file: MultipartBody.Part
     ) = flow<Resource<profilePicModel?>> {
 
-        emit(Resource.Loading())
         try {
-            val response = apiInterface.getProfilePic(headerMap, file)
+            val map=LocalSource.getHeaderMapSanctum()?: emptyMap()
+
+            val response = apiInterface.getProfilePic(map, file)
+
+            UserDetailsSyncer.invalidateSync()
+            UserDetailsSyncer.getData()
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))

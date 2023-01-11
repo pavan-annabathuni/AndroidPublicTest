@@ -195,21 +195,19 @@ class EditProfileFragment : Fragment() {
         field.put("pincode",pincode)
         field.put("state",state)
         field.put("district",city)
-        field.put("lat",lat)
-        field.put("long",long)
+        field.put("latitude",lat)
+        field.put("longitude",long)
 
 
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
-
-            viewModel.viewModelScope.launch {
                 viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         Log.d("ProfileUpdate", "editProfile: $it")
                         context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
                     }
-            }
+
             if (selecteduri != null) {
 
                 val fileDir = context?.filesDir
@@ -225,12 +223,11 @@ class EditProfileFragment : Fragment() {
                         file.name, requestFile
                     )
 
-                Log.d("selecteduri", "editProfile: $profileImageBody")
+                Log.d("selecteduri", "editProfile: $selecteduri")
 
-                viewModel.viewModelScope.launch {
                     viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner) {
                         Log.d("selecteduri", "editProfile: ${it.data?.profile_pic}")
-                    }
+
                 }
             }
 
@@ -342,8 +339,8 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun getGeocodeFromLocation(it: Location) {
-         lat = String.format(Locale.ENGLISH, "%.5f", it.latitude)
-        long = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+         lat = String.format(Locale.ENGLISH, "%.4f", it.latitude)
+        long = String.format(Locale.ENGLISH, "%.4f", it.longitude)
 
         viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
             .observe(viewLifecycleOwner) {
