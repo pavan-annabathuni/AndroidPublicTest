@@ -336,7 +336,7 @@ class AddFarmSupportFragment : Fragment() {
         TranslationsManager().loadString("str_role_type", binding.textView3,"Role Type")
         TranslationsManager().loadString("str_farm_location", binding.textView5,"Farm Location Coordinates")
         TranslationsManager().loadString("str_mobile_number", binding.textView4,"Mobile Number")
-        TranslationsManager().loadString("str_farmer", binding.tvFarmer,"Farmer")
+        TranslationsManager().loadString("str_farmer", binding.tvFarmer,"Farm Manger")
         TranslationsManager().loadString("str_farmer_support", binding.tvFarmerSupport,"Farmer Support")
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
@@ -346,6 +346,8 @@ class AddFarmSupportFragment : Fragment() {
             binding.submit.text = submit
 //            title = TranslationsManager().getString("str_submit")
 //            binding.topAppBar.title = title
+            binding.tvName.hint = TranslationsManager().getString("str_farmer_name")
+            binding.mobilenoEt.hint = TranslationsManager().getString("str_mobile_number")
         }
 
     }

@@ -1,9 +1,15 @@
 package com.waycool.iwap.allservices
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.iwap.databinding.ItemViewallServiceBinding
 
-class PremiumServiceAdapter(private val onClickListener:OnClickListener): ListAdapter<ModuleMasterDomain, PremiumServiceAdapter.MyViewHolder>(DiffCallback) {
+class PremiumServiceAdapter(private val onClickListener:OnClickListener,val context: Context): ListAdapter<ModuleMasterDomain, PremiumServiceAdapter.MyViewHolder>(DiffCallback) {
     class MyViewHolder(private val binding: ItemViewallServiceBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivOne
@@ -28,6 +34,16 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener): ListAd
         val properties = getItem(position)
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties)
+            val deepLink = properties.deepLink
+            if(!deepLink.isNullOrEmpty() && URLUtil.isValidUrl(deepLink.trim())) {
+                try {
+                    val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink.trim()))
+                    ContextCompat.startActivity(context,i,null)
+                }catch (e:Exception){
+                    Log.d("link", "onBindViewHolder: $e")
+                }
+
+            }
         }
         holder.name.text = properties.title
         Glide.with(holder.itemView.context).load(properties.moduleIcon).into(holder.image)

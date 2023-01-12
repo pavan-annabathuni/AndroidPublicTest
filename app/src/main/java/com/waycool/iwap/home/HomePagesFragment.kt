@@ -292,6 +292,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        it.data?.roleId?.let { it1 -> checkRole(it1) }
                         mandiDetailCall()
                         getFarms()
                     }
@@ -435,6 +436,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
+                        binding.tvOurServiceViewAll.visibility = View.INVISIBLE
+                        binding.ivOurService.visibility = View.INVISIBLE
 
                     }
                 }
@@ -1243,5 +1246,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         populateMyFarm()
     }
 
+    private fun checkRole(roleId:Int){
+        if(roleId==31){
+            binding.tvEditMyCrops.visibility = View.INVISIBLE
+            binding.ivEditCrop.visibility = View.INVISIBLE
+            binding.cvAddCrop.isEnabled = false
+            binding.clAdd.visibility = View.INVISIBLE
+            binding.clAddForm.visibility = View.GONE
+            binding.tvMyForm.visibility = View.INVISIBLE
+            binding.ivMyForm.visibility = View.GONE
+
+        }
+    }
 }
 

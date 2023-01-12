@@ -329,6 +329,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         }
 
                     }
+                    it.data?.roleId?.let { it1 -> checkRole(it1) }
                 }
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
@@ -864,6 +865,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }else{
                 binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
             }
+        }
+    }
+    private fun checkRole(roleId:Int){
+        if(roleId==31){
+            binding.cvEditCrop.visibility = View.GONE
+            binding.tvEditMyCrops.visibility = View.GONE
+            binding.clAddForm.visibility = View.GONE
+            binding.ivViewAll.visibility = View.GONE
+            binding.MyFarm.visibility = View.GONE
+        }else{
+            binding.cvEditCrop.visibility = View.VISIBLE
+            binding.tvEditMyCrops.visibility = View.VISIBLE
+            binding.clAddForm.visibility = View.GONE
+            binding.ivViewAll.visibility = View.GONE
+            binding.MyFarm.visibility = View.GONE
         }
     }
 }

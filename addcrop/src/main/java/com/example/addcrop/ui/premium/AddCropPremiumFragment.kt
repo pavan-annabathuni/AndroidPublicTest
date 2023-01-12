@@ -314,7 +314,7 @@ class AddCropPremiumFragment : Fragment() {
         binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 //                itemClicked()
-                val item = p0?.selectedItem
+                val item = p0?.selectedItem.toString()  
                 irrigation_selected = item.toString()
 //                arrayList.add(irrigation)
 
