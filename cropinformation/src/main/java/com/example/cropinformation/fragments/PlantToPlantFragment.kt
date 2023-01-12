@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentPlantToPlantBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
 import com.waycool.data.translations.TranslationsManager
 

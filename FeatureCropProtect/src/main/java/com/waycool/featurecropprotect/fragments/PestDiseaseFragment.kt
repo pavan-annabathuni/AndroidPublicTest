@@ -82,7 +82,7 @@ class PestDiseaseFragment : Fragment() {
                 when (it) {
                     is Resource.Success -> {
                         if(!it.data.isNullOrEmpty()){
-                            binding.tvNoData.visibility=View.GONE
+//                            binding.tvNoData.visibility=View.GONE
                             binding.progressBar.visibility=View.GONE
                             adapter.submitList(it.data)
                             binding.diseasesRv.adapter = adapter
@@ -90,7 +90,6 @@ class PestDiseaseFragment : Fragment() {
                         else{
                             binding.progressBar.visibility=View.GONE
                             adapter.submitList(emptyList())
-                            binding.tvNoData.visibility=View.VISIBLE
                         }
 
 

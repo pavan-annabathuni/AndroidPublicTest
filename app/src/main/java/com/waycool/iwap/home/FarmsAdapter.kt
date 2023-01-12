@@ -29,9 +29,7 @@ class FarmsAdapter(val context: Context,val farmSelectedListener: FarmSelectedLi
         if (selectedPosition == -1) {
             selectedPosition = holder.layoutPosition
             farmSelectedListener.onFarmSelected(getItem(holder.layoutPosition))
-//            onItemClick?.invoke(getItem(position))
         }
-
         holder.bind(getItem(position))
 
     }
@@ -75,7 +73,6 @@ class FarmsAdapter(val context: Context,val farmSelectedListener: FarmSelectedLi
                 notifyItemChanged(temp)
                 notifyItemChanged(selectedPosition)
                 farmSelectedListener.onFarmSelected(getItem(layoutPosition))
-//                onItemClick?.invoke(getItem(layoutPosition))
             }
         }
 

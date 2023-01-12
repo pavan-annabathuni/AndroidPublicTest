@@ -1,8 +1,9 @@
 package com.waycool.data.translations
 
-import android.os.Handler
-import android.os.Looper
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import com.waycool.data.Local.Entity.AppTranslationsEntity
 import com.waycool.data.Sync.syncer.AppTranslationsSyncer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,6 +24,10 @@ class TranslationsManager {
         }
     }
 
+    fun getStringAsLiveData(stringId: String):LiveData<AppTranslationsEntity>?{
+        return AppTranslationsSyncer().getDataAsFlow(stringId)?.asLiveData()
+    }
+
     suspend fun getString(stringId: String): String = withContext(Dispatchers.IO) {
         return@withContext AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
     }
@@ -33,4 +38,5 @@ class TranslationsManager {
             textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: defaultValue
         }
     }
+
 }

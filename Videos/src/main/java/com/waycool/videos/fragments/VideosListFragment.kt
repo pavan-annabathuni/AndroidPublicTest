@@ -40,6 +40,7 @@ import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
 import com.waycool.videos.adapter.VideosPagerAdapter
@@ -89,9 +90,7 @@ class VideosListFragment : Fragment(), itemClick {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    activity?.let {
-                        it.finish()
-                    }
+
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -258,8 +257,7 @@ class VideosListFragment : Fragment(), itemClick {
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer { page, position ->
             val r = 1 - Math.abs(position)
-            page.scaleY = 0.85f + r * 0.15f
-        }
+            page.scaleY = 0.85f + r * 0.15f }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
 
@@ -346,8 +344,7 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     override fun onShareItemClick(it: VansFeederListDomain?) {
-
-            FirebaseDynamicLinks.getInstance().createDynamicLink()
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
                 .setDomainUriPrefix("https://outgrowdev.page.link")
                 .setAndroidParameters(
@@ -372,8 +369,7 @@ class VideosListFragment : Fragment(), itemClick {
                         startActivity(Intent.createChooser(sendIntent, "choose one"))
 
                     }
-
-        }
+                }
 
     }
 

@@ -17,9 +17,6 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
 import com.waycool.iwap.premium.Farmdetailslistener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class MyFarmFragment : Fragment(), Farmdetailslistener {

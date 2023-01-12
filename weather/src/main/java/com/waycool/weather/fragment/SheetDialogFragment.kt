@@ -2,15 +2,12 @@ package com.waycool.weather.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.waycool.weather.viewModel.DailyvViewModel
 import com.waycool.weather.viewModel.DetailViewModelFactory
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R

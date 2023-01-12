@@ -25,17 +25,22 @@ class AppTranslationsSyncer : SyncInterface {
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
     suspend fun getData(appKey: String): AppTranslationsEntity? {
-
-
         if (isSyncRequired()) {
             makeNetworkCall()
         }
         return getDataFromLocal(appKey)
     }
 
-    suspend fun getDataFromLocal(appKey: String): AppTranslationsEntity? {
-
+  private  suspend fun getDataFromLocal(appKey: String): AppTranslationsEntity? {
         return LocalSource.getTranslationForString(appKey)
+    }
+
+   fun getDataAsFlow(appKey: String): Flow<AppTranslationsEntity>? {
+        return getDataFromLocalAsFlow(appKey)
+    }
+
+   private  fun getDataFromLocalAsFlow(appKey: String): Flow<AppTranslationsEntity>? {
+        return LocalSource.getTranslationForStringInFlow(appKey)
     }
 
     private fun makeNetworkCall() {

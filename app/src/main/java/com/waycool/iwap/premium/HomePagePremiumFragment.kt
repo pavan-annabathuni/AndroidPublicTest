@@ -38,9 +38,6 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -92,18 +89,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initObserveMYFarm()
 //        initObserveDevice()
         progressColor()
-        translationSoilTesting()
+        translations()
         fabButton()
         setBanners()
         notification()
+        setWishes()
 
-        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
-            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
-            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
-            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
-            else -> binding.tvGoodMorning.text = "Namaste"
-        }
+
 
         binding.IvNotification.setOnClickListener {
             findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
@@ -111,13 +103,24 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.tvAddFromOne.isSelected = true
 
     }
-
-    fun translationSoilTesting() {
-        CoroutineScope(Dispatchers.Main).launch {
+    private fun setWishes() {
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> {
+                TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+            in 12..15 -> {
+                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+            in 16..20 -> {
+                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+            in 21..23 -> {
+                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
+            else ->{
+                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
         }
-        TranslationsManager().loadString("welcome", binding.tvWelcomeName,"Welcome")
-        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get \n" +
-                "more details.")
+    }
+
+    fun translations() {
+        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
         TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
         TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add crops")
@@ -316,7 +319,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("Profile", userDetails.toString())
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name.toString()}"
+                        binding.tvWelcomeName.text = ", ${it.data?.name.toString()}"
 
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->

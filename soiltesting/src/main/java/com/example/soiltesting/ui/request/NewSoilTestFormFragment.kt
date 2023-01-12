@@ -1,33 +1,21 @@
 package com.example.soiltesting.ui.request
 
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentNewSoilTestFormBinding
-import com.example.soiltesting.model.postsoil.NewSoilTestPost
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
-import com.example.soiltesting.utils.NetworkResult
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class NewSoilTestFormFragment : Fragment() {
     private var _binding: FragmentNewSoilTestFormBinding? = null
