@@ -17,7 +17,7 @@
     <string name="partnerKey" translatable="false">PUizod7af284f5f924170a2bed6c4446fdd2f</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome_text">Welcome Outgrow</string>
+    <string name="welcome_text">Welcome to Outgrow</string>
     <string name="choose_text">Choose your Language</string>
     <string name="privacy_text">I agree to Terms of Use ,Privacy Policy and to share my location</string>
 

@@ -109,7 +109,9 @@ class WeatherFragment : Fragment() {
 //        ViewModel.getHourlyWeather()
 
 
-        binding.imgBack.setOnClickListener { requireActivity().onBackPressed() }
+        binding.imgBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 

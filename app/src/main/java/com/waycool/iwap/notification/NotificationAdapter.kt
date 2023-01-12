@@ -1,5 +1,6 @@
 package com.waycool.iwap.notification
 
+import android.provider.ContactsContract.Data
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.waycool.data.Network.NetworkModels.DataNotification
 import com.waycool.data.Network.NetworkModels.HistoricData
+import com.waycool.data.Network.NetworkModels.Notification
 import com.waycool.iwap.databinding.ItemNotificationBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,13 +39,9 @@ class NotificationAdapter(val onClickListener:OnClickListener,val context: Conte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val properties = getItem(position)
         holder.bind(properties)
-        val deepLink = properties.data2.link
         holder.itemView.setOnClickListener() {
-            if(properties.data2.link!=null) {
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                context.startActivity(i)
-            }
-            onClickListener.clickListener(properties!!)
+            onClickListener.clickListener(properties.data2,properties)
+            notifyDataSetChanged()
         }
 //        val inputDateFormatter: SimpleDateFormat =
 //            SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ", Locale.ENGLISH)
@@ -77,6 +75,8 @@ class NotificationAdapter(val onClickListener:OnClickListener,val context: Conte
             return oldItem.id == newItem.id
         }
     }
-    class OnClickListener(val clickListener: (data: DataNotification) -> Unit) {
-        fun onClick(data: DataNotification) = clickListener(data)
-    }}
+    class OnClickListener(val clickListener: (data2: Notification,data:DataNotification) -> Unit) {
+        fun onClick(data2: Notification,data:DataNotification) = clickListener(data2,data)
+
+    }
+}

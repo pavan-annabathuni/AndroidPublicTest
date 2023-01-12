@@ -40,6 +40,7 @@ class DiseasesChildAdapter() : ListAdapter<String, DiseasesChildAdapter.ViewHold
                     ImageLoader { imageView: ImageView, image: String? ->
                         Glide.with(binding.childImage.context)
                             .load(image)
+                            .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                             .into(imageView)
                     }).allowSwipeToDismiss(true)
                     .withStartPosition(layoutPosition)

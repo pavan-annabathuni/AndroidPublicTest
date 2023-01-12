@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -73,6 +74,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
+
         initClickEvents()
         initViewProfile()
         initViewAddCrop()
@@ -102,10 +114,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
-//            val title = TranslationsManager().getString("str_add_device")
-//            binding.topAppBar.title = title
-//            var areaHint = TranslationsManager().getString("e_g_50")
-//            binding.imeiAddress.hint =areaHint
         }
         TranslationsManager().loadString("welcome", binding.tvWelcomeName,"Welcome")
         TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get \n" +
@@ -174,45 +182,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
 
         }
-
-
-//
-
-////        binding.rvMyDevice.adapter = deviceDataAdapter
-//        viewDevice.getIotDevice().observe(viewLifecycleOwner) { it ->
-////            if (it.data?.data==null){
-////                Toast.makeText(requireContext(), "Server Data", Toast.LENGTH_SHORT).show()
-////            }
-//            if (it.data?.data?.isEmpty() == true) {
-//                binding.cardAddDevice.visibility = View.VISIBLE
-//            } else
-//                when (it) {
-//                    is Resource.Success -> {
-////                        binding.cardAddDevice.visibility = View.GONE
-//                        val response = it.data!!.data as ArrayList<ViewDeviceData>
-//                        viewDeviceListAdapter.setMovieList(response)
-//
-////                        val arrayList = ArrayList<ModelFlex>()
-////                        response.forEach {
-////                            arrayList.add(ModelFlex(it.deviceName.toString()))
-////                            Log.d("TAG", "initObserveDevicefgcg:$arrayList ")
-////                            viewDeviceListAdapter.setMovieList(arrayList)
-////                        }
-////                        deviceDataAdapter.setMovieList(response)
-////                        Log.d("TAG", "initObserveDevice: $response")
-//                    }
-//                    is Resource.Error -> {
-//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                    is Resource.Loading -> {
-//                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                }
-//
-//
-//        }
 
     }
 
@@ -349,7 +318,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         binding.tvWelcome.text = userDetails?.profile?.village
                         binding.tvWelcomeName.text = "Welcome, ${it.data?.name.toString()}"
 
-                        Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
