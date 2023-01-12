@@ -65,6 +65,7 @@ class NotificationFragment : Fragment() {
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener { notification,dataNotification ->
             viewModel.getNotification().observe(viewLifecycleOwner){
                 val deepLink = notification.link
+                Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
                         val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                         startActivity(i)

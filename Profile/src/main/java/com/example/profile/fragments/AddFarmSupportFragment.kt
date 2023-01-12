@@ -2,7 +2,6 @@ package com.example.profile.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -10,7 +9,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.text.InputFilter
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -33,7 +30,6 @@ import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import com.waycool.featurelogin.fragment.RegistrationFragment
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.regex.Pattern

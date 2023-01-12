@@ -28,7 +28,7 @@ class AboutOutgrowFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
-        TranslationsManager().loadString("str_about_outgrow",binding.about,resources.getString(R.string.str_about_outGrow))
+        TranslationsManager().loadString("about_outgrow",binding.tvAboutOutgrowDescription,getString(R.string.str_about_outGrow))
         return binding.root
     }
 }

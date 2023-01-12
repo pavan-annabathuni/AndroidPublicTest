@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
@@ -12,28 +13,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.profile.ProfileActivity
 import com.example.soiltesting.utils.Constant
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import com.waycool.featurecropprotect.CropProtectActivity
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
-import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.view.NewsFullviewActivity
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -73,8 +68,7 @@ class MainActivity : AppCompatActivity() {
                     if (deepLink?.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
-                    }
-                    else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
+                    } else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
                         val title = deepLink.getQueryParameter("title")
                         val desc = deepLink.getQueryParameter("content")
                         val image = deepLink.getQueryParameter("image")
@@ -96,8 +90,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            .addOnFailureListener(this) {
-                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            .addOnFailureListener(this) { e ->
+                Log.w("TAG", "getDynamicLink:onFailure", e)
             }
 
 
@@ -125,8 +119,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-            .addOnFailureListener(this) {
-                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            .addOnFailureListener(this) { e ->
+                Log.w("TAG", "getDynamicLink:onFailure", e)
             }
 
 
@@ -155,7 +149,11 @@ class MainActivity : AppCompatActivity() {
                     if (it.data?.status == true) {
 //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                     } else if (it.data?.status == false) {
-                        ToastStateHandling.toastError(this, "Account Logged in Another Device", Toast.LENGTH_SHORT)
+                        ToastStateHandling.toastError(
+                            this,
+                            "Account Logged in Another Device",
+                            Toast.LENGTH_SHORT
+                        )
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {
@@ -180,20 +178,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDashBoard() {
-
         tokenCheckViewModel.getDasBoard().observe(this) {
-            if(dashboardDomain==null){
-                dashboardDomain=it.data
+            if (dashboardDomain == null) {
+                dashboardDomain = it.data
                 when (it) {
                     is Resource.Success -> {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
-
                         if (it.data?.subscription?.iot == true) {
                             setupBottomNavigationAndNavigationGraph(isPremium = true)
-                            Log.d("dashboard", "Premium Triggered")
-
                         } else {
-                            Log.d("dashboard", "Free Triggered")
                             setupBottomNavigationAndNavigationGraph(isPremium = false)
                         }
                     }
@@ -204,8 +197,8 @@ class MainActivity : AppCompatActivity() {
                     is Resource.Error -> {
                     }
                 }
-            }else{
-                if(dashboardDomain?.subscription?.iot!=it.data?.subscription?.iot){
+            } else {
+                if (dashboardDomain?.subscription?.iot != it.data?.subscription?.iot) {
 
                     when (it) {
                         is Resource.Success -> {
@@ -213,10 +206,8 @@ class MainActivity : AppCompatActivity() {
 
                             if (it.data?.subscription?.iot == true) {
                                 setupBottomNavigationAndNavigationGraph(isPremium = true)
-                                Log.d("dashboard", "Premium Triggered")
 
                             } else {
-                                Log.d("dashboard", "Free Triggered")
                                 setupBottomNavigationAndNavigationGraph(isPremium = false)
                             }
                         }
@@ -236,7 +227,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigationAndNavigationGraph(isPremium: Boolean) {
-
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_mainactivity
         ) as NavHostFragment
@@ -245,7 +235,7 @@ class MainActivity : AppCompatActivity() {
         // Setup the bottom navigation view with navController
         val bottomNavigationView = binding.activityMainBottomNavigationView
         bottomNavigationView.setupWithNavController(navController)
-        bottomNavigationView.itemIconTintList=null
+        bottomNavigationView.itemIconTintList = null
 
         val graphInflater = navHostFragment.navController.navInflater
         val navGraph = graphInflater.inflate(R.navigation.nav_main)
@@ -256,11 +246,37 @@ class MainActivity : AppCompatActivity() {
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
+
+            TranslationsManager().getStringAsLiveData("home")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue?:"Home"
+            }
+            TranslationsManager().getStringAsLiveData("services")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Services"
+            }
+            TranslationsManager().getStringAsLiveData("my_farm")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue?:"My Farms"
+            }
+            TranslationsManager().getStringAsLiveData("profile")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Profile"
+            }
         } else {
             navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
+
+            TranslationsManager().getStringAsLiveData("home")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"
+            }
+            TranslationsManager().getStringAsLiveData("mandi")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
+            }
+            TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"
+            }
+            TranslationsManager().getStringAsLiveData("profile")?.observe(this){
+                bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Home"
+            }
         }
 
 
@@ -315,3 +331,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

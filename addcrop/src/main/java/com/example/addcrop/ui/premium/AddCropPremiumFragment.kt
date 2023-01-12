@@ -486,7 +486,7 @@ class AddCropPremiumFragment : Fragment() {
         account_id: Int?,
         crop_id: Int?,
         soil_type_id: Int?,
-        irrigation_type: String
+        irrigation_type: Any
     ) {
         binding.cardCheckHealth.setOnClickListener {
             it.hideSoftInput()

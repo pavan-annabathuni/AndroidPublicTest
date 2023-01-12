@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
@@ -55,11 +56,15 @@ import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.PlacesSearchEventError
 import com.waycool.data.utils.PlacesSearchEventFound
 import com.waycool.data.utils.PlacesSearchEventLoading
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import smartdevelop.ir.eram.showcaseviewlib.GuideView
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType
 import java.util.*
@@ -145,9 +150,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarTitle.text = buildString {
-        append("Add Farm")
-    }
+        CoroutineScope(Dispatchers.IO).launch {
+            binding.toolbarTitle.text = TranslationsManager().getString("str_add_farm")
+            binding.search.hint = TranslationsManager().getString("search")
+
+        }
+        TranslationsManager().loadString("next",binding.savemapBtn,"NEXT")
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
@@ -230,8 +238,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         binding.resetFab.setOnClickListener {
             previousStateStack.clear()
             isPolygonDraw = false
-            //binding.savemapBtn.setVisibility(View.GONE)
-            binding.areaCard.setVisibility(View.GONE)
+            binding.areaCard.visibility = View.GONE
             if (isMarkerSelected) {
                 binding.markerImageview.setVisibility(View.INVISIBLE)
                 isMarkerSelected = false
