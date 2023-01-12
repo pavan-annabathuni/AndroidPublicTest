@@ -110,8 +110,8 @@ class MandiFragment : Fragment() {
             this.findNavController().navigateUp()
         }
 
-        setBanners()
-        translation()
+//        setBanners()
+//        translation()
 //        return binding.root
 
     }

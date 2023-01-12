@@ -14,7 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NavUtils
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -87,6 +89,23 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
+
+        binding.toolbar.setOnClickListener {
+            val isSuccess = findNavController().popBackStack()
+            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+        }
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().popBackStack()
+                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         return binding.root
     }
 
@@ -120,9 +139,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
 
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+//        binding.toolbar.setNavigationOnClickListener {
+//            findNavController().navigateUp()
+//        }
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 

@@ -73,8 +73,7 @@ class MainActivity : AppCompatActivity() {
                     if (deepLink?.lastPathSegment!! == "weathershare") {
                         val intent = Intent(this, WeatherActivity::class.java)
                         startActivity(intent)
-                    }
-                    else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
+                    } else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
                         val title = deepLink.getQueryParameter("title")
                         val desc = deepLink.getQueryParameter("content")
                         val image = deepLink.getQueryParameter("image")
@@ -96,8 +95,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            .addOnFailureListener(this) {
-                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            .addOnFailureListener(this) { e ->
+                Log.w("TAG", "getDynamicLink:onFailure", e)
             }
 
 
@@ -125,8 +124,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-            .addOnFailureListener(this) {
-                    e -> Log.w("TAG", "getDynamicLink:onFailure", e)
+            .addOnFailureListener(this) { e ->
+                Log.w("TAG", "getDynamicLink:onFailure", e)
             }
 
 
@@ -182,8 +181,8 @@ class MainActivity : AppCompatActivity() {
     private fun getDashBoard() {
 
         tokenCheckViewModel.getDasBoard().observe(this) {
-            if(dashboardDomain==null){
-                dashboardDomain=it.data
+            if (dashboardDomain == null) {
+                dashboardDomain = it.data
                 when (it) {
                     is Resource.Success -> {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
@@ -204,8 +203,8 @@ class MainActivity : AppCompatActivity() {
                     is Resource.Error -> {
                     }
                 }
-            }else{
-                if(dashboardDomain?.subscription?.iot!=it.data?.subscription?.iot){
+            } else {
+                if (dashboardDomain?.subscription?.iot != it.data?.subscription?.iot) {
 
                     when (it) {
                         is Resource.Success -> {
@@ -245,7 +244,7 @@ class MainActivity : AppCompatActivity() {
         // Setup the bottom navigation view with navController
         val bottomNavigationView = binding.activityMainBottomNavigationView
         bottomNavigationView.setupWithNavController(navController)
-        bottomNavigationView.itemIconTintList=null
+        bottomNavigationView.itemIconTintList = null
 
         val graphInflater = navHostFragment.navController.navInflater
         val navGraph = graphInflater.inflate(R.navigation.nav_main)
@@ -268,10 +267,19 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homePagesFragment -> showBottomNav()
                 R.id.myFarmFragment -> showBottomNav()
-                R.id.allServicesFragment2 -> showBottomNav()
                 com.example.profile.R.id.myProfileFragment -> showBottomNav()
-                com.example.mandiprice.R.id.mandiFragment -> showBottomNav()
-                com.waycool.featurecropprotect.R.id.cropSelectionFragment -> showBottomNav()
+                com.example.mandiprice.R.id.mandiFragment -> {
+                    if (isPremium)
+                        hideBottomNav()
+                    else
+                        showBottomNav()
+                }
+                com.waycool.featurecropprotect.R.id.cropSelectionFragment -> {
+                    if (isPremium)
+                        hideBottomNav()
+                    else
+                        showBottomNav()
+                }
                 R.id.homePagePremiumFragment3 -> showBottomNav()
                 else -> hideBottomNav()
             }

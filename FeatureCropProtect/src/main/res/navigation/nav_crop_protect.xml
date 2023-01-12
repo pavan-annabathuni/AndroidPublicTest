@@ -12,14 +12,18 @@
         <action
             android:id="@+id/action_cropSelectionFragment_to_pestDiseaseFragment"
             app:destination="@id/pestDiseaseFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_out"
+            app:popExitAnim="@android:anim/fade_in"
             app:popUpTo="@id/cropSelectionFragment" />
         <action
             android:id="@+id/action_cropSelectionFragment_to_pestDiseaseDetailsFragment"
-            app:destination="@id/pestDiseaseDetailsFragment" />
+            app:destination="@id/pestDiseaseDetailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_out"
+            app:popExitAnim="@android:anim/fade_in"/>
     </fragment>
     <fragment
         android:id="@+id/pestDiseaseFragment"
@@ -28,10 +32,10 @@
         <action
             android:id="@+id/action_pestDiseaseFragment_to_pestDiseaseDetailsFragment"
             app:destination="@id/pestDiseaseDetailsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_out"
+            app:popExitAnim="@android:anim/fade_in"
             app:popUpTo="@id/pestDiseaseFragment" />
     </fragment>
     <fragment
@@ -41,11 +45,19 @@
         <action
             android:id="@+id/action_pestDiseaseDetailsFragment_to_newsFullviewActivity"
             app:destination="@id/newsFullviewActivity"
-            app:popUpTo="@id/pestDiseaseDetailsFragment" />
+            app:popUpTo="@id/pestDiseaseDetailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_pestDiseaseDetailsFragment_to_playVideoFragment3"
             app:destination="@id/playVideoFragment3"
-            app:popUpTo="@id/pestDiseaseDetailsFragment" />
+            app:popUpTo="@id/pestDiseaseDetailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity"
