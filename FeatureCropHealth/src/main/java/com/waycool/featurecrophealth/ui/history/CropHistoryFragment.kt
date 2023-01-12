@@ -214,6 +214,7 @@ class CropHistoryFragment : Fragment() {
 
                 val temp = ArrayList<AiCropHistoryDomain>()
 //                filteredList.clear()
+                Log.d("TAG", "onTextChangedListShow: $temp")
                 if (charSequence.isNotEmpty()) {
                     filteredList.forEach {
                         if (it.cropdata.cropName.toString().lowercase()
@@ -225,6 +226,7 @@ class CropHistoryFragment : Fragment() {
                         }
                     }
                     historyAdapter.upDateList(temp)
+//                    historyAdapter.submitList(temp)
                     Log.d("TAG", "::::stderr  $temp")
                 }
 //                if (temp.isEmpty()){

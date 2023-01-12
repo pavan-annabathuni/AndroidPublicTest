@@ -1,8 +1,10 @@
 package com.waycool.data.Local.Entity
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.waycool.data.Network.NetworkModels.CropDataData
-
+@Entity(tableName = "ai_history")
 data class AiCropHistoryEntity(
 //    val id: Int? = null,
 //    val crop_id: Int? = null,
@@ -13,6 +15,7 @@ data class AiCropHistoryEntity(
 //    val user_feedback: Any? = null,
 //    val updated_at: String? = null,
 //    @SerializedName("crop") var cropdata: CropData?
+    @PrimaryKey var historyId:Int,
     @SerializedName("id"            ) var id: Int?    = null,
     @SerializedName("image_url"     ) var imageUrl: String? = null,
     @SerializedName("prediction"    ) var prediction: String? = null,

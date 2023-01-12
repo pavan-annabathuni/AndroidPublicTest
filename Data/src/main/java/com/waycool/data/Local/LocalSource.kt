@@ -168,6 +168,9 @@ object LocalSource {
 
     fun getSelectedDiseasesForCrop(diseaseId: Int) = outgrowDao.getSelectedDisease(diseaseId)
 
+    suspend fun getSelectedDiseaseEntity(diseaseId: Int) = outgrowDao.getEntityDisease(diseaseId)
+
+
     suspend fun insertWeatherData(weather: WeatherMasterEntity, lat: String, lon: String) {
         DataStoreManager.insertWeather(weather, lat, lon)
     }

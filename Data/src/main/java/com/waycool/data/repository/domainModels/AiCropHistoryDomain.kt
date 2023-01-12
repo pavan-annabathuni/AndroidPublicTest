@@ -7,6 +7,7 @@ import com.waycool.data.Local.Entity.CropData
 data class AiCropHistoryDomain(
     val crop_id: Int? = null,
     val disease_id: Int? = null,
+    var disease_name: String? = null,
     val id: Int? = null,
     val image_url: String? = null,
     val prediction: String? = null,

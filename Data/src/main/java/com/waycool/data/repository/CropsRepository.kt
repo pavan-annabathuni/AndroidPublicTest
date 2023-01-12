@@ -120,7 +120,7 @@ object CropsRepository {
         }
     }
 
-  fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+    fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
         return CropMasterSyncer().getIrrigationCrops(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
@@ -259,7 +259,7 @@ object CropsRepository {
         }
     }
 
-    fun farmDetailsDelta(farmId:Int): Flow<Resource<FarmDetailsDTO?>> {
+    fun farmDetailsDelta(farmId: Int): Flow<Resource<FarmDetailsDTO?>> {
 //        GlobalScope.launch {
 //            MyCropSyncer().invalidateSync()
 //        }
@@ -425,7 +425,7 @@ object CropsRepository {
         state: String,
         district: String,
         number: String,
-        crop_id:Int
+        crop_id: Int
     ): Flow<Resource<SoilTestResponseDTO?>> {
 
         return NetworkSource.postNewSoil(
@@ -490,8 +490,20 @@ object CropsRepository {
             when (it) {
                 is Resource.Success -> {
                     AiCropHistorySyncer().invalidateSync()
-                    Resource.Success(
+                    var domainList =
                         AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
+
+                    domainList=domainList.map { history->
+                        history.disease_name= history.crop_id?.let { it1 ->
+                            LocalSource.getSelectedDiseaseEntity(
+                                it1
+                            ).diseaseName
+                        }
+                        history
+                    }
+
+                    Resource.Success(
+                        domainList
                     )
                 }
                 is Resource.Loading -> {

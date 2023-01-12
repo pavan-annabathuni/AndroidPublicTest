@@ -27,6 +27,15 @@ interface OutgrowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCropMaster(crops: List<CropMasterEntity>)
 
+    //AI Crop History
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertHistory(crops: List<AiCropHistoryEntity>)
+//
+//    @Query("SELECT * FROM ai_history WHERE  LIKE '%' || :search || '%' ORDER BY crop_name Asc")
+//    fun getAiHistory(search: String? = ""): Flow<List<CropMasterEntity>?>
+
+
     @Query("SELECT * FROM crop_master WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
     fun getCropMaster(search: String? = ""): Flow<List<CropMasterEntity>?>
 
@@ -54,6 +63,9 @@ interface OutgrowDao {
 
     @Query("SELECT * FROM pest_disease WHERE disease_id = :diseaseId ORDER BY disease_name Asc")
     fun getSelectedDisease(diseaseId: Int): Flow<PestDiseaseEntity>
+
+    @Query("SELECT * FROM pest_disease WHERE disease_id = :diseaseId ORDER BY disease_name Asc")
+   suspend fun getEntityDisease(diseaseId: Int): PestDiseaseEntity
 
     @Query("DELETE FROM pest_disease")
     fun deletePestDiseases()

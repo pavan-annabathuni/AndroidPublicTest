@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
+import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.featurecrophealth.databinding.ViewholderHistoryBinding
 
 
 class AiCropHistoryAdapter(private val context: Context) :
     ListAdapter<AiCropHistoryDomain, AiCropHistoryAdapter.NoteViewHolder>(ComparatorDiffUtil()) {
+//    var details = mutableListOf<AiCropHistoryDomain>()
 
     var onItemClick: ((AiCropHistoryDomain?) -> Unit)? = null
 
@@ -46,6 +48,7 @@ class AiCropHistoryAdapter(private val context: Context) :
 //            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text = note.cropdata.cropName.toString()
+            binding.tvDesiessName.text = note.disease_name
             binding.tvStatus
             Glide.with(context)
                 .load(note.image_url)
@@ -63,7 +66,7 @@ class AiCropHistoryAdapter(private val context: Context) :
     }
 //
     fun upDateList(list: ArrayList<AiCropHistoryDomain>) {
-//        currentList.clear()
+
         list.addAll(list)
         notifyDataSetChanged()
 
