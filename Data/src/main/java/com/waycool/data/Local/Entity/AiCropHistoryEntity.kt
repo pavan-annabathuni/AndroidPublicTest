@@ -15,7 +15,6 @@ data class AiCropHistoryEntity(
 //    val user_feedback: Any? = null,
 //    val updated_at: String? = null,
 //    @SerializedName("crop") var cropdata: CropData?
-    @PrimaryKey var historyId:Int,
     @SerializedName("id"            ) var id: Int?    = null,
     @SerializedName("image_url"     ) var imageUrl: String? = null,
     @SerializedName("prediction"    ) var prediction: String? = null,
