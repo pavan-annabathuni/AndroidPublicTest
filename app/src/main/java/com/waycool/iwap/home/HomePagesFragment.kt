@@ -432,7 +432,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
-                        binding.tvOurService.visibility = View.INVISIBLE
+                        binding.tvOurServiceViewAll.visibility = View.INVISIBLE
                         binding.ivOurService.visibility = View.INVISIBLE
 
                     }
