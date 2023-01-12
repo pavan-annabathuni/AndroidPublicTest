@@ -39,6 +39,10 @@ class AddUseAdapter(val onClickListener: OnClickListener, private val userDetail
             holder.delete.visibility = View.INVISIBLE
         TranslationsManager().loadString("str_delete",holder.delete)
 
+        if(userDetailsDomain.roleId==31){
+            holder.delete.visibility = View.INVISIBLE
+        }
+
     }
     companion object DiffCallback : DiffUtil.ItemCallback<GetFarmSupportData>() {
 

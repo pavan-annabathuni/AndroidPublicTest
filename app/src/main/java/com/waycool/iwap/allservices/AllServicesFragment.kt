@@ -68,11 +68,7 @@ class AllServicesFragment : Fragment() {
                         it.subscription!=1
                     }
                     premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener {
-                        if(it.deepLink!=null) {
-                            val i = Intent(Intent.ACTION_VIEW, Uri.parse(it.deepLink))
-                            startActivity(i)
-                        }
-                    })
+                    },requireContext())
                     binding.recyclerviewService.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)
 
@@ -108,8 +104,8 @@ class AllServicesFragment : Fragment() {
                         bundle.putString("desc",it.moduleDesc)
                         bundle.putString("audioUrl",it.audioUrl)
                         bundle.putString("icon",it.moduleIcon)
-                        findNavController().navigate(R.id.action_allServicesFragment_to_serviceDescFragment,bundle)
-                    })
+                        this.findNavController().navigate(R.id.action_allServicesFragment_to_serviceDescFragment,bundle)
+                    },requireContext())
                     binding.recyclerviewServicePremium.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)
                 }

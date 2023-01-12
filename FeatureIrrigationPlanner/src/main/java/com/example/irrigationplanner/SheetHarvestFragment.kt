@@ -41,8 +41,8 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             plotId = it.getInt("plotId")
-            accountId = it.getInt("plotId")
-            cropId = it.getInt("plotId")
+            accountId = it.getInt("accountId")
+            cropId = it.getInt("cropId")
         }
     }
 

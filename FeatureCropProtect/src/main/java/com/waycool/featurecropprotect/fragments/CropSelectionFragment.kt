@@ -78,7 +78,7 @@ class CropSelectionFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val isSuccess = findNavController().popBackStack()
+                    val isSuccess = findNavController().navigateUp()
                     if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
                 }
             }

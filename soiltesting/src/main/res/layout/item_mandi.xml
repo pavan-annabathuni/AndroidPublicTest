@@ -160,7 +160,7 @@
                         android:drawableStart="@drawable/ic_location"
                         android:drawablePadding="8dp"
                         android:maxLines="2"
-                        android:minLines="2"
+                        android:minLines="1"
                         android:text="@{property.market}"
                         android:textColor="#585858"
                         android:textSize="12sp"

@@ -866,7 +866,8 @@ object NetworkSource {
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap, account_id)
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            val response = apiInterface.getMyCrops(headerMap, account_id,lang=langCode)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -883,7 +884,8 @@ object NetworkSource {
     ) = flow<Resource<MyCropsModel?>> {
 
         try {
-            val response = apiInterface.getMyCrops(headerMap, account_id)
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            val response = apiInterface.getMyCrops(headerMap, account_id,lang=langCode)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))

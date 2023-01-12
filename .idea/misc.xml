@@ -11,6 +11,7 @@
         <entry key="FeatureCropHealth/src/main/res/drawable/ic_play.xml" value="0.124" />
         <entry key="FeatureCropHealth/src/main/res/layout-land/fragment_crop_details_capture.xml" value="0.12083333333333333" />
         <entry key="FeatureCropHealth/src/main/res/layout/activity_crop_health.xml" value="0.21481481481481482" />
+        <entry key="FeatureCropHealth/src/main/res/layout/dailog_information.xml" value="0.2175925925925926" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.375" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_history.xml" value="0.21481481481481482" />
@@ -73,6 +74,7 @@
         <entry key="FeatureNdvi/src/main/res/layout/item_cloud.xml" value="0.165" />
         <entry key="FeatureNdvi/src/main/res/layout/top_corner.xml" value="0.2175925925925926" />
         <entry key="Mandi/src/main/res/drawable/bg_graph.xml" value="0.1685" />
+        <entry key="Mandi/src/main/res/layout/activity_mandi.xml" value="0.2175925925925926" />
         <entry key="Mandi/src/main/res/layout/fragment_mandi.xml" value="0.335" />
         <entry key="Mandi/src/main/res/layout/fragment_mandi_graph.xml" value="0.21481481481481482" />
         <entry key="Mandi/src/main/res/layout/fragment_search.xml" value="0.2878565470377604" />
@@ -112,8 +114,6 @@
         <entry key="Profile/src/main/res/layout/fragment_profile_language.xml" value="0.3199488321940105" />
         <entry key="Profile/src/main/res/layout/item_support.xml" value="0.2640625" />
         <entry key="Profile/src/main/res/menu/chat_menu.xml" value="0.25893769152196117" />
-        <entry key="SquareCamera/src/main/res/layout/fragment_capture_image.xml" value="0.1" />
-        <entry key="SquareCamera/src/main/res/layout/fragment_image_preview.xml" value="0.2543822146216332" />
         <entry key="UiComponents/src/main/res/drawable/ic_chat.xml" value="0.1685" />
         <entry key="UiComponents/src/main/res/drawable/ic_cross.xml" value="0.1685" />
         <entry key="UiComponents/src/main/res/drawable/ic_fab_call.xml" value="0.1685" />
@@ -131,10 +131,8 @@
         <entry key="Videos/src/main/res/layout/viewholder_videos_category_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_videos_list.xml" value="0.21481481481481482" />
         <entry key="Videos/src/main/res/layout/viewholder_viewpager_slider_layout.xml" value="0.21481481481481482" />
-        <entry key="addDevice/src/main/res/drawable/ic_camera.xml" value="0.2645" />
-        <entry key="addDevice/src/main/res/drawable/ic_scanner.xml" value="0.174" />
         <entry key="addDevice/src/main/res/layout/activity_add_device.xml" value="0.15885416666666666" />
-        <entry key="addDevice/src/main/res/layout/fragment_add_device.xml" value="0.475" />
+        <entry key="addDevice/src/main/res/layout/fragment_add_device.xml" value="0.2844311377245509" />
         <entry key="addDevice/src/main/res/layout/item_spinner.xml" value="0.14010416666666667" />
         <entry key="addcrop/src/main/res/drawable/background_switch.xml" value="0.1645" />
         <entry key="addcrop/src/main/res/drawable/bg_acres.xml" value="0.1645" />
@@ -195,8 +193,6 @@
         <entry key="app/src/main/res/layout/fragment_graphs.xml" value="0.20350577169730655" />
         <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.2336038208007813" />
-        <entry key="app/src/main/res/layout/fragment_home_page_premium.xml" value="0.2904306369357639" />
-        <entry key="app/src/main/res/layout/fragment_home_pages.xml" value="0.32852111816406254" />
         <entry key="app/src/main/res/layout/fragment_loading.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/layout/fragment_my_farm.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.335" />
@@ -229,6 +225,7 @@
         <entry key="cropinformation/src/main/res/drawable/ic_sowing_depth.xml" value="0.181" />
         <entry key="cropinformation/src/main/res/drawable/ic_spacing.xml" value="0.181" />
         <entry key="cropinformation/src/main/res/layout/activity_crop_info.xml" value="0.21481481481481482" />
+        <entry key="cropinformation/src/main/res/layout/dailog_information.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_blorder_crop.xml" value="0.25893769152196117" />
         <entry key="cropinformation/src/main/res/layout/fragment_crop_duration.xml" value="0.3098958333333333" />
         <entry key="cropinformation/src/main/res/layout/fragment_crop_info.xml" value="0.25" />
@@ -295,16 +292,10 @@
         <entry key="soiltesting/src/main/res/layout/fragment_all_services.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_video.xml" value="0.2796296296296296" />
         <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.24444444444444444" />
-        <entry key="soiltesting/src/main/res/layout/fragment_check_soil_test.xml" value="0.41815680880330125" />
-        <entry key="soiltesting/src/main/res/layout/fragment_crop_selected_soil_test.xml" value="0.2543822146216332" />
-        <entry key="soiltesting/src/main/res/layout/fragment_custome_dialog.xml" value="0.2543822146216332" />
-        <entry key="soiltesting/src/main/res/layout/fragment_farm_details.xml" value="0.2543822146216332" />
-        <entry key="soiltesting/src/main/res/layout/fragment_home_page_premium.xml" value="0.2543822146216332" />
         <entry key="soiltesting/src/main/res/layout/fragment_home_pages.xml" value="0.1" />
         <entry key="soiltesting/src/main/res/layout/fragment_new_soil_test_form.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_report_generator.xml" value="0.15522215810732834" />
         <entry key="soiltesting/src/main/res/layout/fragment_sagar_form.xml" value="0.2947916666666667" />
-        <entry key="soiltesting/src/main/res/layout/fragment_select_crop_soil_test.xml" value="0.40314328650615094" />
         <entry key="soiltesting/src/main/res/layout/fragment_soil_testing_home.xml" value="0.335" />
         <entry key="soiltesting/src/main/res/layout/fragment_status_tracker.xml" value="0.2947916666666667" />
         <entry key="soiltesting/src/main/res/layout/fragment_sucess_full.xml" value="0.21481481481481482" />
