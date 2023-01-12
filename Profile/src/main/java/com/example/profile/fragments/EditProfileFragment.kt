@@ -164,6 +164,11 @@ class EditProfileFragment : Fragment() {
             }
         }
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if(it.data?.roleId==31){
+                binding.submit.visibility = View.INVISIBLE
+            }else{
+                binding.submit.visibility = View.VISIBLE
+            }
             if (it.data?.profile?.remotePhotoUrl != null && selecteduri == null) {
                 Glide.with(this).load(it.data?.profile?.remotePhotoUrl).into(binding.imageView)
             }
@@ -550,5 +555,9 @@ class EditProfileFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_GPS = 1011
+    }
+
+    private fun checkRollId(){
+
     }
 }

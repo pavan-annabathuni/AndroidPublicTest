@@ -268,6 +268,8 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.getLegend().setEnabled(false);
                     binding.lineChart.xAxis.setCenterAxisLabels(false);
                     binding.lineChart.xAxis.setGranularity(1f);
+                    binding.lineChart.viewPortHandler.offsetTop()
+                    binding.lineChart.axisLeft.spaceTop = 100f
                     // binding.lineChart.setVisibleXRangeMaximum(3f);
 
                 }
