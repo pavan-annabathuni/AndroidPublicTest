@@ -79,7 +79,6 @@ class CropInfoFragment : Fragment(), onItemClick {
         // Inflate the layout for this fragment
         binding = FragmentCropInfoBinding.inflate(inflater)
 
-        translation()
         setBanners()
 
 
@@ -131,6 +130,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         setVideos()
         setNews()
         fabButton()
+        translation()
     }
 
 
@@ -671,6 +671,10 @@ class CropInfoFragment : Fragment(), onItemClick {
 
     private fun translation(){
         TranslationsManager().loadString("str_title",binding.textView2,"Crop information")
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,"News & Article")
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View all")
       //  TranslationsManager().loadString("str_video")
     }
 

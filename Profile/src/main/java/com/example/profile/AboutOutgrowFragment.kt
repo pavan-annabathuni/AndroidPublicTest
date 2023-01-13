@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.profile.databinding.FragmentAboutOutgrowBinding
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class AboutOutgrowFragment : Fragment() {
@@ -29,6 +31,9 @@ class AboutOutgrowFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         TranslationsManager().loadString("str_about_outgrow",binding.about,resources.getString(R.string.str_about_outGrow))
+        GlobalScope.launch {
+          binding.topAppBar.title = TranslationsManager().getString("str_about")
+        }
         return binding.root
     }
 }

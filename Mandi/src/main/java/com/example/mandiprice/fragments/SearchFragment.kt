@@ -108,8 +108,9 @@ class SearchFragment : Fragment() {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            it?.crop?.let { it1 -> args.putString("cropName", it1) }
-            it?.market?.let { it1 -> args.putString("market", it1) }
+            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
+            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
+            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
             this.findNavController()
                 .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
         })
@@ -147,7 +148,7 @@ class SearchFragment : Fragment() {
             // on below line we are passing our
             // language as a default language.
             viewModel.viewModelScope.launch {
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"en-IN")
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,SpeechToText.getLangCode())
             }
 
 
@@ -344,21 +345,32 @@ class SearchFragment : Fragment() {
            }
        }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
-        binding.textView2.text = "Today $sdf"
+        viewModel.viewModelScope.launch {
+            val today = TranslationsManager().getString("str_today")
+            binding.textView2.text = "$today $sdf"
+        }
 
     }
 
 
     fun autoComplete() {
+        viewModel.getMandiMaster().observe(viewLifecycleOwner){
+            val marketName = it.data?.data?.map { data->
+                data.mandiName
+            }?: emptyList()
         viewModel.getAllCrops().observe(viewLifecycleOwner) {
             val cropName = it?.data?.map { data ->
-                data.cropNameTag
+                data.cropName
             } ?: emptyList()
-            val text = resources.getStringArray(R.array.autoComplete)
+
+
+
+                val list = cropName+marketName
+                Log.d("autoList", "autoComplete: $marketName")
             val arrayAdapter =
-                ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, cropName)
+                ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, list)
             binding.searchBar.setAdapter(arrayAdapter)
-        }
+        }}
     }
 
     override fun onStart() {

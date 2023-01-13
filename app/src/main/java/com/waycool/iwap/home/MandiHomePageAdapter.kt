@@ -1,5 +1,6 @@
 package com.waycool.iwap.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +14,15 @@ import com.example.mandiprice.databinding.ItemDistanceBinding
 import com.example.soiltesting.databinding.ItemLabsSampleBinding
 import com.example.soiltesting.databinding.ItemMandiBinding
 import com.example.soiltesting.ui.checksoil.SoilTestingLabsHolder
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.repository.domainModels.MandiDomainRecord
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MandiHomePageAdapter(val onClickListener:OnClickListener):
     PagingDataAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
-
+    var cropName: String? = null
+    var marketName:String?=null
 
     class MandiHomePageHolder(private val binding: ItemMandiBinding):
         RecyclerView.ViewHolder(binding.root) {
@@ -25,6 +30,8 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
        val imageView = binding.ivPriceIndex
         val source = binding.tvSource
          val image = binding.ivMandi
+        val cropName = binding.tvMango
+        val markerName = binding.tvMarket
         fun bind(data: MandiDomainRecord?) {
             binding.property = data
             binding.executePendingBindings()
@@ -44,6 +51,7 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
 //        } else {
 //            holder.distance.visibility = View.VISIBLE
 //        }
+        Log.d("mandiCheck", "onBindViewHolder: ${properties?.crop_logo}")
         when (properties?.price_status) {
             1 -> {
                 holder.imageView.setImageResource(R.drawable.ic_uip)
@@ -64,6 +72,41 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
         }
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties!!)
+        }
+        GlobalScope.launch {
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            when(langCode){
+                "en"->{
+                    holder.cropName.text = properties?.crop
+                    holder.markerName.text = properties?.market
+
+                }
+                "hi"->{
+                    holder.cropName.text = properties?.crop_hi
+                    holder.markerName.text = properties?.market_hi
+
+                }
+                "kn"->{
+                    holder.cropName.text = properties?.crop_kn
+                    holder.markerName.text = properties?.market_kn
+
+                }
+                "te"->{
+                    holder.cropName.text = properties?.crop_te
+                    holder.markerName.text = properties?.market_te
+                }
+                "ta"->{
+                    holder.cropName.text = properties?.crop_ta
+                    holder.markerName.text = properties?.market_ta
+                }
+                "mr"->{
+                    holder.cropName.text = properties?.crop_mr
+                    holder.markerName.text = properties?.market_mr
+                }
+
+            }
+            cropName = holder.cropName.text.toString()
+            marketName = holder.markerName.text.toString()
         }
     }
 

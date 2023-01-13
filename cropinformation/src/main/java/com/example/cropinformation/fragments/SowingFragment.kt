@@ -11,6 +11,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentSowingBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 class SowingFragment : Fragment() {
        private lateinit var binding:FragmentSowingBinding
@@ -33,6 +34,7 @@ class SowingFragment : Fragment() {
         binding = FragmentSowingBinding.inflate(inflater)
         ViewModel.cropAdvisory()
         observer()
+        translation()
         return binding.root
     }
 
@@ -72,4 +74,18 @@ class SowingFragment : Fragment() {
             }
     }
 
+    private fun translation(){
+        TranslationsManager().loadString("str_jan",binding.jan,"Jan")
+        TranslationsManager().loadString("str_feb",binding.tvFeb,"Feb")
+        TranslationsManager().loadString("str_mar",binding.Mar,"Mar")
+        TranslationsManager().loadString("str_apr",binding.Apr,"Apr")
+        TranslationsManager().loadString("str_may",binding.may,"May")
+        TranslationsManager().loadString("str_jun",binding.jun,"Jun")
+        TranslationsManager().loadString("str_jul",binding.jul,"Jul")
+        TranslationsManager().loadString("str_aug",binding.tvAug,"Aug")
+        TranslationsManager().loadString("str_sep",binding.sep,"Sep")
+        TranslationsManager().loadString("str_oct",binding.oct,"Oct")
+        TranslationsManager().loadString("str_nov",binding.Nov,"Nov")
+        TranslationsManager().loadString("str_dec",binding.Dec,"Dec")
+    }
 }

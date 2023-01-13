@@ -7,6 +7,7 @@ import com.example.mandiprice.api.MandiApi
 import com.example.mandiprice.api.mandiResponse.Record
 import com.example.mandiprice.api.stateRespond.IndianStates
 import com.example.mandiprice.utils.Constants
+import com.waycool.data.Network.NetworkModels.MandiMasterModel
 import com.waycool.data.Network.NetworkModels.StateModel
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.MandiRepository
@@ -55,14 +56,16 @@ class MandiViewModel : ViewModel() {
             state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
 
 
-    suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?):
+    suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?,sub_record_id:String?):
             LiveData<Resource<MandiHistoryDomain?>> =
-        MandiRepository.getMandiHistory(crop_master_id,mandi_master_id).asLiveData()
+        MandiRepository.getMandiHistory(crop_master_id,mandi_master_id, sub_record_id).asLiveData()
 
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
 
+    fun getMandiMaster(): LiveData<Resource<MandiMasterModel?>> =
+        MandiRepository.getMandiMaster().asLiveData()
 
     init {
         _loading.value = Constants.ApiStatus.LOADING

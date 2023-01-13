@@ -55,6 +55,7 @@ class FarmSupportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getUserDetails().observe(viewLifecycleOwner){ resource ->
+            Log.d("roleId", "onViewCreated: ${resource.data?.roleId}")
             if(resource.data?.roleId==31){
                 binding.addUser.visibility = View.INVISIBLE
             }else{

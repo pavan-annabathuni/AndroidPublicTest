@@ -24,18 +24,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:cardBackgroundColor="@color/white">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/img_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
                     android:src="@drawable/ic_black_back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -43,9 +43,21 @@
                 <TextView
                     android:id="@+id/crop_name"
                     style="@style/Bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:text="Tomato"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -60,11 +72,12 @@
                     android:layout_marginEnd="16dp"
                     android:drawablePadding="8dp"
                     android:text="Share"
+                    android:gravity="end"
                     android:textColor="@color/DarkGreen"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:drawableStartCompat="@drawable/ic_share_solid" />
-            </RelativeLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.core.widget.NestedScrollView
@@ -89,11 +102,18 @@
                 <TextView
                     android:id="@+id/tv_market"
                     style="@style/Bold"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     android:text="KR Market, Bangalore"
                     android:textColor="@color/black"
                     android:textSize="18sp"
