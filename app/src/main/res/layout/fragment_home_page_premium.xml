@@ -124,7 +124,8 @@
                         android:id="@+id/cardAddForm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:elevation="15dp"
                         app:cardCornerRadius="@dimen/txt10">
 
@@ -1022,7 +1023,7 @@
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/clBattery"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="14dp"
                                     app:layout_constraintEnd_toStartOf="@+id/view"
@@ -1048,7 +1049,6 @@
                                         android:text="Battery"
                                         android:textColor="#5D6571"
                                         android:textSize="@dimen/txt14"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/battery"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
 
@@ -1068,7 +1068,7 @@
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/clBatteryTwo"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="14dp"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -1094,7 +1094,6 @@
                                         android:text="Elevation"
                                         android:textColor="#5D6571"
                                         android:textSize="@dimen/txt14"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/batteryTwo"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreeaTwo" />
 
@@ -1118,6 +1117,7 @@
                                     android:layout_width="2dp"
                                     android:layout_height="32dp"
                                     android:background="#EBECF2"
+                                    android:visibility="gone"
                                     app:layout_constraintBottom_toTopOf="@+id/belowBattery"
                                     app:layout_constraintEnd_toStartOf="@+id/clBatteryTwo"
                                     app:layout_constraintHorizontal_bias="0.5"
@@ -1128,11 +1128,11 @@
                                     android:id="@+id/belowBattery"
                                     android:layout_width="match_parent"
                                     android:layout_height="0.5dp"
-                                    android:layout_marginTop="@dimen/space12"
+                                    android:layout_marginTop="24dp"
                                     android:background="#EDEDED"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/clBattery" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivAddDeviceEnd" />
 
 
                                 <androidx.appcompat.widget.AppCompatTextView
@@ -1160,12 +1160,26 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
 
+                                <ProgressBar
+                                    android:id="@+id/update_progress_device"
+                                    style="?android:attr/progressBarStyle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:indeterminate="true"
+                                    android:visibility="invisible"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tvLastUpdateRefresh"
+                                    app:layout_constraintEnd_toEndOf="@+id/ivUpdate"
+                                    app:layout_constraintStart_toStartOf="@+id/ivUpdate"
+                                    app:layout_constraintTop_toTopOf="@+id/tvLastUpdateRefresh" />
+
+
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvLastUpdateRefresh"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginEnd="10dp"
                                     android:text="Update"
+                                    android:padding="4dp"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"

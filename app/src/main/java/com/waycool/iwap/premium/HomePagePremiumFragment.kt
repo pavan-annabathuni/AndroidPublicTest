@@ -28,7 +28,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -61,6 +60,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
     private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
 
+    private var lastUpdatedTime: String? = null
 
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
@@ -152,6 +152,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun initObserveDevice(farmId: Int) {
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
+           checkForDeviceApiUpdate()
             if (it.data?.isEmpty() == true) {
                 binding.cardMYDevice.visibility = View.GONE
             } else
@@ -192,6 +193,23 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     }
 
+    private fun checkForDeviceApiUpdate() {
+        activity?.let {
+            viewModel.getLatestTimeStamp().observe(it) { time ->
+
+                if (lastUpdatedTime.isNullOrEmpty()) {
+                    lastUpdatedTime = time
+                }
+                if (lastUpdatedTime != time) {
+                    lastUpdatedTime = time
+                    binding.updateProgressDevice.visibility = View.INVISIBLE
+                    binding.ivUpdate.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+
     private fun initClickEvents() {
         binding.clAddCropData.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
@@ -229,6 +247,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
 //        }
 
+        binding.tvLastUpdateRefresh.setOnClickListener {
+            updateDevice()
+
+        }
+
+    }
+
+    private fun updateDevice() {
+        binding.ivUpdate.visibility = View.INVISIBLE
+        binding.updateProgressDevice.visibility = View.VISIBLE
+        viewModel.updateDevices()
     }
 
     private fun initMyCropObserve() {
@@ -478,6 +507,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.let {
 
             it.totalAreea.text = data.battery.toString()
+            if (data.battery == null) {
+                it.clBattery.visibility = View.GONE
+            }
             it.tvAddDeviceStart.text = data.modelName.toString()
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
@@ -501,6 +533,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
             binding.kpaTwo.text = "${data.soilMoisture2} kPa"
+
+            if (data.soilTemperature1.isNullOrEmpty()) {
+                it.clSoilTemp.visibility = View.GONE
+            }
+            if (data.soilMoisture2 == null) {
+                it.bottomTop.visibility = View.GONE
+            }
 
             binding.soilMoistureOne.addSections(
                 Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
@@ -612,9 +651,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            it.tubeSpeedometer.maxSpeed = 100f
 //            it.tubeSpeedometer.speedTo(140f)
 //            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
-            it.tvLastUpdateRefresh.setOnClickListener {
-                viewDeviceListAdapter.upDateList()
-            }
+//            it.tvLastUpdateRefresh.setOnClickListener {
+//                viewDeviceListAdapter.upDateList()
+//            }
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {

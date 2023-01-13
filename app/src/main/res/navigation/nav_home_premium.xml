@@ -11,19 +11,39 @@
         tools:layout="@layout/fragment_home_page_premium" >
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_graphsFragment2"
-            app:destination="@id/graphsFragment2" />
+            app:destination="@id/graphsFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_navigation_irrigation"
-            app:destination="@id/navigation_irrigation" />
+            app:destination="@id/navigation_irrigation"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_nav_farmdetails"
-            app:destination="@id/nav_farmdetails" />
+            app:destination="@id/nav_farmdetails"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_notificationFragment2"
-            app:destination="@id/notificationFragment2" />
+            app:destination="@id/notificationFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_spotLightFragment2"
-            app:destination="@id/spotLightFragment2" />
+            app:destination="@id/spotLightFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/graphsFragment2"

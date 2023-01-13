@@ -1,5 +1,6 @@
 package com.waycool.data.repository
 
+import android.provider.MediaStore.Video
 import com.waycool.data.Sync.syncer.ViewDevicesSyncer
 import com.waycool.data.repository.DomainMapper.ViewDeviceDomainMapper
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
@@ -46,6 +47,12 @@ object DevicesRepository {
         }
     }
 
+    fun getLatestTimeStamp() =
+        ViewDevicesSyncer.getLastUpdated()
+
+    fun refreshDevices() {
+        ViewDevicesSyncer.downloadDevices()
+    }
 
 
 }

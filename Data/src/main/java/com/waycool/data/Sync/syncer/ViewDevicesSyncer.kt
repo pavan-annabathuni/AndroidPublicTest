@@ -63,7 +63,6 @@ object ViewDevicesSyncer : SyncInterface {
 
             val accountId= LocalSource.getUserDetailsEntity()?.accountId
             if (accountId != null) {
-                setSyncStatus(true)
                 NetworkSource.getIotDevice()
                     .collect {
                         when (it) {
@@ -87,6 +86,10 @@ object ViewDevicesSyncer : SyncInterface {
                     }
             }
         }
+    }
+
+    fun downloadDevices() {
+        makeNetworkCall()
     }
 
 }

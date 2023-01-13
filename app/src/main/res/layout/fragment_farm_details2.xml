@@ -84,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvMyform"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -156,7 +156,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardImageBanner3x1"
-                tools:visibility="visible">
+                tools:visibility="gone">
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardAddForm"
                     android:layout_width="match_parent"
@@ -194,8 +195,8 @@
                             android:layout_marginStart="@dimen/txt16"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
-                            android:padding="4dp"
                             android:background="@drawable/bg_add_form"
+                            android:padding="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvYourForm">
@@ -214,12 +215,12 @@
                                 android:id="@+id/tvAddFrom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
                                 android:layout_marginTop="6dp"
                                 android:layout_marginEnd="6dp"
                                 android:layout_marginBottom="@dimen/space6"
                                 android:fontFamily="@font/notosans_bold"
                                 android:text="Add crops"
-                                android:layout_marginStart="6dp"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt14"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -785,9 +786,11 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/clBattery"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="14dp"
+                                android:visibility="visible"
                                 app:layout_constraintEnd_toStartOf="@+id/view"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
@@ -830,9 +833,11 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/clBatteryTwo"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="14dp"
+                                android:layout_marginEnd="16dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/view"
@@ -842,7 +847,6 @@
                                     android:id="@+id/batteryTwo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/space12"
                                     android:layout_marginTop="10dp"
                                     android:src="@drawable/ic_icon_awesome_mountain"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -879,6 +883,7 @@
                                 android:layout_width="2dp"
                                 android:layout_height="32dp"
                                 android:background="#EBECF2"
+                                android:visibility="gone"
                                 app:layout_constraintBottom_toTopOf="@+id/belowBattery"
                                 app:layout_constraintEnd_toStartOf="@+id/clBatteryTwo"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -889,11 +894,11 @@
                                 android:id="@+id/belowBattery"
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:layout_marginTop="@dimen/space12"
+                                android:layout_marginTop="24dp"
                                 android:background="#EDEDED"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/clBattery" />
+                                app:layout_constraintTop_toBottomOf="@+id/ivAddDeviceEnd" />
 
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -914,24 +919,37 @@
                                 android:id="@+id/ivUpdate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space12"
                                 android:layout_marginEnd="14dp"
                                 android:src="@drawable/ic_update_refresh"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+                                app:layout_constraintTop_toBottomOf="@+id/belowBattery"
+                                tools:visibility="invisible" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvLastUpdateRefresh"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="10dp"
+                                android:padding="4dp"
                                 android:text="Update"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/ivUpdate"
                                 app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                            <ProgressBar
+                                android:id="@+id/update_progress_device"
+                                style="?android:attr/progressBarStyle"
+                                android:layout_width="20dp"
+                                android:layout_height="0dp"
+                                android:indeterminate="true"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="@+id/tvLastUpdateRefresh"
+                                app:layout_constraintEnd_toEndOf="@+id/ivUpdate"
+                                app:layout_constraintStart_toStartOf="@+id/ivUpdate"
+                                app:layout_constraintTop_toTopOf="@+id/tvLastUpdateRefresh" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
