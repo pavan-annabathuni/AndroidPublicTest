@@ -39,8 +39,8 @@ data class MyCropDataEntity (
     @ColumnInfo(name="crop_logo" ) var cropLogo : String? = null,
     @ColumnInfo(name="soil_type"   ) var soilType    : String? = null,
 
-    @ColumnInfo(name = "irrigation_required"   ) var irrigationRequired  : Boolean?  = null,
-    @ColumnInfo(name = "disease"               ) var disease             : Boolean?  = null,
+    @ColumnInfo(name = "irrigation_required"   ) var irrigationRequired  : Int?  = null,
+    @ColumnInfo(name = "disease"               ) var disease             : Int?  = null,
 
 )
 //data class MyCropEntity(

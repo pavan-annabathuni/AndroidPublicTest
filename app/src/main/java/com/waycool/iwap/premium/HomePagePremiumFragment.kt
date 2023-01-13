@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -26,6 +27,7 @@ import com.google.android.libraries.maps.model.Polygon
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
@@ -96,6 +98,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         fabButton()
         setBanners()
         notification()
+
+        lifecycleScope.launch {
+            val value: String? = DataStoreManager.read("FirstTime")
+            if (value != "true")
+                findNavController().navigate(R.id.action_homePagePremiumFragment3_to_spotLightFragment2)
+        }
 
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
@@ -234,6 +242,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     calculateScrollPercentage2(binding).toFloat()
             }
         })
+
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val response = it.data as ArrayList<MyCropDataDomain>
             myCropPremiumAdapter.setMovieList(response)

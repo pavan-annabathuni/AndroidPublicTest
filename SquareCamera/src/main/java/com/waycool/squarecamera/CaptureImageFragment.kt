@@ -125,7 +125,7 @@ class CaptureImageFragment : Fragment() {
             val pic = File(requireActivity().externalCacheDir, "pest.jpg")
 
             val options: UCrop.Options = UCrop.Options()
-            options.setCompressionQuality(100)
+            options.setCompressionQuality(80)
             options.setMaxBitmapSize(10000)
 
             if (selectedImage != null)
@@ -195,6 +195,7 @@ class CaptureImageFragment : Fragment() {
 
             imageCapture = ImageCapture.Builder()
                 .setTargetResolution(Size(1000, 1000))
+                .setJpegQuality(80)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_ZERO_SHUTTER_LAG)
                 .setFlashMode(flashMode)
                 .build()

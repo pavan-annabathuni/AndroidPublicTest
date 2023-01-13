@@ -215,7 +215,9 @@ class LoginFragment : Fragment() {
                                         loginViewModel.setUserToken(loginMaster.data)
 
                                     }
-                                    gotoMainActivity()
+                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner){
+                                        gotoMainActivity()
+                                    }
 //
 
                                 } else {

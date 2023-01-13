@@ -181,7 +181,6 @@ class VideosListFragment : Fragment(), itemClick {
                 createChip(allCategory)
                 if (categoryList != null) {
                     for (category in categoryList) {
-                        if (category.vansType == "videos")
                             createChip(category)
                     }
                 }

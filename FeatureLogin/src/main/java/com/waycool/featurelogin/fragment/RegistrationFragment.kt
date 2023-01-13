@@ -43,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -634,7 +635,9 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        gotoMainActivity()
+                        viewModel.getUserDetails().observe(viewLifecycleOwner){
+                            gotoMainActivity()
+                        }
 /*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }*/
@@ -656,6 +659,7 @@ class RegistrationFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
+        TranslationsManager().init()
         requireActivity().finish()
     }
 

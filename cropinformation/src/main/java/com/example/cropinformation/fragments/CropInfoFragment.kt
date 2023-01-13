@@ -131,6 +131,8 @@ class CropInfoFragment : Fragment(), onItemClick {
         setVideos()
         setNews()
         fabButton()
+
+        ViewModel.downloadCropInfo()
     }
 
 

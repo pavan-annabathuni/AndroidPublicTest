@@ -401,7 +401,9 @@ class OtpFragment : Fragment() {
                                     "Logged in successfully",
                                     Toast.LENGTH_SHORT
                                 )
-                                gotoMainActivity()
+                                loginViewModel.getUserDetails().observe(viewLifecycleOwner){
+                                    gotoMainActivity()
+                                }
 
                             } else {
                                 if (loginMaster?.data == "406") {

@@ -5,8 +5,6 @@ import android.content.Intent
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,8 +42,6 @@ class CropDetailsCaptureFragment : Fragment() {
     var crop_id: Int? = null
     var crop_name: String? = null
     var crop_logo: String? = null
-    private val FILE_NAME = "photo.jpg"
-    private val REQUEST_CODE = 42
     private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
     private lateinit var photoFile: File
     private var selecteduri: Uri? = null
@@ -89,6 +85,7 @@ class CropDetailsCaptureFragment : Fragment() {
         translationSoilTesting()
         binding.camptureImage.isSelected = true
         binding.camptureImageCamera.isSelected = true
+        viewModel.downloadPestAndDiseases()
     }
 
     fun translationSoilTesting() {
@@ -120,8 +117,8 @@ class CropDetailsCaptureFragment : Fragment() {
             val pic = File(requireActivity().externalCacheDir, "pest.jpg")
             selecteduri = selectedImage
             val options: UCrop.Options = UCrop.Options()
-            options.setCompressionQuality(100)
-            options.setMaxBitmapSize(10000)
+            options.setCompressionQuality(80)
+            options.setMaxBitmapSize(9000)
 
             if (selectedImage != null)
                 UCrop.of(selectedImage, Uri.fromFile(pic))

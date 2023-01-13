@@ -28,6 +28,13 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 
 object CropsRepository {
+    fun downloadPestDiseases(){
+        PestDiseaseSyncer().downloadData()
+    }
+
+  fun downloadCropInfo(){
+        CropInformationSyncer().downloadData()
+    }
 
     fun getCropCategory(): Flow<Resource<List<CropCategoryMasterDomain>?>> {
         return CropCategorySyncer.getData().map {

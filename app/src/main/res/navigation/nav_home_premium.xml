@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_homePagePremiumFragment3_to_notificationFragment2"
             app:destination="@id/notificationFragment2" />
+        <action
+            android:id="@+id/action_homePagePremiumFragment3_to_spotLightFragment2"
+            app:destination="@id/spotLightFragment2" />
     </fragment>
     <fragment
         android:id="@+id/graphsFragment2"
@@ -34,4 +37,9 @@
         android:name="com.waycool.iwap.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/spotLightFragment2"
+        android:name="com.waycool.iwap.spotlight.SpotLightFragment"
+        android:label="fragment_spot_light"
+        tools:layout="@layout/fragment_spot_light" />
 </navigation>

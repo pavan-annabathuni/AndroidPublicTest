@@ -11,7 +11,7 @@ import java.lang.Exception
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class,MyCropDataEntity::class,AppTranslationsEntity::class,MyFarmsEntity::class], version = 8, exportSchema = false)
+@Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class,MyCropDataEntity::class,AppTranslationsEntity::class,MyFarmsEntity::class], version = 9, exportSchema = false)
 @TypeConverters(TypeConverter::class)
 
 abstract class OutgrowDB : RoomDatabase() {

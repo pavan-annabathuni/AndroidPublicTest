@@ -266,7 +266,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 if (selectedNdvi?.cl!! > 85) {
                     binding.cardView2.visibility = View.VISIBLE
                     binding.tvTextAlert.text =
-                        "The Cloud Cover for Satellite Image is ${selectedNdvi?.cl}%. This Imagery may not be an accurate representation of Crop Health."
+                        "This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health."
                 }
 
             selectedNdvi?.stats?.ndvi?.let {

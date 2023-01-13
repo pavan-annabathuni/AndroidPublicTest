@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -68,6 +69,12 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                 is Resource.Error ->{}
             }
         }
+
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            val response = it.data as ArrayList<MyCropDataDomain>
+            adapter.updateCropsList(response)
+        }
+
         translationSoilTesting()
     }
 

@@ -115,11 +115,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     ): View {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
 
-        lifecycleScope.launch {
-            val value: String? = DataStoreManager.read("FirstTime")
-            if (value != "true")
-                findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
-        }
+
         newsBinding = binding.layoutNews
 
         videosBinding = binding.layoutVideos
@@ -431,7 +427,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
-
+                    }else{
+                        lifecycleScope.launch {
+                            val value: String? = DataStoreManager.read("FirstTime")
+                            if (value != "true")
+                                findNavController().navigate(R.id.action_homePagesFragment_to_spotLightFragment)
+                        }
                     }
                 }
                 is Resource.Loading -> {

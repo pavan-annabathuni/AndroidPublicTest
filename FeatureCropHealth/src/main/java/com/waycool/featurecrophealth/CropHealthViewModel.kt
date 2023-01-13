@@ -62,4 +62,8 @@ class CropHealthViewModel : ViewModel() {
 
         return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
+
+    fun downloadPestAndDiseases() {
+        CropsRepository.downloadPestDiseases()
+    }
 }

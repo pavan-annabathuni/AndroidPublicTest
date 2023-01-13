@@ -10,9 +10,9 @@
         android:id="@+id/cardAddDevice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:elevation="10dp"
         android:visibility="visible"
@@ -54,12 +54,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:text=" Total Area: 5 Acre"
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivFeedback"
                 app:layout_constraintStart_toEndOf="@+id/map_card"
                 app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
 
@@ -67,24 +69,41 @@
                 android:id="@+id/ivFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="16dp"
                 android:padding="4dp"
                 android:src="@drawable/ic_awesome_star"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
+                app:layout_constraintTop_toTopOf="@+id/totalAreea" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvEnableAddDevice"
+            <!--            <androidx.appcompat.widget.AppCompatTextView-->
+            <!--                android:id="@+id/tvEnableAddDevice"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="6dp"-->
+            <!--                android:text="Bangalore"-->
+            <!--                android:textColor="#5D6571"-->
+            <!--                android:textSize="@dimen/txt14"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/totalAreea"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/map_card"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/crop_farm_rv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:text="Bangalore"
-                android:textColor="#5D6571"
-                android:textSize="@dimen/txt14"
-                app:layout_constraintEnd_toEndOf="@+id/totalAreea"
-                app:layout_constraintStart_toEndOf="@+id/map_card"
-                app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
+                app:layout_constraintTop_toBottomOf="@+id/totalAreea"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:itemCount="5"
+                tools:listitem="@layout/viewholder_farm_crops" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCloudy"
@@ -126,6 +145,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view_farm_details"
                 android:layout_width="match_parent"
@@ -148,20 +168,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/txt8"
-                    android:text="View Farm Details"
-                    android:textColor="#146133"
-                    android:textSize="@dimen/txt18"
-                    android:textStyle="bold"
                     android:ellipsize="marquee"
                     android:focusable="true"
+                    android:gravity="center"
                     android:focusableInTouchMode="true"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
+                    android:text="View Farm Details"
+                    android:textColor="#146133"
+                    android:textSize="@dimen/txt18"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ivAddDevice"
 
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
@@ -169,58 +191,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="50dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/ic_know_more"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/view_farm_details"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/space16"-->
-<!--                android:layout_marginTop="@dimen/space16"-->
-<!--                android:layout_marginEnd="@dimen/space12"-->
-<!--                android:layout_marginBottom="@dimen/space16"-->
-<!--                android:background="@drawable/bg_add_form"-->
-<!--                android:clickable="true"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/map_card"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clCloudy">-->
-
-
-<!--                <androidx.appcompat.widget.AppCompatTextView-->
-<!--                    android:id="@+id/tvAddDevice"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="@dimen/txt8"-->
-<!--                    android:text="View Farm Details"-->
-<!--                    android:textColor="#146133"-->
-<!--                    android:textSize="@dimen/txt18"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivAddDevice"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="@dimen/txt8"-->
-<!--                    android:layout_marginEnd="@dimen/txt8"-->
-<!--                    android:src="@drawable/ic_know_more"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/tvAddDevice"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <!--            <ImageView-->
             <!--                android:id="@+id/ivAddDeviceEnd"-->
@@ -240,17 +220,28 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.libraries.maps.MapView
-                    android:id="@+id/map_premium_add_farm"
-                    android:name="com.google.android.libraries.maps.SupportMapFragment"
+                <!--                <com.google.android.libraries.maps.MapView-->
+                <!--                    android:id="@+id/map_premium_add_farm"-->
+                <!--                    android:name="com.google.android.libraries.maps.SupportMapFragment"-->
+                <!--                    android:layout_width="80dp"-->
+                <!--                    android:layout_height="80dp"-->
+                <!--                    android:src="@drawable/adddevice"-->
+                <!--                    map:liteMode="true"-->
+                <!--                    tools:ignore="SpeakableTextPresentCheck" />-->
+
+                <ImageView
+                    android:id="@+id/ivAddDeviceEnd"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/adddevice"
-                    map:liteMode="true"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

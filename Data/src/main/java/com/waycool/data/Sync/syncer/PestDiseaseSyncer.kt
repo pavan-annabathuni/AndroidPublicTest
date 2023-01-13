@@ -91,4 +91,12 @@ class PestDiseaseSyncer : SyncInterface {
         }
     }
 
+    fun downloadData() {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (isSyncRequired()) {
+                makeNetworkCall()
+            }
+        }
+    }
+
 }
