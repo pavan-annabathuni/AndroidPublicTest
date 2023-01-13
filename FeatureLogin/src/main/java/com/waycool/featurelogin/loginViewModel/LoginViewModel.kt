@@ -3,6 +3,7 @@ package com.waycool.featurelogin.loginViewModel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
+import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.repository.LoginRepository
@@ -42,8 +43,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         LoginRepository.logout(mobile_no).asLiveData()
 
 
-    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
-        LoginRepository.getUserDetails().asLiveData()
+    fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> {
+      return  LoginRepository.getUserDetails().asLiveData()
+
+    }
 
     /*  public LiveData<AuthorizeOTP> authorizeOTP(Context context,String mobile_no,String otp,String FcmToken,String androidId, String msg){
         return loginRepository.authorizedOTP(context,mobile_no,otp,FcmToken,androidId,msg);

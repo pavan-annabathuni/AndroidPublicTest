@@ -29,7 +29,6 @@ object AppTranslationsSyncer : SyncInterface {
 
         if (isSyncRequired()) {
             makeNetworkCall()
-            setSyncStatus(true)
         }
         return getDataFromLocal(appKey)
     }
@@ -41,6 +40,7 @@ object AppTranslationsSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
             NetworkSource.getAppTranslations()
                 .collect {
                     when (it) {

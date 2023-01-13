@@ -60,8 +60,8 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         }else{
             holder.binding.tvCloudy.text = "-NA-"
         }
-            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
-        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
+//            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
+//        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
 
         holder.binding.tvCloudyNoDisease.isSelected = true
         if (myCrop.disease == 1) {

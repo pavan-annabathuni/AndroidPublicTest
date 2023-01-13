@@ -88,7 +88,7 @@ class RegistrationFragment : Fragment() {
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
     private var audioUrl: String? = null
 
-    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
         .build()
@@ -97,7 +97,7 @@ class RegistrationFragment : Fragment() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             getLocation()
-            locationResult.lastLocation?.let { 
+            locationResult.lastLocation?.let {
                 removeLocationCallback()
                 getGeocodeFromLocation(it)
             }
@@ -635,8 +635,11 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        viewModel.getUserDetails().observe(viewLifecycleOwner){
-                            gotoMainActivity()
+                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
+                            if (user.data != null && user.data?.userId != null) {
+
+                                gotoMainActivity()
+                            }
                         }
 /*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()

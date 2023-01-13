@@ -127,6 +127,7 @@ object CropMasterSyncer : SyncInterface {
             setSyncStatus(true)
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             if (headerMap != null) {
+                setSyncStatus(true)
                 NetworkSource.getCropMaster(headerMap)
                     .collect {
                         when (it) {

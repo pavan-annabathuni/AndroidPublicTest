@@ -40,10 +40,10 @@ class MyFarmsSyncer:SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
-            setSyncStatus(true)
 
             val accountId=LocalSource.getUserDetailsEntity()?.accountId
-            if (accountId != null)
+            if (accountId != null) {
+                setSyncStatus(true)
                 NetworkSource.getMyFarms(accountId)
                     .collect {
                         when (it) {
@@ -66,6 +66,7 @@ class MyFarmsSyncer:SyncInterface {
 
                         }
                     }
+            }
         }
     }
 }
