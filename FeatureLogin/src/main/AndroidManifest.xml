@@ -17,6 +17,7 @@
             android:name="com.waycool.featurelogin.activity.LoginMainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
         <activity
