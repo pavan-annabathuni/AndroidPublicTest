@@ -152,7 +152,7 @@ class TabViewModel:ViewModel {
     }
 
     fun downloadCropInfo() {
-        CropsRepository.downloadPestDiseases()
+        CropsRepository.downloadCropInfo()
     }
 
 }

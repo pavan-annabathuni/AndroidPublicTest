@@ -15,6 +15,7 @@ import com.waycool.data.Network.NetworkModels.ViewDeviceDTO
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumMyfarmsBinding
@@ -28,7 +29,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
     private var cropList: MutableList<MyCropDataDomain> = mutableListOf()
-    private var deviceList: MutableList<ViewDeviceData> = mutableListOf()
+    private var deviceList: MutableList<ViewDeviceDomain> = mutableListOf()
 
     var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
@@ -60,6 +61,13 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         val farmsCropsAdapter= FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
+
+        val deviceList = deviceList.filter { it.farmId==detail.id }
+        if(deviceList.isNullOrEmpty()){
+            holder.binding.deviceIv.visibility=View.GONE
+        }else{
+            holder.binding.deviceIv.visibility=View.VISIBLE
+        }
 
 //        loadFarm(details.farmJson,holder.mapCurrent)
 //        (details.farmCenter)?.get(0)?.latitude?.let { lat ->
@@ -124,7 +132,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         notifyDataSetChanged()
     }
 
-  fun updateDeviceList(list: List<ViewDeviceData>) {
+  fun updateDeviceList(list: List<ViewDeviceDomain>) {
         deviceList.clear()
         deviceList.addAll(list)
         notifyDataSetChanged()

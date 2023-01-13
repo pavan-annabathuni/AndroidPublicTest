@@ -248,7 +248,7 @@ class CropDetailsCaptureFragment : Fragment() {
 //          val imageModelFilters = arrayListOf<String>("plant", "Petal", "fruit", "flower", "Vegetable", "insect")
                         Log.d("Plant Health", labels.toString())
 
-                        if (!labels.any { it.text.lowercase() == "plant" || it.text.lowercase() == "petal" || it.text.lowercase() == "fruit" || it.text.lowercase() == "flower" || it.text.lowercase() == "vegetable" || it.text.lowercase() == "insect" }) {
+                        if (!labels.any { it.text.lowercase() == "plant" || it.text.lowercase() == "petal" || it.text.lowercase() == "fruit" || it.text.lowercase() == "flower" || it.text.lowercase() == "vegetable" || it.text.lowercase() == "insect" } && !labels.isNullOrEmpty()) {
                             MaterialAlertDialogBuilder(requireContext()).setTitle("Incorrect Image")
                                 .setMessage("Image does not look correct. Upload correct image.")
                                 .setPositiveButton("ok") { dialog, which ->

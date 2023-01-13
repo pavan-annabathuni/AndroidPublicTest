@@ -34,8 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
@@ -44,7 +43,8 @@
                 android:textColor="#111827"
                 android:textSize="@dimen/txt16"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/device_iv"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/map_card"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:clickable="false"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="@dimen/space12"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="@dimen/space16"
                 android:background="@drawable/bg_add_form"
                 android:clickable="true"
@@ -170,8 +170,8 @@
                     android:layout_margin="@dimen/txt8"
                     android:ellipsize="marquee"
                     android:focusable="true"
-                    android:gravity="center"
                     android:focusableInTouchMode="true"
+                    android:gravity="center"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
@@ -217,8 +217,8 @@
                 android:id="@+id/map_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -244,6 +244,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/device_iv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvAddDeviceStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tvAddDeviceStart"
+                app:layout_constraintTop_toTopOf="@+id/tvAddDeviceStart"
+                map:srcCompat="@drawable/ic_weather_device" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

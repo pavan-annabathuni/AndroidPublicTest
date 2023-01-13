@@ -28,6 +28,7 @@ import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -114,7 +115,71 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //        progressbar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN)
 
 
+        setupDeltaTGuage()
+        setUpSoilMoisture()
     }
+
+    private fun setupDeltaTGuage() {
+        binding.currentDelta.clearSections()
+        binding.currentDelta.addSections(
+            Section
+                (
+                0f,
+                .24f,
+                Color.parseColor("#DA0101"),
+                binding.currentDelta.dpTOpx(12f)
+            ),
+            Section(
+                .24f,
+                .59f,
+                Color.parseColor("#01B833"),
+                binding.currentDelta.dpTOpx(12f)
+            ),
+            Section(
+                .59f,
+                .71f,
+                Color.parseColor("#F3C461"),
+                binding.currentDelta.dpTOpx(12f)
+            ),
+            Section(
+                .71f,
+                1f,
+                Color.parseColor("#DA0101"),
+                binding.currentDelta.dpTOpx(12f)
+            )
+        )
+        binding.currentDelta.maxSpeed = 15F
+        binding.currentDelta.tickNumber = 0
+        binding.currentDelta.marksNumber = 0
+    }
+
+    private fun setUpSoilMoisture(){
+
+        binding.soilMoistureOne.clearSections()
+        binding.soilMoistureOne.addSections(
+            Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
+            Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
+            Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
+            Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
+        )
+        //two
+        binding.soilMoistureTwo.clearSections()
+        binding.soilMoistureTwo.addSections(
+            Section
+                (0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
+            Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
+            Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
+            Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
+        )
+
+        binding.soilMoistureOne.tickNumber = 0
+        binding.soilMoistureOne.marksNumber = 0
+        binding.soilMoistureTwo.tickNumber = 0
+        binding.soilMoistureTwo.marksNumber = 0
+        binding.soilMoistureOne.maxSpeed = 60F
+        binding.soilMoistureTwo.maxSpeed = 60F
+    }
+
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
 
@@ -248,16 +313,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.farmdetailsPremiumCl.visibility = View.GONE
         binding.cardMYDevice.visibility = View.GONE
         binding.freeAddDeviceCv.visibility = View.VISIBLE
-        viewDevice.getIotDevice().observe(requireActivity()) {
+        viewDevice.getIotDeviceByFarm(myFarm?.id!!).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    if (it.data?.data != null) {
-                        val response = it.data!!.data.filter { it.farmId == myFarm?.id }
-
+                    if (it.data != null) {
                         binding.deviceFarm.adapter = viewDeviceListAdapter
-                        viewDeviceListAdapter.setMovieList(response as ArrayList<ViewDeviceData>)
+                        viewDeviceListAdapter.setMovieList(it.data as ArrayList<ViewDeviceDomain>)
 
-                        if (response.isNullOrEmpty()) {
+                        if (it.data.isNullOrEmpty()) {
                             binding.ndviCl.visibility = View.GONE
                             binding.farmdetailsPremiumCl.visibility = View.GONE
                             binding.cardMYDevice.visibility = View.GONE
@@ -419,10 +482,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         }
     }
 
-    override fun viewDevice(data: ViewDeviceData) {
+    override fun viewDevice(data: ViewDeviceDomain) {
 
         setupDeltaT(data)
-        if (data.model?.series == "GSX") {
+        if (data.modelSeries == "GSX") {
             binding.cardTopParent.visibility = View.GONE
             binding.clTempView.visibility = View.GONE
         } else {
@@ -431,8 +494,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         }
         binding.let {
 
-            it.totalAreea.text = data.iotDevicesData?.battery.toString()
-            it.tvAddDeviceStart.text = data.model?.modelName.toString()
+            it.totalAreea.text = data.battery.toString()
+            it.tvAddDeviceStart.text = data.modelName.toString()
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -448,32 +511,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
             it.tvLastUpdate.text = data.dataTimestamp.toString()
-            binding.soilMoistureOne.clearSections()
-            binding.soilMoistureTwo.clearSections()
+//            binding.soilMoistureOne.clearSections()
+//            binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
             binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
-            binding.soilMoistureOne.addSections(
-                Section(0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
-            )
-            //two
-            binding.soilMoistureTwo.addSections(
-                Section
-                    (0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
-            )
-
-            binding.soilMoistureOne.tickNumber = 0
-            binding.soilMoistureOne.marksNumber = 0
-            binding.soilMoistureTwo.tickNumber = 0
-            binding.soilMoistureTwo.marksNumber = 0
-            binding.soilMoistureOne.maxSpeed = 60F
-            binding.soilMoistureTwo.maxSpeed = 60F
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
             binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
 
@@ -655,9 +697,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     }
 
-    private fun setupDeltaT(data: ViewDeviceData) {
+    private fun setupDeltaT(data: ViewDeviceDomain) {
 
-        if (data.model?.series == "GSX") {
+        if (data.modelSeries == "GSX") {
             binding.currentDelta.visibility = View.GONE
             binding.deltaText.visibility = View.GONE
             binding.updateDate.visibility = View.GONE
@@ -668,41 +710,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.updateDate.text="Last Updated: ${data.dataTimestamp}"
         }
 
-        binding.currentDelta.clearSections()
-        binding.currentDelta.maxSpeed = 15F
-        binding.currentDelta.tickNumber = 0
-        binding.currentDelta.marksNumber = 0
+//        binding.currentDelta.clearSections()
+
         data.deltaT?.toFloat()
             ?.let { it1 -> binding.currentDelta.speedTo(it1) }
         binding.deltaText.text = data.deltaT.toString()
 
-        binding.currentDelta.addSections(
-            Section
-                (
-                0f,
-                .24f,
-                Color.parseColor("#DA0101"),
-                binding.currentDelta.dpTOpx(12f)
-            ),
-            Section(
-                .24f,
-                .59f,
-                Color.parseColor("#01B833"),
-                binding.currentDelta.dpTOpx(12f)
-            ),
-            Section(
-                .59f,
-                .71f,
-                Color.parseColor("#F3C461"),
-                binding.currentDelta.dpTOpx(12f)
-            ),
-            Section(
-                .71f,
-                1f,
-                Color.parseColor("#DA0101"),
-                binding.currentDelta.dpTOpx(12f)
-            )
-        )
     }
 
     override fun onMapReady(map: GoogleMap?) {

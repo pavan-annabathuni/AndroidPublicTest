@@ -35,11 +35,11 @@ data class ViewDeviceData(
     @SerializedName("farm_id"               ) var farmId             : Int?                = null,
     @SerializedName("device_name"           ) var deviceName         : String?             = null,
     @SerializedName("delta_t"               ) var deltaT             : Double?                = null,
-    @SerializedName("delta_t_range"         ) var deltaTRange        : DeltaTRange?        = DeltaTRange(),
-    @SerializedName("soil_moisture_1_range" ) var soilMoisture1Range : SoilMoisture1Range? = SoilMoisture1Range(),
-    @SerializedName("soil_moisture_2_range" ) var soilMoisture2Range : SoilMoisture2Range? = SoilMoisture2Range(),
+    @SerializedName("delta_t_range"         ) var deltaTRange        : RangesData?        = RangesData(),
+    @SerializedName("soil_moisture_1_range" ) var soilMoisture1Range : RangesData? = RangesData(),
+    @SerializedName("soil_moisture_2_range" ) var soilMoisture2Range : RangesData? = RangesData(),
     @SerializedName("iot_devices_data") var iotDevicesData: ViewIOTData? = ViewIOTData(),
-    @SerializedName("model") var model: ViewIOTModel? = ViewIOTModel()
+    @SerializedName("model") var model: ViewIOTModelData? = ViewIOTModelData()
 )
 
 data class ViewIOTData(
@@ -47,31 +47,31 @@ data class ViewIOTData(
     @SerializedName("battery") var battery: String? = null
 )
 
-data class ViewIOTModel(
+data class ViewIOTModelData(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("model_name") var modelName: String? = null,
     @SerializedName("series") var series: String? = null
 )
 
 
-data class DeltaTRange (
+data class RangesData (
 
     @SerializedName("min"    ) var min    : Double?    = null,
     @SerializedName("max"    ) var max    : Double?    = null,
     @SerializedName("ranges" ) var ranges : Map<String,List<Double>>? = emptyMap()
 
 )
-data class SoilMoisture1Range (
-
-    @SerializedName("min"    ) var min    : Double?    = null,
-    @SerializedName("max"    ) var max    : Double?    = null,
-    @SerializedName("ranges" ) var ranges : Map<String,List<Double>>? = emptyMap()
-
-)
-data class SoilMoisture2Range (
-
-    @SerializedName("min"    ) var min    : Double?    = null,
-    @SerializedName("max"    ) var max    : Double?    = null,
-    @SerializedName("ranges" ) var ranges : Map<String,List<Double>>? = emptyMap()
-
-)
+//data class SoilMoisture1Range (
+//
+//    @SerializedName("min"    ) var min    : Double?    = null,
+//    @SerializedName("max"    ) var max    : Double?    = null,
+//    @SerializedName("ranges" ) var ranges : Map<String,List<Double>>? = emptyMap()
+//
+//)
+//data class SoilMoisture2Range (
+//
+//    @SerializedName("min"    ) var min    : Double?    = null,
+//    @SerializedName("max"    ) var max    : Double?    = null,
+//    @SerializedName("ranges" ) var ranges : Map<String,List<Double>>? = emptyMap()
+//
+//)

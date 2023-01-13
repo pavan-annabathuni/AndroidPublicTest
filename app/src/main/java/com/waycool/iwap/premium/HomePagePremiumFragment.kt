@@ -32,6 +32,7 @@ import com.waycool.data.Network.NetworkModels.ViewDeviceData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -150,22 +151,20 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     private fun initObserveDevice(farmId: Int) {
-        viewDevice.getIotDevice().observe(requireActivity()) {
-            if (it.data?.data.isNullOrEmpty()) {
+        viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
+            if (it.data?.isEmpty() == true) {
                 binding.cardMYDevice.visibility = View.GONE
             } else
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data?.data != null) {
-                            val deviceListForFarm =
-                                it.data?.data?.filter { it1 -> it1.farmId == farmId }
-                            if (!deviceListForFarm.isNullOrEmpty()) {
+                        if (it.data != null) {
+                            if (!it.data.isNullOrEmpty()) {
                                 binding.cardMYDevice.visibility = View.VISIBLE
                                 binding.deviceParamsCL.visibility=View.VISIBLE
                                 binding.deviceFarm.visibility=View.VISIBLE
                                 binding.devicesEmptyText.visibility=View.GONE
                                 binding.deviceFarm.adapter = viewDeviceListAdapter
-                                viewDeviceListAdapter.setMovieList(deviceListForFarm as ArrayList<ViewDeviceData>)
+                                viewDeviceListAdapter.setMovieList(it.data!!)
                             }else{
                                 binding.cardMYDevice.visibility = View.VISIBLE
                                 binding.deviceParamsCL.visibility=View.GONE
@@ -466,9 +465,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     @SuppressLint("SetTextI18n")
-    override fun viewDevice(data: ViewDeviceData) {
+    override fun viewDevice(data: ViewDeviceDomain) {
 
-        if (data.model?.series == "GSX") {
+        if (data.modelSeries == "GSX") {
             binding.cardTopParent.visibility = View.GONE
             binding.clTempView.visibility = View.GONE
         } else {
@@ -478,8 +477,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
         binding.let {
 
-            it.totalAreea.text = data.iotDevicesData?.battery.toString()
-            it.tvAddDeviceStart.text = data.model?.modelName.toString()
+            it.totalAreea.text = data.battery.toString()
+            it.tvAddDeviceStart.text = data.modelName.toString()
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -504,19 +503,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
             binding.soilMoistureOne.addSections(
-                Section(0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
+                Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
             )
             //two
 //            binding.soilMoistureOne .indicator.color = Color.RED
             binding.soilMoistureTwo.addSections(
                 Section
-                    (0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
+                    (0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
             )
 
 
@@ -538,8 +537,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.soilMoistureTwo.marksNumber = 0
 
 //            binding.soilMoistureOne.speedTo()
-            binding.soilMoistureOne.maxSpeed = 100F
-            binding.soilMoistureTwo.maxSpeed = 100F
+            binding.soilMoistureOne.maxSpeed = 60F
+            binding.soilMoistureTwo.maxSpeed = 60F
 //            binding.soilMoistureOne.ticks  = listOf(10.0F)
 //            binding.soilMoistureTwo.ticks = 10
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())

@@ -233,9 +233,9 @@ object CropsRepository {
 //            }
 //        }
 //    }
-    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
-        return NetworkSource.getIotDevice()
-    }
+//    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
+//        return NetworkSource.getIotDevice()
+//    }
 
     fun getGraphsViewDevice(
         serial_no_id: Int?,

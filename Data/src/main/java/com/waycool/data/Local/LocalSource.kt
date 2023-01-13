@@ -213,4 +213,17 @@ object LocalSource {
     fun deleteCropInformation() = outgrowDao.deleteCropInformation()
     fun deleteMyFarms()= outgrowDao.deleteAllMyFarms()
 
+
+    fun insertViewDevice(devices: List<ViewDeviceEntity>) {
+        outgrowDao.deleteAllDevices()
+        outgrowDao.insertViewDevice(devices)
+    }
+
+    fun getAllDevices()= outgrowDao.getViewDevices()
+
+    fun getDevicesByFarm(farmId:Int)= outgrowDao.getViewDevicesByFarm(farmId)
+
+
+
+
 }
