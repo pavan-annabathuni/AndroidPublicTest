@@ -29,11 +29,11 @@ interface OutgrowDao {
 
     //AI Crop History
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insertHistory(crops: List<AiCropHistoryEntity>)
-//
-//    @Query("SELECT * FROM ai_history WHERE  LIKE '%' || :search || '%' ORDER BY crop_name Asc")
-//    fun getAiHistory(search: String? = ""): Flow<List<CropMasterEntity>?>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertHistory(crops: List<AiCropHistoryEntity>)
+
+    @Query("SELECT * FROM ai_history WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
+    fun getAiHistory(search: String? = ""): Flow<List<AiCropHistoryEntity>?>
 
 
     @Query("SELECT * FROM crop_master WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")

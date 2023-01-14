@@ -47,7 +47,7 @@ class AiCropHistoryAdapter(private val context: Context) :
 //            binding.tvRequest.text = note.prediction
 //            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at
-            binding.tvRequest.text = note.cropdata.cropName.toString()
+            binding.tvRequest.text = note.cropName.toString()
             binding.tvDesiessName.text = note.disease_name
             binding.tvStatus
             Glide.with(context)

@@ -291,7 +291,7 @@ class CropHealthFragment : Fragment() {
 
     private fun bindObservers() {
 
-        viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
+        viewModel.getAiCropHistoryFromLocal().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
                 binding.clTopGuide.visibility = View.VISIBLE
                 binding.clRequest.visibility = View.GONE

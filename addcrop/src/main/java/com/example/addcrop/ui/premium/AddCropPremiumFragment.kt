@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.os.BundleCompat.getParcelable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -89,6 +90,7 @@ class AddCropPremiumFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddCropPremiumBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -101,16 +103,33 @@ class AddCropPremiumFragment : Fragment() {
         noOFYear()
         noOFYearBahar()
         translationSoilTesting()
-//        getFarms()
         year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
 //        }
-        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            accountID = it.data?.accountId
-            getFarms()
+        if (requireActivity().intent.extras != null) {
+            val bundle = requireActivity().intent.extras
+            selectedFarmId = bundle?.getInt("farmID")
+            if (selectedFarmId == null) {
+                binding.farmsCl.visibility = View.VISIBLE
+                binding.paragraphMedium.visibility = View.VISIBLE
+                binding.myfarmsChipGroup.visibility = View.VISIBLE
+            } else {
+                binding.farmsCl.visibility = View.GONE
+                binding.paragraphMedium.visibility = View.GONE
+                binding.myfarmsChipGroup.visibility = View.GONE
+            }
+        }else{
+            binding.farmsCl.visibility = View.VISIBLE
+            binding.paragraphMedium.visibility = View.VISIBLE
+            binding.myfarmsChipGroup.visibility = View.VISIBLE
+            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+                accountID = it.data?.accountId
+                getFarms()
 
+            }
         }
+
         binding.toolbar.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
@@ -380,7 +399,6 @@ class AddCropPremiumFragment : Fragment() {
                             if (selectedFarmId != null) {
                                 bundle.putInt("farm_id", selectedFarmId!!)
                             }
-
 
                             bundle.putString("area", area)
                             bundle.putString("date", date)

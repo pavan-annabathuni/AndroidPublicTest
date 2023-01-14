@@ -71,6 +71,7 @@ class PlantSpacingFragment : Fragment() {
                 Log.d("TAG", "onCreateViewGetData: $date")
                 Log.d("TAG", "onCreateViewGetData: $irrigation_selected")
                 Log.d("TAG", "onCreateViewGetData: $noOFPlants")
+                Log.d("TAG", "onCreateViewGetDataTTT: $farm_id")
 
                 val map = mutableMapOf<String, Any>()
                 account_id?.let {

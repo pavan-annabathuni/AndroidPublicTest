@@ -235,11 +235,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Error: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        )
+//                        ToastStateHandling.toastError(
+//                            requireContext(),
+//                            "Error: ${it.message}",
+//                            Toast.LENGTH_SHORT
+//                        )
 
                     }
 
