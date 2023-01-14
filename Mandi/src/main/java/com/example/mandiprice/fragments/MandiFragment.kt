@@ -234,19 +234,21 @@ class MandiFragment : Fragment() {
 
 
     private fun spinnerSetup() {
+        viewModel.viewModelScope.launch {
+            var category = TranslationsManager().getString("str_category")
         viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
             val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
                 data.categoryName
             } ?: emptyList()) as MutableList<String>
-            viewModel.viewModelScope.launch {
-                var category = TranslationsManager().getString("str_category")
+
+
             if (cropCategoryList.isNotEmpty())
 
                     if(!category.isNullOrEmpty())
                     cropCategoryList[0] = category
                     else cropCategoryList[0] ="Category"
-                }
+
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, cropCategoryList)
             binding.spinner1.adapter = arrayAdapter
@@ -380,7 +382,7 @@ class MandiFragment : Fragment() {
                     }}
                 }
 
-            }
+            }}
 
         viewModel.getAllCrops().observe(viewLifecycleOwner) {
            // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }

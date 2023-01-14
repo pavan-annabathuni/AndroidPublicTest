@@ -106,6 +106,13 @@ class AddFarmSupportFragment : Fragment() {
         onClick()
         getLocation()
         binding.imgLocation.setOnClickListener() {
+            context?.let { it1 ->
+                ToastStateHandling.toastSuccess(
+                    it1,
+                    "Loading",
+                    Toast.LENGTH_SHORT
+                )
+            }
             getLocation()
         }
         binding.farmManger.background =

@@ -866,13 +866,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
     private fun checkRole(roleId:Int){
         if(roleId==31){
-            binding.cvEditCrop.visibility = View.GONE
+            binding.tvEditMyCrops.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.GONE
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
         }else{
-            binding.cvEditCrop.visibility = View.VISIBLE
+            binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE

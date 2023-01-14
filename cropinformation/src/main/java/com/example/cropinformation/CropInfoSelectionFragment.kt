@@ -88,19 +88,20 @@ class CropInfoSelectionFragment : Fragment() {
             it?.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             viewModel.getCropMaster().observe(viewLifecycleOwner){
                 for (i in 0 until it.data?.size!!){
-                    Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
+
                     if(it.data?.get(i)?.cropId==id) {
                         id2 = it.data?.get(i)?.cropId!!
+                        Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
                         break
                     }
-                }}
+                }
             if(id==id2){
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_cropInfoFragment,
                 args
             )}else{
                 dialog()
-            }
+            }}
         })
         binding.rvMyCrops.adapter = myCropAdapter
 
