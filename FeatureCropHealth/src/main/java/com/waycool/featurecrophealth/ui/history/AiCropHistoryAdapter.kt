@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.featurecrophealth.databinding.ViewholderHistoryBinding
 
 
@@ -41,20 +42,16 @@ class AiCropHistoryAdapter(private val context: Context) :
 
         @SuppressLint("SetTextI18n")
         fun bind(note: AiCropHistoryDomain) {
+            TranslationsManager().loadString("txt_complete",binding.tvStatus,"Completed")
             binding.tvCropID.text = "id : " + note.id.toString()
-//            binding.tvRequest.text = note.prediction
-//            binding.tvDesiessName.text = note.
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text = note.cropdata.cropName.toString()
-            binding.tvStatus
             Glide.with(context)
                 .load(note.image_url)
                 .centerCrop()
                 .placeholder(com.waycool.featurecrophealth.R.drawable.background_selected_item)
                 .thumbnail(0.5f)
                 .into(binding.iVHistory);
-//            binding.title.text = note.title
-//            binding.desc.text = note.description
             binding.root.setOnClickListener {
                 onItemClick?.invoke(getItem(absoluteAdapterPosition))
             }
@@ -68,7 +65,6 @@ class AiCropHistoryAdapter(private val context: Context) :
         notifyDataSetChanged()
 
     }
-
     class ComparatorDiffUtil : DiffUtil.ItemCallback<AiCropHistoryDomain>() {
         override fun areItemsTheSame(
             oldItem: AiCropHistoryDomain,

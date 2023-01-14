@@ -47,6 +47,8 @@ class LoginMainActivity : AppCompatActivity() {
             }
         }
 
+
+
         getFCMToken()
         viewModel.saveDeviceDetails(deviceManufacturer, deviceName)
     }

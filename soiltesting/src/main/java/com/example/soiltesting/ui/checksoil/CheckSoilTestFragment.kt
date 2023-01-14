@@ -1,41 +1,28 @@
 package com.example.soiltesting.ui.checksoil
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentCheckSoilTestBinding
 import com.example.soiltesting.ui.history.HistoryViewModel
-import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CheckSoilTestFragment : Fragment() {
     private var _binding: FragmentCheckSoilTestBinding? = null
@@ -107,8 +94,9 @@ class CheckSoilTestFragment : Fragment() {
         TranslationsManager().loadString("add", binding.addText,"Add")
         TranslationsManager().loadString("str_edit", binding.selectCropEdit,"Edit")
         TranslationsManager().loadString("soil_sample_will_be_collected_by_the_selected_lab", binding.collectedLab,"Soil sample will be collected by the selected Lab")
-        TranslationsManager().loadString("txt_selct_crop", binding.selectCrop,"Select Crop")
+        TranslationsManager().loadString("select_crop", binding.selectCrop,"Select Crop")
         TranslationsManager().loadString("select_testing_lab", binding.toolBarTittle,"Select Testing Lab")
+
 
 //        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
 //        TranslationsManager().loadString("crop_area", binding.pincodeNumber)

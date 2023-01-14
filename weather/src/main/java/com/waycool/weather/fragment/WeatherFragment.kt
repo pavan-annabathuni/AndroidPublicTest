@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -34,7 +35,6 @@ import com.waycool.weather.R
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
-import com.waycool.weather.utils.Constants.*
 import com.waycool.weather.utils.WeatherIcons
 import com.waycool.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.launch
@@ -115,6 +115,22 @@ class WeatherFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.let {
+                        it.finish()
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
+    }
+
     private fun networkCall() {
         if(NetworkUtil.getConnectivityStatusString(context)==0){
             binding.clInclude.visibility=View.VISIBLE
@@ -129,11 +145,6 @@ class WeatherFragment : Fragment() {
             setBanners()
         }
     }
-//     fun onClick(){
-//          binding.recycleViewHourly.setOnClickListener(){
-//              binding.recycleViewHourly.setBackgroundResource(R.drawable.green_border)
-//          }
-//     }
 
 
     fun screenShot() {
@@ -176,10 +187,7 @@ class WeatherFragment : Fragment() {
                 loadWeatherFromFarms(it.data!!)
             }
         }
-//
-//        GlobalScope.launch {
-//            getWeatherData("16.22","72.33")
-//        }
+
 
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
             if (null != it) {

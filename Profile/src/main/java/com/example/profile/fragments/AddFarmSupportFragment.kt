@@ -2,7 +2,6 @@ package com.example.profile.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -10,7 +9,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.text.InputFilter
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -33,7 +30,6 @@ import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import com.waycool.featurelogin.fragment.RegistrationFragment
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.regex.Pattern
@@ -340,7 +336,7 @@ class AddFarmSupportFragment : Fragment() {
         TranslationsManager().loadString("str_role_type", binding.textView3,"Role Type")
         TranslationsManager().loadString("str_farm_location", binding.textView5,"Farm Location Coordinates")
         TranslationsManager().loadString("str_mobile_number", binding.textView4,"Mobile Number")
-        TranslationsManager().loadString("str_farmer", binding.tvFarmer,"Farmer")
+        TranslationsManager().loadString("str_farmer", binding.tvFarmer,"Farm Manger")
         TranslationsManager().loadString("str_farmer_support", binding.tvFarmerSupport,"Farmer Support")
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
@@ -350,6 +346,8 @@ class AddFarmSupportFragment : Fragment() {
             binding.submit.text = submit
 //            title = TranslationsManager().getString("str_submit")
 //            binding.topAppBar.title = title
+            binding.tvName.hint = TranslationsManager().getString("str_farmer_name")
+            binding.mobilenoEt.hint = TranslationsManager().getString("str_mobile_number")
         }
 
     }

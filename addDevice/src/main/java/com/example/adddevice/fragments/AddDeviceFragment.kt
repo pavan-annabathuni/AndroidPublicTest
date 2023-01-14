@@ -15,7 +15,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -511,6 +510,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             binding.topAppBar.title = title
             var areaHint = TranslationsManager().getString("e_g_50")
             binding.imeiAddress.hint =areaHint
+
+            var zone = TranslationsManager().getString("e_g_50")
+            binding.device1.hint =zone
         }
         TranslationsManager().loadString("str_device_name", binding.textView,"Device Name")
         TranslationsManager().loadString("str_device_details", binding.textView2,"Device Details")

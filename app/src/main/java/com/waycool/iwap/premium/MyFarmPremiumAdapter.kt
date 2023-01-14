@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 import com.waycool.iwap.home.FarmCropsAdapter
 

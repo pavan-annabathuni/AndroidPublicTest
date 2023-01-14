@@ -3,7 +3,6 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +35,6 @@ import kotlinx.coroutines.launch
 
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 

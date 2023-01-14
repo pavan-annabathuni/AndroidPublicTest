@@ -25,7 +25,6 @@ import com.google.android.libraries.maps.model.*
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
-import com.google.maps.android.PolyUtil
 import com.waycool.data.Network.NetworkModels.NdviData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +13,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.waycool.data.Local.LocalSource
-import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.log
 
 
 class SheetHarvestFragment : BottomSheetDialogFragment() {
@@ -41,8 +36,8 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             plotId = it.getInt("plotId")
-            accountId = it.getInt("plotId")
-            cropId = it.getInt("plotId")
+            accountId = it.getInt("accountId")
+            cropId = it.getInt("cropId")
         }
     }
 

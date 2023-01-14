@@ -3,10 +3,7 @@ package com.example.irrigationplanner.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
-import com.example.irrigationplanner.databinding.ItemForecastBinding
 import com.example.irrigationplanner.databinding.ItemPagerForecastBinding
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
 import com.waycool.data.repository.domainModels.MyCropDataDomain
