@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -28,9 +27,6 @@ import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBindi
 import com.waycool.featurecrophealth.utils.Constant.TAG
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

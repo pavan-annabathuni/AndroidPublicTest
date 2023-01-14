@@ -21,14 +21,11 @@ import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class IrrigationFragment : Fragment() {
     private lateinit var binding: FragmentIrrigationBinding

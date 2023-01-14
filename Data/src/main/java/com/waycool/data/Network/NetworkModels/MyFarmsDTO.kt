@@ -12,9 +12,10 @@ data class MyFarmsDTO(
 data class MyFarmsNetwork (
     @SerializedName("id"                  ) var id               : Int?    = null,
     @SerializedName("farm_name"           ) var farmName         : String? = null,
+    @SerializedName("farm_location"       ) var farmLocation     : String? = null,
     @SerializedName("farm_center"         ) var farmCenter       : ArrayList<LatLng>? = null,
     @SerializedName("farm_area"           ) var farmArea         : String? = null,
-    @SerializedName("farm_json"           ) var farmJson          :ArrayList<LatLng>? = null,
+    @SerializedName("farm_json"           ) var farmJson         :ArrayList<LatLng>? = null,
     @SerializedName("farm_water_source"   ) var farmWaterSource  : ArrayList<String>? = null,
     @SerializedName("farm_pump_hp"        ) var farmPumpHp       : String? = null,
     @SerializedName("farm_pump_type"      ) var farmPumpType     : String? = null,

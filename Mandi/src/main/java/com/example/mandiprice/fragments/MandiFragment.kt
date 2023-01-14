@@ -78,16 +78,7 @@ class MandiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMandiBinding.inflate(inflater)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    this@MandiFragment.findNavController().navigateUp()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()
@@ -120,6 +111,16 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@MandiFragment.findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
 
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()

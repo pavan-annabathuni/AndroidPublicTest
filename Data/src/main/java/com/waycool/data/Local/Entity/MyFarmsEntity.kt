@@ -12,6 +12,7 @@ data class MyFarmsEntity(
     @PrimaryKey
     @ColumnInfo(name="id"                  ) var id               : Int?    = null,
     @ColumnInfo(name="farm_name"           ) var farmName         : String? = null,
+    @ColumnInfo(name="farm_location"       ) var farmLocation         : String? = null,
     @ColumnInfo(name="farm_center"         ) var farmCenter       : ArrayList<LatLng>? = null,
     @ColumnInfo(name="farm_area"           ) var farmArea         : String? = null,
     @ColumnInfo(name="farm_json"           ) var farmJson          :ArrayList<LatLng>? = null,

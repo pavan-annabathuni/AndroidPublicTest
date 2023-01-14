@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class MyFarmsDomain (
    var id               : Int?    = null,
    var farmName         : String? = null,
+   var farmLocation     : String? = null,
    var farmCenter       : ArrayList<LatLng>?= null,
    var farmArea         : String? = null,
    var farmJson         : ArrayList<LatLng>?= null,

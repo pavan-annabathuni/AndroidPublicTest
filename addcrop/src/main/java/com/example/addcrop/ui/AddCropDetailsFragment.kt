@@ -105,7 +105,7 @@ class AddCropDetailsFragment : Fragment() {
 
 //        spinner()
         spinnerYear()
-        translationSoilTesting()
+        translations()
         binding.clCalender.setOnClickListener {
             showCalender()
         }
@@ -325,13 +325,13 @@ class AddCropDetailsFragment : Fragment() {
             Color.parseColor("#7946A9")
         )
     }
-    fun translationSoilTesting() {
+    fun translations() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
-            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
-            binding.etNickName.hint =NickNamehint
-            var areaHint = TranslationsManager().getString("e_g_50")
+            val nickNameHint = TranslationsManager().getString("e_g_crop_name")
+            binding.etNickName.hint =nickNameHint
+            val areaHint = TranslationsManager().getString("device_hint")
             binding.etAreaNumber.hint =areaHint
         }
         TranslationsManager().loadString("add_crop_information", binding.plot,"Add Crop information")
