@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_draw_farm" >
         <action
             android:id="@+id/action_drawFarmFragment_to_saveFarmFragment"
-            app:destination="@id/saveFarmFragment" />
+            app:destination="@id/saveFarmFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/saveFarmFragment"

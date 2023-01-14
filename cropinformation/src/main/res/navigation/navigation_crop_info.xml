@@ -13,10 +13,18 @@
 
         <action
             android:id="@+id/action_cropInfoFragment_to_playVideoFragment2"
-            app:destination="@id/playVideoFragment2" />
+            app:destination="@id/playVideoFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_cropInfoFragment_to_newsFullviewActivity"
-            app:destination="@id/newsFullviewActivity" />
+            app:destination="@id/newsFullviewActivity"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/cropSelectionFragment"
@@ -25,10 +33,10 @@
         <action
             android:id="@+id/action_cropSelectionFragment_to_cropInfoFragment"
             app:destination="@id/cropInfoFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"/>
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <dialog
         android:id="@+id/playVideoFragment2"

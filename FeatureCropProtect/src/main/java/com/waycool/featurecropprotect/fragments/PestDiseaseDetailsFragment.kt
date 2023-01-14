@@ -71,7 +71,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
 
-    private val viewModel: CropProtectViewModel by lazy { ViewModelProvider(requireActivity())[CropProtectViewModel::class.java] }
+    private val viewModel: CropProtectViewModel by lazy { ViewModelProvider(this)[CropProtectViewModel::class.java] }
     private val adapter: DiseasesChildAdapter by lazy { DiseasesChildAdapter() }
     private var moduleId = "2"
 
@@ -92,20 +92,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         binding.toolbar.setOnClickListener {
             val isSuccess = findNavController().popBackStack()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+//            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val isSuccess = findNavController().popBackStack()
-                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                    val isSuccess = findNavController().navigateUp()
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
         return binding.root
     }
 
@@ -115,19 +117,19 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
          newsBinding = binding.layoutNews
 
         videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
+            val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         newsBinding.viewAllNews.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
-            val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
+            val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         arguments?.let {
@@ -170,7 +172,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.subRecycler.adapter = adapter
 
         diseaseId?.let { diseaseId ->
-            viewModel.getSelectedDisease(diseaseId).observe(requireActivity()) {
+            viewModel.getSelectedDisease(diseaseId).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
                         binding.toolbarTitle.text = it.data?.diseaseName
@@ -259,11 +261,13 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Error: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        )
+                        activity?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1,
+                                "Error: ${it.message}",
+                                Toast.LENGTH_SHORT
+                            )
+                        }
 
                     }
 

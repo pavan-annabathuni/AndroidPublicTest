@@ -12,13 +12,25 @@
         tools:layout="@layout/fragment_farm_details2" >
         <action
             android:id="@+id/action_farmDetailsFragment4_to_navigation_adddevice"
-            app:destination="@id/navigation_adddevice" />
+            app:destination="@id/navigation_adddevice"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_farmDetailsFragment4_to_navigation"
-            app:destination="@id/navigation" />
+            app:destination="@id/navigation"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_farmDetailsFragment4_to_graphsFragment3"
-            app:destination="@id/graphsFragment3" />
+            app:destination="@id/graphsFragment3"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_farmDetailsFragment4_to_deltaTInfoBottomDialogFragment"
             app:destination="@id/deltaTInfoBottomDialogFragment" />

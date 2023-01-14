@@ -8,7 +8,7 @@ object SyncRate {
     //Map of Sync Key to Refresh Rate in Minutes
     private val syncRate: Map<Preferences.Key<String>, Int> = mapOf(
         SyncKey.LANGUAGE_MASTER to 30,
-        SyncKey.CROPS_MASTER to 60,
+        SyncKey.CROPS_MASTER to 10,
         SyncKey.VANS_CATEGORY_MASTER to 60,
         SyncKey.TAGS_MASTER to 60,
         SyncKey.USER_DETAILS to 5,

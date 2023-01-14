@@ -13,18 +13,34 @@
         <action
             android:id="@+id/action_myProfileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment"
-            app:popUpTo="@id/myProfileFragment" />
+            app:popUpTo="@id/myProfileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_myProfileFragment_to_farmSupportFragment"
             app:destination="@id/farmSupportFragment"
-            app:popUpTo="@id/myProfileFragment" />
+            app:popUpTo="@id/myProfileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_myProfileFragment_to_languageFragment3"
             app:destination="@id/languageFragment3"
-            app:popUpTo="@id/myProfileFragment" />
+            app:popUpTo="@id/myProfileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_myProfileFragment_to_aboutOutgrowFragment"
-            app:destination="@id/aboutOutgrowFragment" />
+            app:destination="@id/aboutOutgrowFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"

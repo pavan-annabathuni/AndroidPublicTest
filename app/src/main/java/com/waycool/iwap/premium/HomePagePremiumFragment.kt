@@ -510,7 +510,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             if (data.battery == null) {
                 it.clBattery.visibility = View.GONE
             }
-            it.tvAddDeviceStart.text = data.modelName.toString()
+            it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -540,6 +540,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             if (data.soilMoisture2 == null) {
                 it.bottomTop.visibility = View.GONE
             }
+
+            var colorSectionListSM1= mutableListOf<Section>()
 
             binding.soilMoistureOne.addSections(
                 Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),

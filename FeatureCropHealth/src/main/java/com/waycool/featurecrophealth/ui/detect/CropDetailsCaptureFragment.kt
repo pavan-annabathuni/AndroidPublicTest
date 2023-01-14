@@ -199,7 +199,7 @@ class CropDetailsCaptureFragment : Fragment() {
                         val bundle = Bundle()
                         data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
                         findNavController().navigate(
-                            R.id.action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2,
+                            R.id.action_cropDetailsCaptureFragment_to_navigation_pest_and_disease_details,
                             bundle
                         )
                     }

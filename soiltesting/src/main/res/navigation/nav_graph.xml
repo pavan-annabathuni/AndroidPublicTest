@@ -12,25 +12,53 @@
         tools:layout="@layout/fragment_soil_testing_home" >
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_allHistoryFragment"
-            app:destination="@id/allHistoryFragment" />
+            app:destination="@id/allHistoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_checkSoilTestFragment"
-            app:destination="@id/checkSoilTestFragment" />
+            app:destination="@id/checkSoilTestFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_statusTrackerFragment"
-            app:destination="@id/statusTrackerFragment" />
+            app:destination="@id/statusTrackerFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_customeDialogFragment"
-            app:destination="@id/customeDialogFragment" />
+            app:destination="@id/customeDialogFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment" />
+            app:destination="@id/homePageFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_newSoilTestFormFragment"
-            app:destination="@id/newSoilTestFormFragment" />
+            app:destination="@id/newSoilTestFormFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_soilTestingHomeFragment_to_playVideoFragment2"
-            app:destination="@id/playVideoFragment2" />
+            app:destination="@id/playVideoFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <!--        <action-->
 <!--            android:id="@+id/action_soilTestingHomeFragment_to_newSoilTestFormFragment"-->
 <!--            app:destination="@id/newSoilTestFormFragment" />-->
@@ -43,10 +71,18 @@
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_sucessFullFragment"
             app:destination="@id/sucessFullFragment"
-            app:popUpTo="@id/soilTestingHomeFragment" />
+            app:popUpTo="@id/soilTestingHomeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_newSoilTestFormFragment_to_checkSoilTestFragment"
-            app:destination="@id/checkSoilTestFragment" />
+            app:destination="@id/checkSoilTestFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/statusTrackerFragment"
@@ -55,16 +91,32 @@
         tools:layout="@layout/fragment_status_tracker" >
         <action
             android:id="@+id/action_statusTrackerFragment_to_feedbackFragment"
-            app:destination="@id/feedbackFragment" />
+            app:destination="@id/feedbackFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_statusTrackerFragment_to_viewReportFragment"
-            app:destination="@id/viewReportFragment" />
+            app:destination="@id/viewReportFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_statusTrackerFragment_to_allHistoryFragment"
-            app:destination="@id/allHistoryFragment" />
+            app:destination="@id/allHistoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_statusTrackerFragment_to_soilTestingHomeFragment"
-            app:destination="@id/soilTestingHomeFragment" />
+            app:destination="@id/soilTestingHomeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/allHistoryFragment"
@@ -73,13 +125,25 @@
         tools:layout="@layout/fragment_all_history" >
         <action
             android:id="@+id/action_allHistoryFragment_to_statusTrackerFragment"
-            app:destination="@id/statusTrackerFragment" />
+            app:destination="@id/statusTrackerFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_allHistoryFragment_to_customeDialogFragment"
-            app:destination="@id/customeDialogFragment" />
+            app:destination="@id/customeDialogFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_allHistoryFragment_to_checkSoilTestFragment"
-            app:destination="@id/checkSoilTestFragment" />
+            app:destination="@id/checkSoilTestFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/checkSoilTestFragment"
@@ -88,10 +152,18 @@
         tools:layout="@layout/fragment_check_soil_test" >
         <action
             android:id="@+id/action_checkSoilTestFragment_to_newSoilTestFormFragment"
-            app:destination="@id/newSoilTestFormFragment" />
+            app:destination="@id/newSoilTestFormFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_checkSoilTestFragment_to_selectCropSoilTestFragment"
-            app:destination="@id/selectCropSoilTestFragment" />
+            app:destination="@id/selectCropSoilTestFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
 <!--        <argument-->
 <!--            android:name="id"-->
 <!--            app:argType="integer"/>-->
@@ -111,7 +183,11 @@
             android:id="@+id/action_sucessFullFragment_to_soilTestingHomeFragment"
             app:destination="@id/soilTestingHomeFragment"
             app:popUpTo="@id/homePageFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="false"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <dialog
         android:id="@+id/customeDialogFragment"
@@ -121,18 +197,27 @@
         <action
             android:id="@+id/action_customeDialogFragment_to_soilTestingHomeFragment"
             app:destination="@id/soilTestingHomeFragment"
-            app:popUpTo="@id/soilTestingHomeFragment" />
+            app:popUpTo="@id/soilTestingHomeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_customeDialogFragment_to_allHistoryFragment"
             app:destination="@id/allHistoryFragment"
             app:popUpTo="@id/allHistoryFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </dialog>
     <dialog
         android:id="@+id/feedbackFragment"
         android:name="com.example.soiltesting.ui.tracker.FeedbackFragment"
         android:label="fragment_feedback"
-        tools:layout="@layout/fragment_feedback" />
+        tools:layout="@layout/fragment_feedback"
+        />
     <fragment
         android:id="@+id/viewReportFragment"
         android:name="com.example.soiltesting.ui.request.ViewReportFragment"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_pest_and_disease_details"
+    app:startDestination="@id/pestDiseaseDetailsFragment">
+
+
+    <fragment
+        android:id="@+id/pestDiseaseDetailsFragment"
+        android:name="com.waycool.cropprotect.fragments.PestDiseaseDetailsFragment"
+        android:label="PestDiseaseDetailsFragment">
+        <action
+            android:id="@+id/action_pestDiseaseDetailsFragment_to_newsFullviewActivity"
+            app:destination="@id/newsFullviewActivity"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+        <action
+            android:id="@+id/action_pestDiseaseDetailsFragment_to_playVideoFragment3"
+            app:destination="@id/playVideoFragment3"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+    </fragment>
+    <activity
+        android:id="@+id/newsFullviewActivity"
+        android:name="com.waycool.newsandarticles.view.NewsFullviewActivity"
+        android:label="NewsFullviewActivity" />
+    <fragment
+        android:id="@+id/playVideoFragment3"
+        android:name="com.waycool.videos.fragments.PlayVideoFragment"
+        android:label="PlayVideoFragment" />
+
+</navigation>

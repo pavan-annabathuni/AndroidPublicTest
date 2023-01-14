@@ -11,16 +11,32 @@
         tools:layout="@layout/fragment_crop_health" >
         <action
             android:id="@+id/action_cropHealthFragment_to_cropHistoryFragment"
-            app:destination="@id/cropHistoryFragment" />
+            app:destination="@id/cropHistoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_cropHealthFragment_to_cropSelectFragment"
-            app:destination="@id/cropSelectFragment" />
-        <action
-            android:id="@+id/action_cropHealthFragment_to_pestDiseaseDetailsFragment2"
-            app:destination="@id/pestDiseaseDetailsFragment2" />
+            app:destination="@id/cropSelectFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_cropHealthFragment_to_playVideoFragment3"
-            app:destination="@id/playVideoFragment3" />
+            app:destination="@id/playVideoFragment3"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+        <action
+            android:id="@+id/action_cropHealthFragment_to_navigation_pest_and_disease_details"
+            app:destination="@id/navigation_pest_and_disease_details"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
 
     </fragment>
     <fragment
@@ -30,10 +46,18 @@
         tools:layout="@layout/fragment_crop_history" >
         <action
             android:id="@+id/action_cropHistoryFragment_to_cropSelectFragment"
-            app:destination="@id/cropSelectFragment" />
+            app:destination="@id/cropSelectFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
-            android:id="@+id/action_cropHistoryFragment_to_pestDiseaseDetailsFragment2"
-            app:destination="@id/pestDiseaseDetailsFragment2" />
+            android:id="@+id/action_cropHistoryFragment_to_navigation_pest_and_disease_details"
+            app:destination="@id/navigation_pest_and_disease_details"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/cropSelectFragment"
@@ -42,7 +66,11 @@
         tools:layout="@layout/fragment_crop_select" >
         <action
             android:id="@+id/action_cropSelectFragment_to_cropDetailsCaptureFragment"
-            app:destination="@id/cropDetailsCaptureFragment" />
+            app:destination="@id/cropDetailsCaptureFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/cropDetailsCaptureFragment"
@@ -51,10 +79,18 @@
         tools:layout="@layout/fragment_crop_details_capture" >
         <action
             android:id="@+id/action_cropDetailsCaptureFragment_to_howToClickFragment"
-            app:destination="@id/howToClickFragment" />
+            app:destination="@id/howToClickFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
-            android:id="@+id/action_cropDetailsCaptureFragment_to_pestDiseaseDetailsFragment2"
-            app:destination="@id/pestDiseaseDetailsFragment2" />
+            android:id="@+id/action_cropDetailsCaptureFragment_to_navigation_pest_and_disease_details"
+            app:destination="@id/navigation_pest_and_disease_details"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <dialog
         android:id="@+id/howToClickFragment"
@@ -62,13 +98,10 @@
         android:label="fragment_how_to_click"
         tools:layout="@layout/fragment_how_to_click" />
     <fragment
-        android:id="@+id/pestDiseaseDetailsFragment2"
-        android:name="com.waycool.cropprotect.fragments.PestDiseaseDetailsFragment"
-        android:label="PestDiseaseDetailsFragment" />
-    <fragment
         android:id="@+id/playVideoFragment3"
         android:name="com.waycool.videos.fragments.PlayVideoFragment"
         android:label="PlayVideoFragment" />
+    <include app:graph="@navigation/navigation_pest_and_disease_details" />
     <!--    <fragment-->
 <!--        android:id="@+id/paginationFragment"-->
 <!--        android:name="com.example.featurecrophealth.pagination.PaginationFragment"-->

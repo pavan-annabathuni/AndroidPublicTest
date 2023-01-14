@@ -12,22 +12,46 @@
         tools:layout="@layout/fragment_irrigation" >
         <action
             android:id="@+id/action_irrigationFragment_to_cropOverviewFragment"
-            app:destination="@id/cropOverviewFragment" />
+            app:destination="@id/cropOverviewFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_irrigationFragment_to_sheetHarvestFragment"
-            app:destination="@id/sheetHarvestFragment" />
+            app:destination="@id/sheetHarvestFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_irrigationFragment_to_irrigationHistoryFragment"
-            app:destination="@id/irrigationHistoryFragment" />
+            app:destination="@id/irrigationHistoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_irrigationFragment_to_diseaseHistoryFragment"
-            app:destination="@id/diseaseHistoryFragment" />
+            app:destination="@id/diseaseHistoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_irrigationFragment_to_forecastFragment"
-            app:destination="@id/forecastFragment" />
+            app:destination="@id/forecastFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_irrigationFragment_to_cropStageFragment"
-            app:destination="@id/cropStageFragment" />
+            app:destination="@id/cropStageFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <dialog
         android:id="@+id/cropOverviewFragment"
@@ -58,6 +82,10 @@
         tools:layout="@layout/fragment_crop_stage" >
         <action
             android:id="@+id/action_cropStageFragment_self"
-            app:destination="@id/cropStageFragment" />
+            app:destination="@id/cropStageFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
 </navigation>

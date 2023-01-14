@@ -48,8 +48,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     private var _binding: FragmentFarmDetails2Binding? = null
     private val binding get() = _binding!!
 
-    private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
-    private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
+    private val viewDevice by lazy { ViewModelProvider(this)[ViewDeviceViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
     private var lastUpdatedTime: String? = null
@@ -66,10 +66,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@FarmDetailsFragment.findNavController().navigateUp()
+                    findNavController().navigateUp()
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
+        activity?.onBackPressedDispatcher?.addCallback(
             requireActivity(),
             callback
         )
@@ -105,7 +105,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
+            if (!isSuccess) activity?.onBackPressed()
 //            soilTestingLabsAdapter.upDateList()
         }
 
@@ -313,7 +313,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.cardMYDevice.visibility = View.GONE
 //        binding.freeAddDeviceCv.visibility = View.VISIBLE
 
-        viewDevice.getIotDeviceByFarm(myFarm?.id!!).observe(requireActivity()) {
+        viewDevice.getIotDeviceByFarm(myFarm?.id!!).observe(viewLifecycleOwner) {
             checkForDeviceApiUpdate()
             when (it) {
                 is Resource.Success -> {
@@ -493,7 +493,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             bundle.putBoolean("isedit", true)
 //            findNavController().navigate(R.id.action_farmDetailsFragment4_to_nav_add_farm, bundle)
 
-            val intent = Intent(requireActivity(), AddFarmActivity::class.java)
+            val intent = Intent(activity, AddFarmActivity::class.java)
             intent.putExtras(bundle)
             startActivity(intent)
         }
@@ -521,7 +521,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             if (data.battery == null) {
                 it.clBattery.visibility = View.GONE
             }
-            it.tvAddDeviceStart.text = data.modelName.toString()
+            it.tvAddDeviceStart.text = "${ data.modelName} - ${data.deviceName}"
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
