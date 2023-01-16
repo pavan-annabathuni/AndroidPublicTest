@@ -228,7 +228,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         TranslationsManager().loadString("chat",binding.messageDevice,"Chat")
         TranslationsManager().loadString("have_device",binding.addDeviceFree,"Already have our device? Click here to Add Device")
         TranslationsManager().loadString("get_recommendation",binding.textView253,"Get Advanced disease and irrigation recommendations. To know more\"")
-        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
+//        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
 
 
 
@@ -829,11 +829,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     private fun checkRole(){
         viewModel.getUserDetails().observe(viewLifecycleOwner){
             if(it.data?.roleId==31){
-            binding.ClYourForm.visibility = View.GONE
+//            binding.ClYourForm.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.INVISIBLE
                 binding.editFarmFarmsSingle.visibility = View.GONE
             }else{
-                binding.ClYourForm.visibility = View.VISIBLE
+//                binding.ClYourForm.visibility = View.VISIBLE
                 binding.tvEditMyCrops.visibility = View.VISIBLE
                 binding.editFarmFarmsSingle.visibility = View.VISIBLE
             }

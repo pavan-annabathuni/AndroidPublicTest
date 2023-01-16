@@ -25,7 +25,7 @@ class TranslationsManager {
     }
 
     fun getStringAsLiveData(stringId: String):LiveData<AppTranslationsEntity>?{
-        return AppTranslationsSyncer().getDataAsFlow(stringId)?.asLiveData()
+        return AppTranslationsSyncer.getDataAsFlow(stringId)?.asLiveData()
     }
 
     suspend fun getString(stringId: String): String = withContext(Dispatchers.IO) {

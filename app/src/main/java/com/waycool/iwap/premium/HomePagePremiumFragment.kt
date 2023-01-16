@@ -40,6 +40,7 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -134,7 +135,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     fun translations() {
-        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+//        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
         TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
         TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
