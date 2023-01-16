@@ -32,8 +32,11 @@ class CropHealthViewModel : ViewModel() {
         LoginRepository.getUserDetails().asLiveData()
 
 
-    fun getAiCropHistory(): LiveData<Resource<List<AiCropHistoryDomain>>> {
-        return CropsRepository.getAiCropHistory().asLiveData()
+//    fun getAiCropHistory(): LiveData<Resource<List<AiCropHistoryDomain>>> {
+//        return CropsRepository.getAiCropHistory().asLiveData()
+//    }
+    fun getAiCropHistoryFromLocal(searchQuery: String? = ""): LiveData<Resource<List<AiCropHistoryDomain>?>> {
+        return CropsRepository.getAiCropHistory(searchQuery).asLiveData()
     }
 
     fun postAiImage(
