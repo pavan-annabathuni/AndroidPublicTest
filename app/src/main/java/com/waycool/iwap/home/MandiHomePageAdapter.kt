@@ -16,6 +16,7 @@ import com.example.soiltesting.databinding.ItemMandiBinding
 import com.example.soiltesting.ui.checksoil.SoilTestingLabsHolder
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.repository.domainModels.MandiDomainRecord
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,7 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties!!)
         }
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             val langCode = LocalSource.getLanguageCode() ?: "en"
             when(langCode){
                 "en"->{

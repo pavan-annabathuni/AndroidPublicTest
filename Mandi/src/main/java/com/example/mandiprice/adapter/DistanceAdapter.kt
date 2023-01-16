@@ -13,8 +13,7 @@ import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.MandiRecord
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class DistanceAdapter(val onClickListener: OnClickListener) :
     PagingDataAdapter<MandiDomainRecord, DistanceAdapter.MyViewHolder>(DiffCallback) {
@@ -43,6 +42,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         return MyViewHolder(binding)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
         holder.bind(properties)
@@ -74,7 +74,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
             onClickListener.clickListener(properties!!)
         }
          // TranslationsManager().loadString("Rate / Kg",holder.kg)
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main){
         val langCode = LocalSource.getLanguageCode() ?: "en"
         when(langCode){
             "en"->{
