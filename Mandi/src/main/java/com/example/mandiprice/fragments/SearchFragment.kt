@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -25,6 +26,7 @@ import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*

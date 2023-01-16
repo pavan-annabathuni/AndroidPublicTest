@@ -340,6 +340,7 @@ class MandiFragment : Fragment() {
                                 data.cropName
                             } ?: emptyList()).toMutableList()
 
+
 //            if (cropNameList.size==0)
 //                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
 
