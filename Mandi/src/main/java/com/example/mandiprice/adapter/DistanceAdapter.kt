@@ -15,7 +15,7 @@ import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.*
 
-class DistanceAdapter(val onClickListener: OnClickListener) :
+class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) :
     PagingDataAdapter<MandiDomainRecord, DistanceAdapter.MyViewHolder>(DiffCallback) {
 
     var cropName: String? = null
@@ -74,8 +74,8 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
             onClickListener.clickListener(properties!!)
         }
          // TranslationsManager().loadString("Rate / Kg",holder.kg)
-        GlobalScope.launch(Dispatchers.Main){
-        val langCode = LocalSource.getLanguageCode() ?: "en"
+//        GlobalScope.launch(Dispatchers.Main){
+//        val langCode = LocalSource.getLanguageCode() ?: "en"
         when(langCode){
             "en"->{
                 holder.cropName.text = properties?.crop
@@ -107,7 +107,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
             marketName = holder.markerName.text.toString()
     }
 
-    }
+
 
 
     companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
