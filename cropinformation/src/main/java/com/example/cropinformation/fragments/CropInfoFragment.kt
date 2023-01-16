@@ -482,13 +482,14 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     newsBinding.ivViewAll.visibility=View.GONE
 
                                 }
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    newsBinding.noDataNews.visibility = View.VISIBLE
-                                    newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
-
+                                if (it1 is LoadState.Error ) {
+                                    if(adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
+                                    }
 
                                 }
 

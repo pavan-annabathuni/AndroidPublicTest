@@ -15,7 +15,7 @@ class AiCropHistoryDomainMapper : DomainMapper<AiCropHistoryDomain, AiCropHistor
             probability = dto.probability,
             user_feedback = dto.userFeedback,
             updated_at = dto.updatedAt,
-            cropdata = dto.crop
+            cropName = dto.cropName
         )
     }
 

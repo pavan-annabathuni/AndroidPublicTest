@@ -142,6 +142,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
         TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
         TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
+//        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
+
+
+
     }
 
     private fun initObserveDevice(farmId: Int) {

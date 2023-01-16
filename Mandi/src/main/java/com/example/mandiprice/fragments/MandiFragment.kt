@@ -114,7 +114,7 @@ class MandiFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiFragment.findNavController().popBackStack()
+               findNavController().popBackStack()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -164,7 +164,7 @@ class MandiFragment : Fragment() {
             context?.let {
                 ToastStateHandling.toastError(
                     it,
-                    "Please check you internet connectivity",
+                    "Please check your internet connectivity",
                     Toast.LENGTH_SHORT
                 )
             }

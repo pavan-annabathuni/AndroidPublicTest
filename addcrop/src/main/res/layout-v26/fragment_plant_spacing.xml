@@ -142,6 +142,7 @@
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginBottom="@dimen/space4"
                             app:toggle_backgroundColor="#FFFFFF"
+                            android:focusedByDefault="true"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
                             app:toggle_text="ft" />

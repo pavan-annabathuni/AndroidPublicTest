@@ -241,7 +241,7 @@ class MyProfileFragment : Fragment() {
                             ToastStateHandling.toastSuccess(
                                 it1,
                                 "Successfully Logout",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             )
                         }
 
@@ -251,6 +251,7 @@ class MyProfileFragment : Fragment() {
 
         }
     private fun moveToLogin() {
+        Log.d("logout","Logout called in profile")
         val intent = Intent(context, LoginMainActivity::class.java)
 
         GlobalScope.launch {
@@ -265,6 +266,7 @@ class MyProfileFragment : Fragment() {
 
         }
         startActivity(intent)
+        activity?.finish()
     }
 
     private fun translation() {

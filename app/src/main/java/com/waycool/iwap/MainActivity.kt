@@ -149,11 +149,11 @@ class MainActivity : AppCompatActivity() {
                     if (it.data?.status == true) {
 //                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                     } else if (it.data?.status == false) {
-                        ToastStateHandling.toastError(
-                            this,
-                            "Account Logged in Another Device",
-                            Toast.LENGTH_SHORT
-                        )
+//                        ToastStateHandling.toastError(
+//                            this,
+//                            "Account Logged in Another Device",
+//                            Toast.LENGTH_SHORT
+//                        )
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent);
                     } else {
@@ -272,6 +272,7 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
+                if(bottomNavigationView.menu!=null)
                 bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this){
