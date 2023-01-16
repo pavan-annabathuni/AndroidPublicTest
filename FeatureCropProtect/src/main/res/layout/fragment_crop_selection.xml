@@ -355,6 +355,7 @@
                     app:chipSpacingHorizontal="6dp"
                     android:theme="@style/AppTheme"
                     app:chipSpacing="8dp"
+                    android:paddingEnd="24dp"
                     app:selectionRequired="true"
                     app:singleLine="true"
                     app:singleSelection="true">

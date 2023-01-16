@@ -27,6 +27,7 @@ import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.utils.NetworkUtil
@@ -122,6 +123,7 @@ class MandiFragment : Fragment() {
             callback
         )
 
+        viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -130,14 +132,14 @@ class MandiFragment : Fragment() {
             adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
             it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
             args.putString("fragment", "one")
-            this.findNavController()
+            findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
-        })
+        }, LocalSource.getLanguageCode() ?: "en")
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
             accountID = it.data?.accountId!!
-        }
+        }}
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
         filterMenu()

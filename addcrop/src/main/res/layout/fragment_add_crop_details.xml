@@ -106,6 +106,7 @@
                     android:theme="@style/Theme.MaterialComponents.Light"
                     app:chipSpacingHorizontal="4dp"
                     app:chipSpacingVertical="6dp"
+                    android:paddingEnd="24dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
