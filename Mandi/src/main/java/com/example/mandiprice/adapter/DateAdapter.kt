@@ -36,8 +36,8 @@ class DateAdapter : ListAdapter<MandiHistoryDataDomain, DateAdapter.MyViewHolder
         val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
         val date:Date = inputDateFormatter.parse(properties.arrivalDate)
 
-//        holder.arrivalDate.text = outputDateFormatter.format(date)
-        holder
+        holder.arrivalDate.text = outputDateFormatter.format(date)
+
 
         var s:Float = properties.avgPrice!!.toFloat()
        val price  = "%.2f".format(s)

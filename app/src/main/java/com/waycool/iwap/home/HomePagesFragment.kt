@@ -130,17 +130,22 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
+
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            it?.crop?.let { it1 -> args.putString("cropName", it1) }
-            it?.market?.let { it1 -> args.putString("market", it1) }
+            mandiAdapter.cropName.let { it1 -> args.putString("cropName", it1) }
+            mandiAdapter.marketName.let { it1 -> args.putString("market", it1) }
+            it?.sub_record_id?.let { it1 -> args.putString("sub_record_id", it1) }
             this.findNavController()
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
+
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -325,7 +330,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 0
             )
                 .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle, it)
+                    mandiAdapter.submitData(lifecycle,it)
 
                 }
         }

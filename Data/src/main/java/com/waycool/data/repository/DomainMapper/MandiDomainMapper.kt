@@ -10,7 +10,7 @@ class MandiDomainMapper : DomainMapper<MandiDomain, MandiEntity> {
     override fun mapToDomain(dto: MandiEntity): MandiDomain {
 
         return MandiDomain(
-            data = MandiDataDomainMapper().mapToDomain(dto.data),
+            data = dto.data?.let { MandiDataDomainMapper().mapToDomain(it) },
             message = dto.message,
             status = dto.status
         )
@@ -25,8 +25,8 @@ class MandiDataDomainMapper : DomainMapper<MandiDomainData, MandiEntityData> {
             page = dto.page,
             records = MandiRecordDomainMapper().toDomainList(dto.records),
             startFrom = dto.startFrom,
-            total_pages = dto.total_pages,
-            total_results = dto.total_results
+            total_pages = dto.totalPages,
+            total_results = dto.totalResults
         )
     }
 }
@@ -37,30 +37,28 @@ class MandiRecordDomainMapper : DomainMapper<MandiDomainRecord, MandiEntityRecor
     override fun mapToDomain(dto: MandiEntityRecord): MandiDomainRecord {
 
         return MandiDomainRecord(
-            arrival_date = dto.arrival_date,
-            avg_price = dto.avg_price,
-            created_at = dto.created_at,
-            crop =  dto.crop,
-            crop_category = dto.crop_category,
-            crop_logo = dto.crop_logo,
-            crop_master_id = dto.crop_master_id,
-            district = dto.district,
-            id = dto.id,
-            last_price = dto.last_price,
-            location = dto.location,
-            mandi_master_id = dto.mandi_master_id,
+            crop_te = dto.cropTe,
+            market_te = dto.marketTe,
+            crop_hi = dto.cropHi,
+            market_hi = dto.marketHi,
+            crop_kn = dto.cropKn,
+            market_kn = dto.marketKn,
+            market_mr = dto.marketMr,
+            crop_mr = dto.cropMr,
+            crop_ta = dto.cropTa,
+            market_ta = dto.marketTa,
+            crop = dto.crop,
             market = dto.market,
-            max_price = dto.max_price,
-            min_price = dto.min_price,
-            modal_price = dto.modal_price,
-            price_diff = dto.price_diff,
-            price_status = dto.price_status,
+            avg_price = dto.avgPrice,
             source = dto.source,
-            state = dto.state,
-            sub_district = dto.sub_district,
-            updated_at = dto.updated_at,
-            variety = dto.variety,
+            price_status = dto.priceStatus,
+            crop_master_id = dto.cropMasterId,
+            mandi_master_id = dto.mandiMasterId,
+            crop_logo = dto.cropLogo,
+            sub_record_id = dto.subRecordId,
+            id = dto.subRecordId,
             distance = dto.distance
+
 
         )
     }

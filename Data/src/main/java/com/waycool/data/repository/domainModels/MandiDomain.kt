@@ -1,42 +1,42 @@
 package com.waycool.data.repository.domainModels
 
-data class MandiDomain(val `data`: MandiDomainData,
-                       val message: String,
-                       val status: String
+
+
+data class MandiDomain(
+    var status: Boolean? = null,
+    var message: String? = null,
+    var data: MandiDomainData? = MandiDomainData()
 )
 
 data class MandiDomainData(
-    val numberOfRecordsPerPage: Int?,
-    val page: Int?,
-    val records: List<MandiDomainRecord>,
-    val startFrom: Int?,
-    val total_pages: Int?,
-    val total_results: Int?
+    var page: Int? = null,
+    var numberOfRecordsPerPage: Int? = null,
+    var startFrom: Int? = null,
+    var total_pages: Int? = null,
+    var total_results: Int? = null,
+    var records: List<MandiDomainRecord> = emptyList()
 )
 
 data class MandiDomainRecord(
-    val arrival_date: String?,
-    val avg_price: Double?,
-    val created_at: String?,
-    val crop: String?,
-    val crop_category: String?,
-    val crop_logo: String?,
-    val crop_master_id: Int?,
-    val district: String?,
-    val id: String?,
-    val last_price: Double?,
-    val location: String?,
-    val mandi_master_id: Int?,
-    val market: String?,
-    val max_price: Double?,
-    val min_price: Double?,
-    val modal_price: Double?,
-    val price_diff: Double?,
-    val price_status: Int?,
-    val source: String?,
-    val state: String?,
-    val sub_district: String?,
-    val updated_at: String?,
-    val variety: String?,
-    val distance: Double?
+    var crop_te: String? = null,
+    var market_te: String? = null,
+    var crop_master_id: Int? = null,
+    var crop_logo: String? = null,
+    var market_ta: String? = null,
+    var avg_price: Double? = null,
+    val distance: Double? = null,
+    var source: String? = null,
+    var market: String? = null,
+    var market_kn: String? = null,
+    var crop_hi: String? = null,
+    var price_status: Int? = null,
+    var crop_kn: String? = null,
+    var market_hi: String? = null,
+    var crop_mr: String? = null,
+    var mandi_master_id: Int? = null,
+    var sub_record_id: String? = null,
+    var crop_ta: String? = null,
+    var crop: String? = null,
+    var market_mr: String? = null,
+    var id: String? = null
 )

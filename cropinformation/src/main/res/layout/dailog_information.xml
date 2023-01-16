@@ -35,7 +35,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:text="Thanks for showing your interest. Currently, we’re working on a pest &amp; disease detection model for this crop. We look forward to serving you shortly."
+            android:text="Thanks for showing your interest. Currently, we’re working on a Crop Information for this crop. We look forward to serving you shortly."
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

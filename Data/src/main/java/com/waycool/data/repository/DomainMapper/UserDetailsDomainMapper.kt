@@ -22,7 +22,8 @@ class UserDetailsDomainMapper : DomainMapper<UserDetailsDomain, UserDetailsEntit
             defaultModules = dto.defaultModules,
             subscription = dto.subscription,
             roleTitle = dto.roleTitle,
-            roleId = dto.roleId
+            roleId = dto.roleId,
+            title = dto.roleTitle
         )
     }
 

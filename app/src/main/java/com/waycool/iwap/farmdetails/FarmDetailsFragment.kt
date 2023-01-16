@@ -817,10 +817,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.ClYourForm.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.INVISIBLE
                 binding.editFarmFarmsSingle.visibility = View.GONE
+                binding.MyDevice.visibility = View.GONE
+                binding.ivViewAll.visibility = View.GONE
             }else{
                 binding.ClYourForm.visibility = View.VISIBLE
                 binding.tvEditMyCrops.visibility = View.VISIBLE
                 binding.editFarmFarmsSingle.visibility = View.VISIBLE
+                binding.MyDevice.visibility = View.VISIBLE
+                binding.ivViewAll.visibility = View.VISIBLE
             }
         }
     }
