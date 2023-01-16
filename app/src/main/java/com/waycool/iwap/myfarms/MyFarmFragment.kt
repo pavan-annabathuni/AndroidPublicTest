@@ -83,6 +83,7 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         }
 
         translationSoilTesting()
+        checkRole()
     }
 
     fun translationSoilTesting() {
@@ -100,6 +101,12 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         bundle.putParcelable("farm",farm)
         findNavController().navigate(R.id.action_myFarmFragment_to_nav_farmdetails,bundle)
     }
-
-
+    private fun checkRole(){
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            var roleId = it.data?.roleId
+            if(roleId==31){
+                binding.addFarmFab.hide()
+            }else binding.addFarmFab.show()
+        }
+    }
 }

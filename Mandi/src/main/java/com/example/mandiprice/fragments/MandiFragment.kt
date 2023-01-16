@@ -114,7 +114,7 @@ class MandiFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MandiFragment.findNavController().popBackStack()
+               findNavController().popBackStack()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -126,8 +126,9 @@ class MandiFragment : Fragment() {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            it?.crop?.let { it1 -> args.putString("cropName", it1) }
-            it?.market?.let { it1 -> args.putString("market", it1) }
+            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
+            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
+            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
             args.putString("fragment", "one")
             this.findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
@@ -163,7 +164,7 @@ class MandiFragment : Fragment() {
             context?.let {
                 ToastStateHandling.toastError(
                     it,
-                    "Please check you internet connectivity",
+                    "Please check your internet connectivity",
                     Toast.LENGTH_SHORT
                 )
             }
@@ -188,7 +189,10 @@ class MandiFragment : Fragment() {
             }
         }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
-        binding.textView2.text = "Today $sdf"
+        viewModel.viewModelScope.launch {
+            val today = TranslationsManager().getString("str_today")
+            binding.textView2.text = "$today $sdf"
+        }
     }
 
     private fun filterMenu() {
@@ -231,13 +235,21 @@ class MandiFragment : Fragment() {
 
 
     private fun spinnerSetup() {
+        viewModel.viewModelScope.launch {
+            var category = TranslationsManager().getString("str_category")
         viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
             val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
-                data.categoryTagName
+                data.categoryName
             } ?: emptyList()) as MutableList<String>
+
+
             if (cropCategoryList.isNotEmpty())
-                cropCategoryList[0] = "Category"
+
+                    if(!category.isNullOrEmpty())
+                    cropCategoryList[0] = category
+                    else cropCategoryList[0] ="Category"
+
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, cropCategoryList)
             binding.spinner1.adapter = arrayAdapter
@@ -276,12 +288,12 @@ class MandiFragment : Fragment() {
                     viewModel.getAllCrops().observe(viewLifecycleOwner) {
                         val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                         var cropNameList = (filter?.map { data ->
-                            data.cropNameTag
+                            data.cropName
                         } ?: emptyList()).toMutableList()
 
                         if (cropNameList.size==0)
                             cropNameList = (it.data?.map { data ->
-                                data.cropNameTag
+                                data.cropName
                             } ?: emptyList()).toMutableList()
 
                         val arrayAdapter2 =
@@ -325,8 +337,9 @@ class MandiFragment : Fragment() {
                         viewModel.getAllCrops().observe(viewLifecycleOwner) {
                             // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                             var cropNameList = (it.data?.map { data ->
-                                data.cropNameTag
+                                data.cropName
                             } ?: emptyList()).toMutableList()
+
 
 //            if (cropNameList.size==0)
 //                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
@@ -371,12 +384,12 @@ class MandiFragment : Fragment() {
                     }}
                 }
 
-            }
+            }}
 
         viewModel.getAllCrops().observe(viewLifecycleOwner) {
            // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
             var cropNameList = (it.data?.map { data ->
-                data.cropNameTag
+                data.cropName
             } ?: emptyList()).toMutableList()
 
 //            if (cropNameList.size==0)
@@ -421,6 +434,7 @@ class MandiFragment : Fragment() {
         }
 
         viewModel.viewModelScope.launch {
+            var state = TranslationsManager().getString("str_state")
             viewModel.getState().observe(viewLifecycleOwner) {
                 val stateNameList = (it?.data?.data?.map { data ->
                     data.state_name
@@ -428,7 +442,9 @@ class MandiFragment : Fragment() {
                 stateNameList.sort()
 
                 if (stateNameList.isNotEmpty())
-                    stateNameList[0] = "State"
+                    if(!state.isNullOrEmpty())
+                    stateNameList[0] = state
+                else stateNameList[0] = "State"
                 val arrayAdapter3 =
                     ArrayAdapter(requireContext(), R.layout.item_spinner, stateNameList)
                 binding.spinner3.adapter = arrayAdapter3

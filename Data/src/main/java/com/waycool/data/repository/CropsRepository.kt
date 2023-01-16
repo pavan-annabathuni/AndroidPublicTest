@@ -3,6 +3,7 @@ package com.waycool.data.repository
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.waycool.data.Local.Entity.AiCropHistoryEntity
 import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
@@ -474,6 +475,9 @@ object CropsRepository {
             .map {
                 when (it) {
                     is Resource.Success -> {
+                        AiCropHistorySyncer().invalidateSync()
+                        AiCropHistorySyncer().getDataFromAiHistoryData()
+
                         Resource.Success(
                             AiCropDetectionDomainMapper().mapToDomain(
                                 it.data ?: AiCropDetectionDTO()
@@ -490,15 +494,25 @@ object CropsRepository {
             }
 
     }
-
-
-    fun getAiCropHistory(): Flow<Resource<List<AiCropHistoryDomain>>> {
-        return AiCropHistorySyncer().getData().map {
+    fun getAiCropHistory(searchQuery: String? = ""): Flow<Resource<List<AiCropHistoryDomain>?>> {
+        return AiCropHistorySyncer().getDataFromAiHistoryData(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
-                    AiCropHistorySyncer().invalidateSync()
-                    Resource.Success(
+//                    AiCropHistorySyncer().invalidateSync()
+                    var domainList =
                         AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
+
+                    domainList=domainList.map { history->
+                        history.disease_name= history.crop_id?.let { it1 ->
+                            LocalSource.getSelectedDiseaseEntity(
+                                it1
+                            ).diseaseName
+                        }
+                        history
+                    }
+
+                    Resource.Success(
+                        domainList
                     )
                 }
                 is Resource.Loading -> {
@@ -510,6 +524,38 @@ object CropsRepository {
             }
         }
     }
+
+
+//    fun getAiCropHistory(): Flow<Resource<List<AiCropHistoryDomain>>> {
+//        return AiCropHistorySyncer().getData().map {
+//            when (it) {
+//                is Resource.Success -> {
+//                    AiCropHistorySyncer().invalidateSync()
+//                    var domainList =
+//                        AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
+//
+//                    domainList=domainList.map { history->
+//                        history.disease_name= history.crop_id?.let { it1 ->
+//                            LocalSource.getSelectedDiseaseEntity(
+//                                it1
+//                            ).diseaseName
+//                        }
+//                        history
+//                    }
+//
+//                    Resource.Success(
+//                        domainList
+//                    )
+//                }
+//                is Resource.Loading -> {
+//                    Resource.Loading()
+//                }
+//                is Resource.Error -> {
+//                    Resource.Error(it.message)
+//                }
+//            }
+//        }
+//    }
 
     fun getCropInformation(crop_id: Int): Flow<Resource<List<CropInformationDomainData>>> {
         return CropInformationSyncer().getCropInformation(crop_id).map {

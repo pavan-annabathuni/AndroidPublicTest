@@ -66,7 +66,7 @@ class MandiGraphFragment : Fragment() {
     private var mandiMasterId: Int? = null
     private var cropName: String? = null
     private var marketName: String? = null
-    private var fragment: String? = null
+    private var sub_record_id:String? =null
 
     private val inputDateFormatter: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
@@ -79,7 +79,8 @@ class MandiGraphFragment : Fragment() {
             mandiMasterId = it.getInt("mandiId")
             cropName = it.getString("cropName")
             marketName = it.getString("market")
-            fragment = it.getString("fragment")
+            sub_record_id = it.getString("sub_record_id")
+
         }
 
     }
@@ -111,8 +112,11 @@ class MandiGraphFragment : Fragment() {
             mandiGraphPageApi()
         }
         mandiGraphPageApi()
+        Log.d("cropName", "onCreateView: $cropName")
 
 
+        binding.tvMarket.isSelected = true
+        binding.cropName.isSelected = true
         return binding.root
     }
 
@@ -130,7 +134,7 @@ class MandiGraphFragment : Fragment() {
             }
         } else {
             viewModel.viewModelScope.launch {
-                viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
+                viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId, sub_record_id)
                     .observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
@@ -179,15 +183,10 @@ class MandiGraphFragment : Fragment() {
 
     private fun onClick() {
 
-        Log.d("navigation", "onClick: $fragment")
         binding.imgBack.setOnClickListener() {
-            if (fragment == "one") {
+
                 this.findNavController()
                     .navigateUp()
-            } else {
-                this.findNavController()
-                    .popBackStack()
-            }
         }
 //
 //        binding.imgShare.setOnClickListener() {
@@ -199,7 +198,7 @@ class MandiGraphFragment : Fragment() {
 
     private fun graph() {
         viewModel.viewModelScope.launch {
-            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId)
+            viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId,sub_record_id)
                 .observe(viewLifecycleOwner) { it ->
 
 
@@ -268,7 +267,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.xAxis.setCenterAxisLabels(false);
                     binding.lineChart.xAxis.setGranularity(1f);
                     binding.lineChart.viewPortHandler.offsetTop()
-                    binding.lineChart.axisLeft.spaceTop = 100f
+                    binding.lineChart.axisLeft.spaceTop = 150f
                     // binding.lineChart.setVisibleXRangeMaximum(3f);
 
                 }

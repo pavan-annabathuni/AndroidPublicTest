@@ -129,11 +129,11 @@ class CropHealthFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("crop_health")
             binding.tvToolBar.text = title
-//            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
-//            binding.etNickName.hint =NickNamehint
-//            var areaHint = TranslationsManager().getString("e_g_50")
-//            binding.etAreaNumber.hint =areaHint
+
         }
+        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
+
+
         TranslationsManager().loadString("pestdisease_description", binding.tvOurAll,"Our ‘Pest & Disease Detection’ service helps in detecting pests & diseases and recommends control measures using Artificial Intelligence.")
         TranslationsManager().loadString("take_picture", binding.tvTakeImage,"Take a Picture")
         TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo,"Get Diagnosed")
@@ -192,17 +192,18 @@ class CropHealthFragment : Fragment() {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.viewAllVideos.visibility = View.GONE
-                                    videosBinding.ivViewAll.visibility = View.GONE
-
-                                    videosBinding.videoCardNoInternet.visibility = View.GONE
-                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                if (it1 is LoadState.Error ) {
+                                    if(adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                        videosBinding.tvNoVANs.text = "Videos are being loaded.Please wait for some time"
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    }
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
-
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.viewAllVideos.visibility = View.GONE
@@ -289,7 +290,7 @@ class CropHealthFragment : Fragment() {
 
     private fun bindObservers() {
 
-        viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
+        viewModel.getAiCropHistoryFromLocal().observe(viewLifecycleOwner) {
             if (it.data?.isEmpty() == true) {
                 binding.clTopGuide.visibility = View.VISIBLE
                 binding.clRequest.visibility = View.GONE

@@ -186,50 +186,65 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         CoroutineScope(Dispatchers.Main).launch {
 
         }
-        TranslationsManager().loadString("farm", binding.tvMyform,"Farm")
-        TranslationsManager().loadString("add_crop_info", binding.tvYourForm,"Add your Crop and get more details.")
-        TranslationsManager().loadString("add_crop", binding.tvAddFrom,"Add crops")
-        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle,"Edit")
-        TranslationsManager().loadString("farm_details", binding.tvMyformDetails,"Farm Details")
-        TranslationsManager().loadString("water_source", binding.tvWaterSource,"Water Sources")
-        TranslationsManager().loadString("pump_hp", binding.tvPump,"Pump HP")
-        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add Crop")
-        TranslationsManager().loadString("pump_type", binding.tvShowingDateTotalFoem,"Pump Type")
-        TranslationsManager().loadString("pump_size", binding.tvPempSize,"Pump Size (in Inches)")
-        TranslationsManager().loadString("pipe_height", binding.tvPempHeight,"Pump Height (in Mtrs)")
-        TranslationsManager().loadString("pump_flow", binding.tvPumpFlowRate,"Pump Flow Rate (in Ltre per hr)")
-        TranslationsManager().loadString("submersible", binding.totalFormDate,"Submersible")
-        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"My Crops")
-        TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
-        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
-        TranslationsManager().loadString("view_rainfall", binding.tvWind,"Wind")
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
-        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed,"Wind Speed")
-        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness,"Leaf wetness")
-        TranslationsManager().loadString("view_pressure", binding.tvPressure,"Pressure")
-        TranslationsManager().loadString("view_light", binding.ivSoilTempText,"Light Intensity")
-        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture,"Soil Moisture")
-        TranslationsManager().loadString("view_top", binding.tvTop,"Top")
-        TranslationsManager().loadString("view_bottom", binding.tvBottom,"Bottom")
-        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp,"Soil Temperature")
-        TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
-        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
-        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
-        TranslationsManager().loadString("deltat", binding.deltat,"Spraying Condition (Delta T)")
-        TranslationsManager().loadString("tvNDVi", binding.tvNDVi,"Farm Health Monitoring (NDVI)")
-        TranslationsManager().loadString("get_sattilate_image", binding.title3Bold,"Get Satellite imagery for your crops")
-        TranslationsManager().loadString("txt_know_more",binding.ndviButton,"Know more")
-        TranslationsManager().loadString("str_today", binding.textView159,"Today")
-        TranslationsManager().loadString("tomorrow",binding.textView164,"Tomorrow")
-        TranslationsManager().loadString("how_it_work",binding.deltaTInfo,"How does this work?")
-        TranslationsManager().loadString("str_add_device",binding.MyDevice,"Add Device")
+        TranslationsManager().loadString("farm", binding.tvMyform, "Farm")
+        TranslationsManager().loadString(
+            "add_crop_info",
+            binding.tvYourForm,
+            "Add your Crop and get more details."
+        )
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom, "Add crops")
+        TranslationsManager().loadString("str_edit", binding.editFarmFarmsSingle, "Edit")
+        TranslationsManager().loadString("farm_details", binding.tvMyformDetails, "Farm Details")
+        TranslationsManager().loadString("water_source", binding.tvWaterSource, "Water Sources")
+        TranslationsManager().loadString("pump_hp", binding.tvPump, "Pump HP")
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops, "Add Crop")
+        TranslationsManager().loadString("pump_type", binding.tvShowingDateTotalFoem, "Pump Type")
+        TranslationsManager().loadString("pump_size", binding.tvPempSize, "Pump Size (in Inches)")
+        TranslationsManager().loadString(
+            "pipe_height",
+            binding.tvPempHeight,
+            "Pump Height (in Mtrs)"
+        )
+        TranslationsManager().loadString(
+            "pump_flow",
+            binding.tvPumpFlowRate,
+            "Pump Flow Rate (in Ltre per hr)"
+        )
+        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle, "My Crops")
+        TranslationsManager().loadString("my_device", binding.titleMyDevice, "My Devices")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
+        TranslationsManager().loadString("view_rainfall", binding.tvWind, "Wind")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity, "Humidity")
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed, "Wind Speed")
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness, "Leaf wetness")
+        TranslationsManager().loadString("view_pressure", binding.tvPressure, "Pressure")
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText, "Light Intensity")
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture, "Soil Moisture")
+        TranslationsManager().loadString("view_top", binding.tvTop, "Top")
+        TranslationsManager().loadString("view_bottom", binding.tvBottom, "Bottom")
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp, "Soil Temperature")
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice, "Battery")
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo, "Elevation")
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh, "Update")
+        TranslationsManager().loadString("deltat", binding.deltat, "Spraying Condition (Delta T)")
+        TranslationsManager().loadString("tvNDVi", binding.tvNDVi, "Farm Health Monitoring (NDVI)")
+        TranslationsManager().loadString(
+            "get_sattilate_image",
+            binding.title3Bold,
+            "Get Satellite imagery for your crops"
+        )
+        TranslationsManager().loadString("txt_know_more", binding.ndviButton, "Know more")
+        TranslationsManager().loadString("str_today", binding.textView159, "Today")
+        TranslationsManager().loadString("tomorrow", binding.textView164, "Tomorrow")
+        TranslationsManager().loadString("how_it_work", binding.deltaTInfo, "How does this work?")
+        TranslationsManager().loadString("str_add_device", binding.MyDevice, "Add Device")
         //to translations
         TranslationsManager().loadString("call",binding.callDevice,"Call")
         TranslationsManager().loadString("chat",binding.messageDevice,"Chat")
         TranslationsManager().loadString("have_device",binding.addDeviceFree,"Already have our device? Click here to Add Device")
         TranslationsManager().loadString("get_recommendation",binding.textView253,"Get Advanced disease and irrigation recommendations. To know more\"")
-//        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
-
+        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
 
 
 
@@ -274,16 +289,28 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //                        deltaAdapter.update(getSprayingItems(sprayingTime.getToday()))
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data[0].Today} ")
 
+//                        if (it.data?.data?.Today.isNullOrEmpty()){
+//                            binding.linearLayout5.visibility=View.GONE
+//                        }else{
+//                            deltaAdapter.setMovieList(it.data?.data?.Today)
+//                        }
+//                        if (it.data?.data?.Tomorrow.isNullOrEmpty()){
+//                            binding.textView164.visibility=View.GONE
+//                        }else{
+//
+//
+//                        }
+
 
                     }
                     is Resource.Error -> {
                     }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(
-                            requireContext(),
-                            "Loading",
-                            Toast.LENGTH_SHORT
-                        )
+//                        ToastStateHandling.toastWarning(
+//                            requireContext(),
+//                            "Loading",
+//                            Toast.LENGTH_SHORT
+//                        )
 
                     }
                 }
@@ -434,18 +461,22 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     private fun initViewClick() {
         binding.tvEditMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
+            val bundle = Bundle()
+            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 
         binding.addCropCl.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
+            val bundle = Bundle()
+            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 
-        binding.cardAddForm.setOnClickListener {
-            val intent = Intent(activity, AddCropActivity::class.java)
-            startActivity(intent)
-        }
 
         binding.MyDevice.setOnClickListener {
             val bundle = Bundle()
@@ -496,6 +527,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         }
         binding.cardAddForm.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
+            val bundle = Bundle()
+            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 
@@ -832,10 +867,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 //            binding.ClYourForm.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.INVISIBLE
                 binding.editFarmFarmsSingle.visibility = View.GONE
+                binding.MyDevice.visibility = View.GONE
+                binding.ivViewAll.visibility = View.GONE
             }else{
 //                binding.ClYourForm.visibility = View.VISIBLE
                 binding.tvEditMyCrops.visibility = View.VISIBLE
                 binding.editFarmFarmsSingle.visibility = View.VISIBLE
+                binding.MyDevice.visibility = View.VISIBLE
+                binding.ivViewAll.visibility = View.VISIBLE
             }
         }
     }

@@ -79,7 +79,6 @@ class CropInfoFragment : Fragment(), onItemClick {
         // Inflate the layout for this fragment
         binding = FragmentCropInfoBinding.inflate(inflater)
 
-        translation()
         setBanners()
 
 
@@ -133,6 +132,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         fabButton()
 
         ViewModel.downloadCropInfo()
+        translation()
     }
 
 
@@ -484,13 +484,14 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     newsBinding.ivViewAll.visibility=View.GONE
 
                                 }
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    newsBinding.noDataNews.visibility = View.VISIBLE
-                                    newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
-
+                                if (it1 is LoadState.Error ) {
+                                    if(adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
+                                    }
 
                                 }
 
@@ -673,6 +674,10 @@ class CropInfoFragment : Fragment(), onItemClick {
 
     private fun translation(){
         TranslationsManager().loadString("str_title",binding.textView2,"Crop information")
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,"News & Article")
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View all")
       //  TranslationsManager().loadString("str_video")
     }
 

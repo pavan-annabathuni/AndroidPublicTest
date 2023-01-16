@@ -11,12 +11,15 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentAllServicesBinding
+import kotlinx.coroutines.launch
 
 
 class AllServicesFragment : Fragment() {
@@ -59,6 +62,12 @@ class AllServicesFragment : Fragment() {
             }
 
         })
+        viewModel.viewModelScope.launch {
+            val title = TranslationsManager().getString("str_all_services")
+            if(!title.isNullOrEmpty())
+            binding.topAppBar.title = title
+            else binding.topAppBar.title = "All Services"
+        }
     }
     private fun freeUser() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->
@@ -130,5 +139,6 @@ class AllServicesFragment : Fragment() {
         }
 
     }
+
 
 }

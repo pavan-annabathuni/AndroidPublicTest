@@ -46,7 +46,8 @@ interface ApiInterface {
 
     @GET("api/v1/module-masters")
     suspend fun getModuleMaster(
-        @HeaderMap map: Map<String, String>
+        @HeaderMap map: Map<String, String>,
+        @Query("lang") lang: String = "en"
     ): Response<ModuleMasterDTO>
 
 
@@ -231,19 +232,22 @@ interface ApiInterface {
         @Query("page") page: Int,
         @Query("sort_by") sort_by: String?,
         @Query("order_by") orderBy: String?,
-        @Query("search") search: String?
+        @Query("search") search: String?,
+        @Query("lang")lang: String = "en"
     ): Response<MandiDomain>
 
     @GET("api/v1/get-mandi-history")
     suspend fun getMandiHistory(
         @HeaderMap map: Map<String, String>?,
         @Query("crop_master_id") crop_master_id: Int?,
-        @Query("mandi_master_id") mandi_master_id: Int?
+        @Query("mandi_master_id") mandi_master_id: Int?,
+        @Query("sub_record_id")sub_record_id:String?
     ): Response<MandiHistoryDomain>
 
     @GET("api/v1/india-state-master")
     suspend fun getStateList(
         @HeaderMap map: Map<String, String>?,
+        @Query("lang")lang: String = "en"
     ): Response<StateModel>
 
     @FormUrlEncoded
@@ -530,5 +534,10 @@ interface ApiInterface {
         @Query("plot_id") plotId: Int
     ): Response<PestAndDiseaseModel>
 
+    @GET("api/v1/get-mandi-master")
+    suspend fun getMandiMaster(
+        @HeaderMap map: Map<String, String>?,
+        @Query("lang")lang: String = "en"
+    ): Response<MandiMasterModel>
 
 }

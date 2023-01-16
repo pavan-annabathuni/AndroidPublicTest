@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -39,22 +40,25 @@ class LoginMainActivity : AppCompatActivity() {
         setContentView(binding!!.root)
         navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
+        Log.d("logout","in login")
+
         lifecycleScope.launch(Dispatchers.Main) {
             if (viewModel.getIsFirst()) {
                 navHost.findNavController().setGraph(R.navigation.onboarding_nav)
+                Log.d("logout","in login - onboarding nav")
+
             } else {
                 navHost.findNavController().setGraph(R.navigation.login_nav)
+                Log.d("logout","in login - login nav")
+
             }
         }
-
-
-
         getFCMToken()
         viewModel.saveDeviceDetails(deviceManufacturer, deviceName)
     }
 
     private fun getFCMToken() {
-        FirebaseMessaging.getInstance().getToken()
+        FirebaseMessaging.getInstance().token
             .addOnCompleteListener(OnCompleteListener addOnCompleteListener@{ task: Task<String?> ->
                 if (!task.isSuccessful) {
                     return@addOnCompleteListener
@@ -75,6 +79,11 @@ class LoginMainActivity : AppCompatActivity() {
             TruecallerSDK.getInstance()
                 .onActivityResultObtained(this, requestCode, resultCode, data);
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("logout","in login - on destroy")
     }
 
 }

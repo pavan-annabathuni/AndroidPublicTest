@@ -154,7 +154,8 @@ object NetworkSource {
 
     fun getModuleMaster() = flow<Resource<ModuleMasterDTO?>> {
         try {
-            val response = apiInterface.getModuleMaster(headerMapPublic)
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            val response = apiInterface.getModuleMaster(headerMapPublic, lang = langCode)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
             } else {
@@ -802,7 +803,7 @@ object NetworkSource {
         sortBy: String?, orderBy: String?, search: String?, accountId: Int?
     ): Flow<PagingData<MandiDomainRecord>> {
         return Pager(
-            config = PagingConfig(pageSize = 50, prefetchDistance = 2, initialLoadSize = 2),
+            config = PagingConfig(pageSize = 15, prefetchDistance = 2, initialLoadSize = 2),
             pagingSourceFactory = {
                 MandiPagingSource(
                     apiInterface, lat, lon, crop_category,
@@ -813,12 +814,12 @@ object NetworkSource {
     }
 
     fun getMandiHistory(
-        headerMap: Map<String, String>, crop_master_id: Int?, mandi_master_id: Int?
+        headerMap: Map<String, String>, crop_master_id: Int?, mandi_master_id: Int?,sub_record_id:String?
     ) = flow<Resource<MandiHistoryDomain?>> {
 
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getMandiHistory(headerMap, crop_master_id, mandi_master_id)
+            val response = apiInterface.getMandiHistory(headerMap, crop_master_id, mandi_master_id,sub_record_id)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -833,10 +834,10 @@ object NetworkSource {
     fun getStateList(
         headerMap: Map<String, String>
     ) = flow<Resource<StateModel?>> {
-
+        val langCode = LocalSource.getLanguageCode() ?: "en"
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getStateList(headerMap)
+            val response = apiInterface.getStateList(headerMap, lang = langCode)
 
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
@@ -1329,6 +1330,23 @@ object NetworkSource {
         emit(Resource.Loading())
         try {
             val response = apiInterface.getDisease(map, account_id, plot_id)
+            if (response.isSuccessful)
+                emit(Resource.Success(response.body()))
+            else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        } catch (e: Exception) {
+            //   emit(Resource.Error(e.message))
+        }
+    }
+
+    fun getMandiMaster() = flow<Resource<MandiMasterModel?>> {
+        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val langCode = LocalSource.getLanguageCode() ?: "en"
+        emit(Resource.Loading())
+        try {
+            val response = apiInterface.getMandiMaster(map, lang = langCode)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

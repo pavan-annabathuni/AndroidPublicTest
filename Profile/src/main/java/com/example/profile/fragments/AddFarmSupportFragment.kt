@@ -102,6 +102,13 @@ class AddFarmSupportFragment : Fragment() {
         onClick()
         getLocation()
         binding.imgLocation.setOnClickListener() {
+            context?.let { it1 ->
+                ToastStateHandling.toastSuccess(
+                    it1,
+                    "Loading",
+                    Toast.LENGTH_SHORT
+                )
+            }
             getLocation()
         }
         binding.farmManger.background =
@@ -341,11 +348,13 @@ class AddFarmSupportFragment : Fragment() {
 //        TranslationsManager().loadString("delete_farm_support",areYouSure)
 
         viewModel.viewModelScope.launch {
-            var title = ""
+            var title = TranslationsManager().getString("str_add_farm_support")
+
+            if(!title.isNullOrEmpty())
+            binding.topAppBar.title = title
+            else  binding.topAppBar.title = "Add Farm Support"
             submit = TranslationsManager().getString("str_submit")
             binding.submit.text = submit
-//            title = TranslationsManager().getString("str_submit")
-//            binding.topAppBar.title = title
             binding.tvName.hint = TranslationsManager().getString("str_farmer_name")
             binding.mobilenoEt.hint = TranslationsManager().getString("str_mobile_number")
         }

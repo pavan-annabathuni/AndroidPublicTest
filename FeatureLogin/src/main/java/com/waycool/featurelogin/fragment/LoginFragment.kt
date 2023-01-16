@@ -67,8 +67,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        binding.backBtn.setOnClickListener {
+            activity?.finish()
+        }
         val trueScope = TruecallerSdkScope.Builder(requireContext(), sdkCallback)
             .consentMode(TruecallerSdkScope.CONSENT_MODE_BOTTOMSHEET)
             .buttonColor(
@@ -134,6 +135,7 @@ class LoginFragment : Fragment() {
 
     private fun checkForValidMobileNumber(mobileno: String): Boolean {
         val pattern = Pattern.compile("^[6-9]\\d{9}\$")
+
         val matcher = pattern.matcher(mobileno)
         return matcher.find()
     }

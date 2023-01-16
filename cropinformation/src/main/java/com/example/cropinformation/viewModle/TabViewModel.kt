@@ -133,7 +133,6 @@ class TabViewModel:ViewModel {
     }
     fun cropAdvisory(){
         viewModelScope.launch {
-
             try {
                 val VideoData = videoApi.retrofitService.getInfromation()
                 _response3.value = VideoData.data

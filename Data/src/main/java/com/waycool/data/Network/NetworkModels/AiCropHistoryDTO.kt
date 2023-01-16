@@ -1,7 +1,6 @@
 package com.waycool.data.Network.NetworkModels
 
 import com.google.gson.annotations.SerializedName
-import com.waycool.data.Local.Entity.CropData
 
 data class AiCropHistoryDTO(
     @SerializedName("status"  ) var status  : Boolean?        = null,
@@ -27,7 +26,7 @@ data class AiHistoryData(
     @SerializedName("disease_id"    ) var diseaseId: Int?    = null,
     @SerializedName("crop_id"       ) var cropId: Int?    = null,
     @SerializedName("updated_at"    ) var updatedAt: String? = null,
-    @SerializedName("crop"          ) var crop: CropData = CropData()
+    @SerializedName("crop"          ) var crop: CropDataData = CropDataData()
     )
 
   data class  CropDataData(

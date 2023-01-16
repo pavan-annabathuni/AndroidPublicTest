@@ -26,6 +26,7 @@ class AddUseAdapter(val onClickListener: OnClickListener,val userDetailsDomain: 
         val name = binding.name
         val number = binding.tvNumber
         val firstName = binding.textView10
+        val roleName = binding.tvRole
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -65,6 +66,7 @@ class AddUseAdapter(val onClickListener: OnClickListener,val userDetailsDomain: 
             holder.delete.visibility = View.INVISIBLE
         }
 
+        holder.roleName.text = userDetailsDomain.roleTitle
     }
     companion object DiffCallback : DiffUtil.ItemCallback<GetFarmSupportData>() {
 

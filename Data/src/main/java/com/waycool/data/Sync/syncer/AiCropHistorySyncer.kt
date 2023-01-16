@@ -2,6 +2,7 @@ package com.waycool.data.Sync.syncer
 
 import androidx.datastore.preferences.core.Preferences
 import com.waycool.data.Local.Entity.AiCropHistoryEntity
+import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.AiCropHistoryEntityMapper
 import com.waycool.data.Network.NetworkSource
@@ -21,24 +22,42 @@ class AiCropHistorySyncer : SyncInterface {
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
-    fun getData(): Flow<Resource<List<AiCropHistoryEntity>>> {
+//    fun getData(): Flow<Resource<List<AiCropHistoryEntity>>> {
+//
+//        GlobalScope.launch(Dispatchers.IO) {
+//            if (isSyncRequired()) {
+//                makeNetworkCall()
+//            }
+//        }
+//        return getDataFromLocal()
+//    }
 
+//    private fun getDataFromLocal(): Flow<Resource<List<AiCropHistoryEntity>>> {
+//        return LocalSource.getAiCropHistory()?.map {
+//            if (it != null) {
+//                (Resource.Success(it))
+//            } else {
+//                (Resource.Error(""))
+//            }
+//        } ?: emptyFlow()
+//    }
+    fun getDataFromAiHistoryData(searchQuery: String? = ""): Flow<Resource<List<AiCropHistoryEntity>>> {
         GlobalScope.launch(Dispatchers.IO) {
             if (isSyncRequired()) {
                 makeNetworkCall()
             }
         }
-        return getDataFromLocal()
+        return getDataFromAiHistory(searchQuery)
     }
 
-    private fun getDataFromLocal(): Flow<Resource<List<AiCropHistoryEntity>>> {
-        return LocalSource.getAiCropHistory()?.map {
+    private fun getDataFromAiHistory(searchQuery: String? = ""): Flow<Resource<List<AiCropHistoryEntity>>> {
+        return LocalSource.getAiHistory(searchQuery).map {
             if (it != null) {
-                (Resource.Success(it))
+                Resource.Success(it)
             } else {
-                (Resource.Error(""))
+                Resource.Error("")
             }
-        } ?: emptyFlow()
+        }
     }
 
     private fun makeNetworkCall() {
@@ -52,7 +71,7 @@ class AiCropHistorySyncer : SyncInterface {
                     .collect {
                         when (it) {
                             is Resource.Success -> {
-                                LocalSource.insertAiCropHistory(
+                                LocalSource.insertHistory(
                                     AiCropHistoryEntityMapper().toEntityList(
                                         it.data?.data!!
                                     )

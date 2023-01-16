@@ -3,6 +3,8 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.translations.TranslationsManager
@@ -38,6 +41,10 @@ class CropHistoryFragment : Fragment() {
     private var _binding: FragmentCropHistoryBinding? = null
     private val binding get() = _binding!!
     private val REQUEST_CODE_SPEECH_INPUT = 1
+    private var searchCharSequence: CharSequence? = ""
+    private var handler: Handler? = null
+
+    //    private lateinit var historyAdapter: AiCropHistoryAdapter
     private lateinit var historyAdapter: AiCropHistoryAdapter
     private val viewModel by lazy { ViewModelProvider(this)[CropHealthViewModel::class.java] }
     var filteredList = ArrayList<AiCropHistoryDomain>()
@@ -53,7 +60,7 @@ class CropHistoryFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        clickSearch()
+//        clickSearch()
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = historyAdapter
@@ -79,6 +86,24 @@ class CropHistoryFragment : Fragment() {
 
 
         }
+
+        handler = Handler(Looper.myLooper()!!)
+        val searchRunnable =
+            Runnable {
+                bindObservers  (
+                    searchQuery = searchCharSequence.toString()
+                )
+            }
+        binding.searchView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                searchCharSequence = charSequence
+                handler!!.removeCallbacks(searchRunnable)
+                handler!!.postDelayed(searchRunnable, 150)
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
     }
 
     private fun speechToText() {
@@ -153,8 +178,8 @@ class CropHistoryFragment : Fragment() {
         }
     }
 
-    private fun bindObservers() {
-        viewModel.getAiCropHistory().observe(viewLifecycleOwner) {
+    private fun bindObservers( searchQuery: String? = "") {
+        viewModel.getAiCropHistoryFromLocal(searchQuery).observe(viewLifecycleOwner) {
 
             when (it) {
                 is Resource.Success -> {
@@ -191,67 +216,69 @@ class CropHistoryFragment : Fragment() {
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
-    private fun clickSearch() {
-        binding.searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                charSequence: CharSequence,
-                i: Int,
-                i1: Int,
-                i2: Int
-
-            ) {
-            }
-
-            override fun onTextChanged(
-                charSequence: CharSequence,
-                i: Int,
-                i1: Int,
-                i2: Int
-            ) {
-
-                val temp = ArrayList<AiCropHistoryDomain>()
-//                filteredList.clear()
-                if (charSequence.isNotEmpty()) {
-                    filteredList.forEach {
-                        if (it.cropdata.cropName.toString().lowercase()
-                                .contains(charSequence.toString().lowercase())
-                        ) {
-                            if (!temp.contains(it)) {
-                                temp.add(it)
-                            }
-                        }
-                    }
-                    historyAdapter.upDateList(temp)
-                    Log.d("TAG", "::::stderr  $temp")
-                }
-//                if (temp.isEmpty()){
-//                    soilHistoryAdapter.upDateList(filteredList)
-//                }
-            }
-//                filteredList.forEach {
-//                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
-//                     filteredList.add(filteredList)
-//                 }
-//                }
-
-//                for (item in filteredList[].soil_test_number!!.indices) {
-//                    Log.d("TAG", "::::stderr $charSequence")
-//                    if (filteredList[0].soil_test_number!!.lowercase()
-//                            .startsWith(charSequence.toString().lowercase())
-//                    ) {
-////                        filteredList.add(filteredList)
-//                        Log.d(TAG, "onTextChangedList:$filteredList")
-//                        Log.d("TAG", "::::::::stderr $charSequence")
-//                    }
+//    private fun clickSearch() {
+//        binding.searchView.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(
+//                charSequence: CharSequence,
+//                i: Int,
+//                i1: Int,
+//                i2: Int
 //
-//                }
-
-//                binding.etSearchItem.getText().clear();
+//            ) {
 //            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
-    }
+//
+//            override fun onTextChanged(
+//                charSequence: CharSequence,
+//                i: Int,
+//                i1: Int,
+//                i2: Int
+//            ) {
+//
+//                val temp = ArrayList<AiCropHistoryDomain>()
+////                filteredList.clear()
+//                Log.d("TAG", "onTextChangedListShow: $temp")
+//                if (charSequence.isNotEmpty()) {
+//                    filteredList.forEach {
+//                        if (it.cropdata.cropName.toString().lowercase()
+//                                .contains(charSequence.toString().lowercase())
+//                        ) {
+//                            if (!temp.contains(it)) {
+//                                temp.add(it)
+//                            }
+//                        }
+//                    }
+//                    historyAdapter.upDateList(temp)
+////                    historyAdapter.submitList(temp)
+//                    Log.d("TAG", "::::stderr  $temp")
+//                }
+////                if (temp.isEmpty()){
+////                    soilHistoryAdapter.upDateList(filteredList)
+////                }
+//            }
+////                filteredList.forEach {
+////                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
+////                     filteredList.add(filteredList)
+////                 }
+////                }
+//
+////                for (item in filteredList[].soil_test_number!!.indices) {
+////                    Log.d("TAG", "::::stderr $charSequence")
+////                    if (filteredList[0].soil_test_number!!.lowercase()
+////                            .startsWith(charSequence.toString().lowercase())
+////                    ) {
+//////                        filteredList.add(filteredList)
+////                        Log.d(TAG, "onTextChangedList:$filteredList")
+////                        Log.d("TAG", "::::::::stderr $charSequence")
+////                    }
+////
+////                }
+//
+////                binding.etSearchItem.getText().clear();
+////            }
+//
+//            override fun afterTextChanged(editable: Editable) {}
+//        })
+//    }
 
     private fun fabButton() {
         var isVisible = false

@@ -1,47 +1,47 @@
 package com.waycool.data.Local.Entity
 
+import com.google.gson.annotations.SerializedName
+import com.waycool.data.Network.NetworkModels.MandiData
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 
 data class MandiEntity(
-    val `data`: MandiEntityData,
-    val message: String,
-    val status: String
+    @SerializedName("status"  ) var status  : Boolean? = null,
+    @SerializedName("message" ) var message : String?  = null,
+    @SerializedName("data"    ) var data    : MandiEntityData?    = MandiEntityData()
 )
 
 data class MandiEntityData(
-    val numberOfRecordsPerPage: Int?,
-    val page: Int?,
-    val records: List<MandiEntityRecord>,
-    val startFrom: Int?,
-    val total_pages: Int?,
-    val total_results: Int?
+    var numberOfRecordsPerPage : Int?               = null,
+    var page                   : Int?               = null,
+    val records: List<MandiEntityRecord> = emptyList(),
+    var startFrom              : Int?               = null,
+    var totalPages             : Int?               = null,
+    var totalResults           : Int?               = null,
 )
 
 data class MandiEntityRecord(
-    val arrival_date: String?,
-    val avg_price: Double?,
-    val created_at: String?,
-    val crop: String?,
-    val crop_category: String?,
-    val crop_logo: String?,
-    val crop_master_id: Int?,
-    val district: String?,
-    val id: String?,
-    val last_price: Double?,
-    val location: String?,
-    val mandi_master_id: Int?,
-    val market: String?,
-    val max_price: Double?,
-    val min_price: Double?,
-    val modal_price: Double?,
-    val price_diff: Double?,
-    val price_status: Int?,
-    val source: String?,
-    val state: String?,
-    val sub_district: String?,
-    val updated_at: String?,
-    val variety: String?,
-    val distance: Double?
+     var cropTe        : String? = null,
+     var marketTe      : String? = null,
+     var cropMasterId  : Int?    = null,
+     var cropLogo      : String? = null,
+     var marketTa      : String? = null,
+     var avgPrice      : Double?    = null,
+     var source        : String? = null,
+     var market        : String? = null,
+     var marketKn      : String? = null,
+    var cropHi        : String? = null,
+     var priceStatus   : Int?    = null,
+     var cropKn        : String? = null,
+     var marketHi      : String? = null,
+    var cropMr        : String? = null,
+     var mandiMasterId : Int?    = null,
+     var subRecordId   : String? = null,
+    var cropTa        : String? = null,
+     var crop          : String? = null,
+    var marketMr      : String? = null,
+    var id            : String? = null,
+     var distance     : Double? = null
+
 )
 
 
