@@ -269,20 +269,21 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.ivViewAll.visibility = View.GONE
                     videosBinding.viewAllVideos.visibility = View.GONE
-
-
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.ivViewAll.visibility = View.GONE
-                                    videosBinding.viewAllVideos.visibility = View.GONE
-                                    videosBinding.videoCardNoInternet.visibility = View.GONE
-                                    videosBinding.videosListRv.visibility = View.INVISIBLE
+                                if (it1 is LoadState.Error) {
+                                    if(adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                        videosBinding.tvNoVANs.text="Videos are being loaded.Please wait for some time"
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                    }
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
