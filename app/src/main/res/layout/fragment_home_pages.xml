@@ -116,12 +116,23 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:fontFamily="@font/playfair_reg"
-                        android:text="Namaste"
                         android:textColor="@color/textdark"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/playfair_reg"
+                        android:text="!"
+                        android:textColor="@color/textdark"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="2dp"
+                        app:layout_constraintTop_toTopOf="@id/tvGoodMorning"
+                        app:layout_constraintBottom_toBottomOf="@id/tvGoodMorning"
+                        app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"/>
 
                     <LinearLayout
                         android:id="@+id/ll"
@@ -170,6 +181,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clAdd"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/txt16"
@@ -826,7 +838,7 @@
                                 android:layout_marginTop="2dp"
                                 android:layout_marginEnd="@dimen/txt16"
                                 android:fontFamily="@font/notosans_medium"
-                                android:text="Today Tue 26, Jul"
+                                android:text="Tue 26, Jul"
                                 android:textColor="#585858"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="@+id/tvTemp"
@@ -999,6 +1011,13 @@
                                     android:layout_marginEnd="24dp"
                                     android:fontFamily="@font/notosans_medium"
                                     android:text="Chance of rain"
+                                    android:ellipsize="marquee"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:maxLines="1"
+                                    android:scrollHorizontally="true"
+                                    android:singleLine="true"
                                     android:textColor="#585858"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -1150,7 +1169,7 @@
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/banner_indicators"
-                        android:layout_width="120dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
@@ -1164,10 +1183,10 @@
                         app:tabGravity="center"
                         app:tabIndicator="@null"
                         app:tabIndicatorHeight="0dp"
-                        app:tabMaxWidth="38dp"
+                        app:tabMaxWidth="30dp"
                         app:tabMode="auto"
-                        app:tabPaddingEnd="8dp"
-                        app:tabPaddingStart="8dp"
+                        app:tabPaddingEnd="2dp"
+                        app:tabPaddingStart="2dp"
                         app:tabSelectedTextColor="@color/white"
                         app:tabTextAppearance="@style/TabTextBannerAppearance"
                         app:tabTextColor="@color/transparent" />
@@ -1244,7 +1263,7 @@
                         android:id="@+id/recyclerview"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/space16"
                         android:background="#fff"

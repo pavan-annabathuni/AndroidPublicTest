@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -34,7 +35,6 @@ import com.waycool.weather.R
 import com.waycool.weather.adapters.HourlyAdapter
 import com.waycool.weather.adapters.WeatherAdapter
 import com.waycool.weather.databinding.FragmentWeatherBinding
-import com.waycool.weather.utils.Constants.*
 import com.waycool.weather.utils.WeatherIcons
 import com.waycool.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.launch
@@ -101,14 +101,34 @@ class WeatherFragment : Fragment() {
 //        observer()
         setBanners()
         translation()
+        binding.lableRain.isSelected = true
+        binding.lableVisibility.isSelected = true
         //getWeatherData("12.22", "77.32")
 //        ViewModel.getCurrentWeather()
 //        ViewModel.getWeekWeather()
 //        ViewModel.getHourlyWeather()
 
 
-        binding.imgBack.setOnClickListener { requireActivity().onBackPressed() }
+        binding.imgBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.let {
+                        it.finish()
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
     }
 
     private fun networkCall() {
@@ -125,11 +145,6 @@ class WeatherFragment : Fragment() {
             setBanners()
         }
     }
-//     fun onClick(){
-//          binding.recycleViewHourly.setOnClickListener(){
-//              binding.recycleViewHourly.setBackgroundResource(R.drawable.green_border)
-//          }
-//     }
 
 
     fun screenShot() {
@@ -172,10 +187,7 @@ class WeatherFragment : Fragment() {
                 loadWeatherFromFarms(it.data!!)
             }
         }
-//
-//        GlobalScope.launch {
-//            getWeatherData("16.22","72.33")
-//        }
+
 
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
             if (null != it) {
@@ -693,16 +705,17 @@ class WeatherFragment : Fragment() {
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
     fun translation(){
-        TranslationsManager().loadString("str_Weather",binding.textView)
-        TranslationsManager().loadString("str_share",binding.imgShare)
-        TranslationsManager().loadString("str_today",binding.icon2)
-        TranslationsManager().loadString("str_today",binding.today)
-        TranslationsManager().loadString("str_humidity",binding.lableHumidity)
-        TranslationsManager().loadString("str_vsibility",binding.lableVisibility)
-        TranslationsManager().loadString("str_wind",binding.lableWind)
-        TranslationsManager().loadString("str_rain",binding.lableRain)
-        TranslationsManager().loadString("str_hourly",binding.tvHouly)
-        TranslationsManager().loadString("str_next",binding.tvDaily)
+
+        TranslationsManager().loadString("str_Weather",binding.textView,"Weather")
+        TranslationsManager().loadString("str_share",binding.imgShare,"Share")
+        TranslationsManager().loadString("str_today",binding.icon2,"Today")
+        TranslationsManager().loadString("str_today",binding.today,"Today")
+        TranslationsManager().loadString("str_humidity",binding.lableHumidity,"Humidity")
+        TranslationsManager().loadString("str_vsibility",binding.lableVisibility,"Visibility")
+        TranslationsManager().loadString("str_wind",binding.lableWind,"Wind")
+        TranslationsManager().loadString("str_rain",binding.lableRain,"Chance of Rain")
+        TranslationsManager().loadString("str_hourly",binding.tvHouly,"Hourly")
+        TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
     }
 }

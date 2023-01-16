@@ -130,10 +130,19 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.imgShare.setOnClickListener {
             screenShot(diseaseId, diseaseName)
         }
-
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
         TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)
+        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
+        TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
+
+
+
+        setVideos()
+        setNews()
+        setBanners()
+        audioPlayer()
+
 
         var chemical = "Chemical"
         viewModel.viewModelScope.launch {
@@ -247,10 +256,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             }
         }
 
-        setVideos()
-        setNews()
-        setBanners()
-        audioPlayer()
+
     }
 
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
@@ -320,6 +326,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.tvNoVANS.text="News and Articles are being loaded.Please wait for some time"
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility=View.GONE
                                     newsBinding.ivViewAll.visibility=View.GONE
@@ -372,18 +379,19 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.videoCardNoInternet.visibility = View.GONE
-                                    videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    videosBinding.viewAllVideos.visibility=View.GONE
-                                    videosBinding.ivViewAll.visibility=View.GONE
+                                if (it1 is LoadState.Error ) {
+                                    if(adapter.itemCount == 0) {
+                                        videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        videosBinding.videoCardNoInternet.visibility = View.GONE
+                                        videosBinding.tvNoVANs.text =
+                                            "Videos are being loaded.Please wait for some time"
+                                        videosBinding.videosListRv.visibility = View.INVISIBLE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.GONE
+                                    }
 
                                 }
                                 if (it1 is LoadState.NotLoading) {
-                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
-
-
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE

@@ -139,12 +139,8 @@ class CropInfoFragment : Fragment(), onItemClick {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) { it ->
             val data = it.data!!
             size = it.data!!.size
-
-            //data.sortedBy { it.id }
             binding.ViewPager.adapter = ViewpagerAdapter(this, it.data, data.size, cropId!!)
             binding.tvTotalItem.text = "/${data.size}"
-
-
 
 
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
@@ -474,21 +470,25 @@ class CropInfoFragment : Fragment(), onItemClick {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    newsBinding.noDataNews.visibility = View.VISIBLE
-                                    newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
+                                if (it1 is LoadState.Error) {
+                                    if(adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.tvNoVANS.text = "News and Articles are being loaded.Please wait for some time"
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
+                                    }
 
                                 }
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    newsBinding.noDataNews.visibility = View.VISIBLE
-                                    newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
-
+                                if (it1 is LoadState.Error ) {
+                                    if(adapter.itemCount == 0) {
+                                        newsBinding.noDataNews.visibility = View.VISIBLE
+                                        newsBinding.videoCardNoInternet.visibility = View.GONE
+                                        newsBinding.newsListRv.visibility = View.INVISIBLE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
+                                    }
 
                                 }
 
@@ -516,24 +516,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                     }
                 }
             }
-
-
-
         }
-
-        /*    ViewModel.getVansNewsList(cropId,module_id).observe(requireActivity()) {
-                adapter.submitData(lifecycle, it)
-
-                *//*   if (adapter.snapshot().size==0){
-                   newsBinding.noDataNews.visibility=View.VISIBLE
-               }
-               else{
-                   newsBinding.noDataNews.visibility=View.GONE
-                   adapter.submitData(lifecycle, it)
-               }*//*
-
-        }*/
-
     }
 
     private fun setVideos() {
@@ -548,8 +531,6 @@ class CropInfoFragment : Fragment(), onItemClick {
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                     videosBinding.viewAllVideos.visibility=View.GONE
                     videosBinding.ivViewAll.visibility=View.GONE
-
-
                 }
                 else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -570,12 +551,8 @@ class CropInfoFragment : Fragment(), onItemClick {
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                     videosBinding.viewAllVideos.visibility=View.GONE
                                     videosBinding.ivViewAll.visibility=View.GONE
-
                                 }
-
                                 if (it1 is LoadState.NotLoading) {
-                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
-
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
@@ -670,8 +647,10 @@ class CropInfoFragment : Fragment(), onItemClick {
     }
 
     private fun translation(){
-        TranslationsManager().loadString("str_title",binding.textView2)
-      //  TranslationsManager().loadString("str_video")
+        TranslationsManager().loadString("str_title",binding.textView2,"Crop information")
+
+
+        //  TranslationsManager().loadString("str_video")
     }
 
     override fun onItemClickListener(it: VansFeederListDomain?) {

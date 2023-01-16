@@ -98,7 +98,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         initMyObserve()
         myCrop()
         farmDetailsObserve()
-        translationSoilTesting()
+        translations()
+        checkRole()
 
 
         binding.backBtn.setOnClickListener {
@@ -115,7 +116,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     }
 
-    fun translationSoilTesting() {
+    fun translations() {
         CoroutineScope(Dispatchers.Main).launch {
 
         }
@@ -172,6 +173,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         TranslationsManager().loadString("tomorrow", binding.textView164, "Tomorrow")
         TranslationsManager().loadString("how_it_work", binding.deltaTInfo, "How does this work?")
         TranslationsManager().loadString("str_add_device", binding.MyDevice, "Add Device")
+        //to translations
+        TranslationsManager().loadString("call",binding.callDevice,"Call")
+        TranslationsManager().loadString("chat",binding.messageDevice,"Chat")
+        TranslationsManager().loadString("have_device",binding.addDeviceFree,"Already have our device? Click here to Add Device")
+        TranslationsManager().loadString("get_recommendation",binding.textView253,"Get Advanced disease and irrigation recommendations. To know more\"")
+        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
+
+
+
 
     }
 
@@ -265,9 +275,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
             }
-//                        if (it.data?.size!! < 8) {
-//                            binding.addLl.visibility = View.VISIBLE
-//                        } else binding.addLl.visibility = View.GONE
+                        if (it.data?.size!! < 8) {
+                            binding.tvEditMyCrops.visibility = View.VISIBLE
+                        } else binding.tvEditMyCrops.visibility = View.GONE
         }
     }
 
@@ -801,4 +811,17 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         return SphericalUtil.computeArea(latLngs)
     }
 
+    private fun checkRole(){
+        viewModel.getUserDetails().observe(viewLifecycleOwner){
+            if(it.data?.roleId==31){
+            binding.ClYourForm.visibility = View.GONE
+            binding.tvEditMyCrops.visibility = View.INVISIBLE
+                binding.editFarmFarmsSingle.visibility = View.GONE
+            }else{
+                binding.ClYourForm.visibility = View.VISIBLE
+                binding.tvEditMyCrops.visibility = View.VISIBLE
+                binding.editFarmFarmsSingle.visibility = View.VISIBLE
+            }
+        }
+    }
 }

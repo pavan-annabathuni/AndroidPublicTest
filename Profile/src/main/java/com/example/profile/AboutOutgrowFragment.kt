@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.profile.databinding.FragmentAboutOutgrowBinding
+import com.waycool.data.translations.TranslationsManager
 
 
 class AboutOutgrowFragment : Fragment() {
@@ -27,6 +28,7 @@ class AboutOutgrowFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
+        TranslationsManager().loadString("about_outgrow",binding.tvAboutOutgrowDescription,getString(R.string.str_about_outGrow))
         return binding.root
     }
 }

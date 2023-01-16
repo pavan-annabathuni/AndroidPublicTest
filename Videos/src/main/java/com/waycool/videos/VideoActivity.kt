@@ -51,24 +51,27 @@ class VideoActivity : AppCompatActivity() {
                 }
                 if (deepLink != null) {
 
-                    Log.d("videoLink","$deepLink")
-                    val id = deepLink.getQueryParameter ("video_id")
-                    val title = deepLink.getQueryParameter ("video_name")
-                    val description = deepLink.getQueryParameter ("video_desc")
-                    val contentUrl = deepLink.getQueryParameter ("content_url")
+                    if (deepLink.lastPathSegment == "videoslist") {
+                        this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
+                    } else {
+                        Log.d("videoLink", "$deepLink")
+                        val id = deepLink.getQueryParameter("video_id")
+                        val title = deepLink.getQueryParameter("video_name")
+                        val description = deepLink.getQueryParameter("video_desc")
+                        val contentUrl = deepLink.getQueryParameter("content_url")
 
-                    Log.d("Video","$deepLink")
-
-                        if (!id.isNullOrEmpty()&&!title.isNullOrEmpty()) {
+                        Log.d("Video", "$deepLink")
+                        if (!id.isNullOrEmpty() && !title.isNullOrEmpty()) {
                             val args = Bundle()
                             args.putInt("id", id.toInt())
-                            args.putString("title",title)
-                            args.putString("description",description)
-                            args.putString("url",contentUrl)
-
-                            this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.action_videosListFragment_to_playVideoFragment, args)
+                            args.putString("title", title)
+                            args.putString("description", description)
+                            args.putString("url", contentUrl)
+                            this.findNavController(R.id.nav_host_fragment_videos)
+                                .navigate(R.id.action_videosListFragment_to_playVideoFragment, args)
                         }
                     }
+                }
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
     }

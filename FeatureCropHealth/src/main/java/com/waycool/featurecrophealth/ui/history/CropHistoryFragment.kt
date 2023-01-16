@@ -16,14 +16,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
-import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -32,7 +30,6 @@ import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropHistoryBinding
 import com.waycool.featurecrophealth.utils.Constant
-import com.waycool.featurecrophealth.utils.NetworkResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -55,6 +55,11 @@ class FarmSupportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getUserDetails().observe(viewLifecycleOwner){ resource ->
+            if(resource.data?.roleId==31){
+                binding.addUser.visibility = View.INVISIBLE
+            }else{
+                binding.addUser.visibility = View.VISIBLE
+            }
             val accountId: Int? = resource.data?.accountId!!
             mAddUseAdapter = AddUseAdapter(AddUseAdapter.OnClickListener {
                 name = it.name.toString()
@@ -122,9 +127,10 @@ class FarmSupportFragment : Fragment() {
             username.text = deleteDes
 
         }
-        TranslationsManager().loadString("delete_farm_support",areYouSure)
-        TranslationsManager().loadString("str_delete",delete)
-        TranslationsManager().loadString("str_cancel",cancel)
+        TranslationsManager().loadString("delete_farm_support",areYouSure,"Are you Sure you want to \n" +
+                "delete this account? ")
+        TranslationsManager().loadString("str_delete",delete,"Delete")
+        TranslationsManager().loadString("str_cancel",cancel,"Cancel")
 
         cancel.setOnClickListener { dialog.dismiss() }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

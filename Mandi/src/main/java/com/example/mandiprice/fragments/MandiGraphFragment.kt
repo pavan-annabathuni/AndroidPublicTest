@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -266,6 +267,8 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.getLegend().setEnabled(false);
                     binding.lineChart.xAxis.setCenterAxisLabels(false);
                     binding.lineChart.xAxis.setGranularity(1f);
+                    binding.lineChart.viewPortHandler.offsetTop()
+                    binding.lineChart.axisLeft.spaceTop = 100f
                     // binding.lineChart.setVisibleXRangeMaximum(3f);
 
                 }
@@ -354,7 +357,10 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-                    binding.imgShare.isEnabled = true
+                    Handler().postDelayed({
+                        binding.imgShare.isEnabled = true
+                    },2500)
+
 
                 }
             }
@@ -363,10 +369,10 @@ class MandiGraphFragment : Fragment() {
 
     private fun translation() {
 
-        TranslationsManager().loadString("str_share", binding.imgShare)
-        TranslationsManager().loadString("rate_kg", binding.textView7)
-        TranslationsManager().loadString("rate_kg", binding.tvKg)
-        TranslationsManager().loadString("date", binding.textView8)
+        TranslationsManager().loadString("str_share", binding.imgShare,"Share")
+        TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
+        TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
+        TranslationsManager().loadString("date", binding.textView8,"Date")
 
 
     }

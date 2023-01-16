@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.irrigationplanner.R
-import com.example.irrigationplanner.databinding.ItemHistoryBinding
 import com.example.irrigationplanner.databinding.ItemHistoryDetailsBinding
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.translations.TranslationsManager

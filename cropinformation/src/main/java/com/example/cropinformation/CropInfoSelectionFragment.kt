@@ -1,6 +1,9 @@
 package com.example.cropinformation
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -8,10 +11,12 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +34,6 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import kotlinx.coroutines.launch
@@ -75,14 +79,27 @@ class CropInfoSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            var id = it.idd
+            var id2:Int? = null
             val args = Bundle()
             it.idd?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
             it?.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
+            viewModel.getCropMaster().observe(viewLifecycleOwner){
+                for (i in 0 until it.data?.size!!){
+                    Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
+                    if(it.data?.get(i)?.cropId==id) {
+                        id2 = it.data?.get(i)?.cropId!!
+                        break
+                    }
+                }}
+            if(id==id2){
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_cropInfoFragment,
                 args
-            )
+            )}else{
+                dialog()
+            }
         })
         binding.rvMyCrops.adapter = myCropAdapter
 
@@ -196,7 +213,7 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
-        viewModel.getIrrigationCrops(searchQuery).observe(requireActivity()) { res ->
+        viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
                     if (categoryId == null) {
@@ -305,5 +322,19 @@ class CropInfoSelectionFragment : Fragment() {
             binding.toolbarTitle.text = title
 
         }
+    }
+    private fun dialog(){
+
+        val dialog = Dialog(requireContext())
+        //dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dailog_information)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val yesBtn = dialog.findViewById(R.id.ok) as Button
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            Log.d("Dialog", "dialog: Clicked")
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
     }
 }

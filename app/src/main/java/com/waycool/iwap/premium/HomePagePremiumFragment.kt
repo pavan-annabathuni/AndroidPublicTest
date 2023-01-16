@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,9 +38,6 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -73,6 +71,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
+
         initClickEvents()
         initViewProfile()
         initViewAddCrop()
@@ -80,18 +89,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initObserveMYFarm()
 //        initObserveDevice()
         progressColor()
-        translationSoilTesting()
+        translations()
         fabButton()
         setBanners()
         notification()
+        setWishes()
 
-        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
-            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
-            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
-            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
-            else -> binding.tvGoodMorning.text = "Namaste"
-        }
+
 
         binding.IvNotification.setOnClickListener {
             findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
@@ -99,17 +103,24 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.tvAddFromOne.isSelected = true
 
     }
-
-    fun translationSoilTesting() {
-        CoroutineScope(Dispatchers.Main).launch {
-//            val title = TranslationsManager().getString("str_add_device")
-//            binding.topAppBar.title = title
-//            var areaHint = TranslationsManager().getString("e_g_50")
-//            binding.imeiAddress.hint =areaHint
+    private fun setWishes() {
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> {
+                TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+            in 12..15 -> {
+                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+            in 16..20 -> {
+                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+            in 21..23 -> {
+                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
+            else ->{
+                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
         }
-        TranslationsManager().loadString("welcome", binding.tvWelcomeName,"Welcome")
-        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get \n" +
-                "more details.")
+    }
+
+    fun translations() {
+        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
         TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
         TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add crops")
@@ -131,6 +142,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
         TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
         TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
+//        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
+
+
+
     }
 
     private fun initObserveDevice(farmId: Int) {
@@ -174,45 +189,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
 
         }
-
-
-//
-
-////        binding.rvMyDevice.adapter = deviceDataAdapter
-//        viewDevice.getIotDevice().observe(viewLifecycleOwner) { it ->
-////            if (it.data?.data==null){
-////                Toast.makeText(requireContext(), "Server Data", Toast.LENGTH_SHORT).show()
-////            }
-//            if (it.data?.data?.isEmpty() == true) {
-//                binding.cardAddDevice.visibility = View.VISIBLE
-//            } else
-//                when (it) {
-//                    is Resource.Success -> {
-////                        binding.cardAddDevice.visibility = View.GONE
-//                        val response = it.data!!.data as ArrayList<ViewDeviceData>
-//                        viewDeviceListAdapter.setMovieList(response)
-//
-////                        val arrayList = ArrayList<ModelFlex>()
-////                        response.forEach {
-////                            arrayList.add(ModelFlex(it.deviceName.toString()))
-////                            Log.d("TAG", "initObserveDevicefgcg:$arrayList ")
-////                            viewDeviceListAdapter.setMovieList(arrayList)
-////                        }
-////                        deviceDataAdapter.setMovieList(response)
-////                        Log.d("TAG", "initObserveDevice: $response")
-//                    }
-//                    is Resource.Error -> {
-//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                    is Resource.Loading -> {
-//                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                }
-//
-//
-//        }
 
     }
 
@@ -347,9 +323,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("Profile", userDetails.toString())
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         binding.tvWelcome.text = userDetails?.profile?.village
-                        binding.tvWelcomeName.text = "Welcome, ${it.data?.name.toString()}"
+                        binding.tvWelcomeName.text = ", ${it.data?.name.toString()}"
 
-                        Log.d("TAG", "onViewCreatedProfileUser: $it.data?.name")
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
                                 Log.d("Profile", it1 + it2)
@@ -358,6 +333,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         }
 
                     }
+                    it.data?.roleId?.let { it1 -> checkRole(it1) }
                 }
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
@@ -893,6 +869,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }else{
                 binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
             }
+        }
+    }
+    private fun checkRole(roleId:Int){
+        if(roleId==31){
+            binding.cvEditCrop.visibility = View.GONE
+            binding.tvEditMyCrops.visibility = View.GONE
+            binding.clAddForm.visibility = View.GONE
+            binding.ivViewAll.visibility = View.GONE
+            binding.MyFarm.visibility = View.GONE
+        }else{
+            binding.cvEditCrop.visibility = View.VISIBLE
+            binding.tvEditMyCrops.visibility = View.VISIBLE
+            binding.clAddForm.visibility = View.GONE
+            binding.ivViewAll.visibility = View.GONE
+            binding.MyFarm.visibility = View.GONE
         }
     }
 }

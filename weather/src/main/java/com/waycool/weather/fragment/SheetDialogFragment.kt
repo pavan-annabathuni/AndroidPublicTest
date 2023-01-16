@@ -2,15 +2,12 @@ package com.waycool.weather.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.waycool.weather.viewModel.DailyvViewModel
 import com.waycool.weather.viewModel.DetailViewModelFactory
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R
@@ -309,15 +306,18 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun translation(){
-        TranslationsManager().loadString("str_daily_weather",binding.textView2)
-        TranslationsManager().loadString("str_humidity",binding.labelHumidity)
-        TranslationsManager().loadString("str_vsibility",binding.labelVisiblity)
-        TranslationsManager().loadString("str_wind",binding.lableWind)
-        TranslationsManager().loadString("str_rain",binding.labelRain)
-        TranslationsManager().loadString("str_hourly",binding.labelUv)
-        TranslationsManager().loadString("str_rain_intensity",binding.labelRainInt)
-        TranslationsManager().loadString("str_sunrise",binding.labelSunrise)
-        TranslationsManager().loadString("str_sunset",binding.labelSunset)
+        binding.labelRain.isSelected = true
+        binding.labelUv.isSelected = true
+        binding.labelRainInt.isSelected = true
+        TranslationsManager().loadString("str_daily_weather",binding.textView2,"Daily Weather")
+        TranslationsManager().loadString("str_humidity",binding.labelHumidity,"Humidity")
+        TranslationsManager().loadString("str_vsibility",binding.labelVisiblity,"Visibility")
+        TranslationsManager().loadString("str_wind",binding.lableWind,"Wind")
+        TranslationsManager().loadString("str_rain",binding.labelRain,"Chance of Rain")
+        TranslationsManager().loadString("str_uv",binding.labelUv,"UV Index")
+        TranslationsManager().loadString("str_rain_intensity",binding.labelRainInt,"Rain Intensity")
+        TranslationsManager().loadString("str_sunrise",binding.labelSunrise,"Sunrise")
+        TranslationsManager().loadString("str_sunset",binding.labelSunset,"Sunset")
 
     }
 }

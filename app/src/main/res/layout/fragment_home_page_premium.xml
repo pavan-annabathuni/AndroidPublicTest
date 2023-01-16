@@ -80,16 +80,29 @@
                     android:id="@+id/tvWelcomeName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="2dp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Welcome, Krishna Kumar"
+                    android:text="Krishna Kumar"
                     android:textColor="#111827"
                     android:textSize="@dimen/space13"
-                    app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
+                    app:layout_constraintStart_toEndOf="@+id/tvName"
+                    app:layout_constraintTop_toTopOf="@+id/tvName"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvName"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/notosans_medium"
+                    android:text="Welcome"
+                    android:textColor="#111827"
+                    android:textSize="@dimen/space13"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvGoodMorning"
@@ -102,9 +115,20 @@
                     android:textColor="@color/textdark"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/tvWelcomeName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/playfair_reg"
+                    android:text="!"
+                    android:textColor="@color/textdark"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="2dp"
+                    app:layout_constraintTop_toTopOf="@id/tvGoodMorning"
+                    app:layout_constraintBottom_toBottomOf="@id/tvGoodMorning"
+                    app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -683,8 +707,6 @@
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
-
-
                                 <TextView
                                     android:id="@+id/MyFarm"
                                     android:layout_width="0dp"
@@ -1978,7 +2000,7 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/banner_indicators"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="8dp"
@@ -1992,10 +2014,10 @@
                     app:tabGravity="center"
                     app:tabIndicator="@null"
                     app:tabIndicatorHeight="0dp"
-                    app:tabMaxWidth="38dp"
+                    app:tabMaxWidth="30dp"
                     app:tabMode="auto"
-                    app:tabPaddingEnd="8dp"
-                    app:tabPaddingStart="8dp"
+                    app:tabPaddingEnd="2dp"
+                    app:tabPaddingStart="2dp"
                     app:tabSelectedTextColor="@color/white"
                     app:tabTextAppearance="@style/TabTextBannerAppearance"
                     app:tabTextColor="@color/transparent" />

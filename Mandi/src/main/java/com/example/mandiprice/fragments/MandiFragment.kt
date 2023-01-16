@@ -78,16 +78,7 @@ class MandiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMandiBinding.inflate(inflater)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    this@MandiFragment.findNavController().navigateUp()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()
@@ -120,6 +111,16 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+               findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
 
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()
@@ -162,7 +163,7 @@ class MandiFragment : Fragment() {
             context?.let {
                 ToastStateHandling.toastError(
                     it,
-                    "Please check you internet connectivity",
+                    "Please check your internet connectivity",
                     Toast.LENGTH_SHORT
                 )
             }
@@ -628,8 +629,7 @@ class MandiFragment : Fragment() {
             binding.topAppBar.title = mandi
         }
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
-        TranslationsManager().loadString("sort_by",binding.filter)
+        TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
     }
 }

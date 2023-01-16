@@ -21,14 +21,11 @@ import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class IrrigationFragment : Fragment() {
     private lateinit var binding: FragmentIrrigationBinding
@@ -444,8 +441,8 @@ class IrrigationFragment : Fragment() {
             dialog.show()
 
             //translation
-            TranslationsManager().loadString("str_delete", deleteTv)
-            TranslationsManager().loadString("str_delete_crop_desc", deleteDesc)
+            TranslationsManager().loadString("str_delete", deleteTv,"Delete")
+            TranslationsManager().loadString("str_delete_crop_desc", deleteDesc,"Are you sure? Do you want to delete this crop?")
             viewModel.viewModelScope.launch {
                 val deletetv = TranslationsManager().getString("str_delete")
                 delete.text = deletetv
@@ -475,19 +472,19 @@ class IrrigationFragment : Fragment() {
 
     private fun translation() {
 //        TranslationsManager().loadString("",binding.graps)
-        TranslationsManager().loadString("str_view_all", binding.cropStage)
-        TranslationsManager().loadString("str_irrigation", binding.textView3)
-        TranslationsManager().loadString("str_crop _nformation", binding.tvCropInfo)
-        TranslationsManager().loadString("str_today", binding.textView4)
-        TranslationsManager().loadString("str_weekly_irrigation", binding.textView5)
-        TranslationsManager().loadString("str_have_you _irrigated", binding.textView6)
-        TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay)
-        TranslationsManager().loadString("str_view_all", binding.tvViewDeatils)
-        TranslationsManager().loadString("str_view_all", binding.tvViewDetails2)
-        TranslationsManager().loadString("str_view_all", binding.viewDetails3)
-        TranslationsManager().loadString("str_edit", binding.tvEdit)
-        TranslationsManager().loadString("str_risk_outbreak", binding.textView9)
-        TranslationsManager().loadString("str_irrigation_history", binding.textView8)
+        TranslationsManager().loadString("str_view_all", binding.cropStage,"View all")
+        TranslationsManager().loadString("str_irrigation", binding.textView3,"Irrigation")
+        TranslationsManager().loadString("str_crop _nformation", binding.tvCropInfo,"Crop information")
+        TranslationsManager().loadString("str_today", binding.textView4,"Today")
+        TranslationsManager().loadString("str_weekly_irrigation", binding.textView5,"Weekly Irrigation Forecast")
+        TranslationsManager().loadString("str_have_you _irrigated", binding.textView6,"Have you Irrigated your Crop today?")
+        TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay,"Irrigation done today per Plant")
+        TranslationsManager().loadString("str_view_all", binding.tvViewDeatils,"View details")
+        TranslationsManager().loadString("str_view_all", binding.tvViewDetails2,"View details")
+        TranslationsManager().loadString("str_view_all", binding.viewDetails3,"View details")
+        TranslationsManager().loadString("str_edit", binding.tvEdit,"Edit")
+        TranslationsManager().loadString("str_risk_outbreak", binding.textView9,"Risk Outbreak Chances")
+        TranslationsManager().loadString("str_irrigation_history", binding.textView8,"Irrigation History")
 //        TranslationsManager().loadString("str_irrigation_history",binding.textView8)
 
 

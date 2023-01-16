@@ -1,6 +1,7 @@
 package com.waycool.featurecropprotect.Adapter
 
 import android.content.Context
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,11 +48,10 @@ class DiseasesParentAdapter() :
                 .into(binding.cropProtectDiseaseImage)
 
             binding.cropProtectDiseaseImage.setOnClickListener {
-                StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context,
-                    listOf(item.thumb),
-                    ImageLoader { imageView: ImageView, image: String? ->
-                        Glide.with(binding.cropProtectDiseaseImage.context)
-                            .load(image)
+                StfalconImageViewer.Builder<String>(context, listOf(item.thumb), ImageLoader { imageView: ImageView, image: String? ->
+                        Glide.with(binding.cropProtectDiseaseImage)
+                            .load(item.thumb)
+                            .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                             .into(imageView)
                     }).allowSwipeToDismiss(true)
                     .allowZooming(true)

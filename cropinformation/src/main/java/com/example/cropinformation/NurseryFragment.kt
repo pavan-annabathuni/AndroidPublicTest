@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
-import com.example.cropinformation.databinding.FragmentCropVarityBinding
 import com.example.cropinformation.databinding.FragmentNurseryBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
 import com.waycool.data.translations.TranslationsManager
 import org.json.JSONArray

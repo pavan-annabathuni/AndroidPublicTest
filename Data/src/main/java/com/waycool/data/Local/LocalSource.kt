@@ -206,6 +206,10 @@ object LocalSource {
         return outgrowDao.getTranslation(appKey)
     }
 
+  fun getTranslationForStringInFlow(appKey: String): Flow<AppTranslationsEntity>? {
+        return outgrowDao.getTranslationFlow(appKey)
+    }
+
 
     fun insertMyFarms(farms: List<MyFarmsEntity>) {
         outgrowDao.deleteAllMyFarms()

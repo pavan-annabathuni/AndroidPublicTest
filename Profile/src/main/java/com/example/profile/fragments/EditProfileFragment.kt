@@ -2,8 +2,6 @@ package com.example.profile.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -13,7 +11,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +18,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -34,16 +29,14 @@ import com.example.profile.viewModel.EditProfileViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.featurelogin.fragment.RegistrationFragment
+import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -162,11 +155,17 @@ class EditProfileFragment : Fragment() {
             }
         }
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if(it.data?.roleId==31){
+                binding.submit.visibility = View.INVISIBLE
+            }else{
+                binding.submit.visibility = View.VISIBLE
+            }
             if (it.data?.profile?.remotePhotoUrl != null && selecteduri == null) {
                 Glide.with(this).load(it.data?.profile?.remotePhotoUrl).into(binding.imageView)
             }
-            lat = it.data?.profile?.lat.toString()
-            long = it.data?.profile?.long.toString()
+            lat = String.format("%.5f",it.data?.profile?.lat?.toDouble())
+            long = String.format("%.5f",it.data?.profile?.long?.toDouble())
+
         }
 
         if (selecteduri != null) {
@@ -198,7 +197,6 @@ class EditProfileFragment : Fragment() {
         field.put("lat",lat)
         field.put("long",long)
 
-
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
@@ -206,8 +204,18 @@ class EditProfileFragment : Fragment() {
             viewModel.viewModelScope.launch {
                 viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
+                        when(it){
+                            is Resource.Success->{
+                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
+                                findNavController().navigateUp()
+                            }
+                            is Resource.Loading->{}
+                            is Resource.Error->{
+                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Error", Toast.LENGTH_SHORT) }
+                            }
+                        }
                         Log.d("ProfileUpdate", "editProfile: $it")
-                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
+
                     }
             }
             if (selecteduri != null) {
@@ -234,7 +242,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
 
-            this.findNavController().navigateUp()
+
 
         } else {
             context?.let { ToastStateHandling.toastError(it, "Please Fill All Fields", Toast.LENGTH_SHORT) }
@@ -520,13 +528,13 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun translation(){
-        TranslationsManager().loadString("str_farmer_name",binding.textView3)
-        TranslationsManager().loadString("str_mobile_number",binding.textView4)
-        TranslationsManager().loadString("str_addressline_1",binding.textView5)
-        TranslationsManager().loadString("str_city",binding.textView6)
-        TranslationsManager().loadString("str_state",binding.textView8)
-        TranslationsManager().loadString("str_pincode",binding.textView9)
-        TranslationsManager().loadString("str_district",binding.textView7)
+        TranslationsManager().loadString("str_farmer_name",binding.textView3,"Farmer Name ")
+        TranslationsManager().loadString("str_mobile_number",binding.textView4,"Mobile Number")
+        TranslationsManager().loadString("str_addressline_1",binding.textView5,"Address Line 1")
+        TranslationsManager().loadString("str_city",binding.textView6,"City")
+        TranslationsManager().loadString("str_state",binding.textView8,"State")
+        TranslationsManager().loadString("str_pincode",binding.textView9,"Pincode")
+        TranslationsManager().loadString("str_district",binding.textView7,"District")
 
     }
 
@@ -538,5 +546,9 @@ class EditProfileFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_GPS = 1011
+    }
+
+    private fun checkRollId(){
+
     }
 }

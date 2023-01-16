@@ -16,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -52,29 +53,34 @@ class NotificationFragment : Fragment() {
         binding = FragmentNotificationBinding.inflate(inflater)
         setAdapter()
         binding.back.setOnClickListener(){
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
+        binding.topAppBar.isSelected = true
         newNotification()
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
     private fun setAdapter(){
-        mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener {
+        mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener { notification,dataNotification ->
             viewModel.getNotification().observe(viewLifecycleOwner){
-                val deepLink = it.data?.data?.get(0)?.data2?.link
-                    if(deepLink!=null) {
+                val deepLink = notification.link
+                Log.d("Notification","Notification Link ${notification.link}")
+                    if(!deepLink.isNullOrEmpty()) {
                         val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                         startActivity(i)
                 }
+                else if(deepLink.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,"Deeplink is null",Toast.LENGTH_SHORT) }
+                }
             }
-            if(it.readAt == null){
-            viewModel.updateNotification(it.id!!).observe(viewLifecycleOwner){
+            if(dataNotification.readAt == null){
+            viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner){
               setAdapter()
                 newNotification()
 
             }}
-        })
+        }, requireContext())
         binding.recycleViewHis.adapter = mNotificationAdapter
         viewModel.getNotification().observe(viewLifecycleOwner){
             mNotificationAdapter.submitList(it.data?.data)

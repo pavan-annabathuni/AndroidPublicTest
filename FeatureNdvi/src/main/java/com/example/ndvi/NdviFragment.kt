@@ -25,7 +25,6 @@ import com.google.android.libraries.maps.model.*
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
-import com.google.maps.android.PolyUtil
 import com.waycool.data.Network.NetworkModels.NdviData
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -400,14 +399,14 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_date", binding.textView8)
-        TranslationsManager().loadString("str_low", binding.textView3)
-        TranslationsManager().loadString("str_high", binding.textView4)
-        TranslationsManager().loadString("str_unhealthy", binding.unhealthy)
-        TranslationsManager().loadString("moderately_healthy", binding.moderate)
-        TranslationsManager().loadString("healthy", binding.healthy)
-        TranslationsManager().loadString("mean_ndvi", binding.textView5)
-        TranslationsManager().loadString("opacity", binding.textView6)
+        TranslationsManager().loadString("str_date", binding.textView8,"Date")
+        TranslationsManager().loadString("str_low", binding.textView3,"Low")
+        TranslationsManager().loadString("str_high", binding.textView4,"High")
+        TranslationsManager().loadString("str_unhealthy", binding.unhealthy,"Unhealthy")
+        TranslationsManager().loadString("moderately_healthy", binding.moderate,"Moderately Healthy")
+        TranslationsManager().loadString("healthy", binding.healthy,"Healthy")
+        TranslationsManager().loadString("mean_ndvi", binding.textView5,"Mean NDVI")
+        TranslationsManager().loadString("opacity", binding.textView6,"Opacity")
 
         viewModel.viewModelScope.launch() {
             val title = TranslationsManager().getString("str_ndvi")

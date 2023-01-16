@@ -27,7 +27,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
-
 import com.example.soiltesting.SoilTestActivity
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
@@ -40,9 +39,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -65,15 +64,14 @@ import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.Dispatchers
 import com.waycool.weather.utils.WeatherIcons
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
@@ -98,7 +96,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private var farmjson: String? = null
     private var lat: String = ""
     private var long: String = ""
-    private var moduleId = "49"
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val mandiViewModel by lazy { ViewModelProvider(requireActivity())[MandiViewModel::class.java] }
     private val farmsCropsAdapter by lazy { FarmCropsAdapter() }
@@ -148,17 +145,18 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@HomePagesFragment.findNavController().navigateUp()
+                  findNavController().popBackStack()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
+           viewLifecycleOwner,
             callback
         )
         setWishes()
         checkNetwork()
         initClick()
         notification()
+        binding.tvRain.isSelected = true
         binding.recyclerview.adapter = mandiAdapter
         binding.cropFarmRv.adapter = farmsCropsAdapter
 
@@ -250,15 +248,27 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
         TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Mandi Prices")
         TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi,"View All")
+
+        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
+        TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
+
+
+
+
     }
 
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
-            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
-            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
-            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
-            else -> binding.tvGoodMorning.text = "Namaste"
+            in (1..11) -> {
+            TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+            in 12..15 -> {
+                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+            in 16..20 -> {
+                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+            in 21..23 -> {
+                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
+            else ->{
+                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
         }
     }
 
@@ -289,6 +299,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 //                                Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                             }
                         }
+                        it.data?.roleId?.let { it1 -> checkRole(it1) }
                         mandiDetailCall()
                         getFarms()
                     }
@@ -432,6 +443,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
+                        binding.tvOurServiceViewAll.visibility = View.INVISIBLE
+                        binding.ivOurService.visibility = View.INVISIBLE
 
                     }
                 }
@@ -509,13 +522,16 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.farmsDetailsCl.visibility = View.VISIBLE
                         val farmsAdapter = FarmsAdapter(requireContext(), this)
                         binding.farmsRv.adapter = farmsAdapter
-                        farmsAdapter.submitList(it.data)
+
+                        val sortedList=it.data?.sortedByDescending { farm->
+                            farm.isPrimary==1
+                        }
+
+                        farmsAdapter.submitList(sortedList)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
                         binding.clMyForm.visibility = View.GONE
                         binding.farmsDetailsCl.visibility = View.GONE
-
-
                     }
 
                 }
@@ -540,14 +556,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
         }
         drawFarmBoundaries(selectedFarm?.farmJson)
-        (selectedFarm?.farmCenter)?.get(0)?.latitude?.let { lat ->
-            (selectedFarm?.farmCenter)?.get(0)?.longitude?.let { lng ->
-                getFarmLocation(
-                    lat, lng
-                )
-            }
-        }
-        binding.tvCityName.text = district
+        binding.tvCityName.text = selectedFarm?.farmLocation
         viewModel.getMyCrop2().observe(viewLifecycleOwner) { crops ->
             val croplist =
                 crops.data?.filter { filter ->
@@ -556,21 +565,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             farmsCropsAdapter.submitList(croplist)
         }
 
-    }
-
-    private fun getFarmLocation(lat: Double, lng: Double) {
-        viewModel.viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                val list: List<Address> =
-                    geocoder.getFromLocation(lat, lng, 1) as List<Address>
-                if (!list.isNullOrEmpty()) {
-                    district = list[0].locality + "," + list[0].adminArea
-                }
-            } catch (e: InvocationTargetException) {
-
-            }
-        }
     }
 
     private fun drawFarmBoundaries(farmJson: ArrayList<LatLng>?) {
@@ -652,7 +646,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = NewsGenericAdapter(context, this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            viewModel.getVansNewsList(moduleId).collect { pagingData ->
+            viewModel.getVansNewsList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -669,6 +663,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
+                                    newsBinding.tvNoVANS.text="News and Articles are being loaded.Please wait for some time"
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility = View.GONE
                                     newsBinding.ivViewAll.visibility=View.GONE
@@ -705,7 +700,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansVideosList(moduleId).collect { pagingData ->
+            viewModel.getVansVideosList().collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -721,6 +716,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.tvNoVANs.text="Videos are being loaded.Please wait for some time"
                                     videosBinding.ivViewAll.visibility = View.GONE
                                     videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
@@ -1258,5 +1254,17 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         populateMyFarm()
     }
 
+    private fun checkRole(roleId:Int){
+        if(roleId==31){
+            binding.tvEditMyCrops.visibility = View.INVISIBLE
+            binding.ivEditCrop.visibility = View.INVISIBLE
+            binding.cvAddCrop.isEnabled = false
+            binding.clAdd.visibility = View.INVISIBLE
+            binding.clAddForm.visibility = View.GONE
+            binding.tvMyForm.visibility = View.INVISIBLE
+            binding.ivMyForm.visibility = View.GONE
+
+        }
+    }
 }
 

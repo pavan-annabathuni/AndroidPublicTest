@@ -258,7 +258,8 @@ interface ApiInterface {
     @GET("api/v1/my-crops")
     suspend fun getMyCrops(
         @HeaderMap map: Map<String, String>?,
-        @Query("account_id") account_id: Int
+        @Query("account_id") account_id: Int,
+        @Query("lang")lang: String = "en"
     ): Response<MyCropsModel>
 
 
