@@ -65,7 +65,7 @@ interface OutgrowDao {
     fun getSelectedDisease(diseaseId: Int): Flow<PestDiseaseEntity>
 
     @Query("SELECT * FROM pest_disease WHERE disease_id = :diseaseId ORDER BY disease_name Asc")
-   suspend fun getEntityDisease(diseaseId: Int): PestDiseaseEntity
+   suspend fun getEntityDisease(diseaseId: Int): PestDiseaseEntity?
 
     @Query("DELETE FROM pest_disease")
     fun deletePestDiseases()

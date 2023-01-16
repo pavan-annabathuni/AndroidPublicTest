@@ -272,8 +272,8 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
-                if(bottomNavigationView.menu!=null)
-                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"
+                if(bottomNavigationView.menu!=null){
+                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"}
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this){
                 bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Home"

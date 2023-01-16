@@ -499,7 +499,7 @@ object CropsRepository {
                         history.disease_name= history.crop_id?.let { it1 ->
                             LocalSource.getSelectedDiseaseEntity(
                                 it1
-                            ).diseaseName
+                            )?.diseaseName?:"-"
                         }
                         history
                     }
