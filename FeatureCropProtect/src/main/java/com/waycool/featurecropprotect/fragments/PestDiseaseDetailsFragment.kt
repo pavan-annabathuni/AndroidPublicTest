@@ -145,8 +145,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
         var chemical = "Chemical"
+        var biological = "Biological"
+        var cultural = "Cultural"
         viewModel.viewModelScope.launch {
-            chemical = TranslationsManager().getString("related_images")
+            chemical = TranslationsManager().getString("chemical")
+            biological = TranslationsManager().getString("str_biological")
+            cultural = TranslationsManager().getString("str_cultural")
         }
 
         val audioNewLayoutBinding: AudioNewLayoutBinding =
@@ -226,11 +230,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         }
 
                         if (it.data != null && it.data!!.biological != null) {
-                            addTab("Biological")
+                            addTab(biological)
                         }
 
                         if (it.data != null && it.data!!.cultural != null) {
-                            addTab("Cultural")
+                            addTab(cultural)
                         }
 
 

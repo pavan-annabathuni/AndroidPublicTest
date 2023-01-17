@@ -43,6 +43,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         }
         information()
         translation()
+        binding.tvDrip.isSelected = true
         return binding.root
     }
 

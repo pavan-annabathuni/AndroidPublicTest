@@ -139,9 +139,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun observerName() {
-        viewModel.response2.observe(viewLifecycleOwner) {
-            binding.tvName.setText(it.name)
-        }
+
         viewModel.viewModelScope.launch {
             viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
                 binding.tvName.setText(it.data?.data?.name)
@@ -197,7 +195,7 @@ class EditProfileFragment : Fragment() {
         ) {
 
             viewModel.viewModelScope.launch {
-                viewModel.getProfileRepository(field)
+                viewModel.updateProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         when(it){
                             is Resource.Success->{

@@ -135,13 +135,12 @@
                         android:id="@+id/tv_sowing_date"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:text="Sowing date"
                         android:textColor="@color/darkGray"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView3"
+                        app:layout_constraintStart_toStartOf="@+id/tv_date"
                         app:layout_constraintTop_toBottomOf="@+id/tv_date" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -232,15 +231,26 @@
                     <TextView
                         android:id="@+id/tv_drip"
                         style="@style/Bold"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
                         android:text="Drip"
                         android:textColor="@color/black"
                         android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView5"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="EllipsizeMaxLines" />
 
                     <TextView
                         android:id="@+id/tv_irrigation"
