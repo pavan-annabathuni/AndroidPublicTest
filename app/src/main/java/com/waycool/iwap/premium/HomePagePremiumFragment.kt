@@ -767,7 +767,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
-                    bundle.putString("temp_value", data.leafWetness)
+                    bundle.putString("temp_value", data.leafWetness.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,

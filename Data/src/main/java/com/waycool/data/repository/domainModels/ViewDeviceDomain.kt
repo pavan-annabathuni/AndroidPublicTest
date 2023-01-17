@@ -13,7 +13,7 @@ data class ViewDeviceDomain (
         var windspeed          : String?             = null,
         var soilMoisture1      : Double?                = null,
         var soilMoisture2      : Double?             = null,
-        var leafWetness        : String?             = null,
+        var leafWetness        : Int?             = null,
         var soilTemperature1   : String?             = null,
         var lux                : String?             = null,
         var modelId            : Int?                = null,

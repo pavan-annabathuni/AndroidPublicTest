@@ -18,7 +18,7 @@ data class ViewDeviceEntity(
     @ColumnInfo(name = "windspeed"             ) var windspeed          : String?             = null,
     @ColumnInfo(name = "soil_moisture_1"       ) var soilMoisture1      : Double?                = null,
     @ColumnInfo(name = "soil_moisture_2"       ) var soilMoisture2      : Double?             = null,
-    @ColumnInfo(name = "leaf_wetness"          ) var leafWetness        : String?             = null,
+    @ColumnInfo(name = "leaf_wetness"          ) var leafWetness        : Int?             = null,
     @ColumnInfo(name = "soil_temperature_1"    ) var soilTemperature1   : String?             = null,
     @ColumnInfo(name = "lux"                   ) var lux                : String?             = null,
     @ColumnInfo(name = "model_id"              ) var modelId            : Int?                = null,
