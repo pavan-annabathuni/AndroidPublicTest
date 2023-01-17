@@ -447,7 +447,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 
