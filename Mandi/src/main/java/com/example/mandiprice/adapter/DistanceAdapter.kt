@@ -15,7 +15,7 @@ import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.*
 
-class DistanceAdapter(val onClickListener: OnClickListener) :
+class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) :
     PagingDataAdapter<MandiDomainRecord, DistanceAdapter.MyViewHolder>(DiffCallback) {
 
     var cropName: String? = null
@@ -62,7 +62,7 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
             }
             else -> holder.imageView.visibility = View.GONE
         }
-        when(properties?.source){
+        when (properties?.source) {
             "benchmarker" -> holder.source.visibility = View.INVISIBLE
             else -> {
                 holder.source.visibility = View.VISIBLE
@@ -73,39 +73,38 @@ class DistanceAdapter(val onClickListener: OnClickListener) :
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties!!)
         }
-         // TranslationsManager().loadString("Rate / Kg",holder.kg)
-        GlobalScope.launch(Dispatchers.Main){
-        val langCode = LocalSource.getLanguageCode() ?: "en"
-        when(langCode){
-            "en"->{
+        // TranslationsManager().loadString("Rate / Kg",holder.kg)
+//        GlobalScope.launch(Dispatchers.Main){
+//        val langCode = LocalSource.getLanguageCode() ?: "en"
+        when (langCode) {
+            "en" -> {
                 holder.cropName.text = properties?.crop
                 holder.markerName.text = properties?.market
             }
-            "hi"->{
+            "hi" -> {
                 holder.cropName.text = properties?.crop_hi
                 holder.markerName.text = properties?.market_hi
             }
-            "kn"->{
+            "kn" -> {
                 holder.cropName.text = properties?.crop_kn
                 holder.markerName.text = properties?.market_kn
             }
-            "te"->{
+            "te" -> {
                 holder.cropName.text = properties?.crop_te
                 holder.markerName.text = properties?.market_te
             }
-            "ta"->{
+            "ta" -> {
                 holder.cropName.text = properties?.crop_ta
                 holder.markerName.text = properties?.market_ta
             }
-            "mr"->{
+            "mr" -> {
                 holder.cropName.text = properties?.crop_mr
                 holder.markerName.text = properties?.market_mr
             }
 
         }
-            cropName = holder.cropName.text.toString()
-            marketName = holder.markerName.text.toString()
-    }
+        cropName = holder.cropName.text.toString()
+        marketName = holder.markerName.text.toString()
 
     }
 

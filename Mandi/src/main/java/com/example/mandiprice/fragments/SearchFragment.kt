@@ -25,6 +25,7 @@ import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
@@ -101,6 +102,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DistanceAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -108,9 +110,9 @@ class SearchFragment : Fragment() {
             adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
             adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
             it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
-            this.findNavController()
+            findNavController()
                 .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
-        })
+        }, LocalSource.getLanguageCode() ?: "en")
         binding.recycleViewDis.adapter = adapterMandi
         viewModel.viewModelScope.launch {
             viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountId)
@@ -119,7 +121,7 @@ class SearchFragment : Fragment() {
                     adapterMandi.submitData(lifecycle, it)
                     // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
-        }
+        }}
         filterMenu()
         tabs()
         //searchView()
@@ -427,7 +429,7 @@ class SearchFragment : Fragment() {
         }
     }
     private fun translation(){
-        var mandi = "Mandi Price"
+        var mandi = "Market Prices"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi

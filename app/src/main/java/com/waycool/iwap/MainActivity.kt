@@ -5,8 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -19,7 +17,6 @@ import com.example.soiltesting.utils.Constant
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -155,10 +152,10 @@ class MainActivity : AppCompatActivity() {
 //                            Toast.LENGTH_SHORT
 //                        )
                         val intent = Intent(this, LoginMainActivity::class.java)
-                        startActivity(intent);
+                        startActivity(intent)
                     } else {
                         val intent = Intent(this, LoginMainActivity::class.java)
-                        startActivity(intent);
+                        startActivity(intent)
                     }
                 }
                 is Resource.Loading -> {
@@ -272,7 +269,6 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
-                if(bottomNavigationView.menu!=null)
                 bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this){

@@ -1817,6 +1817,7 @@
                                         android:layout_marginBottom="@dimen/space16"
                                         android:nestedScrollingEnabled="true"
                                         android:orientation="vertical"
+                                        android:visibility="visible"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -1828,6 +1829,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Today"
+                                            android:visibility="visible"
                                             android:textColor="@color/black"
                                             android:textStyle="bold" />
 
@@ -1836,6 +1838,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="4dp"
+                                            android:visibility="visible"
                                             android:orientation="horizontal"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             tools:listitem="@layout/item_delta_progress_bar" />
@@ -1844,6 +1847,7 @@
                                             android:id="@+id/line_two"
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
+                                            android:visibility="visible"
                                             android:layout_marginTop="20dp"
                                             app:layout_constraintTop_toBottomOf="@+id/kpa_one" />
 
@@ -1853,6 +1857,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="16dp"
                                             android:text="Tomorrow"
+                                            android:visibility="visible"
                                             android:textColor="@color/black"
                                             android:textStyle="bold" />
 
@@ -1865,6 +1870,7 @@
                                             android:orientation="horizontal"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                             tools:itemCount="10"
+                                            android:visibility="visible"
                                             tools:listitem="@layout/item_delta_progress_bar" />
                                     </LinearLayout>
 

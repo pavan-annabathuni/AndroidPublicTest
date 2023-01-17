@@ -247,7 +247,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
         TranslationsManager().loadString("add_crop",binding.AddCrop,"Add Crop")
 
-        TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Mandi Prices")
+        TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Market Prices")
         TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi,"View All")
 
         TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")

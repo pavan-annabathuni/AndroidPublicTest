@@ -109,7 +109,7 @@ class ProfileLanguageFragment : Fragment() {
                 val langCode = selectedLanguage!!.id
                 field = HashMap()
                 langCode?.let { it1 -> field.put("lang_id", it1.toString())
-                    viewModel.getProfileRepository(field).observe(viewLifecycleOwner){
+                    viewModel.updateProfileRepository(field).observe(viewLifecycleOwner){
             }}
                 Handler().postDelayed({
                     binding.progressBar.visibility = View.GONE

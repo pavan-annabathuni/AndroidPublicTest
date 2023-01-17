@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:src ="@drawable/ic_back"
                 android:gravity="center"
+                android:padding="8dp"
                 android:layout_marginStart="16dp"/>
             <TextView
                 android:id="@+id/topAppBar"

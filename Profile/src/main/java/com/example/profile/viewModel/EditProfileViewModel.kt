@@ -15,25 +15,11 @@ import com.waycool.data.utils.Resource
 import okhttp3.MultipartBody
 
 class EditProfileViewModel:ViewModel() {
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
-        get() = _status
-
-    private val _response = MutableLiveData<profile>()
-    val response: LiveData<profile>
-        get() = _response
-
-    private val _response2 = MutableLiveData<Data>()
-    val response2: LiveData<Data>
-        get() = _response2
 
     private val _response3 = MutableLiveData<Profile>()
     val response3: LiveData<Profile>
         get() = _response3
 
-    private val _responsePic = MutableLiveData<profile_pic>()
-    val responsePic: LiveData<profile_pic>
-        get() = _responsePic
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()

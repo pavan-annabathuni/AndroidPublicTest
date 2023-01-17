@@ -230,7 +230,11 @@ class RegistrationFragment : Fragment() {
                 getLocation()
             }, 500)
             //                getLocation()
-            binding.locationTextlayout.helperText = "Detecting your location.."
+            binding.textEnterManually.visibility=View.GONE
+            binding.textDetecting.visibility=View.VISIBLE
+/*
+            binding.locationEt.error = "Detecting your location.."
+*/
         }
         binding.nameMic.setOnClickListener { speechToText() }
         Handler(Looper.myLooper()!!).postDelayed({
@@ -472,7 +476,9 @@ class RegistrationFragment : Fragment() {
                     if (result.district != null)
                         binding.locationEt.append(" ${result.district}")
                     binding.locationEt.setSelection(0)
-                    binding.locationTextlayout.helperText = ""
+                    binding.textEnterManually.visibility=View.GONE
+                    binding.textDetecting.visibility=View.GONE
+//                    binding.locationEt.error= ""
 
                     address = result.formattedAddress.toString()
                     village = result.subLocality.toString()
@@ -480,10 +486,11 @@ class RegistrationFragment : Fragment() {
                     state = result.state.toString()
                     district = result.district.toString()
                 } else {
-//                                        binding.locationEt.setText("$village, $district")
-                    binding.locationTextlayout.helperText =
+                    binding.textEnterManually.visibility=View.VISIBLE
+                    binding.textDetecting.visibility=View.GONE
+                   /* binding.locationEt.error=
                         "Could not find your location. " +
-                                "Enter Manually."
+                                "Enter Manually."*/
                 }
 
             }
