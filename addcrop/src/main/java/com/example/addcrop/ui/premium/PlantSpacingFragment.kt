@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.translations.TranslationsManager
@@ -17,6 +20,9 @@ import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+
 
 class PlantSpacingFragment : Fragment() {
     private var _binding: FragmentPlantSpacingBinding? = null
@@ -49,6 +55,7 @@ class PlantSpacingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         translationSoilTesting()
         val bundle = Bundle()
+//        binding.btn1.setChecked(true)
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             val accountID = it.data?.accountId
             if (arguments != null) {
@@ -62,7 +69,6 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants = arguments?.getString("numberOfPlanets")
                 farm_id = arguments?.getInt("farm_id")
                 acrea_type = arguments?.getString("area_type")
-
 
                 Log.d("TAG", "onCreateViewGetData: $account_id")
                 Log.d("TAG", "onCreateViewGetData: $crop_id")
@@ -111,12 +117,12 @@ class PlantSpacingFragment : Fragment() {
                             }
                         }
 
-                    } catch (e: NumberFormatException) {
+                        } catch (e: NumberFormatException) {
 
-                    }
-
+                        }
 
                 }
+
                 binding.constraintLayoutBedWidth.setOnSelectListener {
                     try {
                         if (it.text.trim().isEmpty()) {

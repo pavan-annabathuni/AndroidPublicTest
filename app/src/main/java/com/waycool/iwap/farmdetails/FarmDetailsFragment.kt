@@ -174,13 +174,23 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         TranslationsManager().loadString("how_it_work", binding.deltaTInfo, "How does this work?")
         TranslationsManager().loadString("str_add_device", binding.MyDevice, "Add Device")
         //to translations
-        TranslationsManager().loadString("call",binding.callDevice,"Call")
-        TranslationsManager().loadString("chat",binding.messageDevice,"Chat")
-        TranslationsManager().loadString("have_device",binding.addDeviceFree,"Already have our device? Click here to Add Device")
-        TranslationsManager().loadString("get_recommendation",binding.textView253,"Get Advanced disease and irrigation recommendations. To know more\"")
-        TranslationsManager().loadString("gwx_txt",binding.gwxText,"GWX-100 Smart Weather Station")
-
-
+        TranslationsManager().loadString("call", binding.callDevice, "Call")
+        TranslationsManager().loadString("chat", binding.messageDevice, "Chat")
+        TranslationsManager().loadString(
+            "have_device",
+            binding.addDeviceFree,
+            "Already have our device? Click here to Add Device"
+        )
+        TranslationsManager().loadString(
+            "get_recommendation",
+            binding.textView253,
+            "Get Advanced disease and irrigation recommendations. To know more\""
+        )
+        TranslationsManager().loadString(
+            "gwx_txt",
+            binding.gwxText,
+            "GWX-100 Smart Weather Station"
+        )
 
 
     }
@@ -214,29 +224,28 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             viewDevice.farmDetailsDelta(myFarm?.id!!).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-
-                            deltaAdapter.setMovieList(it.data?.data?.Today)
+//                            deltaAdapter.setMovieList(it.data?.data?.Today)
 //                        binding.soilMoistureOne.progress=60
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
 //                        deltaAdapter.notifyDataSetChanged()
-                        deltaTomAdapter.setMovieList(it.data?.data?.Tomorrow)
+
 //                        deltaAdapter.update(getSprayingItems(sprayingTime.getToday()))
 //                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data[0].Today} ")
 
-//                        if (it.data?.data?.Today.isNullOrEmpty()){
-//                            binding.linearLayout5.visibility=View.GONE
-//                        }else{
-//                            deltaAdapter.setMovieList(it.data?.data?.Today)
-//                        }
-//                        if (it.data?.data?.Tomorrow.isNullOrEmpty()){
-//                            binding.textView164.visibility=View.GONE
-//                        }else{
-//
-//
-//                        }
+                        if (it.data?.data?.Today.isNullOrEmpty()) {
+                            binding.textView159.visibility = View.GONE
+                            binding.sparayingRv.visibility = View.GONE
+                            binding.lineTwo.visibility = View.GONE
 
-
-
+                        } else {
+                            deltaAdapter.setMovieList(it.data?.data?.Today)
+                        }
+                        if (it.data?.data?.Tomorrow.isNullOrEmpty()) {
+                            binding.textView164.visibility = View.GONE
+                            binding.sparayingRv2.visibility = View.GONE
+                        } else {
+                            deltaTomAdapter.setMovieList(it.data?.data?.Tomorrow)
+                        }
                     }
                     is Resource.Error -> {
                     }
@@ -275,9 +284,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
             }
-                        if (it.data?.size!! < 8) {
-                            binding.tvEditMyCrops.visibility = View.VISIBLE
-                        } else binding.tvEditMyCrops.visibility = View.GONE
+            if (it.data?.size!! < 8) {
+                binding.tvEditMyCrops.visibility = View.VISIBLE
+            } else binding.tvEditMyCrops.visibility = View.GONE
         }
     }
 
@@ -381,7 +390,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.tvEditMyCrops.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             val bundle = Bundle()
-            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            bundle.putInt("farmID", myFarm?.id.toString().toInt())
             Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
             intent.putExtras(bundle)
             startActivity(intent)
@@ -390,7 +399,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.addCropCl.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             val bundle = Bundle()
-            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            bundle.putInt("farmID", myFarm?.id.toString().toInt())
             Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
             intent.putExtras(bundle)
             startActivity(intent)
@@ -447,7 +456,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.cardAddForm.setOnClickListener {
             val intent = Intent(activity, AddCropActivity::class.java)
             val bundle = Bundle()
-            bundle.putInt("farmID",myFarm?.id.toString().toInt())
+            bundle.putInt("farmID", myFarm?.id.toString().toInt())
             Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
             intent.putExtras(bundle)
             startActivity(intent)
@@ -811,15 +820,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         return SphericalUtil.computeArea(latLngs)
     }
 
-    private fun checkRole(){
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
-            if(it.data?.roleId==31){
-            binding.ClYourForm.visibility = View.GONE
-            binding.tvEditMyCrops.visibility = View.INVISIBLE
+    private fun checkRole() {
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            if (it.data?.roleId == 31) {
+                binding.ClYourForm.visibility = View.GONE
+                binding.tvEditMyCrops.visibility = View.INVISIBLE
                 binding.editFarmFarmsSingle.visibility = View.GONE
                 binding.MyDevice.visibility = View.GONE
                 binding.ivViewAll.visibility = View.GONE
-            }else{
+            } else {
                 binding.ClYourForm.visibility = View.VISIBLE
                 binding.tvEditMyCrops.visibility = View.VISIBLE
                 binding.editFarmFarmsSingle.visibility = View.VISIBLE
