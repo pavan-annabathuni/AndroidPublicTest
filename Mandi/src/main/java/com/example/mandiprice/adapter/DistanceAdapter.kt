@@ -106,7 +106,7 @@ class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) 
             cropName = holder.cropName.text.toString()
             marketName = holder.markerName.text.toString()
 
-    }
+
 
 
     companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
