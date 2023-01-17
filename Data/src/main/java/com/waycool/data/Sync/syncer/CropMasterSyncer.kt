@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class CropMasterSyncer : SyncInterface {
+object CropMasterSyncer : SyncInterface {
 
 
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.CROPS_MASTER
@@ -126,6 +126,7 @@ class CropMasterSyncer : SyncInterface {
         GlobalScope.launch(Dispatchers.IO) {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             if (headerMap != null) {
+                setSyncStatus(true)
                 NetworkSource.getCropMaster(headerMap)
                     .collect {
                         when (it) {

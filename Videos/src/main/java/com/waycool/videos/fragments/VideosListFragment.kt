@@ -180,7 +180,6 @@ class VideosListFragment : Fragment(), itemClick {
                 createChip(allCategory)
                 if (categoryList != null) {
                     for (category in categoryList) {
-                        if (category.vansType == "videos")
                             createChip(category)
                     }
                 }
@@ -235,7 +234,7 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

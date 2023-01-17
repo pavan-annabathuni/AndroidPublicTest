@@ -41,8 +41,11 @@ class CropInformationSyncer : SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
+
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            if (headerMap != null)
+            if (headerMap != null) {
+                setSyncStatus(true)
                 NetworkSource.getCropInformation(headerMap)
                     .collect {
                         when (it) {
@@ -65,6 +68,15 @@ class CropInformationSyncer : SyncInterface {
 
                         }
                     }
+            }
+        }
+    }
+
+    fun downloadData() {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (isSyncRequired()) {
+                makeNetworkCall()
+            }
         }
     }
 }

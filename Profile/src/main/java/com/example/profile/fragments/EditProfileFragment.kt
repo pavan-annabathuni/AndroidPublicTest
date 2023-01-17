@@ -142,13 +142,13 @@ class EditProfileFragment : Fragment() {
 
         viewModel.viewModelScope.launch {
             viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
-                binding.tvName.setText(it.data?.data?.name)
-                binding.tvPhoneNo.setText("+91 ${it.data?.data?.contact}")
-                binding.tvAddress1.setText(it.data?.data?.profile?.address)
-                binding.tvAddress2.setText(it.data?.data?.profile?.village)
-                binding.tvPincode.setText(it.data?.data?.profile?.pincode)
-                binding.tvState.setText(it.data?.data?.profile?.state)
-                binding.tvCity.setText(it.data?.data?.profile?.district)
+                binding.tvName.setText(it.data?.name)
+                binding.tvPhoneNo.setText("+91 ${it.data?.phone}")
+                binding.tvAddress1.setText(it.data?.profile?.address)
+                binding.tvAddress2.setText(it.data?.profile?.village)
+                binding.tvPincode.setText(it.data?.profile?.pincode)
+                binding.tvState.setText(it.data?.profile?.state)
+                binding.tvCity.setText(it.data?.profile?.district)
 
             }
         }
@@ -187,15 +187,13 @@ class EditProfileFragment : Fragment() {
         field.put("pincode",pincode)
         field.put("state",state)
         field.put("district",city)
-        field.put("lat",lat)
-        field.put("long",long)
+        field.put("latitude",lat)
+        field.put("longitude",long)
 
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
-
-            viewModel.viewModelScope.launch {
-                viewModel.updateProfileRepository(field)
+                viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         when(it){
                             is Resource.Success->{
@@ -210,7 +208,7 @@ class EditProfileFragment : Fragment() {
                         Log.d("ProfileUpdate", "editProfile: $it")
 
                     }
-            }
+
             if (selecteduri != null) {
 
                 val fileDir = context?.filesDir
@@ -226,12 +224,11 @@ class EditProfileFragment : Fragment() {
                         file.name, requestFile
                     )
 
-                Log.d("selecteduri", "editProfile: $profileImageBody")
+                Log.d("selecteduri", "editProfile: $selecteduri")
 
-                viewModel.viewModelScope.launch {
                     viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner) {
                         Log.d("selecteduri", "editProfile: ${it.data?.profile_pic}")
-                    }
+
                 }
             }
 
@@ -343,8 +340,8 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun getGeocodeFromLocation(it: Location) {
-         lat = String.format(Locale.ENGLISH, "%.5f", it.latitude)
-        long = String.format(Locale.ENGLISH, "%.5f", it.longitude)
+         lat = String.format(Locale.ENGLISH, "%.4f", it.latitude)
+        long = String.format(Locale.ENGLISH, "%.4f", it.longitude)
 
         viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
             .observe(viewLifecycleOwner) {

@@ -26,6 +26,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -71,6 +72,8 @@ dependencies {
 
     implementation(libraries.stetho)
     implementation(libraries.stethohttp)
+    implementation 'com.facebook.stetho:stetho-urlconnection:1.5.1'
+
 
     //Glide
     implementation(libraries.glide)

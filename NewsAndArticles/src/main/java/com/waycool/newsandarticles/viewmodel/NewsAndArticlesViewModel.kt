@@ -3,6 +3,7 @@ package com.waycool.newsandarticles.viewmodel
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 

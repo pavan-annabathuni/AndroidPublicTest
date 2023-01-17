@@ -6,8 +6,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalCoroutinesApi::class)
 interface SyncInterface {
 
     fun getSyncKey(): Preferences.Key<String>
@@ -27,7 +27,11 @@ interface SyncInterface {
         }
     }
 
-    suspend fun invalidateSync(){
+    suspend fun invalidateSync() {
         SyncManager.invalidateSync(getSyncKey())
+    }
+
+    fun getLastUpdated(): Flow<String> {
+        return SyncManager.getLastUpdated(getSyncKey())
     }
 }

@@ -3,6 +3,7 @@ package com.waycool.data.repository
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.waycool.data.Local.Entity.AiCropHistoryEntity
 import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
@@ -16,19 +17,28 @@ import com.waycool.data.Sync.syncer.CropInformationSyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
 import com.waycool.data.Sync.syncer.*
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 
 object CropsRepository {
+    fun downloadPestDiseases(){
+        PestDiseaseSyncer().downloadData()
+    }
+
+  fun downloadCropInfo(){
+        CropInformationSyncer().downloadData()
+    }
 
     fun getCropCategory(): Flow<Resource<List<CropCategoryMasterDomain>?>> {
-        return CropCategorySyncer().getData().map {
+        return CropCategorySyncer.getData().map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -65,7 +75,7 @@ object CropsRepository {
 
 
     fun getAllCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsMaster(searchQuery).map {
+        return CropMasterSyncer.getCropsMaster(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -83,7 +93,7 @@ object CropsRepository {
     }
 
     fun getPestDiseaseCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsPestDiseases(searchQuery).map {
+        return CropMasterSyncer.getCropsPestDiseases(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -101,7 +111,7 @@ object CropsRepository {
     }
 
     fun getCropInfoCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsCropInfo(searchQuery).map {
+        return CropMasterSyncer.getCropsCropInfo(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -118,8 +128,8 @@ object CropsRepository {
         }
     }
 
-    fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getIrrigationCrops(searchQuery).map {
+  fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+        return CropMasterSyncer.getIrrigationCrops(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -137,7 +147,7 @@ object CropsRepository {
     }
 
     fun getAiCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
-        return CropMasterSyncer().getCropsAiCropHealth(searchQuery).map {
+        return CropMasterSyncer.getCropsAiCropHealth(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -224,9 +234,9 @@ object CropsRepository {
 //            }
 //        }
 //    }
-    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
-        return NetworkSource.getIotDevice()
-    }
+//    fun getIotDevice(): Flow<Resource<ViewDeviceDTO?>> {
+//        return NetworkSource.getIotDevice()
+//    }
 
     fun getGraphsViewDevice(
         serial_no_id: Int?,
@@ -240,7 +250,7 @@ object CropsRepository {
     }
 
     fun getDashBoard(): Flow<Resource<DashboardDomain?>> {
-        return DashboardSyncer().getData().map {
+        return DashboardSyncer.getData().map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
@@ -257,7 +267,7 @@ object CropsRepository {
         }
     }
 
-    fun farmDetailsDelta(farmId: Int): Flow<Resource<FarmDetailsDTO?>> {
+    fun farmDetailsDelta(farmId:Int): Flow<Resource<FarmDetailsDTO?>> {
 //        GlobalScope.launch {
 //            MyCropSyncer().invalidateSync()
 //        }
@@ -381,10 +391,12 @@ object CropsRepository {
     ): Flow<Resource<ActivateDeviceDTO?>> {
         Handler(Looper.myLooper()!!).postDelayed({
             GlobalScope.launch {
-                DashboardSyncer().invalidateSync()
-                DashboardSyncer().getData()
+                DashboardSyncer.invalidateSync()
+                DashboardSyncer.getData()
+                ViewDevicesSyncer.invalidateSync()
+                ViewDevicesSyncer.downloadDevices()
             }
-        }, 500)
+        }, 600)
         return NetworkSource.activateDevice(map)
     }
 
@@ -423,7 +435,7 @@ object CropsRepository {
         state: String,
         district: String,
         number: String,
-        crop_id: Int
+        crop_id:Int
     ): Flow<Resource<SoilTestResponseDTO?>> {
 
         return NetworkSource.postNewSoil(
@@ -494,16 +506,12 @@ object CropsRepository {
 
                     domainList=domainList.map { history->
                         history.disease_name= history.crop_id?.let { it1 ->
-                            LocalSource.getSelectedDiseaseEntity(
-                                it1
-                            )?.diseaseName?:"-"
+                            LocalSource.getSelectedDiseaseEntity(it1)?.diseaseName?:"--"
                         }
                         history
                     }
 
-                    Resource.Success(
-                        domainList
-                    )
+                    Resource.Success(domainList)
                 }
                 is Resource.Loading -> {
                     Resource.Loading()

@@ -43,12 +43,13 @@ class MyCropSyncer : SyncInterface {
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             val accountId: Int? = LocalSource.getUserDetailsEntity()?.accountId
             if (headerMap != null)
-                if (accountId != null)
+                if (accountId != null) {
+                    setSyncStatus(true)
                     NetworkSource.getMyCrop2(headerMap, accountId)
                         .collect {
                             when (it) {
                                 is Resource.Success -> {
-                                    Log.d("MyCrops"," ${it.data}")
+                                    Log.d("MyCrops", " ${it.data}")
 
                                     LocalSource.insertMyCrop(
                                         MyCropEntityMapper().toEntityList(it.data?.data!!)
@@ -64,13 +65,14 @@ class MyCropSyncer : SyncInterface {
 
                                 }
                                 is Resource.Error -> {
-                                    Log.d("MyCrops"," ${it.message}")
+                                    Log.d("MyCrops", " ${it.message}")
 
                                     setSyncStatus(false)
                                 }
 
                             }
                         }
+                }
         }
     }
 }

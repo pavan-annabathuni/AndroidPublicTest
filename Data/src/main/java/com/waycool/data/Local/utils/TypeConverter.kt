@@ -73,17 +73,18 @@ object TypeConverter {
         val gson = Gson()
         return gson.toJson(language)
     }
+
     fun convertStringDashboard(s: String): DashboardEntity? {
         Log.d("TypeConverterFrom", s)
         val listType = object : TypeToken<DashboardEntity?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
     fun convertDashBoardString(language: DashboardEntity): String {
         Log.d("TypeConverterTO", language.toString())
         val gson = Gson()
         return gson.toJson(language)
     }
-
 
 
     fun convertCropCategoryToString(language: List<CropCategoryEntity>): String {
@@ -127,7 +128,7 @@ object TypeConverter {
         try {
             val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
             return Gson().fromJson(s, listType)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             return emptyList()
             Log.d("cropVariety", "convertStringToCropVariety: $e")
         }
@@ -161,12 +162,13 @@ object TypeConverter {
     }
 
     @TypeConverter
-    fun convertLatLngListToString(latlngs:ArrayList<LatLng>):String{
+    fun convertLatLngListToString(latlngs: ArrayList<LatLng>): String {
         val gson = Gson()
         return gson.toJson(latlngs)
     }
+
     @TypeConverter
-    fun convertStringToLatLng(s:String):ArrayList<LatLng>{
+    fun convertStringToLatLng(s: String): ArrayList<LatLng> {
         val listType = object : TypeToken<List<LatLng>?>() {}.type
         return Gson().fromJson(s, listType)
     }
@@ -180,9 +182,23 @@ object TypeConverter {
     }
 
     @TypeConverter
-    fun convertStringListToString(latlngs:ArrayList<String>?):String?{
+    fun convertStringListToString(latlngs: ArrayList<String>?): String? {
         val gson = Gson()
         return gson.toJson(latlngs)
+    }
+
+    @TypeConverter
+    fun convertStringToRangeEntity(s: String?): RangesEntity? {
+        if (s == null)
+            return RangesEntity()
+        val listType = object : TypeToken<RangesEntity?>() {}.type
+        return Gson().fromJson(s, listType)
+    }
+
+    @TypeConverter
+    fun convertRangeEntityToString(range: RangesEntity?): String? {
+        val gson = Gson()
+        return gson.toJson(range)
     }
 
 

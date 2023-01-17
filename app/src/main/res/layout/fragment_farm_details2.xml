@@ -10,7 +10,6 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -85,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvMyform"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -157,7 +156,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardImageBanner3x1"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardAddForm"
@@ -673,8 +672,8 @@
 
                         <TextView
                             android:id="@+id/MyDevice"
-                            style="@style/SemiBold"
                             android:layout_width="0dp"
+                            style="@style/SemiBold"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:layout_marginEnd="5dp"
@@ -775,6 +774,17 @@
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
                                 app:layout_constraintTop_toTopOf="parent" />
 
+                            <com.waycool.uicomponents.Text.SmallTextMedium
+                                android:id="@+id/deviceNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/textlight"
+                                tools:text="Device Number : 23cewn"
+                                app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
+                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
+
+
                             <ImageView
                                 android:id="@+id/ivAddDeviceEnd"
                                 android:layout_width="@dimen/space100"
@@ -788,13 +798,15 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/clBattery"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="14dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:visibility="visible"
                                 app:layout_constraintEnd_toStartOf="@+id/view"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                 <ImageView
                                     android:id="@+id/battery"
@@ -833,19 +845,20 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/clBatteryTwo"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="14dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/view"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                 <ImageView
                                     android:id="@+id/batteryTwo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/space12"
                                     android:layout_marginTop="10dp"
                                     android:src="@drawable/ic_icon_awesome_mountain"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -882,6 +895,7 @@
                                 android:layout_width="2dp"
                                 android:layout_height="32dp"
                                 android:background="#EBECF2"
+                                android:visibility="gone"
                                 app:layout_constraintBottom_toTopOf="@+id/belowBattery"
                                 app:layout_constraintEnd_toStartOf="@+id/clBatteryTwo"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -892,11 +906,40 @@
                                 android:id="@+id/belowBattery"
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:layout_marginTop="@dimen/space12"
+                                android:layout_marginTop="8dp"
                                 android:background="#EDEDED"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/clBattery" />
+                                app:layout_constraintTop_toBottomOf="@+id/approvedCV" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/approvedCV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:visibility="visible"
+                                app:cardBackgroundColor="#FFF3F1"
+                                app:cardCornerRadius="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/clBatteryTwo">
+
+                                <TextView
+                                    android:id="@+id/tv_textAlert"
+                                    style="@style/Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_warning"
+                                    android:drawablePadding="8dp"
+                                    android:padding="8dp"
+                                    android:text="Your device is not approved. Contact us."
+                                    android:textColor="#FF2C23"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    tools:layout_editor_absoluteY="294dp" />
+                            </androidx.cardview.widget.CardView>
+
 
 
                             <androidx.appcompat.widget.AppCompatTextView
@@ -917,24 +960,37 @@
                                 android:id="@+id/ivUpdate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space12"
                                 android:layout_marginEnd="14dp"
                                 android:src="@drawable/ic_update_refresh"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+                                app:layout_constraintTop_toBottomOf="@+id/belowBattery"
+                                tools:visibility="invisible" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvLastUpdateRefresh"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="10dp"
+                                android:padding="4dp"
                                 android:text="Update"
                                 android:textColor="#146133"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/ivUpdate"
                                 app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                            <ProgressBar
+                                android:id="@+id/update_progress_device"
+                                style="?android:attr/progressBarStyle"
+                                android:layout_width="20dp"
+                                android:layout_height="0dp"
+                                android:indeterminate="true"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="@+id/tvLastUpdateRefresh"
+                                app:layout_constraintEnd_toEndOf="@+id/ivUpdate"
+                                app:layout_constraintStart_toStartOf="@+id/ivUpdate"
+                                app:layout_constraintTop_toTopOf="@+id/tvLastUpdateRefresh" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -2313,8 +2369,8 @@
                     android:id="@+id/tvNDVi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:text="Farm Health Monitoring (NDVI)"
                     android:textColor="@color/textdark"
@@ -2333,7 +2389,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvNDVi">
+                    app:layout_constraintTop_toBottomOf="@+id/tvNDVi" >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -2365,26 +2421,26 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="Get Satellite imagery for your crops"
                             android:textColor="@color/textdark"
+                            android:text="Get Satellite imagery for your crops"
                             app:layout_constraintEnd_toStartOf="@+id/imageView15"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/ndvi_button"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_marginBottom="16dp"
+                            app:strokeColor="@color/green"
+                            app:strokeWidth="2dp"
                             android:text="Know more"
                             android:textAllCaps="false"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/title3Bold"
-                            app:layout_constraintTop_toBottomOf="@+id/title3Bold"
-                            app:strokeColor="@color/green"
-                            app:strokeWidth="2dp" />
+                            app:layout_constraintTop_toBottomOf="@+id/title3Bold" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

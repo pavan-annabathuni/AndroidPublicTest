@@ -133,11 +133,11 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun checkForValidMobileNumber(mobileno:String):Boolean{
+    private fun checkForValidMobileNumber(mobileno: String): Boolean {
         val pattern = Pattern.compile("^[6-9]\\d{9}\$")
 
         val matcher = pattern.matcher(mobileno)
-       return matcher.find()
+        return matcher.find()
     }
 
     private fun setTermsText() {
@@ -218,7 +218,11 @@ class LoginFragment : Fragment() {
                                         loginViewModel.setUserToken(loginMaster.data)
 
                                     }
-                                    gotoMainActivity()
+                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                        if (user.data != null && user.data?.userId != null) {
+                                            gotoMainActivity()
+                                        }
+                                    }
 //
 
                                 } else {

@@ -26,7 +26,7 @@ object LoginRepository {
 
 
     fun getLanguageMaster(): Flow<Resource<List<LanguageMasterDomain>>> {
-        return LanguageSyncer().getData()
+        return LanguageSyncer.getData()
             .map {
                 when (it) {
                     is Resource.Success -> {
@@ -175,18 +175,11 @@ object LoginRepository {
 //    }
 
     fun getUserDetails(): Flow<Resource<UserDetailsDomain>> {
-        return UserDetailsSyncer().getData().map {
+        return UserDetailsSyncer.getData().map {
             when (it) {
                 is Resource.Success -> {
-                    UserDetailsSyncer().invalidateSync()
-
                     Log.d("TAG", "getUserDetailsAccountID:${it.data} ")
-                    Resource.Success(
-
-                        UserDetailsDomainMapper().mapToDomain(it.data!!)
-
-                    )
-
+                    Resource.Success(UserDetailsDomainMapper().mapToDomain(it.data!!))
                 }
                 is Resource.Loading -> {
                     Resource.Loading()

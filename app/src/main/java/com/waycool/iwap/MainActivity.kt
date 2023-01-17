@@ -283,10 +283,19 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homePagesFragment -> showBottomNav()
                 R.id.myFarmFragment -> showBottomNav()
-                R.id.allServicesFragment2 -> showBottomNav()
                 com.example.profile.R.id.myProfileFragment -> showBottomNav()
-                com.example.mandiprice.R.id.mandiFragment -> showBottomNav()
-                com.waycool.featurecropprotect.R.id.cropSelectionFragment -> showBottomNav()
+                com.example.mandiprice.R.id.mandiFragment -> {
+                    if (isPremium)
+                        hideBottomNav()
+                    else
+                        showBottomNav()
+                }
+                com.waycool.featurecropprotect.R.id.cropSelectionFragment -> {
+                    if (isPremium)
+                        hideBottomNav()
+                    else
+                        showBottomNav()
+                }
                 R.id.homePagePremiumFragment3 -> showBottomNav()
                 else -> hideBottomNav()
             }

@@ -1,21 +1,17 @@
 package com.example.profile.viewModel
 
 import androidx.lifecycle.*
-import com.example.profile.apiService.ProfileApi
 import com.example.profile.apiService.profilePic.profile_pic
 import com.example.profile.apiService.response.profile
 import com.example.profile.apiService.userResponse.Data
 import com.example.profile.apiService.userResponse.Profile
 import com.waycool.data.Network.NetworkModels.*
-import com.waycool.data.Network.NetworkSource
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.ProfileRepository
 import com.waycool.data.repository.domainModels.GeocodeDomain
 import com.waycool.data.utils.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 class EditProfileViewModel:ViewModel() {
@@ -28,13 +24,13 @@ class EditProfileViewModel:ViewModel() {
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
 
-     suspend fun updateProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
+      fun getProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.ProfileUpdateResponseDTO?>> =
         ProfileRepository.updateProfile(field).asLiveData()
 
-    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
+     fun getUserProfileDetails():LiveData<Resource<UserDetailsDomain?>> =
         ProfileRepository.getUserProfileDet().asLiveData()
 
-    suspend fun getUserProfilePic(file:MultipartBody.Part):LiveData<Resource<profilePicModel?>> =
+     fun getUserProfilePic(file:MultipartBody.Part):LiveData<Resource<profilePicModel?>> =
         ProfileRepository.getUserProfilePic(file).asLiveData()
 
     fun getReverseGeocode(latlon:String):LiveData<GeocodeDomain> = GeocodeRepository.getReverseGeocode(latlon).asLiveData()

@@ -113,4 +113,18 @@ interface OutgrowDao {
 
     @Query("DELETE FROM my_farms")
     fun deleteAllMyFarms()
+
+    //View Device
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertViewDevice(farms: List<ViewDeviceEntity>)
+
+    @Query("SELECT * FROM my_devices")
+    fun getViewDevices(): Flow<List<ViewDeviceEntity>>
+
+    @Query("SELECT * FROM my_devices WHERE farm_id = :farmId ORDER BY model_series DESC")
+    fun getViewDevicesByFarm(farmId:Int): Flow<List<ViewDeviceEntity>>
+
+    @Query("DELETE FROM my_devices")
+    fun deleteAllDevices()
 }

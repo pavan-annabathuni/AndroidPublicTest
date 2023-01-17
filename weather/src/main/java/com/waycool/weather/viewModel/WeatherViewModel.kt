@@ -8,6 +8,7 @@ import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.repository.domainModels.weather.DailyDomain
 import com.waycool.data.utils.Resource
@@ -44,7 +45,8 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
-    suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
+
+    fun getUserProfileDetails():LiveData<Resource<UserDetailsDomain?>> =
         ProfileRepository.getUserProfileDet().asLiveData()
 
      fun getWeather(

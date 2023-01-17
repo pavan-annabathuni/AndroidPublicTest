@@ -189,11 +189,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 waterSourcesSelected?.add("Borewell")
             } else if (!b) waterSourcesSelected?.remove("Borewell")
         }
-        isPrimary = if (binding.setPrimaryFarm.isChecked) {
-            1
-        } else {
-            0
-        }
+
 
         binding.saveFarmBtn.setOnClickListener {
             if (accountId != null) {
@@ -221,6 +217,13 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                         )
                     }
                 } else {
+
+                    isPrimary = if (binding.setPrimaryFarm.isChecked) {
+                        1
+                    } else {
+                        0
+                    }
+
                     binding.saveProgressBar.visibility = View.VISIBLE
                     binding.saveFarmBtn.visibility = View.INVISIBLE
                     if (myFarmEdit == null) {

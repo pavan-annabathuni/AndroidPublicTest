@@ -149,4 +149,9 @@ class TabViewModel:ViewModel {
         queryMap["vans_type"] = "banners"
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
+
+    fun downloadCropInfo() {
+        CropsRepository.downloadCropInfo()
+    }
+
 }

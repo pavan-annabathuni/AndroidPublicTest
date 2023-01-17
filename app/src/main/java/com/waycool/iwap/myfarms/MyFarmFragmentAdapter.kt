@@ -11,10 +11,15 @@ import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.LatLngBounds
 import com.google.android.libraries.maps.model.Polygon
 import com.google.android.libraries.maps.model.PolygonOptions
+import com.waycool.data.Network.NetworkModels.ViewDeviceDTO
+import com.waycool.data.Network.NetworkModels.ViewDeviceData
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.ItemPremiumMyfarmsBinding
+import com.waycool.iwap.home.FarmCropsAdapter
 import com.waycool.iwap.premium.Farmdetailslistener
 import kotlin.collections.ArrayList
 
@@ -23,6 +28,8 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
     //    val context: Context,
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
+    private var cropList: MutableList<MyCropDataDomain> = mutableListOf()
+    private var deviceList: MutableList<ViewDeviceDomain> = mutableListOf()
 
     var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
@@ -43,14 +50,25 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         val detail = details[position]
         holder.binding.tvAddDeviceStart.text = detail.farmName
         holder.binding.tvAddDeviceStart.isSelected = true
-        holder.binding.tvAddDevice.isSelected=true
-        TranslationsManager().loadString("view_farm_detail",holder. binding.tvAddDevice,"View Farm Details")
+        holder.binding.tvAddDevice.isSelected = true
+        TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice, "View Farm Details")
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
-        holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {
             holder.binding.ivFeedback.visibility = View.VISIBLE
         } else
             holder.binding.ivFeedback.visibility = View.GONE
+
+        val farmsCropsAdapter= FarmCropsAdapter()
+        holder.binding.cropFarmRv.adapter=farmsCropsAdapter
+        farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
+
+        val deviceList = deviceList.filter { it.farmId==detail.id }
+        if(deviceList.isNullOrEmpty()){
+            holder.binding.deviceIv.visibility=View.GONE
+        }else{
+            holder.binding.deviceIv.visibility=View.VISIBLE
+        }
+
 //        loadFarm(details.farmJson,holder.mapCurrent)
 //        (details.farmCenter)?.get(0)?.latitude?.let { lat ->
 //            (details.farmCenter)?.get(0)?.longitude?.let { lng ->
@@ -108,66 +126,78 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
         return details.size
     }
 
+    fun updateCropsList(list: List<MyCropDataDomain>) {
+        cropList.clear()
+        cropList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+  fun updateDeviceList(list: List<ViewDeviceDomain>) {
+        deviceList.clear()
+        deviceList.addAll(list)
+        notifyDataSetChanged()
+    }
+
 
     inner class MyFarmPremiumViewHolder(val binding: ItemPremiumMyfarmsBinding) :
-        RecyclerView.ViewHolder(binding.root), OnMapReadyCallback {
-        var mapCurrent: GoogleMap? = null
-        var polygonCurrent: Polygon? = null
-        var map: MapView? = null
+        RecyclerView.ViewHolder(binding.root) {
+//        var mapCurrent: GoogleMap? = null
+//        var polygonCurrent: Polygon? = null
+//        var map: MapView? = null
 
-        init {
-            map = itemView.findViewById(R.id.map_premium_add_farm)
+//        init {
+//            map = itemView.findViewById(R.id.map_premium_add_farm)
+//
+//            if (map != null) {
+//                map!!.onCreate(null)
+//                map!!.onResume()
+//                map!!.getMapAsync(this)
+//                map?.isClickable = false
+//            }
+//        }
+//
+//        override fun onMapReady(googleMap: GoogleMap?) {
+//            MapsInitializer.initialize(context.applicationContext)
+//            mapCurrent = googleMap
+//            mapCurrent?.uiSettings?.setAllGesturesEnabled(false)
+//            mapCurrent?.uiSettings?.isMapToolbarEnabled = false
+//            loadFarm(details[layoutPosition].farmJson, mapCurrent)
+//
+//        }
 
-            if (map != null) {
-                map!!.onCreate(null)
-                map!!.onResume()
-                map!!.getMapAsync(this)
-                map?.isClickable = false
-            }
-        }
 
-        override fun onMapReady(googleMap: GoogleMap?) {
-            MapsInitializer.initialize(context.applicationContext)
-            mapCurrent = googleMap
-            mapCurrent?.uiSettings?.setAllGesturesEnabled(false)
-            mapCurrent?.uiSettings?.isMapToolbarEnabled = false
-            loadFarm(details[layoutPosition].farmJson, mapCurrent)
+//        private fun loadFarm(farmJson: ArrayList<LatLng>?, mapCurrent: GoogleMap?) {
+//            mapCurrent?.mapType = GoogleMap.MAP_TYPE_NORMAL
+//            if (farmJson != null) {
+//                if (polygonCurrent != null)
+//                    polygonCurrent?.remove()
+//                if (farmJson.size >= 3) {
+//                    polygonCurrent = mapCurrent?.addPolygon(
+//                        PolygonOptions().addAll(farmJson).fillColor(Color.argb(100, 58, 146, 17))
+//                            .strokeColor(
+//                                Color.argb(255, 255, 255, 255)
+//                            )
+//                    )
+//
+//                    mapCurrent?.animateCamera(
+//                        CameraUpdateFactory.newLatLngBounds(
+//                            getLatLnBounds(farmJson), 10
+//                        )
+//                    )
+//                } else {
+//                    mapCurrent?.animateCamera(CameraUpdateFactory.newLatLngZoom(farmJson[0], 16f))
+//                }
+//            }
+//
+//        }
 
-        }
-
-
-        private fun loadFarm(farmJson: ArrayList<LatLng>?, mapCurrent: GoogleMap?) {
-            mapCurrent?.mapType = GoogleMap.MAP_TYPE_NORMAL
-            if (farmJson != null) {
-                if (polygonCurrent != null)
-                    polygonCurrent?.remove()
-                if (farmJson.size >= 3) {
-                    polygonCurrent = mapCurrent?.addPolygon(
-                        PolygonOptions().addAll(farmJson).fillColor(Color.argb(100, 58, 146, 17))
-                            .strokeColor(
-                                Color.argb(255, 255, 255, 255)
-                            )
-                    )
-
-                    mapCurrent?.animateCamera(
-                        CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(farmJson), 10
-                        )
-                    )
-                } else {
-                    mapCurrent?.animateCamera(CameraUpdateFactory.newLatLngZoom(farmJson[0], 16f))
-                }
-            }
-
-        }
-
-        private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
-            val builder = LatLngBounds.builder()
-            for (ll in points) {
-                builder.include(ll)
-            }
-            return builder.build()
-        }
+//        private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
+//            val builder = LatLngBounds.builder()
+//            for (ll in points) {
+//                builder.include(ll)
+//            }
+//            return builder.build()
+//        }
 
     }
 }

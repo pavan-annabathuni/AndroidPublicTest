@@ -43,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -87,7 +88,7 @@ class RegistrationFragment : Fragment() {
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
     private var audioUrl: String? = null
 
-    private var fusedLocationProviderClient: FusedLocationProviderClient?=null
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
         .build()
@@ -96,7 +97,7 @@ class RegistrationFragment : Fragment() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             getLocation()
-            locationResult.lastLocation?.let { 
+            locationResult.lastLocation?.let {
                 removeLocationCallback()
                 getGeocodeFromLocation(it)
             }
@@ -562,7 +563,12 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        gotoMainActivity()
+                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
+                            if (user.data != null && user.data?.userId != null) {
+
+                                gotoMainActivity()
+                            }
+                        }
 /*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }*/
@@ -584,6 +590,7 @@ class RegistrationFragment : Fragment() {
         val intent = Intent()
         intent.setClassName(requireContext(), "com.waycool.iwap.MainActivity")
         startActivity(intent)
+        TranslationsManager().init()
         requireActivity().finish()
     }
 

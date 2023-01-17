@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class DashboardSyncer : SyncInterface {
+object DashboardSyncer : SyncInterface {
     override fun getSyncKey(): Preferences.Key<String> = SyncKey.DASH_BOARD
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
@@ -43,6 +43,8 @@ class DashboardSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+            setSyncStatus(true)
+
             NetworkSource.dashBoard()
                 .collect {
                     when (it) {

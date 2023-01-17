@@ -45,8 +45,10 @@ class AddCropTypeSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
             if (headerMap != null) {
+                setSyncStatus(true)
                 NetworkSource.getAddCropType(headerMap)
                     .collect {
                         when (it) {

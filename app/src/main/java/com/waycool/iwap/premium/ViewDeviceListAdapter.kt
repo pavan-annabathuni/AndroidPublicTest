@@ -8,18 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.soiltesting.databinding.ItemFlexBoxAddFormBinding
-import com.waycool.data.Network.NetworkModels.ViewDeviceDTO
-import com.waycool.data.Network.NetworkModels.ViewDeviceData
-
-import com.waycool.data.Network.NetworkModels.ViewIOTModel
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.iwap.R
-
 
 class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) : RecyclerView.Adapter<ViewDeviceListViewHolder>()  {
     private var row_index = 0
-    var itemsList = mutableListOf<ViewDeviceData>()
+    var itemsList = mutableListOf<ViewDeviceDomain>()
     private var selectedPosition = 0
-    fun setMovieList(movies: ArrayList<ViewDeviceData>) {
+    fun setMovieList(movies: List<ViewDeviceDomain>) {
         if (movies != null) {
             this.itemsList = movies.toMutableList()
         }
@@ -34,7 +30,7 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
     @SuppressLint("ResourceAsColor", "UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewDeviceListViewHolder, position: Int) {
         val details = itemsList[position]
-        holder.binding.skillName.text=details.model?.modelName
+        holder.binding.skillName.text=details.modelName
 //        if (position==0){
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
 //            viewDeviceFlexListener.viewDevice(details)

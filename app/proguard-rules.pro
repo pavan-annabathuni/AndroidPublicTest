@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.waycool.data.Network.NetworkModels.*
+-keep class com.waycool.data.Local.Entity.*
+-keep class com.waycool.data.repository.domainModels.*
+-keep public class ** {
+    public *;
+    protected *;
+
+}

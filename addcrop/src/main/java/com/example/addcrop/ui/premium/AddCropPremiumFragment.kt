@@ -364,7 +364,7 @@ class AddCropPremiumFragment : Fragment() {
                             binding.etCalender.error = "Pick up the Date"
                             return@setOnClickListener
                         } else if (numberOfPlanets.isEmpty()) {
-                            binding.etNoOfAcre.error = "Enter Number of Planets"
+                            binding.etNoOfAcre.error = "Enter Number of Plants per Acre"
                             return@setOnClickListener
                         } else if (area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                            Toast.makeText(requireContext(), "Next Page", Toast.LENGTH_SHORT)

@@ -13,6 +13,7 @@ import com.example.addcrop.AddCropActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentSpotLightBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -56,30 +57,36 @@ class SpotLightFragment : Fragment() {
                 if (position != imageList.size) {
                     binding.next.setOnClickListener() {
                         binding.idViewPager.setCurrentItem(position + 1, true)
-                    }}
-                    if (position == imageList.size - 1) {
-                        binding.next.setOnClickListener() {
-                          lifecycleScope.launch(){
-                              DataStoreManager.save("FirstTime","true")
-
-                            this@SpotLightFragment.findNavController()
-                                .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-                        }}
-
-
                     }
-                    binding.prev.setOnClickListener() {
-                        binding.idViewPager.setCurrentItem(position - 1, true)
-                    }
-                    binding.skip.setOnClickListener(){
-
-                            lifecycleScope.launch(){
-                                DataStoreManager.save("FirstTime","true")
-
-                            this@SpotLightFragment.findNavController()
-                                .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-                        }}
                 }
+                if (position == imageList.size - 1) {
+                    binding.next.setOnClickListener() {
+
+
+                        lifecycleScope.launch {
+                            DataStoreManager.save("FirstTime", "true")
+                            this@SpotLightFragment.findNavController().popBackStack()
+//                                .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
+
+                        }
+                    }
+
+
+                }
+                binding.prev.setOnClickListener() {
+                    binding.idViewPager.setCurrentItem(position - 1, true)
+                }
+                binding.skip.setOnClickListener() {
+
+                    lifecycleScope.launch {
+                        DataStoreManager.save("FirstTime", "true")
+                        this@SpotLightFragment.findNavController().popBackStack()
+//                            .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
+
+
+                    }
+                }
+            }
         }
         binding.idViewPager.registerOnPageChangeCallback(myPageChangeCallback)
 

@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -17,6 +18,10 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
 import com.waycool.iwap.premium.Farmdetailslistener
+import com.waycool.iwap.premium.ViewDeviceViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MyFarmFragment : Fragment(), Farmdetailslistener {
@@ -24,6 +29,7 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
     private val binding get() = _binding!!
 
     private val viewModel:MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+    private val deviceViewModel by lazy { ViewModelProvider(this)[ViewDeviceViewModel::class.java] }
     private val adapter: MyFarmFragmentAdapter by lazy { MyFarmFragmentAdapter(this,requireContext()) }
 
     override fun onCreateView(
@@ -65,6 +71,17 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                 is Resource.Error ->{}
             }
         }
+
+        viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            val response = it.data as ArrayList<MyCropDataDomain>
+            adapter.updateCropsList(response)
+        }
+
+        deviceViewModel.getIotDevice().observe(viewLifecycleOwner){
+            if(!it.data.isNullOrEmpty())
+            adapter.updateDeviceList(it.data!!)
+        }
+
         translationSoilTesting()
         checkRole()
     }

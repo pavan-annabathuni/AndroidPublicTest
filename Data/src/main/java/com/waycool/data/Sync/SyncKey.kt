@@ -57,4 +57,7 @@ object SyncKey {
 
     //MY FARMS
     val MY_FARMS = stringPreferencesKey("myfarms")
+
+    //MY Devices
+    val MY_DEVICES = stringPreferencesKey("mydevice")
 }

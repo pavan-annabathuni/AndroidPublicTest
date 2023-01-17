@@ -43,8 +43,10 @@ class VansCategorySyncer : SyncInterface {
     private fun makeNetworkCall() {
 
         GlobalScope.launch(Dispatchers.IO) {
+
             val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-            if (headerMap != null)
+            if (headerMap != null) {
+                setSyncStatus(true)
                 NetworkSource.getVansCategory(headerMap)
                     .collect {
                         when (it) {
@@ -67,6 +69,7 @@ class VansCategorySyncer : SyncInterface {
                             }
                         }
                     }
+            }
         }
     }
 }

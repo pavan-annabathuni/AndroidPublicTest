@@ -86,9 +86,10 @@
                     android:text="Krishna Kumar"
                     android:textColor="#111827"
                     android:textSize="@dimen/space13"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvName"
                     app:layout_constraintStart_toEndOf="@+id/tvName"
-                    app:layout_constraintTop_toTopOf="@+id/tvName"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvName"/>
+                    app:layout_constraintTop_toTopOf="@+id/tvName" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
@@ -101,7 +102,6 @@
                     android:textSize="@dimen/space13"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
-
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -117,18 +117,19 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
                     android:fontFamily="@font/playfair_reg"
                     android:text="!"
                     android:textColor="@color/textdark"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintTop_toTopOf="@id/tvGoodMorning"
                     app:layout_constraintBottom_toBottomOf="@id/tvGoodMorning"
-                    app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"/>
+                    app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"
+                    app:layout_constraintTop_toTopOf="@id/tvGoodMorning" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,13 +143,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvGoodMorning"
-                    tools:visibility="visible">
+                    tools:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardAddForm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:elevation="15dp"
                         app:cardCornerRadius="@dimen/txt10">
 
@@ -603,7 +605,8 @@
                 app:cardCornerRadius="@dimen/txt10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clBack">
+                app:layout_constraintTop_toBottomOf="@+id/clBack"
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clAddForm"
@@ -621,12 +624,12 @@
                         android:id="@+id/ivAddOne"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:src="@drawable/ic_add"
-                        android:layout_marginStart="100dp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -634,9 +637,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt8"
-                        android:text="Add your farm"
-                        android:textColor="#146133"
-                        android:textSize="@dimen/txt18"
                         android:ellipsize="marquee"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
@@ -644,6 +644,9 @@
                         android:maxLines="1"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
+                        android:text="Add your farm"
+                        android:textColor="#146133"
+                        android:textSize="@dimen/txt18"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -707,6 +710,7 @@
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
+
                                 <TextView
                                     android:id="@+id/MyFarm"
                                     android:layout_width="0dp"
@@ -909,12 +913,12 @@
                     <com.waycool.uicomponents.Text.ParagraphMedium
                         android:id="@+id/devices_empty_text"
                         android:layout_width="0dp"
-                        android:textColor="@color/textdark"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="No Devices added for this farm"
+                        android:textColor="@color/textdark"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/titleMyDevice" />
@@ -1044,13 +1048,13 @@
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/clBattery"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="14dp"
+                                    android:layout_marginTop="8dp"
                                     app:layout_constraintEnd_toStartOf="@+id/view"
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                    app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                     <ImageView
                                         android:id="@+id/battery"
@@ -1070,7 +1074,6 @@
                                         android:text="Battery"
                                         android:textColor="#5D6571"
                                         android:textSize="@dimen/txt14"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/battery"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreea" />
 
@@ -1090,13 +1093,13 @@
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/clBatteryTwo"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="14dp"
+                                    android:layout_marginTop="8dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toEndOf="@+id/view"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                    app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                     <ImageView
                                         android:id="@+id/batteryTwo"
@@ -1116,7 +1119,6 @@
                                         android:text="Elevation"
                                         android:textColor="#5D6571"
                                         android:textSize="@dimen/txt14"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/batteryTwo"
                                         app:layout_constraintTop_toBottomOf="@+id/totalAreeaTwo" />
 
@@ -1140,6 +1142,7 @@
                                     android:layout_width="2dp"
                                     android:layout_height="32dp"
                                     android:background="#EBECF2"
+                                    android:visibility="gone"
                                     app:layout_constraintBottom_toTopOf="@+id/belowBattery"
                                     app:layout_constraintEnd_toStartOf="@+id/clBatteryTwo"
                                     app:layout_constraintHorizontal_bias="0.5"
@@ -1150,11 +1153,39 @@
                                     android:id="@+id/belowBattery"
                                     android:layout_width="match_parent"
                                     android:layout_height="0.5dp"
-                                    android:layout_marginTop="@dimen/space12"
+                                    android:layout_marginTop="8dp"
                                     android:background="#EDEDED"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/clBattery" />
+                                    app:layout_constraintTop_toBottomOf="@+id/approvedCV" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/approvedCV"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="#FFF3F1"
+                                    app:cardCornerRadius="16dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/clBatteryTwo">
+
+                                    <TextView
+                                        android:id="@+id/tv_textAlert"
+                                        style="@style/Medium"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableStart="@drawable/ic_warning"
+                                        android:drawablePadding="8dp"
+                                        android:padding="8dp"
+                                        android:text="Your device is not approved. Contact us."
+                                        android:textColor="#FF2C23"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        tools:layout_editor_absoluteY="294dp" />
+                                </androidx.cardview.widget.CardView>
 
 
                                 <androidx.appcompat.widget.AppCompatTextView
@@ -1182,17 +1213,41 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
 
+                                <ProgressBar
+                                    android:id="@+id/update_progress_device"
+                                    style="?android:attr/progressBarStyle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:indeterminate="true"
+                                    android:visibility="invisible"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tvLastUpdateRefresh"
+                                    app:layout_constraintEnd_toEndOf="@+id/ivUpdate"
+                                    app:layout_constraintStart_toStartOf="@+id/ivUpdate"
+                                    app:layout_constraintTop_toTopOf="@+id/tvLastUpdateRefresh" />
+
+
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvLastUpdateRefresh"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginEnd="10dp"
+                                    android:padding="4dp"
                                     android:text="Update"
                                     android:textColor="#146133"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toStartOf="@+id/ivUpdate"
                                     app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
+
+                                <com.waycool.uicomponents.Text.SmallTextMedium
+                                    android:id="@+id/deviceNumber"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/textlight"
+                                    app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart"
+                                    tools:text="Device Number : 23cewn" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
@@ -1258,16 +1313,16 @@
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvTemp"
 
-                                        android:layout_height="wrap_content"
                                         android:layout_width="0dp"
-                                        android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginEnd="8dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Temprature"
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvTempDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvTempDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1312,17 +1367,17 @@
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvWind"
                                         android:layout_width="0dp"
-                                        android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
-
+                                        android:layout_marginEnd="8dp"
                                         android:layout_marginBottom="@dimen/txt10"
-                                        android:text="Rainfall"
 
+                                        android:text="Rainfall"
                                         android:textColor="#585858"
+
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvWindDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvWindDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1364,16 +1419,16 @@
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvHumidity"
 
-                                        android:layout_height="wrap_content"
                                         android:layout_width="0dp"
-                                        android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginEnd="8dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Humidity"
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvHumidityDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvHumidityDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1415,16 +1470,16 @@
 
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvWindSpeed"
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
-                                        android:layout_width="0dp"
                                         android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Wind Speed"
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvWindSpeedDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvWindSpeedDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1468,16 +1523,16 @@
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvLeafWetness"
 
-                                        android:layout_height="wrap_content"
                                         android:layout_width="0dp"
-                                        android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginEnd="8dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Leaf wetness"
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvLeafWetnessDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvLeafWetnessDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1519,16 +1574,16 @@
                                     <androidx.appcompat.widget.AppCompatTextView
                                         android:id="@+id/tvPressure"
 
-                                        android:layout_height="wrap_content"
                                         android:layout_width="0dp"
-                                        android:layout_marginEnd="8dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginTop="4dp"
+                                        android:layout_marginEnd="8dp"
                                         android:layout_marginBottom="@dimen/txt10"
                                         android:text="Pressure"
                                         android:textColor="#585858"
                                         android:textSize="@dimen/txt12"
                                         app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/tvPressureDegree"
                                         app:layout_constraintTop_toBottomOf="@+id/tvPressureDegree" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1639,12 +1694,12 @@
                                         android:id="@+id/soil_moisture_one"
                                         android:layout_width="100dp"
                                         android:layout_height="100dp"
+                                        android:layout_marginTop="8dp"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/tv_top"
                                         app:sv_centerCircleRadius="7dp"
                                         app:sv_endDegree="360"
-                                        android:layout_marginTop="8dp"
                                         app:sv_indicator="NeedleIndicator"
                                         app:sv_indicatorColor="#070D09"
                                         app:sv_speedTextFormat="FLOAT"
@@ -1744,12 +1799,12 @@
                                         android:id="@+id/soil_moisture_two"
                                         android:layout_width="100dp"
                                         android:layout_height="100dp"
+                                        android:layout_marginTop="8dp"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/tv_bottom"
                                         app:sv_centerCircleRadius="7dp"
                                         app:sv_endDegree="360"
-                                        android:layout_marginTop="8dp"
                                         app:sv_indicator="NeedleIndicator"
                                         app:sv_indicatorColor="#070D09"
                                         app:sv_speedTextFormat="FLOAT"

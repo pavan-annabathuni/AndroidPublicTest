@@ -223,14 +223,16 @@ class OtpFragment : Fragment() {
                             val otpResponse: OTPResponseDomain? = it.data
                             if (otpResponse?.type == "success") {
                                 verifyUser()
-                            }
-                            else if (otpResponse?.type == "error") {
-                                if(otpResponse?.message=="Max limit reached for this otp verification"){
-                                    ToastStateHandling.toastError(requireContext(), "You have reached the maximum limit for the otp verification.Get OTP again",Toast.LENGTH_LONG)
+                            } else if (otpResponse?.type == "error") {
+                                if (otpResponse?.message == "Max limit reached for this otp verification") {
+                                    ToastStateHandling.toastError(
+                                        requireContext(),
+                                        "You have reached the maximum limit for the otp verification.Get OTP again",
+                                        Toast.LENGTH_LONG
+                                    )
                                     //go to login fragment
                                     findNavController().popBackStack()
-                                }
-                                else{
+                                } else {
                                     ToastStateHandling.toastError(requireContext(), "Wrong Otp", Toast.LENGTH_SHORT)
                                 }
                             }
@@ -248,7 +250,7 @@ class OtpFragment : Fragment() {
                     }
                 }
         } else {
-            context?.let { ToastStateHandling.toastError(it,"Please enter the OTP", Toast.LENGTH_LONG) }
+            context?.let { ToastStateHandling.toastError(it, "Please enter the OTP", Toast.LENGTH_LONG) }
         }
     }
 
@@ -401,7 +403,13 @@ class OtpFragment : Fragment() {
                                     "Logged in successfully",
                                     Toast.LENGTH_SHORT
                                 )
-                                gotoMainActivity()
+                                loginViewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
+                                    Log.d("otpfragment", "${user.data}")
+                                    if (user.data != null && user.data?.userId != null) {
+                                        Log.d("otpfragment", "After Check ${user.data}")
+                                        gotoMainActivity()
+                                    }
+                                }
 
                             } else {
                                 if (loginMaster?.data == "406") {
@@ -465,7 +473,7 @@ class OtpFragment : Fragment() {
     fun apiOTP(mobileNumber: String) {
         loginViewModel.getOtp(mobileNumber).observe(requireActivity()) {
             if (it is Resource.Success) {
-                context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"OTP Sent",Toast.LENGTH_SHORT) }
+                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "OTP Sent", Toast.LENGTH_SHORT) }
             }
         }
     }

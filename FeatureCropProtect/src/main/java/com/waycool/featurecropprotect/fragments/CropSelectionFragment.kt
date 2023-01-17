@@ -139,6 +139,9 @@ class CropSelectionFragment : Fragment() {
             speechToText()
         }
         setUpCropCategories()
+
+        viewModel.downloadPestAndDiseases()
+
     }
 
     private fun setUpCropCategories() {

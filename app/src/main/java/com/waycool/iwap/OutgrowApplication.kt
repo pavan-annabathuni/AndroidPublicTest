@@ -26,10 +26,10 @@ class OutgrowApplication : Application() {
 
         //Refresh UserDetails If Required
         GlobalScope.launch {
-            UserDetailsSyncer().invalidateSync()
-            UserDetailsSyncer().getData()
-            DashboardSyncer().invalidateSync()
-            DashboardSyncer().getData()
+            UserDetailsSyncer.invalidateSync()
+            UserDetailsSyncer.getData()
+            DashboardSyncer.invalidateSync()
+            DashboardSyncer.getData()
         }
     }
 }

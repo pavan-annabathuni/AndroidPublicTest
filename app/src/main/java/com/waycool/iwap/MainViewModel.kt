@@ -87,4 +87,10 @@ class MainViewModel : ViewModel() {
         return NotificationRepository.updateNotification(id).asLiveData()
     }
 
+    fun getLatestTimeStamp(): LiveData<String> = DevicesRepository.getLatestTimeStamp().asLiveData()
+    fun updateDevices() {
+        DevicesRepository.refreshDevices()
+    }
+
+
 }

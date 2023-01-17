@@ -13,57 +13,85 @@
         <action
             android:id="@+id/action_homePagesFragment_to_newsFullviewActivity2"
             app:destination="@id/newsFullviewActivity2"
-            app:popUpTo="@id/homePagesFragment" />
+            app:popUpTo="@id/homePagesFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagesFragment_to_playVideoFragment4"
             app:destination="@id/playVideoFragment4"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/homePagesFragment" />
 
 
         <action
             android:id="@+id/action_homePagesFragment_to_allServicesFragment"
             app:destination="@id/allServicesFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_homePagesFragment_to_mandiGraphFragment22"
             app:destination="@id/mandiGraphFragment2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+           app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_homePagesFragment_to_editCropFragment"
             app:destination="@id/editCropFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
+           app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/homePagesFragment" />
         <action
             android:id="@+id/action_homePagesFragment_to_spotLightFragment"
-            app:destination="@id/spotLightFragment" />
+            app:destination="@id/spotLightFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagesFragment_to_notificationFragment"
-            app:destination="@id/notificationFragment" />
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagesFragment_to_nav_crop_protect"
-            app:destination="@id/nav_crop_protect" />
+            app:destination="@id/nav_crop_protect"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagesFragment_to_nav_farmdetails"
-            app:destination="@id/nav_farmdetails" />
+            app:destination="@id/nav_farmdetails"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_homePagesFragment_to_videosListFragment2"
-            app:destination="@+id/videosListFragment2" />
+            app:destination="@+id/videosListFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/xml"
-            app:destination="@id/nav_videos.xml" />
+            app:destination="@id/nav_videos.xml"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity2"
@@ -82,15 +110,19 @@
         <action
             android:id="@+id/action_allServicesFragment_to_homePagesFragment"
             app:destination="@id/homePagesFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
+           app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/homePagesFragment"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_allServicesFragment_to_serviceDescFragment"
-            app:destination="@id/serviceDescFragment" />
+            app:destination="@id/serviceDescFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/mandiGraphFragment2"
@@ -111,50 +143,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/homePagePremiumFragment2"
-        android:name="com.waycool.iwap.premium.HomePagePremiumFragment"
-        android:label="fragment_home_page_premium"
-        tools:layout="@layout/fragment_home_page_premium">
-        <action
-            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment2"
-            app:destination="@id/farmDetailsFragment2" />
-
-        <action
-            android:id="@+id/action_homePagePremiumFragment2_to_graphsFragment"
-            app:destination="@id/graphsFragment" />
-        <action
-            android:id="@+id/action_homePagePremiumFragment2_to_farmDetailsFragment3"
-            app:destination="@id/farmDetailsFragment3" />
-        <action
-            android:id="@+id/action_homePagePremiumFragment2_to_navigation"
-            app:destination="@id/navigation" />
-    </fragment>
-    <fragment
-        android:id="@+id/farmDetailsFragment2"
-        android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
-        android:label="fragment_farm_details"
-        tools:layout="@layout/fragment_farm_details2" >
-        <action
-            android:id="@+id/action_farmDetailsFragment2_to_graphsFragment"
-            app:destination="@id/graphsFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/graphsFragment"
-        android:name="com.waycool.iwap.graphs.GraphsFragment"
-        android:label="fragment_graphs"
-        tools:layout="@layout/fragment_graphs" />
-    <fragment
-        android:id="@+id/farmDetailsFragment3"
-        android:name="com.waycool.iwap.farmdetails.FarmDetailsFragment"
-        android:label="fragment_farm_details"
-        tools:layout="@layout/fragment_farm_details2" />
-    <fragment
         android:id="@+id/notificationFragment"
         android:name="com.waycool.iwap.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
-    <include app:graph="@navigation/irrgation_navigation" />
     <include app:graph="@navigation/nav_crop_protect" />
     <include app:graph="@navigation/nav_farmdetails" />
     <fragment

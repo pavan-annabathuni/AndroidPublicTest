@@ -14,28 +14,28 @@ import kotlinx.coroutines.withContext
 class TranslationsManager {
     fun init() {
         GlobalScope.launch(Dispatchers.IO) {
-            AppTranslationsSyncer().getData("")
+            AppTranslationsSyncer.getData("")
         }
     }
 
     fun refreshTranslations() {
         GlobalScope.launch {
-            AppTranslationsSyncer().getData("")
+            AppTranslationsSyncer.getData("")
         }
     }
 
     fun getStringAsLiveData(stringId: String):LiveData<AppTranslationsEntity>?{
-        return AppTranslationsSyncer().getDataAsFlow(stringId)?.asLiveData()
+        return AppTranslationsSyncer.getDataAsFlow(stringId)?.asLiveData()
     }
 
     suspend fun getString(stringId: String): String = withContext(Dispatchers.IO) {
-        return@withContext AppTranslationsSyncer().getData(stringId)?.appValue ?: ""
+        return@withContext AppTranslationsSyncer.getData(stringId)?.appValue ?: ""
     }
 
 
     fun loadString(stringId: String, textview: TextView,defaultValue:String?="") {
         GlobalScope.launch(Dispatchers.Main) {
-            textview.text = AppTranslationsSyncer().getData(stringId)?.appValue ?: defaultValue
+            textview.text = AppTranslationsSyncer.getData(stringId)?.appValue ?: defaultValue
         }
     }
 

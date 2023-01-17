@@ -102,8 +102,8 @@ class MandiFragment : Fragment() {
             this.findNavController().navigateUp()
         }
 
-        setBanners()
-        translation()
+//        setBanners()
+//        translation()
 //        return binding.root
 
     }
@@ -549,7 +549,7 @@ class MandiFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

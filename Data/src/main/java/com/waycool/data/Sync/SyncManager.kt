@@ -6,7 +6,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.mapLatest
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
@@ -51,6 +54,12 @@ object SyncManager {
     suspend fun syncSuccess(key: Preferences.Key<String>) {
         performPrefsSanityCheck()
         saveSyncTime(key)
+    }
+
+     fun getLastUpdated(key: Preferences.Key<String>):Flow<String>{
+        return context?.syncDataStore?.data?.mapLatest {
+            it[key] ?: ""
+        }?: emptyFlow()
     }
 
 

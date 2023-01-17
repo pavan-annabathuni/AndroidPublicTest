@@ -53,20 +53,20 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         Glide.with(holder.itemView.context).load(myCrop.cropLogo)
             .into(holder.binding.ivAddDeviceEnd)
         holder.binding.tvCloudy.isSelected = true
-        if (myCrop.irrigationRequired == true) {
+        if (myCrop.irrigationRequired == 1) {
             holder.binding.tvCloudy.text = "Irrigation required"
-        } else if (myCrop.irrigationRequired == false){
+        } else if (myCrop.irrigationRequired == 0){
             holder.binding.tvCloudy.text = "Irrigation not required"
         }else{
             holder.binding.tvCloudy.text = "-NA-"
         }
-            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
-        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
+//            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
+//        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
 
         holder.binding.tvCloudyNoDisease.isSelected = true
-        if (myCrop.disease == true) {
+        if (myCrop.disease == 1) {
             holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
-        } else if (myCrop.disease == false){
+        } else if (myCrop.disease == 0){
             holder.binding.tvCloudyNoDisease.text = "No diseases alerts today"
         }else {
             holder.binding.tvCloudyNoDisease.text = "-NA-"

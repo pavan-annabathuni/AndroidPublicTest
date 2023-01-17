@@ -41,7 +41,6 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice,"View Farm Details")
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
-
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
 //        holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {

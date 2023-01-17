@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -26,10 +27,11 @@ import com.google.android.libraries.maps.model.Polygon
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
-import com.waycool.data.Network.NetworkModels.ViewDeviceData
+import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -38,6 +40,7 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -55,6 +58,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
     private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
 
+    private var lastUpdatedTime: String? = null
 
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
@@ -95,7 +99,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         notification()
         setWishes()
 
+        lifecycleScope.launch {
+            val value: String? = DataStoreManager.read("FirstTime")
+            if (value != "true")
+                findNavController().navigate(R.id.action_homePagePremiumFragment3_to_spotLightFragment2)
+        }
 
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in (1..11) -> binding.tvGoodMorning.text = "Good Morning!"
+            in 12..15 -> binding.tvGoodMorning.text = "Good Afternoon!"
+            in 16..20 -> binding.tvGoodMorning.text = "Good Evening!"
+            in 21..23 -> binding.tvGoodMorning.text = "Good Night!"
+            else -> binding.tvGoodMorning.text = "Namaste"
+        }
 
         binding.IvNotification.setOnClickListener {
             findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
@@ -119,7 +135,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     fun translations() {
-        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+//        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
         TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
         TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
@@ -149,22 +165,22 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     private fun initObserveDevice(farmId: Int) {
-        viewDevice.getIotDevice().observe(requireActivity()) {
-            if (it.data?.data.isNullOrEmpty()) {
-                binding.cardMYDevice.visibility = View.GONE
-            } else
+        viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
+           checkForDeviceApiUpdate()
+//            if (it.data?.isEmpty() == true) {
+//                binding.cardMYDevice.visibility = View.GONE
+//            } else
+
+            Log.d("DeviceSelected","${it.data}")
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data?.data != null) {
-                            val deviceListForFarm =
-                                it.data?.data?.filter { it1 -> it1.farmId == farmId }
-                            if (!deviceListForFarm.isNullOrEmpty()) {
+                            if (!it.data.isNullOrEmpty()) {
                                 binding.cardMYDevice.visibility = View.VISIBLE
                                 binding.deviceParamsCL.visibility=View.VISIBLE
                                 binding.deviceFarm.visibility=View.VISIBLE
                                 binding.devicesEmptyText.visibility=View.GONE
                                 binding.deviceFarm.adapter = viewDeviceListAdapter
-                                viewDeviceListAdapter.setMovieList(deviceListForFarm as ArrayList<ViewDeviceData>)
+                                viewDeviceListAdapter.setMovieList(it.data!!)
                             }else{
                                 binding.cardMYDevice.visibility = View.VISIBLE
                                 binding.deviceParamsCL.visibility=View.GONE
@@ -172,8 +188,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                                 binding.devicesEmptyText.visibility=View.VISIBLE
 
                             }
-                        }
-
                     }
                     is Resource.Error -> {
                         ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
@@ -191,6 +205,23 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
 
     }
+
+    private fun checkForDeviceApiUpdate() {
+        activity?.let {
+            viewModel.getLatestTimeStamp().observe(it) { time ->
+
+                if (lastUpdatedTime.isNullOrEmpty()) {
+                    lastUpdatedTime = time
+                }
+                if (lastUpdatedTime != time) {
+                    lastUpdatedTime = time
+                    binding.updateProgressDevice.visibility = View.INVISIBLE
+                    binding.ivUpdate.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
 
     private fun initClickEvents() {
         binding.clAddCropData.setOnClickListener {
@@ -229,6 +260,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
 //        }
 
+        binding.tvLastUpdateRefresh.setOnClickListener {
+            updateDevice()
+
+        }
+
+    }
+
+    private fun updateDevice() {
+        binding.ivUpdate.visibility = View.INVISIBLE
+        binding.updateProgressDevice.visibility = View.VISIBLE
+        viewModel.updateDevices()
     }
 
     private fun initMyCropObserve() {
@@ -241,6 +283,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     calculateScrollPercentage2(binding).toFloat()
             }
         })
+
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val response = it.data as ArrayList<MyCropDataDomain>
             myCropPremiumAdapter.setMovieList(response)
@@ -465,9 +508,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     @SuppressLint("SetTextI18n")
-    override fun viewDevice(data: ViewDeviceData) {
+    override fun viewDevice(data: ViewDeviceDomain) {
 
-        if (data.model?.series == "GSX") {
+        if (data.modelSeries == "GSX") {
             binding.cardTopParent.visibility = View.GONE
             binding.clTempView.visibility = View.GONE
         } else {
@@ -477,8 +520,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
         binding.let {
 
-            it.totalAreea.text = data.iotDevicesData?.battery.toString()
-            it.tvAddDeviceStart.text = data.model?.modelName.toString()
+            it.totalAreea.text = data.battery.toString()
+            if (data.battery == null) {
+                it.clBattery.visibility = View.GONE
+            }
+            it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
+            it.deviceNumber.text="Device Number : ${data.deviceNumber?.uppercase()}"
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -489,6 +536,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             } else {
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
+
+            if(data.isApproved==0){
+                it.approvedCV.visibility=View.VISIBLE
+                it.tvTextAlert.text="Your device is not approved. Contact us."
+                it.cardTopParent.visibility=View.GONE
+                it.cardSpeedMeter.visibility=View.GONE
+                it.clSoilTemp.visibility=View.GONE
+                it.clTempView.visibility=View.GONE
+            }else{
+                it.approvedCV.visibility=View.GONE
+                it.cardTopParent.visibility=View.VISIBLE
+                it.cardSpeedMeter.visibility=View.VISIBLE
+                it.clSoilTemp.visibility=View.VISIBLE
+                it.clTempView.visibility=View.VISIBLE
             }
 //            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
 //
@@ -502,20 +564,29 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
             binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
+            if (data.soilTemperature1.isNullOrEmpty()) {
+                it.clSoilTemp.visibility = View.GONE
+            }
+            if (data.soilMoisture2 == null) {
+                it.bottomTop.visibility = View.GONE
+            }
+
+            var colorSectionListSM1= mutableListOf<Section>()
+
             binding.soilMoistureOne.addSections(
-                Section(0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
+                Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureOne.dpTOpx(12f)),
+                Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureOne.dpTOpx(12f))
             )
             //two
 //            binding.soilMoistureOne .indicator.color = Color.RED
             binding.soilMoistureTwo.addSections(
                 Section
-                    (0f, .1f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.1f, .3f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.3f, .5f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
-                Section(.5f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
+                    (0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.16f, .41f, Color.parseColor("#5FC047"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
+                Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
             )
 
 
@@ -537,8 +608,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.soilMoistureTwo.marksNumber = 0
 
 //            binding.soilMoistureOne.speedTo()
-            binding.soilMoistureOne.maxSpeed = 100F
-            binding.soilMoistureTwo.maxSpeed = 100F
+            binding.soilMoistureOne.maxSpeed = 60F
+            binding.soilMoistureTwo.maxSpeed = 60F
 //            binding.soilMoistureOne.ticks  = listOf(10.0F)
 //            binding.soilMoistureTwo.ticks = 10
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
@@ -612,9 +683,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            it.tubeSpeedometer.maxSpeed = 100f
 //            it.tubeSpeedometer.speedTo(140f)
 //            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
-            it.tvLastUpdateRefresh.setOnClickListener {
-                viewDeviceListAdapter.upDateList()
-            }
+//            it.tvLastUpdateRefresh.setOnClickListener {
+//                viewDeviceListAdapter.upDateList()
+//            }
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
@@ -696,7 +767,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
-                    bundle.putString("temp_value", data.leafWetness)
+                    bundle.putString("temp_value", data.leafWetness.toString())
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -724,7 +795,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soil_moisture_1")
+                    bundle.putString("value", "soil_moisture_1_kpa")
                     bundle.putString("toolbar", "Soil Moisture Top")
                     bundle.putString("temp_value", data.soilMoisture1.toString())
                     bundle.putString("date_time", data.dataTimestamp)
@@ -740,7 +811,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
-                    bundle.putString("value", "soil_moisture_2")
+                    bundle.putString("value", "soil_moisture_2_kpa")
                     bundle.putString("toolbar", "Soil Moisture Bottom")
                     bundle.putString("temp_value", data.soilMoisture2?.toString())
                     bundle.putString("date_time", data.dataTimestamp)
@@ -829,7 +900,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)
@@ -856,6 +927,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     override fun onFarmSelected(data: MyFarmsDomain) {
         data.id?.let { initObserveDevice(it) }
+        Log.d("FarmSelected","FarmId:${data.id}")
     }
 
 

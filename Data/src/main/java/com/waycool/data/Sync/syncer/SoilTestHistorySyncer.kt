@@ -56,6 +56,7 @@ class SoilTestHistorySyncer : SyncInterface {
 
 
             if (headerMap != null ) {
+                setSyncStatus(true)
                 NetworkSource.getSoilTesAllHistory(headerMap,account_id )
                     .collect {
                         when (it) {

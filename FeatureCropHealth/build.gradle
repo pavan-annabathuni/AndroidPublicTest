@@ -112,6 +112,8 @@ dependencies {
 
     implementation(libraries.stetho)
 
+    implementation 'com.google.android.gms:play-services-mlkit-image-labeling:16.0.8'
+
 
     //tab layout
 //    implementation "com.android.support:design:26.1.0"

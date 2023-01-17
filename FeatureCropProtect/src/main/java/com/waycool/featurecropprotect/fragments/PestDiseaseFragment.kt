@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -48,6 +50,22 @@ class PestDiseaseFragment : Fragment() {
     ): View {
 
         binding = FragmentPestDiseaseBinding.inflate(inflater)
+        binding.toolbar.setOnClickListener {
+            val isSuccess = findNavController().popBackStack()
+            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+        }
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().popBackStack()
+                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            callback
+        )
         return binding.root
     }
 
@@ -66,9 +84,9 @@ class PestDiseaseFragment : Fragment() {
 //        pestDiseaseApiCall()
 //        setBanners()
         fabButton()
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+//        binding.toolbar.setNavigationOnClickListener {
+//            findNavController().popBackStack()
+//        }
         binding.toolbarTitle.text = cropName
 
 
@@ -90,6 +108,7 @@ class PestDiseaseFragment : Fragment() {
                         else{
                             binding.progressBar.visibility=View.GONE
                             adapter.submitList(emptyList())
+//                            binding.tvNoData.visibility=View.VISIBLE
                         }
 
 
@@ -151,7 +170,7 @@ class PestDiseaseFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
             bannerAdapter.submitData(lifecycle, it)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
