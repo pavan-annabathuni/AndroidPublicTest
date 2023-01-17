@@ -122,10 +122,10 @@ class MandiFragment : Fragment() {
             requireActivity(),
             callback
         )
-
         viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
             val args = Bundle()
+
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
             adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
@@ -135,6 +135,7 @@ class MandiFragment : Fragment() {
             findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         }, LocalSource.getLanguageCode() ?: "en")
+
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
@@ -641,11 +642,12 @@ class MandiFragment : Fragment() {
     }
 
     private fun translation(){
-        var mandi = "Mandi Price"
+        var mandi = "Market Prices"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi
         }
+        TranslationsManager().loadString("str_no_data",binding.tvNoData,"Selected Crop or Mandi is not available with us.")
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
         TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 

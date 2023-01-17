@@ -102,7 +102,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.viewModelScope.launch{
+        viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DistanceAdapter.DiffCallback.OnClickListener {
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
@@ -114,14 +114,14 @@ class SearchFragment : Fragment() {
                 .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
         }, LocalSource.getLanguageCode() ?: "en")
         binding.recycleViewDis.adapter = adapterMandi
-
+        viewModel.viewModelScope.launch {
             viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountId)
                 .observe(viewLifecycleOwner) {
                     // binding.viewModel = it
                     adapterMandi.submitData(lifecycle, it)
                     // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                }}
-
+                }
+        }}
         filterMenu()
         tabs()
         //searchView()
@@ -429,7 +429,7 @@ class SearchFragment : Fragment() {
         }
     }
     private fun translation(){
-        var mandi = "Mandi Price"
+        var mandi = "Market Prices"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi
