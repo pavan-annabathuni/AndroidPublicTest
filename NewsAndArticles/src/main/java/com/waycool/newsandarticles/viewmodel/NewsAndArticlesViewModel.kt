@@ -7,39 +7,22 @@ import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 
 class NewsAndArticlesViewModel : ViewModel() {
-
-
-    //news
     fun getVansNewsList(
         vansType: String? = null,
         tags: String? = null
     ): LiveData<PagingData<VansFeederListDomain>> {
-
         val queryMap = mutableMapOf<String, String>()
         queryMap["lang_id"] = "1"
         if (vansType == null) {
             queryMap["vans_type"] = "news,articles"
         } else queryMap["vans_type"] = vansType.toString()
-
         if (tags != null)
             queryMap["tags"] = tags
-
-//        if (categoryId != null)
-//            queryMap["category_id"] = categoryId.toString()
-
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
-
-    //Ad Banners
     fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
-
-
-//    fun getVansVideosCat(): LiveData<Resource<List<VansCategoryDomain>>> {
-//        return VansRepository.getVansCategoryList().asLiveData()
-//    }
-
 }

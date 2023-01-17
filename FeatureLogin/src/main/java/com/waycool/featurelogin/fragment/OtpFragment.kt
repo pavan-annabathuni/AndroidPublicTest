@@ -1,5 +1,6 @@
 package com.waycool.featurelogin.fragment
 
+//import com.waycool.data.utils.SharedPreferenceUtility
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,7 +9,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,11 +34,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mukesh.OTP_VIEW_TYPE_BORDER
 import com.mukesh.OtpView
 import com.waycool.core.retrofit.OTPApiCient
-import com.waycool.data.utils.NetworkUtil
-//import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
+import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
 import com.waycool.featurelogin.databinding.FragmentOtpBinding
@@ -55,6 +54,7 @@ import java.util.regex.Pattern
 
 
 class OtpFragment : Fragment() {
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     lateinit var binding: FragmentOtpBinding
     private var mToast: Toast? = null
     var mobileNumber: String = ""
@@ -405,7 +405,7 @@ class OtpFragment : Fragment() {
 
                             } else {
                                 if (loginMaster?.data == "406") {
-                                    val bottomSheetDialog = BottomSheetDialog(requireContext())
+                                    bottomSheetDialog = BottomSheetDialog(requireContext())
                                     bottomSheetDialog.setContentView(R.layout.bottom_dialog_logged_in_details)
                                     val logginTv =
                                         bottomSheetDialog.findViewById<TextView>(R.id.loggin_text_dialog)
@@ -467,6 +467,12 @@ class OtpFragment : Fragment() {
             if (it is Resource.Success) {
                 context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"OTP Sent",Toast.LENGTH_SHORT) }
             }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (bottomSheetDialog.isShowing) {
+            bottomSheetDialog.dismiss()
         }
     }
 }
