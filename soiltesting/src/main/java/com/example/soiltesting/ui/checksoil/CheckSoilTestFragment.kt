@@ -49,7 +49,8 @@ class CheckSoilTestFragment : Fragment() {
             binding.tvLabTitle.text = your_list?.get(0)?.onpName.toString()
             binding.tvName.text = your_list?.get(0)?.onpAddress.toString()
             binding.tvCheckCrop.text =
-                your_list?.get(0)?.onpDistanceKm.toString() + " from your location"
+                your_list?.get(0)?.onpDistanceKm.toString()+TranslationsManager().loadString("_11_km_from_your_location", binding.tvCheckCrop)
+
             binding.pinCode.text = your_list?.get(0)?.onpPincode.toString()
             binding.btnSelectCrop.setOnClickListener {
                 findNavController().navigate(R.id.action_checkSoilTestFragment_to_selectCropSoilTestFragment)
