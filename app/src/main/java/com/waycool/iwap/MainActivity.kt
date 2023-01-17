@@ -244,6 +244,7 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
 
+            if (bottomNavigationView.menu!=null){
             TranslationsManager().getStringAsLiveData("home")?.observe(this){
                 bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue?:"Home"
             }
@@ -256,11 +257,12 @@ class MainActivity : AppCompatActivity() {
             TranslationsManager().getStringAsLiveData("profile")?.observe(this){
                 bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Profile"
             }
-        } else {
+        }} else {
             navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
+            if(bottomNavigationView.menu!=null){
 
             TranslationsManager().getStringAsLiveData("home")?.observe(this){
                 bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"
@@ -269,11 +271,11 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"
-            }
-            TranslationsManager().getStringAsLiveData("profile")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Home"
-            }
+                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"}
+            TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
+                bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
+                    it?.appValue ?: "Home"
+            } }
         }
 
 

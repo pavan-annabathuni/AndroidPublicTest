@@ -330,74 +330,6 @@ class RegistrationFragment : Fragment() {
 
     }
 
-//    @SuppressLint("MissingPermission")
-//    private fun getLocation() {
-//        if (checkPermissions()) {
-//            if (isLocationEnabled()) {
-//
-//                mFusedLocationClient =
-//                    LocationServices.getFusedLocationProviderClient(requireActivity().applicationContext)
-//
-//                binding.locationTextlayout.helperText = "Detecting your location.."
-//
-//                mFusedLocationClient.lastLocation
-//                    .addOnSuccessListener { location: Location? ->
-//                        if (location != null) {
-//                            latitude = String.format(Locale.ENGLISH, "%.5f", location.latitude)
-//                            longitutde = String.format(Locale.ENGLISH, "%.5f", location.longitude)
-//
-//                            viewModel.getReverseGeocode("${location.latitude},${location.longitude}")
-//                                .observe(viewLifecycleOwner) {
-//                                    binding.locationEt.setText("")
-//                                    if (it.results.isNotEmpty()) {
-//                                        val result = it.results[0]
-//                                        if (result.subLocality != null)
-//                                            binding.locationEt.append("${result.subLocality},")
-//                                        if (result.locality != null)
-//                                            binding.locationEt.append("${result.locality},")
-//                                        if (result.district != null)
-//                                            binding.locationEt.append(" ${result.district}")
-//                                        binding.locationEt.setSelection(0)
-//                                        binding.locationTextlayout.helperText = ""
-//
-//                                        address = result.formattedAddress.toString()
-//                                        village = result.subLocality.toString()
-//                                        pincode = result.pincode.toString()
-//                                        state = result.state.toString()
-//                                        district = result.district.toString()
-//                                    } else {
-////                                        binding.locationEt.setText("$village, $district")
-//                                        binding.locationTextlayout.helperText =
-//                                            "Could not find your location. " +
-//                                                    "Enter Manually."
-//                                    }
-//
-//                                }
-//
-//                        }
-//                    }
-//                    .addOnFailureListener {
-//                        it.message?.let { it1 ->
-//                            ToastStateHandling.toastError(requireContext(),
-//                                it1,Toast.LENGTH_SHORT)
-//                        }
-//                        Log.d("Registration", "" + it.message)
-//                    }
-//                    .addOnCanceledListener {
-//                        ToastStateHandling.toastError(requireContext(),
-//                            "Cancelled",Toast.LENGTH_SHORT)
-//
-//                    }
-//            } else {
-//                ToastStateHandling.toastError(requireContext(),
-//                    "Please turn on location",Toast.LENGTH_SHORT)
-//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-//                startActivity(intent)
-//            }
-//        } else {
-//            requestPermission()
-//        }
-//    }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
@@ -488,9 +420,6 @@ class RegistrationFragment : Fragment() {
                 } else {
                     binding.textEnterManually.visibility=View.VISIBLE
                     binding.textDetecting.visibility=View.GONE
-                   /* binding.locationEt.error=
-                        "Could not find your location. " +
-                                "Enter Manually."*/
                 }
 
             }
@@ -527,14 +456,6 @@ class RegistrationFragment : Fragment() {
             )
         )
 
-//        requestPermissions(
-//            arrayOf(
-//                Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ),
-//            permissionId
-//        )
-        //requestPermissions(String[] {android.Manifest.permission.READ_CONTACTS}, REQUEST_CONTACT);
     }
 
 
@@ -674,19 +595,16 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun userModule() {
-        viewModel.getModuleMaster().observe(viewLifecycleOwner) {
+        viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->
             when (it) {
                 is Resource.Success -> {
-
                     val freelist = it.data?.filter { it.subscription == 0 } as MutableList
                     val paidlist = it.data?.filter { it.subscription == 1 } as MutableList
                     knowAdapter.update(freelist)
                     premiumAdapter.update(paidlist)
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {
-//                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
 
                 }
                 is Resource.Error -> {
