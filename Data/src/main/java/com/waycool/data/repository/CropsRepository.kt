@@ -393,8 +393,10 @@ object CropsRepository {
             GlobalScope.launch {
                 DashboardSyncer.invalidateSync()
                 DashboardSyncer.getData()
+                ViewDevicesSyncer.invalidateSync()
+                ViewDevicesSyncer.downloadDevices()
             }
-        }, 500)
+        }, 600)
         return NetworkSource.activateDevice(map)
     }
 
@@ -504,16 +506,12 @@ object CropsRepository {
 
                     domainList=domainList.map { history->
                         history.disease_name= history.crop_id?.let { it1 ->
-                            LocalSource.getSelectedDiseaseEntity(
-                                it1
-                            ).diseaseName
+                            LocalSource.getSelectedDiseaseEntity(it1)?.diseaseName?:"--"
                         }
                         history
                     }
 
-                    Resource.Success(
-                        domainList
-                    )
+                    Resource.Success(domainList)
                 }
                 is Resource.Loading -> {
                     Resource.Loading()

@@ -167,12 +167,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun initObserveDevice(farmId: Int) {
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
            checkForDeviceApiUpdate()
-            if (it.data?.isEmpty() == true) {
-                binding.cardMYDevice.visibility = View.GONE
-            } else
+//            if (it.data?.isEmpty() == true) {
+//                binding.cardMYDevice.visibility = View.GONE
+//            } else
+
+            Log.d("DeviceSelected","${it.data}")
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data != null) {
                             if (!it.data.isNullOrEmpty()) {
                                 binding.cardMYDevice.visibility = View.VISIBLE
                                 binding.deviceParamsCL.visibility=View.VISIBLE
@@ -187,8 +188,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                                 binding.devicesEmptyText.visibility=View.VISIBLE
 
                             }
-                        }
-
                     }
                     is Resource.Error -> {
                         ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
@@ -526,6 +525,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.clBattery.visibility = View.GONE
             }
             it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
+            it.deviceNumber.text="Device Number : ${data.deviceNumber?.uppercase()}"
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -536,6 +536,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             } else {
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
+
+            if(data.isApproved==0){
+                it.approvedCV.visibility=View.VISIBLE
+                it.tvTextAlert.text="Your device is not approved. Contact us."
+                it.cardTopParent.visibility=View.GONE
+                it.cardSpeedMeter.visibility=View.GONE
+                it.clSoilTemp.visibility=View.GONE
+                it.clTempView.visibility=View.GONE
+            }else{
+                it.approvedCV.visibility=View.GONE
+                it.cardTopParent.visibility=View.VISIBLE
+                it.cardSpeedMeter.visibility=View.VISIBLE
+                it.clSoilTemp.visibility=View.VISIBLE
+                it.clTempView.visibility=View.VISIBLE
             }
 //            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
 //
@@ -912,6 +927,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     override fun onFarmSelected(data: MyFarmsDomain) {
         data.id?.let { initObserveDevice(it) }
+        Log.d("FarmSelected","FarmId:${data.id}")
     }
 
 

@@ -34,6 +34,8 @@ data class ViewDeviceData(
     @SerializedName("iot_devices_data_id"   ) var iotDevicesDataId   : Int?                = null,
     @SerializedName("farm_id"               ) var farmId             : Int?                = null,
     @SerializedName("device_name"           ) var deviceName         : String?             = null,
+    @SerializedName("device_number"           ) var deviceNumber         : String?             = null,
+    @SerializedName("is_approved"           ) var isApproved         : Int?             = null,
     @SerializedName("delta_t"               ) var deltaT             : Double?                = null,
     @SerializedName("delta_t_range"         ) var deltaTRange        : RangesData?        = RangesData(),
     @SerializedName("soil_moisture_1_range" ) var soilMoisture1Range : RangesData? = RangesData(),

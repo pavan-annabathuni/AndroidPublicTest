@@ -569,6 +569,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 it.clBattery.visibility = View.GONE
             }
             it.tvAddDeviceStart.text = "${ data.modelName} - ${data.deviceName}"
+            it.deviceNumber.text="Device Number : ${data.deviceNumber?.uppercase()}"
             it.tvTempDegree.text = data.temperature.toString() + " \u2103"
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
@@ -580,6 +581,22 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 it.tvLeafWetnessDegree.text = "Dry"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
             }
+
+            if(data.isApproved==0){
+                it.approvedCV.visibility=View.VISIBLE
+                it.tvTextAlert.text="Your device is not approved. Contact us."
+                it.cardTopParent.visibility=View.GONE
+                it.cardSpeedMeter.visibility=View.GONE
+                it.clSoilTemp.visibility=View.GONE
+                it.clTempView.visibility=View.GONE
+            }else{
+                it.approvedCV.visibility=View.GONE
+                it.cardTopParent.visibility=View.VISIBLE
+                it.cardSpeedMeter.visibility=View.VISIBLE
+                it.clSoilTemp.visibility=View.VISIBLE
+                it.clTempView.visibility=View.VISIBLE
+            }
+
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
 
             if (data.soilTemperature1.isNullOrEmpty()) {

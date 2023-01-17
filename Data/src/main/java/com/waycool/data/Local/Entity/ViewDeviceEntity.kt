@@ -34,6 +34,9 @@ data class ViewDeviceEntity(
     @ColumnInfo(name = "model_name"            ) var modelName          : String? =null,
     @ColumnInfo(name = "model_series"          ) var modelSeries        : String? =null,
 
+    @ColumnInfo(name = "device_number"           ) var deviceNumber         : String?             = null,
+    @ColumnInfo(name = "is_approved"           ) var isApproved         : Int?             = null,
+
 )
 
 data class RangesEntity (

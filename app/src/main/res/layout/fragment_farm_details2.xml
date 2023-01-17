@@ -774,6 +774,17 @@
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
                                 app:layout_constraintTop_toTopOf="parent" />
 
+                            <com.waycool.uicomponents.Text.SmallTextMedium
+                                android:id="@+id/deviceNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/textlight"
+                                tools:text="Device Number : 23cewn"
+                                app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
+                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
+
+
                             <ImageView
                                 android:id="@+id/ivAddDeviceEnd"
                                 android:layout_width="@dimen/space100"
@@ -790,12 +801,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:layout_marginTop="14dp"
+                                android:layout_marginTop="8dp"
                                 android:visibility="visible"
                                 app:layout_constraintEnd_toStartOf="@+id/view"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                 <ImageView
                                     android:id="@+id/battery"
@@ -837,12 +848,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:layout_marginTop="14dp"
+                                android:layout_marginTop="8dp"
                                 android:layout_marginEnd="16dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/view"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart">
+                                app:layout_constraintTop_toBottomOf="@+id/deviceNumber">
 
                                 <ImageView
                                     android:id="@+id/batteryTwo"
@@ -895,11 +906,40 @@
                                 android:id="@+id/belowBattery"
                                 android:layout_width="match_parent"
                                 android:layout_height="0.5dp"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="8dp"
                                 android:background="#EDEDED"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/ivAddDeviceEnd" />
+                                app:layout_constraintTop_toBottomOf="@+id/approvedCV" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/approvedCV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:visibility="visible"
+                                app:cardBackgroundColor="#FFF3F1"
+                                app:cardCornerRadius="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/clBatteryTwo">
+
+                                <TextView
+                                    android:id="@+id/tv_textAlert"
+                                    style="@style/Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_warning"
+                                    android:drawablePadding="8dp"
+                                    android:padding="8dp"
+                                    android:text="Your device is not approved. Contact us."
+                                    android:textColor="#FF2C23"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    tools:layout_editor_absoluteY="294dp" />
+                            </androidx.cardview.widget.CardView>
+
 
 
                             <androidx.appcompat.widget.AppCompatTextView

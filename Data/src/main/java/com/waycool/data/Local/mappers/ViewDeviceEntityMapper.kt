@@ -35,7 +35,9 @@ class ViewDeviceEntityMapper : EntityMapper<ViewDeviceEntity, ViewDeviceData> {
             soilMoisture2Range = RangeEntityMapper().mapToEntity(dto.soilMoisture2Range?:RangesData()),
             battery = dto.iotDevicesData?.battery,
             modelName = dto.model?.modelName,
-            modelSeries = dto.model?.series
+            modelSeries = dto.model?.series,
+            deviceNumber = dto.deviceNumber,
+            isApproved = dto.isApproved
         )
     }
 

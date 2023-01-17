@@ -200,7 +200,7 @@ class PlantSpacingFragment : Fragment() {
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
-            binding.toolbarTitle.text = title
+//            binding.toolbarTitle.text = title
             var NickNamehint = TranslationsManager().getString("e_g_crop_name")
             binding.etNumber.hint =NickNamehint
             binding.etNumberWidth.hint=NickNamehint

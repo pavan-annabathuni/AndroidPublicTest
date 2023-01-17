@@ -6,10 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.paging.PagingData
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.MandiMasterModel
-import com.waycool.data.Network.NetworkModels.MandiModel
-import com.waycool.data.Network.NetworkModels.profile
 import com.waycool.data.Network.NetworkSource
-import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource

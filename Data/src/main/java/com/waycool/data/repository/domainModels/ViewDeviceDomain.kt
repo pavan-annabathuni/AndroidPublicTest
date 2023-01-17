@@ -1,5 +1,7 @@
 package com.waycool.data.repository.domainModels
 
+import com.google.gson.annotations.SerializedName
+
 
 data class ViewDeviceDomain (
         var id                 : Int?                = null,
@@ -26,6 +28,8 @@ data class ViewDeviceDomain (
         var battery            : String? = null,
         var modelName          : String? =null,
         var modelSeries        : String? =null,
+         var deviceNumber         : String?             = null,
+        var isApproved         : Int?             = null,
         )
 
 data class RangesDomain (

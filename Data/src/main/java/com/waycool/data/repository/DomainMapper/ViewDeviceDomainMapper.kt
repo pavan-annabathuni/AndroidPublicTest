@@ -36,7 +36,9 @@ class ViewDeviceDomainMapper:DomainMapper<ViewDeviceDomain,ViewDeviceEntity> {
             soilMoisture2Range = RangeDomainMapper().mapToDomain(dto.soilMoisture2Range?: RangesEntity()),
             battery = dto.battery,
             modelName = dto.modelName,
-            modelSeries = dto.modelSeries
+            modelSeries = dto.modelSeries,
+            deviceNumber = dto.deviceNumber,
+            isApproved = dto.isApproved
         )
     }
 
