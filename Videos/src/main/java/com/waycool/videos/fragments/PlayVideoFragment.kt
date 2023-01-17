@@ -103,7 +103,7 @@ class PlayVideoFragment : Fragment() ,itemClick{
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigateUp()
+                    findNavController().popBackStack()
                 }
             }
         activity?.onBackPressedDispatcher?.addCallback(
