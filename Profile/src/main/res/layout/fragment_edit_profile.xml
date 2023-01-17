@@ -107,7 +107,6 @@
                     android:background="@drawable/text_border"
                     android:lines="1"
                     android:paddingStart="16dp"
-                    android:text="@{viewModel.response2.name}"
                     tools:text="Krishna AgriFarm"
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -141,7 +140,6 @@
                     android:enabled="false"
                     android:paddingStart="16dp"
                     android:drawableStart="@drawable/ic_flag"
-                    android:text='@{"+91 "+viewModel.response2.contact}'
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"

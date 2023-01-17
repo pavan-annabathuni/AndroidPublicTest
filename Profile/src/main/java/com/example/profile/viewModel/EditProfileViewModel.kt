@@ -19,30 +19,16 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 class EditProfileViewModel:ViewModel() {
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
-        get() = _status
-
-    private val _response = MutableLiveData<profile>()
-    val response: LiveData<profile>
-        get() = _response
-
-    private val _response2 = MutableLiveData<Data>()
-    val response2: LiveData<Data>
-        get() = _response2
 
     private val _response3 = MutableLiveData<Profile>()
     val response3: LiveData<Profile>
         get() = _response3
 
-    private val _responsePic = MutableLiveData<profile_pic>()
-    val responsePic: LiveData<profile_pic>
-        get() = _responsePic
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
         LoginRepository.getUserDetails().asLiveData()
 
-     suspend fun getProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
+     suspend fun updateProfileRepository(field: Map<String,String>):LiveData<Resource<com.waycool.data.Network.NetworkModels.profile?>> =
         ProfileRepository.updateProfile(field).asLiveData()
 
     suspend fun getUserProfileDetails():LiveData<Resource<UserDetailsDTO?>> =
