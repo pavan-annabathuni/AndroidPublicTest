@@ -110,7 +110,6 @@
                 android:drawablePadding="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{property.market}"
                 android:textColor="@color/darkGray"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -126,12 +125,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:drawablePadding="4dp"
-                android:text='@{Double.toString(property.distance)+"km"}'
                 android:textColor="@color/darkGray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-                tools:text="100 kms" />
+                tools:text="100 kms"
+                android:text='@{Double.toString(property.distance)+"km"}'/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentSpacingBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.translations.TranslationsManager
 
 class SpacingFragment : Fragment() {
      private lateinit var binding: FragmentSpacingBinding
@@ -31,6 +32,7 @@ class SpacingFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSpacingBinding.inflate(inflater)
         //ViewModel.cropAdvisory()
+        TranslationsManager().loadString("str_spacing",binding.labelName)
         observer()
         return binding.root
 

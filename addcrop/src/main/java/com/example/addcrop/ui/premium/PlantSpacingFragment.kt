@@ -99,14 +99,9 @@ class PlantSpacingFragment : Fragment() {
                 irrigation_selected?.let { map.put("irrigation_type", it) }
                 date?.let { map.put("sowing_date", it) }
                 noOFPlants?.let { map.put("no_of_plants", it) }
-//            var length=binding.et
                 map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
-//                map["len_drip"] = binding.etNumber.text
-//                map["width_drip"] = binding.etNumberWidth.text
                 binding.constraintLayout3.setOnSelectListener {
-                    Log.d("TAG", "onViewCreatedBtnselect: $it")
-//                    Toast.makeText(requireContext(), it.text, Toast.LENGTH_SHORT).show()
                     try {
                         if (it.text.trim().isEmpty()){
                             Toast.makeText(requireContext(), "Please Enter Plant to Plant Distance", Toast.LENGTH_SHORT).show()

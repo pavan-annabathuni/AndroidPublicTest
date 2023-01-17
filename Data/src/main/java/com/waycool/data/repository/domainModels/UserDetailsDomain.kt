@@ -14,7 +14,9 @@ data class UserDetailsDomain(
     var defaultModules  : Int?     = null,
     var subscription    : Int?     = null,
     var roleTitle       : String?  = null,
-    var roleId          : Int?     = null
+    var roleId          : Int?     = null,
+    var title            :String? = null
+
 )
 
 

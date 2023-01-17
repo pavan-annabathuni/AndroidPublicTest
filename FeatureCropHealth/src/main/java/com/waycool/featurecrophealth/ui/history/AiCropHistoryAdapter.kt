@@ -48,7 +48,8 @@ class AiCropHistoryAdapter(private val context: Context) :
             binding.tvCropID.text = "id : " + note.id.toString()
             binding.tvDate.text = note.updated_at
             binding.tvRequest.text = note.cropName.toString()
-            binding.tvDesiessName.text = note.disease_name
+            if(note.disease_name!=null){
+            binding.tvDesiessName.text = note.disease_name}
             binding.tvStatus
             Glide.with(context)
                 .load(note.image_url)

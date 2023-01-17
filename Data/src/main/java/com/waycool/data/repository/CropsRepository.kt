@@ -3,7 +3,6 @@ package com.waycool.data.repository
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.waycool.data.Local.Entity.AiCropHistoryEntity
 import com.waycool.data.Local.Entity.DashboardEntity
 import com.waycool.data.Local.Entity.PestDiseaseEntity
 import com.waycool.data.Local.LocalSource
@@ -17,12 +16,10 @@ import com.waycool.data.Sync.syncer.CropInformationSyncer
 import com.waycool.data.Sync.syncer.CropMasterSyncer
 import com.waycool.data.Sync.syncer.PestDiseaseSyncer
 import com.waycool.data.Sync.syncer.*
-import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -499,7 +496,7 @@ object CropsRepository {
                         history.disease_name= history.crop_id?.let { it1 ->
                             LocalSource.getSelectedDiseaseEntity(
                                 it1
-                            ).diseaseName
+                            )?.diseaseName?:"-"
                         }
                         history
                     }

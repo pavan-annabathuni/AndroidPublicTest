@@ -1,43 +1,43 @@
 package com.waycool.data.Network.NetworkModels
 
+import com.google.gson.annotations.SerializedName
+
 class MandiModel(
-    val `data`: MandiData,
-    val message: String,
-    val status: String
+    @SerializedName("status"  ) var status  : Boolean? = null,
+    @SerializedName("message" ) var message : String?  = null,
+    @SerializedName("data"    ) var data    : MandiData?    = MandiData()
 )
 
 data class MandiData(
-    val numberOfRecordsPerPage: Int?,
-    val page: Int?,
-    val records: List<MandiRecord>,
-    val startFrom: Int?,
-    val total_pages: Int?,
-    val total_results: Int?
+@SerializedName("page"                   ) var page                   : Int?               = null,
+@SerializedName("numberOfRecordsPerPage" ) var numberOfRecordsPerPage : Int?               = null,
+@SerializedName("startFrom"              ) var startFrom              : Int?               = null,
+@SerializedName("total_pages"            ) var totalPages             : Int?               = null,
+@SerializedName("total_results"          ) var totalResults           : Int?               = null,
+@SerializedName("records"                ) var records                : List<MandiRecord> = emptyList()
+
 )
 
 data class MandiRecord(
-    val arrival_date: String?,
-    val avg_price: Double?,
-    val created_at: String?,
-    val crop: String?,
-    val crop_category: String?,
-    val crop_logo: String?,
-    val crop_master_id: Int?,
-    val district: String?,
-    val id: String?,
-    val last_price: Double?,
-    val location: String?,
-    val mandi_master_id: Int?,
-    val market: String?,
-    val max_price: Double?,
-    val min_price: Double?,
-    val modal_price: Double?,
-    val price_diff: Double?,
-    val price_status: Int?,
-    val source: String?,
-    val state: String?,
-    val sub_district: String?,
-    val updated_at: String?,
-    val variety: String?,
-    val distance: Double?
+    @SerializedName("crop_te"         ) var cropTe        : String? = null,
+    @SerializedName("market_te"       ) var marketTe      : String? = null,
+    @SerializedName("crop_master_id"  ) var cropMasterId  : Int?    = null,
+    @SerializedName("crop_logo"       ) var cropLogo      : String? = null,
+    @SerializedName("market_ta"       ) var marketTa      : String? = null,
+    @SerializedName("avg_price"       ) var avgPrice      : Double?    = null,
+    @SerializedName("source"          ) var source        : String? = null,
+    @SerializedName("market"          ) var market        : String? = null,
+    @SerializedName("market_kn"       ) var marketKn      : String? = null,
+    @SerializedName("crop_hi"         ) var cropHi        : String? = null,
+    @SerializedName("price_status"    ) var priceStatus   : Int?    = null,
+    @SerializedName("crop_kn"         ) var cropKn        : String? = null,
+    @SerializedName("market_hi"       ) var marketHi      : String? = null,
+    @SerializedName("crop_mr"         ) var cropMr        : String? = null,
+    @SerializedName("mandi_master_id" ) var mandiMasterId : Int?    = null,
+    @SerializedName("sub_record_id"   ) var subRecordId   : String? = null,
+    @SerializedName("crop_ta"         ) var cropTa        : String? = null,
+    @SerializedName("crop"            ) var crop          : String? = null,
+    @SerializedName("market_mr"       ) var marketMr      : String? = null,
+    @SerializedName("distance"       ) var distance      : Double? = null,
+    @SerializedName("id"              ) var id            : String? = null
 )
