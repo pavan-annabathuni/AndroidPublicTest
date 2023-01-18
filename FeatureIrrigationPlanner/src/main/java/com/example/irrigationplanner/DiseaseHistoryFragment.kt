@@ -14,6 +14,7 @@ import com.example.irrigationplanner.databinding.FragmentDisaseHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
@@ -140,6 +141,10 @@ class DiseaseHistoryFragment : Fragment() {
 
             }
         })
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DiseaseHistoryFragment")
     }
 
 }

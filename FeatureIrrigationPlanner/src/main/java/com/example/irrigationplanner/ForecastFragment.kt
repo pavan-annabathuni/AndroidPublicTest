@@ -17,6 +17,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -138,36 +139,6 @@ class ForecastFragment : Fragment() {
                 }
             }.attach()
         }
-        // viewModel.viewModelScope.launch{
-//      viewModel.getIrrigationHis(2,3).observe(viewLifecycleOwner){
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(0)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(1)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(2)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(3)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(4)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(5)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(irrigation.irrigationForecast?.days?.get(6)).setCustomView(R.layout.item_tab_irrigation))
-//        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                when(binding.tabLayout.selectedTabPosition){
-//                    0-> viewModelData(0)
-//                    1-> viewModelData(1)
-//                    2-> viewModelData(2)
-//                    3-> viewModelData(3)
-//                    4-> viewModelData(4)
-//                    5-> viewModelData(5)
-//                    6-> viewModelData(6)
-//                }
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//            }
-//        })
-//    }}}
     }
 
     private fun onclick(){
@@ -178,47 +149,6 @@ class ForecastFragment : Fragment() {
 
     private fun viewModelData(i:Int){
 
-
-//        viewModel.viewModelScope.launch(){
-//
-//                val dep = irrigation.irrigationForecast?.depletion?.get(i).toString().toFloat()
-//                binding.tvEtc.text = "${irrigation.irrigationForecast?.etc?.get(i)} mm" ?: ""
-//                binding.tvEto.text = "${(irrigation.irrigationForecast?.eto?.get(i))} mm"
-//                binding.tvMm.text = "${irrigation.irrigationForecast?.depletion?.get(i)} mm"?:""
-//                binding.tvAcres.setText(String.format(Locale.ENGLISH, "%.0f", dep * 4046.86 * area / 0.9) + " L")
-//                if(areaPerPlant<=0){
-//                binding.tvPerPlant.visibility = View.INVISIBLE
-//                    binding.textView25.visibility = View.INVISIBLE
-//                }
-//                else {
-//                    binding.tvPerPlant.text = (areaPerPlant*dep).toString()
-//                    binding.tvPerPlant.visibility = View.VISIBLE
-//                    binding.textView25.visibility = View.INVISIBLE
-//                }
-//
-//               val  properties = irrigation.irrigationForecast
-//                if (properties!!.mad[i] == 0) {
-//                    val value = 30 - properties.depletion[i].toFloat()
-//                    if (value <= 0) {
-//                        binding.irrigationReq.text = "Irrigation Required"
-//                    } else {
-//                        val value = 30 - properties.depletion[i].toFloat()
-//                        val percentage = (value / 30) * 100
-//                        binding.irrigationReq.text = "Irrigation Not Required"
-//                    }
-//                } else {
-//                    val value = properties.mad[i] - properties.depletion[i].toFloat()
-//                    if (value <= 0) {
-//                        binding.irrigationReq.text = "Irrigation Required"
-//                    } else {
-//                        val value = properties.mad[i] - properties.depletion[i].toFloat()
-//                        val percentage = (value / properties.mad[i]) * 100
-//                        binding.irrigationReq.text = "Irrigation Not Required"
-//                    }
-////        if(level<=0)
-////        holder.waterLevel.progress = level
-//                }
-//            }
         }
     fun viewPager(){
        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -238,6 +168,10 @@ class ForecastFragment : Fragment() {
                 super.onPageScrollStateChanged(state)
             }
         })
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FragmeForecastFragmentntPlantingYield")
     }
     }
 

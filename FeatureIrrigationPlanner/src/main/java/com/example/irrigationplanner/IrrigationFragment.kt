@@ -23,6 +23,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -486,7 +487,9 @@ class IrrigationFragment : Fragment() {
         TranslationsManager().loadString("str_risk_outbreak", binding.textView9,"Risk Outbreak Chances")
         TranslationsManager().loadString("str_irrigation_history", binding.textView8,"Irrigation History")
 //        TranslationsManager().loadString("str_irrigation_history",binding.textView8)
-
-
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("IrrigationFragment")
     }
 }

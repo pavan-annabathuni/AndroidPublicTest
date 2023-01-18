@@ -15,6 +15,7 @@ import com.example.irrigationplanner.databinding.FragmentIrrigationHistoryBindin
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
@@ -65,6 +66,10 @@ class IrrigationHistoryFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener(){
             this.findNavController().navigateUp()
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("IrrigationHistoryFragment")
     }
 
 }

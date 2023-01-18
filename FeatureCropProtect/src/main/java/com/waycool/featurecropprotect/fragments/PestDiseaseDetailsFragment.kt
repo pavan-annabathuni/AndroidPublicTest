@@ -34,6 +34,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
@@ -596,5 +597,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
             bundle
         )
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
     }
 }
