@@ -40,6 +40,7 @@ import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -1272,6 +1273,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             binding.ivMyForm.visibility = View.GONE
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HomePagesFragment")
     }
 }
 
