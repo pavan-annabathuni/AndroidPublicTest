@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.addcrop.AddCropActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentSpotLightBinding
 import kotlinx.coroutines.Dispatchers
@@ -90,5 +91,9 @@ class SpotLightFragment : Fragment() {
         }
         binding.idViewPager.registerOnPageChangeCallback(myPageChangeCallback)
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SpotLightFragment")
     }
 }

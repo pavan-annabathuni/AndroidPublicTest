@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
@@ -108,5 +109,9 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                 binding.addFarmFab.hide()
             }else binding.addFarmFab.show()
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MyFarmFragment")
     }
 }

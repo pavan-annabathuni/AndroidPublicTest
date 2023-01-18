@@ -29,6 +29,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
@@ -385,14 +386,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     private fun initObserveMYFarm() {
-//        val mapFragment = childFragmentManager
-//            .findFragmentById(R.id.map_farms_home) as SupportMapFragment?
-//        mapFragment!!.requireView().isClickable = false
-//        mapFragment.getMapAsync { googleMap: GoogleMap ->
-//            mMap = googleMap
-//            mMap?.uiSettings?.setAllGesturesEnabled(false)
-//            mMap?.uiSettings?.isMapToolbarEnabled = false
-//        }
         binding.videosScrollMyFarm.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
         binding.rvMyFarm.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -445,41 +438,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
     }
 
-//        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//            if (it.data != null) {
-//                var accountId = it.data?.accountId
-//                if (accountId != null)
-//                    viewModel.getMyFarms(721).observe(viewLifecycleOwner) {
-//                        binding.rvMyFarm.adapter = myFarmPremiumAdapter
-//                        if (it.data!!.isEmpty()) {
-//                            binding.clAddForm.visibility = View.VISIBLE
-//                        } else
-//                            when (it) {
-//                                is Resource.Success -> {
-//                                    if (it.data == null) {
-//                                        binding.clAddForm.visibility = View.VISIBLE
-//                                    }
-//                                    binding.clAddForm.visibility = View.GONE
-//                                    binding.cardMYFarm.visibility = View.VISIBLE
-//                                    val response = it.data as ArrayList<MyFarmsDomain>
-//
-//                                    myFarmPremiumAdapter.setMovieList(response)
-//
-//                                }
-//                                is Resource.Error -> {
-//                                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
-//                                        .show()
-//
-//                                }
-//                                is Resource.Loading -> {
-//                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-//                                        .show()
-//
-//                                }
-//                            }
-//                    }
-//            }
-//        }
 
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagePremiumBinding): Int {
@@ -552,9 +510,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.clSoilTemp.visibility=View.VISIBLE
                 it.clTempView.visibility=View.VISIBLE
             }
-//            val imageIndicator = ImageIndicator(requireContext(), R.drawable.image_indicator1)
-//
-//            speedometer.indicator = imageIndicator
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
@@ -588,104 +543,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 Section(.41f, .75f, Color.parseColor("#FEC253"), binding.soilMoistureTwo.dpTOpx(12f)),
                 Section(.75f, 1f, Color.parseColor("#914734"), binding.soilMoistureTwo.dpTOpx(12f))
             )
-
-
-//            binding.soilMoistureOne.addSections(
-//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(5f)),
-//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(5f)),
-//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
-//            )
-
-//            binding.soilMoistureOne.setIndicator(Indicator.Indicators.KiteIndicator)
-//            binding.soilMoistureTwo.setIndicator(Indicator.Indicators.KiteIndicator)
-
-//            binding.soilMoistureOne.ticks= arrayListOf(0f,.1f,.3f,.5f,1f)
             binding.soilMoistureOne.tickNumber = 0
             binding.soilMoistureOne.marksNumber = 0
-
             binding.soilMoistureTwo.tickNumber = 0
             binding.soilMoistureTwo.marksNumber = 0
-
-//            binding.soilMoistureOne.speedTo()
             binding.soilMoistureOne.maxSpeed = 60F
             binding.soilMoistureTwo.maxSpeed = 60F
-//            binding.soilMoistureOne.ticks  = listOf(10.0F)
-//            binding.soilMoistureTwo.ticks = 10
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
-            Log.d("TAG", "viewDevice:$data.soilMoisture1!!.toFloat() ")
             binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
 
 
             binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
             binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
 
-//            binding.soilMoistureOne.speed(data.sensorValue1?.toFloat())
-//            binding.soilMoistureOne.speedTextListener =
-//                {
-//                        speed: Float? ->
-//                    String.format(data.sensorValue1.toString(), "lol%.0f", speed)
-//                }
-
-//            binding.soilMoistureOne.addSections(
-//                Section(0f, .1f, Color.parseColor("#DA0101"),  binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.1f, .4f, Color.parseColor("#01B833"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.4f, .7f, Color.parseColor("#F3C461"),   binding.soilMoistureOne.dpTOpx(20f)),
-//                Section(.7f, .9f, Color.parseColor("#DA0101"),   binding.soilMoistureOne.dpTOpx(20f))
-//            )
-            //        speedView.getSections().add(new Section(1f, Color.RED));
-//            binding.soilMoistureOne.onSectionChangeListener = { previousSection: Section?, newSection: Section? ->
-//                if (previousSection != null) {
-////                    previousSection.setPadding(10);
-//                    previousSection.width = binding.soilMoistureOne.dpTOpx(20f)
-//                }
-//                if (newSection != null) {
-////                    newSection.setPadding(0);
-//                    newSection.width = binding.soilMoistureOne.dpTOpx(20f)
-//                }
-//                Unit
-//            }
-
-
-            //add color ranges to gauge
-//            binding.soilMoistureOne.addRange(range)
-//            binding.soilMoistureOne.addRange(range2)
-//            binding.soilMoistureOne.addRange(range3)
-//            binding.soilMoistureOne.addRange(range4)
-//
-//            binding.soilMoistureTwo.addRange(range)
-//            binding.soilMoistureTwo.addRange(range2)
-//            binding.soilMoistureTwo.addRange(range3)
-//            binding.soilMoistureTwo.addRange(range4)
-//
-//            //set min max and current value
-//            binding.soilMoistureOne.minValue = 0.0
-//            binding.soilMoistureOne.maxValue = 100.0
-//            binding.soilMoistureOne.value = data.soilMoisture1!!.toDouble()
-//
-//            binding.soilMoistureTwo.minValue = 0.0
-//            binding.soilMoistureTwo.maxValue = 100.0
-//            binding.soilMoistureTwo.value = data.soilMoisture1!!.toDouble()
-
-//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
-//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
-//
-//            if (data.soilMoisture1?.toInt()!! < 30){
-//                binding.soilMoistureOne.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-//            }else if (data.soilMoisture1?.toInt()!! < 30)
-//                if (data.soilMoisture2?.toInt()!! < 30){
-//                    binding.soilMoistureTwo.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-//
-//                }
-//            binding.soilMoistureOne.progress = data.soilMoisture1!!.toInt()
-//            binding.soilMoistureTwo.progress = data.soilMoisture2!!.toInt()
-
-//            it.tubeSpeedometer.maxSpeed = 100f
-//            it.tubeSpeedometer.speedTo(140f)
-//            it.tubeSpeedometer.speedometerBackColor = Color.GRAY
-//            it.tvLastUpdateRefresh.setOnClickListener {
-//                viewDeviceListAdapter.upDateList()
-//            }
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
@@ -957,5 +827,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HomePagePremiumFragment")
     }
 }

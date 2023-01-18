@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -117,6 +118,9 @@ class NotificationFragment : Fragment() {
 
         }
     }}
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NotificationFragment")
+    }
 
 }

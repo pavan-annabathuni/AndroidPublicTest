@@ -26,6 +26,7 @@ import com.google.android.material.chip.Chip
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
@@ -905,5 +906,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.ivViewAll.visibility = View.VISIBLE
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FarmDetailsFragment")
     }
 }

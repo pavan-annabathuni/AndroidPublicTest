@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.MainActivity
@@ -55,5 +56,8 @@ class SplashActivity : AppCompatActivity() {
         }, 2000)
 
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SplashActivity")
+    }
 }

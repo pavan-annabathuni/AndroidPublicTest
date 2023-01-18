@@ -24,6 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
@@ -415,6 +416,10 @@ class GraphsFragment : Fragment() {
                 }
 
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("GraphsFragment")
     }
 
 }

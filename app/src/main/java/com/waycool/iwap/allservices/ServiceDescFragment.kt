@@ -11,20 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentServiceDescBinding
 import nl.changer.audiowife.AudioWife
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ServiceDescFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ServiceDescFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentServiceDescBinding
@@ -102,5 +93,9 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
     override fun getTheme(): Int {
         return com.example.irrigationplanner.R.style.BottomSheetDialog
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("ServiceDescFragment")
     }
 }
