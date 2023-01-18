@@ -128,6 +128,11 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventScreenTimeHandling.INSTANCE.calculateScreenTime("PrivacyPolicyActivity");
+    }
 
     @Override
     public void onBackPressed() {
