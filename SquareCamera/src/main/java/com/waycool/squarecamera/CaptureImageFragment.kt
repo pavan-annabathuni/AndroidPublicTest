@@ -31,6 +31,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.waycool.squarecamera.databinding.FragmentCaptureImageBinding
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -41,6 +45,7 @@ import java.util.concurrent.Executors
 
 class CaptureImageFragment : Fragment() {
 
+    private var firebaseAnalytics: FirebaseAnalytics?=null
     lateinit var binding: FragmentCaptureImageBinding
     private var flashMode: Int = ImageCapture.FLASH_MODE_OFF
     private var imageCapture: ImageCapture? = null
@@ -56,6 +61,8 @@ class CaptureImageFragment : Fragment() {
         binding.infoIv.setOnClickListener {
             findNavController().navigate(R.id.action_captureImageFragment_to_dialogFragment)
         }
+        firebaseAnalytics = Firebase.analytics
+
 
         binding.viewFinder.layoutParams.height =
             Resources.getSystem().displayMetrics.widthPixels
@@ -297,4 +304,13 @@ class CaptureImageFragment : Fragment() {
 
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "CaptureImageFragment")
+        }
+    }
+
+   
 }

@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -717,5 +718,9 @@ class WeatherFragment : Fragment() {
         TranslationsManager().loadString("str_hourly",binding.tvHouly,"Hourly")
         TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("WeatherFragment")
     }
 }
