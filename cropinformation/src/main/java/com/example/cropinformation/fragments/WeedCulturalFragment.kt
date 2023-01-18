@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentWeedCulturalBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class WeedCulturalFragment : Fragment() {
@@ -44,5 +45,9 @@ class WeedCulturalFragment : Fragment() {
                     binding.labelValue.text = data[i].label_value
                 }
             }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("WeedCulturalFragment")
     }
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentRatooningBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class RatooningFragment : Fragment() {
@@ -44,4 +45,9 @@ class RatooningFragment : Fragment() {
                         break
                     }
                 }
-            }}}
+            }}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("RatooningFragment")
+    }
+}

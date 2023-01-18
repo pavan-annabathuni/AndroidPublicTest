@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentFertilizersBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class FertilizersFragment : Fragment() {
     private lateinit var binding: FragmentFertilizersBinding
@@ -46,4 +47,9 @@ class FertilizersFragment : Fragment() {
                     break
         }
     }
-}}}
+}}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FertilizersFragment")
+    }
+}

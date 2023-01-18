@@ -11,6 +11,7 @@ import com.example.cropinformation.databinding.FragmentSeedRateBinding
 import com.example.cropinformation.databinding.FragmentSeedTreatmentBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class SeedTreatmentFragment : Fragment() {
@@ -47,6 +48,10 @@ class SeedTreatmentFragment : Fragment() {
                     break
                 }
             }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SeedTreatmentFragment")
     }
 
 }

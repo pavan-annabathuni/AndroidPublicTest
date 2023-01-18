@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentSowingPlantingBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class SowingPlantingFragment : Fragment() {
      private lateinit var binding:FragmentSowingPlantingBinding
@@ -45,5 +46,9 @@ class SowingPlantingFragment : Fragment() {
                     break
                 }
             }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SowingPlantingFragment")
     }
 }

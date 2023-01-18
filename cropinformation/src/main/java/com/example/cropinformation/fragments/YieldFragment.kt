@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentYieldBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class YieldFragment : Fragment() {
     private lateinit var binding: FragmentYieldBinding
@@ -45,5 +46,9 @@ class YieldFragment : Fragment() {
                     break
                 }
             }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("YieldFragment")
     }
 }

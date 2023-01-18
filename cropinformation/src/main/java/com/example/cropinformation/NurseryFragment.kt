@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentNurseryBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import org.json.JSONArray
 
@@ -61,5 +62,8 @@ class NurseryFragment : Fragment() {
         TranslationsManager().loadString("hardening_period",binding.tv3)
         TranslationsManager().loadString("str_transplanting",binding.tv4)
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NurseryFragment")
+    }
 }

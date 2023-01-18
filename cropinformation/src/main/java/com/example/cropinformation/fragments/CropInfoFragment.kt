@@ -24,6 +24,7 @@ import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -695,5 +696,8 @@ class CropInfoFragment : Fragment(), onItemClick {
             bundle
         )
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropInfoFragment")
+    }
 }

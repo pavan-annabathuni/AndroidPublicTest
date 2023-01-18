@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentSpacingBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 class SpacingFragment : Fragment() {
@@ -49,4 +50,9 @@ class SpacingFragment : Fragment() {
                     break
                 }
         }
-}}}
+}}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SpacingFragment")
+    }
+}

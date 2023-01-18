@@ -10,6 +10,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentFieldPreparationBinding
 import com.example.cropinformation.utils.Constants.Companion.CROP_ID
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class FieldPreparationFragment : Fragment() {
@@ -50,4 +51,8 @@ class FieldPreparationFragment : Fragment() {
                 }
             }}
         }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FieldPreparationFragment")
+    }
     }

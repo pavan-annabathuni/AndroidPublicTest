@@ -11,6 +11,7 @@ import com.example.cropinformation.databinding.FragmentBlorderCropBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.utils.Constants.Companion.CROP_ID
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class BlorderCropFragment : Fragment() {
     private lateinit var binding:FragmentBlorderCropBinding
@@ -45,8 +46,10 @@ class BlorderCropFragment : Fragment() {
                     binding.labelValue.text = data[i].label_value
                     break
             }
-//        ViewModel.response3.observe(viewLifecycleOwner){
-//
-//        }
     }
-}}}
+}}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("BlorderCropFragment")
+    }
+}

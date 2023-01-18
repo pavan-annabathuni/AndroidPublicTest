@@ -10,6 +10,7 @@ import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentCropDurationBinding
 import com.example.cropinformation.utils.Constants.Companion.CROP_ID
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class CropDurationFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -55,5 +56,9 @@ class CropDurationFragment : Fragment() {
             }
         }
         return binding.root
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropDurationFragment")
     }
 }

@@ -15,6 +15,7 @@ import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.waycool.data.Local.utils.TypeConverter
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -63,28 +64,13 @@ class CropVarityFragment : Fragment() {
                         adapter.submitList(varietyList)
                     }
                     break
-
-
-
-//                    var jsonData: String = data[i].label_value!!
-//                    val jsonArray = JSONArray(jsonData)
-//                    for(j in 0 until jsonArray.length()) {
-//                        val arr = jsonArray.getJSONObject(0).get("crop_variety_value").toString()
-//                        binding.labelValue.text = jsonArray.getJSONObject(0).get("state_name").toString()
-//                        //  binding.labelValue2.text =jsonArray.getJSONObject(1).get("state_name").toString()
-//                        var jsonData2: String = arr
-//                        val jsonArray2 = JSONArray(jsonData2)
-//
-//                        for(k in 0 until jsonArray2.length()){
-//                            binding.cropVar.text = jsonArray2.toString()
-                            // binding.cropVar2.text = arr2.toString()
                         }
                     }
-                    //   binding.labelValue.text = data[i].label_value
                 }
-            //}
-          //  Toast.makeText(context,"${it.data.toString()}", Toast.LENGTH_SHORT).show()
-        }}
 
-//    }
-//}
+        }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropVarityFragment")
+    }}
+

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentHarvestBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
-
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class HarvestFragment : Fragment() {
@@ -50,5 +50,9 @@ class HarvestFragment : Fragment() {
                 }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HarvestFragment")
     }
 }

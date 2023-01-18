@@ -11,6 +11,7 @@ import com.example.cropinformation.databinding.FragmentNextCropBinding
 import com.example.cropinformation.databinding.FragmentStakingBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class StakingFragment : Fragment() {
@@ -54,5 +55,8 @@ class StakingFragment : Fragment() {
             }
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("StakingFragment")
+    }
 }

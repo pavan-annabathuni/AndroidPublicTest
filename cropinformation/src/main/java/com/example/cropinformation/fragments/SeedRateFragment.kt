@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentSeedRateBinding
 import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class SeedRateFragment : Fragment() {
     private lateinit var binding: FragmentSeedRateBinding
@@ -42,5 +43,8 @@ class SeedRateFragment : Fragment() {
                 }}}
                 return binding.root
             }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SeedRateFragment")
+    }
 }
