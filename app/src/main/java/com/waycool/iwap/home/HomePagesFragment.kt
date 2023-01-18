@@ -443,6 +443,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.clAddYourFarm.visibility = View.GONE
                         binding.tvWelcomeName.visibility = View.INVISIBLE
                         binding.tvGoodMorning.visibility = View.INVISIBLE
+                        binding.exclamationtv.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
                         binding.tvOurServiceViewAll.visibility = View.INVISIBLE

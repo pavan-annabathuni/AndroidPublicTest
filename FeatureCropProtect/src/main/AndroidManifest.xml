@@ -9,6 +9,7 @@
         <activity
             android:name=".CropProtectActivity"
             android:exported="true"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="stateAlwaysVisible">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
