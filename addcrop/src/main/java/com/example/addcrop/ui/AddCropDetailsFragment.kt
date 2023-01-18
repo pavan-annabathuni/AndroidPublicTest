@@ -50,7 +50,7 @@ class AddCropDetailsFragment : Fragment() {
     val arrayList = ArrayList<String>()
     lateinit var areaTypeSelected: String
 
-    private var dateOfBirthFormat = SimpleDateFormat("yyyy-MM-dd")
+    private var cropSelectedDate = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
 
@@ -84,6 +84,7 @@ class AddCropDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         apiErrorHandlingBinding = binding.errorState
         networkCall()
+//        initObeserveLiveData()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
@@ -123,6 +124,14 @@ class AddCropDetailsFragment : Fragment() {
 //        }
 
     }
+
+//    private fun initObeserveLiveData() {
+//        viewModel.selectedDate.observe(viewLifecycleOwner, androidx.lifecycle.Observer { date ->
+//            // Use the selected date here
+//            // for example update the textView
+//            binding.etCalender.text = date
+//        })
+//    }
 
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
@@ -290,8 +299,6 @@ class AddCropDetailsFragment : Fragment() {
 
 
     private fun showCalender() {
-
-
         val date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
@@ -302,7 +309,6 @@ class AddCropDetailsFragment : Fragment() {
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 0)
                 view.maxDate = myCalendar.timeInMillis
-
             }
 
         val dialog = DatePickerDialog(
@@ -312,7 +318,7 @@ class AddCropDetailsFragment : Fragment() {
             myCalendar.get(Calendar.MONTH),
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
-        dateCrop = dateOfBirthFormat.format(myCalendar.time)
+        dateCrop = cropSelectedDate.format(myCalendar.time)
         myCalendar.add(Calendar.YEAR, -1)
         dialog.datePicker.minDate = myCalendar.timeInMillis
         myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
@@ -324,6 +330,7 @@ class AddCropDetailsFragment : Fragment() {
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
         )
+//        viewModel.selectedDate.value=dateCrop
     }
     fun translations() {
         CoroutineScope(Dispatchers.Main).launch {
