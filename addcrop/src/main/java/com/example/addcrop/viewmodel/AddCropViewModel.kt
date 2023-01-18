@@ -14,7 +14,11 @@ import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
 
 class AddCropViewModel :ViewModel() {
-
+//    val selectedDate = MutableLiveData<String>()
+//
+//    fun showDatePicker() {
+//        selectedDate.value = "Open Date Picker"
+//    }
     fun getAddCropType (): LiveData<Resource<List<SoilTypeDomain>?>> {
         return CropsRepository.getSoilType().asLiveData()
     }
