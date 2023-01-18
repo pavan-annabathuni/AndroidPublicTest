@@ -23,6 +23,9 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropPremiumBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -52,6 +55,7 @@ class AddCropPremiumFragment : Fragment() {
     lateinit var irrigation_selected: String
     lateinit var year_selected: String
     lateinit var areaTypeSelected: String
+    private val firebaseAnalytics=Firebase
 
 
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -103,7 +107,7 @@ class AddCropPremiumFragment : Fragment() {
         initViewClicks()
         noOFYear()
         noOFYearBahar()
-        translationSoilTesting()
+        translationAddCropTesting
         year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
@@ -447,7 +451,7 @@ class AddCropPremiumFragment : Fragment() {
 
     }
 
-    fun translationSoilTesting() {
+    fun translationAddCropTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title

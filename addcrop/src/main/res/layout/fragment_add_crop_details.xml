@@ -23,34 +23,34 @@
 <!--            android:padding="8dp"-->
 <!--            android:src="@drawable/ic_back_btn_toolbar" />-->
 
-<!--        <TextView-->
-<!--           android:id="@+id/toolBarId"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:text="Add Crop"-->
-<!--            android:textColor="#171717"-->
-<!--            android:textSize="18sp"-->
-<!--            android:textStyle="bold" />-->
+        <!--        <TextView-->
+        <!--           android:id="@+id/toolBarId"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:text="Add Crop"-->
+        <!--            android:textColor="#171717"-->
+        <!--            android:textSize="18sp"-->
+        <!--            android:textStyle="bold" />-->
 
-<!--    </androidx.appcompat.widget.Toolbar>-->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Base_ToolbarStyle"
+        <!--    </androidx.appcompat.widget.Toolbar>-->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?android:attr/actionBarSize"
-            app:layout_scrollEffect="compress"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:elevation="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Base_ToolbarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?android:attr/actionBarSize"
+                app:layout_scrollEffect="compress"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:layout_scrollFlags="scroll|enterAlways">
 
             <com.waycool.uicomponents.Text.Title2SemiBold
                 android:id="@+id/toolbar_title"
@@ -83,17 +83,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clCalender">
 
-                <com.waycool.uicomponents.Text.ParagraphMedium
-                    android:id="@+id/paragraphMedium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="Select Farm to add this crop"
-                    android:textColor="@color/textdark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/paragraphMedium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="Select Farm to add this crop"
+                        android:textColor="@color/textdark"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/myfarms_chip_group"
@@ -530,7 +530,7 @@
             <!--                app:layout_constraintStart_toStartOf="parent"-->
             <!--                app:layout_constraintTop_toBottomOf="@+id/State"-->
 
-            <!--                >-->
+                <!--                >-->
 
             <!--                <EditText-->
             <!--                    android:id="@+id/etState"-->

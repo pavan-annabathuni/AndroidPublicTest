@@ -6,6 +6,8 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+apply plugin: 'com.google.firebase.firebase-perf'
+
 
 android {
     compileSdk appCompileSdkVersion
@@ -86,6 +88,7 @@ dependencies {
     implementation platform(firebase.bom)
     implementation(firebase.analytics)
     implementation(firebase.crashlytics)
+    implementation 'com.google.firebase:firebase-perf'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     testImplementation 'junit:junit:4.13.2'

@@ -465,8 +465,14 @@ class IrrigationFragment : Fragment() {
             }
             if(data?.irrigationRequired==null){
                 binding.gwxIrrigation.visibility=View.GONE
+                binding.btHarvest.visibility=View.GONE
+                binding.noDeviceCv.visibility=View.VISIBLE
             }else{
                 binding.gwxIrrigation.visibility=View.VISIBLE
+                binding.btHarvest.visibility=View.VISIBLE
+                binding.noDeviceCv.visibility=View.GONE
+
+
             }
         }
     }

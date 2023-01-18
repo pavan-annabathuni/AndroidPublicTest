@@ -35,6 +35,8 @@ import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
@@ -443,6 +445,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.clAddYourFarm.visibility = View.GONE
                         binding.tvWelcomeName.visibility = View.INVISIBLE
                         binding.tvGoodMorning.visibility = View.INVISIBLE
+                        binding.exclamationtv.visibility = View.INVISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
                         binding.tvOurServiceViewAll.visibility = View.INVISIBLE
