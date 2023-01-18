@@ -27,6 +27,7 @@ import com.waycool.addfarm.adapter.SelectCropAdapter
 import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import kotlinx.coroutines.launch
@@ -363,5 +364,9 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
     fun convertStringToLatLnList(s: String?): List<LatLng?>? {
         val listType = object : TypeToken<List<LatLng?>?>() {}.type
         return Gson().fromJson(s, listType)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SaveFarmFragment")
     }
 }

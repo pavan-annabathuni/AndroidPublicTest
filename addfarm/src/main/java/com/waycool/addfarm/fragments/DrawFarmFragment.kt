@@ -55,6 +55,7 @@ import com.waycool.addfarm.utils.DrawingOption
 import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -1275,6 +1276,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         super.onDestroy()
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DrawFarmFragment")
     }
 
 }
