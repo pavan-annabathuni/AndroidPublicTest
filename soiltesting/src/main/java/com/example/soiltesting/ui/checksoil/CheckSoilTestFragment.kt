@@ -19,6 +19,7 @@ import com.example.soiltesting.ui.history.HistoryViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -229,6 +230,9 @@ class CheckSoilTestFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CheckSoilTestFragment")
+    }
 
 }

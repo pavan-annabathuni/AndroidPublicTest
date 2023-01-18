@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
 import com.example.soiltesting.databinding.FragmentAllVideoBinding
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class AllVideoFragment : Fragment() {
@@ -30,6 +31,10 @@ class AllVideoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AllVideoFragment")
     }
 
 }

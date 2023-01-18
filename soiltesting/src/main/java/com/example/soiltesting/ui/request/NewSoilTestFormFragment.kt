@@ -14,6 +14,7 @@ import com.example.soiltesting.databinding.FragmentNewSoilTestFormBinding
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 
@@ -38,16 +39,6 @@ class NewSoilTestFormFragment : Fragment() {
     ): View? {
         _binding = FragmentNewSoilTestFormBinding.inflate(inflater, container, false)
 
-
-//            if (account!=null){
-//                itemClicked(account!!, lat!!, long!!, onp_id!!)
-//            }
-
-
-//        binding.cardCheckHealth.setOnClickListener {
-
-
-//        }
         return binding.root
     }
 
@@ -230,6 +221,10 @@ class NewSoilTestFormFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NewSoilTestingFormFragment")
     }
 
 }

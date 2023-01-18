@@ -47,6 +47,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -850,5 +851,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     companion object {
         private const val REQUEST_CODE_GPS = 1011
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SoilTestingHomeFragment")
     }
 }

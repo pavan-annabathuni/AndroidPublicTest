@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentCustomeDialogBinding
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 
@@ -47,7 +48,10 @@ class CustomeDialogFragment : DialogFragment() {
 
 
 
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CustomeDialogFragment")
+    }
 
 
 }

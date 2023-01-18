@@ -20,6 +20,7 @@ import com.waycool.data.Network.NetworkModels.Recommendation
 import com.waycool.data.Network.NetworkModels.ReportDetails
 import com.waycool.data.Network.NetworkModels.ReportResult
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -229,45 +230,6 @@ class ViewReportFragment : Fragment() {
             }
         }
 
-
-//        if (!NetworkUtil.isNetworkConnected(getApplicationContext())) {
-//            Toast.makeText(getApplicationContext(), "No internet", Toast.LENGTH_LONG).show()
-//        } else {
-//            DataUtils.setProgressVisible(
-//                requireContext(),
-//                binding.loadingScreen.loadingProcess,
-//                binding.loadingScreen.loadingImage
-//            )
-//            soilViewModel.getSoilReport(this@SoilTestReportActivity, language, id).observe(this,
-//                Observer<Any?> { soilTestReportMaster ->
-//                    DataUtils.setProgressGone(
-//                        getApplicationContext(),
-//                        binding.loadingScreen.loadingProcess
-//                    )
-//                    if (soilTestReportMaster != null) {
-//                        if (soilTestReportMaster.getStatus()) {
-//                            fullList =
-//                                soilTestReportMaster.getData().get(0).getResults().getReportData()
-//                                    .getFerilizerRecomendations()
-//                            if (fullList.size > 0) {
-//                                dataSetToRecommendation(fullList)
-//                            }
-//                            fullData = soilTestReportMaster.getData().get(0)
-//                            setOtherData(fullData!!)
-//                            resultList =
-//                                soilTestReportMaster.getData().get(0).getResults().getReportData()
-//                                    .getParameterInfos()
-//                            soilReportResultAdapter!!.updateList(resultList)
-//                        }
-//                    } else {
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Something went wrong",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                })
-//        }
     }
 
     fun initObserve(soil_test_id: Int) {
@@ -423,6 +385,9 @@ class ViewReportFragment : Fragment() {
         if (data.TcLatitude != null) binding.sampleLayout.soilReportTv3.text =
             location + data.StLatitude.toString() + "," + data.StLongitude
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("ViewReportFragment")
+    }
 
 }

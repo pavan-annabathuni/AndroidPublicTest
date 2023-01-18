@@ -21,6 +21,7 @@ import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSelectCropSoilTestBinding
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -285,19 +286,9 @@ class SelectCropSoilTestFragment : Fragment() {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
 
-//    private fun dialog(){
-//
-//        val dialog = Dialog(requireContext())
-//        //dialog.setCancelable(false)
-//        dialog.setContentView(com.waycool.featurecrophealth.R.layout.dailog_information)
-//        // val body = dialog.findViewById(R.id.body) as TextView
-//        val yesBtn = dialog.findViewById(com.waycool.featurecrophealth.R.id.ok) as Button
-//        yesBtn.setOnClickListener {
-//            dialog.dismiss()
-//            Log.d("Dialog", "dialog: Clicked")
-//        }
-//        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        dialog.show()
-//    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SelectCropSoilTestFragment")
+    }
 
 }
