@@ -30,6 +30,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -386,5 +387,9 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             binding.toolbarTitle.text = TranslationsManager().getString("str_news")
             binding.search.hint = TranslationsManager().getString("search")
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NewsAndArticlesActivity")
     }
 }

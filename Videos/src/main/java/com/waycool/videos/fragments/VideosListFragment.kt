@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
@@ -369,6 +370,10 @@ class VideosListFragment : Fragment(), itemClick {
                     }
                 }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("VideosListFragment")
     }
 
 }

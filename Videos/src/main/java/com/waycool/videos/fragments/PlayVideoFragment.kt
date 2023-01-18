@@ -21,6 +21,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -229,6 +230,9 @@ class PlayVideoFragment : Fragment() ,itemClick{
             }
 
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlayVideoFragment")
+    }
 
 }
