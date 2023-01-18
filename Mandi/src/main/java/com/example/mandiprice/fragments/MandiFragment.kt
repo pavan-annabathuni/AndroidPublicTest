@@ -30,6 +30,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -651,5 +652,9 @@ class MandiFragment : Fragment() {
         TranslationsManager().loadString("search_crop_mandi",binding.searchBar)
         TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MandiFragment")
     }
 }

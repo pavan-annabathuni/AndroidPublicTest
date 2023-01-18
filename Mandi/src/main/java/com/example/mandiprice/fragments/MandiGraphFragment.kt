@@ -37,6 +37,7 @@ import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
 import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -372,7 +373,9 @@ class MandiGraphFragment : Fragment() {
         TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
         TranslationsManager().loadString("date", binding.textView8,"Date")
-
-
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MandiGraphFragment")
     }
 }

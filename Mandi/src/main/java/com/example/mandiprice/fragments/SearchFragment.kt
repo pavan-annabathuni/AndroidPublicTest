@@ -26,6 +26,7 @@ import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
@@ -438,5 +439,9 @@ class SearchFragment : Fragment() {
         }
         TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SearchFragment")
     }
 }
