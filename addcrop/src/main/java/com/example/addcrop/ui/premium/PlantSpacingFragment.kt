@@ -202,7 +202,7 @@ class PlantSpacingFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
 //            binding.toolbarTitle.text = title
-            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            var NickNamehint = TranslationsManager().getString("e_g_50")
             binding.etNumber.hint =NickNamehint
             binding.etNumberWidth.hint=NickNamehint
             binding.etNumberWidthDistance.hint=NickNamehint

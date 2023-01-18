@@ -90,8 +90,7 @@ class VideosListFragment : Fragment(), itemClick {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
-                }
+                    activity?.finish()                }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
             requireActivity(),

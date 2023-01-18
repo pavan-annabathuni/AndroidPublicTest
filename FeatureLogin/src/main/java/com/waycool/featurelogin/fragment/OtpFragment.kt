@@ -1,6 +1,5 @@
 package com.waycool.featurelogin.fragment
 
-//import com.waycool.data.utils.SharedPreferenceUtility
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -35,10 +34,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mukesh.OTP_VIEW_TYPE_BORDER
 import com.mukesh.OtpView
 import com.waycool.core.retrofit.OTPApiCient
+import com.waycool.data.utils.NetworkUtil
+//import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
-import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
 import com.waycool.featurelogin.databinding.FragmentOtpBinding
@@ -55,7 +55,7 @@ import java.util.regex.Pattern
 
 
 class OtpFragment : Fragment() {
-    private lateinit var bottomSheetDialog: BottomSheetDialog
+    private var bottomSheetDialog: BottomSheetDialog?=null
     lateinit var binding: FragmentOtpBinding
     private var mToast: Toast? = null
     var mobileNumber: String = ""
@@ -224,16 +224,14 @@ class OtpFragment : Fragment() {
                             val otpResponse: OTPResponseDomain? = it.data
                             if (otpResponse?.type == "success") {
                                 verifyUser()
-                            } else if (otpResponse?.type == "error") {
-                                if (otpResponse?.message == "Max limit reached for this otp verification") {
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        "You have reached the maximum limit for the otp verification.Get OTP again",
-                                        Toast.LENGTH_LONG
-                                    )
+                            }
+                            else if (otpResponse?.type == "error") {
+                                if(otpResponse?.message=="Max limit reached for this otp verification"){
+                                    ToastStateHandling.toastError(requireContext(), "You have reached the maximum limit for the otp verification.Get OTP again",Toast.LENGTH_LONG)
                                     //go to login fragment
                                     findNavController().popBackStack()
-                                } else {
+                                }
+                                else{
                                     ToastStateHandling.toastError(requireContext(), "Wrong Otp", Toast.LENGTH_SHORT)
                                 }
                             }
@@ -251,7 +249,7 @@ class OtpFragment : Fragment() {
                     }
                 }
         } else {
-            context?.let { ToastStateHandling.toastError(it, "Please enter the OTP", Toast.LENGTH_LONG) }
+            context?.let { ToastStateHandling.toastError(it,"Please enter the OTP", Toast.LENGTH_LONG) }
         }
     }
 
@@ -404,32 +402,26 @@ class OtpFragment : Fragment() {
                                     "Logged in successfully",
                                     Toast.LENGTH_SHORT
                                 )
-                                loginViewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
-                                    Log.d("otpfragment", "${user.data}")
-                                    if (user.data != null && user.data?.userId != null) {
-                                        Log.d("otpfragment", "After Check ${user.data}")
-                                        gotoMainActivity()
-                                    }
-                                }
+                                gotoMainActivity()
 
                             } else {
                                 if (loginMaster?.data == "406") {
                                     bottomSheetDialog = BottomSheetDialog(requireContext())
-                                    bottomSheetDialog.setContentView(R.layout.bottom_dialog_logged_in_details)
+                                    bottomSheetDialog?.setContentView(R.layout.bottom_dialog_logged_in_details)
                                     val logginTv =
-                                        bottomSheetDialog.findViewById<TextView>(R.id.loggin_text_dialog)
+                                        bottomSheetDialog?.findViewById<TextView>(R.id.loggin_text_dialog)
                                     val continueBtn =
-                                        bottomSheetDialog.findViewById<Button>(R.id.continue_loggin_dialog)
+                                        bottomSheetDialog?.findViewById<Button>(R.id.continue_loggin_dialog)
                                     val goBackBtn =
-                                        bottomSheetDialog.findViewById<Button>(R.id.goback_login_dialog)
-                                    bottomSheetDialog.setCancelable(false)
-                                    bottomSheetDialog.setCanceledOnTouchOutside(false)
-                                    bottomSheetDialog.show()
-                                    goBackBtn!!.setOnClickListener { view: View? -> bottomSheetDialog.dismiss() }
+                                        bottomSheetDialog?.findViewById<Button>(R.id.goback_login_dialog)
+                                    bottomSheetDialog?.setCancelable(false)
+                                    bottomSheetDialog?.setCanceledOnTouchOutside(false)
+                                    bottomSheetDialog?.show()
+                                    goBackBtn!!.setOnClickListener { view: View? -> bottomSheetDialog?.dismiss() }
                                     logginTv!!.text =
                                         Html.fromHtml("You have already logged in  <b>" + "another Devices" + "</b>. Click on <b>Continue</b> to login.")
                                     continueBtn!!.setOnClickListener { view: View? ->
-                                        bottomSheetDialog.dismiss()
+                                        bottomSheetDialog?.dismiss()
                                         loginViewModel.logout(mobileNumber)
                                             .observe(requireActivity()) {
                                                 verifyUser()
@@ -474,15 +466,14 @@ class OtpFragment : Fragment() {
     fun apiOTP(mobileNumber: String) {
         loginViewModel.getOtp(mobileNumber).observe(requireActivity()) {
             if (it is Resource.Success) {
-                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "OTP Sent", Toast.LENGTH_SHORT) }
+                context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"OTP Sent",Toast.LENGTH_SHORT) }
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        if (bottomSheetDialog.isShowing) {
-            bottomSheetDialog.dismiss()
-        }
+        bottomSheetDialog?.dismiss()
     }
 }
 

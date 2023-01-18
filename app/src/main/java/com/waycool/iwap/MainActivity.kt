@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("TAG", "onCreateToken:$accountID")
                     Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
                     val token: String = tokenCheckViewModel.getUserToken()
-                    validateToken(accountID!!, token)
+                    validateToken(accountID.toString().toInt(), token)
                     Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
                 }
 
@@ -243,39 +243,48 @@ class MainActivity : AppCompatActivity() {
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
-
-            if (bottomNavigationView.menu!=null){
             TranslationsManager().getStringAsLiveData("home")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue?:"Home"
+                if(bottomNavigationView.menu.findItem(R.id.nav_home_premium)!=null){
+                bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue?:"Home"}
             }
             TranslationsManager().getStringAsLiveData("services")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Services"
+                if(bottomNavigationView.menu.findItem(R.id.nav_home)!=null){
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Services"}
             }
             TranslationsManager().getStringAsLiveData("my_farm")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue?:"My Farms"
+                if(bottomNavigationView.menu.findItem(R.id.nav_myfarms)!=null){
+                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue?:"My Farms"}
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Profile"
+                if(bottomNavigationView.menu.findItem(R.id.navigation_profile)!=null){
+                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Profile"}
             }
-        }} else {
+        } else {
             navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
-            if(bottomNavigationView.menu!=null){
-
             TranslationsManager().getStringAsLiveData("home")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"
+                if(bottomNavigationView.menu.findItem(R.id.nav_home)!=null){
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"}
             }
             TranslationsManager().getStringAsLiveData("mandi")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"
+                if(bottomNavigationView.menu.findItem(R.id.navigation_mandi)!=null){
+                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"}
             }
-            TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this){
-                bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title = it?.appValue?:"Crop Protection"}
+            TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.nav_crop_protect) != null) {
+                    bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title =
+                        it?.appValue ?: "Crop Protection"
+                }
+            }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
-                bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
-                    it?.appValue ?: "Home"
-            } }
+                if(bottomNavigationView.menu.findItem(R.id.navigation_profile)!=null) {
+
+                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
+                        it?.appValue ?: "Profile"
+                }
+            }
         }
 
 
