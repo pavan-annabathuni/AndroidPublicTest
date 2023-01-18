@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -216,69 +217,6 @@ class CropHistoryFragment : Fragment() {
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
-//    private fun clickSearch() {
-//        binding.searchView.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//
-//            ) {
-//            }
-//
-//            override fun onTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//            ) {
-//
-//                val temp = ArrayList<AiCropHistoryDomain>()
-////                filteredList.clear()
-//                Log.d("TAG", "onTextChangedListShow: $temp")
-//                if (charSequence.isNotEmpty()) {
-//                    filteredList.forEach {
-//                        if (it.cropdata.cropName.toString().lowercase()
-//                                .contains(charSequence.toString().lowercase())
-//                        ) {
-//                            if (!temp.contains(it)) {
-//                                temp.add(it)
-//                            }
-//                        }
-//                    }
-//                    historyAdapter.upDateList(temp)
-////                    historyAdapter.submitList(temp)
-//                    Log.d("TAG", "::::stderr  $temp")
-//                }
-////                if (temp.isEmpty()){
-////                    soilHistoryAdapter.upDateList(filteredList)
-////                }
-//            }
-////                filteredList.forEach {
-////                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
-////                     filteredList.add(filteredList)
-////                 }
-////                }
-//
-////                for (item in filteredList[].soil_test_number!!.indices) {
-////                    Log.d("TAG", "::::stderr $charSequence")
-////                    if (filteredList[0].soil_test_number!!.lowercase()
-////                            .startsWith(charSequence.toString().lowercase())
-////                    ) {
-//////                        filteredList.add(filteredList)
-////                        Log.d(TAG, "onTextChangedList:$filteredList")
-////                        Log.d("TAG", "::::::::stderr $charSequence")
-////                    }
-////
-////                }
-//
-////                binding.etSearchItem.getText().clear();
-////            }
-//
-//            override fun afterTextChanged(editable: Editable) {}
-//        })
-//    }
 
     private fun fabButton() {
         var isVisible = false
@@ -305,6 +243,10 @@ class CropHistoryFragment : Fragment() {
         binding.addChat.setOnClickListener {
             FeatureChat.zenDeskInit(requireContext())
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropHistoryFragment")
     }
 
 }

@@ -9,6 +9,7 @@ import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentHowToClickBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 
@@ -43,6 +44,10 @@ open class HowToClickFragment() :  BottomSheetDialogFragment() {
         TranslationsManager().loadString("capture_info_3", binding.imageThree)
         TranslationsManager().loadString("capture_info_4", binding.imageFour)
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HowToClickFragment")
     }
 
 }
