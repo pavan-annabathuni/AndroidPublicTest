@@ -29,6 +29,7 @@ import com.truecaller.android.sdk.ITrueCallback
 import com.truecaller.android.sdk.TrueProfile
 import com.truecaller.android.sdk.TrueError
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -318,5 +319,8 @@ class LoginFragment : Fragment() {
         findNavController(binding.root)
             .navigate(R.id.action_loginFragment_to_registrationFragment, args)
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("LoginFragment")
+    }
 }

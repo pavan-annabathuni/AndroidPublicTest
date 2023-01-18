@@ -43,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -703,5 +704,9 @@ class RegistrationFragment : Fragment() {
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 101
         private const val REQUEST_CODE_GPS = 1011
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("RegistrationFragment")
     }
 }

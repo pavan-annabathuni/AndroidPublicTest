@@ -18,7 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 
-;import com.waycool.featurelogin.R;
+;import com.waycool.data.eventscreentime.EventScreenTimeHandling;
+import com.waycool.featurelogin.R;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 
@@ -126,8 +127,11 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(3846 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
     }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }
