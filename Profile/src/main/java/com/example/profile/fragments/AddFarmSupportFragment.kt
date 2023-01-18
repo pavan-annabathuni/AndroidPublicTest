@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -369,5 +370,9 @@ class AddFarmSupportFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_GPS = 1011
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddFarmSupportFragment")
     }
 }

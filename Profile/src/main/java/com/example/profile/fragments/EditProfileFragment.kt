@@ -31,6 +31,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
@@ -540,5 +541,9 @@ class EditProfileFragment : Fragment() {
 
     private fun checkRollId(){
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("EditProfileFragment")
     }
 }

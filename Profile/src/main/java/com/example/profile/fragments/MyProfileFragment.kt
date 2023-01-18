@@ -25,6 +25,7 @@ import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
@@ -281,6 +282,10 @@ class MyProfileFragment : Fragment() {
         TranslationsManager().loadString("str_privacy_policy", binding.textView,"Privacy Policy")
         TranslationsManager().loadString("str_terms", binding.textView2,"Terms & Conditions")
         TranslationsManager().loadString("str_farm_support", binding.tvSupport,"Farm Support")
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MyProfileFragment")
     }
 
 }
