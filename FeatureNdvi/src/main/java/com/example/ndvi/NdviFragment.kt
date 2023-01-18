@@ -27,6 +27,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.NdviData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
@@ -163,48 +164,6 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
         getNdviFromAPI()
 
-//        map.let { itt ->
-//            googleMap = itt!!
-//            var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-//                override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
-//                    var url: String?
-//                    url =
-//                        "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
-////                        if(selectedTileType == TileType.NDVI) {
-////                           // url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/120636aed80/6391d44c50d9ff43ef5568a1?appid=071e58db72985a51f8f5da4ab1969561&paletteid=4"
-////                         //   url = "http://api.agromonitoring.com/tile/1.0/{z}/{x}/{y}/020635f1000/639b20b9dfcf2290ab07ef4d?appid=b1503a7f8fcdbd96d5fd399fac9eb1a6&paletteid=4"
-////                        }else{
-////                           url = trueColor
-////                       }
-//                    url = url?.replace("{z}", "${zoom}")
-//                    url = url?.replace("{x}", "${x}")
-//                    url = url?.replace("{y}", "${y}")
-//                    Log.d("g56", "NDVI Url: $url")
-//                    try {
-//                        return URL(url)
-//                    } catch (e: MalformedURLException) {
-//                        throw AssertionError(e)
-//                    }
-//                }
-//
-//                private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
-//                    val minZoom = 12
-//                    val maxZoom = 16
-//                    return zoom in minZoom..maxZoom
-//                }
-//
-//            }
-//
-//            if (tileOverlay != null)
-//                tileOverlay?.remove()
-//
-//            tileOverlay = googleMap.addTileOverlay(
-//                TileOverlayOptions()
-//                    .tileProvider(tileProvider)
-//            )
-//
-//            // tileOverlayTransparent.remove()
-//        }
 
 
     }
@@ -314,41 +273,6 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-//    fun observer() {
-//        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
-//            // binding.slider.value = it.data?.data?.get(0)?.meanNdvi?.toFloat() ?: 0.0.toFloat()
-//            Log.d("Ndvi", "observer: ${it.data.toString()}")
-//            binding.ndviMean.text = it.data?.data?.get(0)?.meanNdvi?.toString()
-//        }
-//    }
-//
-//    private fun spinner() {
-//        viewModel.getNdvi(1, 2).observe(viewLifecycleOwner) {
-//            val list: MutableList<String?> = (it?.data?.data
-//                ?.filter { ndviData -> ndviData.tileDate != null }
-//                ?.map { data -> data.tileDate } ?: mutableListOf()) as MutableList<String?>
-//
-//            val arrayAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, list)
-//            binding.dateSpinner.adapter = arrayAdapter
-//            binding.dateSpinner.onItemSelectedListener =
-//                object : AdapterView.OnItemSelectedListener {
-//                    override fun onItemSelected(
-//                        p0: AdapterView<*>?,
-//                        p1: View?,
-//                        p2: Int,
-//                        p3: Long
-//                    ) {
-//
-//                        // onMapReady(googleMap)
-//                    }
-//
-//                    override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//                    }
-//                }
-//        }
-//    }
-
     private fun drawFarmPolygon(mMap: GoogleMap?) {
         if (myFarm != null) {
             val points = myFarm?.farmJson
@@ -417,5 +341,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             this.findNavController().navigateUp()
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NdviFragment")
     }
 }
