@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
@@ -221,5 +222,8 @@ class PlantSpacingFragment : Fragment() {
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlantSpacingFragment")
+    }
 }

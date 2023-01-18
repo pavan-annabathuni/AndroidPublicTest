@@ -11,13 +11,12 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
-import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.databinding.FragmentVeriatyCropBinding
-import com.example.addcrop.ui.CategoryAdapter
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
-class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
+class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
     private var _binding: FragmentVeriatyCropBinding? = null
     private val binding get() = _binding!!
     var crop_id: Int? = null
@@ -129,6 +128,10 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
 
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("VarietyCropFragment")
     }
 
 }

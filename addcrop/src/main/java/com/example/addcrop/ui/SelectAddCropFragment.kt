@@ -23,6 +23,7 @@ import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
@@ -284,6 +285,9 @@ class SelectAddCropFragment : Fragment() {
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SelectAddCropFragment")
+    }
 
 }

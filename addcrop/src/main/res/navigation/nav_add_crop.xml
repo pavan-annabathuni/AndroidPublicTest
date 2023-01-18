@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/veriatyCropFragment"
-        android:name="com.example.addcrop.ui.premium.VeriatyCropFragment"
+        android:name="com.example.addcrop.ui.premium.VarietyCropFragment"
         android:label="fragment_veriaty_crop"
         tools:layout="@layout/fragment_veriaty_crop" >
         <action

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
@@ -73,5 +74,9 @@ class EditCropFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         myCrops()
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("EditCropFragment")
     }
 }

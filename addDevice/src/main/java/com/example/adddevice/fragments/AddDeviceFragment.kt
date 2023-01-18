@@ -40,6 +40,7 @@ import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -523,5 +524,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
 //        TranslationsManager().loadString("_2_when_do_i_sample", binding.tvSoilText)
 //        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddDeviceFragment")
     }
 }

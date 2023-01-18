@@ -15,6 +15,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -117,5 +118,9 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
 
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddCropFragment")
     }
 }
