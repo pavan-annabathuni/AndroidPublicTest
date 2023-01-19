@@ -1,0 +1,119 @@
+name: Outgrow Pipeline Action
+
+on:
+  push:
+    branches: [ "qa","development", "staging","main" ]
+jobs:
+  application_cleaning_building:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: execute gradle clean
+        run: ./gradlew clean
+      - name: Build
+        run: ./gradlew build
+  application_testing:
+    needs: [ application_cleaning_building ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v3
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: execute gradle test
+        run: ./gradlew test
+  tagging_releases:
+    needs: [ application_testing ]
+    runs-on: ubuntu-22.04
+    outputs:
+      new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
+    name: 🧿Tagging & Releasing Application
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: '0'
+      - name: 🔖 Tag version Alpha / Beta
+        id: tag_version
+        uses: anothrNick/github-tag-action@master
+        env:
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: false
+          RELEASE_BRANCHES: qa,staging,main
+          if: github.ref == 'refs/heads/development'
+          PRERELEASE: true
+      - name: 🔃 Building Version Output
+        id: new_tag_builder
+        run: echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
+      - name: 🛎️ Create a GitHub release
+        uses: release-drafter/release-drafter@master
+        with:
+          version: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          publish: true
+          if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  dev_deployment:
+    if: github.ref == 'refs/heads/development'
+    needs: [ tagging_releases ]
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v3
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Bump version
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: gradle.properties
+          versionCode: ${{github.run_number}}
+          versionName: ${{needs.tagging_releases.outputs.new_tag_version}}
+      - name: Assemble Release
+        run: ./gradlew assembleDebug
+      - name: Sign Release
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/debug
+          signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
+          alias: ${{ secrets.OUTGROW_APP_ALIAS }}
+          keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.OUTGROW_APP_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "33.0.1"
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/apk/debug
+      - name: download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app
+      - name: list files
+        run: ls -l
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
+          groups: testers
+          file: app-debug-unsigned-signed.apk
