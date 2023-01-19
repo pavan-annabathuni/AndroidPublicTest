@@ -33,6 +33,7 @@ android {
 
     def versionName = VERSION_NAME
     def versionCode = VERSION_CODE
+    namespace 'com.example.profile'
     buildTypes.all {
         buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
         buildConfigField "int", "VERSION_CODE", "$versionCode"
