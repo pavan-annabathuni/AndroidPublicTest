@@ -15,10 +15,10 @@ jobs:
       with:
         java-version: 11
     - name: Set up Android SDK and NDK
-      uses: android-actions/setup-android@v2
+      uses: elgohr/Setup-Android-SDK@v2.1.0
       with:
-        android-sdk-version: 30
-        android-ndk-version: 21.0.6113669
+        android-sdk-version: 30.0.2
+        android-ndk-version: 21.3.6528147
     - name: Set up environment variables
       run: echo "ANDROID_HOME=${{ env.ANDROID_HOME }}" >> ~/.bashrc && echo "ANDROID_NDK_HOME=${{ env.ANDROID_NDK_HOME }}" >> ~/.bashrc
     - name: Clean project
