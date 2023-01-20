@@ -81,6 +81,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             if (accountId == null) {
                 accountId = it.data?.accountId
+                binding.farmLocation.text = it.data?.profile?.district
                 getNdviFromAPI()
             }
         }
@@ -413,9 +414,6 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             binding.topAppBar.title = title
         }
 
-        binding.topAppBar.setOnClickListener() {
-            this.findNavController().navigateUp()
-        }
 
     }
 }

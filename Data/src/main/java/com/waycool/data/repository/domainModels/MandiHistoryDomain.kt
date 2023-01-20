@@ -12,6 +12,9 @@ data class MandiHistoryDomain(
 data class MandiHistoryDataDomain (
 
     @SerializedName("avg_price") var avgPrice    : String? = null,
-    @SerializedName("arrival_date") var arrivalDate : String? = null
+    @SerializedName("arrival_date") var arrivalDate : String? = null,
+    @SerializedName("updated_at"           ) var updatedAt          : String? = null,
+    @SerializedName("formatted_updated_at" ) var formattedUpdatedAt : String? = null
+
 
 )

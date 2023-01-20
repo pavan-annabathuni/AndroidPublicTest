@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
@@ -61,6 +62,7 @@ class EditCropFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
+                EventClickHandling.calculateClickEvent("Edit_crop_${it.data!![0].cropNameTag}")
             }
                 if(it.data.isNullOrEmpty()){
                     this@EditCropFragment.findNavController().navigateUp()

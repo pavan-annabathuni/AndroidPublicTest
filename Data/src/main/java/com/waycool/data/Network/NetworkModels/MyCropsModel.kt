@@ -10,6 +10,7 @@ data class CropModel (
 
     @SerializedName("id"        ) var id       : Int?    = null,
     @SerializedName("crop_name" ) var cropName : String? = null,
+    @SerializedName("crop_name_tag" ) var cropTagName : String? = null,
     @SerializedName("crop_logo" ) var cropLogo : String? = null
 
 )

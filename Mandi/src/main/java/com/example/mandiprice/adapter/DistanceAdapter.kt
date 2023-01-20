@@ -100,11 +100,12 @@ class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) 
             "mr" -> {
                 holder.cropName.text = properties?.crop_mr
                 holder.markerName.text = properties?.market_mr
+                cropName = properties?.crop_mr
+                marketName = properties?.market_mr
             }
 
         }
-        cropName = holder.cropName.text.toString()
-        marketName = holder.markerName.text.toString()
+
 
     }
 
