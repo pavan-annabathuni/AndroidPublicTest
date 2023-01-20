@@ -18,6 +18,10 @@ jobs:
       uses: android-actions/setup-android@v2
     - name: Set up environment variables
       run: echo "ANDROID_HOME=${{ env.ANDROID_HOME }}" >> ~/.bashrc && echo "ANDROID_NDK_HOME=${{ env.ANDROID_NDK_HOME }}" >> ~/.bashrc
+    - name: Touch local properties
+      run: touch local.properties
+    - name: Add Api Key
+      run: echo "apiKey=\"\"" >> local.properties
     - name: Clean project
       run: ./gradlew clean
     - name: Build project
