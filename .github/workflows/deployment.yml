@@ -22,13 +22,14 @@ jobs:
         run: echo "apiKey=\"\"" >> local.properties
         
       - name: NDK init
-      - uses: actions/checkout@v2
-      - uses: nttld/setup-ndk@v1
+        uses: actions/checkout@v2
+      - name: NDK  
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25b
       - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
 
-        
+      
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Make gradlew executable
