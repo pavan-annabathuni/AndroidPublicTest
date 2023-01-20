@@ -953,7 +953,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }else{
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
-            binding.clAddForm.visibility = View.VISIBLE
+            binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
         }

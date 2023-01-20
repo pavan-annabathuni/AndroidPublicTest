@@ -33,6 +33,7 @@ class MyCropEntityMapper:EntityMapper<MyCropDataEntity,MyCropDataModel> {
            disease           =dto.disease,
             cropIdd = dto.crop?.id,
         cropName = dto.crop?.cropName,
+            cropNameTag=dto.crop?.cropTagName,
         cropLogo = dto.crop?.cropLogo,
         soilType = dto.soilType?.soilType,
         actualHarvestDate = dto.actualHarvestDate)

@@ -30,6 +30,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -64,6 +66,7 @@ class MandiFragment : Fragment() {
     var distance = "Distance"
     private var price = "Price"
     var accountID = 0
+    private var mandiMarket = null
 
     val arrayCat = ArrayList<String>()
 
@@ -124,14 +127,18 @@ class MandiFragment : Fragment() {
         )
         viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
+            val bundle = Bundle()
+            bundle.putString("","Mandi${it.crop}")
+            bundle.putString("","Mandi${it.market}")
+            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
             val args = Bundle()
-
-            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
-            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
-            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
-            args.putString("fragment", "one")
+//            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+//            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+//            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
+//            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
+//            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
+//            args.putString("fragment", "one")
+            args.putParcelable("mandiRecord",it)
             findNavController()
                 .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
         }, LocalSource.getLanguageCode() ?: "en")
@@ -271,6 +278,7 @@ class MandiFragment : Fragment() {
                     Log.d("spinnerId", "onItemSelected: $id")
                     binding.recycleViewDis.adapter = adapterMandi
                     val text = binding.spinner1.selectedItem.toString()
+                    EventClickHandling.calculateClickEvent("Mandi_category_filter_$text")
                     if (position > 0) {
                         cropCategory = text
                         mandiApiCall()
@@ -316,6 +324,7 @@ class MandiFragment : Fragment() {
                                 ) {
 
                                     val text = binding.spinner2.selectedItem.toString()
+                                    EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
                                     if (position > 0) {
                                         crop = text
                                         mandiApiCall()
@@ -337,12 +346,17 @@ class MandiFragment : Fragment() {
 
                     }
                     }else{
+                        viewModel.viewModelScope.launch {
+                            var cropName = TranslationsManager().getString("str_crop")
                         viewModel.getAllCrops().observe(viewLifecycleOwner) {
                             // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
                             var cropNameList = (it.data?.map { data ->
                                 data.cropName
                             } ?: emptyList()).toMutableList()
-
+                            if(!cropNameList.isNullOrEmpty())
+                            if(!cropName.isNullOrEmpty())
+                                cropNameList[0] = cropName
+                            else cropNameList[0] ="Crop"
 
 //            if (cropNameList.size==0)
 //                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
@@ -364,6 +378,7 @@ class MandiFragment : Fragment() {
                                     ) {
 
                                         val text = binding.spinner2.selectedItem.toString()
+                                        EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
                                         if (position > 0) {
                                             crop = text
                                             mandiApiCall()
@@ -384,17 +399,23 @@ class MandiFragment : Fragment() {
                                 }
 
                         }
-                    }}
+                    }}}
                 }
 
             }}
 
+        viewModel.viewModelScope.launch {
+            var crop = TranslationsManager().getString("str_crop")
         viewModel.getAllCrops().observe(viewLifecycleOwner) {
+
            // val filter = it.data?.filter { it.cropCategory_id == cropCategoryId }
             var cropNameList = (it.data?.map { data ->
                 data.cropName
             } ?: emptyList()).toMutableList()
-
+            if (cropNameList.isNotEmpty())
+                if(!crop.isNullOrEmpty())
+                    cropNameList[0] = crop
+                else cropNameList[0] ="Crops"
 //            if (cropNameList.size==0)
 //                cropNameList = (it.data?.get(0)?.cropNameTag ?: "") as MutableList<String?>
 
@@ -434,7 +455,7 @@ class MandiFragment : Fragment() {
                     }
                 }
 
-        }
+        }}
 
         viewModel.viewModelScope.launch {
             var state = TranslationsManager().getString("str_state")
@@ -466,6 +487,7 @@ class MandiFragment : Fragment() {
                 id: Long
             ) {
                 val text = binding.spinner3.selectedItem.toString()
+                EventClickHandling.calculateClickEvent("Mandi_state_filter_$text")
                 if (position > 0) {
                     state = text
                     getMandiData(cropCategory, state, crop, sortBy, orderBy)

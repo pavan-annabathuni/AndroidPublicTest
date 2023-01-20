@@ -48,6 +48,7 @@ data class MyCropDataDomain (
   //  @SerializedName("crop"                  ) var crop                : CropDomain?   = CropDomain()
     @SerializedName("crop_idd"        ) var idd       : Int?    = null,
     @SerializedName("crop_name" ) var cropName : String? = null,
+    @SerializedName("crop_name_tag" ) var cropNameTag : String? = null,
     @SerializedName("crop_logo" ) var cropLogo : String? = null,
     @SerializedName("soil_type"   ) var soilType    : String? = null,
 

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.addcrop.AddCropActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentSpotLightBinding
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,14 @@ class SpotLightFragment : Fragment() {
                 if (position == imageList.size - 1) {
                     binding.next.setOnClickListener() {
 
+                        when(position){
+                            0-> EventClickHandling.calculateClickEvent("Next(1/5)")
+                            1-> EventClickHandling.calculateClickEvent("Next(2/5)")
+                            2-> EventClickHandling.calculateClickEvent("Next(3/5)")
+                            3-> EventClickHandling.calculateClickEvent("Next(4/5)")
+                            4-> EventClickHandling.calculateClickEvent("Next(5/5)")
+                            5-> EventClickHandling.calculateClickEvent("Next(6/5)")
+                        }
 
                         lifecycleScope.launch {
                             DataStoreManager.save("FirstTime", "true")
@@ -77,7 +86,14 @@ class SpotLightFragment : Fragment() {
                     binding.idViewPager.setCurrentItem(position - 1, true)
                 }
                 binding.skip.setOnClickListener() {
-
+                    when(position){
+                        0-> EventClickHandling.calculateClickEvent("Skip(1/5))")
+                        1-> EventClickHandling.calculateClickEvent("Skip(2/5)")
+                        2-> EventClickHandling.calculateClickEvent("Skip(3/5)")
+                        3-> EventClickHandling.calculateClickEvent("Skip(4/5)")
+                        4-> EventClickHandling.calculateClickEvent("Skip(5/5))")
+                        5-> EventClickHandling.calculateClickEvent("Skip(6/5)")
+                    }
                     lifecycleScope.launch {
                         DataStoreManager.save("FirstTime", "true")
                         this@SpotLightFragment.findNavController().popBackStack()
