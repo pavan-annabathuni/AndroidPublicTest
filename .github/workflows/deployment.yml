@@ -21,9 +21,9 @@ jobs:
     - name: Touch local properties
       run: touch local.properties
 
-    - name: Clean project
-      run: ./gradlew clean
+#    - name: Clean project
+#      run: ./gradlew clean
     - name: Build project
-      run: ./gradlew build
+      run: ./gradlew assembleDebug
     - name: Run tests
       run: ./gradlew test
