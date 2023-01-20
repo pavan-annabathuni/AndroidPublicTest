@@ -20,16 +20,12 @@ jobs:
         run: touch local.properties
       - name: Add Api Key
         run: echo "apiKey=\"\"" >> local.properties
-        
-      - name: NDK init
-        uses: actions/checkout@v2
-      - name: NDK  
-        uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r25b
-      - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
-
       
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1.2.0
+        with:
+          ndk-version: 21.4.7075529
+  
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Make gradlew executable
