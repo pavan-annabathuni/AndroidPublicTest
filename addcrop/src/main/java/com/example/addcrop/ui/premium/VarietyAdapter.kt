@@ -29,9 +29,9 @@ private var row_index = -1
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val details = varietyList[position]
+        val details = varietyList[holder.layoutPosition]
         holder.binding.tvSand.setText(varietyList[position].name)
-        if (row_index == position) {
+        if (row_index == holder.layoutPosition) {
             holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
             holder.binding.ngClick.visibility= View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
@@ -44,7 +44,7 @@ private var row_index = -1
         }
 //
         holder.binding.clSand .setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             itemSelectedListener.clickOnCategory(details)
             holder.binding.ngClick.visibility= View.GONE
