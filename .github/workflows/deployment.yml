@@ -24,7 +24,7 @@ jobs:
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1.2.0
         with:
-          ndk-version: 21.4.7075529
+          ndk-version: "25.1.8937393"
   
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
