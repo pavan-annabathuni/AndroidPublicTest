@@ -22,9 +22,9 @@ class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : Recycler
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val details = details[position]
+        val details = details[holder.layoutPosition]
         holder.binding.tvSand .text = details.soil_type
-        if (row_index == position) {
+        if (row_index == holder.layoutPosition) {
             holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
             holder.binding.ngClick.visibility=View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
@@ -37,7 +37,7 @@ class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : Recycler
         }
 
         holder.binding.clSand .setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             addCropItemClick.clickOnCategory(details)
             holder.binding.ngClick.visibility=View.GONE
