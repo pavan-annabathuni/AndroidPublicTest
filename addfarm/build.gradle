@@ -6,7 +6,7 @@ plugins {
 
 android {
 //    namespace 'com.waycool.addfarm'
-    compileSdk 32
+    compileSdk appCompileSdkVersion
 
     defaultConfig {
         minSdk appMinSdkVersion
