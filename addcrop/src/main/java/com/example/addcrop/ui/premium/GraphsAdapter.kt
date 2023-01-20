@@ -17,9 +17,9 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
     }
 
     override fun onBindViewHolder(holder: GraphsViewHolder, position: Int) {
-        val details = varietyList[position]
+        val details = varietyList[holder.layoutPosition]
         holder.binding.tvSand .text = details.name
-        if (row_index == position) {
+        if (row_index == holder.layoutPosition) {
             holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
             holder.binding.ngClick.visibility= View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
@@ -32,7 +32,7 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
         }
 
         holder.binding.clSand .setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             itemGraphsClicked.clickGraphs(details)
 //            itemSelectedListener.clickOnCategory(details.name)
