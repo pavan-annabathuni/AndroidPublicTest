@@ -15,7 +15,7 @@ jobs:
       with:
         java-version: 11
     - name: Set up Android SDK and NDK
-      uses: actions/setup-android@v2
+      uses: android-actions/setup-android@v2
       with:
         android-sdk-version: 30
         android-ndk-version: 21.0.6113669
