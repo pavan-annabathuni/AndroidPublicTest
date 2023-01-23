@@ -27,6 +27,7 @@ import com.waycool.addfarm.adapter.SelectCropAdapter
 import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -227,6 +228,26 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
                     binding.saveProgressBar.visibility = View.VISIBLE
                     binding.saveFarmBtn.visibility = View.INVISIBLE
+                    val eventBundle=Bundle()
+                    eventBundle.putString("FarmName",binding.farmnameEtAddfarm.text.toString())
+                    eventBundle.putString("FarmArea",binding.farmareaEtAddfarm.text.toString())
+                    eventBundle.putString("checkedcrops",checkedcrops)
+                    eventBundle.putString("watersources",watersources)
+                    if(binding.pumphpSpinner.selectedItem.toString()!="--Select--"){
+                    eventBundle.putString("pumphpSpinner",binding.pumphpSpinner.selectedItem.toString())
+                    }
+                    if(binding.pumptypeSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumptypeSpinner",binding.pumptypeSpinner.selectedItem.toString())
+                    }
+
+                    if(binding.pumpheightSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumpheightSpinner",binding.pumpheightSpinner.selectedItem.toString())
+                    }
+                    if(binding.pipesizeSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumphpSpinner",binding.pipesizeSpinner.selectedItem.toString())
+                    }
+                    EventItemClickHandling.calculateItemClickEvent("Added_Farm_name",eventBundle)
+
                     if (myFarmEdit == null) {
                         viewModel.addFarm(
                             accountId!!,

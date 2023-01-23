@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,6 @@ import com.example.irrigationplanner.adapter.ForecastAdapter
 import com.example.irrigationplanner.adapter.PagerForcastAdapter
 import com.example.irrigationplanner.databinding.FragmentForecastBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.eventscreentime.EventScreenTimeHandling

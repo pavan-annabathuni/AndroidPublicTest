@@ -22,13 +22,13 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.github.anastr.speedviewlib.components.Section
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.model.Polygon
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -43,7 +43,6 @@ import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 
@@ -52,8 +51,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     myCropListener {
     private var _binding: FragmentHomePagePremiumBinding? = null
     private val binding get() = _binding!!
-    private var polygon: Polygon? = null
-    private var mMap: GoogleMap? = null
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
@@ -115,6 +112,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
 
         binding.IvNotification.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NotificationsHomePagePremiumFragment")
             findNavController().navigate(R.id.action_homePagePremiumFragment3_to_notificationFragment2)
         }
         binding.tvAddFromOne.isSelected = true
@@ -226,14 +224,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun initClickEvents() {
         binding.clAddCropData.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePremiumFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
         binding.tvEditMyCrops.setOnClickListener {
+            EventClickHandling.calculateClickEvent("EditCropsHomePremiumFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
         binding.cardAddForm.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePremiumFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
@@ -242,24 +243,29 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            startActivity(intent)
 //        }
         binding.clAddForm.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddYourFarmHomePremiumFragment")
+
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
         binding.MyFarm.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddYourFarmHomePremiumFragment")
+
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
         binding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddYourFarmHomePremiumFragment")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
         binding.MyDevice.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddYourDeviceHomePremiumFragment")
+
             val intent = Intent(activity, AddDeviceActivity::class.java)
             startActivity(intent)
         }
-//        binding.tvGoodMorning.setOnClickListener {
-//            findNavController().navigate(R.id.action_homePagePremiumFragment2_to_farmDetailsFragment3)
-//        }
+
 
         binding.tvLastUpdateRefresh.setOnClickListener {
             updateDevice()
@@ -320,6 +326,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("AddFabBtnHomePremiumFragment")
+
             if (!isVisible) {
                 binding.addFab.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -345,17 +353,18 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
+
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
 
     }
-
-
     @SuppressLint("SetTextI18n")
     private fun initViewProfile() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -572,6 +581,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
             }
             it.clWind.setOnClickListener {
+
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
@@ -599,6 +609,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //                }
 //            }
             it.clHumidity.setOnClickListener {
+
                 val bundle = Bundle()
                 if (data.serialNoId != null && data.modelId != null) {
                     bundle.putInt("serial_no", data.serialNoId!!.toInt())
@@ -750,6 +761,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     override fun onFarmDetailsClicked(data: MyFarmsDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("added_farm",data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("View_farm_details",eventBundle)
         val bundle = Bundle()
         bundle.putParcelable("farm", data)
         findNavController().navigate(
@@ -793,17 +807,22 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+        bannerAdapter.onItemClick={
+            EventClickHandling.calculateClickEvent("Home_page_adbanner")
+        }
     }
 
     override fun onFarmSelected(data: MyFarmsDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("SelectedFarmHomePremiumFrag",data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("View_farm_details",eventBundle)
         data.id?.let { initObserveDevice(it) }
-        Log.d("FarmSelected","FarmId:${data.id}")
     }
 
 
     private fun notification(){
         viewModel.getNotification().observe(viewLifecycleOwner){
-            var data = it.data?.data?.filter { itt->
+            val data = it.data?.data?.filter { itt->
                 itt.readAt== null
             }
             if(data?.size!=0){

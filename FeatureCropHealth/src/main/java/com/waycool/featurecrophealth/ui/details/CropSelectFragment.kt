@@ -14,7 +14,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -23,6 +25,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -74,6 +78,12 @@ class CropSelectFragment : Fragment() {
         clickSearch()
 
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("cropName",it?.cropName)
+            if(selectedCategory!=null){
+                eventBundle.putString("selectedCategory",selectedCategory?.categoryName)
+            }
+            EventItemClickHandling.calculateItemClickEvent("crophealth_landing",eventBundle)
             val bundle = Bundle()
             it?.cropId?.let { it1 -> bundle.putInt("crop_id", it1) }
             bundle.putString("name", it?.cropName)
@@ -261,6 +271,7 @@ class CropSelectFragment : Fragment() {
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                EventClickHandling.calculateClickEvent("Search_crophealth")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 150)
@@ -272,6 +283,7 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun speechToText() {
+        EventClickHandling.calculateClickEvent("STT_crophealth")
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,

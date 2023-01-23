@@ -42,19 +42,11 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
-//        holder.binding.tvEnableAddDevice.text = ""
         if ((detail.isPrimary ?: 0) == 1) {
             holder.binding.ivFeedback.visibility = View.VISIBLE
         } else
             holder.binding.ivFeedback.visibility = View.GONE
-//        loadFarm(details.farmJson,holder.mapCurrent)
-//        (details.farmCenter)?.get(0)?.latitude?.let { lat ->
-//            (details.farmCenter)?.get(0)?.longitude?.let { lng ->
-//                getFarmLocation(
-//                    lat, lng
-//                )
-//            }
-//        }
+
 
         if (selectedFarmPosition == null) {
             selectedFarmPosition = position

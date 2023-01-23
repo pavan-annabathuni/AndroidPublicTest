@@ -1,12 +1,12 @@
 package com.example.addcrop
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
@@ -32,6 +32,8 @@ class EditCropFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentEditCropBinding.inflate(inflater)
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
+            val eventBundle=Bundle()
+            eventBundle.putString("",it.cropName)
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
                  context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Crop Deleted",Toast.LENGTH_SHORT) }
                  //myCrops()

@@ -8,7 +8,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +18,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -100,6 +102,8 @@ class CropSelectionFragment : Fragment() {
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
+            if(selectedCategory!=null){
+            args.putString("selectedCategory",selectedCategory?.categoryName)}
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_pestDiseaseFragment,
                 args
@@ -120,6 +124,7 @@ class CropSelectionFragment : Fragment() {
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                EventClickHandling.calculateClickEvent("Search_crop_protection")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 150)
@@ -128,6 +133,12 @@ class CropSelectionFragment : Fragment() {
             override fun afterTextChanged(editable: Editable) {}
         })
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("cropName",it?.cropName)
+            if(selectedCategory!=null){
+                eventBundle.putString("selectedCategory",selectedCategory?.categoryName)
+            }
+            EventItemClickHandling.calculateItemClickEvent("cropprotection_landing",eventBundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
@@ -244,6 +255,8 @@ class CropSelectionFragment : Fragment() {
 
 
     private fun speechToText() {
+        EventClickHandling.calculateClickEvent("STT_crop_protection")
+
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -303,11 +316,13 @@ class CropSelectionFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }

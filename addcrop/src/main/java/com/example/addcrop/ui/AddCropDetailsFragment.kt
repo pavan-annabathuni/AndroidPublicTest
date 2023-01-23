@@ -21,9 +21,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -36,6 +37,8 @@ import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
+    private var cropCategoryTagName: String?=null
+    private var cropNameTag: String? =null
     private var selectedFarmId: Int? = null
     private var cropIdSelected: Int? = null
     private var accountID: Int? = null
@@ -92,6 +95,8 @@ class AddCropDetailsFragment : Fragment() {
 
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
+            cropNameTag = arguments?.getString("cropNameTag")
+            cropCategoryTagName = arguments?.getString("selectedCategory")
         }
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -117,22 +122,9 @@ class AddCropDetailsFragment : Fragment() {
         }
 
 
-//        binding.cardCheckHealth.setOnClickListener {
-//            viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                accountID = it.data?.accountId
-//                postAddCrop(cropIdSelected!!, accountID!!)
-//            }
-//        }
-
     }
 
-//    private fun initObeserveLiveData() {
-//        viewModel.selectedDate.observe(viewLifecycleOwner, androidx.lifecycle.Observer { date ->
-//            // Use the selected date here
-//            // for example update the textView
-//            binding.etCalender.text = date
-//        })
-//    }
+
 
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
@@ -248,6 +240,13 @@ class AddCropDetailsFragment : Fragment() {
         map["area"] = binding.etAreaNumber.text
         if (selectedFarmId != null)
             map["farm_id"] = selectedFarmId!!
+
+        val eventBundle=Bundle()
+        eventBundle.putString("cropCategoryTagName","Crop_category_${cropCategoryTagName}")
+        eventBundle.putString("cropTagName",cropNameTag)
+        eventBundle.putString("cropArea",binding.etAreaNumber.text.toString())
+        eventBundle.putString("sowingDate", binding.etCalender.text.toString())
+        EventItemClickHandling.calculateItemClickEvent("Add_crop",eventBundle)
 
         viewModel.addCropDataPass(
             map

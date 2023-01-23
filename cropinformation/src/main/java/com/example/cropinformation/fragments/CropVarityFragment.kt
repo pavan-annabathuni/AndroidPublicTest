@@ -5,19 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.adapter.CropVarietyAdapter
 import com.example.cropinformation.databinding.FragmentCropVarityBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
-import org.json.JSONArray
-import org.json.JSONObject
 
 
 class CropVarityFragment : Fragment() {

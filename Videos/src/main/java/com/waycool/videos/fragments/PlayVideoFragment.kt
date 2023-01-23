@@ -1,6 +1,5 @@
 package com.waycool.videos.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +20,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
@@ -40,6 +40,7 @@ class PlayVideoFragment : Fragment() ,itemClick{
     private var videoTitle:String?=null
     private var videoDesc:String?=null
     private var videoUrl:String?=null
+    var selectedCategory:String?=null
 
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
@@ -84,8 +85,10 @@ class PlayVideoFragment : Fragment() ,itemClick{
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
-            if (arguments?.containsKey("video") == true)
+            if (arguments?.containsKey("video") == true){
                 videoSelected = requireArguments().getParcelable("video")
+                selectedCategory=requireArguments().getString("selectedCategory")
+            }
             else {
                 videoTitle=arguments?.getString("title")
                 videoDesc=arguments?.getString("description")
@@ -189,6 +192,12 @@ class PlayVideoFragment : Fragment() ,itemClick{
     }
 
     override fun onItemClick(van: VansFeederListDomain?) {
+        val eventBundle=Bundle()
+        eventBundle.putString("VideoTitle",van?.title)
+        if(selectedCategory!=null){
+            eventBundle.putString("selectedCategory","video_$selectedCategory")
+        }
+        EventItemClickHandling.calculateItemClickEvent("video_landing",eventBundle)
         if (player != null) {
             player!!.loadVideo(van?.contentUrl)
             player!!.play()

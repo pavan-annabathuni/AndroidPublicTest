@@ -40,6 +40,7 @@ import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
@@ -161,6 +162,11 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 )
 
             } else {
+                val  eventBundle=Bundle()
+                eventBundle.putString("deviceName",binding.device1.text.toString())
+                eventBundle.putString("scanQr",isQRScanned.toString())
+                eventBundle.putString("deviceNumber",scanResult.toString())
+                EventItemClickHandling.calculateItemClickEvent("add_device_register",eventBundle)
                 val map = mutableMapOf<String, Any>()
                 map["device_name"] = binding.device1.text
                 map["farm_id"] = myFarm?.id!!
@@ -172,6 +178,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
                 activityDevice(map)
             }
+
         }
 
         binding.btScanner.setOnClickListener {

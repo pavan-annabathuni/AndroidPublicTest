@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
-import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentServiceDescBinding
 import nl.changer.audiowife.AudioWife
 

@@ -1,11 +1,10 @@
 package com.waycool.featurelogin.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -20,7 +19,6 @@ import com.waycool.featurelogin.adapter.LanguageSelectionAdapter
 import com.waycool.featurelogin.databinding.FragmentLanguageBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
-import kotlinx.android.synthetic.main.activity_login_main.*
 
 
 class LanguageFragment : Fragment() {
@@ -59,7 +57,7 @@ class LanguageFragment : Fragment() {
                         ToastStateHandling.toastError(
                             it1,
                             "Please select Language",
-                            Toast.LENGTH_SHORT
+                            LENGTH_SHORT
                         )
                     }
                 }
@@ -100,7 +98,9 @@ class LanguageFragment : Fragment() {
             binding.clInclude.visibility=View.VISIBLE
             binding.progressBar.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastError(it,"Please check your internet connection",Toast.LENGTH_SHORT) }
+            context?.let { ToastStateHandling.toastError(it,"Please check your internet connection",
+                LENGTH_SHORT
+            ) }
             binding.doneBtn.visibility=View.GONE
             binding.helloTv.visibility=View.GONE
             binding.selectLanguageTv.visibility=View.GONE
@@ -122,6 +122,7 @@ class LanguageFragment : Fragment() {
                         binding.progressBar.visibility=View.VISIBLE
                     }
                     is Resource.Error -> {
+                        ToastStateHandling.toastError(requireContext(),"Server Error", LENGTH_SHORT)
                         binding.progressBar.visibility=View.GONE
                     }
                 }

@@ -2,11 +2,11 @@ package com.example.soiltesting.ui.request
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
@@ -14,6 +14,7 @@ import com.example.soiltesting.databinding.FragmentNewSoilTestFormBinding
 import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -49,10 +50,9 @@ class NewSoilTestFormFragment : Fragment() {
             val lat = arguments?.getString("lat")
             val long = arguments?.getString("long")
             val crop_id = arguments?.getInt("plot_id")
+            val onpName = arguments?.getString("onpName")
+            val cropName = arguments?.getString("cropName")
 
-            Log.d(TAG, "onCreateViewONPID:$onp_id ")
-            Log.d(TAG, "onCreateViewONPID:$lat ")
-            Log.d(TAG, "onCreateViewONPID:$long ")
 
             traslationSoilTesting()
             soilViewModel.getReverseGeocode("${lat},${long}")
@@ -82,7 +82,7 @@ class NewSoilTestFormFragment : Fragment() {
                     ToastStateHandling.toastError(requireContext(), "Please Select Account", Toast.LENGTH_SHORT)
                 } else if (it.data?.accountId != null) {
                     Log.d(TAG, "onCreateViewAccountID:$accountID")
-                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,crop_id.toString().toInt())
+                    itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,crop_id.toString().toInt(),cropName,onpName)
                 }
             }
 
@@ -102,10 +102,6 @@ class NewSoilTestFormFragment : Fragment() {
 
     }
     fun traslationSoilTesting() {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val title = TranslationsManager().getString("soil_testing")
-//            binding.toolText.text = title
-//        }
         TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot,"Plot Number and Sample Collection Address")
         TranslationsManager().loadString("plot_number", binding.plotNumber,"Plot Number ")
         TranslationsManager().loadString("pincode", binding.pincodeNumber,"Pincode ")
@@ -133,7 +129,9 @@ class NewSoilTestFormFragment : Fragment() {
         long: String,
         onp_number: Int,
         phoneNumber: String,
-        crop_id:Int
+        crop_id: Int,
+        cropName: String?,
+        onpName: String?
     ) {
         binding.cardCheckHealth.setOnClickListener {
             ploteNumber = binding.etPlotNumber.text.toString().trim()
@@ -165,6 +163,14 @@ class NewSoilTestFormFragment : Fragment() {
             } else if (ploteNumber.isNotEmpty() && pincode.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && state.isNotEmpty() && mobileNumber.isNotEmpty()) {
                 binding.cardCheckHealth.visibility = View.GONE
                 binding.progressBar2.visibility = View.VISIBLE
+
+                val eventBundle=Bundle()
+                eventBundle.putString("cropName", cropName)
+                eventBundle.putString("onpName",onpName)
+                eventBundle.putString("plotNumber",binding.etPlotNumber.text.toString())
+                eventBundle.putString("plotNumber",binding.etAddress.text.toString())
+                EventItemClickHandling.calculateItemClickEvent("Soiltesting_checksoilhealth",eventBundle)
+
                 soilViewModel.postNewSoil(
                     account_id, lat.toDouble(), long.toDouble(),
                     onp_number,

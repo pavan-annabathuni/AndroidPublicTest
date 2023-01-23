@@ -16,7 +16,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.NavUtils
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +33,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -446,6 +446,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
             adapter.onItemClick = {
+                val eventBundle=Bundle()
+                eventBundle.putString("title",it?.title)
+                EventItemClickHandling.calculateItemClickEvent("PestDiseaseDetailVideo",eventBundle)
                 val bundle = Bundle()
                 bundle.putParcelable("video", it)
                 findNavController().navigate(
@@ -549,8 +552,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 page.scaleY = 0.85f + r * 0.15f
             }
             binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        }
 
+        }
         private fun audioPlayer() {
             binding.playPauseLayout.setOnClickListener {
                 if (audioUrl != null) {

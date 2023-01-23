@@ -8,7 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,15 +25,16 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
-import com.example.mandiprice.adapter.DistanceAdapter.*
+import com.example.mandiprice.adapter.DistanceAdapter.DiffCallback
 import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -140,6 +144,7 @@ class MandiFragment : Fragment() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
+            if (it.data?.accountId!=null)
             accountID = it.data?.accountId!!
         }}
         binding.recycleViewDis.adapter = adapterMandi
@@ -599,11 +604,13 @@ class MandiFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }

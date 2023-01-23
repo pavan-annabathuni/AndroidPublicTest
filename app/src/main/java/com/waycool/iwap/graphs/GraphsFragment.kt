@@ -2,7 +2,6 @@ package com.waycool.iwap.graphs
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.soiltesting.utils.Constant
 import com.github.mikephil.charting.components.IMarker
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -24,6 +22,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -83,22 +82,12 @@ class GraphsFragment : Fragment() {
             paramValue = arguments?.getString("temp_value")
             updateDate = arguments?.getString("date_time")
             binding.tvToolbar.text = arguments?.getString("toolbar")
-
-            Log.d(Constant.TAG, "onCreateViewONPID:$serialNo ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$deviceModelId ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramType ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramValue")
-            Log.d(Constant.TAG, "onCreateViewONPID:$updateDate ")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
             binding.date.text = updateDate
 
             populateGraph(paramType, GraphSelection.LAST12HRS)
             graphApiData(serialNo, deviceModelId, paramType)
 
-//            binding.today.text=
-
-//            binding.tvToolbar.
-//            graphApiData(serial_no, device_model_id, value)
 
         }
         initClicks()
@@ -274,12 +263,51 @@ class GraphsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
                     0 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last12hrs") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("rainfall_card_last12hrs") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last12hrs") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last12hrs") }
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last12hrs") }
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last12hrs") }
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last12hrs") }
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_card_last12hrs") }
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_card_last12hrs") }
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last12hrs") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST12HRS)
                     }
                     1 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last7days") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("Rainfall_card_last7days") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last7days") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last7days")}
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last7days")}
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last7days")}
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last7days")}
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_last7days")}
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_last7days")}
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last7days") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST7DAYS)
                     }
                     2 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last1month") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("Rainfall_card_last1month") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last1month") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last1month")}
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last1month")}
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last1month")}
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last1month")}
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_card_last1month")}
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_card_last1month")}
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last1month") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST30DAYS)
                     }
                 }

@@ -8,7 +8,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +27,7 @@ import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
@@ -35,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class AllHistoryFragment : Fragment(), StatusTrackerListener {
@@ -250,6 +250,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     }
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("id",data.soil_test_number)
+        EventItemClickHandling.calculateItemClickEvent("Soiltesting_viewstatus",eventBundle)
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
         bundle.putString("soil_test_number", data.soil_test_number)

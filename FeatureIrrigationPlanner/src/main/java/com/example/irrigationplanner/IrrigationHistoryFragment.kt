@@ -1,19 +1,16 @@
 package com.example.irrigationplanner
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.HistoryDetailAdapter
-import com.example.irrigationplanner.adapter.WeeklyAdapter
-import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
 import com.example.irrigationplanner.databinding.FragmentIrrigationHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
-import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager

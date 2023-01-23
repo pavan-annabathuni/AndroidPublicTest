@@ -1,14 +1,12 @@
 package com.example.cropinformation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.cropinformation.databinding.FragmentStakingBinding
 import com.example.cropinformation.databinding.FragmentStakingDistanceBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 

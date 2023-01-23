@@ -24,6 +24,8 @@ import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
@@ -437,11 +439,13 @@ class CropInfoFragment : Fragment(), onItemClick {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -612,6 +616,10 @@ class CropInfoFragment : Fragment(), onItemClick {
 
 
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("cropinfo_video",eventBundle)
+
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(

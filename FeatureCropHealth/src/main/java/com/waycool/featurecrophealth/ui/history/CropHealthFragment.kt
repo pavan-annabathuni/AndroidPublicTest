@@ -3,12 +3,12 @@ package com.waycool.featurecrophealth.ui.history
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +16,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.translations.TranslationsManager
@@ -32,10 +34,9 @@ import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -74,9 +75,12 @@ class CropHealthFragment : Fragment() {
             networkCall()
         }
         binding.tvViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Crophealth_requesthistory_viewall")
+
             findNavController().navigate(R.id.action_cropHealthFragment_to_cropHistoryFragment)
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_viewall")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -109,6 +113,11 @@ class CropHealthFragment : Fragment() {
             if (it?.disease_id==null) {
                 ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
             } else {
+                val eventBundle=Bundle()
+                eventBundle.putString("cropname",it.cropName)
+                eventBundle.putString("diseasename",it.disease_name)
+                eventBundle.putString("image",it.image_url)
+                EventItemClickHandling.calculateItemClickEvent("crophealth_requestHistory",eventBundle)
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
 //            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
@@ -253,6 +262,9 @@ class CropHealthFragment : Fragment() {
 */
 
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("crophealth_video",eventBundle)
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
@@ -366,11 +378,13 @@ class CropHealthFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener(){
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener(){
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }

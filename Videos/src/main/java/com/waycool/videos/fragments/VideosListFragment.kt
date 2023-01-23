@@ -8,8 +8,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +17,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -32,24 +31,23 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
-import com.waycool.videos.adapter.VideosPagerAdapter
-import com.waycool.videos.databinding.FragmentVideosListBinding
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.AdsAdapter
+import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.adapter.itemClick
-
+import com.waycool.videos.databinding.FragmentVideosListBinding
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -258,6 +256,9 @@ class VideosListFragment : Fragment(), itemClick {
             val r = 1 - Math.abs(position)
             page.scaleY = 0.85f + r * 0.15f }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+        bannerAdapter.onItemClick={
+            EventClickHandling.calculateClickEvent("Video_Adbanner")
+        }
     }
 
 
@@ -320,11 +321,14 @@ class VideosListFragment : Fragment(), itemClick {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
+
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -334,8 +338,17 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     override fun onItemClick(van: VansFeederListDomain?) {
+        val eventBundle=Bundle()
+        eventBundle.putString("VideoTitle",van?.title)
+        if(selectedCategory!=null){
+            eventBundle.putString("selectedCategory","video_$selectedCategory")
+        }
+        EventItemClickHandling.calculateItemClickEvent("video_landing",eventBundle)
         val bundle = Bundle()
         bundle.putParcelable("video", van)
+        if(selectedCategory!=null){
+            bundle.putString("selectedCategory", selectedCategory.toString())
+        }
         this.findNavController().navigate(
             R.id.action_videosListFragment_to_playVideoFragment,bundle
 
