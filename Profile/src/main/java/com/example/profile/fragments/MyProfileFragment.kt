@@ -15,18 +15,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.profile.BuildConfig
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.google.firebase.dynamiclinks.BuildConfig
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
@@ -155,7 +155,7 @@ class MyProfileFragment : Fragment() {
     }
 
 
-    fun observer(): Boolean {
+    private fun observer(): Boolean {
         viewModel.getUserProfileDetails().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -172,7 +172,10 @@ class MyProfileFragment : Fragment() {
                 binding.llFarmSupport.visibility = View.VISIBLE
             }
             binding.username.text = it.data?.name
-            binding.phoneNo.text = "+91 ${it.data?.phone}"
+            binding.phoneNo.text = buildString {
+        append("+91 ")
+        append(it.data?.phone)
+    }
             if (it.data?.profile?.remotePhotoUrl != null) {
                 Glide.with(requireContext()).load(it.data?.profile?.remotePhotoUrl).into(binding.proPic)
                 Log.d("ProfilePic", "observer: $it")
@@ -263,7 +266,6 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun moveToLogin() {
-        Log.d("logout","Logout called in profile")
         val intent = Intent(context, LoginMainActivity::class.java)
 
         GlobalScope.launch {
