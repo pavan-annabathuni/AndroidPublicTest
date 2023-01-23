@@ -17,6 +17,9 @@ import com.example.soiltesting.utils.Constant
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.waycool.data.Local.DataStorePref.DataStoreManager
+import com.waycool.data.Local.LocalSource
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -143,17 +146,8 @@ class MainActivity : AppCompatActivity() {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
             when (it) {
                 is Resource.Success -> {
-                    if (it.data?.status == true) {
-//                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-                    } else if (it.data?.status == false) {
-//                        ToastStateHandling.toastError(
-//                            this,
-//                            "Account Logged in Another Device",
-//                            Toast.LENGTH_SHORT
-//                        )
-                        val intent = Intent(this, LoginMainActivity::class.java)
-                        startActivity(intent)
-                    } else {
+                   if (it.data?.status != true) {
+                        clearData()
                         val intent = Intent(this, LoginMainActivity::class.java)
                         startActivity(intent)
                     }
@@ -268,9 +262,9 @@ class MainActivity : AppCompatActivity() {
                 if(bottomNavigationView.menu.findItem(R.id.nav_home)!=null){
                     bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"}
             }
-            TranslationsManager().getStringAsLiveData("mandi")?.observe(this){
+            TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this){
                 if(bottomNavigationView.menu.findItem(R.id.navigation_mandi)!=null){
-                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Mandi"}
+                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Market Place"}
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_crop_protect) != null) {
@@ -347,5 +341,17 @@ class MainActivity : AppCompatActivity() {
         return wrappedObserver
     }
 
+    private fun clearData(){
+        GlobalScope.launch {
+            LocalSource.deleteAllMyCrops()
+            LocalSource.deleteTags()
+            LocalSource.deleteCropMaster()
+            LocalSource.deleteCropInformation()
+            LocalSource.deletePestDisease()
+            LocalSource.deleteMyFarms()
+            SyncManager.invalidateAll()
+            DataStoreManager.clearData()
+        }
+    }
 }
 

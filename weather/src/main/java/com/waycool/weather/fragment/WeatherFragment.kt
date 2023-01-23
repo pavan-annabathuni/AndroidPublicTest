@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.NetworkUtil
@@ -82,6 +83,7 @@ class WeatherFragment : Fragment() {
 
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("weather_share")
             screenShot()
         }
         networkCall()
@@ -92,10 +94,12 @@ class WeatherFragment : Fragment() {
         setBanners()
 
         mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
+            EventClickHandling.calculateClickEvent("weather_daily")
             viewModel.displayPropertyDaily(it)
         })
         binding.recycleView.adapter = mWeatherAdapter
         binding.recycleViewHourly.adapter = HourlyAdapter(HourlyAdapter.OnClickListener {
+            EventClickHandling.calculateClickEvent("weather_hourly")
             viewModel.displayPropertyHourly(it)
         })
 

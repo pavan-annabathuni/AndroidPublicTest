@@ -138,11 +138,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             EventItemClickHandling.calculateItemClickEvent("MandiItemClickHomePageFragment",eventBundle)
 
             val args = Bundle()
-            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            mandiAdapter.cropName.let { it1 -> args.putString("cropName", it1) }
-            mandiAdapter.marketName.let { it1 -> args.putString("market", it1) }
-            it?.sub_record_id?.let { it1 -> args.putString("sub_record_id", it1) }
+            args.putParcelable("mandiRecord",it)
             this.findNavController()
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })

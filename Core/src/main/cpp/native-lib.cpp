@@ -17,9 +17,7 @@ extern "C"
 JNIEXPORT jstring
 Java_com_waycool_core_utils_AppSecrets_getBASEURLDebug(JNIEnv *env, jobject clazz) {
     std::string base_url = "https://adminuat.outgrowdigital.com/";
-/*
-    std::string base_url = "https://admindev.outgrowdigital.com/";
-*/
+//    std::string base_url = "https://admindev.outgrowdigital.com/";
     return env->NewStringUTF(base_url.c_str());
 }
 

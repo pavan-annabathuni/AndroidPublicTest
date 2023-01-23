@@ -36,7 +36,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
 import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.repository.domainModels.MandiDomain
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -68,6 +72,7 @@ class MandiGraphFragment : Fragment() {
     private var cropName: String? = null
     private var marketName: String? = null
     private var sub_record_id:String? =null
+    private var mandiDomain:MandiDomainRecord?=null
 
     private val inputDateFormatter: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
@@ -76,11 +81,8 @@ class MandiGraphFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            cropMasterId = it.getInt("cropId")
-            mandiMasterId = it.getInt("mandiId")
-            cropName = it.getString("cropName")
-            marketName = it.getString("market")
-            sub_record_id = it.getString("sub_record_id")
+            mandiDomain = it.getParcelable("mandiRecord")
+
 
         }
 
@@ -96,13 +98,20 @@ class MandiGraphFragment : Fragment() {
         apiErrorHandlingBinding = binding.errorState
 
         binding.lifecycleOwner = this
-        binding.cropName.text = cropName
-        binding.tvMarket.text = marketName
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
 
+        cropMasterId = mandiDomain?.crop_master_id
+        mandiMasterId = mandiDomain?.mandi_master_id
+        cropName = mandiDomain?.crop
+        marketName = mandiDomain?.market
+        sub_record_id = mandiDomain?.sub_record_id
         binding.imgShare.setOnClickListener() {
+            val bundle=Bundle()
+            bundle.putString("","$marketName")
+            bundle.putString("","$cropName")
+            EventItemClickHandling.calculateItemClickEvent("mandi_share",bundle)
             binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
             context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
@@ -118,6 +127,7 @@ class MandiGraphFragment : Fragment() {
 
         binding.tvMarket.isSelected = true
         binding.cropName.isSelected = true
+        checkLang()
         return binding.root
     }
 
@@ -373,6 +383,44 @@ class MandiGraphFragment : Fragment() {
         TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
         TranslationsManager().loadString("date", binding.textView8,"Date")
+
+
+    }
+
+    private fun checkLang(){
+        viewModel.viewModelScope.launch(){
+            var langCode = LocalSource.getLanguageCode() ?: "en"
+
+            when (langCode) {
+                "en" -> {
+                    binding.cropName.text = mandiDomain?.crop
+                    binding.tvMarket.text = mandiDomain?.market
+                }
+                "hi" -> {
+                    binding.cropName.text = mandiDomain?.crop_hi
+                    binding.tvMarket.text = mandiDomain?.market_hi
+                }
+                "kn" -> {
+                    binding.cropName.text = mandiDomain?.crop_kn
+                    binding.tvMarket.text = mandiDomain?.market_kn
+                }
+                "te" -> {
+                    binding.cropName.text = mandiDomain?.crop_te
+                    binding.tvMarket.text = mandiDomain?.market_te
+                }
+                "ta" -> {
+                    binding.cropName.text = mandiDomain?.crop_ta
+                    binding.tvMarket.text = mandiDomain?.market_ta
+                }
+                "mr" -> {
+                    binding.cropName.text = mandiDomain?.crop_mr
+                    binding.tvMarket.text = mandiDomain?.market_mr
+
+                }
+
+            }
+        }
+
     }
     override fun onResume() {
         super.onResume()

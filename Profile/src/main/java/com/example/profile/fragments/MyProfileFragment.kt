@@ -25,6 +25,7 @@ import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -67,6 +68,7 @@ class MyProfileFragment : Fragment() {
         // viewModel.getUserDetails()
 
         binding.llInviteFarmer.setOnClickListener {
+            EventClickHandling.calculateClickEvent("invite_farmer")
             shareInviteLink()
         }
 
@@ -185,12 +187,15 @@ class MyProfileFragment : Fragment() {
         binding.llMyProfile.setOnClickListener {
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToEditProfileFragment())
+            EventClickHandling.calculateClickEvent("farmer_profile")
         }
         binding.llFarmSupport.setOnClickListener {
+            EventClickHandling.calculateClickEvent("profile_farm_support")
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToFarmSupportFragment())
         }
         binding.rateUs.setOnClickListener {
+            EventClickHandling.calculateClickEvent("rate_us")
             val intent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
@@ -201,12 +206,15 @@ class MyProfileFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.textView.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Privacy_policy_profile")
             val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
             intent.putExtra("tittle", "Privacy Policy")
             requireActivity().startActivity(intent)
         }
         binding.textView2.setOnClickListener {
+
+            EventClickHandling.calculateClickEvent("Terms_of_use_profile")
             val intent = Intent(context, PrivacyPolicyActivity::class.java)
             intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
             intent.putExtra("tittle", "Terms and Conditions")
@@ -214,22 +222,25 @@ class MyProfileFragment : Fragment() {
 
         }
         binding.llAboutOutgrow.setOnClickListener {
+            EventClickHandling.calculateClickEvent("profile_farm_support")
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToAboutOutgrowFragment())
         }
 
         binding.cvChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_support_profile")
             FeatureChat.zenDeskInit(requireContext())
         }
 
         binding.llLanguage.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Profile_language")
             this.findNavController()
                 .navigate(MyProfileFragmentDirections.actionMyProfileFragmentToLanguageFragment3())
         }
         val mobileNo = loginViewModel.getMobileNumber()
         if (mobileNo != null)
             binding.logout.setOnClickListener {
-
+                EventClickHandling.calculateClickEvent("logout")
                 loginViewModel.logout(mobileNo)
                     .observe(viewLifecycleOwner) {
 
