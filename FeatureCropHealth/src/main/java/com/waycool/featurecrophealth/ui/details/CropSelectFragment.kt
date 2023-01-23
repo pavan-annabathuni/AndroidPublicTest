@@ -36,8 +36,6 @@ import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -136,9 +134,8 @@ class CropSelectFragment : Fragment() {
                 }
         }
     fun translationSoilTesting() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val search = TranslationsManager().getString("search")
-            binding.searchView.hint = search
+        viewModel.viewModelScope.launch{
+            binding.searchView.hint = TranslationsManager().getString("search")
         }
         TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Crop Selection")
         TranslationsManager().loadString("", binding.toolbarTitle,"My Crops")

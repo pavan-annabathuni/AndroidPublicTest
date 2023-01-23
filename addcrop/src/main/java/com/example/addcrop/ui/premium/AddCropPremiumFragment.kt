@@ -457,11 +457,11 @@ class AddCropPremiumFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
-            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            val NickNamehint = TranslationsManager().getString("e_g_crop_name")
             binding.etNickName.hint = NickNamehint
-            var areaHint = TranslationsManager().getString("e_g_50")
+            val areaHint = TranslationsManager().getString("e_g_50")
             binding.etAreaNumber.hint = areaHint
-            var hitnPlant = TranslationsManager().getString("e_g_50")
+            val hitnPlant = TranslationsManager().getString("e_g_50")
             binding.etNoOfAcre.hint = hitnPlant
         }
         TranslationsManager().loadString(

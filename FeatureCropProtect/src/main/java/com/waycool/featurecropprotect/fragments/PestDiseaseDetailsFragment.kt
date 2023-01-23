@@ -152,6 +152,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.imgShare.setOnClickListener {
             screenShot(diseaseId, diseaseName)
         }
+        TranslationsManager().loadString("str_share", binding.imgShare, "Share")
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
         TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)

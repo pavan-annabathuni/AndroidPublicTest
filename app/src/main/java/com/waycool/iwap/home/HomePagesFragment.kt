@@ -254,11 +254,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
         TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
 
-
-
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View all")
 
     }
-
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
@@ -644,7 +645,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext(), "Videos")
+        val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
             bannerAdapter.submitData(lifecycle, it)

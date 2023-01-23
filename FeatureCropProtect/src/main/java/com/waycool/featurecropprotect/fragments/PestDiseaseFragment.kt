@@ -75,6 +75,7 @@ class PestDiseaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         apiErrorHandlingBinding=binding.errorState
         arguments?.let {
             cropId = it.getInt("cropid")

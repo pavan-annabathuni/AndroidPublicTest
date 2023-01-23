@@ -508,13 +508,7 @@ class RegistrationFragment : Fragment() {
                         is Resource.Success -> {
                             binding.progressBarSubmit.visibility = View.GONE
                             binding.registerDoneBtn.visibility = View.VISIBLE
-                            context?.let { it1 ->
-                                ToastStateHandling.toastSuccess(
-                                    it1,
-                                    "SuccessFully Registered",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
+
                             lifecycleScope.launch {
                                 userLogin()
                             }
@@ -557,6 +551,13 @@ class RegistrationFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    context?.let { it1 ->
+                        ToastStateHandling.toastSuccess(
+                            it1,
+                            "SuccessFully Registered",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
                     val loginDataMaster = it.data
                     if (loginDataMaster?.status == true) {
                         viewModel.setUserToken(
@@ -566,13 +567,10 @@ class RegistrationFragment : Fragment() {
                         viewModel.setIsLoggedIn(true)
                         viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
                             if (user.data != null && user.data?.userId != null) {
-
                                 gotoMainActivity()
                             }
                         }
-/*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                            gotoMainActivity()
-                        }*/
+
 
                     }
                 }
@@ -580,6 +578,7 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error",Toast.LENGTH_SHORT) }
 
                 }
             }

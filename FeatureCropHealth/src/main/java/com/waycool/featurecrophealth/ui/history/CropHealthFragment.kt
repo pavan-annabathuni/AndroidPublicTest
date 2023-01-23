@@ -140,11 +140,12 @@ class CropHealthFragment : Fragment() {
             val title = TranslationsManager().getString("crop_health")
             binding.tvToolBar.text = title
 
+
         }
         TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
 
 
-        TranslationsManager().loadString("pestdisease_description", binding.tvOurAll,"Our ‘Pest & Disease Detection’ service helps in detecting pests & diseases and recommends control measures using Artificial Intelligence.")
+        TranslationsManager().loadString("crop_protect_info", binding.tvOurAll,"Our ‘Pest & Disease Detection’ service helps in detecting pests & diseases and recommends control measures using Artificial Intelligence.")
         TranslationsManager().loadString("take_picture", binding.tvTakeImage,"Take a Picture")
         TranslationsManager().loadString("get_diagnosed", binding.tvTextSoilTwo,"Get Diagnosed")
         TranslationsManager().loadString("get_measures", binding.tvTextSoilThree,"Get Preventive\n" +

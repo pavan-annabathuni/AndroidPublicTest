@@ -338,10 +338,7 @@ class CropInfoSelectionFragment : Fragment() {
         viewModel.viewModelScope.launch{
             title = TranslationsManager().getString("str_title")
             binding.toolbarTitle.text = title
-            if(!TranslationsManager().getString("search").isNullOrEmpty())
             binding.search.hint = TranslationsManager().getString("search")
-            else binding.search.hint = "Search"
-
         }
     }
     private fun dialog(){

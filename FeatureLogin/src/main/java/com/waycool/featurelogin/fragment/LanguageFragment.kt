@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -35,6 +36,7 @@ class LanguageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLanguageBinding.inflate(layoutInflater)
+        TranslationsManager().loadString("welcome_to_outgrow",binding.helloTv,"Welcome to Outgrow")
 
         val apiErrorHandlingBinding=binding.errorState
         binding.languageRecyclerview.layoutManager = GridLayoutManager(context, 3)
@@ -106,8 +108,8 @@ class LanguageFragment : Fragment() {
             binding.selectLanguageTv.visibility=View.GONE
         }
         else {
-            binding.progressBar.visibility=View.VISIBLE
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
+                binding.progressBar.visibility=View.VISIBLE
                 when (it) {
                     is Resource.Success -> {
                         binding.clInclude.visibility=View.GONE
@@ -116,7 +118,7 @@ class LanguageFragment : Fragment() {
                         binding.helloTv.visibility=View.VISIBLE
                         binding.selectLanguageTv.visibility=View.VISIBLE
                         apiErrorHandlingBinding.clInternetError.visibility=View.GONE
-                        languageSelectionAdapter.setData(it.data ?: emptyList())
+                        it.data?.let { it1 -> languageSelectionAdapter.setData(it1) }
                     }
                     is Resource.Loading -> {
                         binding.progressBar.visibility=View.VISIBLE
