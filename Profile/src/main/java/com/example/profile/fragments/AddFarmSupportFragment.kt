@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -127,6 +128,7 @@ class AddFarmSupportFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.farmManger.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
             binding.farmManger.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.text_border_gray)
             binding.mandiBench.background =
@@ -134,6 +136,7 @@ class AddFarmSupportFragment : Fragment() {
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
             roleid = 30
+            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
         }
         binding.mandiBench.setOnClickListener() {
             binding.mandiBench.background =
@@ -143,6 +146,7 @@ class AddFarmSupportFragment : Fragment() {
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
             roleid = 31
+            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
         }
         binding.submit.setOnClickListener() {
             var contact: Long? = null
@@ -177,6 +181,7 @@ class AddFarmSupportFragment : Fragment() {
                 ).observe(viewLifecycleOwner) {
                     when (it) {
                         is Resource.Success -> {
+                            EventClickHandling.calculateClickEvent("farm_support_added$roleid")
                             findNavController().navigateUp()
                         }
                         is Resource.Error -> {

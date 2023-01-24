@@ -24,6 +24,7 @@ import com.example.cropinformation.databinding.FragmentCropInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -104,18 +105,22 @@ class CropInfoFragment : Fragment(), onItemClick {
             findNavController().popBackStack()
         }
         newsBinding.viewAllNews.setOnClickListener {
+            EventClickHandling.calculateClickEvent("news_view_all_CropInfo")
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("news_view_all_CropInfo")
             val intent = Intent(requireActivity(), NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_view_all_CropInfo")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_view_all_CropInfo")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
@@ -686,6 +691,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     }
 
     override fun onItemClickListener(it: VansFeederListDomain?) {
+        EventClickHandling.calculateClickEvent(it?.title.toString())
         val bundle = Bundle()
         bundle.putString("title", it?.title)
         bundle.putString("content", it?.desc)

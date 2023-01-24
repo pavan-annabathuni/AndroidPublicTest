@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -71,7 +72,7 @@ class CropSelectionFragment : Fragment() {
         apiErrorHandlingBinding=binding.errorState
 
         binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().popBackStack()
+            val isSuccess = findNavController().navigateUp()
             if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
         }
 
@@ -128,6 +129,10 @@ class CropSelectionFragment : Fragment() {
             override fun afterTextChanged(editable: Editable) {}
         })
         adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putString("","${it?.cropName}")
+            bundle.putString("","Crop_category_${selectedCategory?.categoryTagName}")
+            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }

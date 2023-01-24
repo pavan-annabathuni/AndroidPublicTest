@@ -26,6 +26,8 @@ import com.example.mandiprice.databinding.FragmentSearchBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
@@ -104,6 +106,10 @@ class SearchFragment : Fragment() {
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         viewModel.viewModelScope.launch {
         adapterMandi = DistanceAdapter(DistanceAdapter.DiffCallback.OnClickListener {
+            val bundle = Bundle()
+            bundle.putString("","Mandi${it.crop}")
+            bundle.putString("","Mandi${it.market}")
+            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
             val args = Bundle()
             it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
             it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
@@ -128,13 +134,17 @@ class SearchFragment : Fragment() {
         autoComplete()
         speechToText()
         showKeypad(binding.searchBar)
-        notFound()
+        dateFormat()
+        binding.searchBar.setOnClickListener(){
+            EventClickHandling.calculateClickEvent("Mandi_search")
+        }
     }
 
     private fun speechToText() {
         //val lang = SpeechToText.langCode
         binding.SpeechtextTo.setOnClickListener() {
             binding.searchBar.text.clear()
+            EventClickHandling.calculateClickEvent("Mandi_STT")
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
             // on below line we are passing language model
@@ -328,7 +338,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun notFound() {
+    private fun dateFormat() {
        adapterMandi.addLoadStateListener { loadState->
            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                binding.llNotFound.visibility = View.VISIBLE

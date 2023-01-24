@@ -31,6 +31,8 @@ import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
 import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -79,6 +81,11 @@ class CropInfoSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            val bundle = Bundle()
+            bundle.putString("",it?.cropName)
+            bundle.putString("","CropInfoSelectionFragment")
+            EventItemClickHandling.calculateItemClickEvent("cropinformation_landing",bundle)
+
             var id = it.idd
             var id2:Int? = null
             val args = Bundle()
@@ -128,6 +135,10 @@ class CropInfoSelectionFragment : Fragment() {
         })
 
         adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putString("","${it?.cropName}")
+            bundle.putString("","Crop_category_${selectedCategory?.categoryTagName}")
+            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
@@ -136,6 +147,7 @@ class CropInfoSelectionFragment : Fragment() {
                 R.id.action_cropSelectionFragment_to_cropInfoFragment,
                 args
             )
+
         }
 
         binding.micBtn.setOnClickListener {
@@ -209,6 +221,7 @@ class CropInfoSelectionFragment : Fragment() {
                     searchQuery = searchCharSequence.toString()
                 )
             }
+          //  EventClickHandling.calculateClickEvent(chip.text.toString())
         }
         binding.cropCategoryChipGroup.addView(chip)
     }
@@ -291,11 +304,13 @@ class CropInfoSelectionFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("cropInfo_call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+           EventClickHandling.calculateClickEvent("cropInfo_chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -331,7 +346,7 @@ class CropInfoSelectionFragment : Fragment() {
 
         val dialog = Dialog(requireContext())
         //dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dailog_information)
+        dialog.setContentView(R.layout.dailog_crop_info)
         // val body = dialog.findViewById(R.id.body) as TextView
         val yesBtn = dialog.findViewById(R.id.ok) as Button
         yesBtn.setOnClickListener {
