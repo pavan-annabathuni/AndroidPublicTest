@@ -1,13 +1,11 @@
 package com.waycool.data.Network.PagingSource
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
-import com.waycool.data.Network.NetworkModels.VansFeederListNetwork
+import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.repository.domainModels.MandiDomainRecord
-import java.lang.Exception
 
 class MandiPagingSource(
     private val api: ApiInterface,
@@ -33,6 +31,8 @@ class MandiPagingSource(
                 nextKey = if (position == response.body()!!.data?.total_pages || response.body()!!.data?.total_pages == 0) null else position + 1
             )
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getMandiList-MandiPagingSource Exception--${e.message}")
+
             LoadResult.Error(e)
         }
     }
