@@ -741,6 +741,7 @@
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:theme="@style/AppTheme"
+                        tools:visibility="visible"
                         android:visibility="gone"
                         app:cornerRadius="12dp"
                         app:elevation="8dp" />

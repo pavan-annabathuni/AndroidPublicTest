@@ -13,11 +13,9 @@ import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 object MandiRepository {
-    suspend fun getMandiList(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
+     fun getMandiList(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
                              sortBy: String?, orderBy: String?,search:String?,accountId:Int?):
             Flow<PagingData<MandiDomainRecord>> {
-        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
-        Log.d("HeaderMap", "getMandiList: $map")
         return NetworkSource.getMandiList(lat,long,crop_category,
             state,crop,sortBy,orderBy,search,accountId)
     }

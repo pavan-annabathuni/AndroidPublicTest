@@ -69,7 +69,7 @@ class SpotLightFragment : Fragment() {
                             2-> EventClickHandling.calculateClickEvent("Next(3/5)")
                             3-> EventClickHandling.calculateClickEvent("Next(4/5)")
                             4-> EventClickHandling.calculateClickEvent("Next(5/5)")
-                            5-> EventClickHandling.calculateClickEvent("Next(6/5)")
+                            5-> EventClickHandling.calculateClickEvent("Done(6/6)")
                         }
 
                         lifecycleScope.launch {

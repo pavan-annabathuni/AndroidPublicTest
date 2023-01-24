@@ -12,11 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.waycool.data.eventscreentime.EventClickHandling;
 import com.waycool.data.repository.domainModels.ModuleMasterDomain;
 import com.waycool.featurelogin.R;
 import com.waycool.featurelogin.fragment.RegistrationFragment;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,6 +72,7 @@ public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfileP
                     String.valueOf(listItem.get(getLayoutPosition()).getSubscription()),
                     listItem.get(getLayoutPosition()).getModuleIcon(),
                     context);
+            EventClickHandling.INSTANCE.calculateClickEvent(listItem.get(getLayoutPosition()).getTitle());
         }
     }
 

@@ -1272,5 +1272,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HomePagesFragment")
+    }
+
 }
 

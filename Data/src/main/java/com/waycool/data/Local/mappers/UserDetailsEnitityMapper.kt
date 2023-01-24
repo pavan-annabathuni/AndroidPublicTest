@@ -43,9 +43,12 @@ class UserDetailsEnitityMapper : EntityMapper<UserDetailsEntity, UserDetailsData
     private fun getRole(rolesList: List<RolesNetwork>?): RolesNetwork? {
         if (rolesList == null)
             return null
-        for (account in rolesList) {
-            if (account.title == "Farmer") {
-                return account
+        for (role in rolesList) {
+            if(role.title == "Farm Support"){
+                return role
+            }
+            if (role.title == "Farmer") {
+                return role
             }
         }
         return null

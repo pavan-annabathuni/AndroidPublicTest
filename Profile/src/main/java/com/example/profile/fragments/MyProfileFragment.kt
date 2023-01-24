@@ -100,6 +100,7 @@ class MyProfileFragment : Fragment() {
         )
         translation()
         observer()
+        EventClickHandling.calculateClickEvent("Profile_landing")
         return binding.root
     }
 
@@ -246,14 +247,14 @@ class MyProfileFragment : Fragment() {
                         // loginViewModel.setUserToken(null)
                         loginViewModel.setIsLoggedIn(false)
                         FeatureChat.zendeskLogout()
-
-                        context?.let { it1 ->
-                            ToastStateHandling.toastSuccess(
-                                it1,
-                                "Successfully Logout",
-                                Toast.LENGTH_SHORT
-                            )
+                        viewModel.viewModelScope.launch{
+                        val toast = TranslationsManager().getString("successfully_logout")
+                        if(toast.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Successfully Logout", Toast.LENGTH_SHORT)}
+                        }else{
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast, Toast.LENGTH_SHORT)}
                         }
+                    }
 
                     }
                 moveToLogin()
