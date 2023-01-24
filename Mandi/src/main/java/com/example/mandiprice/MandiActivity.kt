@@ -5,7 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
@@ -19,6 +21,8 @@ import kotlinx.coroutines.launch
 
 
 class MandiActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mandi)
@@ -39,25 +43,24 @@ class MandiActivity : AppCompatActivity() {
                     deepLink = pendingDynamicLinkData.link
                 }
                 if (deepLink != null) {
-                    if(deepLink.lastPathSegment.equals("/mandi")){
+                    if (deepLink.lastPathSegment.equals("/mandi")) {
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
-                    }
-                    else{
-                        val cropMasterId = deepLink.getQueryParameter ("crop_master_id")
-                        val mandiMasterId = deepLink.getQueryParameter ("mandi_master_id")
-                        val cropName = deepLink.getQueryParameter ("crop_name")
-                        val marketName = deepLink.getQueryParameter ("market_name")
-                        val fragment = deepLink.getQueryParameter ("fragment")
+                    } else {
+                        val cropMasterId = deepLink.getQueryParameter("crop_master_id")
+                        val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
+                        val cropName = deepLink.getQueryParameter("crop_name")
+                        val marketName = deepLink.getQueryParameter("market_name")
+                        val fragment = deepLink.getQueryParameter("fragment")
 
-                        Log.d("Mandi","$deepLink")
+                        Log.d("Mandi", "$deepLink")
 
-                        if (!cropMasterId.isNullOrEmpty()&&!mandiMasterId.isNullOrEmpty()) {
+                        if (!cropMasterId.isNullOrEmpty() && !mandiMasterId.isNullOrEmpty()) {
                             val args = Bundle()
                             args.putInt("cropId", cropMasterId.toInt())
-                            args.putInt("mandiId",mandiMasterId.toInt())
-                            args.putString("cropName",cropName)
-                            args.putString("market",marketName)
-                            args.putString("fragment",fragment)
+                            args.putInt("mandiId", mandiMasterId.toInt())
+                            args.putString("cropName", cropName)
+                            args.putString("market", marketName)
+                            args.putString("fragment", fragment)
                             this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                         }
                     }
@@ -67,6 +70,25 @@ class MandiActivity : AppCompatActivity() {
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
 
 
+        val navHostFragment = supportFragmentManager.findFragmentById(
+            R.id.nav_host_dashboard
+        ) as NavHostFragment
+        navController = navHostFragment.navController
+    }
 
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        return if(navController.navigateUp())
+            true
+        else {
+            finish()
+            true
+        }
     }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        findNavController(R.id.nav_host_dashboard).handleDeepLink(intent)
     }
+}

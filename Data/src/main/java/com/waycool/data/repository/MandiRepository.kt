@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.MandiMasterModel
 import com.waycool.data.Network.NetworkSource
+import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
@@ -16,8 +17,14 @@ object MandiRepository {
      fun getMandiList(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
                              sortBy: String?, orderBy: String?,search:String?,accountId:Int?):
             Flow<PagingData<MandiDomainRecord>> {
+//        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+//        Log.d("HeaderMap", "getMandiList: $map")
         return NetworkSource.getMandiList(lat,long,crop_category,
             state,crop,sortBy,orderBy,search,accountId)
+    }
+
+    fun getMandiSinglePage(lat:String,long:String):Flow<Resource<MandiDomain?>>{
+        return NetworkSource.getMandiSinglePage(lat,long)
     }
 
     suspend fun getMandiHistory(crop_master_id:Int?,mandi_master_id:Int?,sub_record_id:String?): Flow<Resource<MandiHistoryDomain?>> {

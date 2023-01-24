@@ -7,6 +7,8 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -400,12 +402,18 @@ class OtpFragment : Fragment() {
                                     loginViewModel.setUserToken(loginMaster.data)
 
                                 }
+                                Handler(Looper.myLooper()!!).postDelayed({
+                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                        if (user.data != null && user.data?.userId != null) {
+                                            gotoMainActivity()
+                                        }
+                                    }
+                                },200)
                                 ToastStateHandling.toastSuccess(
                                     requireContext(),
                                     "Logged in successfully",
                                     Toast.LENGTH_SHORT
                                 )
-                                gotoMainActivity()
 
                             } else {
                                 if (loginMaster?.data == "406") {

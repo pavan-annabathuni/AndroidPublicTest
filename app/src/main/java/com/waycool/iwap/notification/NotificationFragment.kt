@@ -31,20 +31,6 @@ class NotificationFragment : Fragment() {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
     private lateinit var mNotificationAdapter: NotificationAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    this@NotificationFragment.findNavController().navigateUp()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,9 +38,27 @@ class NotificationFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentNotificationBinding.inflate(inflater)
         setAdapter()
-        binding.back.setOnClickListener(){
-            findNavController().popBackStack()
+
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
         }
+
+        binding.back.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
+
         binding.topAppBar.isSelected = true
         newNotification()
         return binding.root

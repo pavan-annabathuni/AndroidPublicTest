@@ -78,16 +78,12 @@ class CropSelectionFragment : Fragment() {
 
         apiErrorHandlingBinding=binding.errorState
 
-        binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
-        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val isSuccess = findNavController().navigateUp()
-                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                    if (!isSuccess) activity?.let { it.finish() }
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -96,7 +92,8 @@ class CropSelectionFragment : Fragment() {
         )
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it.finish() }
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle,"Protect Your Crop")
         TranslationsManager().loadString("crop_protection_top",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")

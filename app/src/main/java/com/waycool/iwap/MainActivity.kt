@@ -323,7 +323,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
+        return if(navController.navigateUp())
+            true
+        else {
+            finish()
+            true
+        }
     }
 
     fun <T> LiveData<T>.observeOnce(

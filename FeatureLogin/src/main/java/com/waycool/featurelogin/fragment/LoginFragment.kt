@@ -11,6 +11,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -184,9 +185,13 @@ class LoginFragment : Fragment() {
 
         override fun onFailureProfileShared(trueError: TrueError) {
             isTruecallerVerified = false
+            ToastStateHandling.toastError(requireContext(),trueError.toString(),Toast.LENGTH_SHORT)
         }
 
-        override fun onVerificationRequired(trueError: TrueError?) {}
+        override fun onVerificationRequired(trueError: TrueError?) {
+            isTruecallerVerified = false
+            ToastStateHandling.toastError(requireContext(),trueError.toString(),Toast.LENGTH_SHORT)
+        }
     }
 
     /*
@@ -203,6 +208,7 @@ class LoginFragment : Fragment() {
             }
         } else {
             loginViewModel.setMobileNumber(mobileNo)
+            binding.getotpBtn.isEnabled=false
 
             if (!isTruecallerVerified) {
                 moveToOtp(mobileNo)
@@ -215,20 +221,20 @@ class LoginFragment : Fragment() {
                         when (it) {
                             is Resource.Success -> {
                                 val loginMaster = it.data
+                                Log.d("Login","${loginMaster}")
                                 if (loginMaster?.status == true) {
 
                                     if (!(loginMaster.data?.isEmpty())!!) {
                                         loginViewModel.setIsLoggedIn(true)
-
                                         loginViewModel.setUserToken(loginMaster.data)
-
                                     }
-                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
-                                        if (user.data != null && user.data?.userId != null) {
-                                            gotoMainActivity()
+                                    Handler(Looper.myLooper()!!).postDelayed({
+                                        loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                            if (user.data != null && user.data?.userId != null) {
+                                                gotoMainActivity()
+                                            }
                                         }
-                                    }
-//
+                                    },200)
 
                                 } else {
                                     if (loginMaster?.data == "406") {

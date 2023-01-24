@@ -60,27 +60,32 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     private var myFarm: MyFarmsDomain? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigateUp()
-                }
-            }
-        activity?.onBackPressedDispatcher?.addCallback(
-            requireActivity(),
-            callback
-        )
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFarmDetails2Binding.inflate(inflater, container, false)
+
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -99,11 +104,16 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         initViewClick()
         initMyObserve()
         myCrop()
-        farmDetailsObserve()
+//        farmDetailsObserve()
         translations()
         checkRole()
 
-
+        viewModel.getMyFarms().observe(viewLifecycleOwner){
+            val farm=it.data?.firstOrNull {it1-> myFarm?.id == it1.id }
+            myFarm=farm
+            farmDetailsObserve()
+            drawFarm()
+        }
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.onBackPressed()
@@ -847,53 +857,58 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         }
 
-        override fun onMapReady(map: GoogleMap?) {
-            if (map != null) {
-                mMap = map
-                map.mapType = GoogleMap.MAP_TYPE_NORMAL
-                map!!.uiSettings.setAllGesturesEnabled(false)
-                map!!.uiSettings.isMapToolbarEnabled = false
-                if (myFarm != null) {
-                    val points = myFarm?.farmJson
-                    if (points != null) {
-                        if (points.size >= 3) {
-                            map.addPolygon(
-                                PolygonOptions().addAll(points)
-                                    .fillColor(Color.argb(100, 58, 146, 17))
-                                    .strokeColor(
-                                        Color.argb(255, 255, 255, 255)
-                                    )
+    override fun onMapReady(map: GoogleMap?) {
+        if (map != null) {
+            mMap = map
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+            map!!.uiSettings.setAllGesturesEnabled(false)
+            map!!.uiSettings.isMapToolbarEnabled = false
+            drawFarm()
+
+        }
+    }
+
+    private fun drawFarm(){
+        if (myFarm != null) {
+            val points = myFarm?.farmJson
+            mMap?.clear()
+            if (points != null) {
+                if (points.size >= 3) {
+                    mMap?.addPolygon(
+                        PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                            .strokeColor(
+                                Color.argb(255, 255, 255, 255)
                             )
-                        }
-                        for (latLng in points) {
-                            val marker = map.addMarker(
-                                MarkerOptions().position(
-                                    latLng
-                                )
-                                    .icon(BitmapDescriptorFactory.fromResource(com.waycool.addfarm.R.drawable.circle_green))
-                                    .anchor(0.5f, .5f)
-                                    .draggable(false)
-                                    .flat(true)
-                            )
-                        }
-                        map.animateCamera(
-                            CameraUpdateFactory.newLatLngBounds(
-                                getLatLnBounds(points), 20
-                            )
-                        )
-                        val area: Double =
-                            getArea(points) / 4046.86
-                        binding.farmAreaSingleFarm.setText(
-                            (String.format(
-                                Locale.ENGLISH,
-                                "%.2f",
-                                area
-                            )).trim { it <= ' ' } + " Acre"
-                        )
-                    }
+                    )
                 }
+                for (latLng in points) {
+                    val marker = mMap?.addMarker(
+                        MarkerOptions().position(
+                            latLng
+                        )
+                            .icon(BitmapDescriptorFactory.fromResource(com.waycool.addfarm.R.drawable.circle_green))
+                            .anchor(0.5f, .5f)
+                            .draggable(false)
+                            .flat(true)
+                    )
+                }
+                mMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        getLatLnBounds(points), 20
+                    )
+                )
+                val area: Double =
+                    getArea(points) / 4046.86
+                binding.farmAreaSingleFarm.setText(
+                    (String.format(
+                        Locale.ENGLISH,
+                        "%.2f",
+                        area
+                    )).trim { it <= ' ' } + " Acre"
+                )
             }
         }
+    }
 
 
         private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -88,6 +89,25 @@ class MandiFragment : Fragment() {
         setBanners()
         translation()
         EventClickHandling.calculateClickEvent("Mandi_landing")
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
 
     }
@@ -116,16 +136,16 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+//        val callback: OnBackPressedCallback =
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//               findNavController().popBackStack()
+//                }
+//            }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            requireActivity(),
+//            callback
+//        )
         viewModel.viewModelScope.launch {
             adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
                 val bundle = Bundle()
@@ -441,11 +461,11 @@ class MandiFragment : Fragment() {
         val bannerAdapter = AdsAdapter(activity ?: requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it?.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter

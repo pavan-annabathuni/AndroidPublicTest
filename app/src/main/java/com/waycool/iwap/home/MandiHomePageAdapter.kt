@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mandiprice.R
@@ -21,7 +22,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MandiHomePageAdapter(val onClickListener:OnClickListener):
-    PagingDataAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
+    ListAdapter<MandiDomainRecord, MandiHomePageAdapter.MandiHomePageHolder>(MandiHomePageAdapter){
     var cropName: String? = null
     var marketName:String?=null
 
@@ -119,11 +120,11 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
     }
 
 
-    override fun getItemCount(): Int {
-        val size=snapshot().items.size
-        return if(size>=5) 5
-        else size
-    }
+//    override fun getItemCount(): Int {
+//        val size= .items.size
+//        return if(size>=5) 5
+//        else size
+//    }
     companion object DiffCallback : DiffUtil.ItemCallback<MandiDomainRecord>() {
 
         override fun areItemsTheSame(oldItem: MandiDomainRecord, newItem: MandiDomainRecord): Boolean {
