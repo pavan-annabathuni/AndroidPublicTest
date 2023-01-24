@@ -32,12 +32,15 @@ class MandiViewModel : ViewModel() {
     }
 
 
-    suspend fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
+     fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
                                 sortBy: String?, orderBy: String?,search:String?,accountId:Int?=null
     ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(lat,long,crop_category,
             state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
 
+    fun getMandiSinglePage(lat: String,long: String):LiveData<Resource<MandiDomain?>>{
+        return MandiRepository.getMandiSinglePage(lat, long).asLiveData()
+    }
 
     suspend fun getMandiHistoryDetails(crop_master_id:Int?,mandi_master_id:Int?,sub_record_id:String?):
             LiveData<Resource<MandiHistoryDomain?>> =
@@ -52,9 +55,9 @@ class MandiViewModel : ViewModel() {
 
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 }

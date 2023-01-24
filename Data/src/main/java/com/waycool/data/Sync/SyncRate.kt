@@ -14,7 +14,7 @@ object SyncRate {
         SyncKey.USER_DETAILS to 5,
         SyncKey.MODULES_MASTER to 10,
         SyncKey.AI_CROP_HISTORY to 30,
-        SyncKey.WEATHER to 0,
+        SyncKey.WEATHER to 30,
         SyncKey.ADD_CROP_TYPE to 30,
         SyncKey.SOIL_TEST_HISTORY to 30,
         SyncKey.CROPS_CATEGORY_MASTER to 30,

@@ -6,6 +6,7 @@ import androidx.paging.cachedIn
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.utils.Resource
 
 class NewsAndArticlesViewModel : ViewModel() {
     fun getVansNewsList(
@@ -21,9 +22,9 @@ class NewsAndArticlesViewModel : ViewModel() {
             queryMap["tags"] = tags
         return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
     }
-    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 }

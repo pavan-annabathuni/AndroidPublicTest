@@ -236,11 +236,11 @@ class VideosListFragment : Fragment(), itemClick {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter

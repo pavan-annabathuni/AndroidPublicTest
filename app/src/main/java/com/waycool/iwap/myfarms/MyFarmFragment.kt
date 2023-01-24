@@ -36,17 +36,23 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        _binding = FragmentMyFarmBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@MyFarmFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentMyFarmBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
         return binding.root
     }
 

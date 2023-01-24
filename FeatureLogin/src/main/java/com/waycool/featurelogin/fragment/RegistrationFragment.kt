@@ -563,12 +563,14 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
-                            if (user.data != null && user.data?.userId != null) {
 
-                                gotoMainActivity()
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            viewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                if (user.data != null && user.data?.userId != null) {
+                                    gotoMainActivity()
+                                }
                             }
-                        }
+                        },200)
 /*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }*/

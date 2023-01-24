@@ -32,17 +32,26 @@ class AllServicesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@AllServicesFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 

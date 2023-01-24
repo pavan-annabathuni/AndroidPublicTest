@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.iwap.databinding.ItemViewallServiceBinding
+import com.waycool.uicomponents.R
 
 class PremiumServiceAdapter(private val onClickListener:OnClickListener,val context: Context): ListAdapter<ModuleMasterDomain, PremiumServiceAdapter.MyViewHolder>(DiffCallback) {
     class MyViewHolder(private val binding: ItemViewallServiceBinding) :
@@ -37,8 +39,15 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
             val deepLink = properties.deepLink
             if(!deepLink.isNullOrEmpty() && URLUtil.isValidUrl(deepLink.trim())) {
                 try {
-                    val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink.trim()))
-                    ContextCompat.startActivity(context,i,null)
+                    val packageName = "com.android.chrome"
+                    val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(context, R.color.primaryColor))
+                        .build()
+                    customTabIntent.intent.setPackage(packageName)
+                    customTabIntent.launchUrl(
+                        context,
+                        Uri.parse(deepLink)
+                    )
                 }catch (e:Exception){
                     Log.d("link", "onBindViewHolder: $e")
                 }

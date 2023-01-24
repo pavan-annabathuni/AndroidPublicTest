@@ -51,21 +51,31 @@ class GraphsFragment : Fragment() {
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
     private val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
 
+    private val LAST_DAYS: Int = 7
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@GraphsFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish() }
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -206,12 +216,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
             GraphSelection.LAST30DAYS -> graphsData?.last30DaysData?.keys?.toList()
         }
@@ -224,12 +234,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
         }
     }
@@ -306,8 +316,9 @@ class GraphsFragment : Fragment() {
             else -> " "
         }
     }
+
     private fun setTranslation() {
-        TranslationsManager().loadString("str_today",binding.today)
+        TranslationsManager().loadString("str_today", binding.today)
     }
 
     private fun getParamNote(

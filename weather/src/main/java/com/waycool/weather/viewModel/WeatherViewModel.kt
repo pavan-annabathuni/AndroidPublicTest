@@ -101,10 +101,10 @@ class WeatherViewModel : ViewModel() {
     }
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 
     fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =

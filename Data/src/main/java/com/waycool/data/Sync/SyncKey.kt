@@ -1,5 +1,6 @@
 package com.waycool.data.Sync
 
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object SyncKey {
@@ -60,4 +61,8 @@ object SyncKey {
 
     //MY Devices
     val MY_DEVICES = stringPreferencesKey("mydevice")
+
+    fun createDynamicSyncKey(baseName:String,variableName:String):Preferences.Key<String>{
+        return stringPreferencesKey("${baseName}_${variableName}")
+    }
 }
