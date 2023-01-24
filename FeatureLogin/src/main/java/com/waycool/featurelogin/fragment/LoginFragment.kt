@@ -30,6 +30,7 @@ import com.truecaller.android.sdk.ITrueCallback
 import com.truecaller.android.sdk.TrueProfile
 import com.truecaller.android.sdk.TrueError
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -120,6 +121,7 @@ class LoginFragment : Fragment() {
                 loginViewModel.setMobileNumber(binding.mobilenoEt.text.toString())
 
                 AuthorizeMobileNumber(binding.mobilenoEt.text.toString())
+                EventClickHandling.calculateClickEvent("Login_OTP")
             }
         }
 
@@ -150,6 +152,7 @@ class LoginFragment : Fragment() {
                 intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
                 intent.putExtra("tittle", "Terms and Conditions")
                 requireActivity().startActivity(intent)
+                EventClickHandling.calculateClickEvent("Terms_of_use_landing")
             }
         }
         val clickableSpan2: ClickableSpan = object : ClickableSpan() {
@@ -158,6 +161,7 @@ class LoginFragment : Fragment() {
                 intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
                 intent.putExtra("tittle", "Privacy Policy")
                 requireActivity().startActivity(intent)
+                EventClickHandling.calculateClickEvent("Privacy_policy_landing")
             }
         }
         val boldSpan = StyleSpan(Typeface.BOLD)
@@ -208,6 +212,7 @@ class LoginFragment : Fragment() {
 
             if (!isTruecallerVerified) {
                 moveToOtp(mobileNo)
+                EventClickHandling.calculateClickEvent("Login_Truecaller")
             } else {
                 loginViewModel.login(mobileNo, fcmToken!!, deviceModel!!, deviceManufacturer!!)
                     .observe(

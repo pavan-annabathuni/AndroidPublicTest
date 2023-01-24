@@ -40,6 +40,7 @@ import com.waycool.data.utils.NetworkUtil
 //import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -113,6 +114,7 @@ class OtpFragment : Fragment() {
         binding.otpViaCall.setOnClickListener {
             retryOtp("voice")
             showTimer()
+            EventClickHandling.calculateClickEvent("OTP_VIA_Call")
         }
 
         binding.doneBtn.setOnClickListener {
@@ -122,6 +124,7 @@ class OtpFragment : Fragment() {
         binding.resendMsgBtn.setOnClickListener {
             retryOtp("text")
             showTimer()
+            EventClickHandling.calculateClickEvent("Resend_OTP")
         }
 
         binding.backBtn.setOnClickListener {

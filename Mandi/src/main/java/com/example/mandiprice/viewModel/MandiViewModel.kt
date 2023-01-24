@@ -15,6 +15,7 @@ import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MandiViewModel : ViewModel() {
@@ -32,11 +33,11 @@ class MandiViewModel : ViewModel() {
     }
 
 
-     fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
+    suspend fun getMandiDetails(lat:String,long:String,crop_category:String?,state:String?,crop:String?,
                                 sortBy: String?, orderBy: String?,search:String?,accountId:Int?=null
     ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(lat,long,crop_category,
-            state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
+            state,crop,sortBy,orderBy,search,accountId).cachedIn(GlobalScope).asLiveData()
 
     fun getMandiSinglePage(lat: String,long: String):LiveData<Resource<MandiDomain?>>{
         return MandiRepository.getMandiSinglePage(lat, long).asLiveData()

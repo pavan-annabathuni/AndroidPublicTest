@@ -77,6 +77,8 @@ class AllServicesFragment : Fragment() {
             binding.topAppBar.title = title
             else binding.topAppBar.title = "All Services"
         }
+        TranslationsManager().loadString("str_explore",binding.tvExplore,"Explore our services")
+        TranslationsManager().loadString("str_premimum_explore",binding.tvKrishiServicesPremium,"Explore our premium services")
     }
     private fun freeUser() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->

@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
 import androidx.browser.customtabs.CustomTabsIntent
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.ModuleMasterDomain
 import com.waycool.iwap.databinding.ItemViewallServiceBinding
 import com.waycool.uicomponents.R
@@ -52,6 +54,12 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
                     Log.d("link", "onBindViewHolder: $e")
                 }
 
+            }else context?.let {
+                ToastStateHandling.toastError(
+                    it,
+                    "No Link",
+                    Toast.LENGTH_SHORT
+                )
             }
         }
         holder.name.text = properties.title

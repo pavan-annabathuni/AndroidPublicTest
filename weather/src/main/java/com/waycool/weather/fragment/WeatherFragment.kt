@@ -115,6 +115,7 @@ class WeatherFragment : Fragment() {
         binding.imgBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
+        EventClickHandling.calculateClickEvent("weather_landing_page")
         return binding.root
     }
 
@@ -706,6 +707,10 @@ class WeatherFragment : Fragment() {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+
+        bannerAdapter.onItemClick = {
+            EventClickHandling.calculateClickEvent("weather_Adbanner")
+        }
     }
     fun translation(){
 
