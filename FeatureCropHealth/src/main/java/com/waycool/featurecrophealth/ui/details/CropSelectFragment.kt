@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -68,7 +69,7 @@ class CropSelectFragment : Fragment() {
         bindObserversCategory()
 //        bindObserversDetails()
         initView()
-        translationSoilTesting()
+        translationPestAndDisease()
 
         clickSearch()
 
@@ -77,6 +78,7 @@ class CropSelectFragment : Fragment() {
             it?.cropId?.let { it1 -> bundle.putInt("crop_id", it1) }
             bundle.putString("name", it?.cropName)
             bundle.putString("crop_logo", it?.cropLogo)
+            bundle.putString("TagCrop",it?.cropNameTag)
             findNavController().navigate(
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 bundle
@@ -108,6 +110,19 @@ class CropSelectFragment : Fragment() {
         })
         binding.rvMyCrops.adapter = myCropAdapter
         myCrops()
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
 
     private fun myCrops() {
@@ -124,13 +139,13 @@ class CropSelectFragment : Fragment() {
 
                 }
         }
-    fun translationSoilTesting() {
+    fun translationPestAndDisease() {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
         }
-        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Crop Selection")
-        TranslationsManager().loadString("", binding.toolbarTitle,"My Crops")
+        TranslationsManager().loadString("crop_selection", binding. toolbarTitle,"Crop Selection")
+        TranslationsManager().loadString("", binding.myCropsTitle,"My Crops")
     }
 
 

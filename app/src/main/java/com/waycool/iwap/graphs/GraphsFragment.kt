@@ -81,7 +81,10 @@ class GraphsFragment : Fragment() {
             paramType = arguments?.getString("value")
             paramValue = arguments?.getString("temp_value")
             updateDate = arguments?.getString("date_time")
-            binding.tvToolbar.text = arguments?.getString("toolbar")
+
+           val data = arguments?.getString("toolbar")
+            translationToolBar(data.toString())
+//            binding.tvToolbar.text=data.toString()
 
             Log.d(Constant.TAG, "onCreateViewONPID:$serialNo ")
             Log.d(Constant.TAG, "onCreateViewONPID:$deviceModelId ")
@@ -301,14 +304,25 @@ class GraphsFragment : Fragment() {
             "rainfall" -> " mm"
             "humidity" -> " %"
             "windspeed" -> " Kmph"
-            "pressure", "soil_moisture_1", "soil_moisture_2" -> " KPa"
+            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " KPa"
             "lux" -> " lux"
-            "leaf_wetness" -> " Hrs"
+            "leaf_wetness_hrs" -> " Hrs"
             else -> " "
         }
     }
     private fun setTranslation() {
         TranslationsManager().loadString("str_today",binding.today)
+//         TranslationsManager().loadString("view_tepm", binding.tvToolbar,"Temprature")
+//        TranslationsManager().loadString("view_rainfall", binding.tvToolbar,"Rainfall")
+//        TranslationsManager().loadString("str_humidity", binding.tvToolbar,"Humidity")
+//        TranslationsManager().loadString("str_wind_speed", binding.tvToolbar,"Wind Speed")
+//        TranslationsManager().loadString("view_leaf", binding.tvToolbar,"Leaf wetness")
+//        TranslationsManager().loadString("view_pressure", binding.tvToolbar,"Pressure")
+//        TranslationsManager().loadString("view_light", binding.tvToolbar,"Light Intensity")
+//        TranslationsManager().loadString("soil_moisture", binding.tvToolbar,"Soil Moisture")
+//        TranslationsManager().loadString("view_top", binding.tvToolbar,"Top")
+//        TranslationsManager().loadString("view_bottom", binding.tvToolbar,"Bottom")
+//        TranslationsManager().loadString("view_soil_temp", binding.tvToolbar,"Soil Temperature")
     }
 
     private fun getParamNote(
@@ -337,14 +351,14 @@ class GraphsFragment : Fragment() {
                 "%.2f",
                 calculateAvg(valList)
             ) + getUnits(paramType)
-            "leaf_wetness" -> {
+            "leaf_wetness_hrs" -> {
                 if (duration == GraphSelection.LAST12HRS) "Total Leaf Wetness: " + String.format(
                     Locale.ENGLISH, "%.2f", calculateSum(valList)
                 ) + getUnits(paramType) else "Avg Leaf Wetness: " + String.format(
                     Locale.ENGLISH, "%.2f", calculateAvg(valList)
                 ) + getUnits(paramType)
             }
-            "soil_moisture_1", "soil_moisture_2" -> "Avg Soil Moisture: " + String.format(
+            "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> "Avg Soil Moisture: " + String.format(
                 Locale.ENGLISH,
                 "%.2f",
                 calculateAvg(valList)
@@ -359,6 +373,11 @@ class GraphsFragment : Fragment() {
                 "%.2f",
                 calculateAvg(valList)
             ) + getUnits(paramType)
+//            "leaf_wetness_hrs" -> "Avg Leaf: " + String.format(
+//                Locale.ENGLISH,
+//                "kmph ",
+//                calculateAvg(valList)
+//            ) + getUnits(paramType)
             else -> ""
         }
     }
@@ -415,6 +434,47 @@ class GraphsFragment : Fragment() {
 
                 }
 
+        }
+    }
+    fun translationToolBar(toolBarTranslation:String){
+        when (toolBarTranslation) {
+            "Temperature" -> {
+                TranslationsManager().loadString("view_tepm", binding.tvToolbar,"Temperature")
+            }
+            "Rainfall" -> {
+                TranslationsManager().loadString("view_rainfall", binding.tvToolbar,"Rainfall")
+            }
+            "Humidity" -> {
+                TranslationsManager().loadString("str_humidity", binding.tvToolbar,"Humidity")
+
+            }
+            "Wind Speed" -> {
+                TranslationsManager().loadString("str_wind_speed", binding.tvToolbar,"Wind Speed")
+
+            }
+            "Leaf wetness" -> {
+                TranslationsManager().loadString("view_leaf", binding.tvToolbar,"Leaf wetness")
+
+            }
+            "Pressure" -> {
+                TranslationsManager().loadString("view_pressure", binding.tvToolbar,"Pressure")
+
+            }
+            "Soil Moisture Top" -> {
+                TranslationsManager().loadString("soil_moisture_top", binding.tvToolbar,"Soil Moisture Top")
+
+            }
+            "Soil Moisture Bottom" -> {
+                TranslationsManager().loadString("soil_moisture_bottom", binding.tvToolbar,"Soil Moisture Bottom")
+            }
+            "Light Intensity" -> {
+                TranslationsManager().loadString("view_light", binding.tvToolbar,"Light Intensity")
+
+            }
+            "Soil Temperature" -> {
+                TranslationsManager().loadString("soil_moisture", binding.tvToolbar,"Soil Moisture")
+
+            }
         }
     }
 

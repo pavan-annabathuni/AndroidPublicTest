@@ -454,7 +454,8 @@ object NetworkSource {
     fun getAiCropHistory(headerMap: Map<String, String>) =
         flow<Resource<AiCropHistoryDTO?>> {
             try {
-                val response = apiInterface.getAiCropHistory(headerMap)
+                val langCode = LocalSource.getLanguageCode() ?: "en"
+                val response = apiInterface.getAiCropHistory(headerMap, lang = langCode)
                 if (response.isSuccessful)
                     emit(Resource.Success(response.body()))
                 else {
