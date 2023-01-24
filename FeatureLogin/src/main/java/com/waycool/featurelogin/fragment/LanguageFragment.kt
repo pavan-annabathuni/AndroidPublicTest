@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -78,6 +79,7 @@ class LanguageFragment : Fragment() {
                 }
 
             }
+            EventClickHandling.calculateClickEvent("language_selection$selectedLanguage")
         }
 
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {

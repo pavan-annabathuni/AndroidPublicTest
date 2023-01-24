@@ -314,17 +314,26 @@ class CropSelectFragment : Fragment() {
 
     private fun dialog(){
 
-            val dialog = Dialog(requireContext())
-            //dialog.setCancelable(false)
-            dialog.setContentView(R.layout.dailog_information)
-            // val body = dialog.findViewById(R.id.body) as TextView
-            val yesBtn = dialog.findViewById(R.id.ok) as Button
-            yesBtn.setOnClickListener {
-                dialog.dismiss()
-                Log.d("Dialog", "dialog: Clicked")
-            }
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.show()
+        val dialog = Dialog(requireContext())
+        //dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dailog_information)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val yesBtn = dialog.findViewById(R.id.ok) as Button
+        val tvInformation = dialog.findViewById(R.id.textView14)as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15)as TextView
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            Log.d("Dialog", "dialog: Clicked")
         }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        TranslationsManager().loadString("str_information",tvInformation,"Information")
+        TranslationsManager().loadString("str_crop_health_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a pest & disease detection model for this crop. We look forward to serving you shortly.")
+        viewModel.viewModelScope.launch(){
+            var ok = TranslationsManager().getString("str_ok")
+            if(ok.isNullOrEmpty())
+                yesBtn.text = "Ok"
+        }
+    }
 
     }

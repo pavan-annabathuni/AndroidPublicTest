@@ -31,9 +31,11 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -162,8 +164,12 @@ class EditProfileFragment : Fragment() {
         }
 
         if (selecteduri != null) {
-            context?.let { ToastStateHandling.toastSuccess(it, "Image Uploaded", Toast.LENGTH_SHORT) }
-        }
+            viewModel.viewModelScope.launch {
+            var toast = TranslationsManager().getString("profile_updated")
+                if(!toast.isNullOrEmpty())
+            context?.let { ToastStateHandling.toastSuccess(it,toast, Toast.LENGTH_SHORT) }
+                else context?.let { ToastStateHandling.toastSuccess(it,"Profile Updated", Toast.LENGTH_SHORT) }
+        }}
     }
 
 //    private fun observer() {

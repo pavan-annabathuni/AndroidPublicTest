@@ -1278,5 +1278,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("HomePagesFragment")
     }
+
 }
 

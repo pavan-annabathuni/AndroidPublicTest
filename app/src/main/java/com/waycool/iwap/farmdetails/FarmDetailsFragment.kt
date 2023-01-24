@@ -351,9 +351,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.cvEditCrop.visibility = View.GONE
                 binding.cardAddForm.visibility = View.VISIBLE
             }
-                        if (it.data?.size!! < 8) {
-                            binding.tvEditMyCrops.visibility = View.VISIBLE
-                        } else binding.tvEditMyCrops.visibility = View.GONE
+//                        if (it.data?.size!! < 8) {
+//                            binding.tvEditMyCrops.visibility = View.VISIBLE
+//                        } else binding.tvEditMyCrops.visibility = View.GONE
         }
     }
 
@@ -893,10 +893,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             if (it.data?.roleId == 31) {
                 binding.ClYourForm.visibility = View.GONE
-                binding.tvEditMyCrops.visibility = View.INVISIBLE
+                binding.tvEditMyCrops.visibility = View.GONE
                 binding.editFarmFarmsSingle.visibility = View.GONE
                 binding.MyDevice.visibility = View.GONE
                 binding.ivViewAll.visibility = View.GONE
+                binding.addDeviceFree.visibility = View.GONE
+                binding.tvAddFrom.visibility = View.GONE
             } else {
                 binding.ClYourForm.visibility = View.VISIBLE
                 binding.tvEditMyCrops.visibility = View.VISIBLE

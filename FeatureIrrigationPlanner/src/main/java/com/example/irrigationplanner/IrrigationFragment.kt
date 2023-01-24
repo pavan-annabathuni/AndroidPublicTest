@@ -23,6 +23,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -79,11 +80,14 @@ class IrrigationFragment : Fragment() {
             accountId = it.data?.accountId!!
             if (accountId != null)
                 setAdapter(accountId!!)
+            if(it.data!!.roleId==31)
+            binding.btExit.visibility = View.GONE
+            else binding.btExit.visibility = View.VISIBLE
         }
 
         // binding.recycleViewHis.adapter = mHistoryAdapter
 
-
+        EventClickHandling.calculateClickEvent("Irrigation_landing")
         return binding.root
     }
 
@@ -99,9 +103,11 @@ class IrrigationFragment : Fragment() {
         exitDialog()
 
         binding.irrigationYes.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("crop_irrigated_today_yes")
             dialog()
         }
         binding.tvEdit.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("crop_irrigated_today_edit")
             binding.perDay.visibility = View.VISIBLE
             dialog()
         }
@@ -128,6 +134,7 @@ class IrrigationFragment : Fragment() {
         }
 
         binding.irrigationNo.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("crop_irrigated_today_no")
             binding.dailyIrrigation.visibility = View.GONE
             binding.perDay.visibility = View.VISIBLE
         }
@@ -144,6 +151,7 @@ class IrrigationFragment : Fragment() {
         }
 
         binding.btHistory.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("Irrigation_history_view")
             val args = Bundle()
             args.putParcelable("IrrigationHis", irrigation)
             args.putInt("plotId", plotId)
@@ -152,6 +160,7 @@ class IrrigationFragment : Fragment() {
                 .navigate(R.id.action_irrigationFragment_to_irrigationHistoryFragment, args)
         }
         binding.btDisease.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("Disease_outbreak_chances_view")
             val args = Bundle()
             args.putParcelable("IrrigationHis", irrigation)
             args.putInt("plotId", plotId)
@@ -161,6 +170,7 @@ class IrrigationFragment : Fragment() {
         }
 
         binding.btForecast.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("weekly_irrigation_forecast_view")
             val args = Bundle()
             if (irrigation != null) {
                 args.putParcelable("IrrigationHis", irrigation)
@@ -182,6 +192,7 @@ class IrrigationFragment : Fragment() {
         }
 
         binding.btHarvest.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("Harvest_crop")
             val args = Bundle()
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
@@ -191,6 +202,7 @@ class IrrigationFragment : Fragment() {
 
         }
         binding.tvCropInfo.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("Irrigation_landing_crop_overview")
             val args = Bundle()
             args.putInt("plotId", plotId)
             this.findNavController()
@@ -401,6 +413,7 @@ class IrrigationFragment : Fragment() {
 
 
         save.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("Irrigation_plant_save")
             // context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Worked", Toast.LENGTH_SHORT) }
             val value = irrigation?.text.toString().toInt()
             if (irrigationId != null) {
@@ -419,7 +432,9 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun exitDialog() {
+        EventClickHandling.calculateClickEvent("Irrigation_delete")
         binding.btExit.setOnClickListener() {
+
             val dialog = Dialog(requireContext())
 
             dialog.setCancelable(false)
@@ -431,12 +446,14 @@ class IrrigationFragment : Fragment() {
             val deleteDesc = dialog.findViewById<TextView>(R.id.textView15)
 
             delete.setOnClickListener {
+                EventClickHandling.calculateClickEvent("Confirm_delete_crop")
                 viewModel.getEditMyCrop(plotId).observe(viewLifecycleOwner) {
                     this.findNavController().navigateUp()
                 }
                 dialog.dismiss()
             }
-            cancel.setOnClickListener { dialog.dismiss() }
+            cancel.setOnClickListener { dialog.dismiss()
+                EventClickHandling.calculateClickEvent("Confirm_cancel_crop")}
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
 

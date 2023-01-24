@@ -34,6 +34,8 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
@@ -117,18 +119,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
          newsBinding = binding.layoutNews
 
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
             val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
             val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         newsBinding.viewAllNews.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_NewsArticles_viewall")
             val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_NewsArticles_viewall")
             val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
@@ -445,6 +451,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
             adapter.onItemClick = {
+                val bundleEvents = Bundle()
+                bundleEvents.putString("","${it?.title}")
+                EventItemClickHandling.calculateItemClickEvent("cropprotection_video",bundleEvents)
                 val bundle = Bundle()
                 bundle.putParcelable("video", it)
                 findNavController().navigate(
@@ -584,6 +593,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
     override fun onItemClickListener(vans: VansFeederListDomain?) {
+        val bundleEvents = Bundle()
+        bundleEvents.putString("","${vans?.title}")
+        EventItemClickHandling.calculateItemClickEvent("cropprotection_news",bundleEvents)
         val bundle = Bundle()
         bundle.putString("title", vans?.title)
         bundle.putString("content", vans?.desc)
