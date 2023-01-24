@@ -51,21 +51,31 @@ class GraphsFragment : Fragment() {
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
     private val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
 
+    private val LAST_DAYS: Int = 7
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@GraphsFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish() }
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -81,6 +91,16 @@ class GraphsFragment : Fragment() {
             paramType = arguments?.getString("value")
             paramValue = arguments?.getString("temp_value")
             updateDate = arguments?.getString("date_time")
+
+           val data = arguments?.getString("toolbar")
+            translationToolBar(data.toString())
+//            binding.tvToolbar.text=data.toString()
+
+            Log.d(Constant.TAG, "onCreateViewONPID:$serialNo ")
+            Log.d(Constant.TAG, "onCreateViewONPID:$deviceModelId ")
+            Log.d(Constant.TAG, "onCreateViewONPID:$paramType ")
+            Log.d(Constant.TAG, "onCreateViewONPID:$paramValue")
+            Log.d(Constant.TAG, "onCreateViewONPID:$updateDate ")
             binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
             binding.date.text = updateDate
@@ -163,6 +183,7 @@ class GraphsFragment : Fragment() {
             binding.lineChart.getAxisRight().setDrawLabels(false)
             binding.lineChart.getXAxis().setLabelRotationAngle(-45f)
             binding.lineChart.getAxisLeft().setAxisMinimum(0f)
+            binding.lineChart.axisLeft.spaceTop = 150f
             if (paramType.equals("humidity", ignoreCase = true)) {
                 binding.lineChart.getAxisLeft().setAxisMaximum(100f)
             }
@@ -196,12 +217,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
             GraphSelection.LAST30DAYS -> graphsData?.last30DaysData?.keys?.toList()
         }
@@ -214,12 +235,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
         }
     }
@@ -329,14 +350,26 @@ class GraphsFragment : Fragment() {
             "rainfall" -> " mm"
             "humidity" -> " %"
             "windspeed" -> " Kmph"
-            "pressure", "soil_moisture_1", "soil_moisture_2" -> " KPa"
+            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " KPa"
             "lux" -> " lux"
-            "leaf_wetness" -> " Hrs"
+            "leaf_wetness_hrs" -> " Hrs"
             else -> " "
         }
     }
+
     private fun setTranslation() {
         TranslationsManager().loadString("str_today",binding.today)
+//         TranslationsManager().loadString("view_tepm", binding.tvToolbar,"Temprature")
+//        TranslationsManager().loadString("view_rainfall", binding.tvToolbar,"Rainfall")
+//        TranslationsManager().loadString("str_humidity", binding.tvToolbar,"Humidity")
+//        TranslationsManager().loadString("str_wind_speed", binding.tvToolbar,"Wind Speed")
+//        TranslationsManager().loadString("view_leaf", binding.tvToolbar,"Leaf wetness")
+//        TranslationsManager().loadString("view_pressure", binding.tvToolbar,"Pressure")
+//        TranslationsManager().loadString("view_light", binding.tvToolbar,"Light Intensity")
+//        TranslationsManager().loadString("soil_moisture", binding.tvToolbar,"Soil Moisture")
+//        TranslationsManager().loadString("view_top", binding.tvToolbar,"Top")
+//        TranslationsManager().loadString("view_bottom", binding.tvToolbar,"Bottom")
+//        TranslationsManager().loadString("view_soil_temp", binding.tvToolbar,"Soil Temperature")
     }
 
     private fun getParamNote(
@@ -365,14 +398,14 @@ class GraphsFragment : Fragment() {
                 "%.2f",
                 calculateAvg(valList)
             ) + getUnits(paramType)
-            "leaf_wetness" -> {
+            "leaf_wetness_hrs" -> {
                 if (duration == GraphSelection.LAST12HRS) "Total Leaf Wetness: " + String.format(
                     Locale.ENGLISH, "%.2f", calculateSum(valList)
                 ) + getUnits(paramType) else "Avg Leaf Wetness: " + String.format(
                     Locale.ENGLISH, "%.2f", calculateAvg(valList)
                 ) + getUnits(paramType)
             }
-            "soil_moisture_1", "soil_moisture_2" -> "Avg Soil Moisture: " + String.format(
+            "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> "Avg Soil Moisture: " + String.format(
                 Locale.ENGLISH,
                 "%.2f",
                 calculateAvg(valList)
@@ -387,6 +420,11 @@ class GraphsFragment : Fragment() {
                 "%.2f",
                 calculateAvg(valList)
             ) + getUnits(paramType)
+//            "leaf_wetness_hrs" -> "Avg Leaf: " + String.format(
+//                Locale.ENGLISH,
+//                "kmph ",
+//                calculateAvg(valList)
+//            ) + getUnits(paramType)
             else -> ""
         }
     }
@@ -448,6 +486,47 @@ class GraphsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("GraphsFragment")
+    }
+    fun translationToolBar(toolBarTranslation:String){
+        when (toolBarTranslation) {
+            "Temperature" -> {
+                TranslationsManager().loadString("view_tepm", binding.tvToolbar,"Temperature")
+            }
+            "Rainfall" -> {
+                TranslationsManager().loadString("view_rainfall", binding.tvToolbar,"Rainfall")
+            }
+            "Humidity" -> {
+                TranslationsManager().loadString("str_humidity", binding.tvToolbar,"Humidity")
+
+            }
+            "Wind Speed" -> {
+                TranslationsManager().loadString("str_wind_speed", binding.tvToolbar,"Wind Speed")
+
+            }
+            "Leaf wetness" -> {
+                TranslationsManager().loadString("view_leaf", binding.tvToolbar,"Leaf wetness")
+
+            }
+            "Pressure" -> {
+                TranslationsManager().loadString("view_pressure", binding.tvToolbar,"Pressure")
+
+            }
+            "Soil Moisture Top" -> {
+                TranslationsManager().loadString("soil_moisture_top", binding.tvToolbar,"Soil Moisture Top")
+
+            }
+            "Soil Moisture Bottom" -> {
+                TranslationsManager().loadString("soil_moisture_bottom", binding.tvToolbar,"Soil Moisture Bottom")
+            }
+            "Light Intensity" -> {
+                TranslationsManager().loadString("view_light", binding.tvToolbar,"Light Intensity")
+
+            }
+            "Soil Temperature" -> {
+                TranslationsManager().loadString("soil_moisture", binding.tvToolbar,"Soil Moisture")
+
+            }
+        }
     }
 
 }

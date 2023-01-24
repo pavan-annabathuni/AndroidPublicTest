@@ -91,7 +91,7 @@ class WeatherFragment : Fragment() {
             networkCall()
         }
         observer()
-        setBanners()
+//        setBanners()
 
         mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             EventClickHandling.calculateClickEvent("weather_daily")
@@ -104,7 +104,6 @@ class WeatherFragment : Fragment() {
         })
 
 //        observer()
-        setBanners()
         translation()
         binding.lableRain.isSelected = true
         binding.lableVisibility.isSelected = true
@@ -117,6 +116,7 @@ class WeatherFragment : Fragment() {
         binding.imgBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
+        EventClickHandling.calculateClickEvent("weather_landing_page")
         return binding.root
     }
 
@@ -682,11 +682,11 @@ class WeatherFragment : Fragment() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -708,6 +708,10 @@ class WeatherFragment : Fragment() {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+
+        bannerAdapter.onItemClick = {
+            EventClickHandling.calculateClickEvent("weather_Adbanner")
+        }
     }
     fun translation(){
 

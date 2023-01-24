@@ -21,6 +21,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -185,13 +187,12 @@ class PestDiseaseFragment : Fragment() {
     }
 
     private fun setBanners() {
-
         val bannerAdapter = AdsAdapter(activity?:requireContext())
 
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter

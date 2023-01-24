@@ -6,6 +6,8 @@
     <application>
         <activity
             android:name=".CropInfo"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:autoLink="phone"
             android:theme="@style/AppTheme">

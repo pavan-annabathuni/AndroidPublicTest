@@ -3,6 +3,8 @@ package com.example.mandiprice.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
@@ -48,11 +50,12 @@ class SearchFragment : Fragment() {
     private var cropCategory: String? = null
     private var state: String? = null
     private var crop: String? = null
-    private var lat= "12.22"
-    private var long= "78.22"
+    private var lat: String? = null
+    private var long: String? = null
     private var accountId = 0
-    private lateinit var distance:String
-    private lateinit var price:String
+    private lateinit var distance: String
+    private lateinit var price: String
+    private var handler: Handler? = null
     private val REQUEST_CODE_SPEECH_INPUT = 11019
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +71,7 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = this
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
             lat = it.data?.profile?.lat.toString()
             long = it.data?.profile?.long.toString()
             accountId = it.data?.accountId!!
@@ -99,6 +102,8 @@ class SearchFragment : Fragment() {
 //            }
 //        })
         translation()
+        searchView()
+        EventClickHandling.calculateClickEvent("Mandi_graph_landing")
         return binding.root
     }
 
@@ -106,29 +111,23 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         viewModel.viewModelScope.launch {
-        adapterMandi = DistanceAdapter(DistanceAdapter.DiffCallback.OnClickListener {
-            val bundle = Bundle()
-            bundle.putString("","Mandi${it.crop}")
-            bundle.putString("","Mandi${it.market}")
-            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
-            val args = Bundle()
-            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
-            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
-            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
-            findNavController()
-                .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
-        }, LocalSource.getLanguageCode() ?: "en")
-        binding.recycleViewDis.adapter = adapterMandi
-        viewModel.viewModelScope.launch {
-            viewModel.getMandiDetails(lat,long,cropCategory, state, crop, sortBy, orderBy, search,accountId)
-                .observe(viewLifecycleOwner) {
-                    // binding.viewModel = it
-                    adapterMandi.submitData(lifecycle, it)
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
-                }
-        }}
+            adapterMandi = DistanceAdapter(DistanceAdapter.DiffCallback.OnClickListener {
+                val bundle = Bundle()
+                bundle.putString("", "Mandi${it.crop}")
+                bundle.putString("", "Mandi${it.market}")
+                EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
+                val args = Bundle()
+//            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
+//            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
+//            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
+//            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
+//            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
+                args.putParcelable("mandiRecord", it)
+                findNavController()
+                    .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
+            }, LocalSource.getLanguageCode() ?: "en")
+            binding.recycleViewDis.adapter = adapterMandi
+        }
         filterMenu()
         tabs()
         //searchView()
@@ -136,7 +135,7 @@ class SearchFragment : Fragment() {
         speechToText()
         showKeypad(binding.searchBar)
         dateFormat()
-        binding.searchBar.setOnClickListener(){
+        binding.searchBar.setOnClickListener() {
             EventClickHandling.calculateClickEvent("Mandi_search")
         }
     }
@@ -158,7 +157,7 @@ class SearchFragment : Fragment() {
             // on below line we are passing our
             // language as a default language.
             viewModel.viewModelScope.launch {
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,SpeechToText.getLangCode())
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
             }
 
 
@@ -181,7 +180,7 @@ class SearchFragment : Fragment() {
 //                    .show()
             }
         }
-      // SpeechToText.speechToText(requireContext())
+        // SpeechToText.speechToText(requireContext())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -211,13 +210,14 @@ class SearchFragment : Fragment() {
     private fun tabs() {
         viewModel.viewModelScope.launch {
             distance = TranslationsManager().getString("distance")
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
-        )
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
+            )
             price = TranslationsManager().getString("Price")
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
-        )}
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
+            )
+        }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -228,7 +228,7 @@ class SearchFragment : Fragment() {
                             if (search.isNullOrEmpty()) {
                                 submitAdapter()
                             } else {
-                               submitAdapter()
+                                submitAdapter()
                             }
                         } else {
                             orderBy = "distance"
@@ -275,17 +275,31 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchView() {
+        handler = Handler(Looper.myLooper()!!)
+        val searchRunnable =
+            Runnable {
+                submitAdapter()
+            }
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 search = binding.searchBar.text.toString()
-                if (i2 > 2) {
-                    //binding.filter.text = "Sort By"
-                    if (!search.isNullOrEmpty())
-                       submitAdapter()
-                    }
-                    if (binding.searchBar.text.isNullOrEmpty())
-                      submitAdapter()
+                //binding.filter.text = "Sort By"
+//                if (!search.isNullOrEmpty()) {
+//                    binding.recycleViewDis.adapter = adapterMandi
+//                    handler!!.removeCallbacks(searchRunnable)
+//                    handler!!.postDelayed(searchRunnable, 1000)
+//                }
+//
+//                if (search.isNullOrEmpty()) {
+//                    binding.recycleViewDis.adapter = adapterMandi
+//                    handler!!.removeCallbacks(searchRunnable)
+//                    handler!!.postDelayed(searchRunnable, 1000)
+//                }
+
+                binding.recycleViewDis.adapter = adapterMandi
+                handler!!.removeCallbacks(searchRunnable)
+                handler!!.postDelayed(searchRunnable, 1000)
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -340,20 +354,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun dateFormat() {
-       adapterMandi.addLoadStateListener { loadState->
-           if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
-               binding.llNotFound.visibility = View.VISIBLE
-               binding.recycleViewDis.visibility = View.GONE
-               binding.progressBar.visibility = View.GONE
-           }else if(loadState.source.refresh is LoadState.Loading){
-               binding.progressBar.visibility = View.VISIBLE
-           }
-           else{
-               binding.llNotFound.visibility = View.GONE
-           binding.recycleViewDis.visibility = View.VISIBLE
-               binding.progressBar.visibility = View.GONE
-           }
-       }
+        adapterMandi.addLoadStateListener { loadState ->
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
+                binding.llNotFound.visibility = View.VISIBLE
+                binding.recycleViewDis.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+            } else if (loadState.source.refresh is LoadState.Loading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.llNotFound.visibility = View.GONE
+                binding.recycleViewDis.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+            }
+        }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         viewModel.viewModelScope.launch {
             val today = TranslationsManager().getString("str_today")
@@ -364,49 +377,49 @@ class SearchFragment : Fragment() {
 
 
     fun autoComplete() {
-        viewModel.getMandiMaster().observe(viewLifecycleOwner){
-            val marketName = it.data?.data?.map { data->
+        viewModel.getMandiMaster().observe(viewLifecycleOwner) {
+            val marketName = it.data?.data?.map { data ->
                 data.mandiName
-            }?: emptyList()
-        viewModel.getAllCrops().observe(viewLifecycleOwner) {
-            val cropName = it?.data?.map { data ->
-                data.cropName
             } ?: emptyList()
+            viewModel.getAllCrops().observe(viewLifecycleOwner) {
+                val cropName = it?.data?.map { data ->
+                    data.cropName
+                } ?: emptyList()
 
 
-
-                val list = cropName+marketName
+                val list = cropName + marketName
                 Log.d("autoList", "autoComplete: $marketName")
-            val arrayAdapter =
-                ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, list)
-            binding.searchBar.setAdapter(arrayAdapter)
-        }}
+                val arrayAdapter =
+                    ArrayAdapter<String>(requireContext(), R.layout.item_auto_complete, list)
+                binding.searchBar.setAdapter(arrayAdapter)
+            }
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding.searchBar.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                search = binding.searchBar.text.toString()
-                    //binding.filter.text = "Sort By"
-                        if (!search.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                submitAdapter()
-                        if (binding.searchBar.text.isNullOrEmpty())
-                            binding.recycleViewDis.adapter = adapterMandi
-                submitAdapter()
-            }
-
-            override fun afterTextChanged(editable: Editable) {
-                //after the change calling the method and passing the search input
-                // viewModel.getSearch(editable.toString())
-
-            }
-        })
-
-        callingData()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        binding.searchBar.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+//            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+//                search = binding.searchBar.text.toString()
+//                    //binding.filter.text = "Sort By"
+//                        if (!search.isNullOrEmpty())
+//                            binding.recycleViewDis.adapter = adapterMandi
+//                submitAdapter()
+//                        if (binding.searchBar.text.isNullOrEmpty())
+//                            binding.recycleViewDis.adapter = adapterMandi
+//                submitAdapter()
+//            }
+//
+//            override fun afterTextChanged(editable: Editable) {
+//                //after the change calling the method and passing the search input
+//                // viewModel.getSearch(editable.toString())
+//
+//            }
+//        })
+//
+////        callingData()
+//    }
 
     private fun showKeypad(editText: EditText) {
         val imm: InputMethodManager =
@@ -424,30 +437,32 @@ class SearchFragment : Fragment() {
 
     fun submitAdapter() {
         binding.recycleViewDis.adapter = adapterMandi
-        viewModel.viewModelScope.launch {
+        if (lat != null && long != null)
             viewModel.getMandiDetails(
-                lat,
-                long,cropCategory,
+
+                lat!!,
+                long!!, cropCategory,
                 state,
                 crop,
                 sortBy,
                 orderBy,
-                search,accountId).observe(viewLifecycleOwner) {
+                search, accountId
+            ).observe(viewLifecycleOwner) {
                 // binding.viewModel = it
                 adapterMandi.submitData(lifecycle, it)
                 // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
             }
-        }
     }
-    private fun translation(){
+
+    private fun translation() {
         var mandi = "Market Prices"
         viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi
             var hint = TranslationsManager().getString("search_crop_mandi")
-            binding.searchBar.hint =hint
+            binding.searchBar.hint = hint
         }
-        TranslationsManager().loadString("sort_by",binding.filter,"Sort By")
+        TranslationsManager().loadString("sort_by", binding.filter, "Sort By")
 
     }
     override fun onResume() {

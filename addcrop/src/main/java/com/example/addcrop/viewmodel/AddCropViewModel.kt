@@ -1,5 +1,6 @@
 package com.example.addcrop.viewmodel
 
+import androidx.databinding.Bindable
 import androidx.lifecycle.*
 
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
@@ -44,8 +45,43 @@ class AddCropViewModel :ViewModel() {
 
     fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
         FarmsRepository.getMyFarms().asLiveData()
+//    @Bindable var nickName: String = ""
+//    @Bindable var area: String = ""
+//    @Bindable var date: String = ""
+//    @Bindable var nickNameError: String = ""
+//    @Bindable var areaError: String = ""
+//    @Bindable
+//    var dateError: String = ""
+
+//    fun checkInputFields() : Boolean {
+//        if (nickName.isEmpty()) {
+//            nickNameError = "Nick name should not be empty"
+//            return false
+//        } else if (area.isEmpty()) {
+//            areaError = "Enter Area"
+//            return false
+//        } else if (date.isEmpty()) {
+//            dateError = "Pick up the Date"
+//            return false
+//        }
+//        nickNameError = ""
+//        areaError = ""
+//        dateError = ""
+//        return true
+//    }
 
 
+
+    fun checkInputFields(nickName: String, area: String, date: String) : Boolean {
+        if (nickName.isEmpty()) {
+            return false
+        } else if (area.isEmpty()) {
+            return false
+        } else if (date.isEmpty()) {
+            return false
+        }
+        return true
+    }
 
 //    private val apiClient: ApiService = RetrofitBuilder.getInstance().create(ApiService::class.java)
 //

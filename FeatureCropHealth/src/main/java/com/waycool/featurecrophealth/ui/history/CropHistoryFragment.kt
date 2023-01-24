@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -110,6 +111,21 @@ class CropHistoryFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+//                    activity?.finish()
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
 
     private fun speechToText() {

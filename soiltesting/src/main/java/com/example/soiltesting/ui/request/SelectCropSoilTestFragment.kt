@@ -105,7 +105,7 @@ class SelectCropSoilTestFragment : Fragment() {
             binding.searchView.hint = search
         }
         TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Select Crop")
-        TranslationsManager().loadString("", binding.toolbarTitle,"My Crops List")
+        TranslationsManager().loadString("select_crop", binding.toolbarTitle,"Select Crop")
     }
 
     fun myCrops() {

@@ -505,7 +505,7 @@ object CropsRepository {
                         AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
 
                     domainList=domainList.map { history->
-                        history.disease_name= history.crop_id?.let { it1 ->
+                        history.disease_name= history.disease_id?.let { it1 ->
                             LocalSource.getSelectedDiseaseEntity(it1)?.diseaseName?:"--"
                         }
                         history

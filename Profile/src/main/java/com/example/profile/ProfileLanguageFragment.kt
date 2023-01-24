@@ -19,6 +19,7 @@ import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -79,6 +80,7 @@ class ProfileLanguageFragment : Fragment() {
 
 
         binding.doneBtn.setOnClickListener {
+
              binding.progressBar.visibility = View.VISIBLE
             binding.doneBtn.visibility = View.GONE
             GlobalScope.launch {
@@ -107,6 +109,7 @@ class ProfileLanguageFragment : Fragment() {
             TranslationsManager().refreshTranslations()
             viewModel.viewModelScope.launch {
                 val langCode = selectedLanguage!!.id
+                EventClickHandling.calculateClickEvent("Profile_language_name$langCode")
                 field = HashMap()
                 langCode?.let { it1 -> field.put("lang_id", it1.toString())
                     viewModel.getProfileRepository(field).observe(viewLifecycleOwner){
@@ -115,7 +118,7 @@ class ProfileLanguageFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     Navigation.findNavController(binding.root)
                         .navigateUp()
-                },1500)
+                },2000)
 
             }
 

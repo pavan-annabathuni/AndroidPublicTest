@@ -24,6 +24,7 @@ object EventClickHandling{
     }
 }
 
+
 object EventItemClickHandling{
     fun calculateItemClickEvent(eventName:String, bundle: Bundle) {
         val firebaseAnalytics = Firebase.analytics

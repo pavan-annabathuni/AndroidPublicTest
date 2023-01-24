@@ -104,13 +104,11 @@ class AddFarmSupportFragment : Fragment() {
         onClick()
         getLocation()
         binding.imgLocation.setOnClickListener() {
-            context?.let { it1 ->
-                ToastStateHandling.toastSuccess(
-                    it1,
-                    "Loading",
-                    Toast.LENGTH_SHORT
-                )
-            }
+            viewModel.viewModelScope.launch {
+            val toast = TranslationsManager().getString("loading")
+                if(!toast.isNullOrEmpty())
+            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT) }
+            else context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Loading",Toast.LENGTH_SHORT) }}
             getLocation()
         }
         binding.farmManger.background =
@@ -160,12 +158,13 @@ class AddFarmSupportFragment : Fragment() {
             }
 
             if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
-                context?.let { it1 ->
-                    ToastStateHandling.toastError(
-                        it1,
-                        "Fill all Fields",
-                        Toast.LENGTH_SHORT
-                    )
+                viewModel.viewModelScope.launch(){
+                val toast = TranslationsManager().getString("str_fill_all_fields")
+                    if(toast.isNullOrEmpty()){
+                context?.let { it1 -> ToastStateHandling.toastError(it1, "Fill all Fields", Toast.LENGTH_SHORT)}
+                    }else{
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toast, Toast.LENGTH_SHORT)}
+                    }
                 }
             } else if (binding.mobilenoEt.text.toString()
                     .isEmpty() || binding.mobilenoEt.text.toString().length != 10

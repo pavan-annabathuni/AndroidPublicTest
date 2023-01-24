@@ -15,6 +15,7 @@
             android:screenOrientation="portrait"
             android:exported="true"
             android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:theme="@style/AppTheme"
             android:name=".SoilTestActivity" >
             <intent-filter >

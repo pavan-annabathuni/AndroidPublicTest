@@ -17,6 +17,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.Toast
+import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -71,7 +73,7 @@ class CropSelectFragment : Fragment() {
         bindObserversCategory()
 //        bindObserversDetails()
         initView()
-        translationSoilTesting()
+        translationPestAndDisease()
 
         clickSearch()
 
@@ -86,6 +88,7 @@ class CropSelectFragment : Fragment() {
             it?.cropId?.let { it1 -> bundle.putInt("crop_id", it1) }
             bundle.putString("name", it?.cropName)
             bundle.putString("crop_logo", it?.cropLogo)
+            bundle.putString("TagCrop",it?.cropNameTag)
             findNavController().navigate(
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 bundle
@@ -117,6 +120,19 @@ class CropSelectFragment : Fragment() {
         })
         binding.rvMyCrops.adapter = myCropAdapter
         myCrops()
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
 
     private fun myCrops() {
@@ -133,12 +149,12 @@ class CropSelectFragment : Fragment() {
 
                 }
         }
-    fun translationSoilTesting() {
+    fun translationPestAndDisease() {
         viewModel.viewModelScope.launch{
             binding.searchView.hint = TranslationsManager().getString("search")
         }
-        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Crop Selection")
-        TranslationsManager().loadString("", binding.toolbarTitle,"My Crops")
+        TranslationsManager().loadString("crop_selection", binding. toolbarTitle,"Crop Selection")
+        TranslationsManager().loadString("", binding.myCropsTitle,"My Crops")
     }
 
 
@@ -324,21 +340,30 @@ class CropSelectFragment : Fragment() {
 
     private fun dialog(){
 
-            val dialog = Dialog(requireContext())
-            //dialog.setCancelable(false)
-            dialog.setContentView(R.layout.dailog_information)
-            // val body = dialog.findViewById(R.id.body) as TextView
-            val yesBtn = dialog.findViewById(R.id.ok) as Button
-            yesBtn.setOnClickListener {
-                dialog.dismiss()
-                Log.d("Dialog", "dialog: Clicked")
-            }
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.show()
+        val dialog = Dialog(requireContext())
+        //dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dailog_information)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val yesBtn = dialog.findViewById(R.id.ok) as Button
+        val tvInformation = dialog.findViewById(R.id.textView14)as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15)as TextView
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            Log.d("Dialog", "dialog: Clicked")
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        TranslationsManager().loadString("str_information",tvInformation,"Information")
+        TranslationsManager().loadString("str_crop_health_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a pest & disease detection model for this crop. We look forward to serving you shortly.")
+        viewModel.viewModelScope.launch(){
+            var ok = TranslationsManager().getString("str_ok")
+            if(ok.isNullOrEmpty())
+                yesBtn.text = "Ok"
         }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("CropSelectFragment")
+    }
     }
 
     }

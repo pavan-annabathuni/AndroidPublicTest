@@ -626,10 +626,14 @@ class CropInfoFragment : Fragment(), onItemClick {
 
             val bundle = Bundle()
             bundle.putParcelable("video", it)
-            findNavController().navigate(
-                R.id.action_cropInfoFragment_to_playVideoFragment2,
-                bundle
-            )
+            try{
+                findNavController().navigate(
+                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+                    bundle)
+            }catch(e: IllegalArgumentException){
+                e.printStackTrace()
+            }
+
         }
         videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 
@@ -657,11 +661,11 @@ class CropInfoFragment : Fragment(), onItemClick {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it?.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter

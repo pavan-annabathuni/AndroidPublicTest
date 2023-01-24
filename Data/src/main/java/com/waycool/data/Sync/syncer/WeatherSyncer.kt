@@ -8,6 +8,7 @@ import com.waycool.data.Local.mappers.WeatherEntityMapper
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncInterface
 import com.waycool.data.Sync.SyncKey
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Sync.SyncRate
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +23,17 @@ class WeatherSyncer : SyncInterface {
 
     override fun getRefreshRate(): Int = SyncRate.getRefreshRate(getSyncKey())
 
+    fun getSyncKeyForLatLon(lat: String, lon: String): Preferences.Key<String>{
+        return SyncKey.createDynamicSyncKey("weather","${lat}_${lon}")
+    }
+
     fun getData(
         lat: String,
         lon: String,
         lang: String = "en"
     ): Flow<Resource<WeatherMasterEntity?>> {
         GlobalScope.launch(Dispatchers.IO) {
-            if (isSyncRequired()) {
+            if (SyncManager.shouldSync(getSyncKeyForLatLon(lat, lon), getRefreshRate())) {
                 makeNetworkCall(lat, lon, lang)
             }
         }
@@ -54,7 +59,7 @@ class WeatherSyncer : SyncInterface {
                             lat,
                             lon
                         )
-                        setSyncStatus(true)
+                        SyncManager.syncSuccess(getSyncKeyForLatLon(lat, lon))
                     }
 
                     is Resource.Loading -> {
@@ -62,7 +67,7 @@ class WeatherSyncer : SyncInterface {
 
                     }
                     is Resource.Error -> {
-                        setSyncStatus(false)
+                        SyncManager.syncFailure(getSyncKeyForLatLon(lat, lon))
                         Log.d("Weather-network", "Error:${it.message}")
                     }
                 }

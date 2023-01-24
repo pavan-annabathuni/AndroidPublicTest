@@ -32,7 +32,8 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="NDVI"
             app:titleCentered="true"
-            app:titleTextColor="@color/black" />
+            app:titleTextColor="@color/black"
+            app:titleTextAppearance="@style/SemiBold"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

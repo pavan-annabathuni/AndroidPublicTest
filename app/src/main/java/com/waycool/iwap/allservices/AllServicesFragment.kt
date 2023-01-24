@@ -31,17 +31,26 @@ class AllServicesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@AllServicesFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -67,6 +76,8 @@ class AllServicesFragment : Fragment() {
             binding.topAppBar.title = title
             else binding.topAppBar.title = "All Services"
         }
+        TranslationsManager().loadString("str_explore",binding.tvExplore,"Explore our services")
+        TranslationsManager().loadString("str_premimum_explore",binding.tvKrishiServicesPremium,"Explore our premium services")
     }
     private fun freeUser() {
         viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->

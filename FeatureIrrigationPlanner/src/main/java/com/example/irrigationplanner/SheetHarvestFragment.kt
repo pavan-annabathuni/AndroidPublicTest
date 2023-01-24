@@ -14,6 +14,7 @@ import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -53,7 +54,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             this.dismiss()
         }
         binding.save.setOnClickListener() {
-
+            EventClickHandling.calculateClickEvent("Harvest_details_save")
             var date = binding.editText2.text.toString()
             if (binding.editText.text.toString() != "" && date != "") {
                 var yield_tone = binding.editText.text.toString().toInt()

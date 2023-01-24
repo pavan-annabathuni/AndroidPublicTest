@@ -27,6 +27,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.NdviData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
@@ -94,6 +95,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         translation()
 
         binding.recycleView.adapter = DateAdapter()
+        EventClickHandling.calculateClickEvent("NDVI_Landing")
         return binding.root
     }
 
@@ -136,10 +138,12 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
                     0 -> {
+                        EventClickHandling.calculateClickEvent("Vegitation_Index")
                         selectedTileType = TileType.NDVI
                         showTileNDVI()
                     }
                     1 -> {
+                        EventClickHandling.calculateClickEvent("True_colour")
                         selectedTileType = TileType.TRUE_COLOR
                         showTileNDVI()
                     }
@@ -224,8 +228,6 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             if (selectedNdvi?.cl != null)
                 if (selectedNdvi?.cl!! > 85) {
                     binding.cardView2.visibility = View.VISIBLE
-                    binding.tvTextAlert.text =
-                        "This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health."
                 }
 
             selectedNdvi?.stats?.ndvi?.let {
@@ -332,6 +334,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         TranslationsManager().loadString("healthy", binding.healthy,"Healthy")
         TranslationsManager().loadString("mean_ndvi", binding.textView5,"Mean NDVI")
         TranslationsManager().loadString("opacity", binding.textView6,"Opacity")
+        TranslationsManager().loadString("str_cloud_coverage",binding.tvTextAlert,"This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health.")
 
         viewModel.viewModelScope.launch() {
             val title = TranslationsManager().getString("str_ndvi")

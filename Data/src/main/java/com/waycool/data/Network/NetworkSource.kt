@@ -20,6 +20,7 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
@@ -181,6 +182,24 @@ object NetworkSource {
             pagingSourceFactory = { VansPagingSource(apiInterface, queryMap) }
         ).flow
     }
+
+    fun getVansFeederSinglePage(queryMap: MutableMap<String, String>) = flow<Resource<VansFeederDTO?>> {
+
+        try {
+            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
+
+            val response = apiInterface.getVansFeeder(headerMap, queryMap)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
+    }
+
 
     fun getCropCategoryMaster(headerMap: Map<String, String>) =
         flow<Resource<CropCategoryMasterDTO?>> {
@@ -428,7 +447,8 @@ object NetworkSource {
     fun getAiCropHistory(headerMap: Map<String, String>) =
         flow<Resource<AiCropHistoryDTO?>> {
             try {
-                val response = apiInterface.getAiCropHistory(headerMap)
+                val langCode = LocalSource.getLanguageCode() ?: "en"
+                val response = apiInterface.getAiCropHistory(headerMap, lang = langCode)
                 if (response.isSuccessful)
                     emit(Resource.Success(response.body()))
                 else {
@@ -783,6 +803,25 @@ object NetworkSource {
                 )
             }
         ).flow
+    }
+
+    fun getMandiSinglePage(
+        lat: String?, lon: String?
+    ) =  flow<Resource<MandiDomain?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        val languageCode=LocalSource.getLanguageCode()?:"en"
+
+        try{
+            val response= apiInterface.getMandiList(map,lat,lon,"","","",1,"distance","asc","",languageCode)
+            if(response.isSuccessful){
+                emit(Resource.Success(response.body()))
+            }else{
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        }catch (e:Exception){
+            emit(Resource.Error(e.message))
+        }
     }
 
     fun getMandiHistory(

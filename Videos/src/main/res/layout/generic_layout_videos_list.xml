@@ -91,43 +91,47 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/llVideos">
+                app:layout_constraintTop_toBottomOf="@+id/llVideos"
+                tools:visibility="visible">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="200dp">
+
                     <ImageView
+                        android:id="@+id/imgRetry"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:id="@+id/imgRetry"
-                        android:src="@drawable/ic_retry"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="30dp"
-                        android:padding="6dp"/>
+                        android:padding="6dp"
+                        android:src="@drawable/ic_retry"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/imgRetry"
-                        android:gravity="center"
-                        android:text="Network error! Retry\nVideos are not available with us."
-                        android:textSize="16sp"
-                        android:textColor="#111827"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/notosans_bold"
+                        android:gravity="center"
+                        android:text="Network error! Retry\nVideos are not available with us."
+                        android:textColor="#111827"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/imgRetry"
                         app:layout_constraintEnd_toEndOf="parent"
-                      />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/imgRetry"
+                        app:layout_constraintTop_toTopOf="@id/imgRetry" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/noDataVideo"
                 android:layout_width="match_parent"
@@ -136,41 +140,44 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/llVideos">
+                app:layout_constraintTop_toBottomOf="@+id/llVideos"
+                tools:visibility="visible">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="200dp">
+
                     <ImageView
+                        android:id="@+id/novideo"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:id="@+id/novideo"
+                        android:layout_marginTop="12dp"
                         android:src="@drawable/not_found"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="12dp"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/tvNoVANs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/novideo"
-                        android:gravity="center"
-                        android:text="Videos are not available with us."
-                        android:textSize="16sp"
-                        android:textColor="#111827"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/notosans_bold"
+                        android:gravity="center"
+                        android:text="Videos are not available with us."
+                        android:textColor="#111827"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/novideo"
                         app:layout_constraintEnd_toEndOf="parent"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/novideo"
+                        app:layout_constraintTop_toTopOf="@id/novideo" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

@@ -96,6 +96,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         setBanners()
         notification()
         setWishes()
+        movingTextViewEnable()
 
         lifecycleScope.launch {
             val value: String? = DataStoreManager.read("FirstTime")
@@ -118,6 +119,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         binding.tvAddFromOne.isSelected = true
 
     }
+
+    private fun movingTextViewEnable() {
+        binding.tvAddFromOne.isSelected = true
+        binding.tvTemp.isSelected=true
+        binding.tvWind.isSelected=true
+        binding.tvHumidity.isSelected=true
+        binding.tvWindSpeed.isSelected=true
+        binding.tvLeafWetness.isSelected=true
+        binding.tvPressureDegree.isSelected=true
+    }
+
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
@@ -135,6 +147,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     fun translations() {
 //        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
+        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
         TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
         TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
@@ -143,7 +156,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("my_farm", binding.titleMyFarm,"")
         TranslationsManager().loadString("add_farm_top", binding.MyFarm,"Add Farm")
         TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
-        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temprature")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
         TranslationsManager().loadString("view_rainfall", binding.tvWind,"Rainfall")
         TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
         TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed,"Wind Speed")
@@ -293,6 +306,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val response = it.data as ArrayList<MyCropDataDomain>
+            response.reverse()
             myCropPremiumAdapter.setMovieList(response)
 
             if(myFarmPremiumAdapter==null)
@@ -787,11 +801,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter

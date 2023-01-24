@@ -34,6 +34,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
@@ -101,7 +102,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val isSuccess = findNavController().navigateUp()
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
                     if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
@@ -120,18 +122,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
          newsBinding = binding.layoutNews
 
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
             val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
             val intent = Intent(activity, VideoActivity::class.java)
             startActivity(intent)
         }
         newsBinding.viewAllNews.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_NewsArticles_viewall")
             val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protect_NewsArticles_viewall")
             val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
@@ -139,6 +145,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
+           Log.d("TAG", "onViewCreatedDiseaseName: $diseaseName")
             audioUrl = it.getString("audioUrl")
         }
 
@@ -534,11 +541,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             val bannerAdapter = AdsAdapter(activity?:requireContext())
             viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-                bannerAdapter.submitData(lifecycle, it)
+                bannerAdapter.submitList( it.data)
                 TabLayoutMediator(
                     binding.bannerIndicators, binding.bannerViewpager
                 ) { tab: Tab, position: Int ->
-                    tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                    tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
                 }.attach()
             }
             binding.bannerViewpager.adapter = bannerAdapter
@@ -591,6 +598,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
     override fun onItemClickListener(vans: VansFeederListDomain?) {
+        val bundleEvents = Bundle()
+        bundleEvents.putString("","${vans?.title}")
+        EventItemClickHandling.calculateItemClickEvent("cropprotection_news",bundleEvents)
         val bundle = Bundle()
         bundle.putString("title", vans?.title)
         bundle.putString("content", vans?.desc)

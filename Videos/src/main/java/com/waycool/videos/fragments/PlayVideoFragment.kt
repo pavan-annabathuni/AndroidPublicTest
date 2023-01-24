@@ -1,6 +1,7 @@
 package com.waycool.videos.fragments
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -32,15 +33,15 @@ import com.waycool.videos.adapter.itemClick
 import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
 @Suppress("DEPRECATION")
-class PlayVideoFragment : Fragment() ,itemClick{
+class PlayVideoFragment : Fragment(), itemClick {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private lateinit var binding: FragmentPlayVideoBinding
     private var videoSelected: VansFeederListDomain? = null
-    private var videoTitle:String?=null
-    private var videoDesc:String?=null
-    private var videoUrl:String?=null
-    var selectedCategory:String?=null
+    private var videoTitle: String? = null
+    private var videoDesc: String? = null
+    private var videoUrl: String? = null
+    private var isFullScreen: Boolean? = null
 
 
     private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
@@ -52,32 +53,12 @@ class PlayVideoFragment : Fragment() ,itemClick{
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
-        apiErrorHandlingBinding=binding.errorState
+        apiErrorHandlingBinding = binding.errorState
 
 
 
 
         return binding.root
-    }
-
-    private fun networkCall() {
-        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            binding.clInclude.visibility = View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check your internet connectivity",
-                    Toast.LENGTH_SHORT
-                )
-            }
-        } else {
-            binding.clInclude.visibility = View.GONE
-            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
-            getVideos()
-
-        }
-
     }
 
 
@@ -90,24 +71,28 @@ class PlayVideoFragment : Fragment() ,itemClick{
                 selectedCategory=requireArguments().getString("selectedCategory")
             }
             else {
-                videoTitle=arguments?.getString("title")
-                videoDesc=arguments?.getString("description")
-                videoUrl=arguments?.getString("url")
+                videoTitle = arguments?.getString("title")
+                videoDesc = arguments?.getString("description")
+                videoUrl = arguments?.getString("url")
             }
         }
 
-        if(videoSelected!=null) {
+        if (videoSelected != null) {
             binding.ytTitleTv.text = videoSelected?.title
             binding.ytDescriptionTv.text = videoSelected?.desc
-        }else{
+        } else {
             binding.ytTitleTv.text = videoTitle
-            binding.ytDescriptionTv.text =videoDesc
+            binding.ytDescriptionTv.text = videoDesc
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    if (isFullScreen == true) {
+                        player?.setFullscreen(false)
+                    } else {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         activity?.onBackPressedDispatcher?.addCallback(
@@ -122,10 +107,13 @@ class PlayVideoFragment : Fragment() ,itemClick{
             networkCall()
         }
 
-        val frag = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
+        val frag =
+            childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
 
         Handler(Looper.myLooper()!!).postDelayed({
-            frag.initialize(AppSecrets.getYoutubeKey(), object : YouTubePlayer.OnInitializedListener {
+            frag.initialize(
+                AppSecrets.getYoutubeKey(),
+                object : YouTubePlayer.OnInitializedListener {
                     override fun onInitializationSuccess(
                         p0: YouTubePlayer.Provider?,
                         youTubePlayer: YouTubePlayer?,
@@ -133,8 +121,15 @@ class PlayVideoFragment : Fragment() ,itemClick{
                     ) {
                         if (!p2) {
                             player = youTubePlayer
-                            if(videoSelected!=null)
-                            youTubePlayer?.loadVideo(videoSelected?.contentUrl)
+
+//                            player?.fullscreenControlFlags =
+//                                YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION
+
+                            player?.setOnFullscreenListener {
+                                isFullScreen = it
+                            }
+                            if (videoSelected != null)
+                                youTubePlayer?.loadVideo(videoSelected?.contentUrl)
                             else youTubePlayer?.loadVideo(videoUrl)
                             youTubePlayer?.play()
                             setupPlayerEvents()
@@ -151,9 +146,26 @@ class PlayVideoFragment : Fragment() ,itemClick{
         }, 200)
 
 
-
-
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+    }
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            // Pause the video
+//            player?.pause()
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            // Resume playing the video
+//            player?.play()
+//        }
+//    }
 
 
     private fun setupPlayerEvents() {
@@ -184,7 +196,7 @@ class PlayVideoFragment : Fragment() ,itemClick{
         tags: String? = null,
         categoryId: Int? = null
     ) {
-        adapterVideo = VideosPagerAdapter(context,this)
+        adapterVideo = VideosPagerAdapter(context, this)
         binding.ytBottomsheetRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(viewLifecycleOwner) {
             adapterVideo.submitData(lifecycle, it)
@@ -206,6 +218,31 @@ class PlayVideoFragment : Fragment() ,itemClick{
 
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
+    private fun networkCall() {
+        if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            context?.let {
+                ToastStateHandling.toastError(
+                    it,
+                    "Please check your internet connectivity",
+                    Toast.LENGTH_SHORT
+                )
+            }
+        } else {
+            binding.clInclude.visibility = View.GONE
+            apiErrorHandlingBinding.clInternetError.visibility = View.GONE
+            getVideos()
+
+        }
+
     }
 
     override fun onShareItemClick(it: VansFeederListDomain?) {
