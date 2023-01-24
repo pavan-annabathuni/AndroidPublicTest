@@ -562,7 +562,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         val sortedList=it.data?.sortedByDescending { farm->
                             farm.isPrimary==1
                         }
-
                         farmsAdapter.submitList(sortedList)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
