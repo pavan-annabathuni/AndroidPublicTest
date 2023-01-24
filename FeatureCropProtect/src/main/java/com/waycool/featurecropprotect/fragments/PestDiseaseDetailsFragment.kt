@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NavUtils
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -92,15 +93,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
 
         binding.toolbar.setOnClickListener {
+
             val isSuccess = findNavController().popBackStack()
-//            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
+            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val isSuccess = findNavController().navigateUp()
-//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
         activity?.let {

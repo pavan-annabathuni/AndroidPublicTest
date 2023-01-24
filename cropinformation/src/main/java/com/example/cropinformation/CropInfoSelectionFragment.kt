@@ -238,7 +238,9 @@ class CropInfoSelectionFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    viewModel.viewModelScope.launch{
+                    val txtServerError=  TranslationsManager().getString("binding!!ver_error")
+                    ToastStateHandling.toastError(requireContext(), txtServerError, Toast.LENGTH_SHORT )}
                 }
             }
         }

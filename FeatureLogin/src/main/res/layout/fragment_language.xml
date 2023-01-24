@@ -26,12 +26,12 @@
         android:id="@+id/select_language_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="120dp"
         android:text="Select your language"
         android:textColor="@color/textdark"
         app:layout_constraintEnd_toEndOf="@+id/hello_tv"
         app:layout_constraintStart_toStartOf="@+id/hello_tv"
-        app:layout_constraintTop_toBottomOf="@+id/hello_tv" />
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -59,7 +59,17 @@
         app:layout_constraintTop_toBottomOf="@+id/select_language_tv"
         app:spanCount="3"
         tools:listitem="@layout/viewholder_language_cardview" />
-
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     <com.google.android.material.button.MaterialButton
         android:id="@+id/done_btn"
         android:layout_width="0dp"

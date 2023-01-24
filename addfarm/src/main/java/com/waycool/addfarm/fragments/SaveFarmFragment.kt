@@ -31,6 +31,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
@@ -76,7 +77,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbarTitle.text = "Farm Details"
+        setTranslations()
         binding.toolbar.setNavigationOnClickListener { activity?.finish() }
 
         (childFragmentManager.findFragmentById(R.id.map_save_fragment) as SupportMapFragment?)?.getMapAsync(
@@ -331,6 +332,30 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 checkedCropList = it
             }
         }
+    }
+
+    private fun setTranslations() {
+        TranslationsManager().loadString("farm_details", binding.toolbarTitle,"Farm Details")
+        TranslationsManager().loadString("farm_name", binding.addfarmnameTitle,"Farm Name")
+        TranslationsManager().loadString("farm_area", binding.setPrimaryFarm,"Farm Name")
+        TranslationsManager().loadString("farm_area", binding.addfarmareaTitle,"Farm Name")
+        TranslationsManager().loadString("water_source", binding.watersourceTitle,"Water Sources")
+
+        TranslationsManager().loadString("pump_hp", binding.addfarmpumphpTitle,"Pump HP")
+        TranslationsManager().loadString("pump_type", binding.addfarmpumptypeTitle,"Pump Type")
+        TranslationsManager().loadString("pump_size", binding.addfarmpipesizeTitle,"Pipe Size in Inches")
+        TranslationsManager().loadString("pipe_height", binding.addfarmpipeheightTitle,"Pipe Height in ft")
+        TranslationsManager().loadString("pump_flow", binding.textView23,"Pump Flow Rate (LPH)")
+        TranslationsManager().loadString("str_save", binding.saveFarmBtn,"Save")
+
+
+
+
+
+
+
+
+
     }
 
     override fun onMapReady(mMap: GoogleMap?) {

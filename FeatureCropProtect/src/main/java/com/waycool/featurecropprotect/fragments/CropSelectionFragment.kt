@@ -74,6 +74,7 @@ class CropSelectionFragment : Fragment() {
         apiErrorHandlingBinding=binding.errorState
 
         binding.toolbar.setOnClickListener {
+            findNavController().navigateUp()
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
         }
@@ -81,6 +82,7 @@ class CropSelectionFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
                     val isSuccess = findNavController().navigateUp()
                     if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
                 }

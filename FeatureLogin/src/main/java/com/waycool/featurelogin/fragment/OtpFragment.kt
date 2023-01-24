@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -86,6 +88,7 @@ class OtpFragment : Fragment() {
         if (arguments != null)
             mobileNumber = arguments?.getString("mobilenumber").toString()
 
+        setTranslations()
         CoroutineScope(Dispatchers.IO).launch {
             fcmToken = loginViewModel.getFcmToken()
             mobileManufacturer = loginViewModel.getDeviceManufacturer()
@@ -93,7 +96,23 @@ class OtpFragment : Fragment() {
 
         }
 
-        binding.receiveMsgTv.text = getString(R.string.opt_text2) + " +91- " + mobileNumber
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val enterCode = TranslationsManager().getString("enter_otp_code")
+            if(!enterCode.isNullOrEmpty()){
+                binding.receiveMsgTv.text = buildString {
+                    append(enterCode)
+                    append(" +91- ")
+                    append(mobileNumber)
+                }
+            }else{
+                binding.receiveMsgTv.text = buildString {
+        append(getString(R.string.opt_text2))
+        append(" +91- ")
+        append(mobileNumber)
+    }
+            }
+        }
         startSmsUserConsent()
         if (!isSmsPermissionGranted) {
             requestReadAndSendSmsPermission()
@@ -127,6 +146,16 @@ class OtpFragment : Fragment() {
         }
         showTimer()
         return binding.root
+    }
+
+    private fun setTranslations() {
+        TranslationsManager().loadString("otp_verification",binding.enterNumberTv,"OTP verification")
+        TranslationsManager().loadString("enter_otp_code", binding.receiveMsgTv,"Enter the 4 digit code sent to you on")
+        TranslationsManager().loadString("enter_otp",binding.tvEnterOtp,"Enter OTP")
+        TranslationsManager().loadString("receive_otp",binding.didnotReceiveMsgTv,"Don’t receive OTP?")
+        TranslationsManager().loadString("resend_otp",binding.resendMsgBtn,"Resend OTP")
+        TranslationsManager().loadString("txt_or",binding.otpResendOr,"Or")
+        TranslationsManager().loadString("get_otp_call",binding.otpViaCall,"Get OTP via Call")
     }
 
     private fun retryOtp(type: String) {
@@ -458,9 +487,14 @@ class OtpFragment : Fragment() {
             getString(R.string.mobile_stringextra),
             mobileNumber
         )
+        binding.pb.visibility = View.VISIBLE
+        Handler().postDelayed ({
+            binding.pb.visibility = View.GONE
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_otpFragment_to_registrationFragment, args)
+        },500)
 
-        Navigation.findNavController(binding.root)
-            .navigate(R.id.action_otpFragment_to_registrationFragment, args)
+
     }
 
     fun apiOTP(mobileNumber: String) {
