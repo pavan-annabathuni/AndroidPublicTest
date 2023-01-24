@@ -98,7 +98,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val isSuccess = findNavController().navigateUp()
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
 //                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
@@ -136,6 +137,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
+           Log.d("TAG", "onViewCreatedDiseaseName: $diseaseName")
             audioUrl = it.getString("audioUrl")
         }
 

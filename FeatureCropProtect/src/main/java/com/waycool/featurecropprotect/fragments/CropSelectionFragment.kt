@@ -88,9 +88,10 @@ class CropSelectionFragment : Fragment() {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.let { it.finish() }
         }
-        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle)
-        TranslationsManager().loadString("crop_protect_info",binding.cropProtectInfo)
-        TranslationsManager().loadString("my_crops",binding.myCropsTitle)
+        TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle,"Protect Your Crop")
+        TranslationsManager().loadString("crop_protection_top",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
+        TranslationsManager().loadString("my_crops",binding.myCropsTitle,"My Crop")
+
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {

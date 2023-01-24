@@ -32,7 +32,7 @@ interface OutgrowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHistory(crops: List<AiCropHistoryEntity>)
 
-    @Query("SELECT * FROM ai_history WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
+    @Query("SELECT * FROM ai_history WHERE crop_name LIKE '%' || :search || '%' ORDER BY id Desc")
     fun getAiHistory(search: String? = ""): Flow<List<AiCropHistoryEntity>?>
 
 

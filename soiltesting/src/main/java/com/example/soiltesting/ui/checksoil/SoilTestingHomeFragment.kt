@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -151,6 +152,22 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         setBanners()
         locationClick()
         translationSoilTesting()
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+
+//                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
+
     }
 
     private fun networkCall() {
@@ -317,10 +334,15 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         adapter.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
-            findNavController().navigate(
-                R.id.action_soilTestingHomeFragment_to_playVideoFragment2,
-                bundle
-            )
+            try{
+                findNavController().navigate(
+                    R.id.action_soilTestingHomeFragment_to_playVideoFragment2,
+                    bundle
+                )
+            }catch(e: IllegalArgumentException){
+                e.printStackTrace()
+            }
+
         }
         videosBinding.viewAllVideos.setOnClickListener {
             val intent = Intent(requireActivity(), VideoActivity::class.java)
