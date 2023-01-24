@@ -443,13 +443,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 is Resource.Success -> {
                     if (it.data?.subscription?.iot == true) {
                         binding.clAddYourFarm.visibility = View.GONE
-                        binding.tvWelcomeName.visibility = View.INVISIBLE
-                        binding.tvGoodMorning.visibility = View.INVISIBLE
+                        binding.tvWelcomeName.visibility = View.VISIBLE
+                        binding.tvGoodMorning.visibility = View.VISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
                         binding.tvOurServiceViewAll.visibility = View.INVISIBLE
                         binding.ivOurService.visibility = View.INVISIBLE
-
                     }else{
                         lifecycleScope.launch {
                             val value: String? = DataStoreManager.read("FirstTime")
@@ -1277,9 +1276,5 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("HomePagesFragment")
-    }
 }
 

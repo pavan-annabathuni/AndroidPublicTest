@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
@@ -41,6 +42,7 @@ class CropDetailsCaptureFragment : Fragment() {
     private val binding get() = _binding!!
     var crop_id: Int? = null
     var crop_name: String? = null
+    var crop_Tag_Name: String? = null
     var crop_logo: String? = null
     private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
     private lateinit var photoFile: File
@@ -58,7 +60,23 @@ class CropDetailsCaptureFragment : Fragment() {
         if (arguments != null) {
             crop_id = arguments?.getInt("crop_id")
             crop_name = arguments?.getString("name").toString()
+            crop_Tag_Name = arguments?.getString("TagCrop").toString()
             crop_logo = arguments?.getString("crop_logo").toString()
+        }
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
         }
 
         // bundle.getInt("project_id").toString()
@@ -174,10 +192,10 @@ class CropDetailsCaptureFragment : Fragment() {
         }
     }
 
-    private fun postImage(crop_id: Int?, crop_name: String?, profileImageBody: MultipartBody.Part) {
+    private fun postImage(crop_id: Int?, ta: String?, profileImageBody: MultipartBody.Part) {
         viewModel.postAiImage(
             crop_id!!,
-            crop_name!!,
+            crop_Tag_Name!!,
             profileImageBody
         ).observe(requireActivity()) {
             when (it) {
@@ -226,8 +244,8 @@ class CropDetailsCaptureFragment : Fragment() {
 
     private fun onClicks() {
         binding.backBtn.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
+            val isSuccess = activity?.let { findNavController().popBackStack() }
+//            if (!isSuccess) requireActivity().onBackPressed()
         }
 
         binding.closeImage?.setOnClickListener {
@@ -289,7 +307,7 @@ class CropDetailsCaptureFragment : Fragment() {
 
         postImage(
             crop_id!!,
-            crop_name!!,
+            crop_Tag_Name!!,
             profileImageBody
         )
 

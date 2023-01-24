@@ -106,7 +106,7 @@ class AddCropPremiumFragment : Fragment() {
         initViewClicks()
         noOFYear()
         noOFYearBahar()
-        translationAddCropTesting
+        translationAddCropTesting()
         year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()

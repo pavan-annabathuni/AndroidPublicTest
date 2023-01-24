@@ -613,10 +613,14 @@ class CropInfoFragment : Fragment(), onItemClick {
         adapter.onItemClick = {
             val bundle = Bundle()
             bundle.putParcelable("video", it)
-            findNavController().navigate(
-                R.id.action_cropInfoFragment_to_playVideoFragment2,
-                bundle
-            )
+            try{
+                findNavController().navigate(
+                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+                    bundle)
+            }catch(e: IllegalArgumentException){
+                e.printStackTrace()
+            }
+
         }
         videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
 

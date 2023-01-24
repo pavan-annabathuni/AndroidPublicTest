@@ -232,7 +232,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                 val temp= ArrayList<SoilTestHistoryDomain>()
                 if (charSequence.length>0){
                     filteredList.forEach {
-                        if (it.soil_test_number?.lowercase()!!.contains(charSequence.toString().lowercase())){
+                        if (it.plot_no?.lowercase()!!.contains(charSequence.toString().lowercase())){
                             if (!temp.contains(it)){
                                 temp.add(it)
                             }
