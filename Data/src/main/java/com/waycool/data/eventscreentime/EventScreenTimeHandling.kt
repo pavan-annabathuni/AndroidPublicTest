@@ -19,17 +19,15 @@ object EventScreenTimeHandling {
 object EventClickHandling{
     fun calculateClickEvent(itemName:String) {
         val firebaseAnalytics = Firebase.analytics
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-            param(FirebaseAnalytics.Param.ITEM_NAME, itemName)
-        }
+        val eventBundle=Bundle()
+        firebaseAnalytics.logEvent(itemName,eventBundle)
     }
 }
 
+
 object EventItemClickHandling{
-    fun calculateItemClickEvent(itemName:String,bundle: Bundle) {
+    fun calculateItemClickEvent(eventName:String, bundle: Bundle) {
         val firebaseAnalytics = Firebase.analytics
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-            param(itemName, bundle)
-        }
+        firebaseAnalytics.logEvent(eventName,bundle)
     }
 }
