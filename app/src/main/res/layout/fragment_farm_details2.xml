@@ -536,6 +536,7 @@
                                     android:layout_marginEnd="8dp"
                                     android:nestedScrollingEnabled="false"
                                     android:orientation="horizontal"
+                                    app:reverseLayout="true"
                                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -1681,6 +1682,7 @@
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_ans"
                         android:elevation="8dp"
+                        android:visibility="visible"
                         app:cardCornerRadius="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -2038,8 +2040,10 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detail_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -2112,6 +2116,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/dottedTwo" />
 
                     <View
+                        android:id="@+id/ViewBottom"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space100"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -2346,6 +2351,7 @@
                 <!--                    app:layout_constraintTop_toBottomOf="@+id/dotted" />-->
 
                 <View
+                    android:id="@+id/view_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/space100"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -2359,6 +2365,7 @@
                 android:id="@+id/ndvi_cl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -2372,6 +2379,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:visibility="visible"
+
                     android:text="Farm Health Monitoring (NDVI)"
                     android:textColor="@color/textdark"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -2379,6 +2388,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/ndviCard"
+                    android:visibility="visible"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

@@ -112,7 +112,9 @@ interface ApiInterface {
 
     @GET("api/v1/ai-crop-health/history")
     suspend fun getAiCropHistory(
-        @HeaderMap headerMap: Map<String, String>
+        @HeaderMap headerMap: Map<String, String>,
+        @Query("lang") lang: String = "en"
+
     ): Response<AiCropHistoryDTO>
 
     @Multipart

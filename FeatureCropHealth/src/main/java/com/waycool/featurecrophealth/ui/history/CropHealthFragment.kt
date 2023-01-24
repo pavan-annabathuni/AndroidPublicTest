@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -95,6 +96,21 @@ class CropHealthFragment : Fragment() {
                 findNavController().navigate(R.id.action_cropHealthFragment_to_cropSelectFragment)
 
             }
+        }
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+
+//                    val isSuccess = activity?.let { findNavController().popBackStack() }
+//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
         }
 
 
