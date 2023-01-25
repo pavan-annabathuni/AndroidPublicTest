@@ -1099,12 +1099,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         val perimeter: Double = getLength(points)
         binding.areaDisplayTv.text = (String.format("%.2f", area) + " Acre").trim { it <= ' ' }
         binding.perimeterTv.text = (String.format("%.2f", perimeter) + " Mtrs").trim { it <= ' ' }
-//        if (area > 200) {
-//            Toast.makeText(requireContext(), "Select smaller Area.", Toast.LENGTH_SHORT).show()
-//            //binding.savemapBtn.setEnabled(false)
-//        } else {
-//            //binding.savemapBtn.setEnabled(true)
-//        }
+        TranslationsManager().loadString("str_area",binding.areaTitleTv,"Area")
+        TranslationsManager().loadString("preimeter",binding.textView,"Perimeter")
+
     }
 
     private fun getAreaInAcre(latLngs: List<LatLng?>?): Double {
