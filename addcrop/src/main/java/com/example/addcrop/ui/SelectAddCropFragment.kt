@@ -65,9 +65,13 @@ class SelectAddCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
-        binding.toolbarTitle.text = buildString {
-        append("Add Crop")
-    }
+        viewModel.viewModelScope.launch {
+            binding.search.hint = TranslationsManager().getString("search")
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("add_crop")
+            binding.toolbarTitle.text = title
+        }
 
         binding.cropsRv.adapter = adapter
 
@@ -150,10 +154,7 @@ class SelectAddCropFragment : Fragment() {
             speechToText()
         }
         setUpCropCategories()
-        CoroutineScope(Dispatchers.Main).launch {
-            val title = TranslationsManager().getString("add_crop")
-            binding.toolbarTitle.text = title
-        }
+
     }
 
     private fun setUpCropCategories() {

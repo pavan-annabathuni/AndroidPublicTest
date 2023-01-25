@@ -66,6 +66,7 @@ class VideosListFragment : Fragment(), itemClick {
 
 
     var searchTag = ""
+    val moduleId="4"
 
     private lateinit var adapterVideo: VideosPagerAdapter
     override fun onCreateView(
@@ -233,7 +234,7 @@ class VideosListFragment : Fragment(), itemClick {
 
     private fun setBanners() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        videoViewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        videoViewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(

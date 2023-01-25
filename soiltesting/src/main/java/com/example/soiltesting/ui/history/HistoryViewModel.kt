@@ -1,19 +1,24 @@
 package com.example.soiltesting.ui.history
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.waycool.data.Network.NetworkModels.CheckSoilTestLabDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
+import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
-import com.waycool.data.repository.domainModels.VansFeederListDomain
-import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.UserDetailsDomain
+import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.collections.List
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 class HistoryViewModel : ViewModel() {
 //    val historyLiveData get() = CropsRepository.getSoilTestHistory() .historyLiveData
@@ -47,10 +52,10 @@ class HistoryViewModel : ViewModel() {
     }
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
+    fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
-        queryMap["module_id"] = "22"
+        queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 

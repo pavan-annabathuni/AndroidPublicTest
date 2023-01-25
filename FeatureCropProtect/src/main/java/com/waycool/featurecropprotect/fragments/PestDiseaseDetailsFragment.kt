@@ -526,7 +526,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         private fun setBanners() {
 
             val bannerAdapter = AdsAdapter(activity?:requireContext())
-            viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+            viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
                 bannerAdapter.submitList( it.data)
                 TabLayoutMediator(

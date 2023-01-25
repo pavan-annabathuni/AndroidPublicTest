@@ -231,9 +231,13 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
+        binding.progressBar.visibility=View.VISIBLE
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
+                    if(!res.data.isNullOrEmpty()){
+                        binding.progressBar.visibility=View.GONE
+                    }
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
