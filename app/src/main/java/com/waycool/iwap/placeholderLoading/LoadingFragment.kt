@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.iwap.R
 
 class LoadingFragment : Fragment() {
@@ -24,6 +25,10 @@ class LoadingFragment : Fragment() {
         Glide.with(requireContext())
             .load(R.raw.loading)
             .into(view.findViewById(R.id.loading_gif))
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("LoadingFragment")
     }
 
 }

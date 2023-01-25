@@ -265,7 +265,7 @@ class ViewpagerAdapter(
             "Micronutrients" -> {
                 val bundle = Bundle()
                 bundle.putInt("CropId", cropid)
-                val fragment = MicronutrientsFragment()
+                val fragment = MicroNutrientsFragment()
                 fragment.arguments = bundle
                 fragment
             }

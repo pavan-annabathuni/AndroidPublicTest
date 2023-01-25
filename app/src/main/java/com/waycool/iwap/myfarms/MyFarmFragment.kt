@@ -2,14 +2,17 @@ package com.waycool.iwap.myfarms
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
@@ -19,9 +22,6 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
 import com.waycool.iwap.premium.Farmdetailslistener
 import com.waycool.iwap.premium.ViewDeviceViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class MyFarmFragment : Fragment(), Farmdetailslistener {
@@ -62,6 +62,7 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         binding.recyclerview.adapter=adapter
 
         binding.addFarmFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddFarmBtnFarmFrag")
             val intent=Intent(requireActivity(),AddFarmActivity::class.java)
             startActivity(intent)
         }
@@ -93,16 +94,14 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
     }
 
     fun translationSoilTesting() {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val title = TranslationsManager().getString("my_farm")
-//            binding.toolBar.text = title
-//
-//        }
         TranslationsManager().loadString("add_farm_top", binding.addFarmFab,"Add Farm")
         TranslationsManager().loadString("add_farm_top", binding.toolBar,"Add Farm")
     }
 
     override fun onFarmDetailsClicked(farm: MyFarmsDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("ViewFarmDetailsFarmFrag",farm.farmName)
+        EventItemClickHandling.calculateItemClickEvent("ViewFarmDetailsFarmFrag",eventBundle)
         val bundle=Bundle()
         bundle.putParcelable("farm",farm)
         findNavController().navigate(R.id.action_myFarmFragment_to_nav_farmdetails,bundle)
@@ -114,5 +113,9 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                 binding.addFarmFab.hide()
             }else binding.addFarmFab.show()
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MyFarmFragment")
     }
 }

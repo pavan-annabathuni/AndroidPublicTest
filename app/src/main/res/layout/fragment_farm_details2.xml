@@ -543,47 +543,6 @@
                                     app:layout_constraintTop_toTopOf="parent"
                                     tools:itemCount="1"
                                     tools:listitem="@layout/item_mycrops" />
-                                <!--                                <LinearLayout-->
-                                <!--                                    android:id="@+id/add_ll"-->
-                                <!--                                    android:layout_width="wrap_content"-->
-                                <!--                                    android:layout_height="wrap_content"-->
-                                <!--                                    android:orientation="vertical"-->
-                                <!--                                    android:layout_marginStart="8dp"-->
-                                <!--                                    app:layout_constraintBottom_toBottomOf="parent"-->
-                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--                                    app:layout_constraintStart_toEndOf="@+id/rv_myCrops"-->
-                                <!--                                    app:layout_constraintTop_toTopOf="parent">-->
-
-                                <!--                                    <com.google.android.material.card.MaterialCardView-->
-                                <!--                                        android:id="@+id/cv_addCrop"-->
-                                <!--                                        android:layout_width="64dp"-->
-                                <!--                                        android:layout_height="64dp"-->
-                                <!--                                        android:layout_gravity="center"-->
-                                <!--                                        android:gravity="center"-->
-                                <!--                                        android:layout_marginTop="8dp"-->
-                                <!--                                        app:cardCornerRadius="100dp"-->
-                                <!--                                        app:cardElevation="0dp"-->
-                                <!--                                        app:strokeColor="#E5E7EB"-->
-                                <!--                                        app:strokeWidth="1dp">-->
-
-                                <!--                                        <ImageView-->
-                                <!--                                            android:id="@+id/check_iv"-->
-                                <!--                                            android:layout_width="24dp"-->
-                                <!--                                            android:layout_height="24dp"-->
-                                <!--                                            android:layout_gravity="center"-->
-                                <!--                                            android:src="@drawable/ic_add_home" />-->
-                                <!--                                    </com.google.android.material.card.MaterialCardView>-->
-
-                                <!--                                    <TextView-->
-                                <!--                                        style="@style/SemiBold"-->
-                                <!--                                        android:layout_width="wrap_content"-->
-                                <!--                                        android:layout_height="wrap_content"-->
-                                <!--                                        android:layout_marginTop="8dp"-->
-                                <!--                                        android:text="Add Crop"-->
-                                <!--                                        android:textColor="#146133"-->
-                                <!--                                        android:textSize="14sp" />-->
-
-                                <!--                                </LinearLayout>-->
 
 
                             </RelativeLayout>

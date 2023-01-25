@@ -1,19 +1,17 @@
 package com.example.irrigationplanner
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.CropStageAdapter
 import com.example.irrigationplanner.databinding.FragmentCropStageBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
-import com.waycool.data.Network.NetworkModels.UpdateCropStage
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -94,5 +92,9 @@ class CropStageFragment : Fragment() {
 
         }
         }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropStageFragment")
+    }
 }
 

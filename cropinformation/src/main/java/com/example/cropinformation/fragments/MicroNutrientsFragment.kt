@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentMicronutrientsBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
-class MicronutrientsFragment : Fragment() {
+class MicroNutrientsFragment : Fragment() {
     private lateinit var binding: FragmentMicronutrientsBinding
     private val ViewModel: TabViewModel by lazy {
         ViewModelProviders.of(this).get(TabViewModel::class.java)
@@ -45,4 +45,9 @@ class MicronutrientsFragment : Fragment() {
                     break
                 }
             }
-        }}}
+        }}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MicroNutrientsFragment")
+    }
+}

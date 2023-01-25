@@ -28,7 +28,10 @@ import com.waycool.featurelogin.activity.LoginMainActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsFullviewActivity
 import com.waycool.weather.WeatherActivity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,14 +64,9 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link
-
-                }
+                    deepLink = pendingDynamicLinkData.link }
                 if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                    if (deepLink?.lastPathSegment!! == "weathershare") {
-                        val intent = Intent(this, WeatherActivity::class.java)
-                        startActivity(intent)
-                    } else if (deepLink.lastPathSegment == "newsandarticlesfullscreen") {
+                     if (deepLink?.lastPathSegment == "newsandarticlesfullscreen") {
                         val title = deepLink.getQueryParameter("title")
                         val desc = deepLink.getQueryParameter("content")
                         val image = deepLink.getQueryParameter("image")

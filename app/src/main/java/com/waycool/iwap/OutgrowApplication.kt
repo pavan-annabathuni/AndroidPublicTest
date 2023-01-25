@@ -3,9 +3,10 @@ package com.waycool.iwap
 import android.app.Application
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Local.db.OutgrowDB
+import com.waycool.data.Sync.SyncManager
 import com.waycool.data.Sync.syncer.DashboardSyncer
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.translations.TranslationsManager
@@ -23,6 +24,9 @@ class OutgrowApplication : Application() {
         OutgrowDB.init(applicationContext)
         TranslationsManager().init()
         FirebaseApp.initializeApp(this)
+        val firebaseAnalytics:FirebaseAnalytics=FirebaseAnalytics.getInstance(this)
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
+        firebaseAnalytics.setSessionTimeoutDuration(5000)
 
         //Refresh UserDetails If Required
         GlobalScope.launch {

@@ -42,6 +42,7 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -427,5 +428,9 @@ class MandiGraphFragment : Fragment() {
             }
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MandiGraphFragment")
     }
 }

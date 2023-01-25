@@ -31,6 +31,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -44,7 +45,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class EditProfileFragment : Fragment() {
@@ -546,5 +546,9 @@ class EditProfileFragment : Fragment() {
 
     private fun checkRollId(){
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("EditProfileFragment")
     }
 }

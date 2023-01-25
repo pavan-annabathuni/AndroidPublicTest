@@ -5,18 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.adapter.CropVarietyAdapter
 import com.example.cropinformation.databinding.FragmentCropVarityBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import com.google.gson.JsonParseException
 import com.waycool.data.Local.utils.TypeConverter
-import org.json.JSONArray
-import org.json.JSONObject
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class CropVarityFragment : Fragment() {
@@ -55,7 +51,16 @@ class CropVarityFragment : Fragment() {
                     binding.labelName.text = data?.get(i)!!.label_name
 
                     Log.d("CropProtect",data[i].label_value!!)
-                    val varietyList=TypeConverter.convertStringToCropVariety(data[i].label_value!!)
+                    val varietyList =
+                        try {
+                            TypeConverter.convertStringToCropVariety(data[i].label_value!!)
+                        } catch (jsonException: JsonParseException) {
+                            data[i].labelValueTag?.let { it1 ->
+                                TypeConverter.convertStringToCropVariety(
+                                    it1
+                                )
+                            }
+                        }
 
                     if(varietyList!=null) {
                         val adapter = CropVarietyAdapter()
@@ -63,28 +68,13 @@ class CropVarityFragment : Fragment() {
                         adapter.submitList(varietyList)
                     }
                     break
-
-
-
-//                    var jsonData: String = data[i].label_value!!
-//                    val jsonArray = JSONArray(jsonData)
-//                    for(j in 0 until jsonArray.length()) {
-//                        val arr = jsonArray.getJSONObject(0).get("crop_variety_value").toString()
-//                        binding.labelValue.text = jsonArray.getJSONObject(0).get("state_name").toString()
-//                        //  binding.labelValue2.text =jsonArray.getJSONObject(1).get("state_name").toString()
-//                        var jsonData2: String = arr
-//                        val jsonArray2 = JSONArray(jsonData2)
-//
-//                        for(k in 0 until jsonArray2.length()){
-//                            binding.cropVar.text = jsonArray2.toString()
-                            // binding.cropVar2.text = arr2.toString()
                         }
                     }
-                    //   binding.labelValue.text = data[i].label_value
                 }
-            //}
-          //  Toast.makeText(context,"${it.data.toString()}", Toast.LENGTH_SHORT).show()
-        }}
 
-//    }
-//}
+        }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropVarityFragment")
+    }}
+

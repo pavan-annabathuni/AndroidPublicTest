@@ -23,6 +23,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
@@ -311,6 +312,10 @@ class CropDetailsCaptureFragment : Fragment() {
             profileImageBody
         )
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropDetailsCaptureFragment")
     }
 
 }

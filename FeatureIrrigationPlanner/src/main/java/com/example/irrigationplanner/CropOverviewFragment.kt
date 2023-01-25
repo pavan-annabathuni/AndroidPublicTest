@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.irrigationplanner.databinding.FragmentCropOverviewBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import org.joda.time.DateTime
 import org.joda.time.Weeks
@@ -112,9 +113,10 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         TranslationsManager().loadString("str_harvest_date",binding.tvHarvestDate,"Harvest Date")
         TranslationsManager().loadString("str_crop_age",binding.textView12,"Crop Age")
         TranslationsManager().loadString("str_expected_avg",binding.tvExpectedDate,"Expected Avg Yeild")
-
-
-
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropOverviewFragment")
     }
 
 }

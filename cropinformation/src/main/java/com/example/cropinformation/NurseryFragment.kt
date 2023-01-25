@@ -1,13 +1,15 @@
 package com.example.cropinformation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentNurseryBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import org.json.JSONArray
 
@@ -34,32 +36,35 @@ class NurseryFragment : Fragment() {
         observer()
         translation()
         return binding.root
-
     }
 
     private fun observer() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
-
-            for(i in 0..data.size-1){
+            for(i in data.indices){
                 if(data[i].label_name=="Nursery Practices"||data[i].labelNameTag=="Nursery Practices") {
-
-                    var jsonData: String = data[i].labelValueTag!!
-                    val jsonArray = JSONArray(jsonData)
-                    binding.Germination.text = jsonArray.getJSONObject(0).get("title").toString()
-                    binding.GerminationTime.text = jsonArray.getJSONObject(0).get("value").toString()
-                    binding.tv2.text = jsonArray.getJSONObject(1).get("title").toString()
-                    binding.tvTime2.text = jsonArray.getJSONObject(1).get("value").toString()
-                    binding.tv3.text = jsonArray.getJSONObject(2).get("title").toString()
-                    binding.tvTime3.text = jsonArray.getJSONObject(2).get("value").toString()
-                    binding.tv4.text = jsonArray.getJSONObject(3).get("title").toString()
-                    binding.tvTime4.text = jsonArray.getJSONObject(3).get("value").toString()
-                }}}}
+                    try {
+                        val jsonData: String = data[i].labelValueTag!!
+                        val jsonArray = JSONArray(jsonData)
+                        binding.Germination.text = jsonArray.getJSONObject(0).get("title").toString()
+                        binding.GerminationTime.text = jsonArray.getJSONObject(0).get("value").toString()
+                        binding.tv2.text = jsonArray.getJSONObject(1).get("title").toString()
+                        binding.tvTime2.text = jsonArray.getJSONObject(1).get("value").toString()
+                        binding.tv3.text = jsonArray.getJSONObject(2).get("title").toString()
+                        binding.tvTime3.text = jsonArray.getJSONObject(2).get("value").toString()
+                        binding.tv4.text = jsonArray.getJSONObject(3).get("title").toString()
+                        binding.tvTime4.text = jsonArray.getJSONObject(3).get("value").toString()
+                    }catch (e:Exception){
+                        Log.d("nursery", "observer: $e")
+                    }}}}}
     private fun translation(){
         TranslationsManager().loadString("str_germination_period",binding.Germination)
         TranslationsManager().loadString("str_nursery_period",binding.tv2)
         TranslationsManager().loadString("hardening_period",binding.tv3)
         TranslationsManager().loadString("str_transplanting",binding.tv4)
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NurseryFragment")
+    }
 }

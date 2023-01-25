@@ -3,7 +3,6 @@ package com.waycool.cropprotect.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -42,6 +43,7 @@ class PestDiseaseFragment : Fragment() {
     }
     private var cropId: Int? = null
     private var cropName: String? = null
+    var selectedCategory:String?=null
 
     //banners
     private val adapter: DiseasesParentAdapter by lazy { DiseasesParentAdapter() }
@@ -73,10 +75,13 @@ class PestDiseaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         apiErrorHandlingBinding=binding.errorState
         arguments?.let {
             cropId = it.getInt("cropid")
             cropName = it.getString("cropname")
+            selectedCategory=it.getString("selectedCategory")
+
         }
 
         networkCall()
@@ -138,15 +143,20 @@ class PestDiseaseFragment : Fragment() {
             }
         }
         adapter.onItemClick = {
-            val bundle = Bundle()
-            bundle.putString("","Crop_category_$cropName")
-            bundle.putString("","${it?.diseaseName}")
-            EventItemClickHandling.calculateItemClickEvent("crop_protection",bundle)
+            val eventBundle=Bundle()
+            eventBundle.putString("cropName",cropName)
+            eventBundle.putString("diseaseName",it?.diseaseName)
+            if(selectedCategory!=null){
+                eventBundle.putString("selectedCategory","CropProtect_$selectedCategory")
+            }
+            EventItemClickHandling.calculateItemClickEvent("cropprotection_landing",eventBundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropId", it1) }
             it?.diseaseId?.let { it1 -> args.putInt("diseaseid", it1) }
             it?.diseaseName?.let { it1 -> args.putString("diseasename", it1) }
             it?.audioUrl?.let { it1 -> args.putString("audioUrl", it1) }
+
+
             findNavController().navigate(
                 R.id.action_pestDiseaseFragment_to_pestDiseaseDetailsFragment,
                 args
@@ -176,6 +186,7 @@ class PestDiseaseFragment : Fragment() {
 
     private fun setBanners() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
+
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
@@ -195,10 +206,7 @@ class PestDiseaseFragment : Fragment() {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-
-        bannerAdapter.onItemClick ={
-            EventClickHandling.calculateClickEvent("crop_protection_Adbanner")
-        }
+        bannerAdapter.onItemClick={EventClickHandling.calculateClickEvent("Crop_disease_Adbanner")}
     }
 
     private fun fabButton(){
@@ -219,12 +227,18 @@ class PestDiseaseFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PestDiseaseFragment")
     }
 }

@@ -26,6 +26,8 @@ import com.google.android.material.chip.Chip
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
@@ -502,19 +504,17 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 val intent = Intent(activity, AddCropActivity::class.java)
                 val bundle = Bundle()
                 bundle.putInt("farmID", myFarm?.id.toString().toInt())
-                Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
                 intent.putExtras(bundle)
-                startActivity(intent)
-            }
+            startActivity(intent)
+        }
 
             binding.addCropCl.setOnClickListener {
                 val intent = Intent(activity, AddCropActivity::class.java)
                 val bundle = Bundle()
                 bundle.putInt("farmID", myFarm?.id.toString().toInt())
-                Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
                 intent.putExtras(bundle)
-                startActivity(intent)
-            }
+            startActivity(intent)
+        }
 
 
             binding.MyDevice.setOnClickListener {
@@ -585,7 +585,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
 
             binding.tvLastUpdateRefresh.setOnClickListener {
-                updateDevice()
+                EventClickHandling.calculateClickEvent("Device_card_Refresh")
+            updateDevice()
 
             }
 
@@ -656,47 +657,37 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
 
                 it.clTemp.setOnClickListener {
-                    val bundle = Bundle()
-                    if (data.serialNoId != null && data.modelId != null) {
-                        bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                        bundle.putInt("device_model_id", data.modelId!!.toInt())
-                        bundle.putString("value", "temperature")
-                        bundle.putString("toolbar", "Temperature")
-                        bundle.putString("temp_value", data.temperature)
-                        bundle.putString("date_time", data.dataTimestamp)
-                        findNavController().navigate(
-                            R.id.action_farmDetailsFragment4_to_graphsFragment3,
-                            bundle
-                        )
-                    }
+                    EventClickHandling.calculateClickEvent("Temparature_card_today")
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    bundle.putString("toolbar", "Temperature")
+                    bundle.putString("temp_value", data.temperature)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
+                        bundle
+                    )
                 }
-                it.clWind.setOnClickListener {
-                    val bundle = Bundle()
-                    if (data.serialNoId != null && data.modelId != null) {
-                        bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                        bundle.putInt("device_model_id", data.modelId!!.toInt())
-                        bundle.putString("value", "rainfall")
-                        bundle.putString("toolbar", "Rainfall")
-                        bundle.putString("temp_value", data.rainfall)
-                        bundle.putString("date_time", data.dataTimestamp)
-                        findNavController().navigate(
-                            R.id.action_farmDetailsFragment4_to_graphsFragment3,
-                            bundle
-                        )
-                    }
+            }
+            it.clWind.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "rainfall")
+                    bundle.putString("toolbar", "Rainfall")
+                    bundle.putString("temp_value", data.rainfall)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
+                        bundle
+                    )
                 }
-//            it.clWindSpeed.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "pressure")
-//                    findNavController().navigate(
-//                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
-//                        bundle
-//                    )
-//                }
-//            }
+            }
+
                 it.clHumidity.setOnClickListener {
                     val bundle = Bundle()
                     if (data.serialNoId != null && data.modelId != null) {
@@ -941,5 +932,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.ivViewAll.visibility = View.VISIBLE
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FarmDetailsFragment")
     }
 }
