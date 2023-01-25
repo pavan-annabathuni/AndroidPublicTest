@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.NetworkModels.VansFeederListNetwork
-import kotlin.math.ceil
+import com.waycool.data.error.CrashAnalytics
 
 class VansPagingSource(
     private val api: ApiInterface,
@@ -29,6 +29,7 @@ class VansPagingSource(
                 nextKey = if (position == response.body()!!.data?.lastPage || response.body()!!.data?.lastPage == 0) null else position + 1
             )
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getVansFeeder-VansPagingSource Exception--${e.message}")
             LoadResult.Error(e)
         }
     }

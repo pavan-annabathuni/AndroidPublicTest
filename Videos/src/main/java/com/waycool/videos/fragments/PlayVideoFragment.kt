@@ -1,8 +1,6 @@
 package com.waycool.videos.fragments
 
-import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +20,8 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -33,6 +33,7 @@ import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
 @Suppress("DEPRECATION")
 class PlayVideoFragment : Fragment(), itemClick {
+    private var selectedCategory: String?=null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private lateinit var binding: FragmentPlayVideoBinding
@@ -65,8 +66,10 @@ class PlayVideoFragment : Fragment(), itemClick {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
-            if (arguments?.containsKey("video") == true)
+            if (arguments?.containsKey("video") == true){
                 videoSelected = requireArguments().getParcelable("video")
+                selectedCategory=requireArguments().getString("selectedCategory")
+            }
             else {
                 videoTitle = arguments?.getString("title")
                 videoDesc = arguments?.getString("description")
@@ -201,6 +204,12 @@ class PlayVideoFragment : Fragment(), itemClick {
     }
 
     override fun onItemClick(van: VansFeederListDomain?) {
+        val eventBundle=Bundle()
+        eventBundle.putString("VideoTitle",van?.title)
+        if(selectedCategory!=null){
+            eventBundle.putString("selectedCategory","video_$selectedCategory")
+        }
+        EventItemClickHandling.calculateItemClickEvent("video_landing",eventBundle)
         if (player != null) {
             player!!.loadVideo(van?.contentUrl)
             player!!.play()
@@ -267,6 +276,9 @@ class PlayVideoFragment : Fragment(), itemClick {
             }
 
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlayVideoFragment")
+    }
 
 }

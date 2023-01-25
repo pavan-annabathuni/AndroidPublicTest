@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -76,5 +77,10 @@ class VegIndexFragment : Fragment(),OnMapReadyCallback{
             )
             tileOverlay.remove()
 }
-    }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("VegIndexFragment")
+    }
+}
 

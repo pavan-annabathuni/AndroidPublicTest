@@ -3,10 +3,9 @@ package com.waycool.featurelogin.loginViewModel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
-import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.repository.GeocodeRepository
-import com.waycool.data.repository.domainModels.*
 import com.waycool.data.repository.LoginRepository
+import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.*
 
@@ -25,6 +24,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
      fun setSelectedLanguage(langCode: String?, langId: Int?,language:String?) {
         LoginRepository.setSelectedLanguageCode(langCode, langId,language)
     }
+
+    suspend fun getselectedLangCode()=LoginRepository.getSelectedLangCode()
 
     fun login(
         mobile_no: String,

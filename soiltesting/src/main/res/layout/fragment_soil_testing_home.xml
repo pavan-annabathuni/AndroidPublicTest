@@ -266,9 +266,9 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space20"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/takeGuide">
 
@@ -276,7 +276,7 @@
                         android:id="@+id/clTextSoil"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space16"
+                        android:layout_marginStart="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clTextSoilTwo"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -288,6 +288,7 @@
                             android:id="@+id/tvRaise"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:minLines="2"
                             android:text="Raise the Request"
                             android:textColor="#000000"
@@ -314,6 +315,7 @@
                             android:id="@+id/SoilSample"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:minLines="2"
                             android:text="Soil Sample Collection"
                             android:textColor="#000000"
@@ -330,16 +332,17 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clTextSoilFour"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/clTextSoilTwo"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/tvSoilLab"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:minLines="2"
                             android:text="Lab Testing"
                             android:textColor="#000000"
@@ -356,7 +359,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space16"
-                        android:layout_marginEnd="@dimen/space16"
+                        android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -367,6 +370,7 @@
                             android:id="@+id/tvDetaols"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:minLines="2"
                             android:text="Detailed Report"
                             android:textColor="#000000"
@@ -566,7 +570,7 @@
 
             <TextView
                 android:id="@+id/tvFAQ"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space16"
                 android:layout_marginTop="24dp"
@@ -574,6 +578,8 @@
                 android:textColor="#111827"
                 android:textSize="@dimen/space20"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_videos" />
 
@@ -598,13 +604,14 @@
 
                     <TextView
                         android:id="@+id/tvSoilText"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
                         android:text="1. Why should I do a soil test?"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/ivSoil"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -668,13 +675,14 @@
 
                     <TextView
                         android:id="@+id/tvSoilTextTwo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
                         android:text="2. What is the ideal time for soil sampling?"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/ivSoilTwo"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -741,13 +749,14 @@
 
                     <TextView
                         android:id="@+id/tvSoilTextThree"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/txt16"
                         android:text="3. How often do I soil Test? "
                         android:textColor="#000000"
                         android:textSize="@dimen/txt14"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/ivSoilThree"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

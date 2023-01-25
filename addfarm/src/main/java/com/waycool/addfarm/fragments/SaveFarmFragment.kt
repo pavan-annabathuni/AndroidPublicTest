@@ -27,8 +27,11 @@ import com.waycool.addfarm.adapter.SelectCropAdapter
 import com.waycool.addfarm.databinding.FragmentSaveFarmBinding
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
@@ -74,7 +77,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbarTitle.text = "Farm Details"
+        setTranslations()
         binding.toolbar.setNavigationOnClickListener { activity?.finish() }
 
         (childFragmentManager.findFragmentById(R.id.map_save_fragment) as SupportMapFragment?)?.getMapAsync(
@@ -226,6 +229,26 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
                     binding.saveProgressBar.visibility = View.VISIBLE
                     binding.saveFarmBtn.visibility = View.INVISIBLE
+                    val eventBundle=Bundle()
+                    eventBundle.putString("FarmName",binding.farmnameEtAddfarm.text.toString())
+                    eventBundle.putString("FarmArea",binding.farmareaEtAddfarm.text.toString())
+                    eventBundle.putString("checkedcrops",checkedcrops)
+                    eventBundle.putString("watersources",watersources)
+                    if(binding.pumphpSpinner.selectedItem.toString()!="--Select--"){
+                    eventBundle.putString("pumphpSpinner",binding.pumphpSpinner.selectedItem.toString())
+                    }
+                    if(binding.pumptypeSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumptypeSpinner",binding.pumptypeSpinner.selectedItem.toString())
+                    }
+
+                    if(binding.pumpheightSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumpheightSpinner",binding.pumpheightSpinner.selectedItem.toString())
+                    }
+                    if(binding.pipesizeSpinner.selectedItem.toString()!="--Select--"){
+                        eventBundle.putString("pumphpSpinner",binding.pipesizeSpinner.selectedItem.toString())
+                    }
+                    EventItemClickHandling.calculateItemClickEvent("Added_Farm_name",eventBundle)
+
                     if (myFarmEdit == null) {
                         viewModel.addFarm(
                             accountId!!,
@@ -311,6 +334,30 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun setTranslations() {
+        TranslationsManager().loadString("farm_details", binding.toolbarTitle,"Farm Details")
+        TranslationsManager().loadString("farm_name", binding.addfarmnameTitle,"Farm Name")
+        TranslationsManager().loadString("farm_area", binding.setPrimaryFarm,"Farm Name")
+        TranslationsManager().loadString("farm_area", binding.addfarmareaTitle,"Farm Name")
+        TranslationsManager().loadString("water_source", binding.watersourceTitle,"Water Sources")
+
+        TranslationsManager().loadString("pump_hp", binding.addfarmpumphpTitle,"Pump HP")
+        TranslationsManager().loadString("pump_type", binding.addfarmpumptypeTitle,"Pump Type")
+        TranslationsManager().loadString("pump_size", binding.addfarmpipesizeTitle,"Pipe Size in Inches")
+        TranslationsManager().loadString("pipe_height", binding.addfarmpipeheightTitle,"Pipe Height in ft")
+        TranslationsManager().loadString("pump_flow", binding.textView23,"Pump Flow Rate (LPH)")
+        TranslationsManager().loadString("str_save", binding.saveFarmBtn,"Save")
+
+
+
+
+
+
+
+
+
+    }
+
     override fun onMapReady(mMap: GoogleMap?) {
         mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
@@ -363,5 +410,9 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
     fun convertStringToLatLnList(s: String?): List<LatLng?>? {
         val listType = object : TypeToken<List<LatLng?>?>() {}.type
         return Gson().fromJson(s, listType)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SaveFarmFragment")
     }
 }

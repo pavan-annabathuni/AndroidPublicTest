@@ -1,9 +1,7 @@
 package com.waycool.featurecropprotect.Adapter
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +12,6 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.ViewholderCropProtectParentBinding
 
 class DiseasesParentAdapter() :
@@ -42,6 +39,10 @@ class DiseasesParentAdapter() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PestDiseaseDomain) {
+            TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv, "Related Images")
+            TranslationsManager().loadString("view_more", binding.viewmoreTv, "View More")
+
+
             binding.cropProtectDiseaseName.text = item.diseaseName
             Glide.with(binding.cropProtectDiseaseImage).load(item.thumb)
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)

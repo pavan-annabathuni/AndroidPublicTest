@@ -1,18 +1,19 @@
 package com.waycool.newsandarticles.view
 
-import androidx.appcompat.app.AppCompatActivity
-import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
-import android.os.Bundle
-import android.text.TextWatcher
-import android.text.Editable
 import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.net.Uri
 import android.speech.RecognizerIntent
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.CompoundButton
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,9 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -42,26 +46,20 @@ import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
-import kotlinx.coroutines.launch
+import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import java.lang.Exception
+import kotlinx.coroutines.launch
 import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     private var searchTag: CharSequence? = ""
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
-
     private var selectedCategory: String? = null
-
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
-
-
-
     private lateinit var newsAdapter: NewsPagerAdapter
 
     val binding: ActivityNewsAndArticlesBinding by lazy {
@@ -243,15 +241,14 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
     private fun setBanners() {
-
         val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
         viewModel.getVansAdsList().observe(this) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -267,6 +264,9 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+        bannerAdapter.onItemClick={
+            EventClickHandling.calculateClickEvent("NewsArticles_Adbanner")
+        }
     }
 
 
@@ -329,11 +329,13 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(this)
         }
     }
@@ -343,6 +345,12 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
     override fun onItemClick(it: VansFeederListDomain?) {
+        val eventBundle=Bundle()
+        eventBundle.putString("NewsAndArticlesTitle",it?.title)
+        if(selectedCategory!=null){
+            eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
+        }
+        EventItemClickHandling.calculateItemClickEvent("NewsArticles_landing",eventBundle)
         val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
         intent.putExtra("title", it?.title)
         intent.putExtra("content", it?.desc)
@@ -354,6 +362,12 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
     override fun onShareItemClick(it: VansFeederListDomain?) {
+        val eventBundle=Bundle()
+        eventBundle.putString("NewsAndArticlesTitle",it?.title)
+        if(selectedCategory!=null){
+            eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
+        }
+        EventItemClickHandling.calculateItemClickEvent("NewsArticles_share",eventBundle)
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -386,5 +400,9 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             binding.toolbarTitle.text = TranslationsManager().getString("str_news")
             binding.search.hint = TranslationsManager().getString("search")
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NewsAndArticlesActivity")
     }
 }

@@ -2,7 +2,6 @@ package com.waycool.iwap.graphs
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.soiltesting.utils.Constant
 import com.github.mikephil.charting.components.IMarker
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -24,6 +22,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
@@ -51,21 +51,31 @@ class GraphsFragment : Fragment() {
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
     private val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
 
+    private val LAST_DAYS: Int = 7
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@GraphsFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish() }
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -84,23 +94,13 @@ class GraphsFragment : Fragment() {
 
            val data = arguments?.getString("toolbar")
             translationToolBar(data.toString())
-//            binding.tvToolbar.text=data.toString()
-
-            Log.d(Constant.TAG, "onCreateViewONPID:$serialNo ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$deviceModelId ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramType ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramValue")
-            Log.d(Constant.TAG, "onCreateViewONPID:$updateDate ")
+            binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
             binding.date.text = updateDate
 
             populateGraph(paramType, GraphSelection.LAST12HRS)
             graphApiData(serialNo, deviceModelId, paramType)
 
-//            binding.today.text=
-
-//            binding.tvToolbar.
-//            graphApiData(serial_no, device_model_id, value)
 
         }
         initClicks()
@@ -210,12 +210,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
             GraphSelection.LAST30DAYS -> graphsData?.last30DaysData?.keys?.toList()
         }
@@ -228,12 +228,12 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= 15) {
-                        totalList.subList(totalList.size - 16, totalList.size - 1)
+                    if (totalList?.size!! >= LAST_DAYS) {
+                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
                     }
-                }else emptyList()
+                } else emptyList()
             }
         }
     }
@@ -277,12 +277,51 @@ class GraphsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
                     0 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last12hrs") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("rainfall_card_last12hrs") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last12hrs") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last12hrs") }
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last12hrs") }
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last12hrs") }
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last12hrs") }
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_card_last12hrs") }
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_card_last12hrs") }
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last12hrs") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST12HRS)
                     }
                     1 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last7days") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("Rainfall_card_last7days") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last7days") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last7days")}
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last7days")}
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last7days")}
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last7days")}
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_last7days")}
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_last7days")}
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last7days") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST7DAYS)
                     }
                     2 -> {
+                        when (paramType) {
+                            "temperature" -> { EventClickHandling.calculateClickEvent("Temparature_card_last1month") }
+                            "rainfall" -> { EventClickHandling.calculateClickEvent("Rainfall_card_last1month") }
+                            "humidity" -> { EventClickHandling.calculateClickEvent("humidity_card_last1month") }
+                            "windspeed" -> { EventClickHandling.calculateClickEvent("windspeed_card_last1month")}
+                            "leaf_wetness_hrs" -> { EventClickHandling.calculateClickEvent("leaf_wetness_card_last1month")}
+                            "pressure" -> { EventClickHandling.calculateClickEvent("pressure_card_last1month")}
+                            "soil_moisture_1_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_top_card_last1month")}
+                            "soil_moisture_2_kpa" -> { EventClickHandling.calculateClickEvent("soil_moisture_bottom_card_last1month")}
+                            "lux" -> { EventClickHandling.calculateClickEvent("lux_card_last1month")}
+                            "soil_temperature_1" -> { EventClickHandling.calculateClickEvent("soil_temperature_card_last1month") }
+
+                        }
                         populateGraph(paramType, GraphSelection.LAST30DAYS)
                     }
                 }
@@ -310,6 +349,7 @@ class GraphsFragment : Fragment() {
             else -> " "
         }
     }
+
     private fun setTranslation() {
         TranslationsManager().loadString("str_today",binding.today)
 //         TranslationsManager().loadString("view_tepm", binding.tvToolbar,"Temprature")
@@ -435,6 +475,10 @@ class GraphsFragment : Fragment() {
                 }
 
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("GraphsFragment")
     }
     fun translationToolBar(toolBarTranslation:String){
         when (toolBarTranslation) {

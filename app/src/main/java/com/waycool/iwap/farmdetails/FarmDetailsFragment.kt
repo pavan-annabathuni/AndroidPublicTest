@@ -26,6 +26,8 @@ import com.google.android.material.chip.Chip
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
@@ -60,27 +62,32 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
     private var myFarm: MyFarmsDomain? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigateUp()
-                }
-            }
-        activity?.onBackPressedDispatcher?.addCallback(
-            requireActivity(),
-            callback
-        )
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFarmDetails2Binding.inflate(inflater, container, false)
+
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.backBtn.setOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -99,11 +106,16 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         initViewClick()
         initMyObserve()
         myCrop()
-        farmDetailsObserve()
+//        farmDetailsObserve()
         translations()
         checkRole()
 
-
+        viewModel.getMyFarms().observe(viewLifecycleOwner){
+            val farm=it.data?.firstOrNull {it1-> myFarm?.id == it1.id }
+            myFarm=farm
+            farmDetailsObserve()
+            drawFarm()
+        }
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.onBackPressed()
@@ -492,19 +504,17 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 val intent = Intent(activity, AddCropActivity::class.java)
                 val bundle = Bundle()
                 bundle.putInt("farmID", myFarm?.id.toString().toInt())
-                Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
                 intent.putExtras(bundle)
-                startActivity(intent)
-            }
+            startActivity(intent)
+        }
 
             binding.addCropCl.setOnClickListener {
                 val intent = Intent(activity, AddCropActivity::class.java)
                 val bundle = Bundle()
                 bundle.putInt("farmID", myFarm?.id.toString().toInt())
-                Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
                 intent.putExtras(bundle)
-                startActivity(intent)
-            }
+            startActivity(intent)
+        }
 
 
             binding.MyDevice.setOnClickListener {
@@ -575,7 +585,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
 
             binding.tvLastUpdateRefresh.setOnClickListener {
-                updateDevice()
+                EventClickHandling.calculateClickEvent("Device_card_Refresh")
+            updateDevice()
 
             }
 
@@ -646,47 +657,37 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
 
                 it.clTemp.setOnClickListener {
-                    val bundle = Bundle()
-                    if (data.serialNoId != null && data.modelId != null) {
-                        bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                        bundle.putInt("device_model_id", data.modelId!!.toInt())
-                        bundle.putString("value", "temperature")
-                        bundle.putString("toolbar", "Temperature")
-                        bundle.putString("temp_value", data.temperature)
-                        bundle.putString("date_time", data.dataTimestamp)
-                        findNavController().navigate(
-                            R.id.action_farmDetailsFragment4_to_graphsFragment3,
-                            bundle
-                        )
-                    }
+                    EventClickHandling.calculateClickEvent("Temparature_card_today")
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "temperature")
+                    bundle.putString("toolbar", "Temperature")
+                    bundle.putString("temp_value", data.temperature)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
+                        bundle
+                    )
                 }
-                it.clWind.setOnClickListener {
-                    val bundle = Bundle()
-                    if (data.serialNoId != null && data.modelId != null) {
-                        bundle.putInt("serial_no", data.serialNoId!!.toInt())
-                        bundle.putInt("device_model_id", data.modelId!!.toInt())
-                        bundle.putString("value", "rainfall")
-                        bundle.putString("toolbar", "Rainfall")
-                        bundle.putString("temp_value", data.rainfall)
-                        bundle.putString("date_time", data.dataTimestamp)
-                        findNavController().navigate(
-                            R.id.action_farmDetailsFragment4_to_graphsFragment3,
-                            bundle
-                        )
-                    }
+            }
+            it.clWind.setOnClickListener {
+                val bundle = Bundle()
+                if (data.serialNoId != null && data.modelId != null) {
+                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
+                    bundle.putInt("device_model_id", data.modelId!!.toInt())
+                    bundle.putString("value", "rainfall")
+                    bundle.putString("toolbar", "Rainfall")
+                    bundle.putString("temp_value", data.rainfall)
+                    bundle.putString("date_time", data.dataTimestamp)
+                    findNavController().navigate(
+                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
+                        bundle
+                    )
                 }
-//            it.clWindSpeed.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "pressure")
-//                    findNavController().navigate(
-//                        R.id.action_farmDetailsFragment4_to_graphsFragment3,
-//                        bundle
-//                    )
-//                }
-//            }
+            }
+
                 it.clHumidity.setOnClickListener {
                     val bundle = Bundle()
                     if (data.serialNoId != null && data.modelId != null) {
@@ -847,53 +848,58 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         }
 
-        override fun onMapReady(map: GoogleMap?) {
-            if (map != null) {
-                mMap = map
-                map.mapType = GoogleMap.MAP_TYPE_NORMAL
-                map!!.uiSettings.setAllGesturesEnabled(false)
-                map!!.uiSettings.isMapToolbarEnabled = false
-                if (myFarm != null) {
-                    val points = myFarm?.farmJson
-                    if (points != null) {
-                        if (points.size >= 3) {
-                            map.addPolygon(
-                                PolygonOptions().addAll(points)
-                                    .fillColor(Color.argb(100, 58, 146, 17))
-                                    .strokeColor(
-                                        Color.argb(255, 255, 255, 255)
-                                    )
+    override fun onMapReady(map: GoogleMap?) {
+        if (map != null) {
+            mMap = map
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+            map!!.uiSettings.setAllGesturesEnabled(false)
+            map!!.uiSettings.isMapToolbarEnabled = false
+            drawFarm()
+
+        }
+    }
+
+    private fun drawFarm(){
+        if (myFarm != null) {
+            val points = myFarm?.farmJson
+            mMap?.clear()
+            if (points != null) {
+                if (points.size >= 3) {
+                    mMap?.addPolygon(
+                        PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
+                            .strokeColor(
+                                Color.argb(255, 255, 255, 255)
                             )
-                        }
-                        for (latLng in points) {
-                            val marker = map.addMarker(
-                                MarkerOptions().position(
-                                    latLng
-                                )
-                                    .icon(BitmapDescriptorFactory.fromResource(com.waycool.addfarm.R.drawable.circle_green))
-                                    .anchor(0.5f, .5f)
-                                    .draggable(false)
-                                    .flat(true)
-                            )
-                        }
-                        map.animateCamera(
-                            CameraUpdateFactory.newLatLngBounds(
-                                getLatLnBounds(points), 20
-                            )
-                        )
-                        val area: Double =
-                            getArea(points) / 4046.86
-                        binding.farmAreaSingleFarm.setText(
-                            (String.format(
-                                Locale.ENGLISH,
-                                "%.2f",
-                                area
-                            )).trim { it <= ' ' } + " Acre"
-                        )
-                    }
+                    )
                 }
+                for (latLng in points) {
+                    val marker = mMap?.addMarker(
+                        MarkerOptions().position(
+                            latLng
+                        )
+                            .icon(BitmapDescriptorFactory.fromResource(com.waycool.addfarm.R.drawable.circle_green))
+                            .anchor(0.5f, .5f)
+                            .draggable(false)
+                            .flat(true)
+                    )
+                }
+                mMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        getLatLnBounds(points), 20
+                    )
+                )
+                val area: Double =
+                    getArea(points) / 4046.86
+                binding.farmAreaSingleFarm.setText(
+                    (String.format(
+                        Locale.ENGLISH,
+                        "%.2f",
+                        area
+                    )).trim { it <= ' ' } + " Acre"
+                )
             }
         }
+    }
 
 
         private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
@@ -926,5 +932,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.ivViewAll.visibility = View.VISIBLE
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FarmDetailsFragment")
     }
 }

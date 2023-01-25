@@ -1,9 +1,6 @@
 package com.waycool.iwap.allservices
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
@@ -32,17 +31,26 @@ class AllServicesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    this@AllServicesFragment.findNavController().navigateUp()
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
-        _binding = FragmentAllServicesBinding.inflate(inflater, container, false)
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
     }
 
@@ -78,7 +86,13 @@ class AllServicesFragment : Fragment() {
                     val data = it.data?.filter {
                         it.subscription!=1
                     }
-                    premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener {
+                    premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener
+                    {
+
+                        val eventBundle=Bundle()
+                        eventBundle.putString("View_all_services",it.title)
+                        EventItemClickHandling.calculateItemClickEvent("View_all_services",eventBundle)
+
                     },requireContext())
                     binding.recyclerviewService.adapter = premiumServiceAdapter
                     premiumServiceAdapter.submitList(data)
@@ -102,14 +116,17 @@ class AllServicesFragment : Fragment() {
         }
     }
     private fun premiumUser() {
-        viewModel.getModuleMaster().observe(viewLifecycleOwner) {
+        viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->
             when (it) {
                 is Resource.Success -> {
                     val data = it.data?.filter {
                         it.subscription == 1
                     }
-                    Log.d("premium", "premiumUser: $data")
-                    premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener {
+                    premiumServiceAdapter = PremiumServiceAdapter(PremiumServiceAdapter.OnClickListener { it ->
+                        val eventBundle=Bundle()
+                        eventBundle.putString("View_all_services",it.title)
+                        EventItemClickHandling.calculateItemClickEvent("View_all_services",eventBundle)
+
                         val bundle =Bundle()
                         bundle.putString("title",it.title)
                         bundle.putString("desc",it.moduleDesc)
@@ -140,6 +157,10 @@ class AllServicesFragment : Fragment() {
             if (!isSuccess) requireActivity().onBackPressed()
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AllServicesFragment")
     }
 
 

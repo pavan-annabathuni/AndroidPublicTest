@@ -59,10 +59,11 @@ class CropProtectViewModel : ViewModel() {
 
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<PagingData<VansFeederListDomain>> {
+    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
-        return VansRepository.getVansFeeder(queryMap).cachedIn(viewModelScope).asLiveData()
+        queryMap["module_id"] = "2"
+        return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =

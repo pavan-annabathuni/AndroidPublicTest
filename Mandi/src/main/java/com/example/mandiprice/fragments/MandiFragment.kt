@@ -8,8 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -22,7 +26,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
-import com.example.mandiprice.adapter.DistanceAdapter.*
+import com.example.mandiprice.adapter.DistanceAdapter.DiffCallback
 import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
@@ -30,8 +34,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -88,6 +92,25 @@ class MandiFragment : Fragment() {
         setBanners()
         translation()
         EventClickHandling.calculateClickEvent("Mandi_landing")
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+        }
         return binding.root
 
     }
@@ -116,16 +139,16 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+//        val callback: OnBackPressedCallback =
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//               findNavController().popBackStack()
+//                }
+//            }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            requireActivity(),
+//            callback
+//        )
         viewModel.viewModelScope.launch {
             adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
                 val bundle = Bundle()
@@ -147,9 +170,9 @@ class MandiFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 lat = it.data?.profile?.lat.toString()
                 long = it.data?.profile?.long.toString()
-                accountID = it.data?.accountId!!
-            }
-        }
+                if (it.data?.accountId!=null)
+            accountID = it.data?.accountId!!
+        }}
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
         filterMenu()
@@ -497,11 +520,13 @@ class MandiFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -580,5 +605,8 @@ class MandiFragment : Fragment() {
             }
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MandiFragment")
+    }
 }

@@ -3,14 +3,17 @@ package com.waycool.data.repository
 import android.util.Log
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.Network.NetworkModels.*
+import com.waycool.data.Network.NetworkModels.LoginDTO
+import com.waycool.data.Network.NetworkModels.LogoutDTO
+import com.waycool.data.Network.NetworkModels.OTPResponseDTO
+import com.waycool.data.Network.NetworkModels.RegisterData
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncManager
-import com.waycool.data.repository.DomainMapper.*
-import com.waycool.data.repository.domainModels.*
 import com.waycool.data.Sync.syncer.LanguageSyncer
 import com.waycool.data.Sync.syncer.ModuleMasterSyncer
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.repository.DomainMapper.*
+import com.waycool.data.repository.domainModels.*
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +22,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.HashMap
 
 
 object LoginRepository {
@@ -270,6 +272,8 @@ object LoginRepository {
 //            it
 //        }
 //    }
+
+    suspend fun getSelectedLangCode()=LocalSource.getLanguageCode()
 
 
 

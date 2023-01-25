@@ -6,7 +6,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -43,11 +42,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -65,7 +65,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -203,13 +202,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         val bannerAdapter = AdsAdapter(requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             binding.clProgressBar.visibility = View.GONE
 
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -231,6 +230,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+        bannerAdapter.onItemClick={
+            EventClickHandling.calculateClickEvent("Soil_Testing_Adbanner")
+        }
+
     }
 
     private fun getAllHistory() {
@@ -268,6 +271,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun initViewClick() {
         binding.tvViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_requesthistory_viewall")
             findNavController().navigate(R.id.action_soilTestingHomeFragment_to_allHistoryFragment)
         }
 
@@ -332,6 +336,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("soil_testing_video",eventBundle)
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             try{
@@ -379,6 +386,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun expandableView() {
         binding.clFAQAnsOne.setOnClickListener {
+            EventClickHandling.calculateClickEvent("FAQ_1")
             if (binding.clExpandeble.visibility == View.GONE) {
                 TransitionManager.beginDelayedTransition(binding.cardData, AutoTransition())
                 binding.clExpandeble.visibility = View.VISIBLE
@@ -396,6 +404,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun expandableViewThree() {
         binding.clFAQAnsThree.setOnClickListener {
+            EventClickHandling.calculateClickEvent("FAQ_3")
             if (binding.clExpandebleThree.visibility == View.GONE) {
                 TransitionManager.beginDelayedTransition(binding.cardDataThree, AutoTransition())
                 binding.clExpandebleThree.visibility = View.VISIBLE
@@ -412,6 +421,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     private fun expandableViewTWo() {
+        EventClickHandling.calculateClickEvent("FAQ_2")
         binding.clFAQAnsTwo.setOnClickListener {
             if (binding.clExpandebleTwo.visibility == View.GONE) {
                 TransitionManager.beginDelayedTransition(binding.cardDataTwo, AutoTransition())
@@ -430,6 +440,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun locationClick() {
         binding.cardCheckHealth.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_checksoilhealth")
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
                 isLocationPermissionGranted(accountID!!)
@@ -516,6 +527,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("id",data.soil_test_number)
+
+        EventItemClickHandling.calculateItemClickEvent("Soiltesting_viewstatus",eventBundle)
+
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
         bundle.putString("soil_test_number", data.soil_test_number)
@@ -855,11 +871,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
         binding.addCall.setOnClickListener {
+            EventClickHandling.calculateClickEvent("call_icon")
+
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -872,5 +891,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     companion object {
         private const val REQUEST_CODE_GPS = 1011
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SoilTestingHomeFragment")
     }
 }

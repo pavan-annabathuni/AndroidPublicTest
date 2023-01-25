@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentNurseryBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import org.json.JSONArray
 
@@ -35,14 +36,12 @@ class NurseryFragment : Fragment() {
         observer()
         translation()
         return binding.root
-
     }
 
     private fun observer() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
             val data = it.data!!
-
-            for(i in 0..data.size-1){
+            for(i in data.indices){
                 if(data[i].label_name=="Nursery Practices"||data[i].labelNameTag=="Nursery Practices") {
 
                     try {
@@ -79,5 +78,8 @@ class NurseryFragment : Fragment() {
         TranslationsManager().loadString("hardening_period",binding.tv3)
         TranslationsManager().loadString("str_transplanting",binding.tv4)
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NurseryFragment")
+    }
 }

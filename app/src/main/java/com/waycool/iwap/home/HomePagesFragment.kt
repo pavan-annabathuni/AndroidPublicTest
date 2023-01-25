@@ -3,8 +3,6 @@ package com.waycool.iwap.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.location.Address
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -35,13 +33,14 @@ import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -72,7 +71,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -122,6 +120,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
         videosBinding = binding.layoutVideos
 
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
         return binding.root
     }
 
@@ -134,24 +146,30 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
+            val eventBundle=Bundle()
+            eventBundle.putString("cropName",mandiAdapter.cropName)
+            eventBundle.putString("marketName",mandiAdapter.marketName)
+            EventItemClickHandling.calculateItemClickEvent("MandiItemClickHomePageFragment",eventBundle)
 
             val args = Bundle()
-            args.putParcelable("mandiRecord",it)
+            args.putParcelable("mandiRecord", it)
             this.findNavController()
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                  findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-           viewLifecycleOwner,
-            callback
-        )
+//        val callback: OnBackPressedCallback =
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//                    findNavController().popBackStack()
+//                }
+//            }
+//        activity?.let {
+//            it.onBackPressedDispatcher.addCallback(
+//                it,
+//                callback
+//            )
+//        }
         setWishes()
         checkNetwork()
         initClick()
@@ -202,83 +220,94 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     private fun setTranslation() {
-        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
-        TranslationsManager().loadString("add_crop_info", binding.tvYourForm,"Add your Crop and get more details.")
-        TranslationsManager().loadString("add_crop", binding.tvAddFrom,"Add crops")
-        TranslationsManager().loadString("add_farm", binding.tvAddFromOne,"Add your farm")
-        TranslationsManager().loadString("my_farm", binding.tvMyform,"My Farms")
-        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData,"Add Farm")
-        TranslationsManager().loadString("str_today", binding.tvDays,"Today")
+        TranslationsManager().loadString("welcome", binding.tvName, "Welcome")
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm, "Add your Crop and get more details.")
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom, "Add crops")
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne, "Add your farm")
+        TranslationsManager().loadString("my_farm", binding.tvMyform, "My Farms")
+        TranslationsManager().loadString("add_farm_top", binding.tvOurAddFormData, "Add Farm")
+        TranslationsManager().loadString("str_today", binding.tvDays, "Today")
 
-        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
-        TranslationsManager().loadString("str_wind", binding.tvWind,"Wind")
-        TranslationsManager().loadString("str_rain", binding.tvRain,"Rain")
-        TranslationsManager().loadString("our_services", binding.tvOurService,"Our Services")
-        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll,"View All")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity, "Humidity")
+        TranslationsManager().loadString("str_wind", binding.tvWind, "Wind")
+        TranslationsManager().loadString("str_rain", binding.tvRain, "Rain")
+        TranslationsManager().loadString("our_services", binding.tvOurService, "Our Services")
+        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll, "View All")
 
-        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails,"View Farm Details")
+        TranslationsManager().loadString("view_farm_detail", binding.tvViewFarmDetails, "View Farm Details")
 
 
-        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting,"Soil Testing")
-        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc,"Helps you assess and recommend the nutrition of your soil")
-        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore,"Know more")
+        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting, "Soil Testing")
+        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc, "Helps you assess and recommend the nutrition of your soil")
+        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore, "Know more")
 
-        TranslationsManager().loadString("crop_health", binding.tvCropHealth,getString(R.string.pestdiseasedetection))
-        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc,"Helps you detect crop’s health using Artificial Intelligence")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore,"Know more")
+        TranslationsManager().loadString("crop_health", binding.tvCropHealth, getString(R.string.pestdiseasedetection))
+        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc, "Helps you detect crop’s health using Artificial Intelligence")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore, "Know more")
 
-        TranslationsManager().loadString("str_title", binding.tvCropInformation,"Crop Information")
-        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc,"Gives you end to end  information about your crop.")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore,"Know more")
+        TranslationsManager().loadString("str_title", binding.tvCropInformation, "Crop Information")
+        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc, "Gives you end to end  information about your crop.")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore, "Know more")
 
-        TranslationsManager().loadString("crop_protection", binding.tvCropProtect,"Crop Protection")
-        TranslationsManager().loadString("crop_protection_info", binding.tvCropProtectDesc,"Complete information to fight against all the possible diseases.")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore,"Know more")
+        TranslationsManager().loadString("crop_protection", binding.tvCropProtect, "Crop Protection")
+        TranslationsManager().loadString(
+            "crop_protection_info",
+            binding.tvCropProtectDesc,
+            "Complete information to fight against all the possible diseases."
+        )
+        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore, "Know more")
+
+        TranslationsManager().loadString("videos", videosBinding.videosTitle, "Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos, "View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle, getString(R.string.newsarticles))
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews, "View All")
+
+        TranslationsManager().loadString("my_crops", binding.myCropsTitle, "My Crops")
+        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops, "Edit Crops")
+
+        TranslationsManager().loadString("add_crop", binding.AddCrop, "Add Crop")
+
+        TranslationsManager().loadString("mandi_prices", binding.tvRequest, "Market Prices")
+        TranslationsManager().loadString("str_viewall", binding.tvViewAllMandi, "View All")
+
+        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
+        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
 
         TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
         TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
-        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,getString(R.string.newsarticles))
-        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View All")
-
-        TranslationsManager().loadString("my_crops", binding.myCropsTitle,"My Crops")
-        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops,"Edit Crops")
-
-        TranslationsManager().loadString("add_crop",binding.AddCrop,"Add Crop")
-
-        TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Market Prices")
-        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi,"View All")
-
-        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
-        TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
-
-
-
-
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View all")
     }
-
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
-            TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+                TranslationsManager().loadString("good_morning", binding.tvGoodMorning, "Good Morning")
+            }
             in 12..15 -> {
-                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+                TranslationsManager().loadString("good_afternoon", binding.tvGoodMorning, "Good Afternoon")
+            }
             in 16..20 -> {
-                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+                TranslationsManager().loadString("good_evening", binding.tvGoodMorning, "Good Evening")
+            }
             in 21..23 -> {
-                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
-            else ->{
-                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
+                TranslationsManager().loadString("good_night", binding.tvGoodMorning, "Good Night")
+            }
+            else -> {
+                TranslationsManager().loadString("namaste", binding.tvGoodMorning, "Namaste")
+            }
         }
     }
 
     private fun checkNetwork() {
         networkCall()
         videosBinding.imgRetry.setOnClickListener {
+            EventClickHandling.calculateClickEvent("VideosBindingImgRetryNetworkCall")
             networkCall()
         }
         networkNewsCall()
         newsBinding.imgRetry.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsBindingImgRetryNetworkCall")
             networkNewsCall()
         }
     }
@@ -313,119 +342,143 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     private fun mandiDetailCall() {
-        mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(
-                lat,
-                long,
-                cropCategory, state,
-                crop,
-                sortBy,
-                orderBy,
-                search,
-                0
-            )
-                .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle,it)
 
+        Log.d("MandiFromHome", "Called")
+
+        mandiViewModel.getMandiSinglePage(lat, long).observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    mandiAdapter.submitList(it.data?.data?.records?.subList(0, 5))
                 }
+                is Resource.Error -> {}
+                is Resource.Loading -> {}
+
+            }
+//                    mandiAdapter.submitList()
+
         }
     }
+
 
     private fun initClick() {
 
         newsBinding.viewAllNews.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsArticles_viewall")
+
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsArticles_viewall")
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_viewall")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_viewall")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
         binding.soilTestingCv.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_landing")
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
         binding.tvSoilTestingKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_landing")
+
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
 
         binding.cardCropHealth.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropHealthCardHomePagesFragment")
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
         binding.tvCropHealthKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropHealthKnowMoreHomePagesFragment")
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
 
         binding.clCropProtect.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropProtectCardHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
         }
 
         binding.tvCropProtectKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropProtectKnowMoreHomePagesFragment")
             val intent = Intent(activity, CropProtectActivity::class.java)
             startActivity(intent)
         }
 
         binding.clCropInformation.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropInformationCardHomePagesFragment")
             val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent)
         }
         binding.clAddFromServiceCropInformation.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropInformationKnowMoreHomePagesFragment")
             val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent)
         }
-
         binding.tvAddFrom.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePagesFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
+
         }
         binding.tvViewAllMandi.setOnClickListener {
+            EventClickHandling.calculateClickEvent("ViewAllMandiHomePagesFragment")
             this.findNavController().navigate(R.id.navigation_mandi)
         }
         binding.cvWeather.setOnClickListener {
+            EventClickHandling.calculateClickEvent("WeatherCardHomePagesFragment")
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
         binding.tvOurServiceViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("View_all_services")
             findNavController().navigate(R.id.action_homePagesFragment_to_allServicesFragment)
         }
         binding.tvEditMyCrops.setOnClickListener {
+            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.ivEditCrop.setOnClickListener {
+            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.cvAddCrop.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePagesFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
         binding.clAddForm.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
         binding.tvOurAddFormData.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
         binding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
-
         binding.IvNotification.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NotificationsHomePagesFragment")
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
         }
 
@@ -486,7 +539,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             newsBinding.ivViewAll.visibility = View.VISIBLE
 
             newsBinding.viewAllNews.isClickable = true
-            newsBinding.ivViewAll.isClickable=true
+            newsBinding.ivViewAll.isClickable = true
             setNews()
         }
     }
@@ -528,10 +581,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         val farmsAdapter = FarmsAdapter(requireContext(), this)
                         binding.farmsRv.adapter = farmsAdapter
 
-                        val sortedList=it.data?.sortedByDescending { farm->
-                            farm.isPrimary==1
+                        val sortedList = it.data?.sortedByDescending { farm ->
+                            farm.isPrimary == 1
                         }
-
                         farmsAdapter.submitList(sortedList)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
@@ -556,6 +608,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         binding.farmnameHome.text = selectedFarm?.farmName
 
         binding.farmsDetailsCl.setOnClickListener {
+            val eventBundle=Bundle()
+            eventBundle.putString("farmName",selectedFarm?.farmName)
+            EventItemClickHandling.calculateItemClickEvent("ViewFarmDetails",eventBundle)
+
             val bundle = Bundle()
             bundle.putParcelable("farm", selectedFarm)
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
@@ -610,14 +666,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity ?: requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -668,10 +724,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.tvNoVANS.text="News and Articles are being loaded.Please wait for some time"
+                                    newsBinding.tvNoVANS.text = "News and Articles are being loaded.Please wait for some time"
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility = View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
+                                    newsBinding.ivViewAll.visibility = View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -680,14 +736,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
-                                        newsBinding.ivViewAll.visibility=View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
                                         newsBinding.viewAllNews.visibility = View.VISIBLE
-                                        newsBinding.ivViewAll.visibility=View.VISIBLE
+                                        newsBinding.ivViewAll.visibility = View.VISIBLE
 
 
                                     }
@@ -714,54 +770,47 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                     videosBinding.viewAllVideos.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        adapter.loadStateFlow.map { it.refresh }
-                            .distinctUntilChanged()
-                            .collect { it1 ->
 
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                    adapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect { it1 ->
+
+                            if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                videosBinding.noDataVideo.visibility = View.VISIBLE
+                                videosBinding.tvNoVANs.text = "Videos are being loaded.Please wait for some time"
+                                videosBinding.ivViewAll.visibility = View.GONE
+                                videosBinding.viewAllVideos.visibility = View.GONE
+                                videosBinding.videoCardNoInternet.visibility = View.GONE
+                                videosBinding.videosListRv.visibility = View.INVISIBLE
+                            }
+
+                            if (it1 is LoadState.NotLoading) {
+                                if (adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.tvNoVANs.text="Videos are being loaded.Please wait for some time"
                                     videosBinding.ivViewAll.visibility = View.GONE
                                     videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                                }
+                                } else {
+                                    videosBinding.noDataVideo.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility = View.VISIBLE
+                                    videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.VISIBLE
 
-                                if (it1 is LoadState.NotLoading) {
-                                    if (adapter.itemCount == 0) {
-                                        videosBinding.noDataVideo.visibility = View.VISIBLE
-                                        videosBinding.ivViewAll.visibility = View.GONE
-                                        videosBinding.viewAllVideos.visibility = View.GONE
-                                        videosBinding.videoCardNoInternet.visibility = View.GONE
-                                        videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    } else {
-                                        videosBinding.noDataVideo.visibility = View.GONE
-                                        videosBinding.ivViewAll.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
-                                        videosBinding.videoCardNoInternet.visibility = View.GONE
-                                        videosBinding.videosListRv.visibility = View.VISIBLE
-
-                                    }
                                 }
                             }
-                    }
+                        }
 
 
                 }
             }
         }
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
-        videosBinding.ivViewAll.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
-
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("Homepage_video",eventBundle)
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
@@ -1126,6 +1175,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddFabBtnHomeFragment")
+
             if (!isVisible) {
                 binding.addFab.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -1151,11 +1202,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             }
         }
         binding.addCall.setOnClickListener {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
 
@@ -1255,12 +1308,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     override fun onFarmSelected(data: MyFarmsDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("SelectedFarmHomeFrag",data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("SelectedFarmHomeFrag",eventBundle)
         selectedFarm = data
         populateMyFarm()
     }
 
-    private fun checkRole(roleId:Int){
-        if(roleId==31){
+    private fun checkRole(roleId: Int) {
+        if (roleId == 31) {
             binding.tvEditMyCrops.visibility = View.INVISIBLE
             binding.ivEditCrop.visibility = View.INVISIBLE
             binding.cvAddCrop.isEnabled = false

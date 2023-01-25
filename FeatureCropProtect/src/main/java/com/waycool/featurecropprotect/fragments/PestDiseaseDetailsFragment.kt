@@ -36,6 +36,7 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
@@ -93,8 +94,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
 
         binding.toolbar.setOnClickListener {
+
             val isSuccess = findNavController().popBackStack()
-//            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
+            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
         }
 
         val callback: OnBackPressedCallback =
@@ -102,7 +104,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 override fun handleOnBackPressed() {
 
                     val isSuccess = activity?.let { findNavController().popBackStack() }
-//                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                    if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
         activity?.let {
@@ -159,6 +161,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.imgShare.setOnClickListener {
             screenShot(diseaseId, diseaseName)
         }
+        TranslationsManager().loadString("str_share", binding.imgShare, "Share")
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
         TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)
@@ -220,53 +223,40 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             audioNewLayoutBinding.root.visibility = VISIBLE
                         else
                             audioNewLayoutBinding.root.visibility = GONE
-
-
                         if (it.data != null && it.data!!.symptoms != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Log.d("Symp","${it.data?.symptoms}")
                                 binding.symptomBodyTv.text = Html.fromHtml(
                                     it.data?.symptoms!!,
                                     Html.FROM_HTML_MODE_COMPACT
                                 )
                             } else {
                                 binding.symptomBodyTv.text =
-                                    Html.fromHtml(it.data?.symptoms!!)
-                            }
+                                    Html.fromHtml(it.data?.symptoms!!) }
                         } else {
                             binding.symptomBodyTv.text = "NA"
-
                         }
-
                         binding.tabLayout.removeAllTabs()
-
-
                         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
                             override fun onTabSelected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
-
                             override fun onTabUnselected(tab: Tab?) {
 
                             }
-
                             override fun onTabReselected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
                         })
-
                         if (it.data != null && it.data!!.chemical != null) {
                             addTab(chemical)
                         }
-
                         if (it.data != null && it.data!!.biological != null) {
                             addTab(biological)
                         }
-
                         if (it.data != null && it.data!!.cultural != null) {
                             addTab(cultural)
                         }
-
-
                     }
                     is Resource.Loading -> {
                         ToastStateHandling.toastWarning(
@@ -453,9 +443,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
 
             adapter.onItemClick = {
-                val bundleEvents = Bundle()
-                bundleEvents.putString("","${it?.title}")
-                EventItemClickHandling.calculateItemClickEvent("cropprotection_video",bundleEvents)
+                val eventBundle=Bundle()
+                eventBundle.putString("title",it?.title)
+                EventItemClickHandling.calculateItemClickEvent("PestDiseaseDetailVideo",eventBundle)
                 val bundle = Bundle()
                 bundle.putParcelable("video", it)
                 findNavController().navigate(
@@ -538,11 +528,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             val bannerAdapter = AdsAdapter(activity?:requireContext())
             viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-                bannerAdapter.submitData(lifecycle, it)
+                bannerAdapter.submitList( it.data)
                 TabLayoutMediator(
                     binding.bannerIndicators, binding.bannerViewpager
                 ) { tab: Tab, position: Int ->
-                    tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                    tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
                 }.attach()
             }
             binding.bannerViewpager.adapter = bannerAdapter
@@ -559,8 +549,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 page.scaleY = 0.85f + r * 0.15f
             }
             binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        }
 
+        }
         private fun audioPlayer() {
             binding.playPauseLayout.setOnClickListener {
                 if (audioUrl != null) {
@@ -610,5 +600,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
             bundle
         )
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
     }
 }

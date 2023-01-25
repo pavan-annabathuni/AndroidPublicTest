@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ndvi.databinding.FragmentInfoSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 class InfoSheetFragment : BottomSheetDialogFragment() {
@@ -42,5 +43,9 @@ class InfoSheetFragment : BottomSheetDialogFragment() {
         TranslationsManager().loadString("str_true_info",binding.tvTrueDes)
         TranslationsManager().loadString("str_disclaimer",binding.tvDis,"Disclaimer")
         TranslationsManager().loadString("str_disclaimer_details",binding.tvDisDesc)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("InfoSheetFragment")
     }
 }

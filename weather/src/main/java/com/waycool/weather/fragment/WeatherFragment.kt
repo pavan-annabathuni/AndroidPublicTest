@@ -27,6 +27,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -90,7 +91,7 @@ class WeatherFragment : Fragment() {
             networkCall()
         }
         observer()
-        setBanners()
+//        setBanners()
 
         mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             EventClickHandling.calculateClickEvent("weather_daily")
@@ -103,7 +104,6 @@ class WeatherFragment : Fragment() {
         })
 
 //        observer()
-        setBanners()
         translation()
         binding.lableRain.isSelected = true
         binding.lableVisibility.isSelected = true
@@ -682,11 +682,11 @@ class WeatherFragment : Fragment() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -726,5 +726,9 @@ class WeatherFragment : Fragment() {
         TranslationsManager().loadString("str_hourly",binding.tvHouly,"Hourly")
         TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("WeatherFragment")
     }
 }
