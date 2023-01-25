@@ -5,6 +5,7 @@ import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.android.libraries.maps.model.LatLng
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Network.NetworkModels.CheckTokenResponseDTO
@@ -123,14 +124,15 @@ object TypeConverter {
         return Gson().fromJson(s, listType)
     }
 
-    fun convertStringToCropVariety(s: String): List<CropVarityDomain>? {
+    @Throws(JsonParseException::class)
+    fun convertStringToCropVariety(s: String): List<CropVarityDomain>?{
         Log.d("TypeConverterFrom", s)
-        try {
+        return try {
             val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
-            return Gson().fromJson(s, listType)
-        } catch (e: Exception) {
-            return emptyList()
-            Log.d("cropVariety", "convertStringToCropVariety: $e")
+            Gson().fromJson(s, listType)
+        } catch (e: JsonParseException) {
+            throw e
+//            Log.d("cropVariety", "convertStringToCropVariety: $e")
         }
 
     }

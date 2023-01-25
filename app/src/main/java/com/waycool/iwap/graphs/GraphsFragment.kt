@@ -94,13 +94,6 @@ class GraphsFragment : Fragment() {
 
            val data = arguments?.getString("toolbar")
             translationToolBar(data.toString())
-//            binding.tvToolbar.text=data.toString()
-
-            Log.d(Constant.TAG, "onCreateViewONPID:$serialNo ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$deviceModelId ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramType ")
-            Log.d(Constant.TAG, "onCreateViewONPID:$paramValue")
-            Log.d(Constant.TAG, "onCreateViewONPID:$updateDate ")
             binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
             binding.date.text = updateDate

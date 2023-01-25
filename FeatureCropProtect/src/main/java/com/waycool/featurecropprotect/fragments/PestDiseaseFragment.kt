@@ -21,8 +21,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
-import com.waycool.data.eventscreentime.EventClickHandling
-import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource

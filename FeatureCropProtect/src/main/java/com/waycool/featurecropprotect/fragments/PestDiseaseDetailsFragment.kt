@@ -104,7 +104,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 override fun handleOnBackPressed() {
 
                     val isSuccess = activity?.let { findNavController().popBackStack() }
-                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+                    if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
         activity?.let {

@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -105,32 +105,32 @@ class LanguageFragment : Fragment() {
             }
             "hi" -> {
                 binding.helloTv.text="आउटग्रो में आपका स्वागत है"
-                binding.selectLanguageTv.text="Select your language"
+                binding.selectLanguageTv.text="अपनी भाषा का चयन करें"
                 binding.doneBtn.text="जारी रखें"
             }
             "kn" -> {
                 binding.helloTv.text="ಔಟ್\u200Cಗ್ರೋಗೆ ಸುಸ್ವಾಗತ"
-                binding.selectLanguageTv.text="Select your language"
+                binding.selectLanguageTv.text="ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
                 binding.doneBtn.text="ಮುಂದುವರಿಸಿ"
 
 
             }
             "te" -> {
                 binding.helloTv.text="ఔట్ గ్రో కి స్వాగతం"
-                binding.selectLanguageTv.text="Select your language"
+                binding.selectLanguageTv.text="మీ భాషను ఎంచుకోండి"
                 binding.doneBtn.text="కొనసాగించు"
 
             }
             "ta" -> {
                 binding.helloTv.text="அவுட்குரோவிற்கு வரவேற்கிறோம்"
-                binding.selectLanguageTv.text="Select your language"
+                binding.selectLanguageTv.text= "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்"
                 binding.doneBtn.text="தொடரவும்"
 
 
             }
             "mr" -> {
                 binding.helloTv.text="आऊटग्रो मध्ये आपले स्वागत आहे"
-                binding.selectLanguageTv.text="Select your language"
+                binding.selectLanguageTv.text="तुमची भाषा निवडा"
                 binding.doneBtn.text="सुरू"
 
 

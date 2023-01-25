@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.adapter.CropVarietyAdapter
 import com.example.cropinformation.databinding.FragmentCropVarityBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.google.gson.JsonParseException
 import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
@@ -50,7 +51,16 @@ class CropVarityFragment : Fragment() {
                     binding.labelName.text = data?.get(i)!!.label_name
 
                     Log.d("CropProtect",data[i].label_value!!)
-                    val varietyList=TypeConverter.convertStringToCropVariety(data[i].label_value!!)
+                    val varietyList =
+                        try {
+                            TypeConverter.convertStringToCropVariety(data[i].label_value!!)
+                        } catch (jsonException: JsonParseException) {
+                            data[i].labelValueTag?.let { it1 ->
+                                TypeConverter.convertStringToCropVariety(
+                                    it1
+                                )
+                            }
+                        }
 
                     if(varietyList!=null) {
                         val adapter = CropVarietyAdapter()
