@@ -1,6 +1,7 @@
 package com.example.cropinformation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,16 +45,33 @@ class NurseryFragment : Fragment() {
             for(i in 0..data.size-1){
                 if(data[i].label_name=="Nursery Practices"||data[i].labelNameTag=="Nursery Practices") {
 
-                    var jsonData: String = data[i].labelValueTag!!
-                    val jsonArray = JSONArray(jsonData)
-                    binding.Germination.text = jsonArray.getJSONObject(0).get("title").toString()
-                    binding.GerminationTime.text = jsonArray.getJSONObject(0).get("value").toString()
-                    binding.tv2.text = jsonArray.getJSONObject(1).get("title").toString()
-                    binding.tvTime2.text = jsonArray.getJSONObject(1).get("value").toString()
-                    binding.tv3.text = jsonArray.getJSONObject(2).get("title").toString()
-                    binding.tvTime3.text = jsonArray.getJSONObject(2).get("value").toString()
-                    binding.tv4.text = jsonArray.getJSONObject(3).get("title").toString()
-                    binding.tvTime4.text = jsonArray.getJSONObject(3).get("value").toString()
+                    try {
+                        var jsonData: String = data[i].labelValueTag!!
+                        val jsonArray = JSONArray(jsonData)
+                        for (j in 0 until jsonArray.length()) {
+                            val jsonObject = jsonArray.getJSONObject(j)
+                            when (j) {
+                                0 -> {
+                                    binding.Germination.text = jsonObject.getString("title")
+                                    binding.GerminationTime.text = jsonObject.getString("value")
+                                }
+                                1 -> {
+                                    binding.tv2.text = jsonObject.getString("title")
+                                    binding.tvTime2.text = jsonObject.getString("value")
+                                }
+                                2 -> {
+                                    binding.tv3.text = jsonObject.getString("title")
+                                    binding.tvTime3.text = jsonObject.getString("value")
+                                }
+                                3 -> {
+                                    binding.tv4.text = jsonObject.getString("title")
+                                    binding.tvTime4.text = jsonObject.getString("value")
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d("Nursery", "observer: $e")
+                    }
                 }}}}
     private fun translation(){
         TranslationsManager().loadString("str_germination_period",binding.Germination)

@@ -510,32 +510,19 @@ class MandiFragment : Fragment() {
         cropCategory: String? = null,
         state: String? = null,
         crop: String? = null,
-        sortBy: String? = "Distance",
-        orderBy: String? = "Asc",
+        sortBy: String = "Distance",
+        orderBy: String = "Asc",
         search: String? = null
     ) {
-        if (lat != null && long != null)
-            viewModel.getMandiDetails(
-                lat!!,
-                long!!,
-                cropCategory,
-                state,
-                crop,
-                sortBy,
-                orderBy,
-                search
-            )
+        if (lat != null && long != null) {
+            viewModel.getMandiDetails(lat!!, long!!, cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
                         binding.llPorgressBar.visibility = View.GONE
-
-
                     }, 1500)
-
-
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
+        }
     }
 
     private fun translation() {
@@ -555,67 +542,43 @@ class MandiFragment : Fragment() {
     }
 
     private fun cropSpinner(categoryId: Int? = null) {
-
         viewModel.viewModelScope.launch {
             var cropName = TranslationsManager().getString("str_crop")
 
             viewModel.getAllCrops().observe(viewLifecycleOwner) {
-
                 val filter = it.data?.filter { it1 -> it1.cropCategory_id == categoryId }
-                var cropNameList = (filter?.map { data ->
-                    data.cropName
-                } ?: emptyList()).toMutableList()
+                var cropNameList = (filter?.map { data -> data.cropName } ?: emptyList()).toMutableList()
 
-
-                if (categoryId==null) {
-                    cropNameList = (it.data?.map { data ->
-                        data.cropName
-                    } ?: emptyList()).toMutableList()
+                if (categoryId == null) {
+                    cropNameList = (it.data?.map { data -> data.cropName } ?: emptyList()) as MutableList<String?>
                 }
 
-                if(!cropNameList.isNullOrEmpty())
-                if (!cropName.isNullOrEmpty())
-                    cropNameList[0] = cropName
-                else cropNameList[0] = "Crops"
+                if (!cropNameList.isNullOrEmpty()) {
+                    cropNameList[0] = if (!cropName.isNullOrEmpty()) cropName else "Crops"
+                }
 
-                val arrayAdapter2 =
-                    ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
+                val arrayAdapter2 = ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
                 binding.spinner2.adapter = arrayAdapter2
-                binding.spinner2?.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                        }
-
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-
-                            val text = binding.spinner2.selectedItem.toString()
-                            EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
-                            if (position > 0) {
-                                selectedCrop = text
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        val text = binding.spinner2.selectedItem.toString()
+                        EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
+                        if (position > 0) {
+                            selectedCrop = text
+                            mandiApiCall()
+                        } else {
+                            if (selectedCrop != null) {
+                                selectedCrop = ""
                                 mandiApiCall()
-
-//                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
-
-                            } else {
-                                if (selectedCrop != null) {
-                                    selectedCrop = ""
-                                    mandiApiCall()
-
-//                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
-                                }
                             }
-                            binding.recycleViewDis.adapter = adapterMandi
-
                         }
+                        binding.recycleViewDis.adapter = adapterMandi
                     }
-
+                }
             }
         }
     }
+
 }

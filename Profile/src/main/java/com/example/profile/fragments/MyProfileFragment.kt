@@ -262,6 +262,7 @@ class MyProfileFragment : Fragment() {
 
     }
 
+    /* Logout Function and Clearing all Room db and Data Store data */
     private fun moveToLogin() {
         Log.d("logout","Logout called in profile")
         val intent = Intent(context, LoginMainActivity::class.java)
