@@ -1,7 +1,6 @@
 package com.waycool.videos.fragments
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -34,6 +33,7 @@ import com.waycool.videos.databinding.FragmentPlayVideoBinding
 
 @Suppress("DEPRECATION")
 class PlayVideoFragment : Fragment(), itemClick {
+    private var selectedCategory: String?=null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
 
     private lateinit var binding: FragmentPlayVideoBinding
