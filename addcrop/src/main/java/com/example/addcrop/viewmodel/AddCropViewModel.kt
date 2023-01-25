@@ -15,21 +15,9 @@ import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
 
 class AddCropViewModel :ViewModel() {
-//    val selectedDate = MutableLiveData<String>()
-//
-//    fun showDatePicker() {
-//        selectedDate.value = "Open Date Picker"
-//    }
     fun getAddCropType (): LiveData<Resource<List<SoilTypeDomain>?>> {
         return CropsRepository.getSoilType().asLiveData()
     }
-//    fun addCropPassData(
-//        crop_id:Int?, account_id:Int?, plot_nickname:String?,
-//        is_active:Int?, sowing_date: String?, area: Editable): LiveData<Resource<AddCropResponseDTO?>> =
-//        CropsRepository.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area).asLiveData()
-
-
-
     fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): LiveData<Resource<AddCropResponseDTO?>> =
         CropsRepository.addCropDataPass(map).asLiveData()
 
@@ -45,30 +33,6 @@ class AddCropViewModel :ViewModel() {
 
     fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
         FarmsRepository.getMyFarms().asLiveData()
-//    @Bindable var nickName: String = ""
-//    @Bindable var area: String = ""
-//    @Bindable var date: String = ""
-//    @Bindable var nickNameError: String = ""
-//    @Bindable var areaError: String = ""
-//    @Bindable
-//    var dateError: String = ""
-
-//    fun checkInputFields() : Boolean {
-//        if (nickName.isEmpty()) {
-//            nickNameError = "Nick name should not be empty"
-//            return false
-//        } else if (area.isEmpty()) {
-//            areaError = "Enter Area"
-//            return false
-//        } else if (date.isEmpty()) {
-//            dateError = "Pick up the Date"
-//            return false
-//        }
-//        nickNameError = ""
-//        areaError = ""
-//        dateError = ""
-//        return true
-//    }
 
 
 
