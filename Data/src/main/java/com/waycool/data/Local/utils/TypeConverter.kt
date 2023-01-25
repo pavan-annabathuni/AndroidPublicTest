@@ -200,6 +200,8 @@ object TypeConverter {
     @TypeConverter
     fun convertRangeEntityToString(range: RangesEntity?): String? {
         val gson = Gson()
+        if(range==null)
+            return null
         return gson.toJson(range)
     }
 
