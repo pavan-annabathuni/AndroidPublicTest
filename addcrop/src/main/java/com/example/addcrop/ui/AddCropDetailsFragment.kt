@@ -10,9 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -335,44 +337,17 @@ class AddCropDetailsFragment : Fragment() {
 //
 //        }
 //    }
-
-    private fun showCalender() {
-        val date: DatePickerDialog.OnDateSetListener? =
-            DatePickerDialog.OnDateSetListener { view, year, month, day ->
-                myCalendar.set(Calendar.YEAR, year)
-                myCalendar.set(Calendar.MONTH, month)
-                myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                updateLabel(myCalendar)
-            }
-
-        myCalendar.add(Calendar.YEAR, -1)
-        val dialog = DatePickerDialog(
-            requireContext(),
-            date,
-            myCalendar.get(Calendar.YEAR),
-            myCalendar.get(Calendar.MONTH),
-            myCalendar.get(Calendar.DAY_OF_MONTH)
-        )
-        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
-        dialog.datePicker.minDate = myCalendar.timeInMillis
-        dialog.datePicker.maxDate = myCalendar.timeInMillis
-        dateCrop = cropSelectedDate.format(myCalendar.time)
-        dialog.show()
-    }
-
-    //    private fun showCalender() {
+//
+//    private fun showCalender() {
 //        val date: DatePickerDialog.OnDateSetListener? =
 //            DatePickerDialog.OnDateSetListener { view, year, month, day ->
 //                myCalendar.set(Calendar.YEAR, year)
 //                myCalendar.set(Calendar.MONTH, month)
 //                myCalendar.set(Calendar.DAY_OF_MONTH, day)
-//                myCalendar.add(Calendar.YEAR, 0)
-//                view.minDate = myCalendar.timeInMillis
 //                updateLabel(myCalendar)
-//                myCalendar.add(Calendar.YEAR, 0)
-//                view.maxDate = myCalendar.timeInMillis
 //            }
 //
+//        myCalendar.add(Calendar.YEAR, -1)
 //        val dialog = DatePickerDialog(
 //            requireContext(),
 //            date,
@@ -380,20 +355,47 @@ class AddCropDetailsFragment : Fragment() {
 //            myCalendar.get(Calendar.MONTH),
 //            myCalendar.get(Calendar.DAY_OF_MONTH)
 //        )
-//        dateCrop = cropSelectedDate.format(myCalendar.time)
-//        myCalendar.add(Calendar.YEAR, -1)
-//        dialog.datePicker.minDate = myCalendar.timeInMillis
 //        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+//        dialog.datePicker.minDate = myCalendar.timeInMillis
 //        dialog.datePicker.maxDate = myCalendar.timeInMillis
+//        dateCrop = cropSelectedDate.format(myCalendar.time)
 //        dialog.show()
-//        dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
-//            Color.parseColor("#7946A9")
-//        )
-//        dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
-//            Color.parseColor("#7946A9")
-//        )
-////        viewModel.selectedDate.value=dateCrop
 //    }
+
+        private fun showCalender() {
+        val date: DatePickerDialog.OnDateSetListener? =
+            DatePickerDialog.OnDateSetListener { view, year, month, day ->
+                myCalendar.set(Calendar.YEAR, year)
+                myCalendar.set(Calendar.MONTH, month)
+                myCalendar.set(Calendar.DAY_OF_MONTH, day)
+                myCalendar.add(Calendar.YEAR, 0)
+                view.minDate = myCalendar.timeInMillis
+                updateLabel(myCalendar)
+                myCalendar.add(Calendar.YEAR, 0)
+                view.maxDate = myCalendar.timeInMillis
+            }
+
+        val dialog = DatePickerDialog(
+            requireContext(),
+            date,
+            myCalendar.get(Calendar.YEAR),
+            myCalendar.get(Calendar.MONTH),
+            myCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        dateCrop = cropSelectedDate.format(myCalendar.time)
+        myCalendar.add(Calendar.YEAR, -1)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
+        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+        dialog.datePicker.maxDate = myCalendar.timeInMillis
+        dialog.show()
+        dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
+            Color.parseColor("#7946A9")
+        )
+        dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
+            Color.parseColor("#7946A9")
+        )
+//        viewModel.selectedDate.value=dateCrop
+    }
     fun translations() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
