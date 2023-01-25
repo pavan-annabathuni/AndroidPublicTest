@@ -151,6 +151,8 @@ dependencies {
     //Zendesk
     implementation "zendesk.messaging:messaging-android:2.7.0"
 
+    //browser
+    implementation "androidx.browser:browser:1.4.0"
 }
 repositories {
     mavenCentral()

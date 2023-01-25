@@ -3,6 +3,7 @@ package com.waycool.data.repository
 import android.util.Log
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.waycool.data.Network.NetworkModels.VansFeederDTO
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.repository.DomainMapper.TagsKeywordsDomainMapper
 import com.waycool.data.repository.DomainMapper.VansCategoryDomainMapper
@@ -76,6 +77,22 @@ object VansRepository {
 //                    Resource.Error(it.message)
 //                }
 //            }
+        }
+    }
+
+    fun getVansFeederSinglePage(queryMap: MutableMap<String, String>):Flow<Resource<List<VansFeederListDomain>>>{
+        return NetworkSource.getVansFeederSinglePage(queryMap).map {
+            when(it){
+                is Resource.Success ->{
+                    Resource.Success(VansFeederDomainMapper.VansFeederListDomainMapper().toDomainList(it.data?.data?.vansFeederList?: emptyList()))
+                }
+                is Resource.Loading ->{
+                    Resource.Loading()
+                }
+                is Resource.Error ->{
+                    Resource.Error(it.message)
+                }
+            }
         }
     }
 

@@ -19,6 +19,8 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -136,6 +138,10 @@ class PestDiseaseFragment : Fragment() {
             }
         }
         adapter.onItemClick = {
+            val bundle = Bundle()
+            bundle.putString("","Crop_category_$cropName")
+            bundle.putString("","${it?.diseaseName}")
+            EventItemClickHandling.calculateItemClickEvent("crop_protection",bundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropId", it1) }
             it?.diseaseId?.let { it1 -> args.putInt("diseaseid", it1) }
@@ -169,12 +175,11 @@ class PestDiseaseFragment : Fragment() {
     }
 
     private fun setBanners() {
-
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -190,6 +195,10 @@ class PestDiseaseFragment : Fragment() {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+
+        bannerAdapter.onItemClick ={
+            EventClickHandling.calculateClickEvent("crop_protection_Adbanner")
+        }
     }
 
     private fun fabButton(){

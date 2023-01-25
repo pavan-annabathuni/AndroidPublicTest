@@ -7,6 +7,8 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,6 +40,7 @@ import com.waycool.data.utils.NetworkUtil
 //import com.waycool.data.utils.SharedPreferenceUtility
 import com.waycool.data.Network.ApiInterface.OTPApiInterface
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -111,6 +114,7 @@ class OtpFragment : Fragment() {
         binding.otpViaCall.setOnClickListener {
             retryOtp("voice")
             showTimer()
+            EventClickHandling.calculateClickEvent("OTP_VIA_Call")
         }
 
         binding.doneBtn.setOnClickListener {
@@ -120,6 +124,7 @@ class OtpFragment : Fragment() {
         binding.resendMsgBtn.setOnClickListener {
             retryOtp("text")
             showTimer()
+            EventClickHandling.calculateClickEvent("Resend_OTP")
         }
 
         binding.backBtn.setOnClickListener {
@@ -397,12 +402,18 @@ class OtpFragment : Fragment() {
                                     loginViewModel.setUserToken(loginMaster.data)
 
                                 }
+                                Handler(Looper.myLooper()!!).postDelayed({
+                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                        if (user.data != null && user.data?.userId != null) {
+                                            gotoMainActivity()
+                                        }
+                                    }
+                                },200)
                                 ToastStateHandling.toastSuccess(
                                     requireContext(),
                                     "Logged in successfully",
                                     Toast.LENGTH_SHORT
                                 )
-                                gotoMainActivity()
 
                             } else {
                                 if (loginMaster?.data == "406") {

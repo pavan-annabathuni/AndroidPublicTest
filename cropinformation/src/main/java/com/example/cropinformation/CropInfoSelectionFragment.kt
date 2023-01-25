@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -67,6 +68,7 @@ class CropInfoSelectionFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
         translation()
+        EventClickHandling.calculateClickEvent("cropinformation_landing")
         return binding.root
     }
 
@@ -82,7 +84,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val bundle = Bundle()
-            bundle.putString("",it?.cropName)
+            bundle.putString("",it?.cropNameTag)
             bundle.putString("","CropInfoSelectionFragment")
             EventItemClickHandling.calculateItemClickEvent("cropinformation_landing",bundle)
 
@@ -118,7 +120,7 @@ class CropInfoSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
+                   // categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -136,9 +138,9 @@ class CropInfoSelectionFragment : Fragment() {
 
         adapter.onItemClick = {
             val bundle = Bundle()
-            bundle.putString("","${it?.cropName}")
+            bundle.putString("","${it?.cropNameTag}")
             bundle.putString("","Crop_category_${selectedCategory?.categoryTagName}")
-            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
+            EventItemClickHandling.calculateItemClickEvent("cropInfo_landing",bundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
@@ -180,6 +182,7 @@ class CropInfoSelectionFragment : Fragment() {
                     ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
                 }
+                else -> {}
             }
         }
     }
@@ -208,7 +211,7 @@ class CropInfoSelectionFragment : Fragment() {
             selectedCategory = category
             getSelectedCategoryCrops(
                 categoryId = category.id,
-                searchQuery = searchCharSequence.toString()
+               // searchQuery = searchCharSequence.toString()
             )
         }
 
@@ -218,7 +221,7 @@ class CropInfoSelectionFragment : Fragment() {
                 selectedCategory = category
                 getSelectedCategoryCrops(
                     categoryId = category.id,
-                    searchQuery = searchCharSequence.toString()
+                 //   searchQuery = searchCharSequence.toString()
                 )
             }
           //  EventClickHandling.calculateClickEvent(chip.text.toString())
@@ -239,6 +242,7 @@ class CropInfoSelectionFragment : Fragment() {
                 is Resource.Error -> {
                     ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
+                else -> {}
             }
         }
     }
@@ -349,11 +353,20 @@ class CropInfoSelectionFragment : Fragment() {
         dialog.setContentView(R.layout.dailog_crop_info)
         // val body = dialog.findViewById(R.id.body) as TextView
         val yesBtn = dialog.findViewById(R.id.ok) as Button
+        val tvInformation = dialog.findViewById(R.id.textView14)as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15)as TextView
         yesBtn.setOnClickListener {
             dialog.dismiss()
             Log.d("Dialog", "dialog: Clicked")
         }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
+        TranslationsManager().loadString("str_information",tvInformation,"Information")
+        TranslationsManager().loadString("crop_info_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a Crop Information for this crop. We look forward to serving you shortly")
+        viewModel.viewModelScope.launch(){
+            var ok = TranslationsManager().getString("str_ok")
+            if(ok.isNullOrEmpty())
+                yesBtn.text = "Ok"
+        }
     }
 }

@@ -38,6 +38,7 @@ import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
@@ -113,7 +114,12 @@ class MandiGraphFragment : Fragment() {
             EventItemClickHandling.calculateItemClickEvent("mandi_share",bundle)
             binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-            context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
+            viewModel.viewModelScope.launch {
+                val toast = TranslationsManager().getString("str_share_opening")
+                if(toast.isNullOrEmpty())
+                context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
+                else context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
+            }
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -127,6 +133,7 @@ class MandiGraphFragment : Fragment() {
         binding.tvMarket.isSelected = true
         binding.cropName.isSelected = true
         checkLang()
+        EventClickHandling.calculateClickEvent("Mandi_graph_landing")
         return binding.root
     }
 
@@ -290,11 +297,11 @@ class MandiGraphFragment : Fragment() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -344,7 +351,7 @@ class MandiGraphFragment : Fragment() {
         )
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
             .setAndroidParameters(
                 AndroidParameters.Builder()
@@ -379,9 +386,9 @@ class MandiGraphFragment : Fragment() {
     private fun translation() {
 
         TranslationsManager().loadString("str_share", binding.imgShare,"Share")
-        TranslationsManager().loadString("rate_kg", binding.textView7,"Rate Kg")
+        TranslationsManager().loadString("date", binding.textView7,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
-        TranslationsManager().loadString("date", binding.textView8,"Date")
+        TranslationsManager().loadString("rate_kg", binding.textView8,"Date")
 
 
     }

@@ -20,6 +20,7 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
@@ -186,6 +187,23 @@ object NetworkSource {
             config = PagingConfig(pageSize = 15, prefetchDistance = 2),
             pagingSourceFactory = { VansPagingSource(apiInterface, queryMap) }
         ).flow
+    }
+
+    fun getVansFeederSinglePage(queryMap: MutableMap<String, String>) = flow<Resource<VansFeederDTO?>> {
+
+        try {
+            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
+
+            val response = apiInterface.getVansFeeder(headerMap, queryMap)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()))
+            } else {
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message))
+        }
     }
 
 
@@ -828,6 +846,25 @@ object NetworkSource {
                 )
             }
         ).flow
+    }
+
+    fun getMandiSinglePage(
+        lat: String?, lon: String?
+    ) =  flow<Resource<MandiDomain?>> {
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
+        val languageCode=LocalSource.getLanguageCode()?:"en"
+
+        try{
+            val response= apiInterface.getMandiList(map,lat,lon,"","","",1,"distance","asc","",languageCode)
+            if(response.isSuccessful){
+                emit(Resource.Success(response.body()))
+            }else{
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+            }
+
+        }catch (e:Exception){
+            emit(Resource.Error(e.message))
+        }
     }
 
     fun getMandiHistory(

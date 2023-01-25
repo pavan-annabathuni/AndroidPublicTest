@@ -43,6 +43,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -53,6 +54,7 @@ import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
+import kotlinx.android.synthetic.main.fragment_registration.*
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import java.util.*
@@ -326,6 +328,7 @@ class RegistrationFragment : Fragment() {
                 }
 
             }
+            EventClickHandling.calculateClickEvent("Listen$tittle")
         }
 
     }
@@ -540,6 +543,8 @@ class RegistrationFragment : Fragment() {
 
 
                 }
+                EventClickHandling.calculateClickEvent("Login_Name${name_et.text}")
+                EventClickHandling.calculateClickEvent("Login_Location${address}")
             }
         } else {
             getLocation()
@@ -563,12 +568,14 @@ class RegistrationFragment : Fragment() {
                         )
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
-                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
-                            if (user.data != null && user.data?.userId != null) {
 
-                                gotoMainActivity()
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            viewModel.getUserDetails().observe(viewLifecycleOwner) {user->
+                                if (user.data != null && user.data?.userId != null) {
+                                    gotoMainActivity()
+                                }
                             }
-                        }
+                        },200)
 /*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
                             gotoMainActivity()
                         }*/

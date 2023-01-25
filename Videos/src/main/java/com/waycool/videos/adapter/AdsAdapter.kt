@@ -10,6 +10,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.VansFeederListDomain
@@ -17,7 +18,7 @@ import com.waycool.uicomponents.R
 import com.waycool.uicomponents.databinding.ViewholderBannerBinding
 
 class AdsAdapter(val context: Context) :
-    PagingDataAdapter<VansFeederListDomain, AdsAdapter.AdsViewHolder>(COMPARATOR) {
+    ListAdapter<VansFeederListDomain, AdsAdapter.AdsViewHolder>(COMPARATOR) {
 
     var onItemClick: ((VansFeederListDomain?) -> Unit)? = null
 
@@ -58,7 +59,7 @@ class AdsAdapter(val context: Context) :
                     customTabIntent.intent.setPackage(packageName)
                     customTabIntent.launchUrl(
                         context,
-                        Uri.parse(vans?.contentUrl)
+                        Uri.parse(vans.contentUrl)
                     )
                 }
             }
@@ -67,10 +68,10 @@ class AdsAdapter(val context: Context) :
         }
     }
 
-    override fun getItemCount(): Int {
-        return if (snapshot().items.size >= 5) 5
-        else snapshot().items.size
-    }
+//    override fun getItemCount(): Int {
+//        return if (snapshot().items.size >= 5) 5
+//        else snapshot().items.size
+//    }
 
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<VansFeederListDomain>() {

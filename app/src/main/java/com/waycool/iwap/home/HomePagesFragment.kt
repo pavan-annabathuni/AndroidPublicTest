@@ -122,6 +122,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
         videosBinding = binding.layoutVideos
 
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
+
         return binding.root
     }
 
@@ -136,22 +150,24 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
 
             val args = Bundle()
-            args.putParcelable("mandiRecord",it)
+            args.putParcelable("mandiRecord", it)
             this.findNavController()
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                  findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-           viewLifecycleOwner,
-            callback
-        )
+//        val callback: OnBackPressedCallback =
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//                    findNavController().popBackStack()
+//                }
+//            }
+//        activity?.let {
+//            it.onBackPressedDispatcher.addCallback(
+//                it,
+//                callback
+//            )
+//        }
         setWishes()
         checkNetwork()
         initClick()
@@ -202,57 +218,59 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     private fun setTranslation() {
-        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
-        TranslationsManager().loadString("add_crop_info", binding.tvYourForm,"Add your Crop and get more details.")
-        TranslationsManager().loadString("add_crop", binding.tvAddFrom,"Add crops")
-        TranslationsManager().loadString("add_farm", binding.tvAddFromOne,"Add your farm")
-        TranslationsManager().loadString("my_farm", binding.tvMyform,"My Farms")
-        TranslationsManager().loadString("add_farm_top",binding.tvOurAddFormData,"Add Farm")
-        TranslationsManager().loadString("str_today", binding.tvDays,"Today")
+        TranslationsManager().loadString("welcome", binding.tvName, "Welcome")
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm, "Add your Crop and get more details.")
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom, "Add crops")
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne, "Add your farm")
+        TranslationsManager().loadString("my_farm", binding.tvMyform, "My Farms")
+        TranslationsManager().loadString("add_farm_top", binding.tvOurAddFormData, "Add Farm")
+        TranslationsManager().loadString("str_today", binding.tvDays, "Today")
 
-        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
-        TranslationsManager().loadString("str_wind", binding.tvWind,"Wind")
-        TranslationsManager().loadString("str_rain", binding.tvRain,"Rain")
-        TranslationsManager().loadString("our_services", binding.tvOurService,"Our Services")
-        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll,"View All")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity, "Humidity")
+        TranslationsManager().loadString("str_wind", binding.tvWind, "Wind")
+        TranslationsManager().loadString("str_rain", binding.tvRain, "Rain")
+        TranslationsManager().loadString("our_services", binding.tvOurService, "Our Services")
+        TranslationsManager().loadString("str_viewall", binding.tvOurServiceViewAll, "View All")
 
-        TranslationsManager().loadString("view_farm_detail",binding.tvViewFarmDetails,"View Farm Details")
-
-
-        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting,"Soil Testing")
-        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc,"Helps you assess and recommend the nutrition of your soil")
-        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore,"Know more")
-
-        TranslationsManager().loadString("crop_health", binding.tvCropHealth,getString(R.string.pestdiseasedetection))
-        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc,"Helps you detect crop’s health using Artificial Intelligence")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore,"Know more")
-
-        TranslationsManager().loadString("str_title", binding.tvCropInformation,"Crop Information")
-        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc,"Gives you end to end  information about your crop.")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore,"Know more")
-
-        TranslationsManager().loadString("crop_protection", binding.tvCropProtect,"Crop Protection")
-        TranslationsManager().loadString("crop_protection_info", binding.tvCropProtectDesc,"Complete information to fight against all the possible diseases.")
-        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore,"Know more")
-
-        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
-        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
-        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,getString(R.string.newsarticles))
-        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View All")
-
-        TranslationsManager().loadString("my_crops", binding.myCropsTitle,"My Crops")
-        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops,"Edit Crops")
-
-        TranslationsManager().loadString("add_crop",binding.AddCrop,"Add Crop")
-
-        TranslationsManager().loadString("mandi_prices",binding.tvRequest,"Market Prices")
-        TranslationsManager().loadString("str_viewall",binding.tvViewAllMandi,"View All")
-
-        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
-        TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
+        TranslationsManager().loadString("view_farm_detail", binding.tvViewFarmDetails, "View Farm Details")
 
 
+        TranslationsManager().loadString("soil_testing", binding.tvSoilTesting, "Soil Testing")
+        TranslationsManager().loadString("soil_testing_info", binding.tvSoilTestingDesc, "Helps you assess and recommend the nutrition of your soil")
+        TranslationsManager().loadString("txt_know_more", binding.tvSoilTestingKnowMore, "Know more")
+
+        TranslationsManager().loadString("crop_health", binding.tvCropHealth, getString(R.string.pestdiseasedetection))
+        TranslationsManager().loadString("crop_health_info", binding.tvCropHealthDesc, "Helps you detect crop’s health using Artificial Intelligence")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropHealthKnowMore, "Know more")
+
+        TranslationsManager().loadString("str_title", binding.tvCropInformation, "Crop Information")
+        TranslationsManager().loadString("crop_information_info", binding.tvCropInformationDesc, "Gives you end to end  information about your crop.")
+        TranslationsManager().loadString("txt_know_more", binding.tvCropInformationKnowMore, "Know more")
+
+        TranslationsManager().loadString("crop_protection", binding.tvCropProtect, "Crop Protection")
+        TranslationsManager().loadString(
+            "crop_protection_info",
+            binding.tvCropProtectDesc,
+            "Complete information to fight against all the possible diseases."
+        )
+        TranslationsManager().loadString("txt_know_more", binding.tvCropProtectKnowMore, "Know more")
+
+        TranslationsManager().loadString("videos", videosBinding.videosTitle, "Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos, "View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle, getString(R.string.newsarticles))
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews, "View All")
+
+        TranslationsManager().loadString("my_crops", binding.myCropsTitle, "My Crops")
+        TranslationsManager().loadString("str_edit", binding.tvEditMyCrops, "Edit Crops")
+
+        TranslationsManager().loadString("add_crop", binding.AddCrop, "Add Crop")
+
+        TranslationsManager().loadString("mandi_prices", binding.tvRequest, "Market Prices")
+        TranslationsManager().loadString("str_viewall", binding.tvViewAllMandi, "View All")
+
+        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
+        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
 
 
     }
@@ -260,15 +278,20 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
-            TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+                TranslationsManager().loadString("good_morning", binding.tvGoodMorning, "Good Morning")
+            }
             in 12..15 -> {
-                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+                TranslationsManager().loadString("good_afternoon", binding.tvGoodMorning, "Good Afternoon")
+            }
             in 16..20 -> {
-                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+                TranslationsManager().loadString("good_evening", binding.tvGoodMorning, "Good Evening")
+            }
             in 21..23 -> {
-                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
-            else ->{
-                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
+                TranslationsManager().loadString("good_night", binding.tvGoodMorning, "Good Night")
+            }
+            else -> {
+                TranslationsManager().loadString("namaste", binding.tvGoodMorning, "Namaste")
+            }
         }
     }
 
@@ -313,23 +336,23 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     private fun mandiDetailCall() {
-        mandiViewModel.viewModelScope.launch {
-            mandiViewModel.getMandiDetails(
-                lat,
-                long,
-                cropCategory, state,
-                crop,
-                sortBy,
-                orderBy,
-                search,
-                0
-            )
-                .observe(viewLifecycleOwner) {
-                    mandiAdapter.submitData(lifecycle,it)
 
+        Log.d("MandiFromHome", "Called")
+
+        mandiViewModel.getMandiSinglePage(lat, long).observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    mandiAdapter.submitList(it.data?.data?.records?.subList(0, 5))
                 }
+                is Resource.Error -> {}
+                is Resource.Loading -> {}
+
+            }
+//                    mandiAdapter.submitList()
+
         }
     }
+
 
     private fun initClick() {
 
@@ -486,7 +509,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             newsBinding.ivViewAll.visibility = View.VISIBLE
 
             newsBinding.viewAllNews.isClickable = true
-            newsBinding.ivViewAll.isClickable=true
+            newsBinding.ivViewAll.isClickable = true
             setNews()
         }
     }
@@ -528,8 +551,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         val farmsAdapter = FarmsAdapter(requireContext(), this)
                         binding.farmsRv.adapter = farmsAdapter
 
-                        val sortedList=it.data?.sortedByDescending { farm->
-                            farm.isPrimary==1
+                        val sortedList = it.data?.sortedByDescending { farm ->
+                            farm.isPrimary == 1
                         }
 
                         farmsAdapter.submitList(sortedList)
@@ -610,14 +633,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity ?: requireContext())
         viewModel.getVansAdsList().observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitData(lifecycle, it)
+            bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
-                tab.text = "${position + 1} / ${bannerAdapter.snapshot().size}"
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
@@ -668,10 +691,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.tvNoVANS.text="News and Articles are being loaded.Please wait for some time"
+                                    newsBinding.tvNoVANS.text = "News and Articles are being loaded.Please wait for some time"
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility = View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
+                                    newsBinding.ivViewAll.visibility = View.GONE
                                 }
 
                                 if (it1 is LoadState.NotLoading) {
@@ -680,14 +703,14 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
-                                        newsBinding.ivViewAll.visibility=View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
                                         newsBinding.viewAllNews.visibility = View.VISIBLE
-                                        newsBinding.ivViewAll.visibility=View.VISIBLE
+                                        newsBinding.ivViewAll.visibility = View.VISIBLE
 
 
                                     }
@@ -714,38 +737,37 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                     videosBinding.viewAllVideos.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                 } else {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        adapter.loadStateFlow.map { it.refresh }
-                            .distinctUntilChanged()
-                            .collect { it1 ->
 
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                    adapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect { it1 ->
+
+                            if (it1 is LoadState.Error && adapter.itemCount == 0) {
+                                videosBinding.noDataVideo.visibility = View.VISIBLE
+                                videosBinding.tvNoVANs.text = "Videos are being loaded.Please wait for some time"
+                                videosBinding.ivViewAll.visibility = View.GONE
+                                videosBinding.viewAllVideos.visibility = View.GONE
+                                videosBinding.videoCardNoInternet.visibility = View.GONE
+                                videosBinding.videosListRv.visibility = View.INVISIBLE
+                            }
+
+                            if (it1 is LoadState.NotLoading) {
+                                if (adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.tvNoVANs.text="Videos are being loaded.Please wait for some time"
                                     videosBinding.ivViewAll.visibility = View.GONE
                                     videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                                }
+                                } else {
+                                    videosBinding.noDataVideo.visibility = View.GONE
+                                    videosBinding.ivViewAll.visibility = View.VISIBLE
+                                    videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                    videosBinding.videoCardNoInternet.visibility = View.GONE
+                                    videosBinding.videosListRv.visibility = View.VISIBLE
 
-                                if (it1 is LoadState.NotLoading) {
-                                    if (adapter.itemCount == 0) {
-                                        videosBinding.noDataVideo.visibility = View.VISIBLE
-                                        videosBinding.ivViewAll.visibility = View.GONE
-                                        videosBinding.viewAllVideos.visibility = View.GONE
-                                        videosBinding.videoCardNoInternet.visibility = View.GONE
-                                        videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    } else {
-                                        videosBinding.noDataVideo.visibility = View.GONE
-                                        videosBinding.ivViewAll.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
-                                        videosBinding.videoCardNoInternet.visibility = View.GONE
-                                        videosBinding.videosListRv.visibility = View.VISIBLE
-
-                                    }
                                 }
                             }
-                    }
+                        }
 
 
                 }
@@ -1259,8 +1281,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         populateMyFarm()
     }
 
-    private fun checkRole(roleId:Int){
-        if(roleId==31){
+    private fun checkRole(roleId: Int) {
+        if (roleId == 31) {
             binding.tvEditMyCrops.visibility = View.INVISIBLE
             binding.ivEditCrop.visibility = View.INVISIBLE
             binding.cvAddCrop.isEnabled = false
@@ -1270,6 +1292,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             binding.ivMyForm.visibility = View.GONE
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("HomePagesFragment")
     }
 
 }

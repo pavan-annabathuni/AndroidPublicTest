@@ -9,7 +9,6 @@
         <activity
             android:name=".MandiActivity"
             android:exported="true"
-            android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysVisible">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

@@ -173,7 +173,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="2dp"
-                 android:src="@drawable/frame2"
+                 android:src="@drawable/soil_ph_chart"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 

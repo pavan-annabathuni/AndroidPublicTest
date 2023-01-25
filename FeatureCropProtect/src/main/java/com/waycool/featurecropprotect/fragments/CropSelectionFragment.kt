@@ -1,6 +1,9 @@
 package com.waycool.cropprotect.fragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -8,11 +11,14 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CompoundButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +30,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -71,16 +78,12 @@ class CropSelectionFragment : Fragment() {
 
         apiErrorHandlingBinding=binding.errorState
 
-        binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
-        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val isSuccess = findNavController().navigateUp()
-                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                    if (!isSuccess) activity?.let { it.finish() }
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -89,7 +92,8 @@ class CropSelectionFragment : Fragment() {
         )
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            val isSuccess = findNavController().navigateUp()
+            if (!isSuccess) activity?.let { it.finish() }
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle,"Protect Your Crop")
         TranslationsManager().loadString("crop_protection_top",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
@@ -98,13 +102,27 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protection_myCrop${it.cropNameTag}")
+            val id = it.cropId
+            var id2 = 0
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
+            viewModel.getCropMaster().observe(viewLifecycleOwner){
+                for (i in 0 until it.data?.size!!){
+                    Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
+                    if(it.data?.get(i)?.cropId==id) {
+                        id2 = it.data?.get(i)?.cropId!!
+                    }
+                }
+                if(id==id2){
             findNavController().navigate(
                 R.id.action_cropSelectionFragment_to_pestDiseaseFragment,
-                args
-            )
+                args)
+        }else  dialog()
+
+            }
+
         })
         binding.rvMyCrops.adapter = myCropAdapter
         fabButton()
@@ -123,16 +141,16 @@ class CropSelectionFragment : Fragment() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
-                handler!!.postDelayed(searchRunnable, 150)
+                handler!!.postDelayed(searchRunnable, 600)
             }
 
             override fun afterTextChanged(editable: Editable) {}
         })
         adapter.onItemClick = {
             val bundle = Bundle()
-            bundle.putString("","${it?.cropName}")
+            bundle.putString("","${it?.cropNameTag}")
             bundle.putString("","Crop_category_${selectedCategory?.categoryTagName}")
-            EventItemClickHandling.calculateItemClickEvent("Mandi_landing",bundle)
+            EventItemClickHandling.calculateItemClickEvent("cropprotection_landing",bundle)
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 -> args.putString("cropname", it1) }
@@ -142,6 +160,7 @@ class CropSelectionFragment : Fragment() {
             )
         }
         binding.micBtn.setOnClickListener {
+            EventClickHandling.calculateClickEvent("crop_protection_landing_STT")
             speechToText()
         }
         setUpCropCategories()
@@ -327,6 +346,29 @@ class CropSelectionFragment : Fragment() {
             } else {
                 binding.cvMyCrops.visibility=View.GONE
             }
+        }
+    }
+    private fun dialog(){
+
+        val dialog = Dialog(requireContext())
+        //dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dailog_pest)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val yesBtn = dialog.findViewById(R.id.ok) as Button
+        val tvInformation = dialog.findViewById(R.id.textView14)as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15)as TextView
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            Log.d("Dialog", "dialog: Clicked")
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        TranslationsManager().loadString("str_information",tvInformation,"Information")
+        TranslationsManager().loadString("str_crop_protect_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a crop protect for this crop. We look forward to serving you shortly.")
+        viewModel.viewModelScope.launch(){
+            var ok = TranslationsManager().getString("str_ok")
+            if(ok.isNullOrEmpty())
+                yesBtn.text = "Ok"
         }
     }
 }
