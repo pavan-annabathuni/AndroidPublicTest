@@ -11,6 +11,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -59,7 +63,7 @@ import java.util.regex.Pattern
 
 
 class OtpFragment : Fragment() {
-    private var bottomSheetDialog: BottomSheetDialog?=null
+    private var bottomSheetDialog: BottomSheetDialog? = null
     lateinit var binding: FragmentOtpBinding
     private var mToast: Toast? = null
     var mobileNumber: String = ""
@@ -101,18 +105,18 @@ class OtpFragment : Fragment() {
 
         CoroutineScope(Dispatchers.Main).launch {
             val enterCode = TranslationsManager().getString("enter_otp_code")
-            if(!enterCode.isNullOrEmpty()){
+            if (!enterCode.isNullOrEmpty()) {
                 binding.receiveMsgTv.text = buildString {
                     append(enterCode)
                     append(" +91- ")
                     append(mobileNumber)
                 }
-            }else{
+            } else {
                 binding.receiveMsgTv.text = buildString {
-        append(getString(R.string.opt_text2))
-        append(" +91- ")
-        append(mobileNumber)
-    }
+                    append(getString(R.string.opt_text2))
+                    append(" +91- ")
+                    append(mobileNumber)
+                }
             }
         }
         startSmsUserConsent()
@@ -153,13 +157,25 @@ class OtpFragment : Fragment() {
     }
 
     private fun setTranslations() {
-        TranslationsManager().loadString("otp_verification",binding.enterNumberTv,"OTP verification")
-        TranslationsManager().loadString("enter_otp_code", binding.receiveMsgTv,"Enter the 4 digit code sent to you on")
-        TranslationsManager().loadString("enter_otp",binding.tvEnterOtp,"Enter OTP")
-        TranslationsManager().loadString("receive_otp",binding.didnotReceiveMsgTv,"Don’t receive OTP?")
-        TranslationsManager().loadString("resend_otp",binding.resendMsgBtn,"Resend OTP")
-        TranslationsManager().loadString("txt_or",binding.otpResendOr,"Or")
-        TranslationsManager().loadString("get_otp_call",binding.otpViaCall,"Get OTP via Call")
+        TranslationsManager().loadString(
+            "otp_verification",
+            binding.enterNumberTv,
+            "OTP verification"
+        )
+        TranslationsManager().loadString(
+            "enter_otp_code",
+            binding.receiveMsgTv,
+            "Enter the 4 digit code sent to you on"
+        )
+        TranslationsManager().loadString("enter_otp", binding.tvEnterOtp, "Enter OTP")
+        TranslationsManager().loadString(
+            "receive_otp",
+            binding.didnotReceiveMsgTv,
+            "Don’t receive OTP?"
+        )
+        TranslationsManager().loadString("resend_otp", binding.resendMsgBtn, "Resend OTP")
+        TranslationsManager().loadString("txt_or", binding.otpResendOr, "Or")
+        TranslationsManager().loadString("get_otp_call", binding.otpViaCall, "Get OTP via Call")
     }
 
     private fun retryOtp(type: String) {
@@ -172,7 +188,11 @@ class OtpFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Error Occurred",
+                        Toast.LENGTH_SHORT
+                    )
 
                 }
             }
@@ -257,15 +277,21 @@ class OtpFragment : Fragment() {
                             val otpResponse: OTPResponseDomain? = it.data
                             if (otpResponse?.type == "success") {
                                 verifyUser()
-                            }
-                            else if (otpResponse?.type == "error") {
-                                if(otpResponse?.message=="Max limit reached for this otp verification"){
-                                    ToastStateHandling.toastError(requireContext(), "You have reached the maximum limit for the otp verification.Get OTP again",Toast.LENGTH_LONG)
+                            } else if (otpResponse?.type == "error") {
+                                if (otpResponse?.message == "Max limit reached for this otp verification") {
+                                    ToastStateHandling.toastError(
+                                        requireContext(),
+                                        "You have reached the maximum limit for the otp verification.Get OTP again",
+                                        Toast.LENGTH_LONG
+                                    )
                                     //go to login fragment
                                     findNavController().popBackStack()
-                                }
-                                else{
-                                    ToastStateHandling.toastError(requireContext(), "Wrong Otp", Toast.LENGTH_SHORT)
+                                } else {
+                                    ToastStateHandling.toastError(
+                                        requireContext(),
+                                        "Wrong Otp",
+                                        Toast.LENGTH_SHORT
+                                    )
                                 }
                             }
 
@@ -282,7 +308,13 @@ class OtpFragment : Fragment() {
                     }
                 }
         } else {
-            context?.let { ToastStateHandling.toastError(it,"Please enter the OTP", Toast.LENGTH_LONG) }
+            context?.let {
+                ToastStateHandling.toastError(
+                    it,
+                    "Please enter the OTP",
+                    Toast.LENGTH_LONG
+                )
+            }
         }
     }
 
@@ -415,9 +447,11 @@ class OtpFragment : Fragment() {
         } else {
 
             loginViewModel.login(mobileNumber, fcmToken!!, mobileModel!!, mobileManufacturer!!)
-                .observe(
+                .observeOnce(
                     requireActivity()
                 ) {
+
+                    Log.d("Login_OTP","${it.data}")
 
                     when (it) {
                         is Resource.Success -> {
@@ -431,12 +465,13 @@ class OtpFragment : Fragment() {
 
                                 }
                                 Handler(Looper.myLooper()!!).postDelayed({
-                                    loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
-                                        if (user.data != null && user.data?.userId != null) {
-                                            gotoMainActivity()
+                                    loginViewModel.getUserDetails()
+                                        .observe(viewLifecycleOwner) { user ->
+                                            if (user.data != null && user.data?.userId != null) {
+                                                gotoMainActivity()
+                                            }
                                         }
-                                    }
-                                },200)
+                                }, 200)
                                 ToastStateHandling.toastSuccess(
                                     requireContext(),
                                     "Logged in successfully",
@@ -462,7 +497,8 @@ class OtpFragment : Fragment() {
                                     continueBtn!!.setOnClickListener { view: View? ->
                                         bottomSheetDialog?.dismiss()
                                         loginViewModel.logout(mobileNumber)
-                                            .observe(requireActivity()) {
+                                            .observeOnce(requireActivity()) { logout->
+                                                Log.d("Login_OTP","${logout.data}")
                                                 verifyUser()
                                             }
 
@@ -498,11 +534,11 @@ class OtpFragment : Fragment() {
             mobileNumber
         )
         binding.pb.visibility = View.VISIBLE
-        Handler().postDelayed ({
+        Handler().postDelayed({
             binding.pb.visibility = View.GONE
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_otpFragment_to_registrationFragment, args)
-        },500)
+        }, 500)
 
 
     }
@@ -510,7 +546,13 @@ class OtpFragment : Fragment() {
     fun apiOTP(mobileNumber: String) {
         loginViewModel.getOtp(mobileNumber).observe(requireActivity()) {
             if (it is Resource.Success) {
-                context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"OTP Sent",Toast.LENGTH_SHORT) }
+                context?.let { it1 ->
+                    ToastStateHandling.toastSuccess(
+                        it1,
+                        "OTP Sent",
+                        Toast.LENGTH_SHORT
+                    )
+                }
             }
         }
     }
@@ -519,9 +561,25 @@ class OtpFragment : Fragment() {
         super.onDestroy()
         bottomSheetDialog?.dismiss()
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("OtpFragment")
+    }
+
+    fun <T> LiveData<T>.observeOnce(
+        owner: LifecycleOwner,
+        reactToChange: (T) -> Unit
+    ): Observer<T> {
+        val wrappedObserver = object : Observer<T> {
+            override fun onChanged(data: T) {
+                reactToChange(data)
+                removeObserver(this)
+            }
+        }
+
+        observe(owner, wrappedObserver)
+        return wrappedObserver
     }
 }
 

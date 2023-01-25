@@ -20,8 +20,8 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
-import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.error.CrashAnalytics
+import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
@@ -348,7 +348,7 @@ object NetworkSource {
         mobile_model: String,
         mobile_manufacturer: String
     ) = flow<Resource<LoginDTO?>> {
-        emit(Resource.Loading())
+//        emit(Resource.Loading())
         try {
             val response = apiInterface.login(
                 headerMapPublic,

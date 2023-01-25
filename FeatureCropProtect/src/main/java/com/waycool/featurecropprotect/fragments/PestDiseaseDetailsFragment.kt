@@ -223,53 +223,40 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             audioNewLayoutBinding.root.visibility = VISIBLE
                         else
                             audioNewLayoutBinding.root.visibility = GONE
-
-
                         if (it.data != null && it.data!!.symptoms != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Log.d("Symp","${it.data?.symptoms}")
                                 binding.symptomBodyTv.text = Html.fromHtml(
                                     it.data?.symptoms!!,
                                     Html.FROM_HTML_MODE_COMPACT
                                 )
                             } else {
                                 binding.symptomBodyTv.text =
-                                    Html.fromHtml(it.data?.symptoms!!)
-                            }
+                                    Html.fromHtml(it.data?.symptoms!!) }
                         } else {
                             binding.symptomBodyTv.text = "NA"
-
                         }
-
                         binding.tabLayout.removeAllTabs()
-
-
                         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
                             override fun onTabSelected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
-
                             override fun onTabUnselected(tab: Tab?) {
 
                             }
-
                             override fun onTabReselected(tab: Tab?) {
                                 populateTabText(tab, it.data)
                             }
                         })
-
                         if (it.data != null && it.data!!.chemical != null) {
                             addTab(chemical)
                         }
-
                         if (it.data != null && it.data!!.biological != null) {
                             addTab(biological)
                         }
-
                         if (it.data != null && it.data!!.cultural != null) {
                             addTab(cultural)
                         }
-
-
                     }
                     is Resource.Loading -> {
                         ToastStateHandling.toastWarning(

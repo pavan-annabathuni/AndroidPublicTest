@@ -26,9 +26,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.truecaller.android.sdk.*
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -37,12 +37,13 @@ import com.waycool.featurelogin.databinding.FragmentLoginBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.regex.Pattern
 
 class LoginFragment : Fragment() {
-    private var langCode: String?=null
+    private var langCode: String? = null
     private var trueCallerFullName: String? = null
 
     private var isTruecallerVerified: Boolean = false
@@ -72,7 +73,12 @@ class LoginFragment : Fragment() {
             findNavController().popBackStack()
         }
         if (arguments?.getString("langCode") != null) {
-            langCode = arguments?.getString("mobile_number")
+            langCode = arguments?.getString("langCode")
+        }
+
+        GlobalScope.launch {
+            if (langCode == null)
+                langCode = loginViewModel.getselectedLangCode() ?: "en"
         }
         translation()
 
@@ -139,11 +145,27 @@ class LoginFragment : Fragment() {
 
 
     private fun translation() {
-        TranslationsManager().loadString("enter_mobile_no", binding.enterNumberTv,"Enter your mobile number")
-        TranslationsManager().loadString("recieve_otp", binding.receiveMsgTv,"You’ll receive a 4 digit code to verify")
-        TranslationsManager().loadString("enter_number", binding.tvEnterMobileNumber,"Enter mobile number")
-        TranslationsManager().loadString("get_otp", binding.getotpBtn,"Get OTP")
-        TranslationsManager().loadString("t_and_c", binding.termsTv,"By continuing you agree to Outgrow's privacy policy and terms of service")
+        TranslationsManager().loadString(
+            "enter_mobile_no",
+            binding.enterNumberTv,
+            "Enter your mobile number"
+        )
+        TranslationsManager().loadString(
+            "recieve_otp",
+            binding.receiveMsgTv,
+            "You’ll receive a 4 digit code to verify"
+        )
+        TranslationsManager().loadString(
+            "enter_number",
+            binding.tvEnterMobileNumber,
+            "Enter mobile number"
+        )
+        TranslationsManager().loadString("get_otp", binding.getotpBtn, "Get OTP")
+        TranslationsManager().loadString(
+            "t_and_c",
+            binding.termsTv,
+            "By continuing you agree to Outgrow's privacy policy and terms of service"
+        )
     }
 
     private fun checkForValidMobileNumber(mobileno: String): Boolean {
@@ -195,12 +217,20 @@ class LoginFragment : Fragment() {
 
         override fun onFailureProfileShared(trueError: TrueError) {
             isTruecallerVerified = false
-            ToastStateHandling.toastError(requireContext(),trueError.toString(),Toast.LENGTH_SHORT)
+            ToastStateHandling.toastError(
+                requireContext(),
+                trueError.toString(),
+                Toast.LENGTH_SHORT
+            )
         }
 
         override fun onVerificationRequired(trueError: TrueError?) {
             isTruecallerVerified = false
-            ToastStateHandling.toastError(requireContext(),trueError.toString(),Toast.LENGTH_SHORT)
+            ToastStateHandling.toastError(
+                requireContext(),
+                trueError.toString(),
+                Toast.LENGTH_SHORT
+            )
         }
     }
 
@@ -218,7 +248,7 @@ class LoginFragment : Fragment() {
             }
         } else {
             loginViewModel.setMobileNumber(mobileNo)
-            binding.getotpBtn.isEnabled=false
+            binding.getotpBtn.isEnabled = false
 
             if (!isTruecallerVerified) {
                 moveToOtp(mobileNo)
@@ -231,7 +261,7 @@ class LoginFragment : Fragment() {
                         when (it) {
                             is Resource.Success -> {
                                 val loginMaster = it.data
-                                Log.d("Login","${loginMaster}")
+                                Log.d("Login", "${loginMaster}")
                                 if (loginMaster?.status == true) {
 
                                     if (!(loginMaster.data?.isEmpty())!!) {
@@ -239,12 +269,13 @@ class LoginFragment : Fragment() {
                                         loginViewModel.setUserToken(loginMaster.data)
                                     }
                                     Handler(Looper.myLooper()!!).postDelayed({
-                                        loginViewModel.getUserDetails().observe(viewLifecycleOwner) {user->
-                                            if (user.data != null && user.data?.userId != null) {
-                                                gotoMainActivity()
+                                        loginViewModel.getUserDetails()
+                                            .observe(viewLifecycleOwner) { user ->
+                                                if (user.data != null && user.data?.userId != null) {
+                                                    gotoMainActivity()
+                                                }
                                             }
-                                        }
-                                    },200)
+                                    }, 200)
 
                                 } else {
                                     if (loginMaster?.data == "406") {
@@ -325,14 +356,15 @@ class LoginFragment : Fragment() {
         val args = Bundle()
         args.putString("mobilenumber", mobileNo)
         binding.pb.visibility = View.VISIBLE
-        binding.getotpBtn.visibility=View.GONE
-        Handler().postDelayed ({
+        binding.getotpBtn.visibility = View.GONE
+        Handler().postDelayed({
             binding.pb.visibility = View.GONE
-            binding.getotpBtn.visibility=View.VISIBLE
+            binding.getotpBtn.visibility = View.VISIBLE
             findNavController(binding.root)
                 .navigate(R.id.action_loginFragment_to_otpFragment, args)
-        },500)
+        }, 500)
     }
+
     private fun moveToRegistration(mobileNo: String) {
         loginViewModel.setIsFirst(false)
 
@@ -343,6 +375,7 @@ class LoginFragment : Fragment() {
         findNavController(binding.root)
             .navigate(R.id.action_loginFragment_to_registrationFragment, args)
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("LoginFragment")
