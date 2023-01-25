@@ -630,12 +630,15 @@ object NetworkSource {
                 val accountId = LocalSource.getUserDetailsEntity()?.accountId
                 val response = apiInterface.getIotDevice(headerMap!!,accountId!!)
                 if (response.isSuccessful) {
+                    Log.d("farmCheck", "getIotDevice: ${response.body()?.data?.size}")
                     emit(Resource.Success(response.body()))
+
                 } else {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
                 CrashAnalytics.crashAnalyticsError("getIotDevice Exception--${e.message}")
+                Log.d("farmCheck", "getIotDevice: $e")
 //                catch(Resource.Error(e.message))
             }
         }

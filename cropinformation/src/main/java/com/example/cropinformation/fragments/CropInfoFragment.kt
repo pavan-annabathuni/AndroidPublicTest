@@ -388,6 +388,11 @@ class CropInfoFragment : Fragment(), onItemClick {
                         tab.setIcon(R.drawable.planting_others)
                         customView
                     }
+                    "Sprinkler" -> {
+                        tab.text = data[position].label_name
+                        tab.setIcon(R.drawable.ci_splinkler)
+                        customView
+                    }
                     else -> {
                         //  tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
 

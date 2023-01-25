@@ -5,11 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.adapter.CropVarietyAdapter
 import com.example.cropinformation.databinding.FragmentCropVarityBinding
+import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.gson.JsonParseException
 import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -18,10 +22,11 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 class CropVarityFragment : Fragment() {
     private var cropId: Int? = null
     private var cropName: String? = null
-     private lateinit var binding: FragmentCropVarityBinding
+    private lateinit var binding: FragmentCropVarityBinding
     private val ViewModel: TabViewModel by lazy {
         ViewModelProviders.of(this).get(TabViewModel::class.java)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -50,7 +55,6 @@ class CropVarityFragment : Fragment() {
                 if(it.data!![i].label_name=="Crop Variety"|| it.data!!.first().labelNameTag=="Crop Variety") {
                     binding.labelName.text = data?.get(i)!!.label_name
 
-                    Log.d("CropProtect",data[i].label_value!!)
                     val varietyList =
                         try {
                             TypeConverter.convertStringToCropVariety(data[i].label_value!!)
@@ -61,6 +65,9 @@ class CropVarityFragment : Fragment() {
                                 )
                             }
                         }
+//                    if (varietyList.isNullOrEmpty())
+//                        varietyList =
+//                            TypeConverter.convertStringToCropVariety(data[i].labelValueTag!!)
 
                     if(varietyList!=null) {
                         val adapter = CropVarietyAdapter()
@@ -68,7 +75,7 @@ class CropVarityFragment : Fragment() {
                         adapter.submitList(varietyList)
                     }
                     break
-                        }
+}
                     }
                 }
 
@@ -76,5 +83,6 @@ class CropVarityFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("CropVarityFragment")
-    }}
+    }
+}
 

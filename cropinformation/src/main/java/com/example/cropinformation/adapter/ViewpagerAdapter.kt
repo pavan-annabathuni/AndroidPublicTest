@@ -269,6 +269,20 @@ class ViewpagerAdapter(
                 fragment.arguments = bundle
                 fragment
             }
+            "Rain Gun" -> {
+                val bundle = Bundle()
+                bundle.putInt("CropId", cropid)
+                val fragment = RainGunFragment()
+                fragment.arguments = bundle
+                fragment
+            }
+            "Sprinkler" -> {
+                val bundle = Bundle()
+                bundle.putInt("CropId", cropid)
+                val fragment = SplinkerFragment()
+                fragment.arguments = bundle
+                fragment
+            }
 
             else -> {
                 val bundle = Bundle()

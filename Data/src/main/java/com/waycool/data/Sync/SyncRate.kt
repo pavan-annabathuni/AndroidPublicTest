@@ -24,7 +24,7 @@ object SyncRate {
         SyncKey.APP_TRANSLATIONS to 60,
         SyncKey.DASH_BOARD to 5,
         SyncKey.MY_FARMS to 10,
-        SyncKey.MY_DEVICES to 30,
+        SyncKey.MY_DEVICES to 20,
     )
 
 

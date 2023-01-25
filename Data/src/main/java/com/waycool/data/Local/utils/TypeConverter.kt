@@ -132,7 +132,7 @@ object TypeConverter {
             Gson().fromJson(s, listType)
         } catch (e: JsonParseException) {
             throw e
-//            Log.d("cropVariety", "convertStringToCropVariety: $e")
+    //            Log.d("cropVariety", "convertStringToCropVariety: $e")
         }
 
     }
@@ -200,6 +200,8 @@ object TypeConverter {
     @TypeConverter
     fun convertRangeEntityToString(range: RangesEntity?): String? {
         val gson = Gson()
+        if(range==null)
+            return null
         return gson.toJson(range)
     }
 

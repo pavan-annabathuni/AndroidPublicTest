@@ -9,6 +9,7 @@ import com.waycool.data.Network.NetworkModels.*
 @Entity(tableName = "my_devices")
 data class ViewDeviceEntity(
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "uniqueid"                    ) var uniqueId                 : Int?                = null,
     @ColumnInfo(name = "id"                    ) var id                 : Int?                = null,
     @ColumnInfo(name = "data_timestamp"        ) var dataTimestamp      : String?             = null,
     @ColumnInfo(name = "temperature"           ) var temperature        : String?             = null,
@@ -27,9 +28,9 @@ data class ViewDeviceEntity(
     @ColumnInfo(name = "farm_id"               ) var farmId             : Int?                = null,
     @ColumnInfo(name = "device_name"           ) var deviceName         : String?             = null,
     @ColumnInfo(name = "delta_t"               ) var deltaT             : Double?                = null,
-    @ColumnInfo(name = "delta_t_range"         ) var deltaTRange        : RangesEntity?        = RangesEntity(),
-    @ColumnInfo(name = "soil_moisture_1_range" ) var soilMoisture1Range : RangesEntity? = RangesEntity(),
-    @ColumnInfo(name = "soil_moisture_2_range" ) var soilMoisture2Range : RangesEntity? = RangesEntity(),
+    @ColumnInfo(name = "delta_t_range"         ) var deltaTRange        : RangesEntity?        = null,
+    @ColumnInfo(name = "soil_moisture_1_range" ) var soilMoisture1Range : RangesEntity? = null,
+    @ColumnInfo(name = "soil_moisture_2_range" ) var soilMoisture2Range : RangesEntity? = null,
     @ColumnInfo(name = "battery"               ) var battery            : String? = null,
     @ColumnInfo(name = "model_name"            ) var modelName          : String? =null,
     @ColumnInfo(name = "model_series"          ) var modelSeries        : String? =null,
