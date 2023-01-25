@@ -44,6 +44,7 @@ class PestDiseaseFragment : Fragment() {
     private var cropId: Int? = null
     private var cropName: String? = null
     var selectedCategory:String?=null
+    private var moduleId = "2"
 
     //banners
     private val adapter: DiseasesParentAdapter by lazy { DiseasesParentAdapter() }
@@ -107,35 +108,21 @@ class PestDiseaseFragment : Fragment() {
                 when (it) {
                     is Resource.Success -> {
                         if(!it.data.isNullOrEmpty()){
-//                            binding.tvNoData.visibility=View.GONE
                             binding.progressBar.visibility=View.GONE
+                        }
+                        if(!it.data.isNullOrEmpty()){
                             adapter.submitList(it.data)
                             binding.diseasesRv.adapter = adapter
                         }
                         else{
-                            binding.progressBar.visibility=View.GONE
                             adapter.submitList(emptyList())
-//                            binding.tvNoData.visibility=View.VISIBLE
                         }
-
-
-                /*        if (it.data.isNullOrEmpty()){ adapter.submitList(emptyList())
-                            binding.progressBar.visibility=View.GONE
-                        }
-                        else{
-                            adapter.submitList(it.data)
-                            binding.diseasesRv.adapter = adapter
-                            binding.progressBar.visibility=View.GONE
-                        }*/
-
                     }
                     is Resource.Loading -> {
-                        binding.progressBar.visibility=View.VISIBLE
                         ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
 
                     }
                     is Resource.Error -> {
-                        binding.progressBar.visibility=View.GONE
                         ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
 
                     }
@@ -187,7 +174,7 @@ class PestDiseaseFragment : Fragment() {
     private fun setBanners() {
         val bannerAdapter = AdsAdapter(activity?:requireContext())
 
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
                 tab.text = "${position + 1} / ${bannerAdapter.itemCount}"

@@ -23,7 +23,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
 
     var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
-    fun setMovieList(movies: List<MyFarmsDomain>?) {
+    fun setFarmsList(movies: List<MyFarmsDomain>?) {
         if (movies != null) {
             this.details = movies.toMutableList()
         }

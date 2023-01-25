@@ -62,6 +62,8 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     private var searchCharSequence: CharSequence? = null
     private lateinit var newsAdapter: NewsPagerAdapter
 
+    val moduleId="4"
+
     val binding: ActivityNewsAndArticlesBinding by lazy {
         ActivityNewsAndArticlesBinding.inflate(layoutInflater)
     }
@@ -242,7 +244,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
     private fun setBanners() {
         val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
-        viewModel.getVansAdsList().observe(this) {
+        viewModel.getVansAdsList(moduleId).observe(this) {
 
             bannerAdapter.submitList(it.data)
             TabLayoutMediator(

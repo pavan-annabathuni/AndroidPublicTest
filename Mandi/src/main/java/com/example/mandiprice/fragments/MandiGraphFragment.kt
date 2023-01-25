@@ -40,9 +40,8 @@ import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
-import com.waycool.data.repository.domainModels.MandiDomain
-import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -54,7 +53,6 @@ import java.io.FileOutputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MandiGraphFragment : Fragment() {
@@ -68,6 +66,7 @@ class MandiGraphFragment : Fragment() {
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
+    val moduleId="11"
     private var cropMasterId: Int? = null
     private var mandiMasterId: Int? = null
     private var cropName: String? = null
@@ -296,7 +295,7 @@ class MandiGraphFragment : Fragment() {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(

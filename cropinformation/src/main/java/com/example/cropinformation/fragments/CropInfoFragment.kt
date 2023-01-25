@@ -59,7 +59,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var size: Int = 0
-    private var module_id = "1"
+    private var moduleId = "1"
 
 
 
@@ -475,7 +475,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         val adapter = NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            ViewModel.getVansNewsList(cropId,module_id).collect {
+            ViewModel.getVansNewsList(cropId,moduleId).collect {
                 adapter.submitData(lifecycle, it)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -557,7 +557,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            ViewModel.getVansVideosList(cropId.toString(),module_id).collect {
+            ViewModel.getVansVideosList(cropId.toString(),moduleId).collect {
                 adapter.submitData(lifecycle, it)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -664,7 +664,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        ViewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it?.data)
             TabLayoutMediator(
