@@ -71,7 +71,10 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
             when(it){
                 is Resource.Success ->{
                     if(!it.data.isNullOrEmpty()){
-                        adapter.setMovieList(it.data)
+                        val sortedList = it.data?.sortedByDescending { farm ->
+                            farm.isPrimary == 1
+                        }
+                        adapter.setFarmsList(sortedList)
                     }
                 }
                 is Resource.Loading ->{}

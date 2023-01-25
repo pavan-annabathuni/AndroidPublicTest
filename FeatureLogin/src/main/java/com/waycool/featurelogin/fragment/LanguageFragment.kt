@@ -146,7 +146,6 @@ class LanguageFragment : Fragment() {
     ) {
         if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
             binding.clInclude.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             context?.let {
                 ToastStateHandling.toastError(
@@ -162,8 +161,8 @@ class LanguageFragment : Fragment() {
                 binding.progressBar.visibility = View.VISIBLE
                 when (it) {
                     is Resource.Success -> {
+                        binding.progressBar.visibility=View.GONE
                         binding.clInclude.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
                         binding.doneBtn.visibility = View.VISIBLE
                         binding.helloTv.visibility = View.VISIBLE
                         binding.selectLanguageTv.visibility = View.VISIBLE
@@ -171,7 +170,6 @@ class LanguageFragment : Fragment() {
                         it.data?.let { it1 -> languageSelectionAdapter.setData(it1) }
                     }
                     is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is Resource.Error -> {
                         ToastStateHandling.toastError(
@@ -179,7 +177,6 @@ class LanguageFragment : Fragment() {
                             "Server Error",
                             LENGTH_SHORT
                         )
-                        binding.progressBar.visibility = View.GONE
                     }
                 }
             }

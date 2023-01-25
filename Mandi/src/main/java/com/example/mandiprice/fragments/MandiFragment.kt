@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -33,8 +32,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -72,6 +71,7 @@ class MandiFragment : Fragment() {
     private var price = "Price"
     var accountID = 0
     private var mandiMarket = null
+    val moduleId="11"
 
     val arrayCat = ArrayList<String>()
 
@@ -140,16 +140,6 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-//        val callback: OnBackPressedCallback =
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//               findNavController().popBackStack()
-//                }
-//            }
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            requireActivity(),
-//            callback
-//        )
         viewModel.viewModelScope.launch {
             adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
                 val bundle = Bundle()
@@ -157,12 +147,6 @@ class MandiFragment : Fragment() {
                 bundle.putString("", "Mandi${it.market}")
                 EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
                 val args = Bundle()
-//            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-//            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-//            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
-//            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
-//            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
-//            args.putString("fragment", "one")
                 args.putParcelable("mandiRecord", it)
                 findNavController()
                     .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
@@ -463,7 +447,7 @@ class MandiFragment : Fragment() {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity ?: requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it?.data)
             TabLayoutMediator(
@@ -473,12 +457,6 @@ class MandiFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
-
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
         binding.bannerViewpager.offscreenPageLimit = 3

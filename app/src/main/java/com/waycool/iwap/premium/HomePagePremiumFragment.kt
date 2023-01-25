@@ -430,7 +430,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                             myCropPremiumAdapter.updateMyfarms(it.data)
                             binding.clAddForm.visibility = View.GONE
                             binding.cardMYFarm.visibility = View.VISIBLE
-                            myFarmPremiumAdapter?.setMovieList(it.data)
+                            val sortedList = it.data?.sortedByDescending { farm ->
+                                farm.isPrimary == 1
+                            }
+                            myFarmPremiumAdapter?.setMovieList(sortedList)
                             if (it.data?.size!! > 1) {
                                 binding.videosScrollMyFarm.visibility = View.VISIBLE
                             } else
@@ -799,7 +802,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList("49").observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(

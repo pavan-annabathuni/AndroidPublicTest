@@ -184,13 +184,10 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun setUpCropCategories() {
-        binding.clProgressBar.visibility=View.VISIBLE
 
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    binding.clProgressBar.visibility=View.GONE
-
                     binding.cropCategoryChipGroup.removeAllViews()
                     selectedCategory = null
                     val categoryList = it.data
@@ -261,19 +258,21 @@ class CropSelectionFragment : Fragment() {
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
-                    if (categoryId == null) {
+                    if(!res.data.isNullOrEmpty()){
                         binding.clProgressBar.visibility=View.GONE
+                    }
+                    if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else {
-                        binding.clProgressBar.visibility=View.GONE
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+//                        binding.clProgressBar.visibility=View.GONE
                     }
+
+
                 }
                 is Resource.Loading -> {
-                    binding.clProgressBar.visibility=View.VISIBLE
                 }
                 is Resource.Error -> {
-                    binding.clProgressBar.visibility=View.GONE
                     ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
                 }
             }

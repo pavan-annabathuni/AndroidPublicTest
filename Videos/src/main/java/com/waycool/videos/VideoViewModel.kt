@@ -1,6 +1,9 @@
 package com.waycool.videos
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.repository.VansRepository
@@ -8,6 +11,9 @@ import com.waycool.data.repository.domainModels.TagsAndKeywordsDomain
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.Resource
+import kotlin.collections.List
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 
 class VideoViewModel : ViewModel() {
@@ -43,9 +49,10 @@ class VideoViewModel : ViewModel() {
     }
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
+    fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
+        queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 

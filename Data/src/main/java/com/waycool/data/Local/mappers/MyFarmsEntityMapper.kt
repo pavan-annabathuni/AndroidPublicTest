@@ -8,6 +8,7 @@ class MyFarmsEntityMapper : EntityMapper<MyFarmsEntity, MyFarmsNetwork> {
     override fun mapToEntity(dto: MyFarmsNetwork): MyFarmsEntity {
         return MyFarmsEntity(
             id = dto.id,
+            farmLocation = dto.farmLocation,
             farmName = dto.farmName,
             farmCenter = dto.farmCenter,
             farmArea = dto.farmArea,

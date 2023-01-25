@@ -1,18 +1,21 @@
 package com.waycool.weather.viewModel
 
-import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.waycool.data.Network.NetworkModels.UserDetailsDTO
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.waycool.data.repository.*
-import com.waycool.data.repository.domainModels.weather.HourlyDomain
-import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.WeatherMasterDomain
 import com.waycool.data.repository.domainModels.weather.DailyDomain
+import com.waycool.data.repository.domainModels.weather.HourlyDomain
 import com.waycool.data.utils.Resource
 import com.waycool.weather.utils.Constants
+import kotlin.collections.List
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 class WeatherViewModel : ViewModel() {
     private val _status = MutableLiveData<Constants.ApiStatus>()
@@ -101,9 +104,10 @@ class WeatherViewModel : ViewModel() {
     }
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
+    fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
+        queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 

@@ -340,22 +340,13 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         TranslationsManager().loadString("farm_area", binding.setPrimaryFarm,"Farm Name")
         TranslationsManager().loadString("farm_area", binding.addfarmareaTitle,"Farm Name")
         TranslationsManager().loadString("water_source", binding.watersourceTitle,"Water Sources")
-
+        TranslationsManager().loadString("set_as_primary", binding.setPrimaryFarm,"Set as primary")
         TranslationsManager().loadString("pump_hp", binding.addfarmpumphpTitle,"Pump HP")
         TranslationsManager().loadString("pump_type", binding.addfarmpumptypeTitle,"Pump Type")
         TranslationsManager().loadString("pump_size", binding.addfarmpipesizeTitle,"Pipe Size in Inches")
         TranslationsManager().loadString("pipe_height", binding.addfarmpipeheightTitle,"Pipe Height in ft")
         TranslationsManager().loadString("pump_flow", binding.textView23,"Pump Flow Rate (LPH)")
         TranslationsManager().loadString("str_save", binding.saveFarmBtn,"Save")
-
-
-
-
-
-
-
-
-
     }
 
     override fun onMapReady(mMap: GoogleMap?) {
