@@ -293,7 +293,24 @@ object CropsRepository {
             }
         }
     }
-
+//    fun cropVariety(crop_id: Int): Flow<Resource<List<VarietyCropDomain>?>> {
+//        return NetworkSource.cropVariety(crop_id).map {
+//            when (it) {
+//                is Resource.Success -> {
+//                    Resource.Success(
+//                        VarietyCropDomainMapper().toDomainList(it.data.data: emptyList())
+////                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
+//                    )
+//                }
+//                is Resource.Loading -> {
+//                    Resource.Loading()
+//                }
+//                is Resource.Error -> {
+//                    Resource.Error(it.message)
+//                }
+//            }
+//        }
+//    }
     fun pdfDownload(soil_test_request_id: Int): Flow<Resource<ResponseBody?>> {
         return NetworkSource.pdfDownload(soil_test_request_id)
     }

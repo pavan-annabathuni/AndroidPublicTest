@@ -2,6 +2,7 @@ package com.waycool.data.Sync.syncer
 
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
+import com.waycool.data.Local.Entity.AiCropHistoryEntity
 import com.waycool.data.Local.Entity.SoilTestHistoryEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.SoilTestHistoryMapper
