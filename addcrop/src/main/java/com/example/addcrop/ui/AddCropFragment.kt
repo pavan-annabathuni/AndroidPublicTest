@@ -2,12 +2,11 @@ package com.example.addcrop.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -62,12 +62,8 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         viewModel.getAddCropType().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("TAG", "bindObserversCategoryData: ${it.data}")
-//                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     val response = it.data!!
-                    Log.d("TAG", "bindObserversCategory:$response ")
                     categoryAdapter.setMovieList(response)
-
                 }
                 is Resource.Error -> {
                     ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
@@ -102,12 +98,10 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                     ToastStateHandling.toastError(requireContext(), "Please Select Soil Type", Toast.LENGTH_SHORT)
 
                 } else {
-                    Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
                     bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
                     bundle.putString("pom",pomo)
-                    Log.d("TAG", "SoilTypeID: ${name.id} ")
                     findNavController().navigate(
                         R.id.action_addCropFragment_to_addCropPremiumFragment, bundle)
                 }
@@ -117,5 +111,9 @@ class AddCropFragment : Fragment(), AddCropItemClick {
 
 
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddCropFragment")
     }
 }

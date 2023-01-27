@@ -6,22 +6,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 
 
 class PlantSpacingFragment : Fragment() {
@@ -221,5 +217,8 @@ class PlantSpacingFragment : Fragment() {
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlantSpacingFragment")
+    }
 }

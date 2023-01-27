@@ -2,12 +2,11 @@ package com.example.profile
 
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -21,6 +20,7 @@ import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.syncer.*
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -134,5 +134,9 @@ class ProfileLanguageFragment : Fragment() {
 //        }
 //        termsConditionClick()
         return binding.root
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("ProfileLanguageFragment")
     }
 }

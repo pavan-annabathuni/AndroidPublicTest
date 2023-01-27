@@ -18,6 +18,7 @@ import com.example.profile.R
 import com.example.profile.adapter.AddUseAdapter
 import com.example.profile.databinding.FragmentFarmSupportBinding
 import com.example.profile.viewModel.EditProfileViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
@@ -136,5 +137,9 @@ class FarmSupportFragment : Fragment() {
         cancel.setOnClickListener { dialog.dismiss() }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FarmSupportFragment")
     }
     }

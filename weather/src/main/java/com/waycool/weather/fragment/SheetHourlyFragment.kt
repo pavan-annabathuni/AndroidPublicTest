@@ -9,6 +9,7 @@ import com.waycool.weather.databinding.FragmentSheetHourlyBinding
 import com.waycool.weather.viewModel.HourlyViewModel
 import com.waycool.weather.viewModel.HourlyViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.utils.WeatherIcons
 import java.text.SimpleDateFormat
@@ -71,5 +72,9 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
 //       today = TranslationsManager().loadString("str_today", binding.imgShare).toString()
         TranslationsManager().loadString("str_humidity", binding.labelHumidity,"Humidity")
         TranslationsManager().loadString("str_rain", binding.labelRain,"Chance of Rain")
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SheetHopurlyFragment")
     }
 }

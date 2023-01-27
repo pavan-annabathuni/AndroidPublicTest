@@ -12,8 +12,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WeatherActivity"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/weathershare"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
+
 
         <provider
             android:name="com.waycool.weather.FileProvider"

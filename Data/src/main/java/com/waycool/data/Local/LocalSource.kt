@@ -1,5 +1,6 @@
 package com.waycool.data.Local
 
+import android.util.Log
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.db.OutgrowDB
@@ -247,8 +248,12 @@ object LocalSource {
 
 
     fun insertViewDevice(devices: List<ViewDeviceEntity>) {
-        outgrowDao.deleteAllDevices()
-        outgrowDao.insertViewDevice(devices)
+        OutgrowDB.getDatabase().runInTransaction {
+            outgrowDao.deleteAllDevices()
+            outgrowDao.insertViewDevice(devices)
+        }
+
+        Log.d("farmCheck","Device Count: ${devices}")
     }
 
     fun getAllDevices() = outgrowDao.getViewDevices()

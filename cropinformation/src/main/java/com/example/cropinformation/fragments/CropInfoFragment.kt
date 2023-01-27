@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,6 +24,8 @@ import com.example.cropinformation.viewModle.TabViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -34,7 +35,6 @@ import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
-import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
@@ -43,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
@@ -53,13 +54,12 @@ class CropInfoFragment : Fragment(), onItemClick {
     private val ViewModel: TabViewModel by lazy {
         ViewModelProviders.of(this).get(TabViewModel::class.java)
     }
-    private val viewModel by lazy { ViewModelProvider(this)[NewsAndArticlesViewModel::class.java] }
 
     private var cropId: Int? = null
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var size: Int = 0
-    private var module_id = "1"
+    private var moduleId = "1"
 
 
 
@@ -149,7 +149,9 @@ class CropInfoFragment : Fragment(), onItemClick {
 
             //data.sortedBy { it.id }
             binding.ViewPager.adapter = ViewpagerAdapter(this, it.data, data.size, cropId!!)
-            binding.tvTotalItem.text = "/${data.size}"
+            binding.tvTotalItem.text = buildString { append("/")
+                append(data.size)
+    }
 
 
 
@@ -386,6 +388,11 @@ class CropInfoFragment : Fragment(), onItemClick {
                         tab.setIcon(R.drawable.planting_others)
                         customView
                     }
+                    "Sprinkler" -> {
+                        tab.text = data[position].label_name
+                        tab.setIcon(R.drawable.ci_splinkler)
+                        customView
+                    }
                     else -> {
                         //  tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
 
@@ -441,11 +448,13 @@ class CropInfoFragment : Fragment(), onItemClick {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -466,7 +475,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         val adapter = NewsGenericAdapter(context,this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch((Dispatchers.Main)) {
-            ViewModel.getVansNewsList(cropId,module_id).collect {
+            ViewModel.getVansNewsList(cropId,moduleId).collect {
                 adapter.submitData(lifecycle, it)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -548,7 +557,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         val adapter = VideosGenericAdapter()
         videosBinding.videosListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            ViewModel.getVansVideosList(cropId.toString(),module_id).collect {
+            ViewModel.getVansVideosList(cropId.toString(),moduleId).collect {
                 adapter.submitData(lifecycle, it)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
@@ -616,6 +625,10 @@ class CropInfoFragment : Fragment(), onItemClick {
 
 
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("cropinfo_video",eventBundle)
+
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             try{
@@ -651,7 +664,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        ViewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        ViewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it?.data)
             TabLayoutMediator(
@@ -675,7 +688,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
+            val r = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
@@ -705,5 +718,8 @@ class CropInfoFragment : Fragment(), onItemClick {
             bundle
         )
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropInfoFragment")
+    }
 }

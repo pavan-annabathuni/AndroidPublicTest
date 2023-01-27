@@ -252,6 +252,7 @@
         <entry key="cropinformation/src/main/res/layout/fragment_planting_material.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_planting_yield.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_post_harvest.xml" value="0.2175925925925926" />
+        <entry key="cropinformation/src/main/res/layout/fragment_rain_gun.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_ratooning.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_seed.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_seed_rate.xml" value="0.2175925925925926" />
@@ -262,6 +263,7 @@
         <entry key="cropinformation/src/main/res/layout/fragment_sowing_depth.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_sowing_planting.xml" value="0.2833333333333333" />
         <entry key="cropinformation/src/main/res/layout/fragment_spacing.xml" value="0.2175925925925926" />
+        <entry key="cropinformation/src/main/res/layout/fragment_splinker.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_staking.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_trimming.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_weed_chemical.xml" value="0.2175925925925926" />

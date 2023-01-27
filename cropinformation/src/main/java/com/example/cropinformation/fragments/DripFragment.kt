@@ -1,14 +1,14 @@
 package com.example.cropinformation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentDripBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class DripFragment : Fragment() {
     private lateinit var binding: FragmentDripBinding
@@ -47,4 +47,8 @@ class DripFragment : Fragment() {
 
     }}
         }}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DripFragment")
+    }
 }

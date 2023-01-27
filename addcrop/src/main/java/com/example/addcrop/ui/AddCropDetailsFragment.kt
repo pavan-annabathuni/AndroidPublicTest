@@ -12,7 +12,10 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +23,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -34,6 +39,8 @@ import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
+    private var cropCategoryTagName: String?=null
+    private var cropNameTag: String? =null
     private var selectedFarmId: Int? = null
     private var cropIdSelected: Int? = null
     private var accountID: Int? = null
@@ -76,6 +83,8 @@ class AddCropDetailsFragment : Fragment() {
         apiErrorHandlingBinding = binding.errorState
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
+            cropNameTag = arguments?.getString("cropNameTag")
+            cropCategoryTagName = arguments?.getString("selectedCategory")
         }
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
@@ -250,6 +259,13 @@ class AddCropDetailsFragment : Fragment() {
         if (selectedFarmId != null)
             map["farm_id"] = selectedFarmId!!
 
+        val eventBundle=Bundle()
+        eventBundle.putString("cropCategoryTagName","Crop_category_${cropCategoryTagName}")
+        eventBundle.putString("cropTagName",cropNameTag)
+        eventBundle.putString("cropArea",binding.etAreaNumber.text.toString())
+        eventBundle.putString("sowingDate", binding.etCalender.text.toString())
+        EventItemClickHandling.calculateItemClickEvent("Add_crop",eventBundle)
+
         viewModel.addCropDataPass(
             map
         ).observe(requireActivity()) {
@@ -355,4 +371,8 @@ class AddCropDetailsFragment : Fragment() {
 //        super.onDestroyView()
 //        _binding = null
 //    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddCropDetailsFragment")
+    }
 }

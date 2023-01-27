@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
@@ -55,6 +53,9 @@ import com.waycool.addfarm.utils.DrawingOption
 import com.waycool.addfarm.utils.ShowCaseViewModel
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
@@ -126,6 +127,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
 
         if (checkPermissions()) {
+
             getLocation()
         }
     }
@@ -205,6 +207,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
 
         binding.tutorial.setOnClickListener {
+            EventClickHandling.calculateClickEvent("farm_tutorial")
             binding.pointA.visibility = View.VISIBLE
             binding.pointB.visibility = View.VISIBLE
             binding.pointC.visibility = View.VISIBLE
@@ -216,6 +219,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
         }
         binding.gpsFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("location_icon")
             getLocation()
             isLocationFabPressed = true
         }
@@ -236,6 +240,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         )
 
         binding.resetFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("farm_reset")
             previousStateStack.clear()
             isPolygonDraw = false
             binding.areaCard.visibility = View.GONE
@@ -262,6 +267,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.undoFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("farm_undo")
             if (isMarkerSelected) {
                 isMarkerSelected = false
                 binding.markerImageview.setVisibility(View.INVISIBLE)
@@ -370,6 +376,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
 
+                EventClickHandling.calculateClickEvent("search_location")
                 searchCharSequence = charSequence
                 if (charSequence.isNotEmpty()) {
                     binding.searchCloseBtn.visibility = View.VISIBLE
@@ -812,6 +819,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 fusedLocationProviderClient?.lastLocation!!
                     .addOnSuccessListener {
                         if (it != null){
+                            val bundle=Bundle()
+                            bundle.putString("latitude",it.latitude.toString())
+                            bundle.putString("longitude",it.longitude.toString())
+                            EventItemClickHandling.calculateItemClickEvent("location_icon",bundle)
+
                             moveMapToCenter(it)
                         }
                     }
@@ -1087,12 +1099,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         val perimeter: Double = getLength(points)
         binding.areaDisplayTv.text = (String.format("%.2f", area) + " Acre").trim { it <= ' ' }
         binding.perimeterTv.text = (String.format("%.2f", perimeter) + " Mtrs").trim { it <= ' ' }
-//        if (area > 200) {
-//            Toast.makeText(requireContext(), "Select smaller Area.", Toast.LENGTH_SHORT).show()
-//            //binding.savemapBtn.setEnabled(false)
-//        } else {
-//            //binding.savemapBtn.setEnabled(true)
-//        }
+        TranslationsManager().loadString("str_area",binding.areaTitleTv,"Area")
+        TranslationsManager().loadString("preimeter",binding.textView,"Perimeter")
+
     }
 
     private fun getAreaInAcre(latLngs: List<LatLng?>?): Double {
@@ -1205,6 +1214,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun speechToText() {
+        EventClickHandling.calculateClickEvent("Add_farm_STT")
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -1275,6 +1285,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         super.onDestroy()
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DrawFarmFragment")
     }
 
 }

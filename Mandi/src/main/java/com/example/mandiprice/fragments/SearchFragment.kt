@@ -30,6 +30,7 @@ import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.launch
@@ -463,5 +464,9 @@ class SearchFragment : Fragment() {
         }
         TranslationsManager().loadString("sort_by", binding.filter, "Sort By")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SearchFragment")
     }
 }

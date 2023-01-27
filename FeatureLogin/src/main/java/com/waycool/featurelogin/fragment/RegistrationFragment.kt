@@ -44,6 +44,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -55,6 +56,8 @@ import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
 import kotlinx.android.synthetic.main.fragment_registration.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
 import java.util.*
@@ -138,10 +141,10 @@ class RegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
         apiErrorHandlingBinding = binding.errorState
+        setTranslations()
 
         binding.registerDoneBtn.isEnabled = true
 
@@ -153,7 +156,16 @@ class RegistrationFragment : Fragment() {
             networkCall()
         }
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
-        toolbarLayoutBinding.toolbarTile.text = "Profile"
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val profile = TranslationsManager().getString("profile")
+            if(!profile.isNullOrEmpty()){
+                toolbarLayoutBinding.toolbarTile.text = profile
+            }else{
+                toolbarLayoutBinding.toolbarTile.text = "Profile"
+
+            }
+        }
         toolbarLayoutBinding.backBtn.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack(R.id.loginFragment, false)
         }
@@ -248,6 +260,19 @@ class RegistrationFragment : Fragment() {
             getLocation()
         }, 400)
         return binding.root
+    }
+
+    private fun setTranslations() {
+        TranslationsManager().loadString("welcome_to_outgrow", binding.titleTv,"Welcome to Outgrow")
+        TranslationsManager().loadString("enter_profile_details", binding.farmerDetMsgTv,"The following details will help us to personalize your Outgrow app experience.")
+        TranslationsManager().loadString("enter_name", binding.textName,"Enter your name")
+        TranslationsManager().loadString("enter_location", binding.textLocation,"Enter your location")
+        TranslationsManager().loadString("detect_location", binding.textDetecting,"Detecting your location..")
+        TranslationsManager().loadString("enter_manually", binding.textEnterManually,"Could not find your location.Enter Manually.")
+        TranslationsManager().loadString("know_your_services", binding.knowServicesTv,"Know Your Services")
+        TranslationsManager().loadString("premium_features", binding.premiumFeaturesTv,"Premium Features")
+        TranslationsManager().loadString("submit", binding.registerDoneBtn,"Submit")
+
     }
 
     private fun networkCall() {
@@ -478,6 +503,7 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.isNotEmpty() && longitutde.isNotEmpty()) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+
                 context?.let {
                     ToastStateHandling.toastError(
                         it,
@@ -510,13 +536,7 @@ class RegistrationFragment : Fragment() {
                         is Resource.Success -> {
                             binding.progressBarSubmit.visibility = View.GONE
                             binding.registerDoneBtn.visibility = View.VISIBLE
-                            context?.let { it1 ->
-                                ToastStateHandling.toastSuccess(
-                                    it1,
-                                    "SuccessFully Registered",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
+
                             lifecycleScope.launch {
                                 userLogin()
                             }
@@ -561,6 +581,13 @@ class RegistrationFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    context?.let { it1 ->
+                        ToastStateHandling.toastSuccess(
+                            it1,
+                            "SuccessFully Registered",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
                     val loginDataMaster = it.data
                     if (loginDataMaster?.status == true) {
                         viewModel.setUserToken(
@@ -569,16 +596,11 @@ class RegistrationFragment : Fragment() {
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
 
-                        Handler(Looper.myLooper()!!).postDelayed({
-                            viewModel.getUserDetails().observe(viewLifecycleOwner) {user->
-                                if (user.data != null && user.data?.userId != null) {
-                                    gotoMainActivity()
-                                }
+                        Handler(Looper.myLooper()!!).postDelayed({                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
+                            if (user.data != null && user.data?.userId != null) {
+                                gotoMainActivity()
                             }
-                        },200)
-/*                        viewModel.getUserDetails().observe(viewLifecycleOwner) {
-                            gotoMainActivity()
-                        }*/
+                        }},200)
 
                     }
                 }
@@ -586,6 +608,7 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error",Toast.LENGTH_SHORT) }
 
                 }
             }
@@ -710,5 +733,9 @@ class RegistrationFragment : Fragment() {
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 101
         private const val REQUEST_CODE_GPS = 1011
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("RegistrationFragment")
     }
 }

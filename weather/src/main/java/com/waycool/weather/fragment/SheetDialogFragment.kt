@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.waycool.weather.viewModel.DailyvViewModel
 import com.waycool.weather.viewModel.DetailViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.weather.R
 import com.waycool.weather.databinding.FragmentSheetDialogBinding
@@ -319,5 +320,9 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
         TranslationsManager().loadString("str_sunrise",binding.labelSunrise,"Sunrise")
         TranslationsManager().loadString("str_sunset",binding.labelSunset,"Sunset")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SheetDialogFragment")
     }
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentPlantingMaterialBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 class PlantingMaterialFragment : Fragment() {
@@ -103,5 +104,9 @@ class PlantingMaterialFragment : Fragment() {
         TranslationsManager().loadString("str_semi_hardwood",binding.label4)
         TranslationsManager().loadString("str_setts",binding.label5)
         TranslationsManager().loadString("str_ring",binding.label6)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlantingMaterialFragment")
     }
 }

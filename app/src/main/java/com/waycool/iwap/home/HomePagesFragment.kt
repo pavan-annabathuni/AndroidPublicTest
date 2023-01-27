@@ -3,8 +3,6 @@ package com.waycool.iwap.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.location.Address
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,13 +32,14 @@ import com.google.android.libraries.maps.SupportMapFragment
 import com.google.android.libraries.maps.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -72,7 +70,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.lang.reflect.InvocationTargetException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -148,6 +145,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
+            val eventBundle=Bundle()
+            eventBundle.putString("cropName",mandiAdapter.cropName)
+            eventBundle.putString("marketName",mandiAdapter.marketName)
+            EventItemClickHandling.calculateItemClickEvent("MandiItemClickHomePageFragment",eventBundle)
 
             val args = Bundle()
             args.putParcelable("mandiRecord", it)
@@ -272,9 +273,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
         TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
 
-
+        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("news_articles", newsBinding.newsTitle,"Videos")
+        TranslationsManager().loadString("str_viewall", newsBinding.viewAllNews,"View all")
     }
-
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
@@ -298,10 +301,12 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun checkNetwork() {
         networkCall()
         videosBinding.imgRetry.setOnClickListener {
+            EventClickHandling.calculateClickEvent("VideosBindingImgRetryNetworkCall")
             networkCall()
         }
         networkNewsCall()
         newsBinding.imgRetry.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsBindingImgRetryNetworkCall")
             networkNewsCall()
         }
     }
@@ -357,98 +362,122 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun initClick() {
 
         newsBinding.viewAllNews.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsArticles_viewall")
+
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         newsBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NewsArticles_viewall")
             val intent = Intent(context, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
         videosBinding.viewAllVideos.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_viewall")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
         videosBinding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("video_viewall")
             val intent = Intent(requireActivity(), VideoActivity::class.java)
             startActivity(intent)
         }
         binding.soilTestingCv.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_landing")
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
         binding.tvSoilTestingKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Soiltesting_landing")
+
             val intent = Intent(activity, SoilTestActivity::class.java)
             startActivity(intent)
         }
 
         binding.cardCropHealth.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropHealthCardHomePagesFragment")
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
         binding.tvCropHealthKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropHealthKnowMoreHomePagesFragment")
             val intent = Intent(activity, CropHealthActivity::class.java)
             startActivity(intent)
         }
 
         binding.clCropProtect.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropProtectCardHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_crop_protect)
         }
 
         binding.tvCropProtectKnowMore.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropProtectKnowMoreHomePagesFragment")
             val intent = Intent(activity, CropProtectActivity::class.java)
             startActivity(intent)
         }
 
         binding.clCropInformation.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropInformationCardHomePagesFragment")
             val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent)
         }
         binding.clAddFromServiceCropInformation.setOnClickListener {
+            EventClickHandling.calculateClickEvent("CropInformationKnowMoreHomePagesFragment")
             val intent = Intent(activity, com.example.cropinformation.CropInfo::class.java)
             startActivity(intent)
         }
-
         binding.tvAddFrom.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePagesFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
+
         }
         binding.tvViewAllMandi.setOnClickListener {
+            EventClickHandling.calculateClickEvent("ViewAllMandiHomePagesFragment")
             this.findNavController().navigate(R.id.navigation_mandi)
         }
         binding.cvWeather.setOnClickListener {
+            EventClickHandling.calculateClickEvent("WeatherCardHomePagesFragment")
             val intent = Intent(activity, WeatherActivity::class.java)
             startActivity(intent)
         }
         binding.tvOurServiceViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("View_all_services")
             findNavController().navigate(R.id.action_homePagesFragment_to_allServicesFragment)
         }
         binding.tvEditMyCrops.setOnClickListener {
+            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.ivEditCrop.setOnClickListener {
+            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.cvAddCrop.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddCropHomePagesFragment")
             val intent = Intent(activity, AddCropActivity::class.java)
             startActivity(intent)
         }
         binding.clAddForm.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
         binding.tvOurAddFormData.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
         binding.ivViewAll.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Added_Farm_name")
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
 
-
         binding.IvNotification.setOnClickListener {
+            EventClickHandling.calculateClickEvent("NotificationsHomePagesFragment")
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
         }
 
@@ -554,7 +583,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         val sortedList = it.data?.sortedByDescending { farm ->
                             farm.isPrimary == 1
                         }
-
                         farmsAdapter.submitList(sortedList)
                     } else {
                         binding.clAddForm.visibility = View.VISIBLE
@@ -579,6 +607,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         binding.farmnameHome.text = selectedFarm?.farmName
 
         binding.farmsDetailsCl.setOnClickListener {
+            val eventBundle=Bundle()
+            eventBundle.putString("farmName",selectedFarm?.farmName)
+            EventItemClickHandling.calculateItemClickEvent("ViewFarmDetails",eventBundle)
+
             val bundle = Bundle()
             bundle.putParcelable("farm", selectedFarm)
             findNavController().navigate(R.id.action_homePagesFragment_to_nav_farmdetails, bundle)
@@ -634,7 +666,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity ?: requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList("49").observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList(it.data)
             TabLayoutMediator(
@@ -774,16 +806,10 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             }
         }
 
-        videosBinding.viewAllVideos.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
-        videosBinding.ivViewAll.setOnClickListener {
-            val intent = Intent(requireActivity(), VideoActivity::class.java)
-            startActivity(intent)
-        }
-
         adapter.onItemClick = {
+            val eventBundle=Bundle()
+            eventBundle.putString("title",it?.title)
+            EventItemClickHandling.calculateItemClickEvent("Homepage_video",eventBundle)
             val bundle = Bundle()
             bundle.putParcelable("video", it)
             findNavController().navigate(
@@ -1148,6 +1174,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener {
+            EventClickHandling.calculateClickEvent("AddFabBtnHomeFragment")
+
             if (!isVisible) {
                 binding.addFab.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -1173,11 +1201,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             }
         }
         binding.addCall.setOnClickListener {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
 
@@ -1277,6 +1307,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     }
 
     override fun onFarmSelected(data: MyFarmsDomain) {
+        val  eventBundle=Bundle()
+        eventBundle.putString("SelectedFarmHomeFrag",data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("SelectedFarmHomeFrag",eventBundle)
         selectedFarm = data
         populateMyFarm()
     }

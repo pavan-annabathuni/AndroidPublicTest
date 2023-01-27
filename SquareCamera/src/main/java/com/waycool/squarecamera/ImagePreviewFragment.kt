@@ -11,9 +11,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.waycool.squarecamera.databinding.FragmentImagePreviewBinding
 
 class ImagePreviewFragment : Fragment() {
+    private var firebaseAnalytics: FirebaseAnalytics?=null
 
 
     private lateinit var uri: Uri
@@ -34,6 +39,7 @@ class ImagePreviewFragment : Fragment() {
         if (arguments != null) {
             uri = arguments?.getParcelable("uri")!!
         }
+        firebaseAnalytics = Firebase.analytics
 
         binding.imageView.invalidate()
         binding.imageView.setImageURI(uri)
@@ -49,6 +55,13 @@ class ImagePreviewFragment : Fragment() {
 //            Toast.makeText(requireContext(),"Save called",Toast.LENGTH_SHORT).show()
             requireActivity().setResult(AppCompatActivity.RESULT_OK, intent)
             requireActivity().finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "ImagePreviewFragment")
         }
     }
 

@@ -9,6 +9,7 @@ class MyFarmsDomainMapper:DomainMapper<MyFarmsDomain,MyFarmsEntity> {
 
         return MyFarmsDomain(
             id=dto.id,
+            farmLocation=dto.farmLocation,
                     farmName=dto.farmName,
                     farmCenter=dto.farmCenter,
                     farmArea=dto.farmArea,

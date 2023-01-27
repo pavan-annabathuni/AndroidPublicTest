@@ -8,9 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -23,7 +25,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
-import com.example.mandiprice.adapter.DistanceAdapter.*
+import com.example.mandiprice.adapter.DistanceAdapter.DiffCallback
 import com.example.mandiprice.databinding.FragmentMandiBinding
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
@@ -33,6 +35,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -68,6 +71,7 @@ class MandiFragment : Fragment() {
     private var price = "Price"
     var accountID = 0
     private var mandiMarket = null
+    val moduleId="11"
 
     val arrayCat = ArrayList<String>()
 
@@ -136,16 +140,6 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-//        val callback: OnBackPressedCallback =
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//               findNavController().popBackStack()
-//                }
-//            }
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            requireActivity(),
-//            callback
-//        )
         viewModel.viewModelScope.launch {
             adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
                 val bundle = Bundle()
@@ -153,12 +147,6 @@ class MandiFragment : Fragment() {
                 bundle.putString("", "Mandi${it.market}")
                 EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
                 val args = Bundle()
-//            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-//            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-//            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
-//            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
-//            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
-//            args.putString("fragment", "one")
                 args.putParcelable("mandiRecord", it)
                 findNavController()
                     .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
@@ -167,9 +155,9 @@ class MandiFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 lat = it.data?.profile?.lat.toString()
                 long = it.data?.profile?.long.toString()
-                accountID = it.data?.accountId!!
-            }
-        }
+                if (it.data?.accountId!=null)
+            accountID = it.data?.accountId!!
+        }}
         binding.recycleViewDis.adapter = adapterMandi
         spinnerSetup()
         filterMenu()
@@ -459,9 +447,9 @@ class MandiFragment : Fragment() {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity ?: requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitList( it?.data)
+            bannerAdapter.submitList(it?.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
@@ -469,12 +457,6 @@ class MandiFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
-
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
         binding.bannerViewpager.offscreenPageLimit = 3
@@ -517,11 +499,13 @@ class MandiFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -530,32 +514,19 @@ class MandiFragment : Fragment() {
         cropCategory: String? = null,
         state: String? = null,
         crop: String? = null,
-        sortBy: String? = "Distance",
-        orderBy: String? = "Asc",
+        sortBy: String = "Distance",
+        orderBy: String = "Asc",
         search: String? = null
     ) {
-        if (lat != null && long != null)
-            viewModel.getMandiDetails(
-                lat!!,
-                long!!,
-                cropCategory,
-                state,
-                crop,
-                sortBy,
-                orderBy,
-                search
-            )
+        if (lat != null && long != null) {
+            viewModel.getMandiDetails(lat!!, long!!, cropCategory, state, crop, sortBy, orderBy, search)
                 .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
                         binding.llPorgressBar.visibility = View.GONE
-
-
                     }, 1500)
-
-
-                    // Toast.makeText(context,"$it",Toast.LENGTH_SHORT).show()
                 }
+        }
     }
 
     private fun translation() {
@@ -575,67 +546,46 @@ class MandiFragment : Fragment() {
     }
 
     private fun cropSpinner(categoryId: Int? = null) {
-
         viewModel.viewModelScope.launch {
             var cropName = TranslationsManager().getString("str_crop")
 
             viewModel.getAllCrops().observe(viewLifecycleOwner) {
-
                 val filter = it.data?.filter { it1 -> it1.cropCategory_id == categoryId }
-                var cropNameList = (filter?.map { data ->
-                    data.cropName
-                } ?: emptyList()).toMutableList()
+                var cropNameList = (filter?.map { data -> data.cropName } ?: emptyList()).toMutableList()
 
-
-                if (categoryId==null) {
-                    cropNameList = (it.data?.map { data ->
-                        data.cropName
-                    } ?: emptyList()).toMutableList()
+                if (categoryId == null) {
+                    cropNameList = (it.data?.map { data -> data.cropName } ?: emptyList()) as MutableList<String?>
                 }
 
-                if(!cropNameList.isNullOrEmpty())
-                if (!cropName.isNullOrEmpty())
-                    cropNameList[0] = cropName
-                else cropNameList[0] = "Crops"
+                if (!cropNameList.isNullOrEmpty()) {
+                    cropNameList[0] = if (!cropName.isNullOrEmpty()) cropName else "Crops"
+                }
 
-                val arrayAdapter2 =
-                    ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
+                val arrayAdapter2 = ArrayAdapter(requireContext(), R.layout.item_spinner, cropNameList)
                 binding.spinner2.adapter = arrayAdapter2
-                binding.spinner2?.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                        }
-
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-
-                            val text = binding.spinner2.selectedItem.toString()
-                            EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
-                            if (position > 0) {
-                                selectedCrop = text
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        val text = binding.spinner2.selectedItem.toString()
+                        EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
+                        if (position > 0) {
+                            selectedCrop = text
+                            mandiApiCall()
+                        } else {
+                            if (selectedCrop != null) {
+                                selectedCrop = ""
                                 mandiApiCall()
-
-//                                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
-
-                            } else {
-                                if (selectedCrop != null) {
-                                    selectedCrop = ""
-                                    mandiApiCall()
-
-//                                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
-                                }
                             }
-                            binding.recycleViewDis.adapter = adapterMandi
-
                         }
+                        binding.recycleViewDis.adapter = adapterMandi
                     }
-
+                }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("MandiFragment")
     }
 }

@@ -715,7 +715,7 @@
                                     android:id="@+id/MyFarm"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_marginEnd="5dp"
                                     android:layout_weight="0.4"
                                     android:gravity="end"

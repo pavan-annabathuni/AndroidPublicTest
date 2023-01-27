@@ -1,6 +1,5 @@
 package com.example.addcrop.ui.premium
 
-import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,9 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentVeriatyCropBinding
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
-class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
+class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
+    private var cropCategoryTagName: String?=null
+    private var crop_name: String?=null
     private var _binding: FragmentVeriatyCropBinding? = null
     private val binding get() = _binding!!
     var crop_id: Int? = null
@@ -33,14 +35,16 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
             crop_id = arguments?.getInt("cropid")
+            crop_name = arguments?.getString("cropname")
+            cropCategoryTagName = arguments?.getString("selectedCategory")
+
             crop_type = arguments?.getInt("soil_type_id")
             if (crop_id == 67) {
                 initView()
             } else if (crop_id == 97) {
                 initViewGraphs()
             }
-            Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsvff: $crop_id")
-            Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsvff: $crop_type")
+
         }
     }
 
@@ -81,11 +85,12 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
                     )
 
                 } else {
-                    Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
 //                    bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
                     bundle.putString("pom", name.name)
+                    bundle.putString("cropName",crop_name)
+                    bundle.putString("selectedCategory",cropCategoryTagName)
                     findNavController().navigate(
                         R.id.action_veriatyCropFragment_to_addCropFragment, bundle
                     )
@@ -100,10 +105,9 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
 
     override fun clickGraphs(name: GraphsModel) {
         if (arguments != null) {
-            var crop_id_selected = arguments?.getInt("cropid")
+            val crop_id_selected = arguments?.getInt("cropid")
             binding.cardCheckHealth.isEnabled = true
             binding.cardCheckHealth.setOnClickListener {
-//                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
                     ToastStateHandling.toastError(
                         requireContext(),
@@ -111,7 +115,6 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
                         Toast.LENGTH_SHORT
                     )
                 } else {
-                    Log.d("TAG", "clickOnCategorySelected: $crop_id_selected ")
                     val bundle = Bundle()
                     bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
@@ -127,6 +130,10 @@ class VeriatyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
 
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("VarietyCropFragment")
     }
 
 }

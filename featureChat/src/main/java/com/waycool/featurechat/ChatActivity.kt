@@ -8,6 +8,7 @@ import android.util.Log
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginMainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -43,5 +44,12 @@ class ChatActivity : AppCompatActivity() {
 
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
+    }
+
+
+        override fun onResume() {
+            super.onResume()
+            EventScreenTimeHandling.calculateScreenTime("ChatActivity")
+
     }
 }

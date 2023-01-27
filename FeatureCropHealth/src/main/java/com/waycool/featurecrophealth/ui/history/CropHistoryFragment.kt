@@ -9,7 +9,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,14 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.soiltesting.ui.history.HistoryDataAdapter
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -35,7 +37,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CropHistoryFragment : Fragment() {
@@ -77,6 +78,11 @@ class CropHistoryFragment : Fragment() {
             if (it?.disease_id == null) {
                 ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
             } else {
+                val eventBundle=Bundle()
+                eventBundle.putString("cropname",it.cropName)
+                eventBundle.putString("diseasename",it.disease_name)
+                eventBundle.putString("image",it.image_url)
+                EventItemClickHandling.calculateItemClickEvent("crophealth_requestHistory",eventBundle)
                 val bundle = Bundle()
                 it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
                 findNavController().navigate(
@@ -232,69 +238,6 @@ class CropHistoryFragment : Fragment() {
 //        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
     }
 
-//    private fun clickSearch() {
-//        binding.searchView.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//
-//            ) {
-//            }
-//
-//            override fun onTextChanged(
-//                charSequence: CharSequence,
-//                i: Int,
-//                i1: Int,
-//                i2: Int
-//            ) {
-//
-//                val temp = ArrayList<AiCropHistoryDomain>()
-////                filteredList.clear()
-//                Log.d("TAG", "onTextChangedListShow: $temp")
-//                if (charSequence.isNotEmpty()) {
-//                    filteredList.forEach {
-//                        if (it.cropdata.cropName.toString().lowercase()
-//                                .contains(charSequence.toString().lowercase())
-//                        ) {
-//                            if (!temp.contains(it)) {
-//                                temp.add(it)
-//                            }
-//                        }
-//                    }
-//                    historyAdapter.upDateList(temp)
-////                    historyAdapter.submitList(temp)
-//                    Log.d("TAG", "::::stderr  $temp")
-//                }
-////                if (temp.isEmpty()){
-////                    soilHistoryAdapter.upDateList(filteredList)
-////                }
-//            }
-////                filteredList.forEach {
-////                 if (   it.soil_test_number?.lowercase()!!.startsWith(charSequence.toString().lowercase())){
-////                     filteredList.add(filteredList)
-////                 }
-////                }
-//
-////                for (item in filteredList[].soil_test_number!!.indices) {
-////                    Log.d("TAG", "::::stderr $charSequence")
-////                    if (filteredList[0].soil_test_number!!.lowercase()
-////                            .startsWith(charSequence.toString().lowercase())
-////                    ) {
-//////                        filteredList.add(filteredList)
-////                        Log.d(TAG, "onTextChangedList:$filteredList")
-////                        Log.d("TAG", "::::::::stderr $charSequence")
-////                    }
-////
-////                }
-//
-////                binding.etSearchItem.getText().clear();
-////            }
-//
-//            override fun afterTextChanged(editable: Editable) {}
-//        })
-//    }
 
     private fun fabButton() {
         var isVisible = false
@@ -314,13 +257,19 @@ class CropHistoryFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener {
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener {
+            EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropHistoryFragment")
     }
 
 }
