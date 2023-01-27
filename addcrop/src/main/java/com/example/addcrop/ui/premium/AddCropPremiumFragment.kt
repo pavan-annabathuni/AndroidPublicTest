@@ -473,6 +473,19 @@ class AddCropPremiumFragment : Fragment() {
         TranslationsManager().loadString("crop_area", binding.pincodeNumber, "Crop Area")
         TranslationsManager().loadString("sowing_date", binding.Address, "Sowing Date")
         TranslationsManager().loadString("submit", binding.tvCheckCrop, "Submit")
+        TranslationsManager().loadString("mulching", binding.tvShapeInFarmMulching, "Mulching")
+        TranslationsManager().loadString("shade_farm", binding.tvShapeInFarm, "Shade in farm")
+        TranslationsManager().loadString("tea_coffee", binding.tvOnlyForTea, "(only for tea and coffee)")
+        TranslationsManager().loadString("first_irrigation", binding.FirstIrrigationDate, "First Irrigation of cycle start")
+        TranslationsManager().loadString("enter_date", binding.EnterDateoffruitPruning, "Enter Date of fruit Pruning")
+        TranslationsManager().loadString("bahar", binding.tvBahar, "Bahar")
+        TranslationsManager().loadString("crop_year", binding.tvYearShow, "Crop Year")
+
+
+
+
+
+
         TranslationsManager().loadString(
             "select_irrigation",
             binding.tvselectIrrigation,
