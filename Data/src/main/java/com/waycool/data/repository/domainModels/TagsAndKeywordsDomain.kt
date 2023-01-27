@@ -1,7 +1,7 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TagsAndKeywordsDomain(
