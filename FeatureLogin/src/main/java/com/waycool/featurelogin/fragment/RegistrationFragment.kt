@@ -55,7 +55,6 @@ import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.databinding.ToolbarLayoutBinding
-import kotlinx.android.synthetic.main.fragment_registration.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -563,7 +562,7 @@ class RegistrationFragment : Fragment() {
 
 
                 }
-                EventClickHandling.calculateClickEvent("Login_Name${name_et.text}")
+                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
                 EventClickHandling.calculateClickEvent("Login_Location${address}")
             }
         } else {
