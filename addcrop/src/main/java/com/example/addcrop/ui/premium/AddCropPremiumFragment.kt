@@ -54,7 +54,7 @@ class AddCropPremiumFragment : Fragment() {
     lateinit var irrigation_selected: String
     lateinit var year_selected: String
     lateinit var areaTypeSelected: String
-    private val firebaseAnalytics=Firebase
+    private val firebaseAnalytics = Firebase
 
 
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -123,7 +123,7 @@ class AddCropPremiumFragment : Fragment() {
                 binding.paragraphMedium.visibility = View.GONE
                 binding.myfarmsChipGroup.visibility = View.GONE
             }
-        }else{
+        } else {
             binding.farmsCl.visibility = View.VISIBLE
             binding.paragraphMedium.visibility = View.VISIBLE
             binding.myfarmsChipGroup.visibility = View.VISIBLE
@@ -237,21 +237,6 @@ class AddCropPremiumFragment : Fragment() {
 
         }
 
-    }
-
-    fun postDataAddCrop(): Map<String, Any>? {
-        val map = mutableMapOf<String, Any>()
-//        map.put("account_id", account_id)
-//        map.put("cropid", crop_id)
-        map.put("nickname", binding.etNickName.text.toString())
-        map.put("area", binding.etAreaNumber.text)
-        map.put("sowingdate", binding.etCalender.text.toString())
-        map.put("noOfAcre", binding.etNoOfAcre.text.toString())
-        Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
-//        if (arguments != null) {
-//            viewModel.addCropDataPass(map)
-//        }
-        return map
     }
 
     private fun initViewClicks() {

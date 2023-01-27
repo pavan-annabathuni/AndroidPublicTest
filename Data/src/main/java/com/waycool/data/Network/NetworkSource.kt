@@ -863,7 +863,7 @@ object NetworkSource {
             }
 
         }catch (e:Exception){
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 

@@ -48,14 +48,11 @@ class AddCropDetailsFragment : Fragment() {
     private var nickName: String = ""
     var area: String = ""
     var date: String = ""
-
-
-    val arrayList = ArrayList<String>()
     lateinit var areaTypeSelected: String
 
     private var cropSelectedDate = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
-    private val years = arrayOf(
+    private val areaOfUnitList = arrayOf(
         "Acres",
         "Gunta",
         "Cent",
@@ -74,8 +71,8 @@ class AddCropDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val window: Window? = null
-        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//        val window: Window? = null
+//        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         apiErrorHandlingBinding = binding.errorState
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
@@ -105,6 +102,18 @@ class AddCropDetailsFragment : Fragment() {
         initViewClick()
         selectAreaUnit()
         translationAddCropForFreeUser()
+        mvvmInit()
+//        binding.viewModel=viewModel
+    }
+
+    private fun mvvmInit() {
+//        viewModel.saveButtonPassData
+//        viewModel.onButtonClicked.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            postCropDetails()
+//        })
+//        viewModel.onButtonClicked.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//                postCropDetails()
+//        })
     }
 
     private fun initViewClick() {
@@ -210,7 +219,7 @@ class AddCropDetailsFragment : Fragment() {
 
     private fun selectAreaUnit() {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, years)
+            ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, areaOfUnitList)
         binding.selectAreaUnit.adapter = arrayAdapter
         binding.selectAreaUnit.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -340,6 +349,7 @@ class AddCropDetailsFragment : Fragment() {
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
+
 
 //    override fun onDestroyView() {
 //        super.onDestroyView()

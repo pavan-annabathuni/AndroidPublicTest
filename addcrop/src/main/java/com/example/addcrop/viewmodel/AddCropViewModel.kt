@@ -1,5 +1,6 @@
 package com.example.addcrop.viewmodel
 
+import android.view.View
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 
@@ -14,11 +15,27 @@ import com.waycool.data.repository.domainModels.UserDetailsDomain
 
 import com.waycool.data.utils.Resource
 
-class AddCropViewModel :ViewModel() {
-    fun getAddCropType (): LiveData<Resource<List<SoilTypeDomain>?>> {
+class AddCropViewModel : ViewModel() {
+    companion object {
+        const val SUBMIT_BUTTON = "SUBMIT_BUTTON"
+    }
+
+    val saveButtonPassData = MutableLiveData<String>()
+    fun saveButtonClicked() {
+        saveButtonPassData.value = SUBMIT_BUTTON
+    }
+    private val _onButtonClicked = MutableLiveData<Boolean>()
+    val onButtonClicked: LiveData<Boolean> = _onButtonClicked
+    fun onButtonClicked(){
+        _onButtonClicked.value = true
+    }
+
+
+    fun getAddCropType(): LiveData<Resource<List<SoilTypeDomain>?>> {
         return CropsRepository.getSoilType().asLiveData()
     }
-    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): LiveData<Resource<AddCropResponseDTO?>> =
+
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String, Any>()): LiveData<Resource<AddCropResponseDTO?>> =
         CropsRepository.addCropDataPass(map).asLiveData()
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
@@ -27,7 +44,7 @@ class AddCropViewModel :ViewModel() {
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
         CropsRepository.getMyCrop2().asLiveData()
 
-    fun getEditMyCrop(id:Int):LiveData<Resource<Unit?>> {
+    fun getEditMyCrop(id: Int): LiveData<Resource<Unit?>> {
         return CropsRepository.getEditCrop(id).asLiveData()
     }
 
@@ -35,8 +52,7 @@ class AddCropViewModel :ViewModel() {
         FarmsRepository.getMyFarms().asLiveData()
 
 
-
-    fun checkInputFields(nickName: String, area: String, date: String) : Boolean {
+    fun checkInputFields(nickName: String, area: String, date: String): Boolean {
         if (nickName.isEmpty()) {
             return false
         } else if (area.isEmpty()) {
