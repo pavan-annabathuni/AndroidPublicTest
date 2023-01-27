@@ -77,7 +77,7 @@ class MyProfileFragment : Fragment() {
             binding.version.text = buildString {
                 append(appVer)
                 append(" ")
-                append(BuildConfig.VERSION_NAME)
+                append(com.example.profile.BuildConfig.VERSION_NAME)
             }
         }
         networkCall()
