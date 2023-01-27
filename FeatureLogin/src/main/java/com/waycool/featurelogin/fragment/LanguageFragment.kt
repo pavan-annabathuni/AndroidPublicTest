@@ -20,7 +20,6 @@ import com.waycool.featurelogin.adapter.LanguageSelectionAdapter
 import com.waycool.featurelogin.databinding.FragmentLanguageBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
-import kotlinx.android.synthetic.main.activity_login_main.*
 
 
 class LanguageFragment : Fragment() {

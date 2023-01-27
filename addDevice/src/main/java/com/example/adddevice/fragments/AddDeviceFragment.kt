@@ -136,7 +136,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     Toast.LENGTH_SHORT
                 )
             } else if (checkDistanceBetweenLatLng(
-                    myFarm?.farmCenter?.get(0) ?: null,
+                    myFarm?.farmCenter?.get(0),
                     latitude?.toDouble()?.let { it1 ->
                         longitutde?.toDouble()
                             ?.let { it2 -> LatLng(it1, it2) }
