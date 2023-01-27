@@ -6,14 +6,12 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.waycool.data.Network.NetworkModels.Notification
 import com.waycool.data.Network.NetworkModels.NotificationModel
 import com.waycool.data.Network.NetworkModels.UpdateNotification
 import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MainViewModel : ViewModel() {
@@ -71,9 +69,10 @@ class MainViewModel : ViewModel() {
         CropsRepository.getMyCrop2().asLiveData()
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
+    fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
+        queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 

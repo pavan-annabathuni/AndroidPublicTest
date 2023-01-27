@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.profile.databinding.FragmentAboutOutgrowBinding
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,5 +36,9 @@ class AboutOutgrowFragment : Fragment() {
           binding.topAppBar.title = TranslationsManager().getString("str_about")
         }
         return binding.root
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AboutOutgrowFragment")
     }
 }

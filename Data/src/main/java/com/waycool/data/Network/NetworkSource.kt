@@ -20,6 +20,7 @@ import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.Network.PagingSource.MandiPagingSource
 import com.waycool.data.Network.PagingSource.VansPagingSource
 import com.waycool.data.Sync.syncer.UserDetailsSyncer
+import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
@@ -30,7 +31,6 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
-import kotlin.Exception
 
 object NetworkSource {
 
@@ -54,33 +54,22 @@ object NetworkSource {
         geocodeInterface = geocodeCLient.create(MapsApiInterface::class.java)
     }
 
-    fun getTagsAndKeywords(headerMap: Map<String, String>) = flow<Resource<TagsAndKeywordsDTO>> {
-
-
+    fun getTagsAndKeywords(headerMap: Map<String, String>) = flow {
         emit(Resource.Loading())
-
         try {
             val response = apiInterface.getTagsAndKeywords(headerMap).awaitResponse()
-
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()!!))
             } else {
-                emit(
-                    Resource.Error(
-                        response.errorBody()?.charStream()?.readText()
-                    )
-                )
+                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
-
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getTagsAndKeywords Exception--${e.message}")
             emit(Resource.Error(e.message))
-
         }
-
     }
 
-
-    fun getLanguageMaster() = flow<Resource<LanguageMasterDTO?>> {
+    fun getLanguageMaster() = flow {
         emit(Resource.Loading())
         try {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
@@ -91,10 +80,10 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getLanguageMaster Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
-
 
     fun getCropMaster(headerMap: Map<String, String>) = flow<Resource<CropMasterDTO?>> {
         try {
@@ -106,10 +95,10 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getCropMaster Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
-
 
     fun getVansCategory(headerMap: Map<String, String>) = flow<Resource<VansCategoryDTO?>> {
         try {
@@ -122,6 +111,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getVansCategory Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -135,6 +125,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getUserDetails Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -149,6 +140,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("register Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -163,6 +155,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getModuleMaster Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -178,6 +171,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("logout Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -219,38 +213,12 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getCropCategoryMaster Exception--${e.message}")
+
                 emit(Resource.Error(e.message))
             }
         }
 
-    //    fun addCropPassData(
-//        crop_id: Int?,
-//        account_id: Int?,
-//        plot_nickname: String?,
-//        is_active: Int?,
-//        sowing_date: String?,
-//        area: Editable?
-//    ) = flow<Resource<AddCropResponseDTO?>> {
-//        try {
-//            val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
-//            val response = apiInterface.addCropPassData(
-//                headerMap!!,
-//                crop_id,
-//                account_id,
-//                plot_nickname,
-//                is_active,
-//                sowing_date,
-//                area
-//            )
-//            if (response.isSuccessful) {
-//                emit(Resource.Success(response.body()))
-//            } else {
-//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-//            }
-//        } catch (e: Exception) {
-//            emit(Resource.Error(e.message))
-//        }
-//    }
     fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String, Any>()) =
         flow<Resource<AddCropResponseDTO?>> {
             try {
@@ -262,6 +230,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("addCropDataPass Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -279,6 +248,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("activateDevice Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -294,6 +264,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("verifyQR Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -309,6 +280,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("viewReport Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -342,7 +314,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
-                Log.d("Soil", "postNewSoil: " + e.message)
+                CrashAnalytics.crashAnalyticsError("postNewSoil Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -363,7 +335,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
-                Log.d("Token", "check token:" + e.message)
+                CrashAnalytics.crashAnalyticsError("checkToken Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -376,7 +348,7 @@ object NetworkSource {
         mobile_model: String,
         mobile_manufacturer: String
     ) = flow<Resource<LoginDTO?>> {
-        emit(Resource.Loading())
+//        emit(Resource.Loading())
         try {
             val response = apiInterface.login(
                 headerMapPublic,
@@ -405,7 +377,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            Log.d("Network", "LoginAPI : ${e.message}")
+            CrashAnalytics.crashAnalyticsError("login Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -428,6 +400,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("requestOTP Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -448,6 +421,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("retryOTP Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -465,6 +439,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("verifyOTP Exception--${e.message}")
 //            emit(Resource.Error(e.message))
         }
     }
@@ -480,6 +455,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getAiCropHistory Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -512,6 +488,7 @@ object NetworkSource {
                 }
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("detectAiCrop Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -535,6 +512,7 @@ object NetworkSource {
                     throw RuntimeException("Header Map is null")
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getPestDisease Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -551,6 +529,7 @@ object NetworkSource {
                 }
 
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getWeatherForecast Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -567,6 +546,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getAddCropType Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -581,6 +561,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getSoilTesAllHistory Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -597,6 +578,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("dashBoard Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -613,6 +595,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("farmDetailsDelta Exception--${e.message}")
                 emit(Resource.Error(e.message))
             }
         }
@@ -632,6 +615,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getSoilTestLab Exception--${e.message}")
 //                emit(Resource.Error(e.message))
             }
         }
@@ -646,11 +630,15 @@ object NetworkSource {
                 val accountId = LocalSource.getUserDetailsEntity()?.accountId
                 val response = apiInterface.getIotDevice(headerMap!!,accountId!!)
                 if (response.isSuccessful) {
+                    Log.d("farmCheck", "getIotDevice: ${response.body()?.data?.size}")
                     emit(Resource.Success(response.body()))
+
                 } else {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getIotDevice Exception--${e.message}")
+                Log.d("farmCheck", "getIotDevice: $e")
 //                catch(Resource.Error(e.message))
             }
         }
@@ -675,6 +663,7 @@ object NetworkSource {
                     emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
                 }
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getGraphsViewDevice Exception--${e.message}")
 //                emit(Resource.Error(e.message))
             }
         }
@@ -694,6 +683,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getTracker Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -712,6 +702,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("pdfDownload Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -732,6 +723,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getCropInformation Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -755,6 +747,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateProfile Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -773,6 +766,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getUserProfile Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -794,29 +788,11 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getUserProfilePic Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
 
-    //    fun getFullMandiList(
-//        headerMap: Map<String, String>?,crop_category:String?,state:String?,crop:String?,
-//         sortBy: String, orderBy: String?
-//    ) = flow<Resource<MandiDomain?>> {
-//
-//        emit(Resource.Loading())
-//        try {
-//            val response = apiInterface.getMandiList(headerMap,"77.22","18.22",crop_category,
-//                state,crop,1,sortBy,orderBy)
-//
-//            if (response.isSuccessful)
-//                emit(Resource.Success(response.body()))
-//            else {
-//                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
-//            }
-//        } catch (e: Exception) {
-//            emit(Resource.Error(e.message))
-//        }
-//    }
     fun getMandiList(
         lat: String?, lon: String?, crop_category: String?, state: String?, crop: String?,
         sortBy: String?, orderBy: String?, search: String?, accountId: Int?
@@ -865,6 +841,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getMandiHistory Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -883,6 +860,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getStateList Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -901,6 +879,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("editMyCrop Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -919,6 +899,8 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getMyCrop Exception--${e.message}")
+
             emit(Resource.Error(e.message))
         }
     }
@@ -937,7 +919,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            Log.d("MyCrops", "error: ${e.message}")
+            CrashAnalytics.crashAnalyticsError("getMyCrop2 Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -955,6 +937,8 @@ object NetworkSource {
 //                emit(response.errorBody()?.charStream()?.readText())
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getGeocode Exception--${e.message}")
+
 //            emit(e.message)
         }
     }
@@ -972,6 +956,8 @@ object NetworkSource {
 //                emit(response.errorBody()?.charStream()?.readText())
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getReverseGeocode Exception--${e.message}")
+
 //            emit(e.message)
         }
     }
@@ -989,6 +975,8 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getAdvIrrigation Exception--${e.message}")
+
             //  emit(Resource.Error(e.message))
         }
     }
@@ -1034,6 +1022,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("addFarm Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -1081,6 +1070,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateFarm Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -1098,6 +1088,8 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getMyFarms Exception--${e.message}")
+
             // emit(Resource.Error(e.message))
         }
     }
@@ -1115,6 +1107,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getAppTranslations Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -1133,6 +1126,7 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateHarvest Exception--${e.message}")
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1151,6 +1145,7 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateIrrigation Exception--${e.message}")
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1206,6 +1201,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateCropStage Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1222,6 +1219,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getCropStage Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1239,6 +1238,8 @@ object NetworkSource {
                 }
 
             } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("updateCropStage Exception--${e.message}")
+
                 //   emit(Resource.Error(e.message))
             }
         }
@@ -1255,6 +1256,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getNdvi Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1269,6 +1272,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getNdviMean Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1293,6 +1298,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateFarmSupport Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1309,6 +1316,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getFarmSupport Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1327,6 +1336,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("deleteFarmSupport Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1343,6 +1354,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getNotification Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1359,6 +1372,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("updateNotification Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1375,6 +1390,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getDisease Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }
@@ -1392,6 +1409,8 @@ object NetworkSource {
             }
 
         } catch (e: Exception) {
+            CrashAnalytics.crashAnalyticsError("getMandiMaster Exception--${e.message}")
+
             //   emit(Resource.Error(e.message))
         }
     }

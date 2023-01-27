@@ -1,14 +1,14 @@
 package com.example.cropinformation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentPostHarvestBinding
-import com.example.cropinformation.utils.Constants
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class PostHarvestFragment : Fragment() {
        private lateinit var binding: FragmentPostHarvestBinding
@@ -44,5 +44,9 @@ class PostHarvestFragment : Fragment() {
                     binding.labelValue.text = data[i].label_value
                 }
             }}
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PostHarvestFragment")
     }
 }

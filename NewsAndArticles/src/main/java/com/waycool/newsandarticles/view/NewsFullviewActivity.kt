@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
@@ -175,5 +176,9 @@ class NewsFullviewActivity : AppCompatActivity() {
 
     companion object {
         var oneTimeOnly = 0
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NewsFullViewActivity")
     }
 }

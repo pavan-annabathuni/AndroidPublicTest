@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentDeltaTInfoBottomDialogBinding
@@ -30,10 +31,12 @@ class DeltaTInfoBottomDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-
-
     override fun getTheme(): Int {
         return com.waycool.uicomponents.R.style.AppBottomSheetDialogTheme
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DeltaTInfoBottomDialogFragment")
     }
 
 }

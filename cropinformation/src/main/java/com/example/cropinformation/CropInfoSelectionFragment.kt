@@ -12,7 +12,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -34,6 +34,7 @@ import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -230,9 +231,13 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
+        binding.progressBar.visibility=View.VISIBLE
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
+                    if(!res.data.isNullOrEmpty()){
+                        binding.progressBar.visibility=View.GONE
+                    }
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
@@ -240,7 +245,9 @@ class CropInfoSelectionFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    viewModel.viewModelScope.launch{
+                    val txtServerError=  TranslationsManager().getString("binding!!ver_error")
+                    ToastStateHandling.toastError(requireContext(), txtServerError, Toast.LENGTH_SHORT )}
                 }
                 else -> {}
             }
@@ -308,13 +315,14 @@ class CropInfoSelectionFragment : Fragment() {
             }
         }
         binding.addCall.setOnClickListener() {
-            EventClickHandling.calculateClickEvent("cropInfo_call_icon")
+            EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
         binding.addChat.setOnClickListener() {
-           EventClickHandling.calculateClickEvent("cropInfo_chat_icon")
+            EventClickHandling.calculateClickEvent("chat_icon")
+
             FeatureChat.zenDeskInit(requireContext())
         }
     }
@@ -340,10 +348,7 @@ class CropInfoSelectionFragment : Fragment() {
         viewModel.viewModelScope.launch{
             title = TranslationsManager().getString("str_title")
             binding.toolbarTitle.text = title
-            if(!TranslationsManager().getString("search").isNullOrEmpty())
             binding.search.hint = TranslationsManager().getString("search")
-            else binding.search.hint = "Search"
-
         }
     }
     private fun dialog(){
@@ -368,5 +373,9 @@ class CropInfoSelectionFragment : Fragment() {
             if(ok.isNullOrEmpty())
                 yesBtn.text = "Ok"
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropInfoSelectionFragment")
     }
 }

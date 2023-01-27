@@ -24,10 +24,11 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -58,6 +59,8 @@ class WeatherFragment : Fragment() {
     val lightRed = "#FFD7D0"
     val green = "#146133"
     val lightGreen = "#C4D8CC"
+
+    val moduleId="6"
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
@@ -679,7 +682,7 @@ class WeatherFragment : Fragment() {
     private fun setBanners() {
 
         val bannerAdapter = AdsAdapter(activity?:requireContext())
-        viewModel.getVansAdsList().observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(
@@ -725,5 +728,9 @@ class WeatherFragment : Fragment() {
         TranslationsManager().loadString("str_hourly",binding.tvHouly,"Hourly")
         TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("WeatherFragment")
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.R
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class FragmentPlantingYield : Fragment() {
     private lateinit var binding: FragmentPlantingYield
@@ -31,5 +32,9 @@ class FragmentPlantingYield : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_planting_yield, container, false)
 
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("FragmentPlantingYield")
     }
 }

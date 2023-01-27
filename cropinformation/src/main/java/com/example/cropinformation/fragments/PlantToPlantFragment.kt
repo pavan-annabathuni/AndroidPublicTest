@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentPlantToPlantBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 class PlantToPlantFragment : Fragment() {
@@ -47,4 +48,8 @@ class PlantToPlantFragment : Fragment() {
                 }
         }
     }}
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("PlantToPlantFragment")
+    }
 }

@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.os.BundleCompat.getParcelable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,10 +22,10 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropPremiumBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
-import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -38,6 +37,8 @@ import java.util.*
 
 
 class AddCropPremiumFragment : Fragment() {
+    private var cropCategoryTagName: String? = null
+    private var cropNameTag: String? = null
     private var accountID: Int? = null
     private var _binding: FragmentAddCropPremiumBinding? = null
     private val binding get() = _binding!!
@@ -208,6 +209,8 @@ class AddCropPremiumFragment : Fragment() {
         if (arguments != null) {
             crop_id = arguments?.getInt("cropid")
             crop_type = arguments?.getInt("soil_type_id")
+            cropNameTag = arguments?.getString("cropNameTag")
+            cropCategoryTagName = arguments?.getString("selectedCategory")
 
             if (crop_id == 97) {
 //                binding.clSwitch.visibility = View.VISIBLE
@@ -422,7 +425,7 @@ class AddCropPremiumFragment : Fragment() {
                     Log.d("TAG", "onItemSelectedIrrigationType:$item")
                     binding.clPlotNumber.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
-                    binding.tvCheckCrop.setText("Save Crop")
+                    binding.tvCheckCrop.text = "Save Crop"
                     itemClicked(account_id, crop_id, soil_type_id, item)
 //                    else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 2", Toast.LENGTH_SHORT).show()
@@ -454,11 +457,11 @@ class AddCropPremiumFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
-            var NickNamehint = TranslationsManager().getString("e_g_crop_name")
+            val NickNamehint = TranslationsManager().getString("e_g_crop_name")
             binding.etNickName.hint = NickNamehint
-            var areaHint = TranslationsManager().getString("e_g_50")
+            val areaHint = TranslationsManager().getString("e_g_50")
             binding.etAreaNumber.hint = areaHint
-            var hitnPlant = TranslationsManager().getString("e_g_50")
+            val hitnPlant = TranslationsManager().getString("e_g_50")
             binding.etNoOfAcre.hint = hitnPlant
         }
         TranslationsManager().loadString(
@@ -510,7 +513,7 @@ class AddCropPremiumFragment : Fragment() {
         soil_type_id: Int?,
         irrigation_type: Any
     ) {
-        binding.cardCheckHealth.setOnClickListener {
+        binding.cardCheckHealth.setOnClickListener { it ->
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
             area = binding.etAreaNumber.text.toString().trim()
@@ -533,7 +536,6 @@ class AddCropPremiumFragment : Fragment() {
                 return@setOnClickListener
             } else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
                 val map = mutableMapOf<String, Any>()
-                Log.d("TAG", "itemClickedjnvjndkfnvk:$account_id ")
                 if (account_id != null) {
                     map["account_no_id"] = account_id
                 }
@@ -553,7 +555,18 @@ class AddCropPremiumFragment : Fragment() {
                 map["irrigation_type"] = irrigation_type
                 map["sowing_date"] = binding.etCalender.text.toString()
                 map["no_of_plants"] = binding.etNoOfAcre.text.toString()
-                Log.d("TAG", "itemClickedBHSCbjzdnjvn: $map")
+                val eventBundle=Bundle()
+                eventBundle.putString("crop_name", cropNameTag.toString())
+                eventBundle.putString("cropCategoryTagName", cropCategoryTagName.toString())
+                eventBundle.putString("soil_type_id", soil_type_id.toString())
+                eventBundle.putString("plot_nickname",binding.etNickName.text.toString())
+                eventBundle.putString("area", binding.etAreaNumber.text.toString())
+                eventBundle.putString("irrigation_type", irrigation_type.toString())
+                eventBundle.putString("no_of_plants", binding.etNoOfAcre.text.toString())
+
+                EventItemClickHandling.calculateItemClickEvent("Add_cropPremium",eventBundle)
+
+
                 viewModel.addCropDataPass(map).observe(requireActivity()) {
                     when (it) {
                         is Resource.Success -> {
@@ -589,16 +602,16 @@ class AddCropPremiumFragment : Fragment() {
     }
 
     private fun showCalender() {
-        var date: DatePickerDialog.OnDateSetListener? =
+        val date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, -1);
-                view.setMinDate(myCalendar.timeInMillis)
+                myCalendar.add(Calendar.YEAR, 0);
+                view.minDate = myCalendar.timeInMillis
                 updateLabel(myCalendar)
-                myCalendar.add(Calendar.YEAR, 1)
-                view.setMaxDate(myCalendar.timeInMillis)
+                myCalendar.add(Calendar.YEAR, 0)
+                view.maxDate = myCalendar.timeInMillis
             }
         val dialog = DatePickerDialog(
             requireContext(),
@@ -609,9 +622,9 @@ class AddCropPremiumFragment : Fragment() {
         )
         dateCrop = dateofBirthFormat.format(myCalendar.time)
         myCalendar.add(Calendar.YEAR, -1);
-        dialog.datePicker.setMinDate(myCalendar.timeInMillis)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
         myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
-        dialog.datePicker.setMaxDate(myCalendar.getTimeInMillis());
+        dialog.datePicker.maxDate = myCalendar.getTimeInMillis();
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")
@@ -637,5 +650,8 @@ class AddCropPremiumFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("AddCropPremiumFragment")
+    }
 }

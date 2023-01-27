@@ -1,22 +1,22 @@
 package com.example.mandiprice.viewModel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.mandiprice.api.MandiApi
-import com.example.mandiprice.api.mandiResponse.Record
-import com.example.mandiprice.api.stateRespond.IndianStates
-import com.example.mandiprice.utils.Constants
 import com.waycool.data.Network.NetworkModels.MandiMasterModel
 import com.waycool.data.Network.NetworkModels.StateModel
 import com.waycool.data.repository.CropsRepository
+import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.MandiRepository
 import com.waycool.data.repository.VansRepository
-import com.waycool.data.repository.*
 import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlin.collections.List
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 class MandiViewModel : ViewModel() {
 
@@ -56,9 +56,11 @@ class MandiViewModel : ViewModel() {
 
 
     //Ad Banners
-    fun getVansAdsList(): LiveData<Resource<List<VansFeederListDomain>>> {
+    fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {
         val queryMap = mutableMapOf<String, String>()
         queryMap["vans_type"] = "banners"
+        queryMap["module_id"] = moduleId
+
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
 }

@@ -19,6 +19,8 @@ import com.example.soiltesting.ui.history.HistoryViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.Network.NetworkModels.CheckSoilTestData
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -63,15 +65,6 @@ class CheckSoilTestFragment : Fragment() {
             }
             latitude = arguments?.getString("lat")
             longitude = arguments?.getString("lon")
-//            binding.cardCheckHealth.setOnClickListener {
-//                val bundle = Bundle()
-//                bundle.putString("onp_id", your_list?.get(0)?.onpName.toString())
-//                findNavController().navigate(
-//                    R.id.action_checkSoilTestFragment_to_newSoilTestFormFragment,
-//                    bundle
-//                )
-//
-//            }
         }
         return binding.root
     }
@@ -189,11 +182,18 @@ class CheckSoilTestFragment : Fragment() {
 
 //                                        binding.tvCrops.setTextColor(Color.parseColor("#5D6571"))
                                         binding.cardCheckHealth.setOnClickListener {
+                                            val eventBundle=Bundle()
+                                            eventBundle.putString("onpName",your_list?.get(0)?.onpName)
+                                            eventBundle.putString("cropName",idTwo)
+                                            EventItemClickHandling.calculateItemClickEvent("Soiltesting_checksoilhealth",eventBundle)
+
                                             val bundle = Bundle()
                                             bundle.putInt(
                                                 "soil_test_number",
                                                 your_list?.get(0)?.onpId.toString().toInt()
                                             )
+                                            bundle.putString("onpName",your_list?.get(0)?.onpName)
+                                            bundle.putString("cropName",idTwo)
                                             bundle.putString("lat", latitude)
                                             bundle.putString("long", longitutde)
                                             bundle.putInt("plot_id", idOne.toString().toInt())
@@ -229,6 +229,9 @@ class CheckSoilTestFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CheckSoilTestFragment")
+    }
 
 }

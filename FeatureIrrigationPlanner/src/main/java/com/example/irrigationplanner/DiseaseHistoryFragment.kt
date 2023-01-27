@@ -2,10 +2,10 @@ package com.example.irrigationplanner
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -13,7 +13,7 @@ import com.example.irrigationplanner.adapter.DiseaseHistoryAdapter
 import com.example.irrigationplanner.databinding.FragmentDisaseHistoryBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
-import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
 
@@ -140,6 +140,10 @@ class DiseaseHistoryFragment : Fragment() {
 
             }
         })
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("DiseaseHistoryFragment")
     }
 
 }

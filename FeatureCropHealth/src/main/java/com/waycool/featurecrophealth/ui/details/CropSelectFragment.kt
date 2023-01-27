@@ -14,7 +14,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -24,6 +27,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -32,8 +38,6 @@ import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -51,7 +55,6 @@ class CropSelectFragment : Fragment() {
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
     private lateinit var myCropAdapter: MyCropsAdapter
-
 
 
     override fun onCreateView(
@@ -74,11 +77,17 @@ class CropSelectFragment : Fragment() {
         clickSearch()
 
         adapter.onItemClick = {
+            val eventBundle = Bundle()
+            eventBundle.putString("cropName", it?.cropName)
+            if (selectedCategory != null) {
+                eventBundle.putString("selectedCategory", selectedCategory?.categoryName)
+            }
+            EventItemClickHandling.calculateItemClickEvent("crophealth_landing", eventBundle)
             val bundle = Bundle()
             it?.cropId?.let { it1 -> bundle.putInt("crop_id", it1) }
             bundle.putString("name", it?.cropName)
             bundle.putString("crop_logo", it?.cropLogo)
-            bundle.putString("TagCrop",it?.cropNameTag)
+            bundle.putString("TagCrop", it?.cropNameTag)
             findNavController().navigate(
                 R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
                 bundle
@@ -91,19 +100,20 @@ class CropSelectFragment : Fragment() {
             val args = Bundle()
             it?.idd?.let { it1 -> args.putInt("crop_id", it1) }
             it?.cropName?.let { it1 -> args.putString("name", it1) }
-            it?.cropLogo?.let { it2->args.putString("crop_logo", it2) }
-            viewModel.getCropMaster().observe(viewLifecycleOwner){
-                for (i in 0 until it.data?.size!!){
+            it?.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
+            viewModel.getCropMaster().observe(viewLifecycleOwner) {
+                for (i in 0 until it.data?.size!!) {
                     Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
-                    if(it.data?.get(i)?.cropId==id) {
+                    if (it.data?.get(i)?.cropId == id) {
                         id2 = it.data?.get(i)?.cropId!!
                     }
                 }
-                if(id==id2){
+                if (id == id2) {
                     findNavController().navigate(
                         R.id.action_cropSelectFragment_to_cropDetailsCaptureFragment,
-                        args)
-                }else  dialog()
+                        args
+                    )
+                } else dialog()
 
             }
 
@@ -129,7 +139,7 @@ class CropSelectFragment : Fragment() {
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
-            binding.clProgressBar.visibility=View.GONE
+            binding.clProgressBar.visibility = View.GONE
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
             } else {
@@ -137,17 +147,16 @@ class CropSelectFragment : Fragment() {
             }
             // Log.d("MYCROPS", it.data?.get(0)?.cropLogo.toString())
 
-                }
         }
-    fun translationPestAndDisease() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val search = TranslationsManager().getString("search")
-            binding.searchView.hint = search
-        }
-        TranslationsManager().loadString("crop_selection", binding. toolbarTitle,"Crop Selection")
-        TranslationsManager().loadString("", binding.myCropsTitle,"My Crops")
     }
 
+    fun translationPestAndDisease() {
+        viewModel.viewModelScope.launch {
+            binding.searchView.hint = TranslationsManager().getString("search")
+        }
+        TranslationsManager().loadString("crop_selection", binding.toolbarTitle, "Crop Selection")
+        TranslationsManager().loadString("", binding.myCropsTitle, "My Crops")
+    }
 
 
     fun initView() {
@@ -163,14 +172,14 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun bindObserversCategory() {
-        binding.clProgressBar.visibility=View.VISIBLE
+        binding.clProgressBar.visibility = View.VISIBLE
 
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
 //                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     binding.cropCategoryChipGroup.removeAllViews()
-                    binding.clProgressBar.visibility=View.GONE
+                    binding.clProgressBar.visibility = View.GONE
 
                     selectedCategory = null
                     val categoryList = it.data
@@ -238,12 +247,12 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
-        binding.clProgressBar.visibility=View.VISIBLE
+        binding.clProgressBar.visibility = View.VISIBLE
 
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
-                    binding.clProgressBar.visibility=View.GONE
+                    binding.clProgressBar.visibility = View.GONE
                     if (categoryId == null) {
                         adapter.submitList(res.data)
                     } else
@@ -251,14 +260,15 @@ class CropSelectFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error Occurred", Toast.LENGTH_SHORT)
+                    ToastStateHandling.toastError(
+                        requireContext(),
+                        "Error Occurred",
+                        Toast.LENGTH_SHORT
+                    )
                 }
             }
         }
     }
-
-
-
 
 
     private fun clickSearch() {
@@ -275,6 +285,7 @@ class CropSelectFragment : Fragment() {
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                EventClickHandling.calculateClickEvent("Search_crophealth")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 150)
@@ -286,6 +297,7 @@ class CropSelectFragment : Fragment() {
     }
 
     private fun speechToText() {
+        EventClickHandling.calculateClickEvent("STT_crophealth")
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -327,28 +339,36 @@ class CropSelectFragment : Fragment() {
         private const val REQUEST_CODE_SPEECH_INPUT = 1
     }
 
-    private fun dialog(){
+    private fun dialog() {
 
         val dialog = Dialog(requireContext())
         //dialog.setCancelable(false)
         dialog.setContentView(R.layout.dailog_information)
         // val body = dialog.findViewById(R.id.body) as TextView
         val yesBtn = dialog.findViewById(R.id.ok) as Button
-        val tvInformation = dialog.findViewById(R.id.textView14)as TextView
-        val tvMessage = dialog.findViewById(R.id.textView15)as TextView
+        val tvInformation = dialog.findViewById(R.id.textView14) as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15) as TextView
         yesBtn.setOnClickListener {
             dialog.dismiss()
             Log.d("Dialog", "dialog: Clicked")
         }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
-        TranslationsManager().loadString("str_information",tvInformation,"Information")
-        TranslationsManager().loadString("str_crop_health_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a pest & disease detection model for this crop. We look forward to serving you shortly.")
-        viewModel.viewModelScope.launch(){
+        TranslationsManager().loadString("str_information", tvInformation, "Information")
+        TranslationsManager().loadString(
+            "str_crop_health_message",
+            tvMessage,
+            "Thanks for showing your interest. Currently, we’re working on a pest & disease detection model for this crop. We look forward to serving you shortly."
+        )
+        viewModel.viewModelScope.launch() {
             var ok = TranslationsManager().getString("str_ok")
-            if(ok.isNullOrEmpty())
+            if (ok.isNullOrEmpty())
                 yesBtn.text = "Ok"
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("CropSelectFragment")
     }
+}

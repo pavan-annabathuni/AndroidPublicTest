@@ -295,10 +295,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:gravity="center"
                         android:paddingTop="7dp"
                         android:text="Pump HP"
                         android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@id/guideline5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -334,23 +334,23 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:gravity="center"
                         android:paddingTop="7dp"
                         android:text="Pump Type"
                         android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline5"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="50dp"
-                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/bg_plot_edittext"
                         app:cardCornerRadius="3dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/addfarmpumptype_title"
-                        app:layout_constraintTop_toBottomOf="@+id/addfarmpumptype_title">
+                        app:layout_constraintTop_toTopOf="@+id/cardView33"
+                        app:layout_constraintBottom_toBottomOf="@id/cardView33">
 
                         <Spinner
                             android:id="@+id/pumptype_spinner"
@@ -366,10 +366,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:gravity="center"
                         android:paddingTop="7dp"
-                        android:text="Pump Size in Inches"
+                        android:text="Pipe Size in Inches"
                         android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="@id/guideline5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardView33" />
 
@@ -395,26 +395,27 @@
 
 
                     <com.waycool.uicomponents.Text.ParagraphMedium
+                        android:id="@+id/addfarmpipeheight_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:gravity="center"
                         android:paddingTop="7dp"
-                        android:text="Pump Height in Mtrs"
+                        android:text="Pipe Height in ft"
                         android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline5"
                         app:layout_constraintTop_toBottomOf="@+id/cardView33" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="50dp"
-                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/bg_plot_edittext"
                         app:cardCornerRadius="3dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline5"
-                        app:layout_constraintTop_toBottomOf="@+id/addfarmpipesize_title">
+                        app:layout_constraintTop_toTopOf="@+id/cardView34"
+                        app:layout_constraintBottom_toBottomOf="@id/cardView34">
 
                         <Spinner
                             android:id="@+id/pumpheight_spinner"
@@ -430,11 +431,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:gravity="center"
                         android:paddingTop="7dp"
                         android:text="Pump Flow Rate (LPH)"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardView34" />
 
                     <androidx.cardview.widget.CardView

@@ -5,22 +5,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.example.irrigationplanner.adapter.HistoryAdapter
-import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
-import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentNotificationBinding
 import kotlinx.coroutines.launch
 
@@ -68,6 +67,9 @@ class NotificationFragment : Fragment() {
     private fun setAdapter(){
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener { notification,dataNotification ->
             viewModel.getNotification().observe(viewLifecycleOwner){
+                val eventBundle=Bundle()
+                eventBundle.putString("",notification.title)
+                EventItemClickHandling.calculateItemClickEvent("NotificationItemClick",eventBundle)
                 val deepLink = notification.link
                 Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
@@ -121,6 +123,9 @@ class NotificationFragment : Fragment() {
 
         }
     }}
-
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("NotificationFragment")
+    }
 
 }

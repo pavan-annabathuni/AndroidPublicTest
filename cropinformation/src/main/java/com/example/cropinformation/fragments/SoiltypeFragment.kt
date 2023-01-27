@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentSoiltypeBinding
 import com.example.cropinformation.viewModle.TabViewModel
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 
@@ -92,5 +93,9 @@ class SoiltypeFragment : Fragment() {
         TranslationsManager().loadString("str_still_loam",binding.tvStill)
         TranslationsManager().loadString("clay_loam",binding.tvClay)
         TranslationsManager().loadString("str_alluvial",binding.tvAllu)
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SoilTypeFragment")
     }
 }

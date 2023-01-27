@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.databinding.FragmentSucessFullBinding
 import com.example.soiltesting.utils.Constant.TAG
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 
@@ -57,6 +58,10 @@ class SucessFullFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onResume() {
+        super.onResume()
+        EventScreenTimeHandling.calculateScreenTime("SuccessFullFragment")
     }
 
 }
