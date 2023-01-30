@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.selectcrop
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentSelectAddCropBinding
+import com.example.addcrop.ui.SelectCropAdapter
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling

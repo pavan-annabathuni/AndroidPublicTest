@@ -1,15 +1,13 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.free
 
 import android.R
 import android.app.DatePickerDialog
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton

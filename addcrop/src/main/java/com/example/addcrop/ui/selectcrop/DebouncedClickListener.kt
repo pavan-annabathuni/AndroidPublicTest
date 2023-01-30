@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.selectcrop
 
 import android.view.View
 import kotlinx.coroutines.GlobalScope

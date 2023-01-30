@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.selectcrop
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
+import com.example.addcrop.ui.CategoryAdapter
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling

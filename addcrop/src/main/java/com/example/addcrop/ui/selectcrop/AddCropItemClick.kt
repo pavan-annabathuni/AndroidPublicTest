@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.selectcrop
 
 
 import com.waycool.data.repository.domainModels.SoilTypeDomain
