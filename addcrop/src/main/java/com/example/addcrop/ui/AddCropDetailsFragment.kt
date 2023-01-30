@@ -258,7 +258,7 @@ class AddCropDetailsFragment : Fragment() {
         binding.myfarmsChipGroup.addView(chip)
     }
 
-
+    //select area unit
     private fun selectAreaUnit() {
         val arrayAdapter =
             ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, areaOfUnitList)
@@ -362,6 +362,7 @@ class AddCropDetailsFragment : Fragment() {
 //        viewModel.selectedDate.value=dateCrop
     }
 
+    //translation for this fragment
     private fun translationAddCropForFreeUser() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
@@ -392,18 +393,6 @@ class AddCropDetailsFragment : Fragment() {
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.tvDateSelected.text = dateFormat.format(myCalendar.time)
     }
-
-    private fun View.hideSoftInput() {
-        val inputMethodManager =
-            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
-
-
-    //    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("AddCropDetailsFragment")
