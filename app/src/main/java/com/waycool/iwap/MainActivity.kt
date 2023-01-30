@@ -289,13 +289,13 @@ class MainActivity : AppCompatActivity() {
                     if (isPremium)
                         hideBottomNav()
                     else
-                        showBottomNav()
+                        hideBottomNav()
                 }
                 com.waycool.featurecropprotect.R.id.cropSelectionFragment -> {
                     if (isPremium)
                         hideBottomNav()
                     else
-                        showBottomNav()
+                        hideBottomNav()
                 }
                 R.id.homePagePremiumFragment3 -> showBottomNav()
                 else -> hideBottomNav()

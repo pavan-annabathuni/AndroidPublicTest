@@ -1,7 +1,6 @@
 package com.example.addcrop.ui.premium
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentVeriatyCropBinding
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 
 
 class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked {
@@ -33,6 +33,10 @@ class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        TranslationsManager().loadString("select_variety", binding.textSelectType, "Select Variety")
+        TranslationsManager().loadString("add_crop", binding.toolbarTitle, "Add Crop")
+        TranslationsManager().loadString("next", binding.tvCheckCrop, "Next")
+
         if (arguments != null) {
             crop_id = arguments?.getInt("cropid")
             crop_name = arguments?.getString("cropname")

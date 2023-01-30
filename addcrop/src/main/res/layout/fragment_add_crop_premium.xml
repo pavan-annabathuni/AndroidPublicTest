@@ -214,6 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="33dp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clPincodeNumber">
@@ -266,6 +267,7 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
 
@@ -280,6 +282,7 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
 
@@ -352,6 +355,7 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clCalender" />
 
@@ -365,6 +369,7 @@
                 android:background="@drawable/bg_plot_edittext"
                 android:padding="@dimen/space1"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvBahar">
@@ -407,6 +412,7 @@
                 android:text="Crop Year"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                tools:visibility="visible"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSpinnerYearBahar" />
@@ -421,6 +427,7 @@
                 android:background="@drawable/bg_plot_edittext"
                 android:padding="@dimen/space1"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvYearShow">
@@ -459,6 +466,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="33dp"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSpinnerYear">
@@ -549,6 +557,7 @@
                     android:layout_marginStart="@dimen/space16"
                     android:layout_marginEnd="@dimen/space4"
                     android:prompt="@string/promote"
+                    android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
