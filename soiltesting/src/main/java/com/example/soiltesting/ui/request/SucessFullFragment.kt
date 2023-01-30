@@ -33,10 +33,6 @@ class SucessFullFragment : Fragment() {
 
             binding.ivClose.setOnClickListener {
                findNavController().navigateUp()
-//                findNavController().navigate(R.id.action_sucessFullFragment_to_soilTestingHomeFragment)
-//                val isSuccess = findNavController().navigateUp()
-//                if (!isSuccess) requireActivity().finish()
-                findNavController().navigateUp()
 //            }
         }
         return binding.root
@@ -51,8 +47,6 @@ class SucessFullFragment : Fragment() {
         TranslationsManager().loadString("successfully_completed", binding.tvRequestID,"Request Successful!")
         TranslationsManager().loadString("Request Successful!", binding.tvRequestIDText,"Your soil test request for")
         TranslationsManager().loadString("successfully_completed", binding.tvRequestIDTextStatus,"Successfully completed")
-
-
     }
 
     override fun onDestroyView() {

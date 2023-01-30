@@ -36,7 +36,6 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentStatusTrackerBinding.inflate(inflater, container, false)
-        val bundle = Bundle()
         if (arguments != null)
             id = arguments?.getInt("id")
         val soil_test_number: String? = arguments?.getString("soil_test_number")
@@ -52,7 +51,7 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                     binding.progressBar.visibility=View.GONE
                     Log.d("TAG", "bindObserversDataStatusTracker:" + it.data.toString())
                     val response = it.data as ArrayList<TrackerDemain>
-                    statusTrackerAdapter.setMovieList(response)
+                    statusTrackerAdapter.setStatusTrackerList(response)
 
                 }
                 is Resource.Error -> {

@@ -57,7 +57,6 @@ class SelectCropSoilTestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerviewDetails.adapter = adapter
         bindObserversCategory()
-//        bindObserversDetails()
         initView()
         translationSoilTesting()
         clickSearch()

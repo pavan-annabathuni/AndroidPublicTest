@@ -57,17 +57,16 @@ class AddCropPremiumFragment : Fragment() {
     lateinit var areaTypeSelected: String
     private val firebaseAnalytics = Firebase
 
-
     var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
-    val colors = arrayOf(
+    val cropIrrigationList = arrayOf(
         "Select Irrigation method",
         "Drip Irrigation",
         "Sprinkler Irrigation",
         "Flood Irrigation"
     )
-    val years = arrayOf(
+    val selectCropUnit = arrayOf(
         "Acres",
         "Gunta",
         "Cent",
@@ -80,7 +79,7 @@ class AddCropPremiumFragment : Fragment() {
         "2-3",
         "3-4"
     )
-    val noOFYear = arrayOf(
+    val selectCropYear = arrayOf(
         "Select",
         "0-1",
         "1-2",
@@ -103,11 +102,11 @@ class AddCropPremiumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        spinnerYear()
+        selectCropAreaSpinner()
         initViewClicks()
-        noOFYear()
+        selectCropYearSpinner()
         noOFYearBahar()
-        translationAddCropTesting()
+        translationAddCropPremiumPage()
         year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
 //            postDataAddCrop()
@@ -251,9 +250,9 @@ class AddCropPremiumFragment : Fragment() {
 //        }
     }
 
-    private fun spinnerYear() {
+    private fun selectCropAreaSpinner() {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropUnit)
         binding.Acres.adapter = arrayAdapter
         binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -289,26 +288,33 @@ class AddCropPremiumFragment : Fragment() {
             }
     }
 
-    private fun noOFYear() {
+    private fun selectCropYearSpinner() {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, noOFYear)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropYear)
         binding.tvSpinnerYear.adapter = arrayAdapter
         binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val item = p0?.selectedItem
                 year_selected = item.toString()
-                if (year_selected == "Select") {
-                    year_selected = "0"
-                } else if (year_selected == "0-1") {
-                    year_selected = "1"
-                } else if (year_selected == "1-2") {
-                    year_selected = "2"
-                } else if (year_selected == "2-3") {
-                    year_selected = "3"
-                } else if (year_selected == "3-4") {
-                    year_selected = "4"
-                } else if (year_selected == "4-5") {
-                    year_selected = "5"
+                when (year_selected) {
+                    "Select" -> {
+                        year_selected = "0"
+                    }
+                    "0-1" -> {
+                        year_selected = "1"
+                    }
+                    "1-2" -> {
+                        year_selected = "2"
+                    }
+                    "2-3" -> {
+                        year_selected = "3"
+                    }
+                    "3-4" -> {
+                        year_selected = "4"
+                    }
+                    "4-5" -> {
+                        year_selected = "5"
+                    }
                 }
             }
 
@@ -320,7 +326,7 @@ class AddCropPremiumFragment : Fragment() {
 
     private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, colors)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, cropIrrigationList)
         binding.tvSpinner.adapter = arrayAdapter
         binding.tvSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -329,18 +335,18 @@ class AddCropPremiumFragment : Fragment() {
                 irrigation_selected = item.toString()
 //                arrayList.add(irrigation)
 
-                if (colors[0] == irrigation_selected) {
-                    binding.cardCheckHealth.setOnClickListener {
+                if (cropIrrigationList[0] == irrigation_selected) {
+                    binding.btnSaveCropDetails.setOnClickListener {
                         Toast.makeText(
                             requireContext(),
                             "Please Irrigation Type",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else if (colors[1] == (irrigation_selected)) {
+                } else if (cropIrrigationList[1] == (irrigation_selected)) {
 //                    binding.tvCheckCrop.setText("Next")
                     TranslationsManager().loadString("next", binding.tvCheckCrop)
-                    binding.cardCheckHealth.setOnClickListener {
+                    binding.btnSaveCropDetails.setOnClickListener {
                         it.hideSoftInput()
                         nickName = binding.etNickName.text.toString().trim()
                         area = binding.etAreaNumber.text.toString().trim()
@@ -403,26 +409,26 @@ class AddCropPremiumFragment : Fragment() {
                             )
                         }
                     }
-                } else if (colors[2] == (item)) {
+                } else if (cropIrrigationList[2] == (item)) {
                     TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
-                    Log.d("TAG", "onItemSelectedIrrigationType:$colors[2]")
-                    Log.d("TAG", "onItemSelectedIrrigationType:$colors")
+                    Log.d("TAG", "onItemSelectedIrrigationType:$cropIrrigationList[2]")
+                    Log.d("TAG", "onItemSelectedIrrigationType:$cropIrrigationList")
                     Log.d("TAG", "onItemSelectedIrrigationType:$item")
-                    binding.clPlotNumber.visibility = View.VISIBLE
+                    binding.clCropNickname.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.text = "Save Crop"
-                    itemClicked(account_id, crop_id, soil_type_id, item)
+                    cropFieldVerification(account_id, crop_id, soil_type_id, item)
 //                    else if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 2", Toast.LENGTH_SHORT).show()
 //                    }
 
 
-                } else if (colors[3] == (item)) {
+                } else if (cropIrrigationList[3] == (item)) {
                     TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
-                    binding.clPlotNumber.visibility = View.VISIBLE
+                    binding.clCropNickname.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.setText("Save Crop")
-                    itemClicked(account_id, crop_id, soil_type_id, item)
+                    cropFieldVerification(account_id, crop_id, soil_type_id, item)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
 //                    }
@@ -438,7 +444,7 @@ class AddCropPremiumFragment : Fragment() {
 
     }
 
-    fun translationAddCropTesting() {
+   private fun translationAddCropPremiumPage() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
@@ -492,13 +498,13 @@ class AddCropPremiumFragment : Fragment() {
     }
 
 
-    private fun itemClicked(
+    private fun cropFieldVerification(
         account_id: Int?,
         crop_id: Int?,
         soil_type_id: Int?,
         irrigation_type: Any
     ) {
-        binding.cardCheckHealth.setOnClickListener { it ->
+        binding.btnSaveCropDetails.setOnClickListener { it ->
             it.hideSoftInput()
             nickName = binding.etNickName.text.toString().trim()
             area = binding.etAreaNumber.text.toString().trim()
@@ -540,16 +546,16 @@ class AddCropPremiumFragment : Fragment() {
                 map["irrigation_type"] = irrigation_type
                 map["sowing_date"] = binding.etCalender.text.toString()
                 map["no_of_plants"] = binding.etNoOfAcre.text.toString()
-                val eventBundle=Bundle()
+                val eventBundle = Bundle()
                 eventBundle.putString("crop_name", cropNameTag.toString())
                 eventBundle.putString("cropCategoryTagName", cropCategoryTagName.toString())
                 eventBundle.putString("soil_type_id", soil_type_id.toString())
-                eventBundle.putString("plot_nickname",binding.etNickName.text.toString())
+                eventBundle.putString("plot_nickname", binding.etNickName.text.toString())
                 eventBundle.putString("area", binding.etAreaNumber.text.toString())
                 eventBundle.putString("irrigation_type", irrigation_type.toString())
                 eventBundle.putString("no_of_plants", binding.etNoOfAcre.text.toString())
 
-                EventItemClickHandling.calculateItemClickEvent("Add_cropPremium",eventBundle)
+                EventItemClickHandling.calculateItemClickEvent("Add_cropPremium", eventBundle)
 
 
                 viewModel.addCropDataPass(map).observe(requireActivity()) {
@@ -635,6 +641,7 @@ class AddCropPremiumFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("AddCropPremiumFragment")

@@ -59,17 +59,17 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
+
 
     //    private val binding get() = _binding!!
     private lateinit var binding: FragmentSoilTestingHomeBinding
@@ -80,6 +80,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var accountID: Int? = null
     private var moduleId = "22"
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+    private val debounceInterval = 1000L
 
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
@@ -494,13 +495,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
                             if (response.size <= 2) {
-                                soilHistoryAdapter.setMovieList(response)
+                                soilHistoryAdapter.setTrackerList(response)
 
                             } else {
                                 val arrayList = ArrayList<SoilTestHistoryDomain>()
                                 arrayList.add(response[0])
                                 arrayList.add(response[1])
-                                soilHistoryAdapter.setMovieList(arrayList)
+                                soilHistoryAdapter.setTrackerList(arrayList)
 
                             }
 

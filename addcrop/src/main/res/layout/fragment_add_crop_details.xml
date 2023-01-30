@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.addcrop.viewmodel.AddCropViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:context=".ui.AddCropDetailsFragment">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,6 +31,7 @@
                 android:layout_height="0dp"
                 android:paddingStart="@dimen/space16"
                 android:paddingEnd="@dimen/space16"
+                android:onClick="@{viewModel.eventHandler::backButton}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -41,8 +52,6 @@
                 android:textStyle="bold" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         <androidx.core.widget.NestedScrollView
@@ -193,9 +202,11 @@
                         android:layout_marginStart="@dimen/space16"
                         android:layout_marginTop="@dimen/space2"
                         android:layout_marginEnd="@dimen/space4"
+
                         android:layout_marginBottom="@dimen/space2"
                         android:background="#FFFFFF"
                         android:hint="e.g 50"
+
                         android:windowSoftInputMode="adjustResize"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -230,6 +241,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/tv_show_calender"
                     android:layout_width="wrap_content"
@@ -265,6 +277,7 @@
                         android:background="#FFFFFF"
                         android:gravity="fill"
                         android:textColor="#828699"
+                        android:onClick="@{viewModel.eventHandler::calenderShow}"
                         android:textSize="@dimen/txt14"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/iv_calender_icon"
@@ -314,7 +327,6 @@
             android:layout_margin="16dp"
             android:visibility="visible"
             app:cardCornerRadius="8dp"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -323,6 +335,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:onClick="@{viewModel.eventHandler::saveButtonClicked}"
                 android:background="@drawable/bg_button">
 
                 <TextView
@@ -355,3 +368,4 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

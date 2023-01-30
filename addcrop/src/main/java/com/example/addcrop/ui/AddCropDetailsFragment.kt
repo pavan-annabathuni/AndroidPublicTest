@@ -9,8 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -39,20 +37,20 @@ import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
-    private var cropCategoryTagName: String?=null
-    private var cropNameTag: String? =null
+    private var cropCategoryTagName: String? = null
+    private var cropNameTag: String? = null
     private var selectedFarmId: Int? = null
     private var cropIdSelected: Int? = null
     private var accountID: Int? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+    lateinit var binding:FragmentAddCropDetailsBinding
 
     //    private var _binding: FragmentAddCropDetailsBinding? = null
 //    private val binding get() = _binding!!
-    private lateinit var _binding: FragmentAddCropDetailsBinding
-    private val binding get() = _binding
+//    private lateinit var _binding: FragmentAddCropDetailsBinding
+//    private val binding get() = _binding
     private val myCalendar = Calendar.getInstance()
     private var dateCrop: String = ""
-    private var nickName: String = ""
     var area: String = ""
     var date: String = ""
     lateinit var areaTypeSelected: String
@@ -72,8 +70,12 @@ class AddCropDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentAddCropDetailsBinding.inflate(layoutInflater)
+        binding.viewModel=viewModel
+         return binding.root
+
+//        _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
+//        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,32 +117,63 @@ class AddCropDetailsFragment : Fragment() {
 //        binding.viewModel=viewModel
     }
 
-    private fun mvvmInit() {
-//        viewModel.saveButtonPassData
-//        viewModel.onButtonClicked.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+    //    private fun mvvmInit() {
+//        viewModel.saveButtonPassData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 //            postCropDetails()
 //        })
-//        viewModel.onButtonClicked.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//                postCropDetails()
+//        viewModel.calenderShow .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//         selectCropDateFromCalender()
 //        })
+//        viewModel.navigateBack.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            val isSuccess = findNavController().navigateUp()
+//            if (!isSuccess) requireActivity().onBackPressed()
+//        })
+//
+//
+//    }
+    private fun mvvmInit() {
+        viewModel.navigation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { action ->
+                when (action) {
+                    "SUBMIT_BUTTON" -> postCropDetails()
+                    "CALENDER_SHOW" -> selectCropDateFromCalender()
+                    "BACK_BUTTON" -> navigateBack()
+                    else -> Log.w("mvvmInit", "Unexpected value: $action")
+                }
+            })
     }
+    private fun navigateBack() {
+        Log.d("TAG", "backButtonClicked:")
+        val isSuccess = findNavController().navigateUp()
+        if (!isSuccess) requireActivity().onBackPressed()
+    }
+
 
     private fun initViewClick() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             checkInternet()
         }
-        binding.cardCheckHealth.setOnClickListener {
-            it.hideSoftInput()
-            postCropDetails()
-        }
-        binding.clCalenderDateSelect.setOnClickListener {
-            selectCropDateFromCalender()
-        }
+//        binding.cardCheckHealth.setOnClickListener {
+//            it.hideSoftInput()
+//            viewModel.eventHandler.saveButtonClicked()
+//        }
+//        binding.clCalenderDateSelect.setOnClickListener {
+//            viewModel.eventHandler.calenderShow()
+//        }
 
-        binding.backBtn.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
-        }
+//        binding.backBtn.setOnClickListener {
+//            viewModel.eventHandler.backButton()
+//        }
+
+//
+//        val debouncedClickListener = DebouncedClickListener(1000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch{
+//                postCropDetails()
+//            }
+//
+//
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
 
     }
 
@@ -259,12 +292,12 @@ class AddCropDetailsFragment : Fragment() {
         if (selectedFarmId != null)
             map["farm_id"] = selectedFarmId!!
 
-        val eventBundle=Bundle()
-        eventBundle.putString("cropCategoryTagName","Crop_category_${cropCategoryTagName}")
-        eventBundle.putString("cropTagName",cropNameTag)
-        eventBundle.putString("cropArea",binding.etAreaNumber.text.toString())
-        eventBundle.putString("sowingDate", binding.etCalender.text.toString())
-        EventItemClickHandling.calculateItemClickEvent("Add_crop",eventBundle)
+        val eventBundle = Bundle()
+        eventBundle.putString("cropCategoryTagName", "Crop_category_${cropCategoryTagName}")
+        eventBundle.putString("cropTagName", cropNameTag)
+//        eventBundle.putString("cropArea",binding.etCropArea.text toString())
+        eventBundle.putString("sowingDate", binding.tvDateSelected.text.toString())
+        EventItemClickHandling.calculateItemClickEvent("Add_crop", eventBundle)
 
         viewModel.addCropDataPass(
             map
@@ -367,7 +400,7 @@ class AddCropDetailsFragment : Fragment() {
     }
 
 
-//    override fun onDestroyView() {
+    //    override fun onDestroyView() {
 //        super.onDestroyView()
 //        _binding = null
 //    }
