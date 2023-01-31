@@ -256,6 +256,7 @@
         <entry key="cropinformation/src/main/res/layout/fragment_ratooning.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_seed.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_seed_rate.xml" value="0.2175925925925926" />
+        <entry key="cropinformation/src/main/res/layout/fragment_seed_rate_bordcasting.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_seed_treatment.xml" value="0.2175925925925926" />
         <entry key="cropinformation/src/main/res/layout/fragment_soil_ph.xml" value="0.3084320068359376" />
         <entry key="cropinformation/src/main/res/layout/fragment_soiltype.xml" value="0.2175925925925926" />
@@ -274,6 +275,7 @@
         <entry key="cropinformation/src/main/res/layout/item_news.xml" value="0.2833333333333333" />
         <entry key="cropinformation/src/main/res/layout/item_tab.xml" value="0.3274902908890336" />
         <entry key="cropinformation/src/main/res/layout/item_tab_crop.xml" value="0.45" />
+        <entry key="cropinformation/src/main/res/layout/item_video.xml" value="0.1" />
         <entry key="cropinformation/src/main/res/menu/chat_menu_cropinfo.xml" value="0.25893769152196117" />
         <entry key="featureChat/src/main/res/drawable-v21/zui_view_messaging.xml" value="0.1555" />
         <entry key="featureChat/src/main/res/drawable/drawable.xml" value="0.1555" />

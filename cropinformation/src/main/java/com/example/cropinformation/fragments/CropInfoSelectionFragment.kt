@@ -1,4 +1,4 @@
-package com.example.cropinformation
+package com.example.cropinformation.fragments
 
 import android.app.Dialog
 import android.content.Intent
@@ -26,10 +26,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.example.cropinformation.R
 import com.example.cropinformation.adapter.CropListAdapter
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.cropinformation.databinding.FragmentCropSelectionInfoBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.google.android.material.chip.Chip
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
@@ -46,8 +47,8 @@ import java.util.*
 class CropInfoSelectionFragment : Fragment() {
     private var selectedCategory: CropCategoryMasterDomain? = null
     private lateinit var binding: FragmentCropSelectionInfoBinding
-    private val viewModel: TabViewModel by lazy {
-        ViewModelProvider(requireActivity())[TabViewModel::class.java]
+    private val viewModel: CropInfoViewModel by lazy {
+        ViewModelProvider(requireActivity())[CropInfoViewModel::class.java]
     }
     private lateinit var myCropAdapter: MyCropsAdapter
     private val adapter: CropListAdapter by lazy { CropListAdapter() }
@@ -301,7 +302,9 @@ class CropInfoSelectionFragment : Fragment() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                    R.drawable.ic_cross
+                ))
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true

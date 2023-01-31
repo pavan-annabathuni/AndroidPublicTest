@@ -3,8 +3,6 @@ package com.example.cropinformation.viewModle
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.cropinformation.apiservice.response.DataX
-import com.example.cropinformation.apiservice.videoApi
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.VansRepository
@@ -12,26 +10,8 @@ import com.waycool.data.repository.domainModels.*
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 
-class TabViewModel:ViewModel {
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
-        get() = _status
-
-    private val _response = MutableLiveData<List<DataX>>()
-    val response: LiveData<List<DataX>>
-        get() = _response
-
-    private val _response2 = MutableLiveData<List<DataX>>()
-    val response2: LiveData<List<DataX>>
-        get() = _response2
-
-    private val _response3 = MutableLiveData<List<com.example.cropinformation.apiservice.response.cropAdvisory.Data>>()
-    val response3: LiveData<List<com.example.cropinformation.apiservice.response.cropAdvisory.Data>>
-        get() = _response3
-
-    constructor()
+class CropInfoViewModel:ViewModel() {
 
     fun getCropInformationDetails(crop_id:Int): LiveData<Resource<List<CropInformationDomainData>>> =
         CropsRepository.getCropInformation(crop_id).asLiveData()
@@ -41,9 +21,6 @@ class TabViewModel:ViewModel {
 
     fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
         return CropsRepository.getCropInfoCrops(searchQuery).asLiveData()
-    }
-    fun getIrrigationCrops(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
-        return CropsRepository.getIrrigationCrops(searchQuery).asLiveData()
     }
     fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
         return CropsRepository.getCropCategory().asLiveData()
@@ -100,41 +77,6 @@ class TabViewModel:ViewModel {
         return VansRepository.getVansFeeder(queryMap).distinctUntilChanged().cachedIn(viewModelScope)
     }
 
-    fun getTabItem(){
-          viewModelScope.launch {
-
-              try {
-                  val VideoData = videoApi.retrofitService.getVideo("videos", "Apple")
-                  _response.value = VideoData.data.data
-                  _status.value = "SUCCESS"
-              } catch (e: Exception) {
-                      _status.value = "FAILED$e"
-              }
-          }
-    }
-    fun getNewsItem(){
-        viewModelScope.launch {
-
-            try {
-                val VideoData = videoApi.retrofitService.getVideo("news", "tomato")
-                _response2.value = VideoData.data.data
-                _status.value = "SUCCESS"
-            } catch (e: Exception) {
-                _status.value = "FAILED$e"
-            }
-        }
-    }
-    fun cropAdvisory(){
-        viewModelScope.launch {
-            try {
-                val VideoData = videoApi.retrofitService.getInfromation()
-                _response3.value = VideoData.data
-                _status.value = "SUCCESS"
-            } catch (e: Exception) {
-                _status.value = "FAILED$e"
-            }
-        }
-    }
 
     //Ad Banners
     fun getVansAdsList(moduleId: String): LiveData<Resource<List<VansFeederListDomain>>> {

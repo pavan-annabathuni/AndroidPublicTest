@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide
 import com.example.cropinformation.R
 import com.example.cropinformation.adapter.ViewpagerAdapter
 import com.example.cropinformation.databinding.FragmentCropInfoBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.eventscreentime.EventClickHandling
@@ -51,8 +51,8 @@ class CropInfoFragment : Fragment(), onItemClick {
     private lateinit var videosBinding: GenericLayoutVideosListBinding
     private lateinit var newsBinding: GenericLayoutNewsListBinding
     private lateinit var binding: FragmentCropInfoBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
 
     private var cropId: Int? = null
@@ -82,11 +82,7 @@ class CropInfoFragment : Fragment(), onItemClick {
 
         setBanners()
 
-
-
-        ViewModel.getTabItem()
         binding.lifecycleOwner = this
-        binding.viewModel = ViewModel
 
 //        recycleViewIndicator()
 
@@ -128,7 +124,6 @@ class CropInfoFragment : Fragment(), onItemClick {
         setTabs()
         Glide.with(requireContext()).load(cropLogo).into(binding.cropLogo)
         tabCount()
-        ViewModel.cropAdvisory()
         binding.ViewPager.setPageTransformer { page, position ->
             updatePagerHeightForChild(page, binding.ViewPager)
         }
@@ -149,16 +144,14 @@ class CropInfoFragment : Fragment(), onItemClick {
 
             //data.sortedBy { it.id }
             binding.ViewPager.adapter = ViewpagerAdapter(this, it.data, data.size, cropId!!)
+            Log.d("cropInfo", "setTabs: ${it.data}")
             binding.tvTotalItem.text = buildString { append("/")
                 append(data.size)
     }
 
 
-
-
             TabLayoutMediator(binding.tabLayout, binding.ViewPager) { tab, position ->
                 val customView = tab.setCustomView(R.layout.item_tab_crop)
-
                 when (data[position].labelNameTag ?: data[position].label_name) {
 
                     "Crop Variety" -> {
@@ -391,6 +384,11 @@ class CropInfoFragment : Fragment(), onItemClick {
                     "Sprinkler" -> {
                         tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ci_splinkler)
+                        customView
+                    }
+                    "Seed Rate (Broadcasting)"-> {
+                        tab.text = data[position].label_name
+                        tab.setIcon(R.drawable.ci_seed_line)
                         customView
                     }
                     else -> {

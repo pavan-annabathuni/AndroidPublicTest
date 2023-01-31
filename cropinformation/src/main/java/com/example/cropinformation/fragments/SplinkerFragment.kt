@@ -1,4 +1,4 @@
-package com.example.cropinformation
+package com.example.cropinformation.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
-import com.example.cropinformation.databinding.FragmentRainGunBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.databinding.FragmentSplinkerBinding
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
+class SplinkerFragment : Fragment() {
 
-class RainGunFragment : Fragment() {
-    private lateinit var binding:FragmentRainGunBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private lateinit var binding:FragmentSplinkerBinding
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +29,7 @@ class RainGunFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentRainGunBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
+        binding = FragmentSplinkerBinding.inflate(inflater)
         observer()
         return binding.root
     }
@@ -38,7 +37,7 @@ class RainGunFragment : Fragment() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Rain Gun"||data[i].labelNameTag == "Rain Gun") {
+                if (data[i].label_name == "Sprinkler"||data[i].labelNameTag == "Sprinkler") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
                     binding.labelValue4.text = data[i].label_value

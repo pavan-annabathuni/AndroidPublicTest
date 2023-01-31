@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,6 +23,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.databinding.FragmentNotificationBinding
+import com.waycool.uicomponents.R
 import kotlinx.coroutines.launch
 
 
@@ -72,11 +75,27 @@ class NotificationFragment : Fragment() {
                 val deepLink = notification.link
                 Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
-                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                        startActivity(i) }
-                else if(deepLink.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,"Deeplink is null",Toast.LENGTH_SHORT) }
-                }
+                        try {
+                            val packageName = "com.android.chrome"
+                            val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
+                                .setToolbarColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+                                .build()
+                            customTabIntent.intent.setPackage(packageName)
+                            customTabIntent.launchUrl(
+                                requireContext(),
+                                Uri.parse(deepLink)
+                            )
+                        }catch (e:Exception){
+                            Log.d("link", "onBindViewHolder: $e")
+                        }
+
+                    }else context?.let {
+                        ToastStateHandling.toastError(
+                            it,
+                            "No Link",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
 
             if(dataNotification.readAt == null){
             viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner) {

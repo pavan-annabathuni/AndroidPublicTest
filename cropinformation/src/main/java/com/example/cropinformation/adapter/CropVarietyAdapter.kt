@@ -3,18 +3,12 @@ package com.example.cropinformation.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cropinformation.R
-import com.example.cropinformation.apiservice.response.DataX
 import com.example.cropinformation.databinding.ItemCropVarietyBinding
-import com.example.cropinformation.databinding.ItemNewsBinding
-import com.example.cropinformation.fragments.CropVarityFragment
 import com.google.android.material.chip.Chip
-import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.CropVarityDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 

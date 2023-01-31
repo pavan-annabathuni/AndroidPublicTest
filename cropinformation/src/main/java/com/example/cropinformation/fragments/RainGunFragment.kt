@@ -1,20 +1,20 @@
-package com.example.cropinformation
+package com.example.cropinformation.fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.cropinformation.databinding.FragmentStakingBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.databinding.FragmentRainGunBinding
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
-class StakingFragment : Fragment() {
-    private lateinit var binding: FragmentStakingBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+class RainGunFragment : Fragment() {
+    private lateinit var binding:FragmentRainGunBinding
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,18 +29,15 @@ class StakingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentStakingBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
+        binding = FragmentRainGunBinding.inflate(inflater)
         observer()
         return binding.root
-
     }
-
     private fun observer() {
         ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
             for (i in 0..data.size-1) {
-                if (data[i].label_name == "Staking"||data[i].labelNameTag == "Staking") {
+                if (data[i].label_name == "Rain Gun"||data[i].labelNameTag == "Rain Gun") {
                     binding.labelName.text = data[i].label_name
                     binding.labelValue.text = data[i].label_value
                     binding.labelValue4.text = data[i].label_value
@@ -54,6 +51,6 @@ class StakingFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("StakingFragment")
+        EventScreenTimeHandling.calculateScreenTime("RainGunFragment")
     }
 }

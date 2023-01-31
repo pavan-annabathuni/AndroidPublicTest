@@ -1,19 +1,19 @@
 package com.example.cropinformation.fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.cropinformation.databinding.FragmentMulchingBinding
+import com.example.cropinformation.databinding.FragmentSeedRateBordcastingBinding
 import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
+class SeedRateBordcastingFragment : Fragment() {
 
-class MulchingFragment : Fragment() {
-    private lateinit var binding: FragmentMulchingBinding
-    private val ViewModel: CropInfoViewModel by lazy {
+    private lateinit var binding: FragmentSeedRateBordcastingBinding
+    private val viewModel: CropInfoViewModel by lazy {
         ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
@@ -29,27 +29,19 @@ class MulchingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentMulchingBinding.inflate(inflater)
-        //ViewModel.cropAdvisory()
-
-        observer()
-        return binding.root
-
-    }
-
-    private fun observer() {
-        ViewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner){
+        binding = FragmentSeedRateBordcastingBinding.inflate(inflater)
+        viewModel.getCropInformationDetails(cropId!!).observe(viewLifecycleOwner) {
             val data = it.data!!
-            for(i in 0 until data.size){
-                if(data[i].label_name=="Mulching"||data[i].labelNameTag=="Mulching") {
-            binding.labelName.text = data[i].label_name
-            binding.labelValue.text = data[i].label_value
-                    break
-        }
-    }}
+            for (i in data.indices) {
+                if (data[i].label_name == "Seed Rate (Broadcasting)"||data[i].labelNameTag == "Seed Rate (Broadcasting)") {
+                    binding.tvSeedRate.text = data[i].label_value
+                    binding.textView10.text = data[i].label_name
+
+                }}}
+        return binding.root
     }
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("MulchingFragment")
+        EventScreenTimeHandling.calculateScreenTime("SeedFragment")
     }
-}
+    }

@@ -6,7 +6,7 @@
     <data>
      <variable
          name="viewModel"
-         type="com.example.cropinformation.viewModle.TabViewModel" />
+         type="com.example.cropinformation.viewModle.CropInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
