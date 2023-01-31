@@ -1,4 +1,4 @@
-package com.example.profile
+package com.example.profile.fragments
 
 import android.os.Bundle
 import android.os.Handler
@@ -28,7 +28,6 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-
 
 class ProfileLanguageFragment : Fragment() {
 
@@ -78,9 +77,8 @@ class ProfileLanguageFragment : Fragment() {
             }
         }
 
-
+/* Clear all local saved data while logout */
         binding.doneBtn.setOnClickListener {
-
              binding.progressBar.visibility = View.VISIBLE
             binding.doneBtn.visibility = View.GONE
             GlobalScope.launch {
@@ -129,10 +127,6 @@ class ProfileLanguageFragment : Fragment() {
             this.findNavController().navigateUp()
             // this.findNavController().navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
         }
-//        binding.privacyCheckBox.setOnCheckedChangeListener { compoundButton, b ->
-//            binding.doneBtn.isEnabled = b
-//        }
-//        termsConditionClick()
         return binding.root
     }
     override fun onResume() {

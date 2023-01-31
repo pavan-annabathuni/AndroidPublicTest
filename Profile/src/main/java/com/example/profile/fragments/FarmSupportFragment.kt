@@ -33,7 +33,6 @@ class FarmSupportFragment : Fragment() {
     private lateinit var title:String
     private lateinit var addUser:String
     private lateinit var deleteDes:String
-
     private lateinit var mAddUseAdapter: AddUseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

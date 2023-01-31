@@ -43,9 +43,9 @@ class AddFarmSupportFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
-    var lat = 12.22
-    var long = 78.22
-    var pinCode = 1
+    var lat:Double? = null
+    var long:Double? = null
+    var pinCode:Int? = null
     var village = ""
     var address = ""
     var state = ""
@@ -174,9 +174,10 @@ class AddFarmSupportFragment : Fragment() {
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             } else {
                 binding.mobileNo.isErrorEnabled = false
+                if(!lat.toString().isNullOrEmpty()&&!long.toString().isNullOrEmpty())
                 viewModel.updateFarmSupport(
                     accountId!!,
-                    name, contact!!, lat, long, roleid, pinCode,
+                    name, contact!!, lat!!, long!!, roleid, pinCode!!,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
                     when (it) {

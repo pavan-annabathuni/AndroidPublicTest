@@ -66,7 +66,6 @@ class NotificationFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
     private fun setAdapter(){
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener { notification,dataNotification ->
-            viewModel.getNotification().observe(viewLifecycleOwner){
                 val eventBundle=Bundle()
                 eventBundle.putString("",notification.title)
                 EventItemClickHandling.calculateItemClickEvent("NotificationItemClick",eventBundle)
@@ -74,24 +73,19 @@ class NotificationFragment : Fragment() {
                 Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
                         val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                        startActivity(i)
-                }
+                        startActivity(i) }
                 else if(deepLink.isNullOrEmpty()){
                         context?.let { it1 -> ToastStateHandling.toastError(it1,"Deeplink is null",Toast.LENGTH_SHORT) }
                 }
-            }
+
             if(dataNotification.readAt == null){
-            viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner){
-              setAdapter()
+            viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner) {
+                setAdapter()
                 newNotification()
 
             }}
         }, requireContext())
-        binding.recycleViewHis.adapter = mNotificationAdapter
-        viewModel.getNotification().observe(viewLifecycleOwner){
-            mNotificationAdapter.submitList(it.data?.data)
-            Log.d("Notifcation", "setAdapter: ${it}")
-        }
+
     }
 
     private fun newNotification(){
@@ -103,6 +97,8 @@ class NotificationFragment : Fragment() {
 
             when(it){
                 is Resource.Success ->{
+                    binding.recycleViewHis.adapter = mNotificationAdapter
+                    mNotificationAdapter.submitList(it.data?.data)
                     binding.progressBar.visibility = View.GONE
                     var data = it.data?.data?.filter { itt->
                         itt.readAt== null

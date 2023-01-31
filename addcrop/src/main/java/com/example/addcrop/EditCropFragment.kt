@@ -65,6 +65,8 @@ class EditCropFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
+                if(!it.data!![0].cropNameTag.isNullOrEmpty())
+                    if(!it.data!![0].cropNameTag.isNullOrEmpty())
                 EventClickHandling.calculateClickEvent("Edit_crop_${it.data!![0].cropNameTag}")
             }
                 if(it.data.isNullOrEmpty()){

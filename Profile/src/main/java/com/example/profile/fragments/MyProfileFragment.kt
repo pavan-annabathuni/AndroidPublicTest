@@ -64,8 +64,6 @@ class MyProfileFragment : Fragment() {
         apiErrorHandlingBinding = binding.errorState
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        //viewModel.getUsers()
-        // viewModel.getUserDetails()
 
         binding.llInviteFarmer.setOnClickListener {
             EventClickHandling.calculateClickEvent("invite_farmer")
@@ -105,6 +103,8 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
+    /* this use for sharing app link with user and if user is already installed the it will
+    * it will redirect to app using dynamic links  */
     private fun shareInviteLink() {
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
