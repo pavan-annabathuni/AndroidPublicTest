@@ -157,11 +157,7 @@ class LoginFragment : Fragment() {
             "Enter mobile number"
         )
         TranslationsManager().loadString("get_otp", fragmentLoginBinding.getotpBtn, "Get OTP")
-        TranslationsManager().loadString(
-            "t_and_c",
-            fragmentLoginBinding.termsTv,
-            "By continuing you agree to Outgrow's privacy policy and terms of service"
-        )
+
     }
 
     private fun checkForValidMobileNumber(mobileno: String): Boolean {
@@ -176,7 +172,7 @@ class LoginFragment : Fragment() {
         val spannableString = SpannableString(text)
         val clickableSpan1: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+                val intent = Intent(context, PrivacyPolicyActivity::class.java)
                 intent.putExtra("url", "https://admindev.outgrowdigital.com/terms-and-conditions")
                 intent.putExtra("tittle", "Terms and Conditions")
                 requireActivity().startActivity(intent)
@@ -185,7 +181,7 @@ class LoginFragment : Fragment() {
         }
         val clickableSpan2: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent: Intent = Intent(context, PrivacyPolicyActivity::class.java)
+                val intent = Intent(context, PrivacyPolicyActivity::class.java)
                 intent.putExtra("url", "https://admindev.outgrowdigital.com/privacy-policy")
                 intent.putExtra("tittle", "Privacy Policy")
                 requireActivity().startActivity(intent)

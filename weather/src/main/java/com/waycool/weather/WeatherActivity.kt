@@ -33,11 +33,11 @@ class WeatherActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
-                    Log.d("DeepLink","WeatherDeeplink2 ${deepLink}")
+                    Log.d("DeepLink","WeatherDeeplink2 $deepLink")
 
                 }
                 if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                    Log.d("DeepLink","WeatherDeeplink2 ${deepLink}")
+                    Log.d("DeepLink","WeatherDeeplink2 $deepLink")
                     if (deepLink?.lastPathSegment == "weathershare") {
                         this.findNavController(R.id.nav_host_fragment).navigate(R.id.weatherFragment)
                     }

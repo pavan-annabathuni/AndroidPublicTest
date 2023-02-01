@@ -57,7 +57,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent = Intent(Intent.ACTION_VIEW)
             intent.data = message.notification!!.link
         }
-        Log.d("DeeplinkCheck","DeeplinkCheck ${message.notification?.link}")
+        Log.d("DeepLink","DeeplinkCheck ${message.notification?.link}")
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
             application,
@@ -85,20 +85,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-//            if (soundUri != null) {
-            // Changing Default mode of notification
-
-            // Creating an Audio Attribute
-//                AudioAttributes audioAttributes = new AudioAttributes.Builder()
-//                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-//                        .build();
-
             // Creating Channel
-            val notificationChannel =
-                NotificationChannel("outgrow", "outgrow", NotificationManager.IMPORTANCE_HIGH)
-            //                notificationChannel.setSound(soundUri, audioAttributes);
+            val notificationChannel = NotificationChannel("outgrow", "outgrow", NotificationManager.IMPORTANCE_HIGH)
+            //notificationChannel.setSound(soundUri, audioAttributes);
             mNotificationManager.createNotificationChannel(notificationChannel)
             notificationBuilder.setDefaults(Notification.DEFAULT_SOUND)
             notificationBuilder.setChannelId("outgrow")

@@ -525,7 +525,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         TranslationsManager().loadString("str_device_name", binding.textView,"Device Name")
         TranslationsManager().loadString("str_device_details", binding.textView2,"Device Details")
         TranslationsManager().loadString("str_scan", binding.tvScanned,"Sacn QR code")
-        TranslationsManager().loadString("str_device_name", binding.textView3,"Device Number")
+        TranslationsManager().loadString("device_serial_number", binding.textView3,"Device Serial Number")
         TranslationsManager().loadString("str_register", binding.submit,"Register")
 //        TranslationsManager().loadString("faq_s", binding.tvFAQ)
 //        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
