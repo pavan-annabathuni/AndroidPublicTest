@@ -161,11 +161,11 @@ class LoginFragment : Fragment() {
             "Enter mobile number"
         )
         TranslationsManager().loadString("get_otp", binding.getotpBtn, "Get OTP")
-        TranslationsManager().loadString(
-            "t_and_c",
-            binding.termsTv,
-            "By continuing you agree to Outgrow's privacy policy and terms of service"
-        )
+//        TranslationsManager().loadString(
+//            "t_and_c",
+//            binding.termsTv,
+//            "By continuing you agree to Outgrow's privacy policy and terms of service"
+//        )
     }
 
     private fun checkForValidMobileNumber(mobileno: String): Boolean {

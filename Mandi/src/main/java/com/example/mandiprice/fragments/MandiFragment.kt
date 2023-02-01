@@ -47,10 +47,6 @@ import java.util.*
 
 
 class MandiFragment : Fragment() {
-    //    private var long: String? = null
-//    private var lat: String? = null
-//    private var price: String? = null
-//    private var distance: String? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private lateinit var binding: FragmentMandiBinding
     private val viewModel: MandiViewModel by lazy {
@@ -70,7 +66,6 @@ class MandiFragment : Fragment() {
     var distance = "Distance"
     private var price = "Price"
     var accountID = 0
-    private var mandiMarket = null
     val moduleId="11"
 
     val arrayCat = ArrayList<String>()
@@ -129,11 +124,6 @@ class MandiFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener() {
             this.findNavController().navigateUp()
         }
-
-//        setBanners()
-//        translation()
-//        return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -162,7 +152,7 @@ class MandiFragment : Fragment() {
         spinnerSetup()
         filterMenu()
         tabs()
-        onClick()
+        loadingProgressBar()
         fabButton()
         //translation()
 
@@ -175,9 +165,10 @@ class MandiFragment : Fragment() {
 
     }
 
+    /** to check network is working or not */
     private fun mandiApiCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
-            binding.progressBar.visibility = View.GONE
+           // binding.progressBar.visibility = View.GONE
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.addFab.visibility = View.GONE
@@ -190,7 +181,7 @@ class MandiFragment : Fragment() {
             }
         } else {
             getMandiData(selectedCropCategory, selectedState, selectedCrop, sortBy, orderBy)
-            binding.progressBar.visibility = View.GONE
+            //binding.progressBar.visibility = View.GONE
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
             binding.addFab.visibility = View.VISIBLE
@@ -198,7 +189,8 @@ class MandiFragment : Fragment() {
 
     }
 
-    private fun onClick() {
+    private fun loadingProgressBar() {
+        /** for progress bar if paging in in loading state it will show progressbar */
         adapterMandi.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                 binding.llNotFound.visibility = View.VISIBLE
@@ -215,6 +207,7 @@ class MandiFragment : Fragment() {
         }
     }
 
+    /** Filter for low to high and high to low */
     private fun filterMenu() {
         binding.filter.setOnClickListener() {
             val popupMenu = PopupMenu(context, binding.filter)
@@ -253,8 +246,8 @@ class MandiFragment : Fragment() {
         }
     }
 
-
     private fun spinnerSetup() {
+        /** Spinner for crop category */
         viewModel.viewModelScope.launch {
             var category = TranslationsManager().getString("str_category")
             viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
@@ -317,8 +310,7 @@ class MandiFragment : Fragment() {
             }
         }
 
-
-
+        /** Spinner for state */
         viewModel.viewModelScope.launch {
             var state = TranslationsManager().getString("str_state")
             viewModel.getState().observe(viewLifecycleOwner) {
@@ -367,7 +359,7 @@ class MandiFragment : Fragment() {
 
     }
 
-
+    /** Tab for price and distance */
     private fun tabs() {
         viewModel.viewModelScope.launch {
             distance = TranslationsManager().getString("distance")
@@ -383,6 +375,7 @@ class MandiFragment : Fragment() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
+                    /** if tab is in distance it will sort in distance and default it will be asc */
                     0 -> {
                         if (binding.filter.text == "Sort by") {
                             orderBy = "distance"
@@ -400,6 +393,7 @@ class MandiFragment : Fragment() {
                         }
 
                     }
+                    /** if tab is in price it will sort by price and default it will be desc */
                     1 -> {
                         if (binding.filter.text == "Sort by") {
                             orderBy = "price"
@@ -470,7 +464,7 @@ class MandiFragment : Fragment() {
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
     }
-
+    /** fab button for chat and call **/
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener() {
@@ -510,6 +504,7 @@ class MandiFragment : Fragment() {
         }
     }
 
+    /** setting adapter and calling api **/
     private fun getMandiData(
         cropCategory: String? = null,
         state: String? = null,
@@ -545,6 +540,7 @@ class MandiFragment : Fragment() {
 
     }
 
+    /** Spinner for crops */
     private fun cropSpinner(categoryId: Int? = null) {
         viewModel.viewModelScope.launch {
             var cropName = TranslationsManager().getString("str_crop")
