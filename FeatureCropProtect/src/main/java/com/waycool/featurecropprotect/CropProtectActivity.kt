@@ -2,16 +2,16 @@ package com.waycool.featurecropprotect
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class CropProtectActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@CropProtectActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@CropProtectActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@CropProtectActivity.finish()
 
@@ -40,12 +40,14 @@ class CropProtectActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+                    Log.d("DeepLink1","Deeplink ${deepLink}")
                 }
                 if (deepLink != null) {
                     if (deepLink.lastPathSegment.equals("cropprotect")) {
 //                        this.findNavController(R.id.fragmentContainerView)
 //                            .navigate(R.id.cropSelectionFragment)
                     } else if (deepLink.path!!.contains("pestdisease")) {
+                        Log.d("DeepLink","Deeplink ${deepLink}")
                         val cropId = deepLink.getQueryParameter("crop_id")
                         val cropName = deepLink.getQueryParameter("crop_name")
                         if (!cropId.isNullOrEmpty() && !cropName.isNullOrEmpty()) {

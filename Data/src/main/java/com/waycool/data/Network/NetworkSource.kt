@@ -70,7 +70,7 @@ object NetworkSource {
     }
 
     fun getLanguageMaster() = flow {
-        emit(Resource.Loading())
+//        emit(Resource.Loading())
         try {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
 

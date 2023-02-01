@@ -30,7 +30,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -268,7 +268,7 @@ class MyProfileFragment : Fragment() {
 
     /* Logout Function and Clearing all Room db and Data Store data */
     private fun moveToLogin() {
-        val intent = Intent(context, LoginMainActivity::class.java)
+        val intent = Intent(context, LoginActivity::class.java)
 
         GlobalScope.launch {
             LocalSource.deleteAllMyCrops()

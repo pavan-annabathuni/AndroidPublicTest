@@ -150,6 +150,9 @@ class CropSelectionFragment : Fragment() {
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if(charSequence.isEmpty()){
+                    setUpCropCategories()
+                }
                 EventClickHandling.calculateClickEvent("Search_crop_protection")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
@@ -184,7 +187,6 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun setUpCropCategories() {
-
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {

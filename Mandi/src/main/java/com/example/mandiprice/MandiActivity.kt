@@ -8,13 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +27,7 @@ class MandiActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mandi)
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@MandiActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@MandiActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@MandiActivity.finish()
 
@@ -41,13 +40,22 @@ class MandiActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+                    Log.d("DeepLink","MandiDeepLink ${deepLink}")
+
+
                 }
                 if (deepLink != null) {
                     if (deepLink.lastPathSegment.equals("/mandi")) {
+                        Log.d("DeepLink","MandiDeeplink1 ${deepLink}")
+
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
                     } else {
+                        Log.d("DeepLink","MandiDeeplink2 ${deepLink}")
+
                         val cropMasterId = deepLink.getQueryParameter("crop_master_id")
                         val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
+                        val subRecordId = deepLink.getQueryParameter("sub_record_id")
+
                         val cropName = deepLink.getQueryParameter("crop_name")
                         val marketName = deepLink.getQueryParameter("market_name")
                         val fragment = deepLink.getQueryParameter("fragment")
@@ -58,6 +66,7 @@ class MandiActivity : AppCompatActivity() {
                             val args = Bundle()
                             args.putInt("cropId", cropMasterId.toInt())
                             args.putInt("mandiId", mandiMasterId.toInt())
+                            args.putString("subRecordId", subRecordId)
                             args.putString("cropName", cropName)
                             args.putString("market", marketName)
                             args.putString("fragment", fragment)

@@ -14,11 +14,8 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.waycool.iwap.R
 import com.waycool.iwap.splash.SplashActivity
-import org.json.JSONObject
 import zendesk.messaging.android.push.PushNotifications
 import zendesk.messaging.android.push.PushResponsibility
-import java.io.IOException
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.atomic.AtomicInteger
@@ -60,6 +57,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent = Intent(Intent.ACTION_VIEW)
             intent.data = message.notification!!.link
         }
+        Log.d("DeeplinkCheck","DeeplinkCheck ${message.notification?.link}")
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
             application,

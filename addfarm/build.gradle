@@ -45,8 +45,7 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Core')
-    implementation project(path: ':FeatureLogin')
-
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.core:core-ktx:1.7.0'

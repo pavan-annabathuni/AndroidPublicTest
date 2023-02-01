@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.waycool.data.Local.Entity.*
 import com.waycool.data.Local.utils.TypeConverter
-import com.waycool.data.Network.NetworkModels.DashBoardDTO
 import kotlinx.coroutines.flow.*
 
 @SuppressLint("StaticFieldLeak")
@@ -49,7 +48,6 @@ object DataStoreManager {
         performPrefsSanityCheck()
         context?.languageDataStore?.edit {
             it[StoreKey.LANGUAGE_MASTER] = TypeConverter.convertLanguageMasterToString(language)
-            Log.d("Languaga", "SavedLanguaga")
         }
 
     }

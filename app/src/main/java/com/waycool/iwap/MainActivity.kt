@@ -24,7 +24,7 @@ import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsFullviewActivity
 import com.waycool.weather.WeatherActivity
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@MainActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@MainActivity.finish()
 
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@MainActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@MainActivity.finish()
 
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Success -> {
                    if (it.data?.status != true) {
                         clearData()
-                        val intent = Intent(this, LoginMainActivity::class.java)
+                        val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                     }
                 }

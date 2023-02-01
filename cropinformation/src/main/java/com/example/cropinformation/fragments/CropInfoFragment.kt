@@ -628,14 +628,17 @@ class CropInfoFragment : Fragment(), onItemClick {
             val eventBundle=Bundle()
             eventBundle.putString("title",it?.title)
             EventItemClickHandling.calculateItemClickEvent("cropinfo_video",eventBundle)
-
             val bundle = Bundle()
             bundle.putParcelable("video", it)
+//                            findNavController().navigate(
+//                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+//                    bundle)
             try{
                 findNavController().navigate(
-                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+                    R.id.action_cropInfoFragment_to_playVideoFragment3,
                     bundle)
             }catch(e: IllegalArgumentException){
+                Log.d("CropInfo","CropInfo ${e.message}")
                 e.printStackTrace()
             }
 

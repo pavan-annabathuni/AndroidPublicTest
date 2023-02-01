@@ -71,6 +71,7 @@ class MandiGraphFragment : Fragment() {
     private var mandiMasterId: Int? = null
     private var cropName: String? = null
     private var marketName: String? = null
+
     private var sub_record_id:String? =null
     private var mandiDomain:MandiDomainRecord?=null
 
@@ -82,8 +83,18 @@ class MandiGraphFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             mandiDomain = it.getParcelable("mandiRecord")
-
-
+        }
+        if (arguments != null) {
+            if (arguments?.containsKey("mandiRecord") == true){
+                mandiDomain = arguments?.getParcelable("mandiRecord")
+            }
+            else {
+                cropMasterId = arguments?.getInt("cropId")
+                mandiMasterId = arguments?.getInt("mandiId")
+                cropName = arguments?.getString("cropName")
+                marketName = arguments?.getString("market")
+                sub_record_id=arguments?.getString("subRecordId")
+            }
         }
 
     }
@@ -102,11 +113,21 @@ class MandiGraphFragment : Fragment() {
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
 
-        cropMasterId = mandiDomain?.crop_master_id
-        mandiMasterId = mandiDomain?.mandi_master_id
-        cropName = mandiDomain?.crop
-        marketName = mandiDomain?.market
-        sub_record_id = mandiDomain?.sub_record_id
+        if(mandiDomain!=null){
+            cropMasterId = mandiDomain?.crop_master_id
+            mandiMasterId = mandiDomain?.mandi_master_id
+            cropName = mandiDomain?.crop
+            marketName = mandiDomain?.market
+            sub_record_id = mandiDomain?.sub_record_id
+        }
+        else{
+            cropMasterId = cropMasterId
+            mandiMasterId = mandiMasterId
+            cropName = cropName
+            marketName = marketName
+            sub_record_id=sub_record_id
+        }
+
         binding.imgShare.setOnClickListener() {
             val bundle=Bundle()
             bundle.putString("","$marketName")

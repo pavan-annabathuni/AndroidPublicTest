@@ -8,12 +8,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.ActivityVideoBinding
 import kotlinx.coroutines.CoroutineScope
@@ -35,12 +34,17 @@ class VideoActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
 
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@VideoActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@VideoActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@VideoActivity.finish()
 
             }
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
@@ -48,10 +52,13 @@ class VideoActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+                    Log.d("DeepLink","Deeplink1 ${deepLink}")
                 }
                 if (deepLink != null) {
+                    Log.d("DeepLink","Deeplink2 ${deepLink}")
 
                     if (deepLink.lastPathSegment == "videoslist") {
+                        Log.d("DeepLink","Deeplink3 ${deepLink}")
                         this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
                     } else {
                         Log.d("videoLink", "$deepLink")
@@ -74,6 +81,7 @@ class VideoActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

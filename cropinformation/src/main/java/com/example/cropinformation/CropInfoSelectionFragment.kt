@@ -129,6 +129,9 @@ class CropInfoSelectionFragment : Fragment() {
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if(charSequence.isEmpty()){
+                    setUpCropCategories()
+                }
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 150)
@@ -231,7 +234,6 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
-        binding.progressBar.visibility=View.VISIBLE
         viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
             when (res) {
                 is Resource.Success -> {
@@ -243,7 +245,9 @@ class CropInfoSelectionFragment : Fragment() {
                     } else
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.progressBar.visibility=View.VISIBLE
+                }
                 is Resource.Error -> {
                     viewModel.viewModelScope.launch{
                     val txtServerError=  TranslationsManager().getString("binding!!ver_error")

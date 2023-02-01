@@ -97,9 +97,9 @@ class LanguageAdapter(private val langCode: String?) : RecyclerView.Adapter<Lang
 
     inner class ViewHolder(binding: ViewholderLanguageCardviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val nativeNameTv: TextView = binding.nativeTvVh
-        val languageNameTv: TextView = binding.languageTvVh
-        val mLanguageParent = binding.languageParent
-        val tickLayout: ImageView = binding.tickView
+        val nativeNameTv: TextView = binding.tvNativeLanguage
+        val languageNameTv: TextView = binding.tvLanguage
+        val mLanguageParent = binding.cvLanguageSelectionItem
+        val tickLayout: ImageView = binding.ivTickMark
     }
 }

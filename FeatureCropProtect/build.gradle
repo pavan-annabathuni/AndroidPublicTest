@@ -45,11 +45,7 @@ dependencies {
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':addcrop')
     implementation project(path: ':soiltesting')
-    implementation project(path: ':FeatureLogin')
-
-
-
-
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.core:core-ktx:1.9.0'

@@ -41,7 +41,7 @@ import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
@@ -106,7 +106,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@NewsAndArticlesActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@NewsAndArticlesActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@NewsAndArticlesActivity.finish()
 

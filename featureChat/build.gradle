@@ -33,7 +33,7 @@ dependencies {
     implementation(lifecycle.livedata)
     implementation project(path: ':Core')
     implementation project(path: ':Data')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"

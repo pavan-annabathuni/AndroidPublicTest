@@ -31,11 +31,11 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -257,7 +257,7 @@ class MandiFragment : Fragment() {
     private fun spinnerSetup() {
         viewModel.viewModelScope.launch {
             var category = TranslationsManager().getString("str_category")
-            viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
+            viewModel.getCropCategory().observe(viewLifecycleOwner) { it->
 
                 val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
                     data.categoryName
