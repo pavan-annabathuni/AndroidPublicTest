@@ -19,17 +19,15 @@ import com.waycool.featurelogin.fragment.RegistrationFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileKnowServiceAdapter extends RecyclerView.Adapter<UserProfileKnowServiceAdapter.TilesVh> {
+public class KnowYourServicesAdapter extends RecyclerView.Adapter<KnowYourServicesAdapter.TilesVh> {
     List<ModuleMasterDomain> listItem;
     Context context;
     RegistrationFragment fragment;
 
-    public UserProfileKnowServiceAdapter( Context context, RegistrationFragment fragment) {
+    public KnowYourServicesAdapter(Context context, RegistrationFragment fragment) {
         this.listItem = new ArrayList<>();
         this.context = context;
         this.fragment = fragment;
-
-        System.out.println(listItem.size() + "dummydatalist");
     }
 
     @NonNull
@@ -42,34 +40,38 @@ public class UserProfileKnowServiceAdapter extends RecyclerView.Adapter<UserProf
     @Override
     public void onBindViewHolder(@NonNull TilesVh holder, int position) {
         ModuleMasterDomain data = listItem.get(position);
+        //set title
         holder.itemName.setText(data.getTitle());
+        //set image using Glide
         Glide.with(holder.itemImage).load(data.getModuleIcon())
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(holder.itemImage);
-        //AppUtil.showImageDrawable(context,data.getModuleIcon(),holder.itemImage);
     }
 
+    //Return size of list
     @Override
     public int getItemCount() {
         return listItem.size();
     }
 
+    //click listener on item
     public class TilesVh extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView itemName;
-        ConstraintLayout transpatrentLayout;
+        ConstraintLayout transparentLayout;
         ImageView itemImage;
 
         public TilesVh(@NonNull View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
-            transpatrentLayout = itemView.findViewById(R.id.transparent_layout);
+            transparentLayout = itemView.findViewById(R.id.transparent_layout);
             itemImage = itemView.findViewById(R.id.list_item_image);
-            transpatrentLayout.setVisibility(View.GONE);
-            transpatrentLayout.setOnClickListener(this);
+            transparentLayout.setVisibility(View.GONE);
+            transparentLayout.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
+        //on click on any service item we will open the dialog box having the detail about that service
         @Override
         public void onClick(View view) {
             fragment.showServiceDialog(listItem.get(getAdapterPosition()).getTitle(), listItem.get(getAdapterPosition()).getModuleDesc(), listItem.get(getAdapterPosition()).getAudioUrl(), String.valueOf(listItem.get(getAdapterPosition()).getSubscription()),listItem.get(getLayoutPosition()).getModuleIcon(), context);

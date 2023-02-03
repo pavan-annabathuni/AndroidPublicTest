@@ -15,9 +15,7 @@ import com.waycool.featurelogin.support.LanguageDiffCallback
 
 
 class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.ViewHolder>() {
-
     private val languageList: MutableList<LanguageMasterDomain> = mutableListOf()
-
     private var selectedPos: Int = -1
     private lateinit var context: Context
     var onItemClick: ((LanguageMasterDomain) -> Unit)? = null
@@ -26,7 +24,9 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
     fun setData(newLangList: List<LanguageMasterDomain>) {
         val diffCallback = LanguageDiffCallback(languageList, newLangList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
+        //clearing the language list
         languageList.clear()
+        //Adding new language list
         languageList.addAll(newLangList)
         diffResult.dispatchUpdatesTo(this)
     }
@@ -34,47 +34,32 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context;
-        val binding =
-            ViewholderLanguageCardviewBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ViewholderLanguageCardviewBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nativeNameTv.text = languageList[position].langNative
-        holder.languageNameTv.text = languageList[position].lang.toString().trim()
+        //Setting data to views
+        holder.tvNativeLanguage.text = languageList[position].langNative
+        holder.tvLanguage.text = languageList[position].lang.toString().trim()
 
+        //change background color and text color of selected item
         if (position == selectedPos) {
-            holder.mLanguageParent.backgroundTintList =
-                ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.green)
-            holder.tickLayout.visibility = View.VISIBLE
-
-            holder.nativeNameTv.setTextColor(
-                ContextCompat.getColor(
-                    context,
-                    com.waycool.uicomponents.R.color.white
-                )
-            )
-            holder.languageNameTv.setTextColor(
-                ContextCompat.getColor(
-                    context,
-                    com.waycool.uicomponents.R.color.white
-                )
-            )
-
+            holder.cvLanguageSelectionItem.backgroundTintList = ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.green)
+            holder.ivTickMark.visibility = View.VISIBLE
+            holder.tvNativeLanguage.setTextColor(ContextCompat.getColor(context, com.waycool.uicomponents.R.color.white))
+            holder.tvLanguage.setTextColor(ContextCompat.getColor(context, com.waycool.uicomponents.R.color.white))
         }
+        //else set default design
         else {
-            holder.mLanguageParent.backgroundTintList =
-                ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.white)
-            holder.tickLayout.visibility = View.GONE
-            holder.nativeNameTv.setTextColor(ContextCompat.getColor(context,com.waycool.uicomponents.R.color.textdark))
-            holder.languageNameTv.setTextColor(
-                ContextCompat.getColor(
-                    context,
-                    com.waycool.uicomponents.R.color.textdark
-                )
-            )
+            holder.cvLanguageSelectionItem.backgroundTintList = ContextCompat.getColorStateList(context, com.waycool.uicomponents.R.color.white)
+            holder.ivTickMark.visibility = View.GONE
+            holder.tvNativeLanguage.setTextColor(ContextCompat.getColor(context,com.waycool.uicomponents.R.color.textdark))
+            holder.tvLanguage.setTextColor(ContextCompat.getColor(context, com.waycool.uicomponents.R.color.textdark))
         }
-        holder.mLanguageParent.setOnClickListener {
+
+        //Click on the entire Item
+        holder.cvLanguageSelectionItem.setOnClickListener {
             val tempPos: Int = selectedPos
             selectedPos = holder.layoutPosition
             notifyItemChanged(tempPos)
@@ -83,15 +68,16 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
         }
     }
 
+    //returning size of list
     override fun getItemCount(): Int {
         return languageList.size
     }
 
     inner class ViewHolder(binding: ViewholderLanguageCardviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val nativeNameTv: TextView = binding.tvNativeLanguage
-        val languageNameTv: TextView = binding.tvLanguage
-        val mLanguageParent = binding.cvLanguageSelectionItem
-        val tickLayout: ImageView = binding.ivTickMark
+        val tvNativeLanguage: TextView = binding.tvNativeLanguage
+        val tvLanguage: TextView = binding.tvLanguage
+        val cvLanguageSelectionItem = binding.cvLanguageSelectionItem
+        val ivTickMark: ImageView = binding.ivTickMark
     }
 }

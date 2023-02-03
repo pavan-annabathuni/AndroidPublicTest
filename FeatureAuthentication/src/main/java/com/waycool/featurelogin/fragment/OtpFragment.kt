@@ -65,7 +65,6 @@ import java.util.regex.Pattern
 class OtpFragment : Fragment() {
     private var bottomSheetDialog: BottomSheetDialog? = null
     lateinit var binding: FragmentOtpBinding
-    private var mToast: Toast? = null
     var mobileNumber: String = ""
     var OTP = ""
     var smsBroadcastReceiver: SmsBroadcastReceiver? = null

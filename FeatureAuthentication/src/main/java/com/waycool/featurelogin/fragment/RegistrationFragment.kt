@@ -19,7 +19,6 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,8 +48,8 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
-import com.waycool.featurelogin.adapter.UserProfileKnowServiceAdapter
-import com.waycool.featurelogin.adapter.UserProfilePremiumAdapter
+import com.waycool.featurelogin.adapter.KnowYourPremiumServicesAdapter
+import com.waycool.featurelogin.adapter.KnowYourServicesAdapter
 import com.waycool.featurelogin.databinding.FragmentRegistrationBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -64,8 +63,6 @@ import java.util.*
 
 class RegistrationFragment : Fragment() {
     lateinit var binding: FragmentRegistrationBinding
-    var k: Int = 4
-
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var latitude: String = ""
     var longitutde: String = ""
@@ -74,8 +71,8 @@ class RegistrationFragment : Fragment() {
     var state = ""
     var district = ""
     var pincode = ""
-    lateinit var knowAdapter: UserProfileKnowServiceAdapter
-    lateinit var premiumAdapter: UserProfilePremiumAdapter
+    lateinit var knowAdapter: KnowYourServicesAdapter
+    lateinit var premiumAdapter: KnowYourPremiumServicesAdapter
     var mobileNumber: String? = ""
     lateinit var mContext: Context
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
@@ -93,42 +90,54 @@ class RegistrationFragment : Fragment() {
     private var audioUrl: String? = null
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+
+    //The Priority of the location request.
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
         .build()
 
+    //A callback for receiving notifications from the FusedLocationProviderClient.
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            //Called when a new LocationResult is available.
             super.onLocationResult(locationResult)
+            //get location of user
             getLocation()
             locationResult.lastLocation?.let {
+                //Removes all location updates for the given listener
                 removeLocationCallback()
+                //get details such as district, sub locality and locality
                 getGeocodeFromLocation(it)
             }
         }
     }
 
     private fun removeLocationCallback() {
+        //Removes all location updates for the given callback.
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
     }
 
+    // The InputFilter Interface has one method, filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) , and it provides you with all the information you need to know about which characters were entered into the EditText it is assigned to
     private val filter: InputFilter =
         InputFilter { source, start, end, dest, dstart, dend ->
+            //The InputFilter implementation takes input in form of CharSequence and checks if it contains any characters present in the blockCharacterSet. If it does, it returns an empty string, otherwise it returns null.
             if (source != null && blockCharacterSet.contains("" + source)) {
                 ""
             } else null
         }
 
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { result ->
-
+    /*registerForActivityResult() takes an ActivityResultContract and an ActivityResultCallback and returns an ActivityResultLauncher which you'll use to launch the other activity. */
+    /*RequestMultiplePermissions-requesting multiple permission at a time.*/
+    //registerForActivityResult method creates an instance of ActivityResultLauncher with RequestMultiplePermissions contract
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        /*The code checks if all the requested permissions were granted by iterating over the values of the map and setting a flag allAreGranted to false if any of the permissions were not granted. */
         var allAreGranted = true
         for (b in result.values) {
             allAreGranted = allAreGranted && b
         }
 
+        //If all permissions were granted, the code calls the getLocation() method.
         if (allAreGranted) {
             getLocation()
         }
@@ -142,45 +151,59 @@ class RegistrationFragment : Fragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
+        //Network Error state layout binding
         apiErrorHandlingBinding = binding.errorState
+        //method to set translations
         setTranslations()
-
         binding.registerDoneBtn.isEnabled = true
 
         Places.initialize(requireActivity().applicationContext, AppSecrets.getMapsKey())
         placesClient = Places.createClient(requireContext())
 
+        //make network call to check availability of internet
         networkCall()
+        //check availability of internet on click of "TRY AGAIN" button
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
+
+        //declaring and initializing toolbar
         val toolbarLayoutBinding: ToolbarLayoutBinding = binding.toolbar
 
+        //setting translations for text heading of toolbar
         CoroutineScope(Dispatchers.Main).launch {
             val profile = TranslationsManager().getString("profile")
-            if(!profile.isNullOrEmpty()){
+            if (!profile.isNullOrEmpty()) {
                 toolbarLayoutBinding.toolbarTile.text = profile
-            }else{
+            } else {
                 toolbarLayoutBinding.toolbarTile.text = "Profile"
 
             }
         }
+        //click on back button present on toolbar
         toolbarLayoutBinding.backBtn.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack(R.id.loginFragment, false)
         }
 
+        //getting these arguments from login fragment
+        //if argument "mobile_number" is not null then assign the values name and mobile number to the respective variables
         if (arguments?.getString("mobile_number") != null) {
             mobileNumber = arguments?.getString("mobile_number")
             binding.nameEt.setText(arguments?.getString("name"))
         }
 
+
+        //Filtering all blockCharacterSet("@~#^|$%&*!-<>+$*()[]{}/,';:?") that are being entered in the Name EditText
         binding.nameEt.filters = arrayOf(filter)
 
+        // FusedLocationProviderClient is part of the Google Play Services Location API and it provides access to the device's location or receive updates about changes to the device's location.
+       // getFusedLocationProviderClient method is a static method of the LocationServices class and it returns an instance of FusedLocationProviderClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        premiumAdapter = UserProfilePremiumAdapter(
-            context, RegistrationFragment()
-        )
+        premiumAdapter =
+            KnowYourPremiumServicesAdapter(
+                context, RegistrationFragment()
+            )
         binding.premiumFeaturesRecyclerView.setHasFixedSize(true)
         binding.premiumFeaturesRecyclerView.adapter = premiumAdapter
         binding.premiumFeaturesRecyclerView.layoutManager =
@@ -190,7 +213,7 @@ class RegistrationFragment : Fragment() {
         binding.premiumFeaturesRecyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
         binding.premiumFeaturesRecyclerView.invalidate()
 
-        knowAdapter = UserProfileKnowServiceAdapter(
+        knowAdapter = KnowYourServicesAdapter(
             context, RegistrationFragment()
         )
         binding.knowServicesRecyclerView.setHasFixedSize(true)
@@ -201,6 +224,9 @@ class RegistrationFragment : Fragment() {
         binding.knowServicesRecyclerView.isDrawingCacheEnabled = true
         binding.knowServicesRecyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
         binding.knowServicesRecyclerView.invalidate()
+
+
+        //This code adds a TextWatcher to an EditText view
         binding.nameEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
 
@@ -210,15 +236,21 @@ class RegistrationFragment : Fragment() {
 
             }
 
+            //The afterTextChanged method of the TextWatcher is called after the text in the EditText has changed.
             override fun afterTextChanged(editable: Editable) {
+                //The code in this method checks if the text in the nameEt EditText is not empty and if the text in the locationEt EditText is not empty. If both conditions are true, it sets the isEnabled property of the registerDoneBtn button to true, enabling the button.
                 if (binding.nameEt.text.toString().trim().isNotEmpty()) {
                     binding.registerDoneBtn.isEnabled =
                         binding.locationEt.text.toString().trim().isNotEmpty()
-                } else {
+                }
+                //If either condition is false, it sets the isEnabled property of the registerDoneBtn button to false, disabling the button.
+                else {
                     binding.registerDoneBtn.isEnabled = false
                 }
             }
         })
+
+        //This code adds a TextWatcher to an EditText view
         binding.locationEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -228,33 +260,42 @@ class RegistrationFragment : Fragment() {
 
             }
 
+            //The afterTextChanged method of the TextWatcher is called after the text in the EditText has changed.
             override fun afterTextChanged(p0: Editable?) {
+                //The code in this method checks if the length of the text in the locationEt EditText is not equal to 0. If the length is not equal to 0, it sets the isEnabled property of the registerDoneBtn button to true if the length of the text in the nameEt EditText is not equal to 0
                 if (binding.locationEt.text.toString().trim().length != 0) {
                     binding.registerDoneBtn.isEnabled =
                         binding.nameEt.text.toString().trim().length != 0
-                } else {
+                }
+                //If the length of the text in the locationEt EditText is equal to 0, it sets the isEnabled property of the registerDoneBtn button to false, disabling the button.
+                else {
                     binding.registerDoneBtn.isEnabled = false
                 }
             }
         })
+
+        ///This code sets an OnClickListener on a button and calls the userCreater function when the button is clicked.
         binding.registerDoneBtn.setOnClickListener { userCreater() }
+        //The code sets an OnClickListener on the ImageView(locationIv) so that when it is clicked, the getLocation function is called after a 500 millisecond delay and the visibility of two text views is changed.
+        //uses a Handler to post a delayed runnable that calls the getLocation function. The textEnterManually view's visibility is set to View.GONE and the textDetecting view's visibility is set to View.VISIBLE.
         binding.locationIv.setOnClickListener {
             Handler(Looper.myLooper()!!).postDelayed({
                 getLocation()
             }, 500)
             //                getLocation()
-            binding.textEnterManually.visibility=View.GONE
-            binding.textDetecting.visibility=View.VISIBLE
-/*
-            binding.locationEt.error = "Detecting your location.."
-*/
+            binding.textEnterManually.visibility = View.GONE
+            binding.textDetecting.visibility = View.VISIBLE
         }
+
+        //The code sets an OnClickListener on an ImageView(nameMic) so that when it is clicked the speechToText function
+        //uses a Handler to post a delayed runnable that calls the userModule function after a 700 millisecond delay.
         binding.nameMic.setOnClickListener { speechToText() }
         Handler(Looper.myLooper()!!).postDelayed({
             userModule()
         }, 700)
 
 
+        //uses a Handler to post a delayed runnable that calls the getLocation function after a 400 millisecond delay.
         Handler(Looper.myLooper()!!).postDelayed({
             getLocation()
         }, 400)
@@ -262,26 +303,62 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun setTranslations() {
-        TranslationsManager().loadString("welcome_to_outgrow", binding.titleTv,"Welcome to Outgrow")
-        TranslationsManager().loadString("enter_profile_details", binding.farmerDetMsgTv,"The following details will help us to personalize your Outgrow app experience.")
-        TranslationsManager().loadString("enter_name", binding.textName,"Enter your name")
-        TranslationsManager().loadString("enter_location", binding.textLocation,"Enter your location")
-        TranslationsManager().loadString("detect_location", binding.textDetecting,"Detecting your location..")
-        TranslationsManager().loadString("enter_manually", binding.textEnterManually,"Could not find your location.Enter Manually.")
-        TranslationsManager().loadString("know_your_services", binding.knowServicesTv,"Know Your Services")
-        TranslationsManager().loadString("premium_features", binding.premiumFeaturesTv,"Premium Features")
-        TranslationsManager().loadString("submit", binding.registerDoneBtn,"Submit")
+        TranslationsManager().loadString(
+            "welcome_to_outgrow",
+            binding.titleTv,
+            "Welcome to Outgrow"
+        )
+        TranslationsManager().loadString(
+            "enter_profile_details",
+            binding.farmerDetMsgTv,
+            "The following details will help us to personalize your Outgrow app experience."
+        )
+        TranslationsManager().loadString("enter_name", binding.textName, "Enter your name")
+        TranslationsManager().loadString(
+            "enter_location",
+            binding.textLocation,
+            "Enter your location"
+        )
+        TranslationsManager().loadString(
+            "detect_location",
+            binding.textDetecting,
+            "Detecting your location.."
+        )
+        TranslationsManager().loadString(
+            "enter_manually",
+            binding.textEnterManually,
+            "Could not find your location.Enter Manually."
+        )
+        TranslationsManager().loadString(
+            "know_your_services",
+            binding.knowServicesTv,
+            "Know Your Services"
+        )
+        TranslationsManager().loadString(
+            "premium_features",
+            binding.premiumFeaturesTv,
+            "Premium Features"
+        )
+        TranslationsManager().loadString("submit", binding.registerDoneBtn, "Submit")
 
     }
 
     private fun networkCall() {
+        //Check Internet availability
+        //if available go to "IF" condition
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
+            //Visibility of Internet Error Screen set as VISIBLE
             binding.clInclude.visibility = View.VISIBLE
-        } else {
+        }
+        //if not available go to "ELSE" condition
+        else {
+            //Visibility of Internet Error Screen set as GONE
             binding.clInclude.visibility = View.GONE
         }
     }
 
+    //Calling this method for opening the dialog on clicking any service item -(KnowYourServicesAdapter has this click call)
+    //Also Calling this method for opening the dialog on clicking any premium service item -(KnowYourPremiumServicesAdapter has this click call)
     fun showServiceDialog(
         tittle: String?,
         desc: String?,
@@ -303,10 +380,10 @@ class RegistrationFragment : Fragment() {
         val pause = bottomSheetDialog.findViewById<ImageView>(R.id.pause)
         val seekbar = bottomSheetDialog.findViewById<SeekBar>(R.id.media_seekbar)
         val totalTime = bottomSheetDialog.findViewById<TextView>(R.id.total_time)
+        //Set data in bottom sheet
         headerTv!!.text = tittle ?: ""
         descTV!!.text = desc ?: ""
-        if (type.equals("0")) {
-//            UserTYpeTV!!.setText("Free User")
+        if (type == "0") {
             icon!!.visibility = View.GONE
         } else {
             UserTYpeTV!!.text = "Subscription"
@@ -325,10 +402,14 @@ class RegistrationFragment : Fragment() {
         bottomSheetDialog.setCancelable(true)
         bottomSheetDialog.setCanceledOnTouchOutside(true)
         bottomSheetDialog.show()
+
+        //closes the bottom sheet on click on close icon present in UI
         close!!.setOnClickListener {
             bottomSheetDialog.dismiss()
             audioWife.release()
         }
+
+// AudioWife- A simple audio player wrapper for Android
         audioWife = AudioWife.getInstance()
         audioWife.addOnCompletionListener {
             //                audioWife.release();
@@ -337,21 +418,40 @@ class RegistrationFragment : Fragment() {
         bottomSheetDialog.setOnDismissListener {
             audioWife.release()
         }
+
+        //play audio functionality of audio
+
         play!!.setOnClickListener { view ->
+            //if audio url is not null go to "IF" condition
             if (audiourl != null) {
                 if (pause != null) {
                     playAudio(context, audiourl, play, pause, seekbar!!, totalTime!!)
                 }
-            } else {
-                context?.let {
-                    ToastStateHandling.toastError(
-                        it,
-                        "Audio file not found",
-                        Toast.LENGTH_SHORT
-                    )
+            }
+            //if audio url is  null go to "ELSE" condition
+            else {
+                //showing toast for "Audio file not found"
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastAudioNotFound = TranslationsManager().getString("audio_file")
+                    if (!toastAudioNotFound.isNullOrEmpty()) {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, toastAudioNotFound,
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    } else {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, "Audio file not found",
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    }
                 }
 
             }
+            //Event Click on clicking the audio play button
             EventClickHandling.calculateClickEvent("Listen$tittle")
         }
 
@@ -360,17 +460,25 @@ class RegistrationFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
+        //if checked permission is true then The location object will not be null
         if (checkPermissions()) {
+            //if location enabled is true
             if (isLocationEnabled()) {
+                /*The FusedLocationProviderClient provides several methods to retrieve device location information.*/
                 fusedLocationProviderClient =
                     LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
+                /*The getLastLocation() method returns a Task that you can use to get a Location object with the latitude and longitude coordinates of a geographic location.
+                The location object may be null in the following situations:Location is turned off in the device settings.*/
                 fusedLocationProviderClient?.lastLocation!!
                     .addOnSuccessListener {
                         if (it != null) {
+                            //get details such as district, sub locality and locality
                             getGeocodeFromLocation(it)
 
                         }
                     }
+                //Request location updates once the permission is granted.
+                //Requests location updates with the given request and results delivered to the given callback on the specified Looper.
                 fusedLocationProviderClient?.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
@@ -405,6 +513,7 @@ class RegistrationFragment : Fragment() {
                 }
             }
         } else {
+            //if check permission method returns false then request for permission
             requestPermission()
         }
     }
@@ -413,20 +522,25 @@ class RegistrationFragment : Fragment() {
         latitude = String.format(Locale.ENGLISH, "%.5f", it.latitude)
         longitutde = String.format(Locale.ENGLISH, "%.5f", it.longitude)
 
+        //get details such as locality,sub locality and district
         viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
             .observe(viewLifecycleOwner) {
                 binding.locationEt.setText("")
                 if (it.results.isNotEmpty()) {
                     val result = it.results[0]
                     if (result.subLocality != null)
+                    //append sub locality to location edit text
                         binding.locationEt.append("${result.subLocality},")
                     if (result.locality != null)
+                    //append  locality to location edit text
                         binding.locationEt.append("${result.locality},")
                     if (result.district != null)
+                    //append sub district to location edit text
                         binding.locationEt.append(" ${result.district}")
                     binding.locationEt.setSelection(0)
-                    binding.textEnterManually.visibility=View.GONE
-                    binding.textDetecting.visibility=View.GONE
+                    //The location has been detected so we set visibility GONE of textEnterManually and textDetecting
+                    binding.textEnterManually.visibility = View.GONE
+                    binding.textDetecting.visibility = View.GONE
 //                    binding.locationEt.error= ""
 
                     address = result.formattedAddress.toString()
@@ -435,36 +549,39 @@ class RegistrationFragment : Fragment() {
                     state = result.state.toString()
                     district = result.district.toString()
                 } else {
-                    binding.textEnterManually.visibility=View.VISIBLE
-                    binding.textDetecting.visibility=View.GONE
+                    //If Location detection fails we set visibility of textEnterManually as VISIBLE
+                    binding.textEnterManually.visibility = View.VISIBLE
+                    binding.textDetecting.visibility = View.GONE
                 }
 
             }
     }
 
     private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
     }
 
+    //check permissions for Location
     private fun checkPermissions(): Boolean {
         if (checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            /*if permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION is granted return true */
             return true
         }
+        /*if permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION is not granted return false */
         return false
     }
 
+    //This code defines a function requestPermission which launches a request for multiple permissions using the requestPermissionLauncher instance of ActivityResultContracts.RequestMultiplePermissions. The permissions requested are for accessing coarse and fine location information.
     private fun requestPermission() {
         requestPermissionLauncher.launch(
             arrayOf(
@@ -473,6 +590,8 @@ class RegistrationFragment : Fragment() {
             )
         )
     }
+
+    //This code is handling the result of a request for permissions to access the device's location. The requestCode of 2 is used to identify this specific request. If the grant results array is not empty and the first element (corresponding to the first requested permission) is equal to PackageManager.PERMISSION_GRANTED, then the getLocation() method is called.
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -558,7 +677,9 @@ class RegistrationFragment : Fragment() {
         }
     }
 
+    //The function userLogin is used to perform a login operation by calling the login method from the viewModel object.
     suspend fun userLogin() {
+        //The login method takes in several parameters such as the mobile number, FCM token, device model, and device manufacturer.
         viewModel.login(
             mobileNumber!!,
             viewModel.getFcmToken(),
@@ -567,14 +688,18 @@ class RegistrationFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    context?.let { it1 ->
-                        ToastStateHandling.toastSuccess(
-                            it1,
-                            "SuccessFully Registered",
+                    //a Toast message with "Successfully Registered" is displayed.
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastSuccessfullyRegistered = TranslationsManager().getString("successfully_registered")
+                        if(!toastSuccessfullyRegistered.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastSuccessfullyRegistered,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Successfully Registered",
                             Toast.LENGTH_SHORT
-                        )
-                    }
+                        ) }}}
                     val loginDataMaster = it.data
+                    //if the status is true, the user token, mobile number, and logged-in status is saved in the viewModel
                     if (loginDataMaster?.status == true) {
                         viewModel.setUserToken(
                             loginDataMaster.data
@@ -582,11 +707,14 @@ class RegistrationFragment : Fragment() {
                         viewModel.setMobileNumber(mobileNumber.toString())
                         viewModel.setIsLoggedIn(true)
 
-                        Handler(Looper.myLooper()!!).postDelayed({                        viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
-                            if (user.data != null && user.data?.userId != null) {
-                                gotoMainActivity()
+                        //After a delay of 200ms, the function getUserDetails is called, and if the user data is present, the gotoMainActivity method is called.
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            viewModel.getUserDetails().observe(viewLifecycleOwner) { user ->
+                                if (user.data != null && user.data?.userId != null) {
+                                    gotoMainActivity()
+                                }
                             }
-                        }},200)
+                        }, 200)
 
                     }
                 }
@@ -594,7 +722,16 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error",Toast.LENGTH_SHORT) }
+                    //It shows a toast message with "Server Error Occurred" or with a translated message from the TranslationsManager class.
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
 
                 }
             }
@@ -610,12 +747,16 @@ class RegistrationFragment : Fragment() {
         requireActivity().finish()
     }
 
+    //get Module Master data
     private fun userModule() {
+        //observing the data from the viewModel.getModuleMaster() LiveData
         viewModel.getModuleMaster().observe(viewLifecycleOwner) { it ->
             when (it) {
                 is Resource.Success -> {
+                    // filters the list of modules based on their subscription status (0 = free, 1 = paid)
                     val freelist = it.data?.filter { it.subscription == 0 } as MutableList
                     val paidlist = it.data?.filter { it.subscription == 1 } as MutableList
+                    //update the data in the adapters knowAdapter and premiumAdapter with the respective filtered lists.
                     knowAdapter.update(freelist)
                     premiumAdapter.update(paidlist)
                 }
@@ -624,11 +765,16 @@ class RegistrationFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        "Error: ${it.message}",
-                        Toast.LENGTH_SHORT
-                    )
+                    //It shows a toast message with "Server Error Occurred" or with a translated message from the TranslationsManager class.
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
 
                 }
             }
@@ -642,7 +788,9 @@ class RegistrationFragment : Fragment() {
         mContext = context
     }
 
+    //This code is for converting speech to text using the device's built-in speech recognition system.
     private fun speechToText() {
+        //An Intent with action ACTION_RECOGNIZE_SPEECH is created and putExtra values are set for language model, language, and prompt.
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -654,8 +802,10 @@ class RegistrationFragment : Fragment() {
         )
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to text")
         try {
+            //The Intent is then passed to startActivityForResult method with a request code REQUEST_CODE_SPEECH_INPUT to start the speech recognition system.
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: Exception) {
+            //In case of any exception, a toast error message is displayed.
             ToastStateHandling.toastError(
                 requireContext(), " " + e.message,
                 Toast.LENGTH_SHORT
@@ -663,11 +813,13 @@ class RegistrationFragment : Fragment() {
         }
     }
 
+    //This code handles the result of the speech-to-text and GPS activities.
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         @Nullable data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
+        //If the speech-to-text activity has a result of RESULT_OK and data, the first recognized speech is extracted and set as the text of the binding.nameEt EditText.
         if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
             if (resultCode == RESULT_OK && data != null) {
                 val result = data.getStringArrayListExtra(
@@ -678,11 +830,21 @@ class RegistrationFragment : Fragment() {
 
             }
         }
+        //If the GPS activity has a result of RESULT_OK, the getLocation method is called.
         if (resultCode == REQUEST_CODE_GPS && resultCode == AppCompatActivity.RESULT_OK) {
             getLocation()
         }
     }
 
+
+    //This code defines a function named playAudio that plays audio using the MediaPlayer API in Android. The function takes the following arguments:
+    //
+    //context: a reference to the current Context
+    //path: the path to the audio file
+    //play: an ImageView that represents the play button
+    //pause: an ImageView that represents the pause button
+    //mediaSeekbar: a SeekBar that displays the progress of the audio playback
+    //totalTime: a TextView that displays the total duration of the audio
     private fun playAudio(
         context: Context,
         path: String,
@@ -692,6 +854,7 @@ class RegistrationFragment : Fragment() {
         totalTime: TextView
     ) {
 
+        //The function initializes a MediaPlayer object and sets an OnCompletionListener on it. When the audio playback completes, the mediaSeekbar is reset to 0 and the visibility of the pause and play ImageViews are changed.
         mediaPlayer = MediaPlayer()
         mediaPlayer!!.setOnCompletionListener {
             mediaSeekbar.progress = 0
@@ -699,7 +862,8 @@ class RegistrationFragment : Fragment() {
             play.visibility = View.VISIBLE
         }
 
-        Log.d("Audio", "audioPlayer: $audioUrl")
+        //The function also creates an instance of AudioWife and initializes it with the context, path, play ImageView, pause ImageView, mediaSeekbar, and totalTime TextView.
+        //The play method of the AudioWife instance is called to start the audio playback.
         val audio = AudioWife.getInstance()
             .init(context, Uri.parse(path))
             .setPlayView(play)
@@ -712,16 +876,20 @@ class RegistrationFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // the method removes the location updates from the fusedLocationProviderClient by calling the removeLocationUpdates method with the locationCallback as its argument. This stops the location updates and prevents any further updates from being received.
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
 
     }
 
+    //The two constants REQUEST_CODE_SPEECH_INPUT and REQUEST_CODE_GPS are defined within this companion object, and they can be accessed using the class name
     companion object {
         private const val REQUEST_CODE_SPEECH_INPUT = 101
         private const val REQUEST_CODE_GPS = 1011
     }
+
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("RegistrationFragment")
+        //Time Spent on this Screen
+        EventScreenTimeHandling.calculateScreenTime("Registration")
     }
 }

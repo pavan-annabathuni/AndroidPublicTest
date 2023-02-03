@@ -1,19 +1,21 @@
 package com.waycool.data.Sync.syncer
 
+import android.widget.Toast
 import androidx.datastore.preferences.core.Preferences
 import com.waycool.data.Local.Entity.AiCropHistoryEntity
-import com.waycool.data.Local.Entity.CropMasterEntity
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Local.mappers.AiCropHistoryEntityMapper
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncInterface
 import com.waycool.data.Sync.SyncKey
 import com.waycool.data.Sync.SyncRate
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -85,6 +87,15 @@ class AiCropHistorySyncer : SyncInterface {
 
                             }
                             is Resource.Error -> {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    val toastServerError = TranslationsManager().getString("server_error")
+                                    if(!toastServerError.isNullOrEmpty()){
+                                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                            Toast.LENGTH_SHORT
+                                        ) }}
+                                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                        Toast.LENGTH_SHORT
+                                    ) }}}
                                 setSyncStatus(false)
                             }
                         }

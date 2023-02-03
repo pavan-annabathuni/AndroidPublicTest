@@ -20,11 +20,11 @@ import com.waycool.featurelogin.fragment.RegistrationFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfilePremiumAdapter.TilesVh> {
+public class KnowYourPremiumServicesAdapter extends RecyclerView.Adapter<KnowYourPremiumServicesAdapter.TilesVh> {
     List<ModuleMasterDomain> listItem;
     Context context;
     RegistrationFragment fragment;
-    public UserProfilePremiumAdapter( Context context, RegistrationFragment fragment){
+    public KnowYourPremiumServicesAdapter(Context context, RegistrationFragment fragment){
         this.listItem = new ArrayList<>();
         this.context = context;
         this.fragment = fragment;
@@ -39,16 +39,21 @@ public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfileP
     @Override
     public void onBindViewHolder(@NonNull TilesVh holder, int position) {
         ModuleMasterDomain data = listItem.get(position);
+        //set title
         holder.itemName.setText(data.getTitle());
-        //AppUtil.showImageDrawable(context,data.getImage(),holder.itemImage);
+        //set image using Glide
         Glide.with(holder.itemImage).load(data.getModuleIcon())
                 .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                 .into(holder.itemImage);
     }
+
+    //Return size of list
     @Override
     public int getItemCount() {
         return listItem.size();
     }
+
+    //click listener on item
     public class TilesVh extends RecyclerView.ViewHolder implements View.OnClickListener {
 
        TextView itemName;
@@ -62,6 +67,8 @@ public class UserProfilePremiumAdapter extends RecyclerView.Adapter<UserProfileP
             transpatrentLayout.setVisibility(View.VISIBLE);
             itemView.setOnClickListener(this);
         }
+
+        //on click on any service item we will open the dialog box having the detail about that premium service
         @Override
         public void onClick(View view) {
             fragment.showServiceDialog(listItem.get(getLayoutPosition()).getTitle(),
