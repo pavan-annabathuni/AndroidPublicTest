@@ -50,16 +50,18 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         tools:itemCount="7"
         tools:listitem="@layout/item_support" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/DarkGreen"
-        tools:visibility="visible"/>
+        tools:visibility="gone" />
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"

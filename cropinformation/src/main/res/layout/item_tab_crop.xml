@@ -27,5 +27,8 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/black"
         tools:text="text"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
         android:id="@android:id/text1"/>
 </LinearLayout>

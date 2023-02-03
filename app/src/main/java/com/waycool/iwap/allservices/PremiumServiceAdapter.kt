@@ -48,7 +48,7 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
                     customTabIntent.intent.setPackage(packageName)
                     customTabIntent.launchUrl(
                         context,
-                        Uri.parse(deepLink)
+                        Uri.parse(deepLink.trim())
                     )
                 }catch (e:Exception){
                     Log.d("link", "onBindViewHolder: $e")
@@ -60,6 +60,7 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
                     "No Link",
                     Toast.LENGTH_SHORT
                 )
+                Log.d("deepLink", "onBindViewHolder: $deepLink")
             }
         }
         holder.name.text = properties.title

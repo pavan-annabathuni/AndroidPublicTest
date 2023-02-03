@@ -52,19 +52,12 @@ class WeatherFragment : Fragment() {
     private lateinit var shareLayout: LinearLayout
     lateinit var mWeatherAdapter: WeatherAdapter
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
-    val yellow = "#070D09"
-    val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
-    val lightRed = "#FFD7D0"
     val green = "#146133"
-    val lightGreen = "#C4D8CC"
-
     val moduleId="6"
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +75,6 @@ class WeatherFragment : Fragment() {
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
         apiErrorHandlingBinding = binding.errorState
-
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
             EventClickHandling.calculateClickEvent("weather_share")
@@ -93,7 +85,6 @@ class WeatherFragment : Fragment() {
             networkCall()
         }
         observer()
-//        setBanners()
 
         mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             EventClickHandling.calculateClickEvent("weather_daily")
@@ -104,16 +95,9 @@ class WeatherFragment : Fragment() {
             EventClickHandling.calculateClickEvent("weather_hourly")
             viewModel.displayPropertyHourly(it)
         })
-
-//        observer()
         translation()
         binding.lableRain.isSelected = true
         binding.lableVisibility.isSelected = true
-        //getWeatherData("12.22", "77.32")
-//        ViewModel.getCurrentWeather()
-//        ViewModel.getWeekWeather()
-//        ViewModel.getHourlyWeather()
-
 
         binding.imgBack.setOnClickListener {
             requireActivity().onBackPressed()
@@ -153,7 +137,7 @@ class WeatherFragment : Fragment() {
         }
     }
 
-
+ /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
         val now = Date()
         android.text.format.DateFormat.format("", now)
@@ -168,15 +152,12 @@ class WeatherFragment : Fragment() {
         outputFile.flush()
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
-
         val share = Intent(Intent.ACTION_SEND)
         share.type = "text/plain"
         share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
-
         share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
         share.putExtra(Intent.EXTRA_STREAM, URI)
         share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
-
         startActivity(Intent.createChooser(share, "Share link!"))
     }
 
@@ -194,8 +175,6 @@ class WeatherFragment : Fragment() {
                 loadWeatherFromFarms(it.data!!)
             }
         }
-
-
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
             if (null != it) {
                 this.findNavController().navigate(
@@ -210,7 +189,6 @@ class WeatherFragment : Fragment() {
                     WeatherFragmentDirections.actionWeatherFragmentToSheetHourlyFragment(it)
                 )
                 viewModel.displayPropertyDetailsCompleteHourly()
-
             }
         }
     }
@@ -220,12 +198,8 @@ class WeatherFragment : Fragment() {
         viewModel.getUserDetails().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
-                        Log.d("Profile", userDetails.toString())
-
-
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -233,8 +207,6 @@ class WeatherFragment : Fragment() {
                                 getWeatherData(it1, it2)
                             }
                         }
-
-
                     }
                 }
                 is Resource.Error -> {}
@@ -244,6 +216,7 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /** showing weather location accordingly farm*/
     private fun loadWeatherFromFarms(farms: List<MyFarmsDomain>) {
 
         binding.horizontalScrollView4.visibility = View.VISIBLE
@@ -335,7 +308,7 @@ class WeatherFragment : Fragment() {
                     )
                     //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
                     binding.weatherMaster = it.data
-
+                   /** checking the id of weather and setting the description */
                     when (it.data?.current?.weather?.get(0)?.id) {
                         200 -> {
                             binding.tvTodayTips.text =
@@ -680,10 +653,8 @@ class WeatherFragment : Fragment() {
 
 
     private fun setBanners() {
-
         val bannerAdapter = AdsAdapter(activity?:requireContext())
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
-
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
@@ -692,11 +663,6 @@ class WeatherFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -715,8 +681,7 @@ class WeatherFragment : Fragment() {
             EventClickHandling.calculateClickEvent("weather_Adbanner")
         }
     }
-    fun translation(){
-
+    private fun translation(){
         TranslationsManager().loadString("str_Weather",binding.textView,"Weather")
         TranslationsManager().loadString("str_share",binding.imgShare,"Share")
         TranslationsManager().loadString("str_today",binding.icon2,"Today")

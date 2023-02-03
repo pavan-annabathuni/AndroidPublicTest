@@ -9,7 +9,7 @@ object SpeechToText {
     suspend fun getLangCode(): String? {
         var langCode:String
         GlobalScope.launch(Dispatchers.Main) {
-            langCode = getLangCode() ?: ""
+            langCode = getLangCode() ?: "en"
             when (langCode) {
                 "en" -> langCode = "en-IN"
                 "hi" -> langCode = "hi-IN"
