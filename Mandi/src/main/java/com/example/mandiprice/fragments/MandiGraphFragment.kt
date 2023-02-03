@@ -89,9 +89,9 @@ class MandiGraphFragment : Fragment() {
             }
 
             else {
-                cropMasterId = arguments?.getInt("cropId")
-                mandiMasterId = arguments?.getInt("mandiId")
                 cropName = arguments?.getString("cropName")
+                mandiMasterId = arguments?.getInt("mandiId")
+                cropMasterId = arguments?.getInt("cropId")
                 marketName = arguments?.getString("market")
                 sub_record_id=arguments?.getString("subRecordId")
             }
