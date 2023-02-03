@@ -159,6 +159,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener {
+            binding.clShareProgress.visibility=View.VISIBLE
+            binding.imgShare.isEnabled = false
             screenShot(diseaseId, diseaseName)
         }
         TranslationsManager().loadString("str_share", binding.imgShare, "Share")
@@ -267,11 +269,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                     }
                     is Resource.Error -> {
-//                        ToastStateHandling.toastError(
-//                            requireContext(),
-//                            "Error: ${it.message}",
-//                            Toast.LENGTH_SHORT
-//                        )
+
 
                     }
 
@@ -306,13 +304,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
                     .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
                     .setDescription("Find Pest Management and more on Outgrow app")
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    binding.imgShare.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND

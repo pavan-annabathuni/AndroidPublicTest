@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -88,6 +87,7 @@ class MandiGraphFragment : Fragment() {
             if (arguments?.containsKey("mandiRecord") == true){
                 mandiDomain = arguments?.getParcelable("mandiRecord")
             }
+
             else {
                 cropMasterId = arguments?.getInt("cropId")
                 mandiMasterId = arguments?.getInt("mandiId")
@@ -129,18 +129,13 @@ class MandiGraphFragment : Fragment() {
         }
 
         binding.imgShare.setOnClickListener() {
+            binding.clShareProgress.visibility=View.VISIBLE
+            binding.imgShare.isEnabled = false
             val bundle=Bundle()
             bundle.putString("","$marketName")
             bundle.putString("","$cropName")
             EventItemClickHandling.calculateItemClickEvent("mandi_share",bundle)
-            binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-            viewModel.viewModelScope.launch {
-                val toast = TranslationsManager().getString("str_share_opening")
-                if(toast.isNullOrEmpty())
-                context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
-                else context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
-            }
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -370,7 +365,6 @@ class MandiGraphFragment : Fragment() {
             "com.example.outgrow",
             imageFile
         )
-
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -387,6 +381,8 @@ class MandiGraphFragment : Fragment() {
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    binding.imgShare.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -394,9 +390,7 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-                    Handler().postDelayed({
-                        binding.imgShare.isEnabled = true
-                    },2500)
+
 
 
                 }

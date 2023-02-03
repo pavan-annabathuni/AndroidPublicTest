@@ -17,11 +17,16 @@
             type="com.waycool.weather.utils.Constants.ApiStatus" />
 
     </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:context=".fragment.WeatherFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -677,7 +682,19 @@
                     layout="@layout/api_error_handling" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/clShareProgress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

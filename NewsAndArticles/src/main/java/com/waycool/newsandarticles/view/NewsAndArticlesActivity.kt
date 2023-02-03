@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -42,7 +41,6 @@ import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginActivity
-import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
@@ -231,17 +229,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
 
-    fun shareClick(
-        pos: Int,
-        url: String?,
-        content: String,
-        imageView: ImageView?,
-        appLink: String
-    ) {
-        Log.d("url", (url)!!)
-        AppUtil.shareItem(this@NewsAndArticlesActivity, url, imageView, content + "\n" + appLink)
-    }
-
     private fun setBanners() {
         val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
         viewModel.getVansAdsList(moduleId).observe(this) {
@@ -363,9 +350,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         startActivity(intent)
     }
 
-    override fun onShareItemClick(it: VansFeederListDomain?) {
+    override fun onShareItemClick(it: VansFeederListDomain?, view: View) {
+        binding.clShareProgress.visibility=View.VISIBLE
+        val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
+            it?.thumbnailUrl
+        } else{
+            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+        }
         val eventBundle=Bundle()
-        eventBundle.putString("NewsAndArticlesTitle",it?.title)
+        eventBundle.putString("NewsAndArticlesTitle", it?.title)
         if(selectedCategory!=null){
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
@@ -380,13 +373,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                    .setTitle("Outgrow - Hi, Checkout the News and Articles on ${it?.title}.")
+                    .setImageUrl(Uri.parse(thumbnail))
+                    .setTitle("Outgrow - Hi, Checkout the News and Articles about ${it?.title}.")
                     .setDescription("Watch more News and Articles and learn with Outgrow")
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    view.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND

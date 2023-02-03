@@ -2,24 +2,24 @@ package com.waycool.newsandarticles.view
 
 import android.content.Intent
 import android.media.MediaPlayer
-import nl.changer.audiowife.AudioWife
-import android.os.Bundle
-import android.text.Html
-import com.squareup.picasso.Picasso
-import com.waycool.newsandarticles.R
 import android.media.MediaPlayer.OnCompletionListener
 import android.net.Uri
+import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.squareup.picasso.Picasso
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.newsandarticles.R
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
+import nl.changer.audiowife.AudioWife
 
 class NewsFullviewActivity : AppCompatActivity() {
 
@@ -64,6 +64,13 @@ class NewsFullviewActivity : AppCompatActivity() {
 
 
         binding.shareBtn.setOnClickListener {
+            binding.shareBtn.isEnabled=false
+            binding.clShareProgress.visibility=View.VISIBLE
+            val thumbnail = if(image.isNullOrEmpty()){
+               image
+            } else{
+                "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+            }
             FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
                 .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -74,13 +81,15 @@ class NewsFullviewActivity : AppCompatActivity() {
                 )
                 .setSocialMetaTagParameters(
                     DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                        .setTitle("Outgrow - Hi, Checkout the News and Articles on ${title}.")
+                        .setImageUrl(Uri.parse(thumbnail))
+                        .setTitle("Outgrow - Hi, Checkout the News and Articles about ${title}.")
                         .setDescription("Watch more News and Articles and learn with Outgrow")
                         .build()
                 )
                 .buildShortDynamicLink().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        binding.clShareProgress.visibility=View.GONE
+                        binding.shareBtn.isEnabled=true
                         val shortLink: Uri? = task.result.shortLink
                         val sendIntent = Intent()
                         sendIntent.action = Intent.ACTION_SEND
@@ -91,8 +100,6 @@ class NewsFullviewActivity : AppCompatActivity() {
                     }
                 }
         }
-
-
         if (source != null) {
             binding.newsSource.text = source
         } else {
