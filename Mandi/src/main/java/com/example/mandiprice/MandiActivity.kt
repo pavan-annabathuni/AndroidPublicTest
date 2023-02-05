@@ -78,7 +78,6 @@ class MandiActivity : AppCompatActivity() {
             }
             .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
 
-
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_dashboard
         ) as NavHostFragment

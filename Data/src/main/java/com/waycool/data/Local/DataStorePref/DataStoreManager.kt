@@ -66,12 +66,12 @@ object DataStoreManager {
     }
 
 
-    suspend fun saveSelectedLanguage(languageCode: String, langId: Int,language:String) {
+    suspend fun saveSelectedLanguage(languageCode: String?, langId: Int?,language:String?) {
         performPrefsSanityCheck()
         context?.userPreferences?.edit {
-            it[StoreKey.LANGUAGE_CODE] = languageCode
-            it[StoreKey.LANGUAGE_ID] = langId
-            it[StoreKey.LANGUAGE]=language
+            it[StoreKey.LANGUAGE_CODE] = languageCode ?: ""
+            it[StoreKey.LANGUAGE_ID] = langId ?: -1
+            it[StoreKey.LANGUAGE]=language ?: ""
         }
     }
 

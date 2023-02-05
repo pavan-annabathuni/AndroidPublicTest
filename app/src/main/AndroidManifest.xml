@@ -69,6 +69,24 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:host="adminuat.outgrowdigital.com"
+                    android:path="/call"
+                    android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
+                    android:path="/rating"
+                    android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="adminuat.outgrowdigital.com"
                     android:path="/newsandarticle"
                     android:scheme="https"/>
             </intent-filter>
@@ -81,6 +99,7 @@
                     android:path="/newsandarticlesfullscreen"
                     android:scheme="https"/>
             </intent-filter>
+
 
         </activity>
 

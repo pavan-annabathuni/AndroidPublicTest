@@ -53,9 +53,9 @@ object LoginRepository {
     }
 
 
-    fun setSelectedLanguageCode(langCode: String?, langId: Int?,language:String?) {
+    fun setSelectedLanguageCode(langCode: String?, langId: Int?, langNative:String?) {
         GlobalScope.launch(Dispatchers.IO) {
-            LocalSource.saveSelectedLanguage(langCode!!, langId!!,language!!)
+            LocalSource.saveSelectedLanguage(langCode, langId,langNative)
             SyncManager.invalidateAll()
             TranslationsManager().init()
         }
@@ -274,7 +274,8 @@ object LoginRepository {
 //    }
 
     suspend fun getSelectedLangCode()=LocalSource.getLanguageCode()
-
+    suspend fun getSelectedLangId()=LocalSource.getLanguageId()
+    suspend fun getSelectedLanguage()=LocalSource.getLanguage()
 
 
     suspend fun getIsLoggedIn() = DataStoreManager.isLoggedIn()

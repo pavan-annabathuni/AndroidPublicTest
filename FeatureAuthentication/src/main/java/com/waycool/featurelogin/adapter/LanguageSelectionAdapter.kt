@@ -80,4 +80,15 @@ class LanguageSelectionAdapter : RecyclerView.Adapter<LanguageSelectionAdapter.V
         val cvLanguageSelectionItem = binding.cvLanguageSelectionItem
         val ivTickMark: ImageView = binding.ivTickMark
     }
+
+    fun updatedSelectedLanguage(langCode: String){
+        var pos = -1
+        languageList.forEach {
+            pos++
+            if(it.langCode == langCode){
+                selectedPos = pos
+            }
+        }
+        notifyDataSetChanged()
+    }
 }

@@ -35,33 +35,15 @@ class CropInfo : AppCompatActivity() {
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                 }
-
-                        if (deepLink?.lastPathSegment!= null) {
-                            if (deepLink?.lastPathSegment!! == "cropinfo") {
+                if (deepLink?.lastPathSegment!= null) {
+                            if (deepLink?.lastPathSegment == "cropinfo") {
                                 this.findNavController(R.id.nav_host_dashboard).navigate(R.id.cropSelectionFragment)
 
                             }
                         }
                     }
                     .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
-/*
-                if(deepLink!=null){
-                    if (deepLink.lastPathSegment!! == "cropinfodetail") {
-                        val cropId = deepLink.getQueryParameter ("crop_id")
-                        val cropName = deepLink.getQueryParameter ("crop_name")
-                        val cropLogo=deepLink.getQueryParameter("crop_logo")
 
-                        if (!cropId.isNullOrEmpty()&&!cropName.isNullOrEmpty()&&!cropLogo.isNullOrEmpty()) {
-                            val args = Bundle()
-                            args.putInt("cropid", cropId.toInt())
-                            args.putString("cropname", cropName)
-                            args.putString("croplogo", cropLogo)
-
-                            this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_cropSelectionFragment_to_cropInfoFragment,args)
-                        }
-                    }
-                }
-*/
 
 
 

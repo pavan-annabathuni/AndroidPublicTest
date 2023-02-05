@@ -72,6 +72,8 @@ dependencies {
     //used to mobile number custom Otp View
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.0.0'
     //implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.2'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
+
 
     // used to trueCaller
     implementation "com.truecaller.android.sdk:truecaller-sdk:2.6.0"

@@ -1,6 +1,7 @@
 package com.waycool.uicomponents.utils;
 
 import android.content.Context;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -93,5 +94,11 @@ public class AppUtil {
         Log.d("dateCon", convertedDate);
         return convertedDate;
     }
+
+    public static void handlerSet(Handler handler, Runnable runnable, int delayTime){
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable,delayTime);
+    }
+
 
 }

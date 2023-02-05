@@ -34,7 +34,8 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
+            Log.d("CropProtectNavigation","click")
             onClickListener.clickListener(properties)
             val deepLink = properties.deepLink
             if(!deepLink.isNullOrEmpty() && URLUtil.isValidUrl(deepLink.trim())) {
@@ -46,7 +47,7 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
                     customTabIntent.intent.setPackage(packageName)
                     customTabIntent.launchUrl(
                         context,
-                        Uri.parse(deepLink)
+                        Uri.parse(deepLink.trim())
                     )
                 }catch (e:Exception){
                     Log.d("link", "onBindViewHolder: $e")

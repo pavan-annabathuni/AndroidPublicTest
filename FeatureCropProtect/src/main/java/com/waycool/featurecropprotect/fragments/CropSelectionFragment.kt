@@ -22,7 +22,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -80,23 +79,23 @@ class CropSelectionFragment : Fragment() {
         apiErrorHandlingBinding=binding.errorState
 
         binding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
             val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigateUp()
                     val isSuccess = findNavController().navigateUp()
-                    if (!isSuccess) activity?.let { it.finish() }
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()

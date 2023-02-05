@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
@@ -51,6 +53,7 @@ import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
@@ -67,7 +70,8 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment(), onItemClick {
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     private lateinit var newsBinding: GenericLayoutNewsListBinding
     private lateinit var videosBinding: GenericLayoutVideosListBinding
     private var audio: AudioWife? = null
@@ -524,7 +528,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         private fun setBanners() {
 
-            val bannerAdapter = AdsAdapter(activity?:requireContext())
+            val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+            runnable =Runnable {
+                if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                    binding.bannerViewpager.currentItem = 0
+                else
+                    binding.bannerViewpager.currentItem += 1
+            }
+            binding.bannerViewpager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (runnable != null) {
+                        AppUtil.handlerSet(handler!!,runnable!!,3000)
+                    }
+                }
+            })
             viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
                 bannerAdapter.submitList( it.data)
@@ -581,6 +600,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         override fun onPause() {
             super.onPause()
             audio?.release()
+            if (runnable != null) {
+                handler?.removeCallbacks(runnable!!)
+            }
         }
 
     override fun onItemClickListener(vans: VansFeederListDomain?) {
@@ -600,8 +622,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             bundle
         )
     }
+
+
+
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
     }
 }

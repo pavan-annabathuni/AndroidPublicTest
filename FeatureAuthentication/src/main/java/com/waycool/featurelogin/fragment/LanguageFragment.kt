@@ -52,13 +52,27 @@ class LanguageFragment : Fragment() {
         apiCall(apiErrorHandlingBinding, languageSelectionAdapter!!)
 
         //Click on Item in Language Adapter
-        languageSelectionAdapter!!.onItemClick = {
+        languageSelectionAdapter?.onItemClick = {
             //setting translations according to selected language
-            setTranslation(it)
+            setTranslation(it.langCode)
             //making an api call to get Language list
             apiCall(apiErrorHandlingBinding, languageSelectionAdapter!!)
             //storing the clicked Language data(LanguageMasterDomain) to selectedLanguage variable
             selectedLanguage = it
+            languageViewModel.setSelectedLanguage(
+                selectedLanguage!!.langCode,
+                selectedLanguage!!.id,
+                selectedLanguage!!.langNative
+            )
+        }
+
+        languageViewModel.language.observe(viewLifecycleOwner) {
+            it.langCode?.let { langCode ->
+                setTranslation(langCode)
+                selectedLanguage?.langCode = langCode
+                languageSelectionAdapter?.updatedSelectedLanguage(langCode)
+                selectedLanguage = it
+            }
         }
 
         //Click on the Continue button present in UI
@@ -99,11 +113,7 @@ class LanguageFragment : Fragment() {
                 //If Internet is is available go to "ELSE" condition
                 else {
                     //Storing data to the DataStoreManager
-                    languageViewModel.setSelectedLanguage(
-                        selectedLanguage!!.langCode,
-                        selectedLanguage!!.id,
-                        selectedLanguage!!.langNative
-                    )
+
                     binding.progressBar.visibility = View.VISIBLE
                     binding.doneBtn.visibility = View.GONE
                     val args = Bundle()
@@ -135,8 +145,8 @@ class LanguageFragment : Fragment() {
         return binding.root
     }
 
-    private fun setTranslation(languageMasterDomain: LanguageMasterDomain) {
-        when (languageMasterDomain.langCode) {
+    private fun setTranslation(langCode: String?) {
+        when (langCode) {
             "en" -> {
                 binding.helloTv.text="Welcome to Outgrow"
                 binding.selectLanguageTv.text="Select your language"
@@ -249,6 +259,7 @@ class LanguageFragment : Fragment() {
     //Time Spent on the Language Screen
     override fun onResume() {
         super.onResume()
+        languageViewModel.getSelectedLangCode()
         EventScreenTimeHandling.calculateScreenTime("LanguageScreen")
     }
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -46,6 +47,7 @@ import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,10 +58,10 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     private var searchTag: CharSequence? = ""
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var selectedCategory: String? = null
-    private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
     private lateinit var newsAdapter: NewsPagerAdapter
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     val moduleId="4"
 
     val binding: ActivityNewsAndArticlesBinding by lazy {
@@ -78,6 +80,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+
         apiErrorHandlingBinding=binding.errorState
         networkCall()
         if(NetworkUtil.getConnectivityStatusString(this)==0){
@@ -230,7 +233,22 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
 
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
+        val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity, binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(this) {
 
             bannerAdapter.submitList(it.data)
@@ -398,8 +416,17 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             binding.search.hint = TranslationsManager().getString("search")
         }
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("NewsAndArticlesActivity")
     }
 }

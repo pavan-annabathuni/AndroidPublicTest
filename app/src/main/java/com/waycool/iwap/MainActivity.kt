@@ -13,21 +13,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.soiltesting.utils.Constant
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
-import com.waycool.featurelogin.FeatureLogin
+import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsFullviewActivity
-import com.waycool.weather.WeatherActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
 
-    //    val loginViewModel: LoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
 
@@ -48,95 +44,57 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        setupBottomNavigationBar()
         getDashBoard()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
-                this@MainActivity.finish()
-
+        navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
             }
-        }
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                var deepLink: Uri? = null
-                if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link }
-                if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                     if (deepLink?.lastPathSegment == "newsandarticlesfullscreen") {
-                        val title = deepLink.getQueryParameter("title")
-                        val desc = deepLink.getQueryParameter("content")
-                        val image = deepLink.getQueryParameter("image")
-                        val audioUrl = deepLink.getQueryParameter("audio")
-                        val newsDate = deepLink.getQueryParameter("date")
-                        val source = deepLink.getQueryParameter("source")
-                        if (!title.isNullOrEmpty()) {
-                            val intent = Intent(this, NewsFullviewActivity::class.java)
-                            intent.putExtra("title", title)
-                            intent.putExtra("content", desc)
-                            intent.putExtra("image", image)
-                            intent.putExtra("audio", audioUrl)
-                            intent.putExtra("date", newsDate)
-                            intent.putExtra("source", source)
-                            startActivity(intent)
-                        }
-                    }
-
-                }
-            }
-
-            .addOnFailureListener(this) { e ->
-                Log.w("TAG", "getDynamicLink:onFailure", e)
-            }
-
-
-        CoroutineScope(Dispatchers.Main).launch {
-            if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
-                this@MainActivity.finish()
-
-            }
-        }
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                var deepLink: Uri? = null
-                if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link
-
-                }
-                if (deepLink?.lastPathSegment != null) {
-                    if (deepLink?.lastPathSegment!! == "weathershare") {
-                        val intent = Intent(this, WeatherActivity::class.java)
+            if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
+                if (deepLink?.lastPathSegment == NEWS_ARTICLE) {
+                    val title = deepLink.getQueryParameter("title")
+                    val desc = deepLink.getQueryParameter("content")
+                    val image = deepLink.getQueryParameter("image")
+                    val audioUrl = deepLink.getQueryParameter("audio")
+                    val newsDate = deepLink.getQueryParameter("date")
+                    val source = deepLink.getQueryParameter("source")
+                    if (!title.isNullOrEmpty()) {
+                        val intent = Intent(this, NewsFullviewActivity::class.java)
+                        intent.putExtra("title", title)
+                        intent.putExtra("content", desc)
+                        intent.putExtra("image", image)
+                        intent.putExtra("audio", audioUrl)
+                        intent.putExtra("date", newsDate)
+                        intent.putExtra("source", source)
                         startActivity(intent)
                     }
-
+                } else if (deepLink?.lastPathSegment == "rating") {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                    )
+                    startActivity(intent)
+                } else if (deepLink?.lastPathSegment!!.contains("call")) {
+                    val intent = Intent(Intent.ACTION_DIAL)
+                    intent.data = Uri.parse(Contants.CALL_NUMBER)
+                    startActivity(intent)
                 }
             }
-            .addOnFailureListener(this) { e ->
-                Log.w("TAG", "getDynamicLink:onFailure", e)
-            }
+        }
+
+
+
 
 
         tokenCheckViewModel.getUserDetails().observe(this) {
             accountID = it.data?.accountId
             if (accountID != null) {
-                Log.d(Constant.TAG, "onCreateViewAccountID:$accountID")
                 CoroutineScope(Dispatchers.Main).launch {
-                    Log.d("TAG", "onCreateToken:$accountID")
-                    Log.d("TAG", "onCreateToken:${tokenCheckViewModel.getUserToken()}")
                     val token: String = tokenCheckViewModel.getUserToken()
                     validateToken(accountID.toString().toInt(), token)
-                    Log.d("TAG", "onCreateToken: ${tokenCheckViewModel.getUserToken()}")
                 }
-
             }
-
-
         }
     }
 

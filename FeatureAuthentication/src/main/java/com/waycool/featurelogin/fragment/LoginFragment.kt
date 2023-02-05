@@ -37,17 +37,16 @@ import com.waycool.featurelogin.databinding.FragmentLoginBinding
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.regex.Pattern
 
 class LoginFragment : Fragment() {
-    private var langCode: String? = null
     private var trueCallerFullName: String? = null
     var deviceManufacturer: String? = null
     var deviceModel: String? = null
     var fcmToken: String? = null
+    var langCode : String? =null
     private var trueCallerVerified: Boolean = false
     private lateinit var trueCallerSDK: TruecallerSDK
     lateinit var fragmentLoginBinding: FragmentLoginBinding
@@ -68,14 +67,8 @@ class LoginFragment : Fragment() {
         fragmentLoginBinding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-        if (arguments?.getString("langCode") != null) {
-            langCode = arguments?.getString("langCode")
-        }
 
-        GlobalScope.launch {
-            if (langCode == null)
-                langCode = loginViewModel.getselectedLangCode() ?: "en"
-        }
+        loginViewModel.getSelectedLangCode()
         translation()
 
         val trueScope = TruecallerSdkScope.Builder(requireContext(), sdkCallback)
@@ -106,13 +99,15 @@ class LoginFragment : Fragment() {
         trueCallerSDK = TruecallerSDK.getInstance()
 
 
-        Handler(Looper.myLooper()!!).postDelayed({
-            if (trueCallerSDK.isUsable) {
-                trueCallerSDK.setLocale(Locale(langCode))
-                trueCallerSDK.getUserProfile(requireActivity())
-            }
-        }, 700)
-
+        loginViewModel.language.observe(viewLifecycleOwner) {
+            langCode = it.langCode
+            Handler(Looper.myLooper()!!).postDelayed({
+                if (trueCallerSDK.isUsable) {
+                    trueCallerSDK.setLocale(Locale(langCode ?: "en"))
+                    trueCallerSDK.getUserProfile(requireActivity())
+                }
+            }, 700)
+        }
 
         fragmentLoginBinding.getotpBtn.setOnClickListener {
             if (fragmentLoginBinding.mobilenoEt.text.toString()

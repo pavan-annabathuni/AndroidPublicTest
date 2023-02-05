@@ -11,6 +11,7 @@ import kotlinx.coroutines.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
+     var language : MutableLiveData<LanguageMasterDomain> = MutableLiveData()
 
 //    val languageLiveData get() = LoginRepository.getLanguageMaster()
 //    val loginLiveData get() = LoginRepository.loginLiveData
@@ -21,11 +22,19 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         LoginRepository.getLanguageMaster().asLiveData()
 
 
-     fun setSelectedLanguage(langCode: String?, langId: Int?,language:String?) {
-        LoginRepository.setSelectedLanguageCode(langCode, langId,language)
+     fun setSelectedLanguage(langCode: String?, langId: Int?,langNative:String?) {
+        LoginRepository.setSelectedLanguageCode(langCode, langId, langNative)
     }
 
-    suspend fun getselectedLangCode()=LoginRepository.getSelectedLangCode()
+     fun getSelectedLangCode(){
+         CoroutineScope(Dispatchers.IO).launch {
+            language.postValue(LanguageMasterDomain(
+                langCode = LoginRepository.getSelectedLangCode(),
+                id = LoginRepository.getSelectedLangId(),
+                langNative = LoginRepository.getSelectedLanguage()))
+         }
+     }
+
 
     fun login(
         mobile_no: String,

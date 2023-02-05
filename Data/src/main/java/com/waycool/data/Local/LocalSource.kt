@@ -146,8 +146,8 @@ object LocalSource {
         return DataStoreManager.getAiCropHistory()
     }
 
-    suspend fun saveSelectedLanguage(langCode: String, langId: Int, language: String) {
-        DataStoreManager.saveSelectedLanguage(langCode, langId, language)
+    suspend fun saveSelectedLanguage(langCode: String?, langId: Int?, langNative: String?) {
+        DataStoreManager.saveSelectedLanguage(langCode, langId, langNative)
     }
 
     suspend fun getLanguageCode() = DataStoreManager.getSelectedLanguageCode()
