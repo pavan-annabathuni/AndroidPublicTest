@@ -68,7 +68,7 @@ class AddCropDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentAddCropDetailsBinding.inflate(layoutInflater)
+        binding = FragmentAddCropDetailsBinding.inflate(layoutInflater,container,false)
         binding.viewModel=viewModel
          return binding.root
 
@@ -180,7 +180,7 @@ class AddCropDetailsFragment : Fragment() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            binding.cardCheckHealth.visibility = View.GONE
+            binding.cardSaveDetailsCrop.visibility = View.GONE
             context?.let {
                 ToastStateHandling.toastError(
                     it,
@@ -191,7 +191,7 @@ class AddCropDetailsFragment : Fragment() {
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
-            binding.cardCheckHealth.visibility = View.VISIBLE
+            binding.cardSaveDetailsCrop.visibility = View.VISIBLE
         }
     }
 
@@ -277,7 +277,7 @@ class AddCropDetailsFragment : Fragment() {
     //post crop details using retrofit
     private fun postCropDetails() {
         binding.progressBar.visibility = View.VISIBLE
-        binding.cardCheckHealth.visibility = View.INVISIBLE
+        binding.cardSaveDetailsCrop.visibility = View.INVISIBLE
         val map = mutableMapOf<String, Any>()
         if (accountID != null)
             map["account_no_id"] = accountID!!
@@ -303,7 +303,7 @@ class AddCropDetailsFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.INVISIBLE
-                    binding.cardCheckHealth.visibility = View.VISIBLE
+                    binding.cardSaveDetailsCrop.visibility = View.VISIBLE
                     activity?.finish()
                     viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
 

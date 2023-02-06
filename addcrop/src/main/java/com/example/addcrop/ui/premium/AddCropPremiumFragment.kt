@@ -66,27 +66,7 @@ class AddCropPremiumFragment : Fragment() {
         "Sprinkler Irrigation",
         "Flood Irrigation"
     )
-    val selectCropUnit = arrayOf(
-        "Acres",
-        "Gunta",
-        "Cent",
-        "Hectare",
-        "Bigha"
-    )
-    val noOFYearsBahar = arrayOf(
-        "0-1",
-        "1-2",
-        "2-3",
-        "3-4"
-    )
-    val selectCropYear = arrayOf(
-        "Select",
-        "0-1",
-        "1-2",
-        "2-3",
-        "3-4",
-        "4-5"
-    )
+
 
 
     override fun onCreateView(
@@ -102,10 +82,13 @@ class AddCropPremiumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        selectCropAreaSpinner()
+//        selectCropAreaSpinner()
         initViewClicks()
-        selectCropYearSpinner()
-        noOFYearBahar()
+//        selectCropYearSpinner()
+        observeSelectCropYear()
+        observeSelectCopUnit()
+        observeSelectYearBahar()
+//        noOFYearBahar()
         translationAddCropPremiumPage()
         year_selected = "0".toString().toInt().toString()
 //        binding.cardCheckHealth.setOnClickListener {
@@ -139,6 +122,92 @@ class AddCropPremiumFragment : Fragment() {
             if (!isSuccess) requireActivity().onBackPressed()
         }
 
+
+    }
+
+    private fun observeSelectYearBahar() {
+        viewModel.selectNumberOfYearBahar.observe(viewLifecycleOwner, androidx.lifecycle.Observer {cropBaharYear->
+            val arrayAdapter =
+                ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    cropBaharYear
+                )
+            binding.tvSpinnerYearBahar.adapter = arrayAdapter
+            binding.tvSpinnerYearBahar.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        val item = p0?.selectedItem
+//                    year_selected = item.toString()
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                    }
+                }
+
+        })
+    }
+
+    private fun observeSelectCopUnit() {
+        viewModel.selectCropUnit.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val arrayAdapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item,it )
+            binding.Acres.adapter = arrayAdapter
+            binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val item = p0?.selectedItem
+                    areaTypeSelected = item.toString()
+//                year_selected = item.toString()
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+
+        })
+
+    }
+
+    private fun observeSelectCropYear() {
+        viewModel.selectCropYear.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, it)
+            binding.tvSpinnerYear.adapter = arrayAdapter
+            binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val item = p0?.selectedItem
+                    year_selected = item.toString()
+                    when (year_selected) {
+                        "Select" -> {
+                            year_selected = "0"
+                        }
+                        "0-1" -> {
+                            year_selected = "1"
+                        }
+                        "1-2" -> {
+                            year_selected = "2"
+                        }
+                        "2-3" -> {
+                            year_selected = "3"
+                        }
+                        "3-4" -> {
+                            year_selected = "4"
+                        }
+                        "4-5" -> {
+                            year_selected = "5"
+                        }
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+
+
+
+        })
 
     }
 
@@ -233,6 +302,7 @@ class AddCropPremiumFragment : Fragment() {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
                 irrigationTypeSpinner(accountID, crop_id, crop_type)
+//                observeSelectCropIrrigation(accountID, crop_id, crop_type)
                 Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_id")
                 Log.d(ContentValues.TAG, "onCreateViewONPIDPrinteddvsv: $crop_type")
             }
@@ -245,84 +315,85 @@ class AddCropPremiumFragment : Fragment() {
         binding.clCalender.setOnClickListener {
             showCalender()
         }
-//        binding.cardCheckHealth.setOnClickListener {
+//        binding.btn.setOnClickListener {
 //
 //        }
     }
 
-    private fun selectCropAreaSpinner() {
-        val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropUnit)
-        binding.Acres.adapter = arrayAdapter
-        binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val item = p0?.selectedItem
-                areaTypeSelected = item.toString()
+//    private fun selectCropAreaSpinner() {
+//        val arrayAdapter =
+//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropUnit)
+//        binding.Acres.adapter = arrayAdapter
+//        binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val item = p0?.selectedItem
+//                areaTypeSelected = item.toString()
+////                year_selected = item.toString()
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//            }
+//        }
+//    }
+
+//    private fun noOFYearBahar() {
+//        val arrayAdapter =
+//            ArrayAdapter(
+//                requireContext(),
+//                android.R.layout.simple_spinner_dropdown_item,
+//                noOFYearsBahar
+//            )
+//        binding.tvSpinnerYearBahar.adapter = arrayAdapter
+//        binding.tvSpinnerYearBahar.onItemSelectedListener =
+//            object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                    val item = p0?.selectedItem
+////                    year_selected = item.toString()
+//                }
+//
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//                }
+//            }
+//    }
+
+//    private fun selectCropYearSpinner() {
+//        val arrayAdapter =
+//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropYear)
+//        binding.tvSpinnerYear.adapter = arrayAdapter
+//        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val item = p0?.selectedItem
 //                year_selected = item.toString()
-            }
+//                when (year_selected) {
+//                    "Select" -> {
+//                        year_selected = "0"
+//                    }
+//                    "0-1" -> {
+//                        year_selected = "1"
+//                    }
+//                    "1-2" -> {
+//                        year_selected = "2"
+//                    }
+//                    "2-3" -> {
+//                        year_selected = "3"
+//                    }
+//                    "3-4" -> {
+//                        year_selected = "4"
+//                    }
+//                    "4-5" -> {
+//                        year_selected = "5"
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//
+//            }
+//        }
+//    }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-        }
-    }
-
-    private fun noOFYearBahar() {
-        val arrayAdapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                noOFYearsBahar
-            )
-        binding.tvSpinnerYearBahar.adapter = arrayAdapter
-        binding.tvSpinnerYearBahar.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val item = p0?.selectedItem
-//                    year_selected = item.toString()
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-            }
-    }
-
-    private fun selectCropYearSpinner() {
-        val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, selectCropYear)
-        binding.tvSpinnerYear.adapter = arrayAdapter
-        binding.tvSpinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val item = p0?.selectedItem
-                year_selected = item.toString()
-                when (year_selected) {
-                    "Select" -> {
-                        year_selected = "0"
-                    }
-                    "0-1" -> {
-                        year_selected = "1"
-                    }
-                    "1-2" -> {
-                        year_selected = "2"
-                    }
-                    "2-3" -> {
-                        year_selected = "3"
-                    }
-                    "3-4" -> {
-                        year_selected = "4"
-                    }
-                    "4-5" -> {
-                        year_selected = "5"
-                    }
-                }
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-        }
-    }
 
     private fun irrigationTypeSpinner(account_id: Int?, crop_id: Int?, soil_type_id: Int?) {
         val arrayAdapter =
@@ -519,6 +590,7 @@ class AddCropPremiumFragment : Fragment() {
     ) {
         binding.btnSaveCropDetails.setOnClickListener { it ->
             it.hideSoftInput()
+
             nickName = binding.etNickName.text.toString().trim()
             area = binding.etAreaNumber.text.toString().trim()
             date = binding.etCalender.text.toString().trim()
@@ -559,6 +631,8 @@ class AddCropPremiumFragment : Fragment() {
                 map["irrigation_type"] = irrigation_type
                 map["sowing_date"] = binding.etCalender.text.toString()
                 map["no_of_plants"] = binding.etNoOfAcre.text.toString()
+                binding.progressBar.visibility = View.VISIBLE
+                binding.btnSaveCropDetails.visibility = View.GONE
                 val eventBundle = Bundle()
                 eventBundle.putString("crop_name", cropNameTag.toString())
                 eventBundle.putString("cropCategoryTagName", cropCategoryTagName.toString())
@@ -574,6 +648,8 @@ class AddCropPremiumFragment : Fragment() {
                 viewModel.addCropDataPass(map).observe(requireActivity()) {
                     when (it) {
                         is Resource.Success -> {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            binding.btnSaveCropDetails.visibility = View.VISIBLE
                             activity?.finish()
                         }
                         is Resource.Error -> {

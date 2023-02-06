@@ -9,17 +9,6 @@ import com.example.addcrop.databinding.ItemSandBinding
 import com.example.addcrop.ui.CategoryViewHolder
 
 class VarietyAdapter(val varietyList:ArrayList<VariatyModel>,private val itemSelectedListener: ItemSelectedListener) : RecyclerView.Adapter<CategoryViewHolder>() {
-//    ,private val itemSelectedListener: ItemSelectedListener
-//    var varietyList = mutableListOf<VariatyModel>()
-//    fun setMovieList(variety: List<VariatyModel>) {
-//        this.varietyList = variety.toMutableList()
-//        notifyDataSetChanged()
-//    }
-    var varietyListTwo = mutableListOf<GraphsModel>()
-    fun setMovieListTwo(variety: List<GraphsModel>) {
-        this.varietyListTwo = variety.toMutableList()
-        notifyDataSetChanged()
-    }
 private var row_index = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -58,12 +47,6 @@ private var row_index = -1
     override fun getItemCount(): Int {
         return varietyList.size
     }
-//    fun upDateList() {
-//        row_index=-1
-//        this.details = details
-//        notifyDataSetChanged()
-//
-//    }
 }
 class CategoryViewHolder(val binding: ItemSandBinding) : RecyclerView.ViewHolder(binding.root) {
 

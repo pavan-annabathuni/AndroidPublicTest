@@ -12,8 +12,8 @@ import com.waycool.data.repository.domainModels.SoilTypeDomain
 class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : RecyclerView.Adapter<CategoryViewHolder>()  {
     var details = mutableListOf<SoilTypeDomain>()
     private var row_index = -1
-    fun setMovieList(movies: List<SoilTypeDomain>) {
-        this.details = movies.toMutableList()
+    fun setSoilTypeList(soilTypeList: List<SoilTypeDomain>) {
+        this.details = soilTypeList.toMutableList()
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {

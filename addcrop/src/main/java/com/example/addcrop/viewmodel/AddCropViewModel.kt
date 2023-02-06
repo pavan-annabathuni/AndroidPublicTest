@@ -35,6 +35,31 @@ class AddCropViewModel : ViewModel() {
         const val CHECK_INTERNET = "CHECK_INTERNET"
     }
 
+    val selectCropYear = MutableLiveData(arrayOf("Select", "0-1", "1-2", "2-3", "3-4", "4-5"))
+    val selectCropUnit = MutableLiveData(
+        arrayOf(
+            "Acres",
+            "Gunta",
+            "Cent",
+            "Hectare",
+            "Bigha"
+        )
+    )
+
+    val selectCropIrrigation=MutableLiveData(arrayOf(
+        "Select Irrigation method",
+        "Drip Irrigation",
+        "Sprinkler Irrigation",
+        "Flood Irrigation"
+    ))
+    val selectNumberOfYearBahar =MutableLiveData(arrayOf(
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4"
+    ))
+
+
     val eventHandler = EventHandler(this)
 
 //    private val _saveButtonPassData = MutableLiveData<String>()

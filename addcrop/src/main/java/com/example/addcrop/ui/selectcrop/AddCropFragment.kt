@@ -64,7 +64,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             when (it) {
                 is Resource.Success -> {
                     val response = it.data!!
-                    categoryAdapter.setMovieList(response)
+                    categoryAdapter.setSoilTypeList (response)
                 }
                 is Resource.Error -> {
                     ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)

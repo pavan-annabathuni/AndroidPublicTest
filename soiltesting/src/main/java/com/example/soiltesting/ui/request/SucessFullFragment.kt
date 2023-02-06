@@ -8,10 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.addcrop.ui.selectcrop.DebouncedClickListener
 import com.example.soiltesting.databinding.FragmentSucessFullBinding
 import com.example.soiltesting.utils.Constant.TAG
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class SucessFullFragment : Fragment() {
@@ -41,6 +45,17 @@ class SucessFullFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         traslationSoilTesting()
+//        val debouncedClickListener = DebouncedClickListener(5000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch{
+//                findNavController().navigateUp()
+//            }
+//
+//
+//
+//        }
+//        debouncedClickListener.onClick()
+
     }
 
     fun traslationSoilTesting() {

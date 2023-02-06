@@ -458,7 +458,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             "our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield",
             binding.tvOurAll,"Our ‘Soil testing’ service enables you with a better understanding of your soil health and recommends you required nutrition to improve the yield."
         )
-        TranslationsManager().loadString("soil_str_raise", binding.tvRaise,"Raise the Request")
+        TranslationsManager().loadString("str_about", binding.tvRaise,"Raise the Request")
         TranslationsManager().loadString("soil_str_soil", binding.SoilSample,"Soil Sample Collection")
         TranslationsManager().loadString("soil_lab_testing", binding.tvSoilLab,"Lab Testing")
         TranslationsManager().loadString("soil_details_report", binding.tvDetaols,"Detailed Report")

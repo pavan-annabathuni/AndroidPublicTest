@@ -158,9 +158,13 @@ class PlantSpacingFragment : Fragment() {
                     } else if (dripEmitterRate.isEmpty()) {
                         binding.etNumberWidthDistance.error = "Drip Emitter Rate Per Plant"
                     } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
+                        binding.progressBar?.visibility = View.VISIBLE
+                        binding.cardCheckHealth.visibility = View.GONE
                         viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip->
                             when (addCropDrip) {
                                 is Resource.Success -> {
+                                    binding.progressBar?.visibility = View.INVISIBLE
+                                    binding.cardCheckHealth.visibility = View.VISIBLE
                                     activity?.finish()
                                 }
                                 is Resource.Error -> {

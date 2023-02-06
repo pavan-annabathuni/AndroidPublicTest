@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cardCheckHealth"
+            app:layout_constraintBottom_toTopOf="@id/card_save_details_crop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
@@ -321,7 +321,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardCheckHealth"
+            android:id="@+id/card_save_details_crop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -361,10 +361,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space16"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/cardCheckHealth"
+            app:layout_constraintBottom_toBottomOf="@+id/card_save_details_crop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/cardCheckHealth" />
+            app:layout_constraintTop_toTopOf="@+id/card_save_details_crop" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
