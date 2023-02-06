@@ -39,6 +39,7 @@ class MyFarmFragmentAdapter(val farmdetailslistener: Farmdetailslistener, val co
     override fun onBindViewHolder(holder: MyFarmPremiumViewHolder, position: Int) {
         val detail = details[position]
         holder.binding.tvAddDeviceStart.text = detail.farmName
+        holder.binding.farmLoaction.text = detail.farmLocation
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.tvAddDevice.isSelected = true
         TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice, "View Farm Details")
