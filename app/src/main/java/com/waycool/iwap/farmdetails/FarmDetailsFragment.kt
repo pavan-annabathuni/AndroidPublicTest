@@ -383,19 +383,16 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         binding.deviceFarm.adapter = viewDeviceListAdapter
                         viewDeviceListAdapter.setMovieList(it.data as ArrayList<ViewDeviceDomain>)
                         val dataList = it.data as ArrayList<ViewDeviceDomain>
-                        dataList.forEach {aprovedList->
-                            if (aprovedList.isApproved == 0) {
-                                binding.cardSpeedMeterDeltat.visibility = View.GONE
-                                binding.ndviCl.visibility = View.GONE
-                                binding.detailId.visibility=View.GONE
-                                binding.ndviCard.visibility=View.GONE
-                                binding.viewBottom.visibility=View.GONE
-                                binding.tvNDVi.visibility=View.GONE
-                                binding.viewOne.visibility=View.GONE
-                            } else {
-                                binding.cardSpeedMeterDeltat.visibility = View.VISIBLE
-                                binding.ndviCl.visibility = View.VISIBLE
-                            }
+
+                        val approvedList=dataList.filter { data -> data.isApproved == 1 }
+                        if(!approvedList.isNullOrEmpty()){
+                            binding.ndviCl.visibility = View.VISIBLE
+                            binding.detailId.visibility=View.VISIBLE
+                            binding.viewOne.visibility=View.VISIBLE
+                        }else{
+                            binding.ndviCl.visibility = View.GONE
+                            binding.detailId.visibility=View.GONE
+                            binding.viewOne.visibility=View.GONE
                         }
                             if (it.data.isNullOrEmpty()) {
                                 binding.ndviCl.visibility = View.GONE
@@ -595,13 +592,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         override fun viewDevice(data: ViewDeviceDomain) {
 
             setupDeltaT(data)
-            if (data.modelSeries == "GSX") {
-                binding.cardTopParent.visibility = View.GONE
-                binding.clTempView.visibility = View.GONE
-            } else {
-                binding.cardTopParent.visibility = View.VISIBLE
-                binding.clTempView.visibility = View.VISIBLE
-            }
+
             binding.let {
 
                 it.totalAreea.text = data.battery.toString()
@@ -629,12 +620,23 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     it.cardSpeedMeter.visibility = View.GONE
                     it.clSoilTemp.visibility = View.GONE
                     it.clTempView.visibility = View.GONE
+                    binding.cardSpeedMeterDeltat.visibility = View.GONE
+
                 } else {
                     it.approvedCV.visibility = View.GONE
                     it.cardTopParent.visibility = View.VISIBLE
                     it.cardSpeedMeter.visibility = View.VISIBLE
                     it.clSoilTemp.visibility = View.VISIBLE
                     it.clTempView.visibility = View.VISIBLE
+                    binding.cardSpeedMeterDeltat.visibility = View.VISIBLE
+
+                    if (data.modelSeries == "GSX") {
+                        binding.cardTopParent.visibility = View.GONE
+                        binding.clTempView.visibility = View.GONE
+                    } else {
+                        binding.cardTopParent.visibility = View.VISIBLE
+                        binding.clTempView.visibility = View.VISIBLE
+                    }
                 }
 
                 it.tvPressureDegree.text = data.pressure.toString() + " hPa"
@@ -851,7 +853,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     override fun onMapReady(map: GoogleMap?) {
         if (map != null) {
             mMap = map
-            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+            map.mapType = GoogleMap.MAP_TYPE_HYBRID
             map!!.uiSettings.setAllGesturesEnabled(false)
             map!!.uiSettings.isMapToolbarEnabled = false
             drawFarm()

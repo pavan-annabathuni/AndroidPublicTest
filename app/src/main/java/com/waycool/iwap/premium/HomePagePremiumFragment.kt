@@ -494,14 +494,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceDomain) {
 
-        if (data.modelSeries == "GSX") {
-            binding.cardTopParent.visibility = View.GONE
-            binding.clTempView.visibility = View.GONE
-        } else {
-            binding.cardTopParent.visibility = View.VISIBLE
-            binding.clTempView.visibility = View.VISIBLE
-        }
-
         binding.let {
 
             it.totalAreea.text = data.battery.toString()
@@ -535,6 +527,15 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.cardSpeedMeter.visibility=View.VISIBLE
                 it.clSoilTemp.visibility=View.VISIBLE
                 it.clTempView.visibility=View.VISIBLE
+
+                if (data.modelSeries.equals( "GSX", ignoreCase = true)) {
+                    binding.cardTopParent.visibility = View.GONE
+                    binding.clTempView.visibility = View.GONE
+                } else {
+                    binding.cardTopParent.visibility = View.VISIBLE
+                    binding.clTempView.visibility = View.VISIBLE
+                }
+
             }
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"

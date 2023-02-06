@@ -50,8 +50,6 @@ object LanguageSyncer : SyncInterface {
 
     private fun makeNetworkCall() {
         GlobalScope.launch(Dispatchers.IO) {
-            setSyncStatus(true)
-
             NetworkSource.getLanguageMaster()
                 .collect {
                     when (it) {
