@@ -35,6 +35,13 @@ interface OutgrowDao {
     @Query("SELECT * FROM ai_history WHERE crop_name LIKE '%' || :search || '%' ORDER BY id Desc")
     fun getAiHistory(search: String? = ""): Flow<List<AiCropHistoryEntity>?>
 
+    //Soil Testing History
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSoilTestHistory(history: List<SoilTestHistoryEntity>)
+
+    @Query("SELECT * FROM soil_test_history WHERE plot_no LIKE '%' || :search || '%' ORDER BY id Desc")
+    fun getSoilTestHistory(search: String? = ""): Flow<List<SoilTestHistoryEntity>?>
+
 
     @Query("SELECT * FROM crop_master WHERE crop_name LIKE '%' || :search || '%' ORDER BY crop_name Asc")
     fun getCropMaster(search: String? = ""): Flow<List<CropMasterEntity>?>
@@ -65,7 +72,7 @@ interface OutgrowDao {
     fun getSelectedDisease(diseaseId: Int): Flow<PestDiseaseEntity>
 
     @Query("SELECT * FROM pest_disease WHERE disease_id = :diseaseId ORDER BY disease_name Asc")
-   suspend fun getEntityDisease(diseaseId: Int): PestDiseaseEntity?
+    suspend fun getEntityDisease(diseaseId: Int): PestDiseaseEntity?
 
     @Query("DELETE FROM pest_disease")
     fun deletePestDiseases()
@@ -101,7 +108,7 @@ interface OutgrowDao {
     suspend fun getTranslation(appkey: String): AppTranslationsEntity?
 
     @Query("SELECT * FROM app_translations WHERE appKey = :appkey")
-     fun getTranslationFlow(appkey: String): Flow<AppTranslationsEntity>?
+    fun getTranslationFlow(appkey: String): Flow<AppTranslationsEntity>?
 
 
     //My Farms
@@ -123,7 +130,7 @@ interface OutgrowDao {
     fun getViewDevices(): Flow<List<ViewDeviceEntity>>
 
     @Query("SELECT * FROM my_devices WHERE farm_id = :farmId ORDER BY model_series DESC")
-    fun getViewDevicesByFarm(farmId:Int): Flow<List<ViewDeviceEntity>>
+    fun getViewDevicesByFarm(farmId: Int): Flow<List<ViewDeviceEntity>>
 
     @Query("DELETE FROM my_devices")
     fun deleteAllDevices()

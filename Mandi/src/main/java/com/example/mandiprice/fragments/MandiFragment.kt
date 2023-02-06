@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DistanceAdapter
 import com.example.mandiprice.adapter.DistanceAdapter.DiffCallback
@@ -32,15 +34,16 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -52,6 +55,11 @@ class MandiFragment : Fragment() {
     private lateinit var binding: FragmentMandiBinding
     private var viewModel: MandiViewModel?=null
 
+    private val viewModel: MandiViewModel by lazy {
+        ViewModelProviders.of(this).get(MandiViewModel::class.java)
+    }
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     private lateinit var adapterMandi: DistanceAdapter
     private var sortBy: String = "asc"
     private var orderBy: String = "distance"
@@ -134,6 +142,12 @@ class MandiFragment : Fragment() {
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
         viewModel?.viewModelScope?.launch {
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        handler = Handler(Looper.myLooper()!!)
+
+        viewModel.viewModelScope.launch {
             adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
                 val bundle = Bundle()
                 bundle.putString("", "Mandi${it.crop}")
@@ -443,8 +457,24 @@ class MandiFragment : Fragment() {
 
     /** setting value for banner */
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(activity ?: requireContext())
-        viewModel?.getVansAdsList(moduleId)?.observe(viewLifecycleOwner) {
+
+        val bannerAdapter = AdsAdapter(activity ?: requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList(it?.data)
             TabLayoutMediator(
@@ -583,8 +613,17 @@ class MandiFragment : Fragment() {
             }
         }
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("MandiFragment")
     }
 }

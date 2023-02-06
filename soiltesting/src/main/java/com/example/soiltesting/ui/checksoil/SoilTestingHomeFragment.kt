@@ -11,6 +11,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.util.Log
@@ -33,6 +34,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
 import com.example.soiltesting.ui.history.HistoryDataAdapter
@@ -55,21 +57,21 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
+
 
     //    private val binding get() = _binding!!
     private lateinit var binding: FragmentSoilTestingHomeBinding
@@ -80,6 +82,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var accountID: Int? = null
     private var moduleId = "22"
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
+    private val debounceInterval = 1000L
 
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
@@ -132,10 +137,14 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
+        handler = Handler(Looper.myLooper()!!)
 
         binding.recyclerview.adapter = soilHistoryAdapter
         binding.tvCheckCrop.isSelected = true
@@ -199,7 +208,22 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private fun setBanners() {
         binding.progressBar.visibility = View.VISIBLE
 
-        val bannerAdapter = AdsAdapter(requireContext())
+        val bannerAdapter = AdsAdapter(requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
@@ -457,7 +481,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             "our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield",
             binding.tvOurAll,"Our ‘Soil testing’ service enables you with a better understanding of your soil health and recommends you required nutrition to improve the yield."
         )
-        TranslationsManager().loadString("soil_str_raise", binding.tvRaise,"Raise the Request")
+        TranslationsManager().loadString("str_about", binding.tvRaise,"Raise the Request")
         TranslationsManager().loadString("soil_str_soil", binding.SoilSample,"Soil Sample Collection")
         TranslationsManager().loadString("soil_lab_testing", binding.tvSoilLab,"Lab Testing")
         TranslationsManager().loadString("soil_details_report", binding.tvDetaols,"Detailed Report")
@@ -494,13 +518,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
                             if (response.size <= 2) {
-                                soilHistoryAdapter.setMovieList(response)
+                                soilHistoryAdapter.setTrackerList(response)
 
                             } else {
                                 val arrayList = ArrayList<SoilTestHistoryDomain>()
                                 arrayList.add(response[0])
                                 arrayList.add(response[1])
-                                soilHistoryAdapter.setMovieList(arrayList)
+                                soilHistoryAdapter.setTrackerList(arrayList)
 
                             }
 
@@ -892,8 +916,18 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     companion object {
         private const val REQUEST_CODE_GPS = 1011
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("SoilTestingHomeFragment")
     }
 }

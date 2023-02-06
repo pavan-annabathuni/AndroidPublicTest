@@ -5,15 +5,16 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdk 32
+    compileSdk appCompileSdkVersion
 
     defaultConfig {
-
-        minSdk 21
-        targetSdk 32
+        minSdk appMinSdkVersion
+        targetSdk appTargetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
+
 
     buildTypes {
         release {
@@ -40,9 +41,7 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':featureChat')
-    implementation project(path: ':FeatureLogin')
-
-
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.paging:paging-common-ktx:3.1.1'

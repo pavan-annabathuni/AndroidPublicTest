@@ -12,13 +12,12 @@ import com.example.soiltesting.R
 import com.example.soiltesting.databinding.ItemStatusTrackerBinding
 import com.example.soiltesting.utils.Constant.TAG
 import com.waycool.data.repository.domainModels.TrackerDemain
-import java.text.SimpleDateFormat
 
 class StatusTrackerAdapter(private val feedbackListerner: FeedbackListerner) : RecyclerView.Adapter<StatusTrackerHolder>() {
 
     var details = mutableListOf<TrackerDemain>()
-    fun setMovieList(movies: List<TrackerDemain>) {
-        this.details = movies.toMutableList()
+    fun setStatusTrackerList(statusList: List<TrackerDemain>) {
+        this.details = statusList.toMutableList()
         notifyDataSetChanged()
     }
 

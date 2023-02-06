@@ -1,16 +1,14 @@
 package com.waycool.iwap.allservices
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
-import androidx.browser.customtabs.CustomTabsIntent
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -36,7 +34,8 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
+            Log.d("CropProtectNavigation","click")
             onClickListener.clickListener(properties)
             val deepLink = properties.deepLink
             if(!deepLink.isNullOrEmpty() && URLUtil.isValidUrl(deepLink.trim())) {

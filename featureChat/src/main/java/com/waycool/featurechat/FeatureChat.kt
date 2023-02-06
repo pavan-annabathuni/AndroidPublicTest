@@ -13,7 +13,6 @@ import zendesk.messaging.android.DefaultMessagingFactory
 import zendesk.messaging.android.push.PushNotifications
 
 object FeatureChat {
-
     var UNREAD_MESSAGES_COUNT = 0
     val zendeskEventListener: ZendeskEventListener = ZendeskEventListener { zendeskEvent ->
         when (zendeskEvent) {

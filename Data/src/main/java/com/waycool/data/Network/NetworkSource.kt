@@ -23,7 +23,6 @@ import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
-import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -70,7 +69,7 @@ object NetworkSource {
     }
 
     fun getLanguageMaster() = flow {
-        emit(Resource.Loading())
+//        emit(Resource.Loading())
         try {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
 
@@ -599,6 +598,22 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+    fun cropVariety(cropId: Int) =
+        flow<Resource<VarietyCropDTO?>> {
+            try {
+                val langCode = LocalSource.getLanguageCode() ?: "en"
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response = apiInterface.cropVariety(headerMap,cropId, lang =langCode)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
 
     fun getSoilTestLab(account_id: Int, lat: String?, long: String?) =
         flow<Resource<CheckSoilTestLabDTO?>> {
@@ -823,13 +838,13 @@ object NetworkSource {
             }
 
         }catch (e:Exception){
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 
     fun getMandiHistory(
         headerMap: Map<String, String>, crop_master_id: Int?, mandi_master_id: Int?,sub_record_id:String?
-    ) = flow<Resource<MandiHistoryDomain?>> {
+    ) = flow {
 
         emit(Resource.Loading())
         try {

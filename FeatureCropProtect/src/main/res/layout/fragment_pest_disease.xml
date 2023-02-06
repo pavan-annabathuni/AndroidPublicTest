@@ -122,7 +122,7 @@
             android:id="@+id/progressBar"
             android:layout_width="@dimen/space90"
             android:layout_height="@dimen/space90"
-            android:visibility="visible"
+            android:visibility="gone"
             android:elevation="10dp"
             android:layout_gravity="center" />
 

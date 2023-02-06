@@ -26,6 +26,8 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -49,13 +51,14 @@ class ProfileLanguageFragment : Fragment() {
     ): View? {
         binding = FragmentProfileLanguageBinding.inflate(layoutInflater)
         binding.languageRecyclerview.layoutManager = GridLayoutManager(context, 3)
-        // binding.languageRecyclerview.setHasFixedSize(true)
+        setTranslation()
 
         languageViewModel.viewModelScope.launch {
-           val langCode = LocalSource.getLanguageCode()
+            val langCode = LocalSource.getLanguageCode()
             languageAdapter = LanguageAdapter(langCode)
             binding.languageRecyclerview.adapter = languageAdapter
             languageAdapter.onItemClick = {
+                setTranslationOnItemSelect(it.langCode)
                 selectedLanguage = it
             }
         }
@@ -125,9 +128,55 @@ class ProfileLanguageFragment : Fragment() {
 
         binding.imgBack.setOnClickListener() {
             this.findNavController().navigateUp()
-            // this.findNavController().navigate(LanguageFragmentDirections.actionLanguageFragment3ToMyProfileFragment())
         }
         return binding.root
+    }
+
+    private fun setTranslationOnItemSelect(langCode: String?) {
+        when (langCode) {
+            "en" -> {
+                binding.helloTv.text="Language"
+                binding.selectLanguageTv.text="Choose your language"
+                binding.doneBtn.text="Update"
+
+            }
+            "hi" -> {
+                binding.helloTv.text="भाषा"
+                binding.selectLanguageTv.text="अपनी भाषा चुनें"
+                binding.doneBtn.text="अद्यतन"
+            }
+            "kn" -> {
+                binding.helloTv.text="ಭಾಷೆ"
+                binding.selectLanguageTv.text="ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆರಿಸಿ"
+                binding.doneBtn.text="ನವೀಕರಿಸಿ"
+            }
+            "te" -> {
+                binding.helloTv.text="భాష"
+                binding.selectLanguageTv.text="మీ భాషను ఎంచుకోండి"
+                binding.doneBtn.text="నవీకరించు"
+
+            }
+            "ta" -> {
+                binding.helloTv.text="மொழி"
+                binding.selectLanguageTv.text= "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்"
+                binding.doneBtn.text="புதுப்பிக்கவும்"
+
+
+            }
+            "mr" -> {
+                binding.helloTv.text="इंग्रजी"
+                binding.selectLanguageTv.text="तुमची भाषा निवडा"
+                binding.doneBtn.text="अपडेट करा"
+            }
+        }
+    }
+    private fun setTranslation() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = TranslationsManager().getString("str_language")
+            binding.helloTv.text = title
+        }
+        TranslationsManager().loadString("str_choose_lang", binding.selectLanguageTv, "Choose your Language")
+        TranslationsManager().loadString("str_update", binding.doneBtn, "Update")
     }
     override fun onResume() {
         super.onResume()

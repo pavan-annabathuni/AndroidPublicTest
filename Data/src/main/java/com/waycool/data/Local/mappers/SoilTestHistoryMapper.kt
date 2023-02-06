@@ -8,11 +8,11 @@ class SoilTestHistoryMapper : EntityMapper<SoilTestHistoryEntity,SoilTestData> {
     override fun mapToEntity(dto: SoilTestData): SoilTestHistoryEntity {
         return SoilTestHistoryEntity(
             id = dto.id,
-            plot_no = dto.plotNo,
-            soil_test_number = dto.soilTestNumber,
+            plotNo = dto.plotNo,
+            soilTestNumber = dto.soilTestNumber,
             status = dto.status,
-            updated_at = dto.updatedAt,
-            approve_status = dto.approveStatus
+            updatedAt = dto.updatedAt,
+            approveStatus = dto.approveStatus
 
 
         )

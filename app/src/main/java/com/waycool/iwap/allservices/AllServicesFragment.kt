@@ -18,6 +18,8 @@ import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentAllServicesBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -46,6 +48,11 @@ class AllServicesFragment : Fragment() {
                 callback
             )
         }
+        CoroutineScope(Dispatchers.IO).launch {
+            binding.topAppBar.title=TranslationsManager().getString("str_all_services")
+        }
+        TranslationsManager().loadString("explore_services",binding.tvExplore,"Explore our Services")
+        TranslationsManager().loadString("explore_premium_services",binding.tvExplorePremium,"Explore our Premium Services")
 
         binding.topAppBar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()

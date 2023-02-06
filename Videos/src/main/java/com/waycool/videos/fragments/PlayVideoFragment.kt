@@ -23,6 +23,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.videos.R
@@ -54,6 +55,9 @@ class PlayVideoFragment : Fragment(), itemClick {
     ): View {
         binding = FragmentPlayVideoBinding.inflate(layoutInflater)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
 
 
 
@@ -220,6 +224,7 @@ class PlayVideoFragment : Fragment(), itemClick {
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -245,8 +250,13 @@ class PlayVideoFragment : Fragment(), itemClick {
 
     }
 
-    override fun onShareItemClick(it: VansFeederListDomain?) {
-
+    override fun onShareItemClick(it: VansFeederListDomain?, view: View?) {
+        binding.clShareProgress.visibility=View.VISIBLE
+        val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
+            it?.thumbnailUrl
+        } else{
+            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+        }
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -257,20 +267,21 @@ class PlayVideoFragment : Fragment(), itemClick {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                    .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
+                    .setImageUrl(Uri.parse(thumbnail))
+                    .setTitle("Outgrow - Hi, Checkout the video  ${it?.title}.")
                     .setDescription("Watch more videos and learn with Outgrow")
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    view?.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-
                 }
 
             }

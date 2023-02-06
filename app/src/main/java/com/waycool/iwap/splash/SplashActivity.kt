@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.iwap.MainActivity
 import com.waycool.iwap.databinding.ActivitySplashBinding
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +42,7 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.myLooper()!!).postDelayed({
             CoroutineScope(Dispatchers.Main).launch {
                 if (!FeatureLogin.getLoginStatus()) {
-                    val intent = Intent(this@SplashActivity, LoginMainActivity::class.java)
+                    val intent = Intent(this@SplashActivity, LoginActivity::class.java)
                     startActivity(intent)
                     this@SplashActivity.finish()
                 }else{

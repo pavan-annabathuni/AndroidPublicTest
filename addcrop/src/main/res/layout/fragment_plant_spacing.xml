@@ -25,7 +25,7 @@
             app:navigationIcon="@drawable/ic_arrow_back">
 
             <TextView
-                android:id="@+id/toolbar_title"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -36,7 +36,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/cardCheckHealth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbarlayout">
@@ -312,8 +313,8 @@
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
-                            android:checked="true"
                             android:layout_marginBottom="@dimen/space4"
+                            android:checked="true"
                             app:toggle_backgroundColor="#FFFFFF"
                             app:toggle_btnCornerRadius="8dp"
                             app:toggle_selectedBackgroundColor="#146133"
@@ -510,10 +511,10 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="@dimen/space200"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/clPlantToPlantWidthDistance" />-->
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="@dimen/space200"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/clPlantToPlantWidthDistance" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -560,6 +561,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space16"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

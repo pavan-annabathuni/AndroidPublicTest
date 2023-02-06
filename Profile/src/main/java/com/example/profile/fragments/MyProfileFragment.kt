@@ -30,7 +30,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -62,12 +62,16 @@ class MyProfileFragment : Fragment() {
         binding = FragmentMyProfileBinding.inflate(inflater)
 
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.llInviteFarmer.setOnClickListener {
+        binding.llInviteFarmer.setOnClickListener {it->
+            it?.isEnabled = false
             EventClickHandling.calculateClickEvent("invite_farmer")
-            shareInviteLink()
+            shareInviteLink(it)
         }
 
         viewModel.viewModelScope.launch {
@@ -106,6 +110,9 @@ class MyProfileFragment : Fragment() {
     /* this use for sharing app link with user and if user is already installed the it will
     * it will redirect to app using dynamic links  */
     private fun shareInviteLink() {
+    private fun shareInviteLink(view: View) {
+        binding.progressBar.visibility = View.VISIBLE
+
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -123,6 +130,8 @@ class MyProfileFragment : Fragment() {
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.progressBar.visibility = View.GONE
+                    view.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -268,7 +277,7 @@ class MyProfileFragment : Fragment() {
 
     /* Logout Function and Clearing all Room db and Data Store data */
     private fun moveToLogin() {
-        val intent = Intent(context, LoginMainActivity::class.java)
+        val intent = Intent(context, LoginActivity::class.java)
 
         GlobalScope.launch {
             LocalSource.deleteAllMyCrops()

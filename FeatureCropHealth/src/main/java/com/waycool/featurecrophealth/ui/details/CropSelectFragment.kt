@@ -38,6 +38,8 @@ import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -192,7 +194,15 @@ class CropSelectFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
 
                 }
                 is Resource.Loading -> {

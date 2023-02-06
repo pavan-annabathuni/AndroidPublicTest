@@ -54,7 +54,7 @@ dependencies {
     implementation project(path: ':Mandi')
     implementation project(path: ':cropinformation')
     implementation project(path: ':UiComponents')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':Data')
     implementation project(path: ':featureChat')

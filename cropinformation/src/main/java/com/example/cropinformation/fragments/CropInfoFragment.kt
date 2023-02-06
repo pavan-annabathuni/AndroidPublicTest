@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
@@ -35,6 +37,7 @@ import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
@@ -54,7 +57,8 @@ class CropInfoFragment : Fragment(), onItemClick {
     private val ViewModel: CropInfoViewModel by lazy {
         ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     private var cropId: Int? = null
     private var cropName: String? = null
     private var cropLogo: String? = null
@@ -71,6 +75,7 @@ class CropInfoFragment : Fragment(), onItemClick {
             cropLogo = it.getString("cropLogo")
 
         }
+
     }
 
     override fun onCreateView(
@@ -95,6 +100,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         super.onViewCreated(view, savedInstanceState)
          newsBinding = binding.layoutNews
          videosBinding = binding.layoutVideos
+        handler = Handler(Looper.myLooper()!!)
 
         binding.topName.text = cropName
         binding.back.setOnClickListener() {
@@ -626,14 +632,17 @@ class CropInfoFragment : Fragment(), onItemClick {
             val eventBundle=Bundle()
             eventBundle.putString("title",it?.title)
             EventItemClickHandling.calculateItemClickEvent("cropinfo_video",eventBundle)
-
             val bundle = Bundle()
             bundle.putParcelable("video", it)
+//                            findNavController().navigate(
+//                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+//                    bundle)
             try{
                 findNavController().navigate(
-                    R.id.action_cropInfoFragment_to_playVideoFragment2,
+                    R.id.action_cropInfoFragment_to_playVideoFragment3,
                     bundle)
             }catch(e: IllegalArgumentException){
+                Log.d("CropInfo","CropInfo ${e.message}")
                 e.printStackTrace()
             }
 
@@ -661,7 +670,22 @@ class CropInfoFragment : Fragment(), onItemClick {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         ViewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it?.data)
@@ -716,8 +740,17 @@ class CropInfoFragment : Fragment(), onItemClick {
             bundle
         )
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("CropInfoFragment")
     }
 }

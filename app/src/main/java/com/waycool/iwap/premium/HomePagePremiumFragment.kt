@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.addcrop.AddCropActivity
 import com.example.adddevice.AddDeviceActivity
 import com.github.anastr.speedviewlib.components.Section
@@ -40,6 +43,7 @@ import com.waycool.featurechat.FeatureChat
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
 import java.util.*
@@ -55,7 +59,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
     private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     private var lastUpdatedTime: String? = null
 
 
@@ -83,13 +88,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             requireActivity(),
             callback
         )
+        handler = Handler(Looper.myLooper()!!)
 
         initClickEvents()
         initViewProfile()
         initViewAddCrop()
         initMyCropObserve()
         initObserveMYFarm()
-//        initObserveDevice()
         progressColor()
         translations()
         fabButton()
@@ -156,6 +161,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("my_farm", binding.titleMyFarm,"")
         TranslationsManager().loadString("add_farm_top", binding.MyFarm,"Add Farm")
         TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
+        TranslationsManager().loadString("str_add_device", binding.MyDevice,"My Devices")
         TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
         TranslationsManager().loadString("view_rainfall", binding.tvWind,"Rainfall")
         TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
@@ -272,6 +278,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
+
         binding.MyDevice.setOnClickListener {
             EventClickHandling.calculateClickEvent("AddYourDeviceHomePremiumFragment")
 
@@ -801,7 +808,22 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList("49").observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
@@ -856,15 +878,27 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
+            binding.MyDevice.visibility=View.GONE
         }else{
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
+            binding.MyDevice.visibility=View.VISIBLE
+        }
+    }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
         }
     }
     override fun onResume() {
         super.onResume()
+
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("HomePagePremiumFragment")
     }
 }

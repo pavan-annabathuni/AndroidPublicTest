@@ -42,8 +42,6 @@ class CustomeDialogFragment : DialogFragment() {
                 "location, we look forward to serve you \n" +
                 "shortly.")
         TranslationsManager().loadString("ok",binding.tvOk,"OK")
-
-//        TranslationsManager().loadString("soil_sample_n_collection", binding.SoilSample)
     }
 
 

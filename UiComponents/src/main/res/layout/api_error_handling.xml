@@ -94,7 +94,7 @@
             android:id="@+id/tvInternetProblem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OOPS! \nThere is a problem with Internet."
+            android:text="There is a problem with Internet."
             android:textColor="#EC4544"
             android:textSize="24sp"
             android:textStyle="bold"
