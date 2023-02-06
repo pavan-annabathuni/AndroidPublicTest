@@ -46,8 +46,6 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Core')
-    implementation project(path: ':Videos')
-    implementation project(path: ':NewsAndArticles')
     implementation project(path: ':FeatureLogin')
     implementation project(path: ':featureChat')
 

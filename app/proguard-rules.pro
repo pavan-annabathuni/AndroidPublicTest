@@ -22,8 +22,3 @@
 -keep class com.waycool.data.Network.NetworkModels.*
 -keep class com.waycool.data.Local.Entity.*
 -keep class com.waycool.data.repository.domainModels.*
--keep public class ** {
-    public *;
-    protected *;
-
-}
