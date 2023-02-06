@@ -99,6 +99,4 @@ public class AppUtil {
         handler.removeCallbacks(runnable);
         handler.postDelayed(runnable,delayTime);
     }
-
-
 }
