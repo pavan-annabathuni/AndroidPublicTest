@@ -42,7 +42,7 @@ dependencies {
     implementation project(path: ':Data')
     implementation project(path: ':Core')
     implementation project(path: ':featureChat')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -72,6 +72,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
 
     implementation "androidx.browser:browser:1.4.0"
+
 
 //    //Firebase
 //    implementation platform(firebase.bom)

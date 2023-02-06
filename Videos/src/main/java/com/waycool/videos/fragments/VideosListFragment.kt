@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -42,18 +43,22 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.R
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.adapter.itemClick
 import com.waycool.videos.databinding.FragmentVideosListBinding
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.math.abs
 
 
 class VideosListFragment : Fragment(), itemClick {
 
+    private var runnable: Runnable? = null
     private lateinit var binding: FragmentVideosListBinding
     private var selectedCategory: VansCategoryDomain? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
@@ -66,7 +71,7 @@ class VideosListFragment : Fragment(), itemClick {
 
 
     var searchTag = ""
-    val moduleId="4"
+    val moduleId = "4"
 
     private lateinit var adapterVideo: VideosPagerAdapter
     override fun onCreateView(
@@ -81,6 +86,9 @@ class VideosListFragment : Fragment(), itemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -90,7 +98,8 @@ class VideosListFragment : Fragment(), itemClick {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    activity?.finish()                }
+                    activity?.finish()
+                }
             }
         requireActivity().onBackPressedDispatcher.addCallback(
             requireActivity(),
@@ -120,7 +129,7 @@ class VideosListFragment : Fragment(), itemClick {
         fabButton()
 
         binding.videosVideoListRv.layoutManager = LinearLayoutManager(requireContext())
-        adapterVideo = VideosPagerAdapter(requireContext(),this)
+        adapterVideo = VideosPagerAdapter(requireContext(), this)
         binding.videosVideoListRv.adapter = adapterVideo
 
 
@@ -179,7 +188,7 @@ class VideosListFragment : Fragment(), itemClick {
                 createChip(allCategory)
                 if (categoryList != null) {
                     for (category in categoryList) {
-                            createChip(category)
+                        createChip(category)
                     }
                 }
             }
@@ -225,7 +234,7 @@ class VideosListFragment : Fragment(), itemClick {
         tags: String? = "",
         categoryId: Int? = null
     ) {
-        adapterVideo=VideosPagerAdapter(requireContext(),this)
+        adapterVideo = VideosPagerAdapter(requireContext(), this)
         binding.videosVideoListRv.adapter = adapterVideo
         videoViewModel.getVansVideosList(tags, categoryId).observe(requireActivity()) {
             adapterVideo.submitData(lifecycle, it)
@@ -233,31 +242,45 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity ?: requireContext(), binding.bannerViewpager)
+        runnable = Runnable {
+            if((bannerAdapter.itemCount -1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         videoViewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
-
-            bannerAdapter.submitList( it.data)
+            bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
                 tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
             }.attach()
+
+
         }
         binding.bannerViewpager.adapter = bannerAdapter
-
-
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
         binding.bannerViewpager.offscreenPageLimit = 3
         binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
-            page.scaleY = 0.85f + r * 0.15f }
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        bannerAdapter.onItemClick={
+        bannerAdapter.onItemClick = {
             EventClickHandling.calculateClickEvent("Video_Adbanner")
         }
     }
@@ -308,7 +331,12 @@ class VideosListFragment : Fragment(), itemClick {
         var isVisible = false
         binding.addFab.setOnClickListener() {
             if (!isVisible) {
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_cross
+                    )
+                )
                 binding.addChat.show()
                 binding.addCall.show()
                 binding.addFab.isExpanded = true
@@ -316,7 +344,12 @@ class VideosListFragment : Fragment(), itemClick {
             } else {
                 binding.addChat.hide()
                 binding.addCall.hide()
-                binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_chat_call))
+                binding.addFab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        com.waycool.uicomponents.R.drawable.ic_chat_call
+                    )
+                )
                 binding.addFab.isExpanded = false
                 isVisible = false
             }
@@ -339,54 +372,74 @@ class VideosListFragment : Fragment(), itemClick {
     }
 
     override fun onItemClick(van: VansFeederListDomain?) {
-        val eventBundle=Bundle()
-        eventBundle.putString("VideoTitle",van?.title)
-        if(selectedCategory!=null){
-            eventBundle.putString("selectedCategory","video_$selectedCategory")
+        val eventBundle = Bundle()
+        eventBundle.putString("VideoTitle", van?.title)
+        if (selectedCategory != null) {
+            eventBundle.putString("selectedCategory", "video_$selectedCategory")
         }
-        EventItemClickHandling.calculateItemClickEvent("video_landing",eventBundle)
+        EventItemClickHandling.calculateItemClickEvent("video_landing", eventBundle)
         val bundle = Bundle()
         bundle.putParcelable("video", van)
-        if(selectedCategory!=null){
+        if (selectedCategory != null) {
             bundle.putString("selectedCategory", selectedCategory.toString())
         }
         this.findNavController().navigate(
-            R.id.action_videosListFragment_to_playVideoFragment,bundle
+            R.id.action_videosListFragment_to_playVideoFragment, bundle
 
         )
     }
 
-    override fun onShareItemClick(it: VansFeederListDomain?) {
+    override fun onShareItemClick(it: VansFeederListDomain?, view: View?) {
+        binding.clShareProgress.visibility = View.VISIBLE
+        val thumbnail = if (!it?.thumbnailUrl.isNullOrEmpty()) {
+            it?.thumbnailUrl
+        } else {
+            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+        }
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
-                .setAndroidParameters(
-                    DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                        .build()
-                )
-                .setSocialMetaTagParameters(
-                    DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                        .setTitle("Outgrow - Hi, Checkout the video on ${it?.title}.")
-                        .setDescription("Watch more videos and learn with Outgrow")
-                        .build()
-                )
-                .buildShortDynamicLink().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val shortLink: Uri? = task.result.shortLink
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        sendIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(sendIntent, "choose one"))
+            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setImageUrl(Uri.parse(thumbnail))
+                    .setTitle("Outgrow - Hi, Checkout the video  ${it?.title}.")
+                    .setDescription("Watch more videos and learn with Outgrow")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    binding.clShareProgress.visibility = View.GONE
+                    view?.isEnabled = true
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-                    }
+
                 }
+            }
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("VideosListFragment")
     }
 

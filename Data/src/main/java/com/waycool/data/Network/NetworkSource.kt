@@ -23,7 +23,6 @@ import com.waycool.data.Sync.syncer.UserDetailsSyncer
 import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiDomainRecord
-import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -70,7 +69,7 @@ object NetworkSource {
     }
 
     fun getLanguageMaster() = flow {
-        emit(Resource.Loading())
+//        emit(Resource.Loading())
         try {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
 
@@ -845,7 +844,7 @@ object NetworkSource {
 
     fun getMandiHistory(
         headerMap: Map<String, String>, crop_master_id: Int?, mandi_master_id: Int?,sub_record_id:String?
-    ) = flow<Resource<MandiHistoryDomain?>> {
+    ) = flow {
 
         emit(Resource.Loading())
         try {

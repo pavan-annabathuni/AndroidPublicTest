@@ -1,6 +1,5 @@
 package com.waycool.videos.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -29,7 +28,7 @@ class VideosGenericAdapter :
 
     override fun onBindViewHolder(holder: VideosViewHolder, position: Int) {
         val item = getItem(position)
-        Log.d("VansFeeder", "Vans: ${item?.title}")
+
         holder.bind(item)
     }
 

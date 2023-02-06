@@ -32,6 +32,8 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
@@ -83,6 +85,10 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         (childFragmentManager.findFragmentById(R.id.map_save_fragment) as SupportMapFragment?)?.getMapAsync(
             this
         )
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.flowrateEtAddfarm.hint= TranslationsManager().getString("enter_flow_rate")
+        }
+        TranslationsManager().loadString("add_existing_crops",binding.textView2,"Add existing crops to this Farm")
 
         if (arguments != null) {
             farmjson = arguments?.getString("farm_json")

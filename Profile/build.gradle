@@ -48,7 +48,7 @@ dependencies {
     implementation project(path: ':Core')
     implementation project(path: ':Videos')
     implementation project(path: ':NewsAndArticles')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
     implementation project(path: ':featureChat')
 
     implementation 'androidx.core:core-ktx:1.7.0'

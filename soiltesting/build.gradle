@@ -46,7 +46,7 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Core')
     implementation project(path: ':featureChat')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
     implementation project(path: ':addcrop')
 
 //    implementation project(path: ':FeatureCropHealth')

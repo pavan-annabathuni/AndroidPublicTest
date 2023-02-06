@@ -7,12 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.repository.VansRepository
-import com.waycool.data.repository.domainModels.TagsAndKeywordsDomain
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.Resource
-import kotlin.collections.List
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 
 
@@ -42,10 +39,6 @@ class VideoViewModel : ViewModel() {
 
     fun getVansVideosCat(): LiveData<Resource<List<VansCategoryDomain>>> {
         return VansRepository.getVansCategoryList().asLiveData()
-    }
-
-    fun getTagsAndKeywords(): LiveData<Resource<List<TagsAndKeywordsDomain>?>> {
-        return VansRepository.getTagsAndKeywords().asLiveData()
     }
 
     //Ad Banners

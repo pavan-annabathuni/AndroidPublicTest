@@ -68,6 +68,29 @@ class AddCropPremiumFragment : Fragment() {
     )
 
 
+    val farmAreaUnits = arrayOf(
+        "Acres",
+        "Gunta",
+        "Cent",
+        "Hectare",
+        "Bigha"
+    )
+    val noOFYearsBahar = arrayOf(
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4"
+    )
+    val noOFYear = arrayOf(
+        "Select",
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4",
+        "4-5"
+    )
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,9 +114,7 @@ class AddCropPremiumFragment : Fragment() {
 //        noOFYearBahar()
         translationAddCropPremiumPage()
         year_selected = "0".toString().toInt().toString()
-//        binding.cardCheckHealth.setOnClickListener {
-//            postDataAddCrop()
-//        }
+
         if (requireActivity().intent.extras != null) {
             val bundle = requireActivity().intent.extras
             selectedFarmId = bundle?.getInt("farmID")

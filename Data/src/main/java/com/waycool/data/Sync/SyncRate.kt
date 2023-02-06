@@ -1,13 +1,12 @@
 package com.waycool.data.Sync
 
 import androidx.datastore.preferences.core.Preferences
-import java.lang.RuntimeException
 
 object SyncRate {
 
     //Map of Sync Key to Refresh Rate in Minutes
     private val syncRate: Map<Preferences.Key<String>, Int> = mapOf(
-        SyncKey.LANGUAGE_MASTER to 30,
+        SyncKey.LANGUAGE_MASTER to 1,
         SyncKey.CROPS_MASTER to 10,
         SyncKey.VANS_CATEGORY_MASTER to 60,
         SyncKey.TAGS_MASTER to 60,

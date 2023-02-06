@@ -71,6 +71,7 @@ class NotificationFragment : Fragment() {
                 eventBundle.putString("",notification.title)
                 EventItemClickHandling.calculateItemClickEvent("NotificationItemClick",eventBundle)
                 val deepLink = notification.link
+
                 Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
                         val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))

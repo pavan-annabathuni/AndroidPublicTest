@@ -106,7 +106,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvGoodMorning"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="6dp"
@@ -119,17 +119,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcomeName" />
 
                 <TextView
+                    android:id="@+id/exclamationtv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
                     android:fontFamily="@font/playfair_reg"
                     android:text="!"
                     android:textColor="@color/textdark"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:layout_marginStart="2dp"
+                    app:layout_constraintTop_toTopOf="@id/tvGoodMorning"
                     app:layout_constraintBottom_toBottomOf="@id/tvGoodMorning"
-                    app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"
-                    app:layout_constraintTop_toTopOf="@id/tvGoodMorning" />
+                    app:layout_constraintStart_toEndOf="@+id/tvGoodMorning"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -606,7 +607,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clBack"
-                tools:visibility="visible">
+             >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clAddForm"
@@ -970,7 +971,8 @@
                         android:visibility="visible"
                         app:drawableEndCompat="@drawable/ic_add"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/titleMyDevice"
+                        app:layout_constraintBottom_toBottomOf="@+id/titleMyDevice"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/device_farm"
@@ -1992,76 +1994,10 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                        <!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
-                        <!--                            android:id="@+id/cl_view_device"-->
-                        <!--                            app:layout_constraintTop_toTopOf="parent"-->
-                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                        <!--                            android:layout_width="0dp"-->
-                        <!--                            android:layout_height="wrap_content">-->
-                        <!--                            -->
-                        <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
-                        <!--                            android:id="@+id/rvMyDevice"-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:layout_marginTop="16dp"-->
-                        <!--                            android:orientation="horizontal"-->
-                        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                        <!--                            app:layout_constraintTop_toBottomOf="@+id/device_farm"-->
-                        <!--                            tools:itemCount="1"-->
-                        <!--                            tools:listitem="@layout/temp" />-->
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                    <!--                            &lt;!&ndash;                                    <LinearLayout&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:orientation="vertical"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:layout_marginStart="8dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:layout_marginEnd="8dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        android:layout_toEndOf="@+id/rv_myCrops"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        app:layout_constraintStart_toEndOf="@+id/rv_myCrops"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        app:layout_constraintTop_toTopOf="parent">&ndash;&gt;-->
 
-                    <!--                            &lt;!&ndash;                                        <com.google.android.material.card.MaterialCardView&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:id="@+id/cv_addCrop"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_width="64dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_height="64dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_gravity="center"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:gravity="center"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_marginTop="8dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            app:cardCornerRadius="100dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            app:cardElevation="0dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            app:strokeColor="#E5E7EB"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            app:strokeWidth="1dp">&ndash;&gt;-->
-
-                    <!--                            &lt;!&ndash;                                            <ImageView&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                                android:id="@+id/imageView"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                                android:layout_width="24dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                                android:layout_height="24dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                                android:layout_gravity="center"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                                android:src="@drawable/ic_add_home" />&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                        </com.google.android.material.card.MaterialCardView>&ndash;&gt;-->
-
-                    <!--                            &lt;!&ndash;                                        <TextView&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            style="@style/SemiBold"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:layout_marginTop="8dp"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:text="Add Crop"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:textColor="#146133"&ndash;&gt;-->
-                    <!--                            &lt;!&ndash;                                            android:textSize="14sp" />&ndash;&gt;-->
-
-                    <!--                            &lt;!&ndash;                                    </LinearLayout>&ndash;&gt;-->
-
-                    <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -2069,18 +2005,7 @@
 
             </LinearLayout>
 
-            <!--            <ImageView-->
-            <!--                android:id="@+id/bottom_banner"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:scaleType="fitXY"-->
-            <!--                android:src="@drawable/ads"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/linearmyDevice" />-->
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clBanner"

@@ -50,7 +50,7 @@ dependencies {
     implementation project(path: ':soiltesting')
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureCropProtect')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.core:core-ktx:1.8.0'
