@@ -67,9 +67,10 @@ class MyProfileFragment : Fragment() {
         //viewModel.getUsers()
         // viewModel.getUserDetails()
 
-        binding.llInviteFarmer.setOnClickListener {
+        binding.llInviteFarmer.setOnClickListener {it->
+            it?.isEnabled = false
             EventClickHandling.calculateClickEvent("invite_farmer")
-            shareInviteLink()
+            shareInviteLink(it)
         }
 
         viewModel.viewModelScope.launch {
@@ -105,7 +106,9 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
-    private fun shareInviteLink() {
+    private fun shareInviteLink(view: View) {
+        binding.progressBar.visibility = View.VISIBLE
+
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -123,12 +126,15 @@ class MyProfileFragment : Fragment() {
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.progressBar.visibility = View.GONE
+                    view.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
+
 
                 }
             }

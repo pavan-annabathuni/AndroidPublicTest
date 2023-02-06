@@ -15,7 +15,6 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_back"
         app:layout_constraintBottom_toBottomOf="@+id/hello_tv"
-        app:layout_constraintEnd_toStartOf="@+id/hello_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/hello_tv" />
 
@@ -27,9 +26,11 @@
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="Language"
+        android:textSize="18sp"
+        android:fontFamily="@font/notosans_bold"
         android:textColor="@color/textdark"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_back"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -46,10 +47,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
         android:text="@string/choose_text"
         android:textColor="@color/textdark"
+        android:fontFamily="@font/notosans_bold"
         app:layout_constraintEnd_toEndOf="@+id/hello_tv"
-        app:layout_constraintStart_toStartOf="@+id/hello_tv"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hello_tv" />
 
 
@@ -68,40 +72,6 @@
         app:layout_constraintTop_toBottomOf="@+id/select_language_tv"
         app:spanCount="3"
         tools:listitem="@layout/viewholder_language_cardview" />
-
-
-    <!--    <CheckBox-->
-    <!--        android:id="@+id/privacy_check_box"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginLeft="16dp"-->
-    <!--        android:layout_marginTop="28dp"-->
-    <!--        android:layout_marginEnd="10dp"-->
-    <!--        android:layout_marginRight="10dp"-->
-    <!--        android:layout_marginBottom="32dp"-->
-    <!--        android:checked="true"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/done_btn"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/privacy_policy_tv"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/language_recyclerview" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/privacy_policy_tv"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginEnd="15dp"-->
-    <!--        android:layout_marginRight="15dp"-->
-    <!--        android:background="@android:color/transparent"-->
-    <!--        android:fontFamily="@font/notosans_medium"-->
-    <!--        android:lines="2"-->
-    <!--        android:maxLines="2"-->
-    <!--        android:text="@string/privacy_text"-->
-    <!--        android:textAllCaps="false"-->
-    <!--        android:textSize="@dimen/txt14"-->
-    <!--        app:layout_constraintBaseline_toBaselineOf="@+id/privacy_check_box"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/privacy_check_box" />-->
 
 
     <com.google.android.material.button.MaterialButton

@@ -95,12 +95,7 @@ class PestDiseaseFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
-//        pestDiseaseApiCall()
-//        setBanners()
         fabButton()
-//        binding.toolbar.setNavigationOnClickListener {
-//            findNavController().popBackStack()
-//        }
         binding.toolbarTitle.text = cropName
 
 
@@ -108,7 +103,6 @@ class PestDiseaseFragment : Fragment() {
 
     private fun pestDiseaseApiCall() {
         binding.progressBar.visibility=View.VISIBLE
-
         cropId?.let { cropId ->
             viewModel.getPestDiseaseListForCrop(cropId).observe(viewLifecycleOwner) {
                 when (it) {
