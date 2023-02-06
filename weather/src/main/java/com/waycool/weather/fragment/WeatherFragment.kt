@@ -90,6 +90,12 @@ class WeatherFragment : Fragment() {
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
         apiErrorHandlingBinding = binding.errorState
+        AppU
+
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+
 
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {

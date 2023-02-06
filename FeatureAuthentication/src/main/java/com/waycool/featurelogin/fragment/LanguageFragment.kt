@@ -43,7 +43,9 @@ class LanguageFragment : Fragment() {
         binding = FragmentLanguageBinding.inflate(layoutInflater)
 
         val apiErrorHandlingBinding = binding.errorState
-
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         binding.languageRecyclerview.layoutManager = GridLayoutManager(context, 3)
         languageSelectionAdapter = LanguageSelectionAdapter()
         binding.languageRecyclerview.adapter = languageSelectionAdapter

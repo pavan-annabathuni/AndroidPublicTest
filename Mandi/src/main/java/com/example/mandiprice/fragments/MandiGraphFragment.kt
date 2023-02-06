@@ -113,6 +113,9 @@ class MandiGraphFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
 
         binding.lifecycleOwner = this
         shareLayout = binding.shareCl2

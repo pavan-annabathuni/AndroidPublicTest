@@ -153,6 +153,9 @@ class RegistrationFragment : Fragment() {
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
         //Network Error state layout binding
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         //method to set translations
         setTranslations()
         binding.registerDoneBtn.isEnabled = true

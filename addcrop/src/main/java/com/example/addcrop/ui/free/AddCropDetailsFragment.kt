@@ -81,6 +81,9 @@ class AddCropDetailsFragment : Fragment() {
 //        val window: Window? = null
 //        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
             cropNameTag = arguments?.getString("cropNameTag")
