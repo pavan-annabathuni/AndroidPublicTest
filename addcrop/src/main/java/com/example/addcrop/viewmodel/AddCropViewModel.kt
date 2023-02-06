@@ -1,5 +1,7 @@
 package com.example.addcrop.viewmodel
 
+import android.util.Log
+import android.view.View
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 
@@ -14,23 +16,78 @@ import com.waycool.data.repository.domainModels.UserDetailsDomain
 
 import com.waycool.data.utils.Resource
 
-class AddCropViewModel :ViewModel() {
-//    val selectedDate = MutableLiveData<String>()
+class AddCropViewModel : ViewModel() {
+    private val TAG = "AddCropViewModel"
+    /*
+  MutableLiveData is a class in the Android architecture components library that is used to store and manage UI-related data in a lifecycle-aware fashion.
+   It can be observed and updated by multiple observers, including the Android UI components.
+   When the data changes, the observers are notified and can update their views accordingly.
+   This helps to ensure that the UI stays in sync with the underlying data, even if the data changes dynamically.
+     */
+
+    private val _navigation = MutableLiveData<String>()
+    val navigation: LiveData<String> get() = _navigation
+
+    companion object {
+        const val SUBMIT_BUTTON = "SUBMIT_BUTTON"
+        const val CALENDER_SHOW = "CALENDER_SHOW"
+        const val BACK_BUTTON = "BACK_BUTTON"
+        const val CHECK_INTERNET = "CHECK_INTERNET"
+    }
+
+    val selectCropYear = MutableLiveData(arrayOf("Select", "0-1", "1-2", "2-3", "3-4", "4-5"))
+    val selectCropUnit = MutableLiveData(
+        arrayOf(
+            "Acres",
+            "Gunta",
+            "Cent",
+            "Hectare",
+            "Bigha"
+        )
+    )
+
+    val selectCropIrrigation=MutableLiveData(arrayOf(
+        "Select Irrigation method",
+        "Drip Irrigation",
+        "Sprinkler Irrigation",
+        "Flood Irrigation"
+    ))
+    val selectNumberOfYearBahar =MutableLiveData(arrayOf(
+        "0-1",
+        "1-2",
+        "2-3",
+        "3-4"
+    ))
+
+
+    val eventHandler = EventHandler(this)
+
+//    private val _saveButtonPassData = MutableLiveData<String>()
+//    val saveButtonPassData: LiveData<String> get() = _saveButtonPassData
 //
-//    fun showDatePicker() {
-//        selectedDate.value = "Open Date Picker"
+//    private val _calenderShow = MutableLiveData<String>()
+//    val calenderShow: LiveData<String> get() = _calenderShow
+//
+//   private val _navigateBack = MutableLiveData<Boolean>()
+//   val navigateBack : LiveData<Boolean> get()=_navigateBack
+
+
+//    fun saveButtonClicked() {
+//        _saveButtonPassData.value = SUBMIT_BUTTON
 //    }
-    fun getAddCropType (): LiveData<Resource<List<SoilTypeDomain>?>> {
+//    fun calenderShow() {
+//        _calenderShow.value = CALENDER_SHOW
+//    }
+//    fun backButton() {
+//        _navigateBack.value =false
+//    }
+
+
+    fun getAddCropType(): LiveData<Resource<List<SoilTypeDomain>?>> {
         return CropsRepository.getSoilType().asLiveData()
     }
-//    fun addCropPassData(
-//        crop_id:Int?, account_id:Int?, plot_nickname:String?,
-//        is_active:Int?, sowing_date: String?, area: Editable): LiveData<Resource<AddCropResponseDTO?>> =
-//        CropsRepository.addCropPassData(crop_id,account_id,plot_nickname,is_active,sowing_date,area).asLiveData()
 
-
-
-    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String,Any>()): LiveData<Resource<AddCropResponseDTO?>> =
+    fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String, Any>()): LiveData<Resource<AddCropResponseDTO?>> =
         CropsRepository.addCropDataPass(map).asLiveData()
 
     fun getUserDetails(): LiveData<Resource<UserDetailsDomain>> =
@@ -39,40 +96,15 @@ class AddCropViewModel :ViewModel() {
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
         CropsRepository.getMyCrop2().asLiveData()
 
-    fun getEditMyCrop(id:Int):LiveData<Resource<Unit?>> {
+    fun getEditMyCrop(id: Int): LiveData<Resource<Unit?>> {
         return CropsRepository.getEditCrop(id).asLiveData()
     }
 
     fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
         FarmsRepository.getMyFarms().asLiveData()
-//    @Bindable var nickName: String = ""
-//    @Bindable var area: String = ""
-//    @Bindable var date: String = ""
-//    @Bindable var nickNameError: String = ""
-//    @Bindable var areaError: String = ""
-//    @Bindable
-//    var dateError: String = ""
-
-//    fun checkInputFields() : Boolean {
-//        if (nickName.isEmpty()) {
-//            nickNameError = "Nick name should not be empty"
-//            return false
-//        } else if (area.isEmpty()) {
-//            areaError = "Enter Area"
-//            return false
-//        } else if (date.isEmpty()) {
-//            dateError = "Pick up the Date"
-//            return false
-//        }
-//        nickNameError = ""
-//        areaError = ""
-//        dateError = ""
-//        return true
-//    }
 
 
-
-    fun checkInputFields(nickName: String, area: String, date: String) : Boolean {
+    fun checkInputFields(nickName: String, area: String, date: String): Boolean {
         if (nickName.isEmpty()) {
             return false
         } else if (area.isEmpty()) {
@@ -83,20 +115,31 @@ class AddCropViewModel :ViewModel() {
         return true
     }
 
-//    private val apiClient: ApiService = RetrofitBuilder.getInstance().create(ApiService::class.java)
-//
-//    private val repository = AddCropRepository(apiClient)
-//    val detailsLiveData get() = repository.historyLiveData
-//    val statusLiveData get() = repository.statusLiveData
-//    fun getAllHistory() {
-//        viewModelScope.launch {
-//            repository.getAllHistory()
-//        }
-//    }
-//    fun addCropPassData(addCropRequest: AddCropRequest) {
-//        viewModelScope.launch {
-//            repository.addCropPassData(addCropRequest)
-//        }
-//    }
+    class EventHandler(private val viewModel: AddCropViewModel) {
+        /*
+         value property of a LiveData object to set its initial value.
+         */
+
+        fun saveButtonClicked(view: View?) {
+            viewModel._navigation.value = SUBMIT_BUTTON
+        }
+
+        fun calenderShow(view: View?) {
+            Log.d(viewModel.TAG, "CalenderClicked:")
+            viewModel._navigation.value = CALENDER_SHOW
+        }
+
+        fun backButton(view: View?) {
+            Log.i(viewModel.TAG, "backButtonClicked:")
+            viewModel._navigation.value = BACK_BUTTON
+        }
+
+        fun checkInternet(view: View?) {
+            Log.i(viewModel.TAG, "Internet:")
+            viewModel._navigation.value = CHECK_INTERNET
+        }
+
+
+    }
 
 }

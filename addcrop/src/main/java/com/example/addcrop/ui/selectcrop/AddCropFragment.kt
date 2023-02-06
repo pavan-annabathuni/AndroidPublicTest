@@ -1,4 +1,4 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.selectcrop
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentAddCropBinding
+import com.example.addcrop.ui.CategoryAdapter
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -43,7 +44,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         super.onViewCreated(view, savedInstanceState)
         initView()
         bindObserversCategory()
-        translationSoilTesting()
+        translationForPremiumAddCrop()
 
 
     }
@@ -63,7 +64,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
             when (it) {
                 is Resource.Success -> {
                     val response = it.data!!
-                    categoryAdapter.setMovieList(response)
+                    categoryAdapter.setSoilTypeList (response)
                 }
                 is Resource.Error -> {
                     ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
@@ -78,7 +79,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
         }
     }
 
-    fun translationSoilTesting() {
+   private fun translationForPremiumAddCrop() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title

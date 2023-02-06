@@ -968,7 +968,7 @@
                         android:text="Add Device"
                         android:textColor="@color/primaryColor"
                         android:textSize="14sp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:drawableEndCompat="@drawable/ic_add"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

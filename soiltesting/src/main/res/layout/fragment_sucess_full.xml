@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space16"
-        android:text=" "
+        android:text=""
         android:textColor="#146133"
         android:textSize="@dimen/txt18"
         android:textStyle="bold"

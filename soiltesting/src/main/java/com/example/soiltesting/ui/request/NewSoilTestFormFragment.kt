@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentNewSoilTestFormBinding
-import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.utils.Constant.TAG
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -22,7 +21,6 @@ import com.waycool.data.utils.Resource
 class NewSoilTestFormFragment : Fragment() {
     private var _binding: FragmentNewSoilTestFormBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
     private val soilViewModel by lazy { ViewModelProvider(this)[SoilTestRequestViewModel::class.java] }
     var ploteNumber: String = ""
     var pincode: String = ""

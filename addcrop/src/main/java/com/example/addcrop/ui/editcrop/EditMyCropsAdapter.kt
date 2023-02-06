@@ -1,4 +1,4 @@
-package com.example.addcrop
+package com.example.addcrop.ui.editcrop
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,9 @@ import com.bumptech.glide.Glide
 import com.example.addcrop.databinding.ItemEditCropBinding
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 
-class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCropDataDomain,EditMyCropsAdapter.MyViewHolder>(DiffCallback) {
+class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCropDataDomain, EditMyCropsAdapter.MyViewHolder>(
+    DiffCallback
+) {
     class MyViewHolder(binding:ItemEditCropBinding):
     RecyclerView.ViewHolder(binding.root) {
      val cropImg = binding.imageView

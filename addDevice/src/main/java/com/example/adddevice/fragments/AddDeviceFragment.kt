@@ -59,8 +59,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentAddDeviceBinding? = null
     private val binding get() = _binding!!
     private var nickName: String = ""
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
     private var myFarm: MyFarmsDomain? = null
     private var mMap: GoogleMap? = null
 
@@ -118,6 +116,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
+
         return binding.root
     }
 
@@ -188,7 +187,12 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             intentIntegrator.setOrientationLocked(false)
             intentIntegrator.initiateScan()
         }
-        translationSoilTesting()
+        translationAddDevice()
+        binding.topAppBar.setOnClickListener{
+            activity?.finish()
+//            val isSuccess = findNavController().navigateUp()
+//            if (!isSuccess) requireActivity().onBackPressed()
+        }
     }
 
     private fun checkDistanceBetweenLatLng(latLng1: LatLng?, latLng2: LatLng?): Float {
@@ -512,7 +516,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-    fun translationSoilTesting() {
+    fun translationAddDevice() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("str_add_device")
             binding.topAppBar.title = title
@@ -527,10 +531,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         TranslationsManager().loadString("str_scan", binding.tvScanned,"Sacn QR code")
         TranslationsManager().loadString("device_serial_number", binding.textView3,"Device Serial Number")
         TranslationsManager().loadString("str_register", binding.submit,"Register")
-//        TranslationsManager().loadString("faq_s", binding.tvFAQ)
-//        TranslationsManager().loadString("_1_why_should_i_soil_test", binding.tvSoilText)
-//        TranslationsManager().loadString("_2_when_do_i_sample", binding.tvSoilText)
-//        TranslationsManager().loadString("str_viewall", binding.tvViewAll)
     }
     override fun onResume() {
         super.onResume()

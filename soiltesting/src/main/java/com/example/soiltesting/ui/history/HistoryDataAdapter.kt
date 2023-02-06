@@ -12,7 +12,7 @@ import com.waycool.data.translations.TranslationsManager
 class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
 
     var details = mutableListOf<SoilTestHistoryDomain>()
-    fun setMovieList(movies: List<SoilTestHistoryDomain>) {
+    fun setTrackerList(movies: List<SoilTestHistoryDomain>) {
         this.details = movies.toMutableList()
         notifyDataSetChanged()
     }

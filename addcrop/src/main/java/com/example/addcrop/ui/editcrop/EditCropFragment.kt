@@ -1,4 +1,4 @@
-package com.example.addcrop
+package com.example.addcrop.ui.editcrop
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ import com.waycool.data.eventscreentime.EventClickHandling
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
-    private lateinit var myCropAdapter:EditMyCropsAdapter
+    private lateinit var myCropAdapter: EditMyCropsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

@@ -47,6 +47,7 @@ dependencies {
     implementation project(path: ':Core')
     implementation project(path: ':featureChat')
     implementation project(path: ':FeatureAuthentication')
+    implementation project(path: ':addcrop')
 
 //    implementation project(path: ':FeatureCropHealth')
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")

@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
-import com.example.soiltesting.ui.checksoil.CheckSoilRTestViewModel
 import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
 import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -44,17 +43,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var accountID: Int? = null
     private val REQUEST_CODE_SPEECH_INPUT = 1
-
-    //    private lateinit var soilHistoryAdapter: SoilHistoryAdapter
     private var soilHistoryAdapter = HistoryDataAdapter(this)
-    var objectListNew = java.util.ArrayList<SoilTestHistoryDomain>()
-
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
 
-
-    private val checkSoilTestViewModel by lazy { ViewModelProvider(this)[CheckSoilRTestViewModel::class.java] }
     val filteredList = ArrayList<SoilTestHistoryDomain>()
-//    lateinit var cropDetailsList: SoilHistory
 
 
     override fun onCreateView(
@@ -76,28 +68,14 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         binding.tvCheckCrop.isSelected = true
         speechToText()
         initViewBackClick()
-//        initSearchView()
         clickSearch()
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-//                    itemClicked(it.data?.data?.id!!, lat!!, long!!, onp_id!!)
-//                    account=it.data.account
             accountID = it.data?.accountId
             if (accountID != null) {
                 bindObserversSoilTestHistory(accountID!!)
             }
         }
         translationSoilTesting()
-
-
-//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                findNavController().navigateUp()
-//            }
-//
-//        })
-
-
-//        clickSearch()
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
@@ -106,6 +84,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             binding.tvToolBar.text=TranslationsManager().getString("txt_soil_testing")
         }
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
 
@@ -200,7 +179,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             when (it) {
                 is Resource.Success -> {
                     val response = it.data as ArrayList<SoilTestHistoryDomain>
-                    soilHistoryAdapter.setMovieList(response)
+                    soilHistoryAdapter.setTrackerList(response)
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
@@ -262,61 +241,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         )
 
     }
-
-    fun temp() {
-        viewModel.getCheckSoilTestLab(
-            11, "18.3603", "77.6028"
-        ).observe(requireActivity()) {
-            when (it) {
-                is Resource.Success -> {
-                    binding.progressBar.isVisible = false
-                    binding.clProgressBar.visibility = View.GONE
-                    Log.d(
-                        "TAG",
-                        "bindObserversDataCheckSoilData:" + it.data.toString()
-                    )
-                    if (it.data!!.isNullOrEmpty()) {
-                        CustomeDialogFragment.newInstance().show(
-                            requireActivity().supportFragmentManager,
-                            CustomeDialogFragment.TAG
-                        )
-                        binding.cardCheckHealth.isClickable = true
-//                                        binding.clProgressBar.visibility = View.VISIBLE
-//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                        //                      findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
-                    } else if (it.data!!.isNotEmpty()) {
-                        val response = it.data
-                        Log.d(
-                            Constant.TAG,
-                            "bindObserversCheckSoilTestModelFJndsj: $response"
-                        )
-                        var bundle = Bundle().apply {
-                            putParcelableArrayList("list", ArrayList<Parcelable>(response))
-                        }
-
-                        findNavController().navigate(
-                            R.id.action_allHistoryFragment_to_checkSoilTestFragment,
-                            bundle
-                        )
-                    }
-
-                }
-                is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
-
-                }
-                is Resource.Loading -> {
-                    binding.progressBar.isVisible = true
-                    binding.clProgressBar.visibility = View.VISIBLE
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
-                }
-            }
-
-        }
-
-    }
-
     private fun isLocationPermissionGranted(account_id: Int?): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 requireContext(),

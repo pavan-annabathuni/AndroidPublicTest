@@ -161,6 +161,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("my_farm", binding.titleMyFarm,"")
         TranslationsManager().loadString("add_farm_top", binding.MyFarm,"Add Farm")
         TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
+        TranslationsManager().loadString("str_add_device", binding.MyDevice,"My Devices")
         TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
         TranslationsManager().loadString("view_rainfall", binding.tvWind,"Rainfall")
         TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
@@ -277,6 +278,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
+
         binding.MyDevice.setOnClickListener {
             EventClickHandling.calculateClickEvent("AddYourDeviceHomePremiumFragment")
 
@@ -876,12 +878,14 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
+            binding.MyDevice.visibility=View.GONE
         }else{
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.clAddForm.visibility = View.VISIBLE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
+            binding.MyDevice.visibility=View.VISIBLE
         }
     }
     override fun onPause() {

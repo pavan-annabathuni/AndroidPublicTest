@@ -62,17 +62,17 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
 class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
+
 
     //    private val binding get() = _binding!!
     private lateinit var binding: FragmentSoilTestingHomeBinding
@@ -85,6 +85,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
     private var handler: Handler? = null
     private var runnable: Runnable?=null
+    private val debounceInterval = 1000L
+
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private val locationRequest = LocationRequest
@@ -477,7 +479,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             "our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield",
             binding.tvOurAll,"Our ‘Soil testing’ service enables you with a better understanding of your soil health and recommends you required nutrition to improve the yield."
         )
-        TranslationsManager().loadString("soil_str_raise", binding.tvRaise,"Raise the Request")
+        TranslationsManager().loadString("str_about", binding.tvRaise,"Raise the Request")
         TranslationsManager().loadString("soil_str_soil", binding.SoilSample,"Soil Sample Collection")
         TranslationsManager().loadString("soil_lab_testing", binding.tvSoilLab,"Lab Testing")
         TranslationsManager().loadString("soil_details_report", binding.tvDetaols,"Detailed Report")
@@ -514,13 +516,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
                             if (response.size <= 2) {
-                                soilHistoryAdapter.setMovieList(response)
+                                soilHistoryAdapter.setTrackerList(response)
 
                             } else {
                                 val arrayList = ArrayList<SoilTestHistoryDomain>()
                                 arrayList.add(response[0])
                                 arrayList.add(response[1])
-                                soilHistoryAdapter.setMovieList(arrayList)
+                                soilHistoryAdapter.setTrackerList(arrayList)
 
                             }
 
