@@ -49,7 +49,6 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSheetHarvestBinding.inflate(inflater)
-
         binding.close.setOnClickListener() {
             this.dismiss()
         }
@@ -59,25 +58,26 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             if (binding.editText.text.toString() != "" && date != "") {
                 var yield_tone = binding.editText.text.toString().toInt()
                 plotId?.let { it1 ->
-                    viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone).observe(viewLifecycleOwner) {
-                        when (it) {
-                            is Resource.Success -> {
-                                this.dismiss()
-                            }
-                            is Resource.Loading -> {}
-                            is Resource.Error -> {
-                                context?.let { it1 ->
-                                    ToastStateHandling.toastError(
-                                        it1,
-                                        "Error",
-                                        Toast.LENGTH_SHORT
-                                    )
+                    viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone)
+                        .observe(viewLifecycleOwner) {
+                            when (it) {
+                                is Resource.Success -> {
+                                    this.dismiss()
                                 }
-                                Log.d("cropInfo", "onCreateView: ${it.message}")
+                                is Resource.Loading -> {}
+                                is Resource.Error -> {
+                                    context?.let { it1 ->
+                                        ToastStateHandling.toastError(
+                                            it1,
+                                            "Error",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                    Log.d("cropInfo", "onCreateView: ${it.message}")
+                                }
                             }
+                            Log.d("Harvest", "onCreateView: ${it.message}")
                         }
-                        Log.d("Harvest", "onCreateView: ${it.message}")
-                    }
                 }
             } else {
                 context?.let { it1 ->
@@ -88,19 +88,8 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                     )
                 }
             }
-            // Toast.makeText(context,"Enter the data",Toast.LENGTH_SHORT).show()
-//                GlobalScope.launch {
-//                    LocalSource.deleteAllMyCrops()
-//                    MyCropSyncer().invalidateSync()
-//
-//            }
-            //this.dismiss()
-
         }
-//        binding.cal.setOnClickListener() {
-//            showCalender()
-//        }
-        binding.editText2.setOnClickListener(){
+        binding.editText2.setOnClickListener() {
             showCalender()
         }
         translation()
@@ -112,8 +101,6 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     }
 
     private fun showCalender() {
-
-
         var date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
@@ -124,9 +111,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 1)
                 view.setMaxDate(myCalendar.timeInMillis)
-
             }
-
         val dialog = DatePickerDialog(
             requireContext(),
             date,
@@ -155,9 +140,21 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_harvest_details", binding.textView13,"Harvest Details")
-        TranslationsManager().loadString("str_actual_yeild", binding.textView14,"Actual Yeild in Tonne")
-        TranslationsManager().loadString("str_actual_harvest_date", binding.textView2,"Actual Harvest Date")
+        TranslationsManager().loadString(
+            "str_harvest_details",
+            binding.textView13,
+            "Harvest Details"
+        )
+        TranslationsManager().loadString(
+            "str_actual_yeild",
+            binding.textView14,
+            "Actual Yeild in Tonne"
+        )
+        TranslationsManager().loadString(
+            "str_actual_harvest_date",
+            binding.textView2,
+            "Actual Harvest Date"
+        )
 
         viewModel.viewModelScope.launch {
             val save = TranslationsManager().getString("str_save")
@@ -165,6 +162,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         }
 
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("SheetHarvestFragment")

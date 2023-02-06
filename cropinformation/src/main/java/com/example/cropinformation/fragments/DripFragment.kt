@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentDripBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class DripFragment : Fragment() {
     private lateinit var binding: FragmentDripBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,6 @@ class DripFragment : Fragment() {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
         binding = FragmentDripBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
         observer()
         return binding.root
 

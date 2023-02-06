@@ -52,13 +52,6 @@ class PremiumServiceAdapter(private val onClickListener:OnClickListener,val cont
                 }catch (e:Exception){
                     Log.d("link", "onBindViewHolder: $e")
                 }
-
-            }else context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "No Link",
-                    Toast.LENGTH_SHORT
-                )
             }
         }
         holder.name.text = properties.title

@@ -68,7 +68,7 @@
         tools:layout="@layout/fragment_add_farm_support" />
     <fragment
         android:id="@+id/languageFragment3"
-        android:name="com.example.profile.ProfileLanguageFragment"
+        android:name="com.example.profile.fragments.ProfileLanguageFragment"
         android:label="LanguageFragment" >
         <action
             android:id="@+id/action_languageFragment3_to_myProfileFragment"
@@ -81,7 +81,7 @@
     </fragment>
     <fragment
         android:id="@+id/aboutOutgrowFragment"
-        android:name="com.example.profile.AboutOutgrowFragment"
+        android:name="com.example.profile.fragments.AboutOutgrowFragment"
         android:label="fragment_about_outgrow"
         tools:layout="@layout/fragment_about_outgrow" />
 </navigation>

@@ -3,7 +3,7 @@ package com.example.cropinformation.adapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.cropinformation.*
+import com.example.cropinformation.fragments.SeedRateBordcastingFragment
 import com.example.cropinformation.fragments.*
 import com.waycool.data.repository.domainModels.CropInformationDomainData
 
@@ -280,6 +280,13 @@ class ViewpagerAdapter(
                 val bundle = Bundle()
                 bundle.putInt("CropId", cropid)
                 val fragment = SplinkerFragment()
+                fragment.arguments = bundle
+                fragment
+            }
+            "Seed Rate (Broadcasting)" -> {
+                val bundle = Bundle()
+                bundle.putInt("CropId", cropid)
+                val fragment = SeedRateBordcastingFragment()
                 fragment.arguments = bundle
                 fragment
             }

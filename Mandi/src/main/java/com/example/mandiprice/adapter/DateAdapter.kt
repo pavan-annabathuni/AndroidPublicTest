@@ -65,13 +65,4 @@ class DateAdapter : ListAdapter<MandiHistoryDataDomain, DateAdapter.MyViewHolder
             fun onClick(data: MandiHistoryDataDomain) = clickListener(data)
         }
     }
-
-//    override fun getItemCount(): Int {
-//        if(currentList.size>=7)
-//            return 7
-//        else
-//            return currentList.size
-//
-//    }
-
 }

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.mandiprice.R
 
 import com.example.soiltesting.databinding.ItemMandiBinding
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,41 +71,41 @@ class MandiHomePageAdapter(val onClickListener:OnClickListener):
         holder.itemView.setOnClickListener() {
             onClickListener.clickListener(properties!!)
         }
-//        GlobalScope.launch(Dispatchers.Main) {
-//            val langCode = LocalSource.getLanguageCode() ?: "en"
-//            when(langCode){
-//                "en"->{
-//                    holder.cropName.text = properties?.crop
-//                    holder.markerName.text = properties?.market
-//
-//                }
-//                "hi"->{
-//                    holder.cropName.text = properties?.crop_hi
-//                    holder.markerName.text = properties?.market_hi
-//
-//                }
-//                "kn"->{
-//                    holder.cropName.text = properties?.crop_kn
-//                    holder.markerName.text = properties?.market_kn
-//
-//                }
-//                "te"->{
-//                    holder.cropName.text = properties?.crop_te
-//                    holder.markerName.text = properties?.market_te
-//                }
-//                "ta"->{
-//                    holder.cropName.text = properties?.crop_ta
-//                    holder.markerName.text = properties?.market_ta
-//                }
-//                "mr"->{
-//                    holder.cropName.text = properties?.crop_mr
-//                    holder.markerName.text = properties?.market_mr
-//                }
-//
-//            }
-//            cropName = holder.cropName.text.toString()
-//            marketName = holder.markerName.text.toString()
-//        }
+        GlobalScope.launch(Dispatchers.Main) {
+            val langCode = LocalSource.getLanguageCode() ?: "en"
+            when(langCode){
+                "en"->{
+                    holder.cropName.text = properties?.crop
+                    holder.markerName.text = properties?.market
+
+                }
+                "hi"->{
+                    holder.cropName.text = properties?.crop_hi
+                    holder.markerName.text = properties?.market_hi
+
+                }
+                "kn"->{
+                    holder.cropName.text = properties?.crop_kn
+                    holder.markerName.text = properties?.market_kn
+
+                }
+                "te"->{
+                    holder.cropName.text = properties?.crop_te
+                    holder.markerName.text = properties?.market_te
+                }
+                "ta"->{
+                    holder.cropName.text = properties?.crop_ta
+                    holder.markerName.text = properties?.market_ta
+                }
+                "mr"->{
+                    holder.cropName.text = properties?.crop_mr
+                    holder.markerName.text = properties?.market_mr
+                }
+
+            }
+            cropName = holder.cropName.text.toString()
+            marketName = holder.markerName.text.toString()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MandiHomePageHolder {

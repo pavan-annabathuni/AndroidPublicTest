@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.R
 import com.example.cropinformation.databinding.FragmentSowingBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 
 class SowingFragment : Fragment() {
        private lateinit var binding:FragmentSowingBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,6 @@ class SowingFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSowingBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
         observer()
         translation()
         return binding.root

@@ -232,11 +232,6 @@ class MandiGraphFragment : Fragment() {
                 this.findNavController()
                     .navigateUp()
         }
-//
-//        binding.imgShare.setOnClickListener() {
-//            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-//            Log.d("toast", "onClick: Working")
-//        }
     }
 
 
@@ -244,12 +239,10 @@ class MandiGraphFragment : Fragment() {
         viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId,sub_record_id)
                 .observe(viewLifecycleOwner) { it ->
-
-
                     listLine = ArrayList()
                     if (it.data?.data != null) {
                         for (i in it.data?.data!!.indices) {
-
+                            /**setting the api in graph*/
                             val xAxis: XAxis = binding.lineChart.getXAxis()
                             listLine.add(
                                 Entry(
@@ -260,6 +253,7 @@ class MandiGraphFragment : Fragment() {
                     }
 
                     lineDataSet = LineDataSet(listLine, "")
+                    /** formating the date for graph*/
                     val datesList = it.data?.data?.map { mandi ->
                         try {
                             val date: Date = inputDateFormatter.parse(mandi.arrivalDate)
@@ -271,15 +265,12 @@ class MandiGraphFragment : Fragment() {
                     }
 
                     val valueFormatter2 = IndexAxisValueFormatter()
-
                     val xAxis2 = datesList?.toTypedArray()
                     valueFormatter2.values = xAxis2
                     binding.lineChart.xAxis.valueFormatter = valueFormatter2
                     binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 //                binding.lineChart.xAxis.labelRotationAngle = -45f
-
                     binding.lineChart.axisLeft.axisMinimum = 0f
-
                     lineData = LineData(lineDataSet)
                     lineDataSet.color = resources.getColor(R.color.WoodBrown)
                     binding.lineChart.data = lineData
@@ -287,8 +278,6 @@ class MandiGraphFragment : Fragment() {
                     lineDataSet.circleHoleColor = resources.getColor(R.color.DarkGreen)
                     lineDataSet.circleRadius = 6f
                     lineDataSet.mode = LineDataSet.Mode.LINEAR
-
-
                     lineDataSet.setDrawFilled(true)
                     binding.lineChart.setDrawGridBackground(false)
                     binding.lineChart.setDrawBorders(true)
@@ -302,6 +291,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.axisRight.isEnabled = false
                     lineDataSet.fillDrawable = ContextCompat.getDrawable(requireContext(),R.drawable.bg_graph)
                     // binding.lineChart.xAxis.spaceMax = 1f
+                    /** fitting graph with screen*/
                     binding.lineChart.fitScreen()
                     binding.lineChart.setScaleEnabled(false)
                     binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
@@ -310,6 +300,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.getLegend().setEnabled(false);
                     binding.lineChart.xAxis.setCenterAxisLabels(false);
                     binding.lineChart.xAxis.setGranularity(1f);
+                    /** giving space for top*/
                     binding.lineChart.viewPortHandler.offsetTop()
                     binding.lineChart.axisLeft.spaceTop = 150f
                     // binding.lineChart.setVisibleXRangeMaximum(3f);
@@ -374,6 +365,7 @@ class MandiGraphFragment : Fragment() {
         market_name: String?,
         fragment: String?
     ) {
+        /** taking screen shot and sharing whole graph and list with dynamic link */
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
@@ -425,15 +417,13 @@ class MandiGraphFragment : Fragment() {
     }
 
     private fun translation() {
-
         TranslationsManager().loadString("str_share", binding.imgShare,"Share")
         TranslationsManager().loadString("date", binding.textView7,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.textView8,"Date")
-
-
     }
 
+    /**checking language translation for cropName and Market*/
     private fun checkLang(){
         viewModel.viewModelScope.launch(){
             var langCode = LocalSource.getLanguageCode() ?: "en"

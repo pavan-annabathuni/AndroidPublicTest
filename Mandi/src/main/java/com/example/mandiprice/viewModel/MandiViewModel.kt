@@ -3,6 +3,7 @@ package com.example.mandiprice.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.Network.NetworkModels.MandiMasterModel
@@ -37,7 +38,7 @@ class MandiViewModel : ViewModel() {
                                 sortBy: String?, orderBy: String?,search:String?,accountId:Int?=null
     ): LiveData<PagingData<MandiDomainRecord>> =
         MandiRepository.getMandiList(lat,long,crop_category,
-            state,crop,sortBy,orderBy,search,accountId).cachedIn(GlobalScope).asLiveData()
+            state,crop,sortBy,orderBy,search,accountId).cachedIn(viewModelScope).asLiveData()
 
     fun getMandiSinglePage(lat: String,long: String):LiveData<Resource<MandiDomain?>>{
         return MandiRepository.getMandiSinglePage(lat, long).asLiveData()
