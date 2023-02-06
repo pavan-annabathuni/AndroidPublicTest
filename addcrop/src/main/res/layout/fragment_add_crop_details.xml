@@ -64,7 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Toolbar Title"
-                    android:textColor="@color/textdark" />
+                    android:textSize="18sp"
+                    android:fontFamily="@font/notosans_bold"
+                    android:textColor="#070D09" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -97,6 +99,7 @@
                         android:layout_marginEnd="16dp"
                         android:text="Select Farm to add this crop"
                         android:textColor="@color/textdark"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -129,11 +132,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:layout_marginTop="@dimen/space12"
+                    android:layout_marginTop="@dimen/space16"
                     android:text="Add Crop information"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/notosans_bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -143,11 +146,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
-                    android:layout_marginTop="@dimen/space12"
                     android:text="Crop Nickname"
                     android:textColor="#000000"
-
                     android:textSize="14sp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/notosans_medium"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/plot" />
@@ -175,6 +178,7 @@
                         android:layout_marginBottom="@dimen/space2"
                         android:background="#ffffff"
                         android:hint="e.g crop name"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -193,6 +197,7 @@
                     android:text="Crop Area"
                     android:textColor="#000000"
                     android:textSize="14sp"
+                    android:fontFamily="@font/notosans_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clPlotNumber" />
 
@@ -219,6 +224,7 @@
                         android:background="#FFFFFF"
                         android:hint="e.g 50"
                         android:inputType="numberDecimal"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -288,7 +294,7 @@
                         android:text="Shade in farm"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt16"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/notosans_bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -301,6 +307,7 @@
                         android:text="(only for tea and coffee)"
                         android:textColor="#000000"
                         android:textSize="@dimen/txt16"
+                        android:fontFamily="@font/notosans_medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tvShapeInFarm"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -327,6 +334,7 @@
                     android:text="Sowing Date "
                     android:textColor="#000000"
                     android:textSize="14sp"
+                    android:fontFamily="@font/notosans_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
 
