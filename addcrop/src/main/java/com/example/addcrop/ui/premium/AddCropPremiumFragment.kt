@@ -67,7 +67,9 @@ class AddCropPremiumFragment : Fragment() {
         "Sprinkler Irrigation",
         "Flood Irrigation"
     )
-    val years = arrayOf(
+
+
+    val farmAreaUnits = arrayOf(
         "Acres",
         "Gunta",
         "Cent",
@@ -109,9 +111,7 @@ class AddCropPremiumFragment : Fragment() {
         noOFYearBahar()
         translationAddCropTesting()
         year_selected = "0".toString().toInt().toString()
-//        binding.cardCheckHealth.setOnClickListener {
-//            postDataAddCrop()
-//        }
+
         if (requireActivity().intent.extras != null) {
             val bundle = requireActivity().intent.extras
             selectedFarmId = bundle?.getInt("farmID")
@@ -268,7 +268,7 @@ class AddCropPremiumFragment : Fragment() {
 
     private fun spinnerYear() {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, farmAreaUnits)
         binding.Acres.adapter = arrayAdapter
         binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

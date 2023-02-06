@@ -74,7 +74,6 @@ class CropSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarTitle.text="Protect your Crop"
 
         apiErrorHandlingBinding=binding.errorState
 

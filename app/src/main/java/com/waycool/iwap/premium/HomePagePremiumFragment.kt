@@ -95,7 +95,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initViewAddCrop()
         initMyCropObserve()
         initObserveMYFarm()
-//        initObserveDevice()
         progressColor()
         translations()
         fabButton()

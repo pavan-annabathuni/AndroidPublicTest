@@ -66,14 +66,6 @@ class PlantSpacingFragment : Fragment() {
                 farm_id = arguments?.getInt("farm_id")
                 acrea_type = arguments?.getString("area_type")
 
-                Log.d("TAG", "onCreateViewGetData: $account_id")
-                Log.d("TAG", "onCreateViewGetData: $crop_id")
-                Log.d("TAG", "onCreateViewGetData: $crop_type")
-                Log.d("TAG", "onCreateViewGetData: $area")
-                Log.d("TAG", "onCreateViewGetData: $date")
-                Log.d("TAG", "onCreateViewGetData: $irrigation_selected")
-                Log.d("TAG", "onCreateViewGetData: $noOFPlants")
-                Log.d("TAG", "onCreateViewGetDataTTT: $farm_id")
 
                 val map = mutableMapOf<String, Any>()
                 account_id?.let {
@@ -196,8 +188,8 @@ class PlantSpacingFragment : Fragment() {
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
-            val title = TranslationsManager().getString("add_crop")
-//            binding.toolbarTitle.text = title
+            binding.title?.text= TranslationsManager().getString("add_crop")
+
             var NickNamehint = TranslationsManager().getString("e_g_50")
             binding.etNumber.hint =NickNamehint
             binding.etNumberWidth.hint=NickNamehint

@@ -103,10 +103,10 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
+            binding.tvToolBar.text=TranslationsManager().getString("txt_soil_testing")
         }
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
-        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
-//        TranslationsManager().loadString("soil_sample_n_collection", binding.tvCheckCrop)
+
     }
 
 

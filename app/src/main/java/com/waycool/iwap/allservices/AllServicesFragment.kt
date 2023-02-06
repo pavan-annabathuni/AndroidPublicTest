@@ -46,6 +46,8 @@ class AllServicesFragment : Fragment() {
                 callback
             )
         }
+        TranslationsManager().loadString("explore_services",binding.tvExplore,"Explore our Services")
+        TranslationsManager().loadString("explore_premium_services",binding.tvExplorePremium,"Explore our Premium Services")
 
         binding.topAppBar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()
