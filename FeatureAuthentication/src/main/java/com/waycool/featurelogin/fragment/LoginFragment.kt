@@ -204,20 +204,20 @@ class LoginFragment : Fragment() {
 
         override fun onFailureProfileShared(trueError: TrueError) {
             trueCallerVerified = false
-            ToastStateHandling.toastError(
-                requireContext(),
-                trueError.toString(),
-                Toast.LENGTH_SHORT
-            )
+//            ToastStateHandling.toastError(
+//                requireContext(),
+//                trueError.toString(),
+//                Toast.LENGTH_SHORT
+//            )
         }
 
         override fun onVerificationRequired(trueError: TrueError?) {
             trueCallerVerified = false
-            ToastStateHandling.toastError(
-                requireContext(),
-                trueError.toString(),
-                Toast.LENGTH_SHORT
-            )
+//            ToastStateHandling.toastError(
+//                requireContext(),
+//                trueError.toString(),
+//                Toast.LENGTH_SHORT
+//            )
         }
     }
 
