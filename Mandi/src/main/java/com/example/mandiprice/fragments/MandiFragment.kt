@@ -53,7 +53,6 @@ import java.util.*
 class MandiFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private lateinit var binding: FragmentMandiBinding
-    private var viewModel: MandiViewModel?=null
 
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
@@ -83,10 +82,10 @@ class MandiFragment : Fragment() {
         arguments?.let {
 
         }
-
-        viewModel= activity?.let {
-            ViewModelProvider(it)[MandiViewModel::class.java]}
     }
+//        viewModel= activity?.let {
+//            ViewModelProvider(it)[MandiViewModel::class.java]}
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -141,45 +140,59 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-        viewModel?.viewModelScope?.launch {
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
-        handler = Handler(Looper.myLooper()!!)
-
-        viewModel.viewModelScope.launch {
-            adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
-                val bundle = Bundle()
-                bundle.putString("", "Mandi${it.crop}")
-                bundle.putString("", "Mandi${it.market}")
-                EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
-                val args = Bundle()
-                args.putParcelable("mandiRecord", it)
-                findNavController()
-                    .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
-            }, LocalSource.getLanguageCode() ?: "en")
-
-            viewModel?.getUserDetails()?.observe(viewLifecycleOwner) {
-                lat = it.data?.profile?.lat.toString()
-                long = it.data?.profile?.long.toString()
-                if (it.data?.accountId!=null)
-            accountID = it.data?.accountId!!
-        }}
-        binding.recycleViewDis.adapter = adapterMandi
-        spinnerSetup()
-        filterMenu()
-        tabs()
-        loadingProgressBar()
-        fabButton()
-        //translation()
-
-        binding.recycleViewDis.isNestedScrollingEnabled = true
-        // mandiApiCall()
-
-        apiErrorHandlingBinding.clInternetError.setOnClickListener {
-            mandiApiCall()
+        viewModel.viewModelScope?.launch {
+            TranslationsManager().loadString(
+                "txt_internet_problem",
+                apiErrorHandlingBinding.tvInternetProblem,
+                "There is a problem with Internet."
+            )
+            TranslationsManager().loadString(
+                "txt_check_net",
+                apiErrorHandlingBinding.tvCheckInternetConnection,
+                "Please check your Internet connection"
+            )
+            TranslationsManager().loadString(
+                "txt_tryagain",
+                apiErrorHandlingBinding.tvTryAgainInternet,
+                "TRY AGAIN"
+            )
         }
+            handler = Handler(Looper.myLooper()!!)
 
+            viewModel.viewModelScope.launch {
+                adapterMandi = DistanceAdapter(DiffCallback.OnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("", "Mandi${it.crop}")
+                    bundle.putString("", "Mandi${it.market}")
+                    EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
+                    val args = Bundle()
+                    args.putParcelable("mandiRecord", it)
+                    findNavController()
+                        .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
+                }, LocalSource.getLanguageCode() ?: "en")
+
+                viewModel?.getUserDetails()?.observe(viewLifecycleOwner) {
+                    lat = it.data?.profile?.lat.toString()
+                    long = it.data?.profile?.long.toString()
+                    if (it.data?.accountId != null)
+                        accountID = it.data?.accountId!!
+                }
+                binding.recycleViewDis.adapter = adapterMandi
+            }
+
+            spinnerSetup()
+            filterMenu()
+            tabs()
+            loadingProgressBar()
+            fabButton()
+            //translation()
+
+            binding.recycleViewDis.isNestedScrollingEnabled = true
+            // mandiApiCall()
+
+            apiErrorHandlingBinding.clInternetError.setOnClickListener {
+                mandiApiCall()
+            }
     }
 
     /** to check network is working or not */
@@ -474,7 +487,7 @@ class MandiFragment : Fragment() {
                 }
             }
         })
-        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
+        viewModel?.getVansAdsList(moduleId)?.observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList(it?.data)
             TabLayoutMediator(

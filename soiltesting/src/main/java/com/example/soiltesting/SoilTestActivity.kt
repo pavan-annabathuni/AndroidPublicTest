@@ -17,15 +17,9 @@ class SoilTestActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink?.lastPathSegment!= null) {
-                if (deepLink?.lastPathSegment!! == "soiltesting") {
-                    this.findNavController(R.id.fragmentContainerView).navigate(R.id.soilTestingHomeFragment)
 
-                }
-                else   if (deepLink?.lastPathSegment!! == "soiltestinghistory") {
-                    this.findNavController(R.id.fragmentContainerView).navigate(R.id.allHistoryFragment)
 
-                }
-                else   if (deepLink?.lastPathSegment!! == "soiltestinghistorystatus") {
+                 if (deepLink?.lastPathSegment!! == "soiltestinghistorystatus") {
                     val id = deepLink.getQueryParameter ("id")
                     val soilTestNumber = deepLink.getQueryParameter ("soil_test_number")
 
@@ -37,6 +31,14 @@ class SoilTestActivity : AppCompatActivity() {
                             R.id.statusTrackerFragment,
                             args)
                     }
+                }
+                 else   if (deepLink?.lastPathSegment!! == "soiltestinghistory") {
+                     this.findNavController(R.id.fragmentContainerView).navigate(R.id.allHistoryFragment)
+
+                 }
+               else if (deepLink?.lastPathSegment!! == "soiltesting") {
+                    this.findNavController(R.id.fragmentContainerView).navigate(R.id.soilTestingHomeFragment)
+
                 }
             }
 
