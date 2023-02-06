@@ -64,15 +64,32 @@ object LocalSource {
     fun insertCropMaster(cropMasterList: List<CropMasterEntity>) {
         outgrowDao.insertCropMaster(cropMasterList)
     }
+    //ai crop history
+
     fun insertHistory(aiCropHistory: List<AiCropHistoryEntity>) {
         outgrowDao.insertHistory(aiCropHistory)
     }
 
+    //soil test history
+
+    fun insertSoilTestHistoryData(soilTestHistory: List<SoilTestHistoryEntity>) {
+        outgrowDao.insertSoilTestHistory(soilTestHistory)
+    }
+
+
     fun getCropMaster(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropMaster(searchQuery)
     }
+
+    //get ai history
     fun getAiHistory(searchQuery: String? = ""): Flow<List<AiCropHistoryEntity>?> {
         return outgrowDao.getAiHistory(searchQuery)
+    }
+
+   //get Soil TEst History
+
+    fun getSoilTestHistory(searchQuery: String? = ""): Flow<List<SoilTestHistoryEntity>?> {
+        return outgrowDao.getSoilTestHistory(searchQuery)
     }
 
     fun getCropsPestDiseases(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
@@ -86,6 +103,7 @@ object LocalSource {
     fun getCropsInfo(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getCropsInfo(searchQuery)
     }
+
     fun getIrrigationCrops(searchQuery: String? = ""): Flow<List<CropMasterEntity>?> {
         return outgrowDao.getIrrigationCrops(searchQuery)
     }
@@ -207,7 +225,7 @@ object LocalSource {
         return outgrowDao.getTranslation(appKey)
     }
 
-  fun getTranslationForStringInFlow(appKey: String): Flow<AppTranslationsEntity>? {
+    fun getTranslationForStringInFlow(appKey: String): Flow<AppTranslationsEntity>? {
         return outgrowDao.getTranslationFlow(appKey)
     }
 
@@ -220,12 +238,13 @@ object LocalSource {
     fun getMyFarms(): Flow<List<MyFarmsEntity>> {
         return outgrowDao.getMyFarms()
     }
+
     fun deleteAllMyCrops() = outgrowDao.getDeleteAllMyCrops()
     fun deleteTags() = outgrowDao.deleteTags()
     fun deleteCropMaster() = outgrowDao.deleteCropMaster()
     fun deletePestDisease() = outgrowDao.deletePestDiseases()
     fun deleteCropInformation() = outgrowDao.deleteCropInformation()
-    fun deleteMyFarms()= outgrowDao.deleteAllMyFarms()
+    fun deleteMyFarms() = outgrowDao.deleteAllMyFarms()
 
 
     fun insertViewDevice(devices: List<ViewDeviceEntity>) {
@@ -237,11 +256,9 @@ object LocalSource {
         Log.d("farmCheck","Device Count: ${devices}")
     }
 
-    fun getAllDevices()= outgrowDao.getViewDevices()
+    fun getAllDevices() = outgrowDao.getViewDevices()
 
-    fun getDevicesByFarm(farmId:Int)= outgrowDao.getViewDevicesByFarm(farmId)
-
-
+    fun getDevicesByFarm(farmId: Int) = outgrowDao.getViewDevicesByFarm(farmId)
 
 
 }

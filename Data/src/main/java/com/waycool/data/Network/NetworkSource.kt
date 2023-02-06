@@ -599,6 +599,22 @@ object NetworkSource {
                 emit(Resource.Error(e.message))
             }
         }
+    fun cropVariety(cropId: Int) =
+        flow<Resource<VarietyCropDTO?>> {
+            try {
+                val langCode = LocalSource.getLanguageCode() ?: "en"
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response = apiInterface.cropVariety(headerMap,cropId, lang =langCode)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message))
+            }
+        }
 
     fun getSoilTestLab(account_id: Int, lat: String?, long: String?) =
         flow<Resource<CheckSoilTestLabDTO?>> {
@@ -823,7 +839,7 @@ object NetworkSource {
             }
 
         }catch (e:Exception){
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 

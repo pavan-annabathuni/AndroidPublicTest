@@ -4,77 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="viewModel"
+            type="com.example.addcrop.viewmodel.AddCropViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.AddCropDetailsFragment">
+        tools:context=".ui.free.AddCropDetailsFragment">
 
-        <!--    <androidx.appcompat.widget.Toolbar-->
-        <!--        android:id="@+id/toolbar"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="?android:attr/actionBarSize"-->
-        <!--        android:background="@drawable/toolbar_background"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/backBtn"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginLeft="16dp"-->
-        <!--            android:padding="8dp"-->
-        <!--            android:src="@drawable/ic_back_btn_toolbar" />-->
-
-        <!--        <TextView-->
-        <!--           android:id="@+id/toolBarId"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            android:text="Add Crop"-->
-        <!--            android:textColor="#171717"-->
-        <!--            android:textSize="18sp"-->
-        <!--            android:textStyle="bold" />-->
-
-        <!--    </androidx.appcompat.widget.Toolbar>-->
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbarlayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@drawable/toolbar_background"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/Base_ToolbarStyle"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingStart="@dimen/space16"
+                android:paddingEnd="@dimen/space16"
+                android:onClick="@{viewModel.eventHandler::backButton}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/ic_back_btn_toolbar" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="?android:attr/actionBarSize"
-                app:layout_scrollEffect="compress"
-                app:navigationIcon="@drawable/ic_arrow_back"
-                app:layout_scrollFlags="scroll|enterAlways">
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Add Crop"
+                android:textColor="#171717"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Toolbar Title"
-                    android:textColor="@color/textdark" />
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/card_save_details_crop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appbarlayout">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -87,7 +74,7 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clCalender">
+                    app:layout_constraintTop_toBottomOf="@+id/cl_calender_date_select">
 
                     <TextView
                         android:id="@+id/paragraphMedium"
@@ -95,6 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
+                        android:textStyle="bold"
                         android:text="Select Farm to add this crop"
                         android:textColor="@color/textdark"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -109,10 +97,10 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:paddingEnd="24dp"
                         android:theme="@style/Theme.MaterialComponents.Light"
                         app:chipSpacingHorizontal="4dp"
                         app:chipSpacingVertical="6dp"
-                        android:paddingEnd="24dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +112,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/plot"
+                    android:id="@+id/tv_add_crop_information"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -138,7 +126,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/plotNumber"
+                    android:id="@+id/tv_crop_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -146,14 +134,13 @@
                     android:layout_marginTop="@dimen/space12"
                     android:text="Crop Nickname"
                     android:textColor="#000000"
-
                     android:textSize="14sp"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/plot" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_add_crop_information" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clPlotNumber"
+                    android:id="@+id/cl_crop_nickname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
@@ -163,10 +150,10 @@
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/plotNumber">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_crop_nickname">
 
                     <EditText
-                        android:id="@+id/etNickName"
+                        android:id="@+id/et_nickname_crop"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space50"
                         android:layout_marginStart="@dimen/space16"
@@ -184,7 +171,7 @@
 
 
                 <TextView
-                    android:id="@+id/pincodeNumber"
+                    android:id="@+id/tv_crop_area"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -194,10 +181,10 @@
                     android:textColor="#000000"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clPlotNumber" />
+                    app:layout_constraintTop_toBottomOf="@+id/cl_crop_nickname" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clPincodeNumber"
+                    android:id="@+id/cl_crop_area"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
@@ -206,18 +193,21 @@
                     android:background="@drawable/bg_plot_edittext"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pincodeNumber">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_crop_area">
 
                     <EditText
-                        android:id="@+id/etAreaNumber"
+                        android:id="@+id/et_crop_area"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space50"
                         android:layout_marginStart="@dimen/space16"
                         android:layout_marginTop="@dimen/space2"
                         android:layout_marginEnd="@dimen/space4"
+
                         android:layout_marginBottom="@dimen/space2"
                         android:background="#FFFFFF"
                         android:hint="e.g 50"
+
+                        android:windowSoftInputMode="adjustResize"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -236,7 +226,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <Spinner
-                            android:id="@+id/Acres"
+                            android:id="@+id/select_area_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/space40"
                             android:layout_gravity="center"
@@ -250,75 +240,10 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                    <!--                <TextView-->
-                    <!--                    android:id="@+id/Acres"-->
-                    <!--                    android:layout_width="@dimen/space60"-->
-                    <!--                    android:layout_height="@dimen/space40"-->
-                    <!--                    android:layout_gravity="center"-->
-                    <!--                    android:layout_margin="@dimen/space4"-->
-                    <!--                    android:layout_marginEnd="@dimen/space16"-->
-                    <!--                    android:background="@drawable/bg_acres"-->
-                    <!--                    android:gravity="center"-->
-                    <!--                    android:text="Acres"-->
-                    <!--                    android:textColor="#000000"-->
-                    <!--                    android:textSize="14sp"-->
-                    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="33dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clPincodeNumber"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/tvShapeInFarm"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/txt16"
-                        android:text="Shade in farm"
-                        android:textColor="#000000"
-                        android:textSize="@dimen/txt16"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvOnlyForTea"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="(only for tea and coffee)"
-                        android:textColor="#000000"
-                        android:textSize="@dimen/txt16"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tvShapeInFarm"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <Switch
-                        android:id="@+id/switchShadeForm"
-                        android:layout_width="44dp"
-                        android:layout_height="24dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                 <TextView
-                    android:id="@+id/Address"
+                    android:id="@+id/tv_show_calender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -328,10 +253,10 @@
                     android:textColor="#000000"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clSwitch" />
+                    app:layout_constraintTop_toBottomOf="@+id/cl_crop_area" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clCalender"
+                    android:id="@+id/cl_calender_date_select"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space16"
@@ -341,10 +266,10 @@
                     android:padding="@dimen/space1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Address">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_show_calender">
 
                     <TextView
-                        android:id="@+id/etCalender"
+                        android:id="@+id/tv_date_selected"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/space50"
                         android:layout_marginStart="@dimen/space16"
@@ -352,14 +277,15 @@
                         android:background="#FFFFFF"
                         android:gravity="fill"
                         android:textColor="#828699"
+                        android:onClick="@{viewModel.eventHandler::calenderShow}"
                         android:textSize="@dimen/txt14"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tvCalender"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_calender_icon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/tvCalender"
+                        android:id="@+id/iv_calender_icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
@@ -373,221 +299,6 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!--            <TextView-->
-                <!--                android:id="@+id/tvYearShow"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_gravity="center"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="24dp"-->
-                <!--                android:text="Crop Year"-->
-                <!--                android:textColor="#000000"-->
-                <!--                android:textSize="14sp"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/clCalender" />-->
-
-                <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-                <!--                android:id="@+id/clSpinnerYear"-->
-                <!--                android:layout_width="0dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="@dimen/space8"-->
-                <!--                android:layout_marginEnd="@dimen/space16"-->
-                <!--                android:background="@drawable/bg_plot_edittext"-->
-                <!--                android:padding="@dimen/space1"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/tvYearShow">-->
-
-                <!--                <Spinner-->
-                <!--                    android:id="@+id/tvSpinnerYear"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="@dimen/space50"-->
-                <!--                    android:layout_marginStart="@dimen/space16"-->
-                <!--                    android:layout_marginEnd="@dimen/space4"-->
-                <!--                    android:background="#FFFFFF"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/ivSpinnerYear"-->
-                <!--                    android:layout_width="@dimen/txt12"-->
-                <!--                    android:layout_height="6dp"-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:layout_margin="@dimen/space20"-->
-                <!--                    android:src="@drawable/ic_spinner"-->
-                <!--                    android:textColor="#000000"-->
-                <!--                    android:textSize="14sp"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
-                <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-                <!--            <TextView-->
-                <!--                android:id="@+id/tvselectIrrigation"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_gravity="center"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="@dimen/txt32"-->
-                <!--                android:text="Select Irrigation "-->
-                <!--                android:textColor="#000000"-->
-                <!--                android:textSize="14sp"-->
-
-                <!--                android:textStyle="bold"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/clSpinnerYear" />-->
-
-                <!--            <TextView-->
-                <!--                android:id="@+id/City"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_gravity="center"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="24dp"-->
-                <!--                android:text="Irrigation Type"-->
-                <!--                android:textColor="#000000"-->
-                <!--                android:textSize="14sp"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />-->
-
-                <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-                <!--                android:id="@+id/clSpinner"-->
-                <!--                android:layout_width="0dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="@dimen/space8"-->
-                <!--                android:layout_marginEnd="@dimen/space16"-->
-                <!--                android:background="@drawable/bg_plot_edittext"-->
-                <!--                android:padding="@dimen/space1"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/City">-->
-
-                <!--                <Spinner-->
-                <!--                    android:id="@+id/tvSpinner"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="@dimen/space50"-->
-                <!--                    android:layout_marginStart="@dimen/space16"-->
-                <!--                    android:layout_marginEnd="@dimen/space4"-->
-                <!--                    android:background="#FFFFFF"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/ivSpinner"-->
-                <!--                    android:layout_width="@dimen/txt12"-->
-                <!--                    android:layout_height="6dp"-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:layout_margin="@dimen/space20"-->
-                <!--                    android:src="@drawable/ic_spinner"-->
-                <!--                    android:textColor="#000000"-->
-                <!--                    android:textSize="14sp"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
-                <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-                <!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:id="@+id/etCity"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/City" />&ndash;&gt;-->
-
-                <!--            <TextView-->
-                <!--                android:id="@+id/State"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_gravity="center"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="24dp"-->
-                <!--                android:text="No of Plants Per Acre "-->
-                <!--                android:textColor="#000000"-->
-                <!--                android:textSize="14sp"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/clSpinner" />-->
-
-                <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-                <!--                android:id="@+id/clState"-->
-                <!--                android:layout_width="0dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_marginStart="@dimen/space16"-->
-                <!--                android:layout_marginTop="@dimen/space8"-->
-                <!--                android:layout_marginEnd="@dimen/space16"-->
-                <!--                android:background="@drawable/bg_plot_edittext"-->
-                <!--                android:padding="@dimen/space1"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/State"-->
-
-                <!--                >-->
-
-                <!--                <EditText-->
-                <!--                    android:id="@+id/etState"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="@dimen/space50"-->
-                <!--                    android:layout_marginStart="@dimen/space16"-->
-                <!--                    android:layout_marginEnd="@dimen/space4"-->
-                <!--                    android:background="#fff"-->
-                <!--                    android:hint="e.g 50"-->
-                <!--                    android:inputType="number"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-                <!--            <View-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="100dp"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/clState" />-->
-
-
-                <!--            &lt;!&ndash;            <TextView&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:id="@+id/Mobile"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginTop="24dp"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:text="Mobile"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:textColor="#000000"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:textSize="14sp"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/tvselectIrrigation" />&ndash;&gt;-->
-
-                <!--            &lt;!&ndash;            <EditText&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:id="@+id/etMobile"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_height="@dimen/space50"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginStart="@dimen/space16"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginTop="@dimen/space8"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:layout_marginEnd="@dimen/space16"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                android:background="@drawable/bg_plot_edittext"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-                <!--            &lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/Mobile" />&ndash;&gt;-->
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -597,20 +308,20 @@
             android:id="@+id/clInclude"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="#fff"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="#fff">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <include
-                layout="@layout/api_error_handling"
-                android:id="@+id/errorState" />
+                android:id="@+id/errorState"
+                layout="@layout/api_error_handling" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardCheckHealth"
+            android:id="@+id/card_save_details_crop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -624,6 +335,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:onClick="@{viewModel.eventHandler::saveButtonClicked}"
                 android:background="@drawable/bg_button">
 
                 <TextView
@@ -649,10 +361,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space16"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/cardCheckHealth"
+            app:layout_constraintBottom_toBottomOf="@+id/card_save_details_crop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/cardCheckHealth" />
+            app:layout_constraintTop_toTopOf="@+id/card_save_details_crop" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

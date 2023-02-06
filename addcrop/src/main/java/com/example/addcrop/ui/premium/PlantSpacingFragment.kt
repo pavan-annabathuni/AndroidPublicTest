@@ -49,11 +49,9 @@ class PlantSpacingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        translationSoilTesting()
-        val bundle = Bundle()
-//        binding.btn1.setChecked(true)
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
-            val accountID = it.data?.accountId
+        translationForPlantSpacingDripIrrigation()
+        viewModel.getUserDetails().observe(viewLifecycleOwner) { userDetails ->
+            val accountID = userDetails.data?.accountId
             if (arguments != null) {
                 nickname = arguments?.getString("nick_name")
                 account_id = arguments?.getInt("account_id")
@@ -97,50 +95,53 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants?.let { map.put("no_of_plants", it) }
                 map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
-                binding.constraintLayout3.setOnSelectListener {
+                binding.constraintLayout3.setOnSelectListener {selectPlantDistance->
                     try {
-                        if (it.text.trim().isEmpty()){
-                            Toast.makeText(requireContext(), "Please Enter Plant to Plant Distance", Toast.LENGTH_SHORT).show()
-                        }else{
-                            if (it.text == "ft") {
+                        if (selectPlantDistance.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant to Plant Distance",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            if (selectPlantDistance.text == "ft") {
                                 map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-                            } else if (it.text == "cm") {
+                            } else if (selectPlantDistance.text == "cm") {
                                 map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                            } else if ((it.text == "mtr")) {
+                            } else if ((selectPlantDistance.text == "mtr")) {
                                 map["len_drip"] = binding.etNumber.text
-                            }else {
+                            } else {
                                 map["len_drip"] = binding.etNumber.text
                             }
                         }
 
-                        } catch (e: NumberFormatException) {
+                    } catch (e: NumberFormatException) {
 
-                        }
+                    }
 
                 }
 
-                binding.constraintLayoutBedWidth.setOnSelectListener {
+                binding.constraintLayoutBedWidth.setOnSelectListener {selectBedWidth->
                     try {
-                        if (it.text.trim().isEmpty()) {
+                        if (selectBedWidth.text.trim().isEmpty()) {
                             Toast.makeText(
                                 requireContext(),
                                 "Please Enter Plant Bed width",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }
-                        else{
-                            if (it.text == "ft") {
+                        } else {
+                            if (selectBedWidth.text == "ft") {
                                 map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-                            } else if (it.text == "cm") {
+                            } else if (selectBedWidth.text == "cm") {
                                 map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                            } else if (it.text == "mtr") {
+                            } else if (selectBedWidth.text == "mtr") {
                                 map["width_drip"] = binding.etNumber.text
-                            }else{
+                            } else {
                                 map["width_drip"] = binding.etNumber.text
                             }
 
                         }
-                    }catch (e: NumberFormatException) {
+                    } catch (e: NumberFormatException) {
 
                     }
 
@@ -157,20 +158,24 @@ class PlantSpacingFragment : Fragment() {
                     } else if (dripEmitterRate.isEmpty()) {
                         binding.etNumberWidthDistance.error = "Drip Emitter Rate Per Plant"
                     } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
-                        viewModel.addCropDataPass(map).observe(requireActivity()) {
-                            when (it) {
+                        binding.progressBar?.visibility = View.VISIBLE
+                        binding.cardCheckHealth.visibility = View.GONE
+                        viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip->
+                            when (addCropDrip) {
                                 is Resource.Success -> {
+                                    binding.progressBar?.visibility = View.INVISIBLE
+                                    binding.cardCheckHealth.visibility = View.VISIBLE
                                     activity?.finish()
                                 }
                                 is Resource.Error -> {
                                     Toast.makeText(
                                         requireContext(),
-                                        it.message.toString(),
+                                        addCropDrip.message.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     Log.d(
                                         ContentValues.TAG,
-                                        "postAddCropExption: ${it.message.toString()}"
+                                        "postAddCropExption: ${addCropDrip.message.toString()}"
                                     )
                                 }
                                 is Resource.Loading -> {
@@ -194,19 +199,23 @@ class PlantSpacingFragment : Fragment() {
 
         }
     }
-    fun translationSoilTesting() {
+
+    private fun translationForPlantSpacingDripIrrigation() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
 //            binding.toolbarTitle.text = title
             var NickNamehint = TranslationsManager().getString("e_g_50")
-            binding.etNumber.hint =NickNamehint
-            binding.etNumberWidth.hint=NickNamehint
-            binding.etNumberWidthDistance.hint=NickNamehint
+            binding.etNumber.hint = NickNamehint
+            binding.etNumberWidth.hint = NickNamehint
+            binding.etNumberWidthDistance.hint = NickNamehint
         }
         TranslationsManager().loadString("plant_spacing_details", binding.plot)
         TranslationsManager().loadString("plant_to_plant_distance", binding.plantDistnce)
         TranslationsManager().loadString("plant_bed_width", binding.plantDistnceWidth)
-        TranslationsManager().loadString("drip_emitter_rate_per_plant", binding.plantDistnceWidthDistance)
+        TranslationsManager().loadString(
+            "drip_emitter_rate_per_plant",
+            binding.plantDistnceWidthDistance
+        )
         TranslationsManager().loadString("save", binding.tvCheckCrop)
     }
 

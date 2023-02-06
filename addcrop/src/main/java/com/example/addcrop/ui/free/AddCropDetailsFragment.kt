@@ -1,15 +1,13 @@
-package com.example.addcrop.ui
+package com.example.addcrop.ui.free
 
 import android.R
 import android.app.DatePickerDialog
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
@@ -37,36 +35,27 @@ import java.util.*
 
 
 class AddCropDetailsFragment : Fragment() {
-    private var cropCategoryTagName: String?=null
-    private var cropNameTag: String? =null
+    private var cropCategoryTagName: String? = null
+    private var cropNameTag: String? = null
     private var selectedFarmId: Int? = null
     private var cropIdSelected: Int? = null
     private var accountID: Int? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+    lateinit var binding:FragmentAddCropDetailsBinding
 
     //    private var _binding: FragmentAddCropDetailsBinding? = null
 //    private val binding get() = _binding!!
-    private lateinit var _binding: FragmentAddCropDetailsBinding
-    private val binding get() = _binding
+//    private lateinit var _binding: FragmentAddCropDetailsBinding
+//    private val binding get() = _binding
     private val myCalendar = Calendar.getInstance()
     private var dateCrop: String = ""
-    private var nickName: String = ""
     var area: String = ""
     var date: String = ""
-    val arrayList = ArrayList<String>()
     lateinit var areaTypeSelected: String
 
     private var cropSelectedDate = SimpleDateFormat("yyyy-MM-dd")
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
-
-
-    val colors = arrayOf(
-        "Select Irrigation method",
-        "Drip Irrigation",
-        "Sprinkler Irrigation",
-        "Flood Irrigation"
-    )
-    private val years = arrayOf(
+    private val areaOfUnitList = arrayOf(
         "Acres",
         "Gunta",
         "Cent",
@@ -74,44 +63,32 @@ class AddCropDetailsFragment : Fragment() {
         "Bigha"
     )
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentAddCropDetailsBinding.inflate(inflater,container,false)
-//        _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentAddCropDetailsBinding.inflate(layoutInflater,container,false)
+        binding.viewModel=viewModel
+         return binding.root
 
-//        viewModel.getUserData()
-        return binding.root
+//        _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
+//        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val window: Window? = null
+//        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         apiErrorHandlingBinding = binding.errorState
-        networkCall()
-//        initObeserveLiveData()
-        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
-            networkCall()
-        }
-
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
             cropNameTag = arguments?.getString("cropNameTag")
             cropCategoryTagName = arguments?.getString("selectedCategory")
         }
-
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
-
-
         }
-
-        binding.cardCheckHealth.setOnClickListener {
-            postAddCrop()
-        }
-
         if (requireActivity().intent.extras != null) {
             val bundle = requireActivity().intent.extras
             selectedFarmId = bundle?.getInt("farmID")
@@ -128,33 +105,82 @@ class AddCropDetailsFragment : Fragment() {
             binding.farmsCl.visibility = View.VISIBLE
             binding.paragraphMedium.visibility = View.VISIBLE
             binding.myfarmsChipGroup.visibility = View.VISIBLE
-            getFarms()
-
+            initObserveFarmDetails()
         }
+        checkInternet()
+        initViewClick()
+        selectAreaUnit()
+        translationAddCropForFreeUser()
+        mvvmInit()
+//        binding.viewModel=viewModel
+    }
+
+    //    private fun mvvmInit() {
+//        viewModel.saveButtonPassData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            postCropDetails()
+//        })
+//        viewModel.calenderShow .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//         selectCropDateFromCalender()
+//        })
+//        viewModel.navigateBack.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            val isSuccess = findNavController().navigateUp()
+//            if (!isSuccess) requireActivity().onBackPressed()
+//        })
+//
+//
+//    }
+    private fun mvvmInit() {
+        viewModel.navigation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { action ->
+                when (action) {
+                    "SUBMIT_BUTTON" -> postCropDetails()
+                    "CALENDER_SHOW" -> selectCropDateFromCalender()
+                    "BACK_BUTTON" -> navigateBack()
+                    else -> Log.w("mvvmInit", "Unexpected value: $action")
+                }
+            })
+    }
+    private fun navigateBack() {
+        Log.d("TAG", "backButtonClicked:")
+        val isSuccess = findNavController().navigateUp()
+        if (!isSuccess) requireActivity().onBackPressed()
+    }
 
 
-
-//        spinner()
-        spinnerYear()
-        translations()
-        binding.clCalender.setOnClickListener {
-            showCalender()
+    private fun initViewClick() {
+        apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
+            checkInternet()
         }
-        binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) requireActivity().onBackPressed()
-        }
+//        binding.cardCheckHealth.setOnClickListener {
+//            it.hideSoftInput()
+//            viewModel.eventHandler.saveButtonClicked()
+//        }
+//        binding.clCalenderDateSelect.setOnClickListener {
+//            viewModel.eventHandler.calenderShow()
+//        }
 
+//        binding.backBtn.setOnClickListener {
+//            viewModel.eventHandler.backButton()
+//        }
+
+//
+//        val debouncedClickListener = DebouncedClickListener(1000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch{
+//                postCropDetails()
+//            }
+//
+//
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
 
     }
 
 
-
-    private fun networkCall() {
+    private fun checkInternet() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            binding.cardCheckHealth.visibility = View.GONE
+            binding.cardSaveDetailsCrop.visibility = View.GONE
             context?.let {
                 ToastStateHandling.toastError(
                     it,
@@ -165,12 +191,12 @@ class AddCropDetailsFragment : Fragment() {
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
-            binding.cardCheckHealth.visibility = View.VISIBLE
+            binding.cardSaveDetailsCrop.visibility = View.VISIBLE
         }
     }
 
 
-    private fun getFarms() {
+    private fun initObserveFarmDetails() {
         viewModel.getMyFarms().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -230,46 +256,46 @@ class AddCropDetailsFragment : Fragment() {
         binding.myfarmsChipGroup.addView(chip)
     }
 
-
-    private fun spinnerYear() {
+    //select area unit
+    private fun selectAreaUnit() {
         val arrayAdapter =
-            ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, years)
-        binding.Acres.adapter = arrayAdapter
-        binding.Acres.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val item = p0?.selectedItem
-                areaTypeSelected = item.toString()
-            }
+            ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, areaOfUnitList)
+        binding.selectAreaUnit.adapter = arrayAdapter
+        binding.selectAreaUnit.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val item = p0?.selectedItem
+                    areaTypeSelected = item.toString()
+                }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
             }
-        }
     }
 
-
-    //format(binding.etAreaNumber.text.toString()).toDouble()
-    private fun postAddCrop() {
+    //post crop details using retrofit
+    private fun postCropDetails() {
         binding.progressBar.visibility = View.VISIBLE
-        binding.cardCheckHealth.visibility = View.INVISIBLE
+        binding.cardSaveDetailsCrop.visibility = View.INVISIBLE
         val map = mutableMapOf<String, Any>()
         if (accountID != null)
             map["account_no_id"] = accountID!!
         if (cropIdSelected != null)
             map["crop_id"] = cropIdSelected!!
-        map["plot_nickname"] = binding.etNickName.text.toString()
-        map["sowing_date"] = binding.etCalender.text.toString()
+        map["plot_nickname"] = binding.etNicknameCrop.text.toString()
+        map["sowing_date"] = binding.tvDateSelected.text.toString()
         map["area_type"] = areaTypeSelected.lowercase()
-        map["area"] = binding.etAreaNumber.text
+        map["area"] = binding.etCropArea.text
         if (selectedFarmId != null)
             map["farm_id"] = selectedFarmId!!
 
-        val eventBundle=Bundle()
-        eventBundle.putString("cropCategoryTagName","Crop_category_${cropCategoryTagName}")
-        eventBundle.putString("cropTagName",cropNameTag)
-        eventBundle.putString("cropArea",binding.etAreaNumber.text.toString())
-        eventBundle.putString("sowingDate", binding.etCalender.text.toString())
-        EventItemClickHandling.calculateItemClickEvent("Add_crop",eventBundle)
+        val eventBundle = Bundle()
+        eventBundle.putString("cropCategoryTagName", "Crop_category_${cropCategoryTagName}")
+        eventBundle.putString("cropTagName", cropNameTag)
+//        eventBundle.putString("cropArea",binding.etCropArea.text toString())
+        eventBundle.putString("sowingDate", binding.tvDateSelected.text.toString())
+        EventItemClickHandling.calculateItemClickEvent("Add_crop", eventBundle)
 
         viewModel.addCropDataPass(
             map
@@ -277,7 +303,7 @@ class AddCropDetailsFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.INVISIBLE
-                    binding.cardCheckHealth.visibility = View.VISIBLE
+                    binding.cardSaveDetailsCrop.visibility = View.VISIBLE
                     activity?.finish()
                     viewModel.getMyCrop2().observe(viewLifecycleOwner) {}
 
@@ -299,70 +325,7 @@ class AddCropDetailsFragment : Fragment() {
 
     }
 
-//    private fun itemClicked() {
-//        binding.cardCheckHealth.setOnClickListener {
-//            it.hideSoftInput()
-//            if (!viewModel.checkInputFields()) {
-//                notifyPropertyChanged(BR.nickNameError)
-//                notifyPropertyChanged(BR.areaError)
-//                notifyPropertyChanged(BR.dateError)
-//                return@setOnClickListener
-//            } else if (accountID == null) {
-//                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
-//            }
-//        }
-//    }
-
-
-//    private fun itemClicked(rop_id: Int) {
-//        binding.cardCheckHealth.setOnClickListener {
-//            it.hideSoftInput()
-//            nickName = binding.etNickName.text.toString().trim()
-//            area = binding.etAreaNumber.text.toString().trim()
-//            date = binding.etCalender.text.toString().trim()
-//
-//            if (nickName.isEmpty()) {
-//                binding.etNickName.error = "Nick name should not be empty"
-//                return@setOnClickListener
-//            } else if (area.isEmpty()) {
-//                binding.etAreaNumber.error = "Enter Area"
-//                return@setOnClickListener
-//            } else if (date.isEmpty()) {
-//                binding.etCalender.error = "Pick up the Date"
-//                return@setOnClickListener
-//            } else if (accountID == null) {
-//                ToastStateHandling.toastError(requireContext(), "Incorrect Id", Toast.LENGTH_SHORT)
-//            }
-//
-//
-//        }
-//    }
-//
-//    private fun showCalender() {
-//        val date: DatePickerDialog.OnDateSetListener? =
-//            DatePickerDialog.OnDateSetListener { view, year, month, day ->
-//                myCalendar.set(Calendar.YEAR, year)
-//                myCalendar.set(Calendar.MONTH, month)
-//                myCalendar.set(Calendar.DAY_OF_MONTH, day)
-//                updateLabel(myCalendar)
-//            }
-//
-//        myCalendar.add(Calendar.YEAR, -1)
-//        val dialog = DatePickerDialog(
-//            requireContext(),
-//            date,
-//            myCalendar.get(Calendar.YEAR),
-//            myCalendar.get(Calendar.MONTH),
-//            myCalendar.get(Calendar.DAY_OF_MONTH)
-//        )
-//        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
-//        dialog.datePicker.minDate = myCalendar.timeInMillis
-//        dialog.datePicker.maxDate = myCalendar.timeInMillis
-//        dateCrop = cropSelectedDate.format(myCalendar.time)
-//        dialog.show()
-//    }
-
-        private fun showCalender() {
+    private fun selectCropDateFromCalender() {
         val date: DatePickerDialog.OnDateSetListener? =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
@@ -396,23 +359,25 @@ class AddCropDetailsFragment : Fragment() {
         )
 //        viewModel.selectedDate.value=dateCrop
     }
-    fun translations() {
+
+    //translation for this fragment
+    private fun translationAddCropForFreeUser() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("add_crop")
             binding.toolbarTitle.text = title
             val nickNameHint = TranslationsManager().getString("e_g_crop_name")
-            binding.etNickName.hint = nickNameHint
+            binding.etNicknameCrop.hint = nickNameHint
             val areaHint = TranslationsManager().getString("device_hint")
-            binding.etAreaNumber.hint = areaHint
+            binding.etCropArea.hint = areaHint
         }
         TranslationsManager().loadString(
             "add_crop_information",
-            binding.plot,
+            binding.tvAddCropInformation,
             "Add Crop information"
         )
-        TranslationsManager().loadString("crop_nickname", binding.plotNumber, "Crop Nickname")
-        TranslationsManager().loadString("crop_area", binding.pincodeNumber, "Crop Area")
-        TranslationsManager().loadString("sowing_date", binding.Address, "Sowing Date")
+        TranslationsManager().loadString("crop_nickname", binding.tvCropNickname, "Crop Nickname")
+        TranslationsManager().loadString("crop_area", binding.tvCropArea, "Crop Area")
+        TranslationsManager().loadString("sowing_date", binding.tvShowCalender, "Sowing Date")
         TranslationsManager().loadString("submit", binding.tvCheckCrop, "Submit")
         TranslationsManager().loadString(
             "select_farm_to_add",
@@ -424,19 +389,8 @@ class AddCropDetailsFragment : Fragment() {
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        binding.etCalender.text = dateFormat.format(myCalendar.time)
+        binding.tvDateSelected.text = dateFormat.format(myCalendar.time)
     }
-
-    private fun View.hideSoftInput() {
-        val inputMethodManager =
-            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("AddCropDetailsFragment")

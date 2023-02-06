@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/addCropFragment"
-        android:name="com.example.addcrop.ui.AddCropFragment"
+        android:name="com.example.addcrop.ui.selectcrop.AddCropFragment"
         android:label="fragment_add_crop"
         tools:layout="@layout/fragment_add_crop" >
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/addCropDetailsFragment"
-        android:name="com.example.addcrop.ui.AddCropDetailsFragment"
+        android:name="com.example.addcrop.ui.free.AddCropDetailsFragment"
         android:label="fragment_add_crop_details"
         tools:layout="@layout/fragment_add_crop_details" >
     </fragment>
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/selectAddCropFragment"
-        android:name="com.example.addcrop.ui.SelectAddCropFragment"
+        android:name="com.example.addcrop.ui.selectcrop.SelectAddCropFragment"
         android:label="fragment_select_add_crop"
         tools:layout="@layout/fragment_select_add_crop" >
         <action
