@@ -35,8 +35,8 @@ class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapt
         holder.date.text = properties.createdAt
         holder.slider2.value = properties.probability!!.toFloat()
         holder.risk.text = properties.probabilityDesc
+        /** Checking the risk factor for plant */
         if(properties.probabilityDesc=="Low Risk") {
-
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
         }
         else if (properties.probabilityDesc=="Nil"){
@@ -50,9 +50,9 @@ class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapt
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
         }
         Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(holder.image)
+        /** showing large image of when user click on image*/
         holder.image.setOnClickListener() {
             val dialog = Dialog(holder.itemView.context)
-
             dialog.setCancelable(true)
             dialog.setContentView(R.layout.item_large_image)
             // val body = dialog.findViewById(R.id.body) as TextView

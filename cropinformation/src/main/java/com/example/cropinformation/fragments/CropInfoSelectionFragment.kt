@@ -19,6 +19,7 @@ import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -80,6 +81,18 @@ class CropInfoSelectionFragment : Fragment() {
 
         binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
+        }
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                  activity?.let { it.finish()}
+                }
+            }
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
         }
         binding.toolbarTitle.text = "Crop information"
 
