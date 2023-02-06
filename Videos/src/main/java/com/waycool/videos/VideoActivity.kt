@@ -4,15 +4,12 @@ package com.waycool.videos
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.ActivityVideoBinding
 import kotlinx.coroutines.CoroutineScope
@@ -45,43 +42,31 @@ class VideoActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                // Get deep link from result (may be null if no link is found)
-                var deepLink: Uri? = null
-                if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link
-                    Log.d("DeepLink","Deeplink1 ${deepLink}")
-                }
-                if (deepLink != null) {
-                    Log.d("DeepLink","Deeplink2 ${deepLink}")
-
-                    if (deepLink.lastPathSegment == "videoslist") {
-                        Log.d("DeepLink","Deeplink3 ${deepLink}")
-                        this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
-                    } else {
-                        Log.d("videoLink", "$deepLink")
-                        val id = deepLink.getQueryParameter("video_id")
-                        val title = deepLink.getQueryParameter("video_name")
-                        val description = deepLink.getQueryParameter("video_desc")
-                        val contentUrl = deepLink.getQueryParameter("content_url")
-
-                        Log.d("Video", "$deepLink")
-                        if (!id.isNullOrEmpty() && !title.isNullOrEmpty()) {
-                            val args = Bundle()
-                            args.putInt("id", id.toInt())
-                            args.putString("title", title)
-                            args.putString("description", description)
-                            args.putString("url", contentUrl)
-                            this.findNavController(R.id.nav_host_fragment_videos)
-                                .navigate(R.id.action_videosListFragment_to_playVideoFragment, args)
-                        }
+        DeepLinkNavigator.navigateFromDeeplink(this@VideoActivity) { pendingDynamicLinkData ->
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
+            }
+            if (deepLink != null) {
+                if (deepLink.lastPathSegment == "videoslist") {
+                    this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
+                } else {
+                    val id = deepLink.getQueryParameter("video_id")
+                    val title = deepLink.getQueryParameter("video_name")
+                    val description = deepLink.getQueryParameter("video_desc")
+                    val contentUrl = deepLink.getQueryParameter("content_url")
+                    if (!id.isNullOrEmpty() && !title.isNullOrEmpty()) {
+                        val args = Bundle()
+                        args.putInt("id", id.toInt())
+                        args.putString("title", title)
+                        args.putString("description", description)
+                        args.putString("url", contentUrl)
+                        this.findNavController(R.id.nav_host_fragment_videos)
+                            .navigate(R.id.action_videosListFragment_to_playVideoFragment, args)
                     }
                 }
             }
-            .addOnFailureListener(this) { e -> Log.w("TAG", "getDynamicLink:onFailure", e) }
-
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

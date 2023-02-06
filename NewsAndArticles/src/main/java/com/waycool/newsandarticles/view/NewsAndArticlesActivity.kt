@@ -8,7 +8,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
@@ -27,9 +26,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -40,8 +36,7 @@ import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
@@ -49,8 +44,6 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -108,33 +101,20 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         fabButton()
         translation()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@NewsAndArticlesActivity, LoginActivity::class.java)
+        DeepLinkNavigator.navigateFromDeeplink(this@NewsAndArticlesActivity) { pendingDynamicLinkData ->
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
+            }
+            if (deepLink != null) {
+
+                val intent =
+                    Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
                 startActivity(intent)
-                this@NewsAndArticlesActivity.finish()
-
-            }else{
-                Firebase.dynamicLinks
-                    .getDynamicLink(intent)
-                    .addOnSuccessListener {pendingDynamicLinkData: PendingDynamicLinkData? ->
-
-                        var deepLink: Uri? = null
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.link
-                        }
-                        if (deepLink != null) {
-
-                            val intent =
-                                Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
-                    .addOnFailureListener {
-                            e -> Log.w("TAG", "getDynamicLink:onFailure", e)
-                    }
             }
         }
+
+
 
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}

@@ -522,7 +522,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.VISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
-                        binding.tvOurServiceViewAll.visibility = View.VISIBLE
+                        binding.tvOurServiceViewAll.visibility = View.GONE
                         binding.ivOurService.visibility = View.INVISIBLE
                     }else{
                         lifecycleScope.launch {
