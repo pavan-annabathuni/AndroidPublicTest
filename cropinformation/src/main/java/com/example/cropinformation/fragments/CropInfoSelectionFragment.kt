@@ -40,6 +40,7 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import kotlinx.coroutines.launch
@@ -135,7 +136,7 @@ class CropInfoSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                   // categoryId = selectedCategory?.id,
+                    categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -284,7 +285,7 @@ class CropInfoSelectionFragment : Fragment() {
             Locale.getDefault()
         )
         viewModel.viewModelScope.launch {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "")
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
         }
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)

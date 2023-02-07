@@ -414,6 +414,8 @@ class VideosListFragment : Fragment(), itemClick {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility = View.GONE
+                    Handler().postDelayed({view?.isEnabled = true
+                    },1000)
                     view?.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()

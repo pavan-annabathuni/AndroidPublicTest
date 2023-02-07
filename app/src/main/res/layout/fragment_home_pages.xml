@@ -1294,6 +1294,15 @@
                         app:trackHeight="6dp"
                         tools:ignore="SpeakableTextPresentCheck" />
 
+                    <ProgressBar
+                        android:id="@+id/mandiProgressBar"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
