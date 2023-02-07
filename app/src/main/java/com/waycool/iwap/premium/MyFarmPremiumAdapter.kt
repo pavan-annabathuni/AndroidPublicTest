@@ -38,6 +38,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
        holder. binding.tvAddDevice .isSelected = true
         holder.binding.tvAddDeviceStart.isSelected = true
         holder.binding.totalAreea.text = "${detail.farmArea} Acres"
+        holder.binding.farmLocation.text ="${detail.farmLocation}"
         TranslationsManager().loadString("view_farm_detail", holder.binding.tvAddDevice,"View Farm Details")
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter

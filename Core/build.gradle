@@ -18,6 +18,9 @@ android {
         consumerProguardFiles "consumer-rules.pro"
         ndkVersion = "21.4.7075529"
 
+//        ndk {
+//            abiFilters "x86", "armeabi-v7a","arm64-v8a",'x86_64'
+//        }
     }
 
     buildTypes {

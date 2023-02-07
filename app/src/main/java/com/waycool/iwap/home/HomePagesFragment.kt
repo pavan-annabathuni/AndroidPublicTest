@@ -364,7 +364,13 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         mandiViewModel.getMandiSinglePage(lat, long).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    mandiAdapter.submitList(it.data?.data?.records?.subList(0, 5))
+                    if(it.data!=null && !it.data?.data?.records.isNullOrEmpty()){
+                        if(it.data?.data?.records?.size!! > 5){
+                            mandiAdapter.submitList(it.data?.data?.records?.subList(0, 5))
+                        }else{
+                            mandiAdapter.submitList(it.data?.data?.records)
+                        }
+                    }
                     binding.mandiProgressBar.visibility = View.GONE
                 }
                 is Resource.Error -> {
