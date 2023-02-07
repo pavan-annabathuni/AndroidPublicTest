@@ -3,7 +3,6 @@ package com.waycool.weather.fragment
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -28,8 +27,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -173,39 +170,17 @@ class WeatherFragment : Fragment() {
         outputFile.flush()
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
-
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://outgrowdev.page.link/weathershare"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
-            .setAndroidParameters(
-                DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                    .build()
-            )
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Outgrow - View weather details")
-                    .setDescription("View weather details and more on Outgrow app")
-                    .build()
-            )
-            .buildShortDynamicLink().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({binding.imgShare.isEnabled = true
-                    },1000)
-                    val shortLink: Uri? = task.result.shortLink
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                    sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
-                    startActivity(Intent.createChooser(sendIntent, "choose one"))
-
-
-
-                }
-            }
-
+       val share = Intent(Intent.ACTION_SEND)
+     share.type = "text/plain"
+     share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+     share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
+     share.putExtra(Intent.EXTRA_STREAM, URI)
+     share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+     binding.clShareProgress.visibility=View.GONE
+     Handler().postDelayed({
+         binding.imgShare.isEnabled = true
+     },1000)
+     startActivity(Intent.createChooser(share, "Outgrow - View weather details"))
     }
 
     private fun observer() {

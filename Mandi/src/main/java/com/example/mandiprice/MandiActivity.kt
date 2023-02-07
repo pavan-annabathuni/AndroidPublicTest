@@ -23,9 +23,7 @@ class MandiActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment.equals("/mandi")) {
-                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
-                } else {
+                if (deepLink.lastPathSegment.equals("/mandigraph")) {
                     val cropMasterId = deepLink.getQueryParameter("crop_master_id")
                     val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
                     val subRecordId = deepLink.getQueryParameter("sub_record_id")
@@ -43,6 +41,8 @@ class MandiActivity : AppCompatActivity() {
                         args.putString("fragment", fragment)
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                     }
+                } else if(deepLink.lastPathSegment.equals("/mandi")) {
+                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
                 }
 
             }
