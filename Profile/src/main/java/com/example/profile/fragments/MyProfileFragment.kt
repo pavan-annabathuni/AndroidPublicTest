@@ -3,6 +3,7 @@ package com.example.profile.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -142,7 +143,9 @@ class MyProfileFragment : Fragment() {
                 .buildShortDynamicLink().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         binding.progressBar.visibility = View.GONE
-                        view.isEnabled = true
+                        Handler().postDelayed({view.isEnabled = true
+                        },1000)
+
                         val shortLink: Uri? = task.result.shortLink
                         val sendIntent = Intent()
                         sendIntent.action = Intent.ACTION_SEND

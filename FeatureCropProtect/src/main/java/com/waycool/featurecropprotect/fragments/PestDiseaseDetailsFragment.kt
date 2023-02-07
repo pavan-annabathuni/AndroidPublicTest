@@ -315,7 +315,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    binding.imgShare.isEnabled = true
+                    Handler().postDelayed({binding.imgShare.isEnabled = true
+                    },1000)
+
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND

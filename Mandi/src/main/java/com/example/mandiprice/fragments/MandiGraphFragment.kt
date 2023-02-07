@@ -383,6 +383,7 @@ class MandiGraphFragment : Fragment() {
             "com.example.outgrow",
             imageFile
         )
+        binding.clShareProgress.visibility=View.VISIBLE
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -400,7 +401,8 @@ class MandiGraphFragment : Fragment() {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    binding.imgShare.isEnabled = true
+                    Handler().postDelayed({binding.imgShare.isEnabled = true
+                    },1000)
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND

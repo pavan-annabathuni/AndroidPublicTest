@@ -382,7 +382,8 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    view.isEnabled = true
+                    Handler().postDelayed({view.isEnabled = true
+                    },1000)
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
