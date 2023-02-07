@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="property"
-            type="com.example.cropinformation.apiservice.response.DataX" />
-    </data>
-
     <com.google.android.material.card.MaterialCardView
         android:layout_width="220dp"
         android:layout_height="wrap_content"
@@ -32,9 +26,7 @@
                    android:id="@+id/img_vid"
                    android:layout_width="198dp"
                    android:scaleType="centerCrop"
-                   tools:src="@drawable/img_video"
-                   android:layout_height="100dp"
-                   imageUrl="@{property.thumbnail_url}"/>
+                   android:layout_height="100dp" />
            </com.google.android.material.card.MaterialCardView>
 
 
@@ -46,7 +38,6 @@
                 android:layout_marginEnd="2dp"
                 android:textSize="14sp"
                 android:maxLines="2"
-                android:text="@{property.desc}"
                 tools:text="Agriculture experts discussion on organic..."
                 style="@style/SemiBold" />
 
@@ -56,7 +47,6 @@
                 android:textColor="@color/darkGray"
                 android:layout_marginTop="2dp"
                 android:textSize="12sp"
-                android:text="@{property.content_date}"
                 tools:text="02 August 22"
                 style="@style/SemiBold" />
         </LinearLayout>

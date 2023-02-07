@@ -76,13 +76,10 @@ class ForecastFragment : Fragment() {
         irrigation.irrigationForecast?.let { mForecastAdapter.setList(it) }
 
         tabs()
-        viewModelData(0)
         viewPager()
-
         onclick()
     }
     private fun tabs() {
-
         viewModel.getUserDetails().observe(viewLifecycleOwner){
             accountId = it.data?.accountId ?: 0
         }
@@ -90,21 +87,22 @@ class ForecastFragment : Fragment() {
             val data = it.data?.filter {itt->
                 itt.id == plotId
             }
+            /** calculating are per plant */
             if(data?.get(0)?.area !=null) {
                 area = data[0].area.toString()
                 length = data.get(0).lenDrip.toString()
                 width = data.get(0).widthDrip.toString()
               areaperPlant = (length.toDouble() * width.toDouble()).toString().trim()
-                mPagerForcastAdapter = PagerForcastAdapter(data.get(0))
-            }else{
-                if (data != null) {
-                    mPagerForcastAdapter = PagerForcastAdapter(data.get(0))
-                }
+                mPagerForcastAdapter = PagerForcastAdapter(data[0])
+//            }else{
+//                if (data != null) {
+//                    mPagerForcastAdapter = PagerForcastAdapter(data[0])
+//                }
             }
             mPagerForcastAdapter.setListData(irrigation.irrigationForecast!!)
             binding.viewPager.adapter = mPagerForcastAdapter
+            /** Formatting date for tabs*/
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-               // val customView = tab.setCustomView(R.layout.item_tab_irrigation)
                 val customDate = irrigation.irrigationForecast!!.days[position]
                 val inputDateFormatter: SimpleDateFormat =
                     SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH)
@@ -145,10 +143,8 @@ class ForecastFragment : Fragment() {
         }
     }
 
-    private fun viewModelData(i:Int){
-
-        }
-    fun viewPager(){
+    /** Creating view pager for swipes in tab*/
+    private fun viewPager(){
        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             // This method is triggered when there is any scrolling activity for the current page
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

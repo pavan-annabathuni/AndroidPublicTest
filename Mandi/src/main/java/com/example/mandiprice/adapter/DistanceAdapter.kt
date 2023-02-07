@@ -7,6 +7,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.mandiprice.R
 import com.example.mandiprice.databinding.ItemDistanceBinding
 import com.waycool.data.Local.LocalSource
@@ -28,9 +29,10 @@ class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) 
         val distance = binding.distance
         val imageView = binding.imageViewPrice
         val source = binding.tvSource
+        val price = binding.price
+        val image = binding.imageView
         val kg = binding.tvKg
         fun bind(data: MandiDomainRecord?) {
-            binding.property = data
             binding.executePendingBindings()
         }
     }
@@ -46,11 +48,10 @@ class DistanceAdapter(val onClickListener: OnClickListener,val langCode:String) 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
         holder.bind(properties)
-//        if (properties?.distance == null) {
-//            holder.distance.visibility = View.GONE
-//        } else {
-//            holder.distance.visibility = View.VISIBLE
-//        }
+        holder.price.text = String.format("%.2f",properties?.avg_price)
+        holder.distance.text = "${String.format("%.2f",properties?.distance)} kms"
+        Glide.with(holder.itemView.context).load(properties?.crop_logo).into(holder.image)
+
         when (properties?.price_status) {
             1 -> {
                 holder.imageView.setImageResource(R.drawable.ic_uip)

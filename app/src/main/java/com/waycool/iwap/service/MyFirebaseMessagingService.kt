@@ -29,6 +29,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
+        Log.d(TAG, "Message Notification Body: ${message.notification}")
+
+
         when (PushNotifications.shouldBeDisplayed(message.data)) {
             PushResponsibility.MESSAGING_SHOULD_DISPLAY -> {
                 // This push belongs to Messaging and the SDK is able to display it to the end user
@@ -47,21 +50,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendMyNotification(message: RemoteMessage) {
-        Log.d(TAG, "Message Notification Body: NULL")
         if (message.notification != null) {
-            Log.d(TAG, "Message Notification Body: " + message.notification!!.link)
-            Log.d(TAG, "Message Notification Body: " + message.notification!!.body)
+            Log.d(TAG, "Message Notification Link: " + message.notification?.link)
+            Log.d(TAG, "Message Notification Body: " + message.notification?.body)
+        } else {
+            Log.d(TAG, "Message Notification Body: NULL")
         }
-        var intent = Intent(this, SplashActivity::class.java)
-        if (message.notification!!.link != null) {
+
+        val notificationId = NotificationID.iD
+        val intent: Intent
+
+        if (message.notification?.link != null) {
             intent = Intent(Intent.ACTION_VIEW)
-            intent.data = message.notification!!.link
-        }
-        Log.d("DeepLink","DeeplinkCheck ${message.notification?.link}")
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.data = message.notification?.link
+        } else
+            intent = Intent(this.applicationContext, SplashActivity::class.java)
+
+        Log.d(TAG, "DeeplinkCheck: ${message.notification?.link}")
+
+        intent.action = System.currentTimeMillis().toString()
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
         val pendingIntent = PendingIntent.getActivity(
             application,
-            REQUEST_CODE,
+            notificationId,
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
@@ -69,14 +81,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        Uri soundUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.cricket);
         val notificationBuilder = NotificationCompat.Builder(this, "outgrow")
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(message.notification!!.title)
-            .setContentText(message.notification!!.body)
-//            .setStyle(NotificationCompat.BigTextStyle().bigText(message.notification!!.body))
-            .setAutoCancel(false)
+            .setContentTitle(message.notification?.title ?: "")
+            .setContentText(message.notification?.body ?: "")
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
-        if (message.notification!!.imageUrl != null) {
-            val bitmap = getBitmapFromUrl(message.notification!!.imageUrl.toString())
+        if (message.notification?.imageUrl != null) {
+            val bitmap = getBitmapFromUrl(message.notification?.imageUrl.toString())
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
@@ -93,7 +104,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationBuilder.setChannelId("outgrow")
             //            }
         }
-        mNotificationManager.notify(NotificationID.iD, notificationBuilder.build())
+        mNotificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     object NotificationID {
@@ -118,6 +129,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "MyFirebaseService"
+
         //    private Call call;
         var token: String? = null
         private const val REQUEST_CODE = 12

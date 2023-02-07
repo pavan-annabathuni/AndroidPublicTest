@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentPostHarvestBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 class PostHarvestFragment : Fragment() {
        private lateinit var binding: FragmentPostHarvestBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
 
     private var cropId: Int? = null
@@ -29,7 +29,6 @@ class PostHarvestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPostHarvestBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
         observer()
         return binding.root
 

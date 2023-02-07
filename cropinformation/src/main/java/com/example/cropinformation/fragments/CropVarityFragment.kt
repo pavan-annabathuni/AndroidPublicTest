@@ -5,15 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.adapter.CropVarietyAdapter
 import com.example.cropinformation.databinding.FragmentCropVarityBinding
-import com.example.cropinformation.utils.Constants
-import com.example.cropinformation.viewModle.TabViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.google.gson.JsonParseException
 import com.waycool.data.Local.utils.TypeConverter
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -23,8 +19,8 @@ class CropVarityFragment : Fragment() {
     private var cropId: Int? = null
     private var cropName: String? = null
     private lateinit var binding: FragmentCropVarityBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

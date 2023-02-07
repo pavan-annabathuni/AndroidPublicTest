@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/cropSelectionFragment"
-        android:name="com.example.cropinformation.CropInfoSelectionFragment"
+        android:name="com.example.cropinformation.fragments.CropInfoSelectionFragment"
         android:label="CropSelectionFragment" >
         <action
             android:id="@+id/action_cropSelectionFragment_to_cropInfoFragment"

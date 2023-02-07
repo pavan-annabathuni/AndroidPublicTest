@@ -1,10 +1,6 @@
 package com.example.profile.viewModel
 
 import androidx.lifecycle.*
-import com.example.profile.apiService.profilePic.profile_pic
-import com.example.profile.apiService.response.profile
-import com.example.profile.apiService.userResponse.Data
-import com.example.profile.apiService.userResponse.Profile
 import com.waycool.data.Network.NetworkModels.*
 import com.waycool.data.repository.GeocodeRepository
 import com.waycool.data.repository.domainModels.UserDetailsDomain

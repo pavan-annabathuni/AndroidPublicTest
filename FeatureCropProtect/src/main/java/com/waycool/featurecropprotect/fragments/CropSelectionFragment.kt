@@ -107,7 +107,7 @@ class CropSelectionFragment : Fragment() {
             binding.search.hint = TranslationsManager().getString("search")
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle,"Protect Your Crop")
-        TranslationsManager().loadString("crop_protection_top",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
+        TranslationsManager().loadString("str_crop_protection",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
         TranslationsManager().loadString("my_crops",binding.myCropsTitle,"My Crop")
 
         binding.cropsRv.adapter = adapter
@@ -144,6 +144,7 @@ class CropSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
+                    categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }

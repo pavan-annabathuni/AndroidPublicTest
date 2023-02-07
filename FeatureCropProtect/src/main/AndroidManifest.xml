@@ -1,60 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.waycool.featurecropprotect">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <application
-        android:usesCleartextTraffic="true">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application android:usesCleartextTraffic="true">
         <activity
             android:name=".CropProtectActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysVisible">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="adminuat.outgrowdigital.com"
                     android:path="/cropprotect"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="adminuat.outgrowdigital.com"
                     android:path="/pestdiseasedetail"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="adminuat.outgrowdigital.com"
                     android:path="/pestdisease"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
     </application>
 
-</manifest>
-<!--<manifest xmlns:android="http://schemas.android.com/apk/res/android">-->
+</manifest><!--<manifest xmlns:android="http://schemas.android.com/apk/res/android">-->
 
-<!--    <application>-->
-<!--        <activity-->
-<!--            android:name=".CropProtectActivity"-->
-<!--            android:exported="false">-->
+    <!--    <application>-->
+    <!--        <activity-->
+    <!--            android:name=".CropProtectActivity"-->
+    <!--            android:exported="false">-->
 
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
+    <!--            <meta-data-->
+    <!--                android:name="android.app.lib_name"-->
+    <!--                android:value="" />-->
 
-<!--        </activity>-->
-<!--    </application>-->
+    <!--        </activity>-->
+    <!--    </application>-->
 
-<!--</manifest>-->
+    <!--</manifest>-->

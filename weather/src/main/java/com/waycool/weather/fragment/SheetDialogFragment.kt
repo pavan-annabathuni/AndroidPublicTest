@@ -42,9 +42,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
 
         val viewModelFactory = DetailViewModelFactory(imageProperty,application)
 
-        binding.viewModel = ViewModelProvider(
-            this, viewModelFactory
-        ).get(DailyvViewModel::class.java)
+        binding.viewModel = ViewModelProvider(this, viewModelFactory)[DailyvViewModel::class.java]
 
         observer()
         onClick()
@@ -52,7 +50,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
 
         return binding.root
     }
-    fun observer(){
+    private fun observer(){
         binding.viewModel?.selectedProperty?.observe(viewLifecycleOwner){
               if (it != null) {
                   WeatherIcons.setWeatherIcon(it?.weather?.get(0)?.icon.toString(),binding.icon2)
@@ -72,7 +70,7 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
             val formatter3 = SimpleDateFormat("KK:mm a")//or use getDateInstance()
             val formatDate3 = formatter3.format(sunset?.times(1000L))
             binding.tvSunset.text = formatDate3.toString()
-
+            /** setting weather alerts text color,description adn icon accordingly weather id */
             when(it?.weather?.get(0)?.id){
                 200-> {binding.alerts.text = it?.weather?.get(0)?.description
                     binding.alerts.setTextColor(Color.parseColor(yellow))
@@ -300,7 +298,6 @@ class SheetDialogFragment : BottomSheetDialogFragment() {
         binding.imgClose.setOnClickListener(){
             this.dismiss()
         }
-
     }
     override fun getTheme(): Int {
         return R.style.BottomSheetDialog

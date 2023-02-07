@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,6 +23,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.databinding.FragmentNotificationBinding
+import com.waycool.uicomponents.R
 import kotlinx.coroutines.launch
 
 
@@ -66,7 +69,6 @@ class NotificationFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
     private fun setAdapter(){
         mNotificationAdapter = NotificationAdapter(NotificationAdapter.OnClickListener { notification,dataNotification ->
-            viewModel.getNotification().observe(viewLifecycleOwner){
                 val eventBundle=Bundle()
                 eventBundle.putString("",notification.title)
                 EventItemClickHandling.calculateItemClickEvent("NotificationItemClick",eventBundle)
@@ -74,25 +76,36 @@ class NotificationFragment : Fragment() {
 
                 Log.d("Notification","Notification Link ${notification.link}")
                     if(!deepLink.isNullOrEmpty()) {
-                        val i = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                        startActivity(i)
-                }
-                else if(deepLink.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,"Deeplink is null",Toast.LENGTH_SHORT) }
-                }
-            }
+                        try {
+                            val packageName = "com.android.chrome"
+                            val customTabIntent: CustomTabsIntent = CustomTabsIntent.Builder()
+                                .setToolbarColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+                                .build()
+                            customTabIntent.intent.setPackage(packageName)
+                            customTabIntent.launchUrl(
+                                requireContext(),
+                                Uri.parse(deepLink)
+                            )
+                        }catch (e:Exception){
+                            Log.d("link", "onBindViewHolder: $e")
+                        }
+
+                    }else context?.let {
+                        ToastStateHandling.toastError(
+                            it,
+                            "No Link",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+
             if(dataNotification.readAt == null){
-            viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner){
-              setAdapter()
+            viewModel.updateNotification(dataNotification.id!!).observe(viewLifecycleOwner) {
+                setAdapter()
                 newNotification()
 
             }}
         }, requireContext())
-        binding.recycleViewHis.adapter = mNotificationAdapter
-        viewModel.getNotification().observe(viewLifecycleOwner){
-            mNotificationAdapter.submitList(it.data?.data)
-            Log.d("Notifcation", "setAdapter: ${it}")
-        }
+
     }
 
     private fun newNotification(){
@@ -104,6 +117,8 @@ class NotificationFragment : Fragment() {
 
             when(it){
                 is Resource.Success ->{
+                    binding.recycleViewHis.adapter = mNotificationAdapter
+                    mNotificationAdapter.submitList(it.data?.data)
                     binding.progressBar.visibility = View.GONE
                     var data = it.data?.data?.filter { itt->
                         itt.readAt== null

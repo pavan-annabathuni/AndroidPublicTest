@@ -96,37 +96,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
             myFarmEdit = arguments?.getParcelable("farm")
         }
 
-        if (myFarmEdit != null) {
-            binding.farmnameEtAddfarm.setText("${myFarmEdit?.farmName}")
-            binding.setPrimaryFarm.isChecked = myFarmEdit?.isPrimary == 1
 
-            waterSourcesSelected = myFarmEdit?.farmWaterSource?.toMutableList()?: mutableListOf()
-            for (i in waterSourcesSelected.indices) {
-                when (waterSourcesSelected[i]) {
-                    "Rain" -> binding.rainSource.isChecked = true
-                    "River" -> binding.riverSource.isChecked = true
-                    "Canal" -> binding.canalSource.isChecked = true
-                    "Lake" -> binding.lakeSource.isChecked = true
-                    "Borewell" -> binding.borewellSource.isChecked = true
-                }
-            }
-
-            if (pumpHpList.indexOf(myFarmEdit?.farmPumpHp) != -1) binding.pumphpSpinner.setSelection(
-                pumpHpList.indexOf(myFarmEdit?.farmPumpHp)
-            )
-            if (pumpTypesList.indexOf(myFarmEdit?.farmPumpType) != -1) binding.pumptypeSpinner.setSelection(
-                pumpTypesList.indexOf(myFarmEdit?.farmPumpType)
-            )
-            if (pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize) != -1) binding.pipesizeSpinner.setSelection(
-                pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize)
-            )
-            if (pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth) != -1) binding.pumpheightSpinner.setSelection(
-                pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth)
-            )
-
-            binding.flowrateEtAddfarm.setText("${myFarmEdit?.farmPumpFlowRate ?: ""}")
-
-        }
 
         binding.mycropsRv.adapter = myCropsAdapter
 
@@ -337,6 +307,41 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
             if (it != null) {
                 checkedCropList = it
             }
+        }
+
+
+        if (myFarmEdit != null) {
+            binding.farmnameEtAddfarm.setText("${myFarmEdit?.farmName}")
+            binding.setPrimaryFarm.isChecked = myFarmEdit?.isPrimary == 1
+
+            waterSourcesSelected = myFarmEdit?.farmWaterSource?.toMutableList()?: mutableListOf()
+            for (i in waterSourcesSelected.indices) {
+                when (waterSourcesSelected[i]) {
+                    "Rain" -> binding.rainSource.isChecked = true
+                    "River" -> binding.riverSource.isChecked = true
+                    "Canal" -> binding.canalSource.isChecked = true
+                    "Lake" -> binding.lakeSource.isChecked = true
+                    "Borewell" -> binding.borewellSource.isChecked = true
+                }
+            }
+
+            Log.d("savefarm","index: ${pumpHpList.indexOf(myFarmEdit?.farmPumpHp)} pumphp:${myFarmEdit?.farmPumpHp}")
+
+            if (pumpHpList.indexOf(myFarmEdit?.farmPumpHp) != -1) binding.pumphpSpinner.setSelection(
+                pumpHpList.indexOf(myFarmEdit?.farmPumpHp)
+            )
+            if (pumpTypesList.indexOf(myFarmEdit?.farmPumpType) != -1) binding.pumptypeSpinner.setSelection(
+                pumpTypesList.indexOf(myFarmEdit?.farmPumpType)
+            )
+            if (pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize) != -1) binding.pipesizeSpinner.setSelection(
+                pipeSizeList.indexOf(myFarmEdit?.farmPumpPipeSize)
+            )
+            if (pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth) != -1) binding.pumpheightSpinner.setSelection(
+                pumpHeightList.indexOf(myFarmEdit?.farmPumpDepth)
+            )
+
+            binding.flowrateEtAddfarm.setText("${myFarmEdit?.farmPumpFlowRate ?: ""}")
+
         }
     }
 

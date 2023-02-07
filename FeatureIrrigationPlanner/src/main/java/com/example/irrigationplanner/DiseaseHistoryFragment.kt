@@ -31,13 +31,10 @@ class DiseaseHistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
-           // irrigation = it.getParcelable("IrrigationHis")!!
             accountId = it.getInt("accountId")
             plotId = it.getInt("plotId")
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,20 +48,16 @@ class DiseaseHistoryFragment : Fragment() {
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
             viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
-//                        val i = it.data?.data?.disease?.size?.minus(1)
-//                        while (i!=0) {
                 val data = it.data?.data?.historicData?.filter { itt ->
                     itt.disease?.diseaseType == "Disease"
                 }
                 mHistoryAdapter.submitList(data)
-                Log.d("hostry", "setAdapter: ${it.message}")
-
+                /** checking that in api Deficiency is there or not */
                 val data2 = it.data?.data?.historicData?.filter { itt ->
                     itt.disease?.diseaseType == "Deficiency"
                 }
                 if(data2!=null) dificiency = "dif"
                 else dificiency = "noData"
-//                        }
             }
         }
         //translation
@@ -73,18 +66,17 @@ class DiseaseHistoryFragment : Fragment() {
             binding.topAppBar.title = title
         }
         tabs()
-
         return binding.root
     }
 
     private fun tabs() {
-
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Disease").setCustomView(R.layout.item_tab)
         )
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Pest").setCustomView(R.layout.item_tab)
         )
+        /** if Deficiency is there we showing Deficiency tab*/
         if(dificiency == "diff"){
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText("Deficiency").setCustomView(R.layout.item_tab)
@@ -94,56 +86,39 @@ class DiseaseHistoryFragment : Fragment() {
                 when(binding.tabLayout.selectedTabPosition) {
                     0->viewModel.viewModelScope.launch {
                         viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
-//                        val i = it.data?.data?.disease?.size?.minus(1)
-//                        while (i!=0) {
                             val data = it.data?.data?.historicData?.filter { itt ->
                                 itt.disease?.diseaseType == "Disease"
                             }
                             mHistoryAdapter.submitList(data)
-                            Log.d("hostry", "setAdapter: ${it.message}")
-//                        }
                         }
                     }
                     1->{viewModel.viewModelScope.launch {
                         viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
-//                        val i = it.data?.data?.disease?.size?.minus(1)
-//                        while (i!=0) {
                             val data = it.data?.data?.historicData?.filter { itt ->
                                 itt.disease?.diseaseType == "Pest"
                             }
                             mHistoryAdapter.submitList(data)
                             Log.d("hostry", "setAdapter: ${it.message}")
-//                        }
                         }
                     }}
                     2->{viewModel.viewModelScope.launch {
                         accountId?.let {
                             viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
-                    //                        val i = it.data?.data?.disease?.size?.minus(1)
-                    //                        while (i!=0) {
                                 val data = it.data?.data?.historicData?.filter { itt ->
                                     itt.disease?.diseaseType == "Deficiency"
                                 }
                                 mHistoryAdapter.submitList(data)
-                                Log.d("hostry", "setAdapter: ${it.message}")
-                    //                        }
                             }
                         }
                     }}
-
                 }}
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("DiseaseHistoryFragment")
     }
-
 }

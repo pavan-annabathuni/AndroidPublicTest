@@ -48,27 +48,9 @@ class ForecastAdapter:RecyclerView.Adapter<ForecastAdapter.MyViewHolder>() {
                 val percentage = (value / properties.mad[position]) * 100
                 holder.waterLevel.progress = percentage
             }
-//        if(level<=0)
-//        holder.waterLevel.progress = level
         }
     }
 
-//    companion object DiffCallback : DiffUtil.ItemCallback<IrrigationForecast>() {
-//
-//        override fun areItemsTheSame(
-//            oldItem: IrrigationForecast,
-//            newItem: IrrigationForecast
-//        ): Boolean {
-//            return oldItem == newItem
-//        }
-//
-//        override fun areContentsTheSame(
-//            oldItem: IrrigationForecast,
-//            newItem: IrrigationForecast
-//        ): Boolean {
-//            return oldItem.days == newItem.days
-//        }
-//    }
 
     override fun getItemCount(): Int {
        return details.days.size

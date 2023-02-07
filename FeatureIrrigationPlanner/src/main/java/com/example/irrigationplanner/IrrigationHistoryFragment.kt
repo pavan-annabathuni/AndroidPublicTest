@@ -37,17 +37,9 @@ class IrrigationHistoryFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentIrrigationHistoryBinding.inflate(inflater)
-
         mHistoryAdapter = HistoryDetailAdapter(HistoryDetailAdapter.OnClickListener {
-
         })
         binding.recycleViewHis.adapter = mHistoryAdapter
-//        viewModel.viewModelScope.launch {
-//            viewModel.getIrrigationHis(2,3).observe(viewLifecycleOwner) {
-//                mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
-//            }
-//        }
-       // mHistoryAdapter.submitList(historyDetails?.historicData)
         mHistoryAdapter.submitList(historyDetails?.historicData)
 
 

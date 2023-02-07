@@ -34,22 +34,7 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
         val properties = getItem(position)
        // holder.disName.text = properties.
         holder.slider2.value = properties.probability!!.toFloat()
-//        if(properties.probability!!>15.00&&properties.probability!!<=43.99) {
-//            holder.risk.text = "Low Risk"
-//            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
-//        }
-//        else if (properties.probability!!<=15.00){
-//            holder.risk.text = "Nill"
-//            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_gray)
-//        }
-//        else if (properties.probability!!>=44&&properties.probability!!<=72.99){
-//            holder.risk.text = "Medium Risk"
-//            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
-//        }
-//        else {
-//            holder.risk.text = "High Risk"
-//            holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
-//        }
+        /** Checking the risk factor for plant */
         holder.risk.text = properties.probabilityDesc
         if(properties.probabilityDesc=="Low Risk") {
 
@@ -66,9 +51,9 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
         }
         Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(holder.image)
+        /** showing large image of when user click on image*/
         holder.image.setOnClickListener() {
             val dialog = Dialog(holder.itemView.context)
-
             dialog.setCancelable(true)
             dialog.setContentView(R.layout.item_large_image)
             // val body = dialog.findViewById(R.id.body) as TextView
@@ -84,11 +69,6 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
 
     }
 
-//    override fun getItemCount(): Int {
-//        val size=data
-//        return if(size>=5) 5
-//        else size
-//    }
     companion object DiffCallback : DiffUtil.ItemCallback<DiseaseCurrentData>() {
 
     override fun areItemsTheSame(
