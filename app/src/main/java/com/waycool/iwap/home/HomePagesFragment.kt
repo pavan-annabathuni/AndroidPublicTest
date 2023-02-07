@@ -365,6 +365,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             when (it) {
                 is Resource.Success -> {
                     mandiAdapter.submitList(it.data?.data?.records?.subList(0, 5))
+                    binding.mandiProgressBar.visibility = View.GONE
                 }
                 is Resource.Error -> {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -377,7 +378,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             Toast.LENGTH_SHORT
                         ) }}}
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.mandiProgressBar.visibility = View.VISIBLE
+                }
 
             }
 //                    mandiAdapter.submitList()

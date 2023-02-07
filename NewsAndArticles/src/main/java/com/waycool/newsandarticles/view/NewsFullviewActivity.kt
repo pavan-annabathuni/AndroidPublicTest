@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.View
@@ -89,7 +90,8 @@ class NewsFullviewActivity : AppCompatActivity() {
                 .buildShortDynamicLink().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         binding.clShareProgress.visibility=View.GONE
-                        binding.shareBtn.isEnabled=true
+                        Handler().postDelayed({binding.shareBtn.isEnabled = true
+                        },1000)
                         val shortLink: Uri? = task.result.shortLink
                         val sendIntent = Intent()
                         sendIntent.action = Intent.ACTION_SEND
