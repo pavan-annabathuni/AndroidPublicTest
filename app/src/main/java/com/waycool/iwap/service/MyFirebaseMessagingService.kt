@@ -69,7 +69,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "DeeplinkCheck: ${message.notification?.link}")
 
         intent.action = System.currentTimeMillis().toString()
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent = PendingIntent.getActivity(
             application,
@@ -83,7 +83,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(message.notification?.title ?: "")
             .setContentText(message.notification?.body ?: "")
-            .setAutoCancel(false)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
         if (message.notification?.imageUrl != null) {
