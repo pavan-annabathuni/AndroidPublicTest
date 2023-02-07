@@ -3,6 +3,8 @@ package com.waycool.cropprotect.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +18,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -31,6 +35,7 @@ import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseBinding
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import kotlin.math.abs
 
@@ -41,6 +46,8 @@ class PestDiseaseFragment : Fragment() {
     private val viewModel: CropProtectViewModel by lazy {
         ViewModelProvider(requireActivity())[CropProtectViewModel::class.java]
     }
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     private var cropId: Int? = null
     private var cropName: String? = null
     var selectedCategory:String?=null
@@ -76,8 +83,11 @@ class PestDiseaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        handler = Handler(Looper.myLooper()!!)
         apiErrorHandlingBinding=binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         arguments?.let {
             cropId = it.getInt("cropid")
             cropName = it.getString("cropname")
@@ -89,12 +99,7 @@ class PestDiseaseFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
         }
-//        pestDiseaseApiCall()
-//        setBanners()
         fabButton()
-//        binding.toolbar.setNavigationOnClickListener {
-//            findNavController().popBackStack()
-//        }
         binding.toolbarTitle.text = cropName
 
 
@@ -102,7 +107,6 @@ class PestDiseaseFragment : Fragment() {
 
     private fun pestDiseaseApiCall() {
         binding.progressBar.visibility=View.VISIBLE
-
         cropId?.let { cropId ->
             viewModel.getPestDiseaseListForCrop(cropId).observe(viewLifecycleOwner) {
                 when (it) {
@@ -172,8 +176,22 @@ class PestDiseaseFragment : Fragment() {
     }
 
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
-
+        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
             bannerAdapter.submitList( it.data)
             TabLayoutMediator(binding.bannerIndicators, binding.bannerViewpager) { tab: TabLayout.Tab, position: Int ->
@@ -224,8 +242,17 @@ class PestDiseaseFragment : Fragment() {
             FeatureChat.zenDeskInit(requireContext())
         }
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("PestDiseaseFragment")
     }
 }

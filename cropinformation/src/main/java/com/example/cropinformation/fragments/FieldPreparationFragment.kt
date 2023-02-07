@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.cropinformation.databinding.FragmentFieldPreparationBinding
-import com.example.cropinformation.viewModle.TabViewModel
+import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 
 
 class FieldPreparationFragment : Fragment() {
 
        private lateinit var binding: FragmentFieldPreparationBinding
-    private val ViewModel: TabViewModel by lazy {
-        ViewModelProviders.of(this).get(TabViewModel::class.java)
+    private val ViewModel: CropInfoViewModel by lazy {
+        ViewModelProviders.of(this).get(CropInfoViewModel::class.java)
     }
     private var cropId: Int? = null
 
@@ -32,7 +32,6 @@ class FieldPreparationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFieldPreparationBinding.inflate(inflater)
-        ViewModel.cropAdvisory()
         observer()
         return binding.root
 

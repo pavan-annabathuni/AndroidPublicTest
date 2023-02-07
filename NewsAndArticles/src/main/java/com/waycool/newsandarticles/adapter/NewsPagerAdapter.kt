@@ -60,7 +60,8 @@ class NewsPagerAdapter(
                 .into(itemBinding.newsListImage)
 
             itemBinding.share.setOnClickListener {
-                onItemClick.onShareItemClick(vans)
+                it?.isEnabled = false
+                onItemClick.onShareItemClick(vans,it)
             }
 
             itemBinding.newsCv.setOnClickListener {
@@ -109,5 +110,5 @@ class NewsPagerAdapter(
 
 interface onItemClickNews{
     fun onItemClick(vans:VansFeederListDomain?)
-    fun onShareItemClick(vans: VansFeederListDomain?)
+    fun onShareItemClick(vans: VansFeederListDomain?, view: View)
 }

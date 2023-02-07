@@ -10,13 +10,13 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -43,9 +43,9 @@ class AddFarmSupportFragment : Fragment() {
     private val viewModel: EditProfileViewModel by lazy {
         ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
     }
-    var lat = 12.22
-    var long = 78.22
-    var pinCode = 1
+    var lat:Double? = null
+    var long:Double? = null
+    var pinCode:Int? = null
     var village = ""
     var address = ""
     var state = ""
@@ -95,6 +95,7 @@ class AddFarmSupportFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -106,9 +107,9 @@ class AddFarmSupportFragment : Fragment() {
         binding.imgLocation.setOnClickListener() {
             viewModel.viewModelScope.launch {
             val toast = TranslationsManager().getString("loading")
-                if(!toast.isNullOrEmpty())
-            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT) }
-            else context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Loading",Toast.LENGTH_SHORT) }}
+                if(!toast.isNullOrEmpty()){
+            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT) }}
+            else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Loading",Toast.LENGTH_SHORT) }}}
             getLocation()
         }
         binding.farmManger.background =
@@ -174,9 +175,10 @@ class AddFarmSupportFragment : Fragment() {
                 binding.mobileNo.error = "Enter Valid Mobile Number"
             } else {
                 binding.mobileNo.isErrorEnabled = false
+                if(!lat.toString().isNullOrEmpty()&&!long.toString().isNullOrEmpty())
                 viewModel.updateFarmSupport(
                     accountId!!,
-                    name, contact!!, lat, long, roleid, pinCode,
+                    name, contact!!, lat!!, long!!, roleid, pinCode!!,
                     village, address, state, district
                 ).observe(viewLifecycleOwner) {
                     when (it) {

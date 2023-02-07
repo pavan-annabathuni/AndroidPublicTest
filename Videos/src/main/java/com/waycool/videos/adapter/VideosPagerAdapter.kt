@@ -1,8 +1,8 @@
 package com.waycool.videos.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -47,18 +47,11 @@ class VideosPagerAdapter(
                 .into(itemBinding.videosListVideoImage)
 
             itemBinding.share.setOnClickListener {
-                Log.d("ItemPos","ItemPosShare${absoluteAdapterPosition}")
-                onItemClickOne.onShareItemClick(vans)
-
-//                onItemShareClick?.invoke(getItem(absoluteAdapterPosition))
+                it?.isEnabled = false
+                onItemClickOne.onShareItemClick(vans,it)
             }
             itemBinding.videosListVideoCardview.setOnClickListener {
-                Log.d("ItemPos","ItemPosItem${absoluteAdapterPosition}")
                 onItemClickOne.onItemClick(vans)
-
-//                onItemClick?.invoke(getItem(absoluteAdapterPosition))
-                Log.d("ItemPos","ItemPosItemClick${absoluteAdapterPosition}")
-
             }
 
             TranslationsManager().loadString("share",itemBinding.share)
@@ -89,6 +82,6 @@ class VideosPagerAdapter(
 }
 interface itemClick{
     fun onItemClick(van:VansFeederListDomain?)
-    fun onShareItemClick(van:VansFeederListDomain?)
+    fun onShareItemClick(van:VansFeederListDomain?,view:View?)
 
 }

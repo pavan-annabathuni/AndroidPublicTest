@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            app:layout_constraintStart_toEndOf="@+id/backBtn"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/space16"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Select Testing Lab"
-                android:textColor="#171717"
+                android:textColor="#070D09"
                 android:textSize="18sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/notosans_bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
             android:text="@string/krishna_s_lab"
             android:textColor="#171717"
             android:textSize="@dimen/txt18"
-            android:textStyle="bold"
+            android:fontFamily="@font/notosans_bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,12 +81,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="@dimen/space16"
+            android:layout_marginTop="@dimen/space4"
             android:layout_marginEnd="@dimen/space16"
             android:padding="4dp"
             android:text="@string/b_mudhuganapalli_n_village_devaripalli_post_talk_hosur_n_tamilnadu_pin_635124"
-            android:textColor="#546E7A"
+            android:textColor="#535870"
             android:textSize="@dimen/space16"
+            android:fontFamily="@font/notosans_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLabTitle" />
@@ -119,8 +120,7 @@
             android:id="@+id/cl_km"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space0_5"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
@@ -130,7 +130,6 @@
                 android:layout_width="@dimen/space16"
                 android:layout_height="@dimen/space16"
                 android:layout_marginStart="@dimen/space16"
-                android:layout_marginTop="@dimen/space12"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_distance"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -143,14 +142,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space8"
-                android:layout_marginTop="@dimen/space12"
-                android:layout_marginBottom="@dimen/space8"
                 android:text="@string/_11_km_from_your_location"
                 android:textColor="#585858"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosans_medium"
+                app:layout_constraintBottom_toBottomOf="@+id/ivClick"
                 app:layout_constraintStart_toEndOf="@+id/ivClick"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/ivClick" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -159,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/space16"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/space16"
             android:background="#EDEDED"
             app:layout_constraintTop_toBottomOf="@+id/cl_km" />
@@ -174,10 +172,11 @@
         android:layout_marginStart="@dimen/space16"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="@dimen/space16"
-        android:padding="4dp"
+        android:padding="2dp"
         android:text="Soil sample will be collected by the selected Lab"
-        android:textColor="#546E7A"
+        android:textColor="#535870"
         android:textSize="14sp"
+        android:fontFamily="@font/notosans_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_top_onp" />
@@ -201,7 +200,8 @@
         android:text="Select Crop"
         android:textColor="#000000"
         android:textSize="16sp"
-        android:textStyle="bold"
+        android:padding="4dp"
+        android:fontFamily="@font/notosans_bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
 
@@ -252,7 +252,8 @@
             android:text="Add"
             android:textColor="#146133"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:fontFamily="@font/notosans_bold"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -311,7 +312,7 @@
         android:text="Next"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/txt16"
-        android:textStyle="bold"
+        android:fontFamily="@font/notosans_bold"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -68,9 +68,6 @@
                     android:fontFamily="@font/notosans_bold"
               />
             </LinearLayout>
-
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/videos_list_rv"
                 android:layout_width="0dp"

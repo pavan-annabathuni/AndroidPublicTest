@@ -4,17 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mandiprice.R
-import com.example.mandiprice.adapter.DistanceAdapter
-import com.example.mandiprice.databinding.ItemDistanceBinding
-import com.example.soiltesting.databinding.ItemLabsSampleBinding
+
 import com.example.soiltesting.databinding.ItemMandiBinding
-import com.example.soiltesting.ui.checksoil.SoilTestingLabsHolder
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import kotlinx.coroutines.Dispatchers

@@ -21,7 +21,6 @@ import java.util.*
 class CropOverviewFragment : BottomSheetDialogFragment() {
     private val viewModel by lazy { ViewModelProvider(this)[IrrigationViewModel::class.java] }
     private lateinit var binding: FragmentCropOverviewBinding
-     var accountId:Int = 0
     var plotId:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +38,6 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         binding.imgClose.setOnClickListener() {
             this.dismiss()
         }
-        viewModel.getUserDetails().observe(viewLifecycleOwner){
-            accountId = it.data?.accountId!!
-        }
         information()
         translation()
         binding.tvDrip.isSelected = true
@@ -50,13 +46,12 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
 
     private fun information() {
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            /** Filtering my crop api with plot id*/
             val data = it.data?.filter {
                 it.id==plotId
             }
-            Log.d("cropInfo", "information: $data ")
-            //Toast.makeText(context, "${data?.get(0)?.actualHarvestDate}", Toast.LENGTH_SHORT).show()
             binding.apply {
-
+                /**setting data from api if data is null then we are showing null text*/
                 if (data?.get(0)?.area != null)
                     tvAce.text = data?.get(0)?.area
                 else tvAce.text = "NA"
@@ -83,6 +78,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                     tvWeek.text = data?.get(0)?.cropYear.toString()
                 else tvWeek.text = "NA"
 
+                /** setting crop age value */
                 if (data?.get(0)?.expectedHarvestDate != null)
                     try {
                      val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -101,6 +97,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         }
     }
 
+    /** Style for bottom sheet dialog */
     override fun getTheme(): Int {
         return R.style.BottomSheetDialog
     }

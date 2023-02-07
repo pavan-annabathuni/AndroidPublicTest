@@ -10,7 +10,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
+import com.waycool.featurelogin.activity.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weather)
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@WeatherActivity, LoginMainActivity::class.java)
+                val intent = Intent(this@WeatherActivity, LoginActivity::class.java)
                 startActivity(intent)
                 this@WeatherActivity.finish()
 
@@ -33,8 +33,11 @@ class WeatherActivity : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+                    Log.d("DeepLink","WeatherDeeplink2 $deepLink")
+
                 }
                 if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
+                    Log.d("DeepLink","WeatherDeeplink2 $deepLink")
                     if (deepLink?.lastPathSegment == "weathershare") {
                         this.findNavController(R.id.nav_host_fragment).navigate(R.id.weatherFragment)
                     }

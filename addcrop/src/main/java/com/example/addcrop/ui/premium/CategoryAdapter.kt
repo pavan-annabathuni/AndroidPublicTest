@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
+import com.example.addcrop.ui.selectcrop.AddCropItemClick
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 
 class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : RecyclerView.Adapter<CategoryViewHolder>()  {
     var details = mutableListOf<SoilTypeDomain>()
     private var row_index = -1
-    fun setMovieList(movies: List<SoilTypeDomain>) {
-        this.details = movies.toMutableList()
+    fun setSoilTypeList(soilTypeList: List<SoilTypeDomain>) {
+        this.details = soilTypeList.toMutableList()
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {

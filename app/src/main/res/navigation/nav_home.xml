@@ -130,7 +130,7 @@
         android:label="MandiGraphFragment"/>
     <fragment
         android:id="@+id/editCropFragment"
-        android:name="com.example.addcrop.EditCropFragment"
+        android:name="com.example.addcrop.ui.editcrop.EditCropFragment"
         android:label="EditCropFragment" />
     <fragment
         android:id="@+id/spotLightFragment"

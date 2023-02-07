@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mandiprice.R
 import com.example.mandiprice.adapter.DateAdapter
 import com.example.mandiprice.databinding.FragmentMandiGraphBinding
@@ -46,6 +48,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
 import java.io.File
@@ -66,11 +69,14 @@ class MandiGraphFragment : Fragment() {
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
     }
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     val moduleId="11"
     private var cropMasterId: Int? = null
     private var mandiMasterId: Int? = null
     private var cropName: String? = null
     private var marketName: String? = null
+
     private var sub_record_id:String? =null
     private var mandiDomain:MandiDomainRecord?=null
 
@@ -82,8 +88,19 @@ class MandiGraphFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             mandiDomain = it.getParcelable("mandiRecord")
+        }
+        if (arguments != null) {
+            if (arguments?.containsKey("mandiRecord") == true){
+                mandiDomain = arguments?.getParcelable("mandiRecord")
+            }
 
-
+            else {
+                cropName = arguments?.getString("cropName")
+                mandiMasterId = arguments?.getInt("mandiId")
+                cropMasterId = arguments?.getInt("cropId")
+                marketName = arguments?.getString("market")
+                sub_record_id=arguments?.getString("subRecordId")
+            }
         }
 
     }
@@ -96,30 +113,38 @@ class MandiGraphFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
 
         binding.lifecycleOwner = this
         shareLayout = binding.shareCl2
         mDateAdapter = DateAdapter()
         binding.recycleViewDis.adapter = mDateAdapter
 
-        cropMasterId = mandiDomain?.crop_master_id
-        mandiMasterId = mandiDomain?.mandi_master_id
-        cropName = mandiDomain?.crop
-        marketName = mandiDomain?.market
-        sub_record_id = mandiDomain?.sub_record_id
+        if(mandiDomain!=null){
+            cropMasterId = mandiDomain?.crop_master_id
+            mandiMasterId = mandiDomain?.mandi_master_id
+            cropName = mandiDomain?.crop
+            marketName = mandiDomain?.market
+            sub_record_id = mandiDomain?.sub_record_id
+        }
+        else{
+            cropMasterId = cropMasterId
+            mandiMasterId = mandiMasterId
+            cropName = cropName
+            marketName = marketName
+            sub_record_id=sub_record_id
+        }
+
         binding.imgShare.setOnClickListener() {
+            binding.clShareProgress.visibility=View.VISIBLE
+            binding.imgShare.isEnabled = false
             val bundle=Bundle()
             bundle.putString("","$marketName")
             bundle.putString("","$cropName")
             EventItemClickHandling.calculateItemClickEvent("mandi_share",bundle)
-            binding.imgShare.isEnabled = false
             screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-            viewModel.viewModelScope.launch {
-                val toast = TranslationsManager().getString("str_share_opening")
-                if(toast.isNullOrEmpty())
-                context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
-                else context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Sharing Options Opening", Toast.LENGTH_SHORT) }
-            }
         }
         binding.recycleViewDis.adapter = DateAdapter()
         binding.recycleViewDis.isNestedScrollingEnabled = true
@@ -180,6 +205,8 @@ class MandiGraphFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handler = Handler(Looper.myLooper()!!)
+
         onClick()
         graph()
         setBanners()
@@ -205,11 +232,6 @@ class MandiGraphFragment : Fragment() {
                 this.findNavController()
                     .navigateUp()
         }
-//
-//        binding.imgShare.setOnClickListener() {
-//            screenShot(cropMasterId, mandiMasterId, cropName, marketName, "one")
-//            Log.d("toast", "onClick: Working")
-//        }
     }
 
 
@@ -217,12 +239,10 @@ class MandiGraphFragment : Fragment() {
         viewModel.viewModelScope.launch {
             viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId,sub_record_id)
                 .observe(viewLifecycleOwner) { it ->
-
-
                     listLine = ArrayList()
                     if (it.data?.data != null) {
                         for (i in it.data?.data!!.indices) {
-
+                            /**setting the api in graph*/
                             val xAxis: XAxis = binding.lineChart.getXAxis()
                             listLine.add(
                                 Entry(
@@ -233,6 +253,7 @@ class MandiGraphFragment : Fragment() {
                     }
 
                     lineDataSet = LineDataSet(listLine, "")
+                    /** formating the date for graph*/
                     val datesList = it.data?.data?.map { mandi ->
                         try {
                             val date: Date = inputDateFormatter.parse(mandi.arrivalDate)
@@ -244,15 +265,12 @@ class MandiGraphFragment : Fragment() {
                     }
 
                     val valueFormatter2 = IndexAxisValueFormatter()
-
                     val xAxis2 = datesList?.toTypedArray()
                     valueFormatter2.values = xAxis2
                     binding.lineChart.xAxis.valueFormatter = valueFormatter2
                     binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 //                binding.lineChart.xAxis.labelRotationAngle = -45f
-
                     binding.lineChart.axisLeft.axisMinimum = 0f
-
                     lineData = LineData(lineDataSet)
                     lineDataSet.color = resources.getColor(R.color.WoodBrown)
                     binding.lineChart.data = lineData
@@ -260,8 +278,6 @@ class MandiGraphFragment : Fragment() {
                     lineDataSet.circleHoleColor = resources.getColor(R.color.DarkGreen)
                     lineDataSet.circleRadius = 6f
                     lineDataSet.mode = LineDataSet.Mode.LINEAR
-
-
                     lineDataSet.setDrawFilled(true)
                     binding.lineChart.setDrawGridBackground(false)
                     binding.lineChart.setDrawBorders(true)
@@ -275,6 +291,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.axisRight.isEnabled = false
                     lineDataSet.fillDrawable = ContextCompat.getDrawable(requireContext(),R.drawable.bg_graph)
                     // binding.lineChart.xAxis.spaceMax = 1f
+                    /** fitting graph with screen*/
                     binding.lineChart.fitScreen()
                     binding.lineChart.setScaleEnabled(false)
                     binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
@@ -283,6 +300,7 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.getLegend().setEnabled(false);
                     binding.lineChart.xAxis.setCenterAxisLabels(false);
                     binding.lineChart.xAxis.setGranularity(1f);
+                    /** giving space for top*/
                     binding.lineChart.viewPortHandler.offsetTop()
                     binding.lineChart.axisLeft.spaceTop = 150f
                     // binding.lineChart.setVisibleXRangeMaximum(3f);
@@ -294,7 +312,22 @@ class MandiGraphFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
@@ -332,6 +365,7 @@ class MandiGraphFragment : Fragment() {
         market_name: String?,
         fragment: String?
     ) {
+        /** taking screen shot and sharing whole graph and list with dynamic link */
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
@@ -349,7 +383,6 @@ class MandiGraphFragment : Fragment() {
             "com.example.outgrow",
             imageFile
         )
-
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
             .setDomainUriPrefix("https://outgrowdev.page.link")
@@ -366,6 +399,8 @@ class MandiGraphFragment : Fragment() {
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    binding.imgShare.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -373,9 +408,7 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
-                    Handler().postDelayed({
-                        binding.imgShare.isEnabled = true
-                    },2500)
+
 
 
                 }
@@ -384,15 +417,13 @@ class MandiGraphFragment : Fragment() {
     }
 
     private fun translation() {
-
         TranslationsManager().loadString("str_share", binding.imgShare,"Share")
         TranslationsManager().loadString("date", binding.textView7,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.tvKg,"Rate Kg")
         TranslationsManager().loadString("rate_kg", binding.textView8,"Date")
-
-
     }
 
+    /**checking language translation for cropName and Market*/
     private fun checkLang(){
         viewModel.viewModelScope.launch(){
             var langCode = LocalSource.getLanguageCode() ?: "en"
@@ -428,8 +459,17 @@ class MandiGraphFragment : Fragment() {
         }
 
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("MandiGraphFragment")
     }
 }

@@ -29,16 +29,11 @@ import java.util.*
 class CheckSoilTestFragment : Fragment() {
     private var _binding: FragmentCheckSoilTestBinding? = null
     private val binding get() = _binding!!
-
-    //    private var soilTestingLabsAdapter = SoilTestingLabsAdapter()
-    private var list: CheckSoilTestData? = null
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
     private var latitude: String? = null
     private var longitude: String? = null
     private var accountID: Int? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    //    private val navArgs:CheckSoilTestFragmentArgs by navArgs()
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,12 +85,6 @@ class CheckSoilTestFragment : Fragment() {
         TranslationsManager().loadString("soil_sample_will_be_collected_by_the_selected_lab", binding.collectedLab,"Soil sample will be collected by the selected Lab")
         TranslationsManager().loadString("select_crop", binding.selectCrop,"Select Crop")
         TranslationsManager().loadString("select_testing_lab", binding.toolBarTittle,"Select Testing Lab")
-
-
-//        TranslationsManager().loadString("crop_nickname", binding.plotNumber)
-//        TranslationsManager().loadString("crop_area", binding.pincodeNumber)
-//        TranslationsManager().loadString("sowing_date", binding.Address)
-//        TranslationsManager().loadString("submit", binding.tvCheckCrop)
     }
 
 
@@ -104,7 +93,6 @@ class CheckSoilTestFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
-//            soilTestingLabsAdapter.upDateList()
         }
     }
     private fun isLocationPermissionGranted(account_id: Int): Boolean {

@@ -8,11 +8,11 @@ class SoilTestHistoryDomainMapper : DomainMapper<SoilTestHistoryDomain, SoilTest
     override fun mapToDomain(dto: SoilTestHistoryEntity): SoilTestHistoryDomain {
         return SoilTestHistoryDomain(
             id = dto.id,
-            plot_no = dto.plot_no,
-            soil_test_number = dto.soil_test_number,
+            plot_no = dto.plotNo,
+            soil_test_number = dto.soilTestNumber,
             status = dto.status,
-            updated_at = dto.updated_at,
-            approve_status = dto.approve_status
+            updated_at = dto.updatedAt,
+            approve_status = dto.approveStatus
 
         )
     }

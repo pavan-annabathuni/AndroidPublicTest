@@ -22,7 +22,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -75,28 +74,30 @@ class CropSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarTitle.text="Protect your Crop"
 
         apiErrorHandlingBinding=binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
 
         binding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
             val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+            if (!isSuccess) activity?.let { it1 -> it1.finish() }
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigateUp()
                     val isSuccess = findNavController().navigateUp()
-                    if (!isSuccess) activity?.let { it.finish() }
+                    if (!isSuccess) activity?.let { it.finish()}
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+        activity?.let {
+            it.onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()
@@ -106,7 +107,7 @@ class CropSelectionFragment : Fragment() {
             binding.search.hint = TranslationsManager().getString("search")
         }
         TranslationsManager().loadString("protect_your_crop",binding.toolbarTitle,"Protect Your Crop")
-        TranslationsManager().loadString("crop_protection_top",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
+        TranslationsManager().loadString("str_crop_protection",binding.cropProtectInfo,"Our ‘Crop Protection’ Information service is a knowledge bank of all the pests & diseases with images that helps you identify and get control measures.")
         TranslationsManager().loadString("my_crops",binding.myCropsTitle,"My Crop")
 
         binding.cropsRv.adapter = adapter
@@ -150,6 +151,9 @@ class CropSelectionFragment : Fragment() {
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if(charSequence.isEmpty()){
+                    setUpCropCategories()
+                }
                 EventClickHandling.calculateClickEvent("Search_crop_protection")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
@@ -184,7 +188,6 @@ class CropSelectionFragment : Fragment() {
     }
 
     private fun setUpCropCategories() {
-
         viewModel.getCropCategory().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {

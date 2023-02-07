@@ -49,6 +49,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     private var mMap: GoogleMap? = null
     private var _binding: FragmentFarmDetails2Binding? = null
     private val binding get() = _binding!!
+   private  var isPremium:Int?=null
 
     private val viewDevice by lazy { ViewModelProvider(this)[ViewDeviceViewModel::class.java] }
     private val viewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
@@ -105,10 +106,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         initViewClick()
         initMyObserve()
-        myCrop()
 //        farmDetailsObserve()
         translations()
         checkRole()
+        myCrop()
 
         viewModel.getMyFarms().observe(viewLifecycleOwner){
             val farm=it.data?.firstOrNull {it1-> myFarm?.id == it1.id }
@@ -348,6 +349,13 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         })
         binding.rvMyCrops.adapter = myCropAdapter
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
+            if (isPremium==0){
+                if (it.data?.size!! >=8) {
+                    binding.tvEditMyCrops.visibility = View.GONE
+                    binding.cardAddForm.visibility = View.GONE
+                }
+            }
+
             Log.d("MyCrops", "myCrop: ${it.data}")
             val cropList = it.data?.filter { plot -> plot.farmId == myFarm?.id }
             myCropAdapter.submitList(cropList)
@@ -361,7 +369,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.cardAddForm.visibility = View.GONE
             } else {
                 binding.cvEditCrop.visibility = View.GONE
-                binding.cardAddForm.visibility = View.VISIBLE
+               // binding.cardAddForm.visibility = View.VISIBLE
             }
 //                        if (it.data?.size!! < 8) {
 //                            binding.tvEditMyCrops.visibility = View.VISIBLE
@@ -918,6 +926,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun checkRole() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            isPremium=it.data?.subscription
             if (it.data?.roleId == 31) {
                 binding.ClYourForm.visibility = View.GONE
                 binding.tvEditMyCrops.visibility = View.GONE
@@ -926,9 +935,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.ivViewAll.visibility = View.GONE
                 binding.addDeviceFree.visibility = View.GONE
                 binding.tvAddFrom.visibility = View.GONE
+                binding.cardAddForm.visibility = View.GONE
             } else {
                 binding.ClYourForm.visibility = View.VISIBLE
-                binding.tvEditMyCrops.visibility = View.VISIBLE
+                //binding.tvEditMyCrops.visibility = View.VISIBLE
                 binding.editFarmFarmsSingle.visibility = View.VISIBLE
                 binding.MyDevice.visibility = View.VISIBLE
                 binding.ivViewAll.visibility = View.VISIBLE

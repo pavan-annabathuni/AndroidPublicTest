@@ -404,6 +404,14 @@ interface ApiInterface {
         @Query("farm_id") farmId: Int
     ): Response<FarmDetailsDTO>
 
+    //variety crop
+    @GET("api/v1/crop-variety")
+    suspend fun cropVariety(
+        @HeaderMap map: Map<String, String>?,
+        @Query("crop_id") crop_id: Int,
+        @Query("lang") lang: String
+    ): Response<VarietyCropDTO>
+
     @GET("api/v1/app-translations")
     suspend fun getTranslations(
         @HeaderMap map: Map<String, String>,
@@ -541,5 +549,7 @@ interface ApiInterface {
         @HeaderMap map: Map<String, String>?,
         @Query("lang")lang: String = "en"
     ): Response<MandiMasterModel>
+
+    //crop variety
 
 }

@@ -8,10 +8,8 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -22,14 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -40,17 +36,14 @@ import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
-import com.waycool.featurelogin.FeatureLogin
-import com.waycool.featurelogin.activity.LoginMainActivity
-import com.waycool.newsandarticles.Util.AppUtil
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -58,10 +51,10 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     private var searchTag: CharSequence? = ""
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var selectedCategory: String? = null
-    private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = null
     private lateinit var newsAdapter: NewsPagerAdapter
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     val moduleId="4"
 
     val binding: ActivityNewsAndArticlesBinding by lazy {
@@ -80,7 +73,11 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+
         apiErrorHandlingBinding=binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         networkCall()
         if(NetworkUtil.getConnectivityStatusString(this)==0){
             networkCall()
@@ -104,33 +101,20 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         fabButton()
         translation()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (!FeatureLogin.getLoginStatus()) {
-                val intent = Intent(this@NewsAndArticlesActivity, LoginMainActivity::class.java)
+        DeepLinkNavigator.navigateFromDeeplink(this@NewsAndArticlesActivity) { pendingDynamicLinkData ->
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
+            }
+            if (deepLink != null) {
+
+                val intent =
+                    Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
                 startActivity(intent)
-                this@NewsAndArticlesActivity.finish()
-
-            }else{
-                Firebase.dynamicLinks
-                    .getDynamicLink(intent)
-                    .addOnSuccessListener {pendingDynamicLinkData: PendingDynamicLinkData? ->
-
-                        var deepLink: Uri? = null
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.link
-                        }
-                        if (deepLink != null) {
-
-                            val intent =
-                                Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
-                    .addOnFailureListener {
-                            e -> Log.w("TAG", "getDynamicLink:onFailure", e)
-                    }
             }
         }
+
+
 
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -231,19 +215,23 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
 
-    fun shareClick(
-        pos: Int,
-        url: String?,
-        content: String,
-        imageView: ImageView?,
-        appLink: String
-    ) {
-        Log.d("url", (url)!!)
-        AppUtil.shareItem(this@NewsAndArticlesActivity, url, imageView, content + "\n" + appLink)
-    }
-
     private fun setBanners() {
-        val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity)
+        val bannerAdapter = AdsAdapter(this@NewsAndArticlesActivity, binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(this) {
 
             bannerAdapter.submitList(it.data)
@@ -363,9 +351,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         startActivity(intent)
     }
 
-    override fun onShareItemClick(it: VansFeederListDomain?) {
+    override fun onShareItemClick(it: VansFeederListDomain?, view: View) {
+        binding.clShareProgress.visibility=View.VISIBLE
+        val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
+            it?.thumbnailUrl
+        } else{
+            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+        }
         val eventBundle=Bundle()
-        eventBundle.putString("NewsAndArticlesTitle",it?.title)
+        eventBundle.putString("NewsAndArticlesTitle", it?.title)
         if(selectedCategory!=null){
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
@@ -380,13 +374,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
-                    .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                    .setTitle("Outgrow - Hi, Checkout the News and Articles on ${it?.title}.")
+                    .setImageUrl(Uri.parse(thumbnail))
+                    .setTitle("Outgrow - Hi, Checkout the News and Articles about ${it?.title}.")
                     .setDescription("Watch more News and Articles and learn with Outgrow")
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    view.isEnabled = true
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
@@ -403,8 +399,17 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             binding.search.hint = TranslationsManager().getString("search")
         }
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("NewsAndArticlesActivity")
     }
 }

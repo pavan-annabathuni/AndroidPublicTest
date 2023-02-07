@@ -32,11 +32,9 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
-import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -48,8 +46,6 @@ import java.util.*
 
 
 class EditProfileFragment : Fragment() {
-    private var longitutde: String?=null
-    private  var latitude: String?=null
     private var selecteduri: Uri? = null
     val requestImageId = 1
     lateinit var field: java.util.HashMap<String, String>
@@ -71,7 +67,6 @@ class EditProfileFragment : Fragment() {
         for (b in result.values) {
             allAreGranted = allAreGranted && b
         }
-
         if (allAreGranted) {
             getLocation()
         }
@@ -100,7 +95,6 @@ class EditProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
     }
 
@@ -112,19 +106,14 @@ class EditProfileFragment : Fragment() {
         binding = FragmentEditProfileBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        // viewModel.getUserProfile()
-        //viewModel.getUsers()
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         mLocationRequest = LocationRequest()
-        //getLocation()
         onClick()
         observerName()
         translation()
         binding.submit.setOnClickListener {
-
             editProfile()
-
         }
 
         viewModel.viewModelScope.launch {
@@ -134,10 +123,7 @@ class EditProfileFragment : Fragment() {
             binding.submit.text = submit
 
         }
-
-
         return binding.root
-
     }
 
     private fun observerName() {
@@ -172,14 +158,7 @@ class EditProfileFragment : Fragment() {
         }}
     }
 
-//    private fun observer() {
-////        viewModel.status.observe(viewLifecycleOwner) {
-////           // Toast.makeText(context, "$it", Toast.LENGTH_SHORT).show()
-////            Log.d("profile", "observer: $it ")
-////        }
-//    }
-
-    fun editProfile() {
+    private fun editProfile() {
         field = HashMap()
         val name: String = binding.tvName.text.toString()
         val address: String = binding.tvAddress1.text.toString()
@@ -196,6 +175,7 @@ class EditProfileFragment : Fragment() {
         field.put("latitude",lat)
         field.put("longitude",long)
 
+        /* Checking all fields are not empty */
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
         ) {
@@ -229,20 +209,16 @@ class EditProfileFragment : Fragment() {
                         "profile_pic",
                         file.name, requestFile
                     )
-
-                Log.d("selecteduri", "editProfile: $selecteduri")
-
                     viewModel.getUserProfilePic(profileImageBody).observe(viewLifecycleOwner) {
-                        Log.d("selecteduri", "editProfile: ${it.data?.profile_pic}")
-
                 }
             }
-
-
-
         } else {
+            viewModel.viewModelScope.launch {
+            val toast = TranslationsManager().getString("str_fill_all_fields")
+                if(toast.isNullOrEmpty())
             context?.let { ToastStateHandling.toastError(it, "Please Fill All Fields", Toast.LENGTH_SHORT) }
-        }
+                else context?.let { ToastStateHandling.toastError(it,toast, Toast.LENGTH_SHORT) }
+        }}
     }
 
     private fun onClick() {
@@ -251,38 +227,11 @@ class EditProfileFragment : Fragment() {
         }
         binding.addImage.setOnClickListener {
             mGetContent.launch("image/*")
-
-//            val intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "image/*"
-//            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-//                startActivityForResult(intent, requestImageId)
-//                Log.d("PROFILE", "onClick: $requestImageId")
-//           }
         }
         binding.imgAutoText.setOnClickListener() {
 
             getLocation()
-//            val pla: List<Place.Field> =
-//                Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS)
-//            val i: Intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, pla)
-//                .setCountry("In")
-//                .setTypeFilter(TypeFilter.ESTABLISHMENT)
-//                .build(context)
-//            startActivityForResult(i, 101)
         }
-//        binding.tvCity.setOnClickListener() {
-//            val pla: List<Place.Field> =
-//                Arrays.asList(Place.Field.ADDRESS, Place.Field.ID, Place.Field.ADDRESS_COMPONENTS)
-//            val i: Intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, pla)
-//                .setCountry("In")
-//                //.setTypeFilter(TypeFilter.CITIES)
-//                .setTypeFilter(TypeFilter.CITIES)
-//                .build(context)
-//            startActivityForResult(i, 102)
-//
-//        }
-
-
     }
 
     @SuppressLint("MissingPermission")
@@ -325,20 +274,8 @@ class EditProfileFragment : Fragment() {
                             } catch (sendIntent: IntentSender.SendIntentException) {
                                 sendIntent.printStackTrace()
                             }
-                        }
-                    }
-
+                        }}
                 }
-
-//                context?.let {
-//                    ToastStateHandling.toastError(
-//                        it,
-//                        "Please turn on location",
-//                        Toast.LENGTH_LONG
-//                    )
-//                }
-//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-//                startActivity(intent)
             }
         } else {
             requestPermission()
@@ -348,7 +285,6 @@ class EditProfileFragment : Fragment() {
     private fun getGeocodeFromLocation(it: Location) {
          lat = String.format(Locale.ENGLISH, "%.4f", it.latitude)
         long = String.format(Locale.ENGLISH, "%.4f", it.longitude)
-
         viewModel.getReverseGeocode("${it.latitude},${it.longitude}")
             .observe(viewLifecycleOwner) {
                 if (it.results.isNotEmpty()) {
@@ -369,6 +305,7 @@ class EditProfileFragment : Fragment() {
             }
     }
 
+    /*checking location is on or not */
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -377,6 +314,7 @@ class EditProfileFragment : Fragment() {
         )
     }
 
+    /*Checking location permission */
     private fun checkPermissions(): Boolean {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -399,15 +337,6 @@ class EditProfileFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         )
-
-//        requestPermissions(
-//            arrayOf(
-//                Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ),
-//            permissionId
-//        )
-        //requestPermissions(String[] {android.Manifest.permission.READ_CONTACTS}, REQUEST_CONTACT);
     }
 
 
@@ -425,6 +354,7 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    //using upCrop to upload image and crop image//
     private var mGetContent = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -453,67 +383,8 @@ class EditProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-//        if (requestCode == 101 && resultCode == RESULT_OK) {
-//            val place: Place = Autocomplete.getPlaceFromIntent(data)
-//            val value = place.address
-//            val lstValues: List<String> = value.split(",").map { it -> it.trim() }
-//            val size = lstValues.size - 2
-//            binding.tvAddress1.setText("${place.name},${lstValues[0]},${lstValues[1]}")
-//            binding.tvAddress2.setText(lstValues[2])
-//            val strState = lstValues[size].replace("[0-9]".toRegex(), "");
-//            binding.tvState.setText(strState)
-//
-//            binding.tvCity.setText(lstValues[size - 1])
-//            val str = lstValues[size].replace("[^\\d.]".toRegex(), "");
-//            binding.tvPincode.setText(str)
-//        } else if (requestCode == 102 && resultCode == RESULT_OK) {
-//            val place: Place = Autocomplete.getPlaceFromIntent(data)
-//            val values = place.address
-//
-//            val lstValues: List<String> = values.split(",").map { it -> it.trim() }
-//            binding.tvCity.setText(lstValues[0])
-//            binding.tvState.setText(lstValues[1])
-//
-//        } else
             if (resultCode == AppCompatActivity.RESULT_OK && requestCode == requestImageId)
             {
-            // Toast.makeText(context, "$requestCode", Toast.LENGTH_SHORT).show()
-//            val selectedImage: Uri? = data?.data// handle chosen image
-//            val pic = File(requireContext().cacheDir, "pic")
-            // pic.mkdirs()
-//            pic.createNewFile()
-//            val options: UCrop.Options = UCrop.Options()
-//            options.setCompressionQuality(100)
-//            options.setMaxBitmapSize(10000)
-//
-//            selecteduri = selectedImage
-
-
-//            if (selectedImage != null)
-//                UCrop.of(selectedImage, Uri.fromFile(pic))
-//                    .withAspectRatio(1F, 1F)
-//                    .withMaxResultSize(1000, 1000)
-//                    .withOptions(options)
-//                    .start(requireActivity())
-            Log.d("ProfilePicImage", "editProfile: $resultCode")
-            Log.d("ProfilePicImage", "editProfile: $requestCode")
-//            val file = selectedImage?.toFile()
-//            val profileImage: RequestBody = RequestBody.create(
-//                "image/jpg".toMediaTypeOrNull(),
-//                file!!
-//            )
-//
-//            val profileImageBody: MultipartBody.Part =
-//                MultipartBody.Part.createFormData(
-//                    "image",
-//                    file.name, profileImage
-//                )
-//            viewModel.viewModelScope.launch {
-//                selecteduri?.let { viewModel.getUserProfilePic(profileImageBody) }
-//            }
-
-            //Toast.makeText(context, "Image Uploaded", Toast.LENGTH_LONG).show()
-
 
         } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val uri: Uri? = data?.let { UCrop.getOutput(it) }
@@ -534,7 +405,6 @@ class EditProfileFragment : Fragment() {
 
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
@@ -544,9 +414,6 @@ class EditProfileFragment : Fragment() {
         private const val REQUEST_CODE_GPS = 1011
     }
 
-    private fun checkRollId(){
-
-    }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("EditProfileFragment")

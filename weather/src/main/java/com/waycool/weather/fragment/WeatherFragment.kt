@@ -3,7 +3,10 @@ package com.waycool.weather.fragment
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +24,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -32,6 +38,7 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.weather.R
 import com.waycool.weather.adapters.HourlyAdapter
@@ -52,19 +59,16 @@ class WeatherFragment : Fragment() {
     private lateinit var shareLayout: LinearLayout
     lateinit var mWeatherAdapter: WeatherAdapter
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-
+    private var handler: Handler? = null
+    private var runnable: Runnable?=null
     val yellow = "#070D09"
     val lightYellow = "#FFFAF0"
     val red = "#FF2C23"
-    val lightRed = "#FFD7D0"
     val green = "#146133"
-    val lightGreen = "#C4D8CC"
-
     val moduleId="6"
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this)[WeatherViewModel::class.java]
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +87,15 @@ class WeatherFragment : Fragment() {
         binding.lifecycleOwner = this
         apiErrorHandlingBinding = binding.errorState
 
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+
+
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener() {
+            binding.clShareProgress.visibility=View.VISIBLE
+            binding.imgShare.isEnabled = false
             EventClickHandling.calculateClickEvent("weather_share")
             screenShot()
         }
@@ -93,7 +104,6 @@ class WeatherFragment : Fragment() {
             networkCall()
         }
         observer()
-//        setBanners()
 
         mWeatherAdapter = WeatherAdapter(WeatherAdapter.DiffCallback.OnClickListener {
             EventClickHandling.calculateClickEvent("weather_daily")
@@ -104,16 +114,9 @@ class WeatherFragment : Fragment() {
             EventClickHandling.calculateClickEvent("weather_hourly")
             viewModel.displayPropertyHourly(it)
         })
-
-//        observer()
         translation()
         binding.lableRain.isSelected = true
         binding.lableVisibility.isSelected = true
-        //getWeatherData("12.22", "77.32")
-//        ViewModel.getCurrentWeather()
-//        ViewModel.getWeekWeather()
-//        ViewModel.getHourlyWeather()
-
 
         binding.imgBack.setOnClickListener {
             requireActivity().onBackPressed()
@@ -132,6 +135,8 @@ class WeatherFragment : Fragment() {
                     }
                 }
             }
+        handler = Handler(Looper.myLooper()!!)
+
         requireActivity().onBackPressedDispatcher.addCallback(
             requireActivity(),
             callback
@@ -153,7 +158,7 @@ class WeatherFragment : Fragment() {
         }
     }
 
-
+ /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
         val now = Date()
         android.text.format.DateFormat.format("", now)
@@ -169,15 +174,37 @@ class WeatherFragment : Fragment() {
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
-        val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("https://outgrowdev.page.link/weathershare"))
+            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setAndroidParameters(
+                DynamicLink.AndroidParameters.Builder()
+                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .build()
+            )
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Outgrow - View weather details")
+                    .setDescription("View weather details and more on Outgrow app")
+                    .build()
+            )
+            .buildShortDynamicLink().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    binding.clShareProgress.visibility=View.GONE
+                    binding.imgShare.isEnabled = true
+                    val shortLink: Uri? = task.result.shortLink
+                    val sendIntent = Intent()
+                    sendIntent.action = Intent.ACTION_SEND
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    sendIntent.type = "text/plain"
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
+                    startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-        share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
-        share.putExtra(Intent.EXTRA_STREAM, URI)
-        share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
 
-        startActivity(Intent.createChooser(share, "Share link!"))
+
+                }
+            }
+
     }
 
     private fun observer() {
@@ -194,8 +221,6 @@ class WeatherFragment : Fragment() {
                 loadWeatherFromFarms(it.data!!)
             }
         }
-
-
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
             if (null != it) {
                 this.findNavController().navigate(
@@ -210,7 +235,6 @@ class WeatherFragment : Fragment() {
                     WeatherFragmentDirections.actionWeatherFragmentToSheetHourlyFragment(it)
                 )
                 viewModel.displayPropertyDetailsCompleteHourly()
-
             }
         }
     }
@@ -220,12 +244,8 @@ class WeatherFragment : Fragment() {
         viewModel.getUserDetails().observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-
                     Log.d("Profile", it.data.toString())
                     it.data.let { userDetails ->
-                        Log.d("Profile", userDetails.toString())
-
-
                         Log.d("Profile", userDetails?.profile?.lat + userDetails?.profile?.long)
                         userDetails?.profile?.lat?.let { it1 ->
                             userDetails.profile?.long?.let { it2 ->
@@ -233,8 +253,6 @@ class WeatherFragment : Fragment() {
                                 getWeatherData(it1, it2)
                             }
                         }
-
-
                     }
                 }
                 is Resource.Error -> {}
@@ -244,6 +262,7 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /** showing weather location accordingly farm*/
     private fun loadWeatherFromFarms(farms: List<MyFarmsDomain>) {
 
         binding.horizontalScrollView4.visibility = View.VISIBLE
@@ -335,7 +354,7 @@ class WeatherFragment : Fragment() {
                     )
                     //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
                     binding.weatherMaster = it.data
-
+                   /** checking the id of weather and setting the description */
                     when (it.data?.current?.weather?.get(0)?.id) {
                         200 -> {
                             binding.tvTodayTips.text =
@@ -681,7 +700,22 @@ class WeatherFragment : Fragment() {
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext())
+        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
+        runnable =Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                }
+            }
+        })
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList( it.data)
@@ -692,12 +726,6 @@ class WeatherFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
-
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
         binding.bannerViewpager.offscreenPageLimit = 3
@@ -715,8 +743,7 @@ class WeatherFragment : Fragment() {
             EventClickHandling.calculateClickEvent("weather_Adbanner")
         }
     }
-    fun translation(){
-
+    private fun translation(){
         TranslationsManager().loadString("str_Weather",binding.textView,"Weather")
         TranslationsManager().loadString("str_share",binding.imgShare,"Share")
         TranslationsManager().loadString("str_today",binding.icon2,"Today")
@@ -729,8 +756,17 @@ class WeatherFragment : Fragment() {
         TranslationsManager().loadString("str_next",binding.tvDaily,"Next 7 Days")
 
     }
+    override fun onPause() {
+        super.onPause()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
+        }
+    }
     override fun onResume() {
         super.onResume()
+        if (runnable != null) {
+            handler?.postDelayed(runnable!!, 3000)
+        }
         EventScreenTimeHandling.calculateScreenTime("WeatherFragment")
     }
 }

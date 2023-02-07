@@ -42,13 +42,11 @@ class CropStageAdapter(val onClickListener:OnClickListener):ListAdapter<CropStag
       holder.name.text = properties.stageName
         Glide.with(holder.itemView.context).load(properties.stageIcon).into(holder.image)
 
-
         holder.date.setOnClickListener(){
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-
             val dpd = DatePickerDialog(
                 holder.itemView.context,
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -61,15 +59,12 @@ class CropStageAdapter(val onClickListener:OnClickListener):ListAdapter<CropStag
                 month,
                 day
             )
-            // Log.d("CropStage", "getCropStage: ${date1}")
-
             dpd.show()
             onClickListener.clickListener(properties)
         }
 
         if(properties.date != null) {
             holder.date.text = properties.date
-//            holder.view.backgroundTintList= ColorStateList(arrayOf(intArrayOf(R.color.DarkGreen)))
             holder.view.backgroundTintList= ContextCompat.getColorStateList(holder.view.context,R.color.DarkGreen)
         holder.holoImg.setImageResource(R.drawable.ic_holo_darkgreen)
         } else{ holder.date.text = "Select Date"

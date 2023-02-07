@@ -71,6 +71,9 @@ class CropHealthFragment : Fragment() {
         videosBinding = binding.layoutVideos
 
         apiErrorHandlingBinding = binding.errorState
+        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
+        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
+        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -145,7 +148,7 @@ class CropHealthFragment : Fragment() {
 
         }
         translationSoilTesting()
-        binding.backBtn.setOnClickListener() {
+        binding.toolbar.setNavigationOnClickListener {
             activity?.finish()
         }
 
@@ -155,8 +158,6 @@ class CropHealthFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("crop_health")
             binding.tvToolBar.text = title
-
-
         }
         TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
 

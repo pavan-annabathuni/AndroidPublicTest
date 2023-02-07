@@ -117,11 +117,6 @@ class SearchFragment : Fragment() {
                 bundle.putString("", "Mandi${it.market}")
                 EventItemClickHandling.calculateItemClickEvent("Mandi_landing", bundle)
                 val args = Bundle()
-//            it?.crop_master_id?.let { it1 -> args.putInt("cropId", it1) }
-//            it?.mandi_master_id?.let { it1 -> args.putInt("mandiId", it1) }
-//            adapterMandi.cropName.let { it1 -> args.putString("cropName", it1) }
-//            adapterMandi.marketName.let { it1 -> args.putString("market", it1) }
-//            it?.sub_record_id?.let { it1->args.putString("sub_record_id",it1) }
                 args.putParcelable("mandiRecord", it)
                 findNavController()
                     .navigate(R.id.action_searchFragment_to_mandiGraphFragment, args)
@@ -130,11 +125,10 @@ class SearchFragment : Fragment() {
         }
         filterMenu()
         tabs()
-        //searchView()
         autoComplete()
         speechToText()
         showKeypad(binding.searchBar)
-        dateFormat()
+        loadingProgressBar()
         binding.searchBar.setOnClickListener() {
             EventClickHandling.calculateClickEvent("Mandi_search")
         }
@@ -157,6 +151,7 @@ class SearchFragment : Fragment() {
             // on below line we are passing our
             // language as a default language.
             viewModel.viewModelScope.launch {
+                /**setting language for speech to text*/
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SpeechToText.getLangCode())
             }
 
@@ -207,6 +202,7 @@ class SearchFragment : Fragment() {
     }
 
 
+    /** function for tabs */
     private fun tabs() {
         viewModel.viewModelScope.launch {
             distance = TranslationsManager().getString("distance")
@@ -218,6 +214,7 @@ class SearchFragment : Fragment() {
                 binding.tabLayout.newTab().setText(price).setCustomView(R.layout.item_tab)
             )
         }
+        /** order_by by distance sort_by asc  for distance tab */
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (binding.tabLayout.selectedTabPosition) {
@@ -240,6 +237,7 @@ class SearchFragment : Fragment() {
                         }
 
                     }
+                    /** order_by by price sort_by desc  for price tab */
                     1 -> {
                         //  Toast.makeText(context, "WORKED2", Toast.LENGTH_SHORT).show()
                         if (binding.filter.text == "Sort by") {
@@ -274,7 +272,9 @@ class SearchFragment : Fragment() {
         })
     }
 
+    /** Search functionality  */
     private fun searchView() {
+        /** creating delay in search so we can limit api calls*/
         handler = Handler(Looper.myLooper()!!)
         val searchRunnable =
             Runnable {
@@ -284,19 +284,6 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 search = binding.searchBar.text.toString()
-                //binding.filter.text = "Sort By"
-//                if (!search.isNullOrEmpty()) {
-//                    binding.recycleViewDis.adapter = adapterMandi
-//                    handler!!.removeCallbacks(searchRunnable)
-//                    handler!!.postDelayed(searchRunnable, 1000)
-//                }
-//
-//                if (search.isNullOrEmpty()) {
-//                    binding.recycleViewDis.adapter = adapterMandi
-//                    handler!!.removeCallbacks(searchRunnable)
-//                    handler!!.postDelayed(searchRunnable, 1000)
-//                }
-
                 binding.recycleViewDis.adapter = adapterMandi
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 1000)
@@ -304,20 +291,18 @@ class SearchFragment : Fragment() {
 
             override fun afterTextChanged(editable: Editable) {
                 //after the change calling the method and passing the search input
-                // viewModel.getSearch(editable.toString())
-
             }
         })
     }
 
+    /** filter for low to high and high to low */
     private fun filterMenu() {
         binding.filter.setOnClickListener() {
             val popupMenu = PopupMenu(context, binding.filter)
             popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
-
-
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 when (item.itemId) {
+                    /** if user select low to high it will sort by asc */
                     R.id.action_crick -> {
                         if (item.isChecked) {
                             item.setChecked(false)
@@ -333,6 +318,7 @@ class SearchFragment : Fragment() {
                         }
 
                     }
+                    /** if user select high to low it will sort by desc */
                     R.id.action_ftbal -> {
                         if (item.isChecked) item.setChecked(false)
                         else item.setChecked(true)
@@ -353,7 +339,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun dateFormat() {
+    private fun loadingProgressBar() {
+        /** Loading progress while adapter is loading */
         adapterMandi.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapterMandi.itemCount < 1) {
                 binding.llNotFound.visibility = View.VISIBLE
@@ -367,6 +354,7 @@ class SearchFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
             }
         }
+        /** formatting date */
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
         viewModel.viewModelScope.launch {
             val today = TranslationsManager().getString("str_today")
@@ -376,7 +364,8 @@ class SearchFragment : Fragment() {
     }
 
 
-    fun autoComplete() {
+    /** function for auto suggestion  */
+    private fun autoComplete() {
         viewModel.getMandiMaster().observe(viewLifecycleOwner) {
             val marketName = it.data?.data?.map { data ->
                 data.mandiName
@@ -385,8 +374,7 @@ class SearchFragment : Fragment() {
                 val cropName = it?.data?.map { data ->
                     data.cropName
                 } ?: emptyList()
-
-
+                /** joining two array cropName and Market show in auto complete field */
                 val list = cropName + marketName
                 Log.d("autoList", "autoComplete: $marketName")
                 val arrayAdapter =
@@ -396,31 +384,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        binding.searchBar.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-//            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-//                search = binding.searchBar.text.toString()
-//                    //binding.filter.text = "Sort By"
-//                        if (!search.isNullOrEmpty())
-//                            binding.recycleViewDis.adapter = adapterMandi
-//                submitAdapter()
-//                        if (binding.searchBar.text.isNullOrEmpty())
-//                            binding.recycleViewDis.adapter = adapterMandi
-//                submitAdapter()
-//            }
-//
-//            override fun afterTextChanged(editable: Editable) {
-//                //after the change calling the method and passing the search input
-//                // viewModel.getSearch(editable.toString())
-//
-//            }
-//        })
-//
-////        callingData()
-//    }
-
     private fun showKeypad(editText: EditText) {
         val imm: InputMethodManager =
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -428,13 +391,7 @@ class SearchFragment : Fragment() {
         editText.requestFocus()
     }
 
-    fun callingData() {
-        search = binding.searchBar.text.toString()
-        //binding.filter.text = "Sort By"
-        if (!search.isNullOrEmpty())
-            submitAdapter()
-    }
-
+    /** calling api and setting adapter*/
     fun submitAdapter() {
         binding.recycleViewDis.adapter = adapterMandi
         if (lat != null && long != null)

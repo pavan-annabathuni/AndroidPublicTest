@@ -5,15 +5,16 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdk 32
+    compileSdk appCompileSdkVersion
 
     defaultConfig {
-
-        minSdk 21
-        targetSdk 32
+        minSdk appMinSdkVersion
+        targetSdk appTargetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
+
 
     buildTypes {
         release {
@@ -40,9 +41,7 @@ dependencies {
     implementation project(path: ':Videos')
     implementation project(path: ':NewsAndArticles')
     implementation project(path: ':featureChat')
-    implementation project(path: ':FeatureLogin')
-
-
+    implementation project(path: ':FeatureAuthentication')
 
 
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
@@ -71,10 +70,6 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
 
-    //Image Slider
-    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
-    // indicator
-    implementation 'me.relex:circleindicator:2.1.6'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
@@ -83,14 +78,6 @@ dependencies {
     //circle ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation 'com.jjoe64:graphview:4.2.2'
-
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-
-   // implementation group: 'com.zendesk', name: 'support', version: '5.1.0'
-    //api group: 'com.zendesk', name: 'support', version: '5.1.0'
-    //api group: 'com.zendesk', name: 'answerbot', version: '3.0.9'
-    //api group: 'com.zendesk', name: 'chat', version: '3.3.6'
 
 
     testImplementation 'junit:junit:4.13.2'

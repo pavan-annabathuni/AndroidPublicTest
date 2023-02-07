@@ -36,9 +36,7 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
 
         val viewModelFactory = HourlyViewModelFactory(imageProperty,application)
 
-        binding.viewModel = ViewModelProvider(
-            this, viewModelFactory
-        ).get(HourlyViewModel::class.java)
+        binding.viewModel = ViewModelProvider(this, viewModelFactory)[HourlyViewModel::class.java]
 
         observer()
         onClick()
@@ -46,10 +44,9 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-       fun observer(){
-
+       private fun observer(){
            binding.viewModel?.selectedProperty?.observe(viewLifecycleOwner){
-
+               /**Setting weather icon*/
                WeatherIcons.setWeatherIcon(it.weather[0].icon.toString(),binding.icon2)
                val date: Int? = it.dt
                val formatter = SimpleDateFormat("hh:mm a")//or use getDateInstance()
@@ -59,17 +56,17 @@ class SheetHourlyFragment : BottomSheetDialogFragment() {
 
        }
 
-    fun onClick(){
+    private fun onClick(){
         binding.imgClose.setOnClickListener(){
             this.dismiss()
         }
     }
+    /**Setting theme for bottom sheet dialog*/
     override fun getTheme(): Int {
         return com.waycool.weather.R.style.BottomSheetDialog
     }
-    fun translation() {
+    private fun translation() {
         TranslationsManager().loadString("str_hourly_weather", binding.textView2,"Hourly Weather")
-//       today = TranslationsManager().loadString("str_today", binding.imgShare).toString()
         TranslationsManager().loadString("str_humidity", binding.labelHumidity,"Humidity")
         TranslationsManager().loadString("str_rain", binding.labelRain,"Chance of Rain")
     }

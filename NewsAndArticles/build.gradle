@@ -39,7 +39,7 @@ dependencies {
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':featureChat')
-    implementation project(path: ':FeatureLogin')
+    implementation project(path: ':FeatureAuthentication')
     implementation project(path: ':Videos')
 
 
