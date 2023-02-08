@@ -98,6 +98,7 @@
             android:textColor="#EC4544"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toTopOf="@id/tvCheckInternetConnection"
             app:layout_constraintStart_toStartOf="@id/clBtnTryAgainInternet"
             android:layout_marginBottom="16dp"
