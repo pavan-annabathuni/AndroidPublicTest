@@ -178,6 +178,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
         TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
 
+
+
         setVideos()
         setNews()
         setBanners()
@@ -293,6 +295,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 }
             }
         }
+
 
     }
 
