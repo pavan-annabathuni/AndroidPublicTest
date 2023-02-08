@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -66,11 +68,11 @@ class RegistrationFragment : Fragment() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     var latitude: String = ""
     var longitutde: String = ""
-    var address: String? = ""
-    var village: String? = ""
-    var state = ""
-    var district = ""
-    var pincode = ""
+    var address: String? = null
+    var village: String? = null
+    var state:String? = null
+    var district:String? = null
+    var pincode:String? = null
     lateinit var knowAdapter: KnowYourServicesAdapter
     lateinit var premiumAdapter: KnowYourPremiumServicesAdapter
     var mobileNumber: String? = ""
@@ -437,14 +439,14 @@ class RegistrationFragment : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     val toastAudioNotFound = TranslationsManager().getString("audio_file")
                     if (!toastAudioNotFound.isNullOrEmpty()) {
-                        context?.let { it1 ->
+                        context.let { it1 ->
                             ToastStateHandling.toastError(
                                 it1, toastAudioNotFound,
                                 Toast.LENGTH_SHORT
                             )
                         }
                     } else {
-                        context?.let { it1 ->
+                        context.let { it1 ->
                             ToastStateHandling.toastError(
                                 it1, "Audio file not found",
                                 Toast.LENGTH_SHORT
@@ -611,14 +613,15 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.isNotEmpty() && longitutde.isNotEmpty()) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-
-                context?.let {
-                    ToastStateHandling.toastError(
-                        it,
-                        "Please check your Internet connection",
-                        Toast.LENGTH_LONG
-                    )
-                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                    if(!toastCheckInternet.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                            LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
+                        LENGTH_SHORT
+                    ) }}}
             } else {
                 query = HashMap()
                 query["name"] = binding.nameEt.text.toString().trim()
@@ -627,15 +630,19 @@ class RegistrationFragment : Fragment() {
                 query["long"] = longitutde
                 query["lang_id"] = "1"
                 query["email"] = ""
-                query["pincode"] = pincode
+                if(!pincode.isNullOrEmpty()) {
+                    query["pincode"] = pincode!!
+                }
                 if (village != null) {
                     query["village"] = village!!
                 }
                 if (address != null) {
                     query["address"] = address!!
                 }
-                query["state"] = state
-                query["district"] = district
+                if(!state.isNullOrEmpty()||!district.isNullOrEmpty()) {
+                    query["state"] = state!!
+                    query["district"] = district!!
+                }
                 query["sub_district_id"] = ""
                 binding.progressBarSubmit.visibility = View.VISIBLE
                 binding.registerDoneBtn.visibility = View.GONE
@@ -692,7 +699,7 @@ class RegistrationFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     //a Toast message with "Successfully Registered" is displayed.
-                    CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.viewModelScope.launch {
                         val toastSuccessfullyRegistered = TranslationsManager().getString("successfully_registered")
                         if(!toastSuccessfullyRegistered.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastSuccessfullyRegistered,
@@ -828,7 +835,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                val searchTag: String = Objects.requireNonNull(result)!![0]
+                val searchTag: String = Objects.requireNonNull(result)[0]
                 binding.nameEt.setText(searchTag)
 
             }

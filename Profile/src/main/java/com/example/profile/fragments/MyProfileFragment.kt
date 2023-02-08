@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,8 @@ import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -161,13 +164,15 @@ class MyProfileFragment : Fragment() {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
                 binding.clInclude.visibility = View.VISIBLE
                 apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-                context?.let {
-                    ToastStateHandling.toastError(
-                        it,
-                        "Please check your internet connectivity",
-                        Toast.LENGTH_SHORT
-                    )
-                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                    if(!toastCheckInternet.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                            LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
+                        LENGTH_SHORT
+                    ) }}}
             } else {
                 binding.clInclude.visibility = View.GONE
                 apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -278,13 +283,15 @@ class MyProfileFragment : Fragment() {
                             viewModel.viewModelScope.launch {
                                 val toast = TranslationsManager().getString("successfully_logout")
                                 if (toast.isNullOrEmpty()) {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastSuccess(
-                                            it1,
-                                            "Successfully Logout",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastLogout = TranslationsManager().getString("successfully_logout")
+                                        if(!toastLogout.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastLogout,
+                                                LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Successfully Logout",
+                                            LENGTH_SHORT
+                                        ) }}}
                                 } else {
                                     context?.let { it1 ->
                                         ToastStateHandling.toastSuccess(

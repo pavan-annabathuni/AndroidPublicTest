@@ -10,13 +10,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentStatusTrackerBinding
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.TrackerDemain
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.launch
 
 
 class StatusTrackerFragment : Fragment(), FeedbackListerner {
@@ -53,13 +56,29 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                 }
                 is Resource.Error -> {
                     binding.progressBar.visibility=View.GONE
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                    viewModel.viewModelScope.launch {
+                        val toastError = TranslationsManager().getString("error")
+                        if(!toastError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                            Toast.LENGTH_SHORT
+                        ) }}}
 
                 }
                 is Resource.Loading -> {
                     binding.progressBar.visibility=View.VISIBLE
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
 
+                 viewModel.viewModelScope.launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }

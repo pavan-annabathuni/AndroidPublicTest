@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -22,6 +24,9 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentMyFarmBinding
 import com.waycool.iwap.premium.Farmdetailslistener
 import com.waycool.iwap.premium.ViewDeviceViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MyFarmFragment : Fragment(), Farmdetailslistener {
@@ -78,7 +83,17 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
                     }
                 }
                 is Resource.Loading ->{}
-                is Resource.Error ->{}
+                is Resource.Error ->{
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+                }
             }
         }
 

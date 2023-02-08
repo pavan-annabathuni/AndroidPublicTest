@@ -55,6 +55,9 @@ class SoilPhFragment : Fragment() {
         }}
         }
         TranslationsManager().loadString("str_plant_nutrient",binding.textView3)
+        TranslationsManager().loadString("str_acidic",binding.tvAcidic)
+        TranslationsManager().loadString("str_neutral",binding.tvNeutral)
+        TranslationsManager().loadString("str_alkaline",binding.tvAlkaline)
         return binding.root
 
 

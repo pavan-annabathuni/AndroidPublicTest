@@ -431,7 +431,7 @@ class AddCropPremiumFragment : Fragment() {
                     binding.btnSaveCropDetails.setOnClickListener {
                         Toast.makeText(
                             requireContext(),
-                            "Please Irrigation Type",
+                            "Please Add Irrigation Type",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -519,7 +519,7 @@ class AddCropPremiumFragment : Fragment() {
                     TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     binding.clCropNickname.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
-                    binding.tvCheckCrop.setText("Save Crop")
+                    binding.tvCheckCrop.text = "Save Crop"
                     cropFieldVerification(account_id, crop_id, soil_type_id, item)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
@@ -674,15 +674,15 @@ class AddCropPremiumFragment : Fragment() {
                             activity?.finish()
                         }
                         is Resource.Error -> {
-                            ToastStateHandling.toastError(
-                                requireContext(),
-                                it.message.toString(),
-                                Toast.LENGTH_SHORT
-                            )
-                            Log.d(
-                                ContentValues.TAG,
-                                "postAddCropExption: ${it.message.toString()}"
-                            )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastServerError = TranslationsManager().getString("server_error")
+                                if(!toastServerError.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
                         }
                         is Resource.Loading -> {
                             ToastStateHandling.toastWarning(
@@ -708,7 +708,7 @@ class AddCropPremiumFragment : Fragment() {
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, 0);
+                myCalendar.add(Calendar.YEAR, 0)
                 view.minDate = myCalendar.timeInMillis
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 0)
@@ -722,14 +722,14 @@ class AddCropPremiumFragment : Fragment() {
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
         dateCrop = dateofBirthFormat.format(myCalendar.time)
-        myCalendar.add(Calendar.YEAR, -1);
+        myCalendar.add(Calendar.YEAR, -1)
         dialog.datePicker.minDate = myCalendar.timeInMillis
-        myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
-        dialog.datePicker.maxDate = myCalendar.getTimeInMillis();
+        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+        dialog.datePicker.maxDate = myCalendar.timeInMillis
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")
-        );
+        )
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
         )
@@ -738,7 +738,7 @@ class AddCropPremiumFragment : Fragment() {
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        binding.etCalender.text = dateFormat.format(myCalendar.getTime())
+        binding.etCalender.text = dateFormat.format(myCalendar.time)
     }
 
     fun View.hideSoftInput() {

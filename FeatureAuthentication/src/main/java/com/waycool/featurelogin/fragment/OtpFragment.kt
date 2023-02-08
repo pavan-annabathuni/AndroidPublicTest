@@ -277,7 +277,7 @@ class OtpFragment : Fragment() {
                             if (otpResponse?.type == "success") {
                                 verifyUser()
                             } else if (otpResponse?.type == "error") {
-                                if (otpResponse?.message == "Max limit reached for this otp verification") {
+                                if (otpResponse.message == "Max limit reached for this otp verification") {
                                     ToastStateHandling.toastError(
                                         requireContext(),
                                         "You have reached the maximum limit for the otp verification.Get OTP again",
@@ -286,22 +286,30 @@ class OtpFragment : Fragment() {
                                     //go to login fragment
                                     findNavController().popBackStack()
                                 } else {
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        "Wrong Otp",
-                                        Toast.LENGTH_SHORT
-                                    )
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastServerError = TranslationsManager().getString("wrong_otp")
+                                        if(!toastServerError.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                                Toast.LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Wrong Otp",
+                                            Toast.LENGTH_SHORT
+                                        ) }}}
                                 }
                             }
 
                         }
                         is Resource.Loading -> {}
                         is Resource.Error -> {
-                            ToastStateHandling.toastError(
-                                requireContext(),
-                                "Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastServerError = TranslationsManager().getString("server_error")
+                                if(!toastServerError.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
 
                         }
                     }
@@ -388,12 +396,12 @@ class OtpFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        registerBroadcastReceiver();
+        registerBroadcastReceiver()
     }
 
     override fun onStop() {
         super.onStop()
-        requireActivity().unregisterReceiver(smsBroadcastReceiver);
+        requireActivity().unregisterReceiver(smsBroadcastReceiver)
     }
 
     private fun showTimer() {

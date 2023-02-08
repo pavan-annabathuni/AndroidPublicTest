@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -147,7 +148,7 @@ class LoginFragment : Fragment() {
             "You’ll receive a 4 digit code to verify"
         )
         TranslationsManager().loadString(
-            "enter_number",
+            "enter_mobile_number",
             fragmentLoginBinding.tvEnterMobileNumber,
             "Enter mobile number"
         )
@@ -226,13 +227,15 @@ class LoginFragment : Fragment() {
      */
     fun AuthorizeMobileNumber(mobileNo: String) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check your Internet connection",
-                    Toast.LENGTH_SHORT
-                )
-            }
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             loginViewModel.setMobileNumber(mobileNo)
             fragmentLoginBinding.getotpBtn.isEnabled = false

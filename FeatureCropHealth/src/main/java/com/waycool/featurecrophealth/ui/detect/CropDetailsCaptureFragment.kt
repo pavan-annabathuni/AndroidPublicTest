@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,9 +32,11 @@ import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropDetailsCaptureBinding
 import com.waycool.squarecamera.SquareCamera
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 
@@ -216,7 +219,7 @@ class CropDetailsCaptureFragment : Fragment() {
                         binding.cardCheckHealth.visibility = View.VISIBLE
                     } else {
                         val bundle = Bundle()
-                        data?.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
+                        data.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
                         findNavController().navigate(
                             R.id.action_cropDetailsCaptureFragment_to_navigation_pest_and_disease_details,
                             bundle
@@ -226,12 +229,15 @@ class CropDetailsCaptureFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Currently We are Facing Server Error",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    ToastStateHandling.toastError(requireContext(), "Currently We are Facing Server Error", Toast.LENGTH_SHORT)
+                   viewModel.viewModelScope.launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                     binding.progressBar?.visibility = View.GONE
                     binding.cardCheckHealth.visibility = View.VISIBLE
                 }
@@ -257,7 +263,15 @@ class CropDetailsCaptureFragment : Fragment() {
         binding.cardCheckHealth.setOnClickListener {
 
             if (selecteduri == null) {
-                ToastStateHandling.toastError(requireContext(), "Select Image", Toast.LENGTH_SHORT)
+              viewModel.viewModelScope.launch {
+                    val toastSelectImage = TranslationsManager().getString("select_image")
+                    if(!toastSelectImage.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastSelectImage,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Select Image",
+                        Toast.LENGTH_SHORT
+                    ) }}}
             } else {
                 val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
                 val image = InputImage.fromFilePath(requireContext(), selecteduri!!)
@@ -290,12 +304,10 @@ class CropDetailsCaptureFragment : Fragment() {
         binding.closeImage?.visibility = View.GONE
         val file = selecteduri?.toFile()
         binding.uploadedImg.isEnabled = true
-        val requestFile: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
+        val requestFile: RequestBody = file!!.asRequestBody("image/*".toMediaTypeOrNull())
 
-        val profileImage: RequestBody = RequestBody.create(
-            "image/jpg".toMediaTypeOrNull(),
-            file
-        )
+        val profileImage: RequestBody = file
+            .asRequestBody("image/jpg".toMediaTypeOrNull())
 
         val profileImageBody: MultipartBody.Part =
             MultipartBody.Part.createFormData(

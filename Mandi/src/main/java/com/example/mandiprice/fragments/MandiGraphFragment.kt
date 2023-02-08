@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -50,6 +51,8 @@ import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -137,7 +140,7 @@ class MandiGraphFragment : Fragment() {
             sub_record_id=sub_record_id
         }
 
-        binding.imgShare.setOnClickListener() {
+        binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
             binding.imgShare.isEnabled = false
             val bundle=Bundle()
@@ -167,13 +170,15 @@ class MandiGraphFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please connect to network",
-                    Toast.LENGTH_SHORT
-                )
-            }
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             viewModel.viewModelScope.launch {
                 viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId, sub_record_id)
@@ -227,7 +232,7 @@ class MandiGraphFragment : Fragment() {
 
     private fun onClick() {
 
-        binding.imgBack.setOnClickListener() {
+        binding.imgBack.setOnClickListener {
 
                 this.findNavController()
                     .navigateUp()
@@ -243,7 +248,7 @@ class MandiGraphFragment : Fragment() {
                     if (it.data?.data != null) {
                         for (i in it.data?.data!!.indices) {
                             /**setting the api in graph*/
-                            val xAxis: XAxis = binding.lineChart.getXAxis()
+                            val xAxis: XAxis = binding.lineChart.xAxis
                             listLine.add(
                                 Entry(
                                     i.toFloat(), it.data!!.data[i].avgPrice!!.toFloat()
@@ -297,9 +302,9 @@ class MandiGraphFragment : Fragment() {
                     binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
                     // binding.lineChart.axisLeft.isEnabled = false;
                     binding.lineChart.isScaleXEnabled = false
-                    binding.lineChart.getLegend().setEnabled(false);
-                    binding.lineChart.xAxis.setCenterAxisLabels(false);
-                    binding.lineChart.xAxis.setGranularity(1f);
+                    binding.lineChart.legend.isEnabled = false
+                    binding.lineChart.xAxis.setCenterAxisLabels(false)
+                    binding.lineChart.xAxis.granularity = 1f
                     /** giving space for top*/
                     binding.lineChart.viewPortHandler.offsetTop()
                     binding.lineChart.axisLeft.spaceTop = 150f
@@ -399,9 +404,10 @@ class MandiGraphFragment : Fragment() {
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
+                Log.d("WeatherTask", "screenShot: $task")
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({binding.imgShare.isEnabled = true
+                    Handler().postDelayed({ binding.imgShare.isEnabled = true
                     },1000)
                     val shortLink: Uri? = task.result.shortLink
                     val sendIntent = Intent()
@@ -427,7 +433,7 @@ class MandiGraphFragment : Fragment() {
 
     /**checking language translation for cropName and Market*/
     private fun checkLang(){
-        viewModel.viewModelScope.launch(){
+        viewModel.viewModelScope.launch {
             var langCode = LocalSource.getLanguageCode() ?: "en"
 
             when (langCode) {

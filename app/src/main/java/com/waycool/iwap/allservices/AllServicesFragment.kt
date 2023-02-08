@@ -107,12 +107,26 @@ class AllServicesFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                        if(!toastCheckInternet.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 else -> {}
             }
@@ -150,8 +164,15 @@ class AllServicesFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error: ${it.message}", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 else -> {}
             }

@@ -30,6 +30,8 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
 import com.waycool.iwap.premium.ViewDeviceViewModel
 import com.waycool.iwap.utils.CustomMarkerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -126,20 +128,20 @@ class GraphsFragment : Fragment() {
             binding.paramProgressBar.visibility = View.GONE
 
             val entries: MutableList<Entry> = ArrayList()
-            for (i in 0 until valList?.size?.let { keysList?.size?.coerceAtMost(it) }!!) {
+            for (i in 0 until valList.size?.let { keysList?.size?.coerceAtMost(it) }!!) {
                 val entryVal: Float = if (valList[i] == null) 0.0F else valList[i].toFloat()
                 entries.add(Entry(i.toFloat(), entryVal))
             }
             binding.lineChart.axisLeft.setDrawGridLines(false)
-            binding.lineChart.getXAxis().setDrawGridLines(false)
-            binding.lineChart.getAxisRight().setDrawGridLines(false)
-            binding.lineChart.getAxisRight().setDrawAxisLine(false)
+            binding.lineChart.xAxis.setDrawGridLines(false)
+            binding.lineChart.axisRight.setDrawGridLines(false)
+            binding.lineChart.axisRight.setDrawAxisLine(false)
             val valueFormatter2 = IndexAxisValueFormatter()
             val xAxis2 = keysList?.toTypedArray()
             valueFormatter2.values = xAxis2
-            binding.lineChart.getXAxis().setValueFormatter(valueFormatter2)
-            binding.lineChart.getXAxis().setValueFormatter(valueFormatter2)
-            binding.lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM)
+            binding.lineChart.xAxis.valueFormatter = valueFormatter2
+            binding.lineChart.xAxis.valueFormatter = valueFormatter2
+            binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
             val line: MutableList<ILineDataSet> = ArrayList()
             val lDataSet = LineDataSet(entries, getGraphDataSetTitle(paramType))
             lDataSet.color = resources.getColor(com.example.mandiprice.R.color.WoodBrown)
@@ -153,13 +155,12 @@ class GraphsFragment : Fragment() {
             ) {
                 lDataSet.mode = LineDataSet.Mode.STEPPED
                 val yAxisVals = ArrayList(Arrays.asList("Dry", "Wet"))
-                binding.lineChart.getAxisLeft()
-                    .setValueFormatter(IndexAxisValueFormatter(yAxisVals))
-                binding.lineChart.getAxisLeft().setLabelCount(2)
-                binding.lineChart.getAxisLeft().setAxisMaximum(1f)
+                binding.lineChart.axisLeft.valueFormatter = IndexAxisValueFormatter(yAxisVals)
+                binding.lineChart.axisLeft.labelCount = 2
+                binding.lineChart.axisLeft.axisMaximum = 1f
             } else if (paramType.equals("leaf_wetness", ignoreCase = true)) {
-                binding.lineChart.getAxisLeft().setValueFormatter(DefaultValueFormatter(1))
-                binding.lineChart.getAxisLeft().resetAxisMaximum()
+                binding.lineChart.axisLeft.valueFormatter = DefaultValueFormatter(1)
+                binding.lineChart.axisLeft.resetAxisMaximum()
                 lDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
             } else lDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
             lDataSet.setDrawFilled(true)
@@ -173,16 +174,16 @@ class GraphsFragment : Fragment() {
             line.add(lDataSet)
             binding.lineChart.xAxis.setDrawGridLinesBehindData(false)
             binding.lineChart.xAxis.setDrawGridLines(true)
-            binding.lineChart.getAxisRight().setDrawLabels(false)
-            binding.lineChart.getXAxis().setLabelRotationAngle(-45f)
-            binding.lineChart.getAxisLeft().setAxisMinimum(0f)
+            binding.lineChart.axisRight.setDrawLabels(false)
+            binding.lineChart.xAxis.labelRotationAngle = -45f
+            binding.lineChart.axisLeft.axisMinimum = 0f
             binding.lineChart.axisLeft.spaceTop = 150f
             if (paramType.equals("humidity", ignoreCase = true)) {
-                binding.lineChart.getAxisLeft().setAxisMaximum(100f)
+                binding.lineChart.axisLeft.axisMaximum = 100f
             }
 
-            binding.lineChart.getXAxis().setLabelCount(keysList!!.size, true)
-            binding.lineChart.setData(LineData(line))
+            binding.lineChart.xAxis.setLabelCount(keysList!!.size, true)
+            binding.lineChart.data = LineData(line)
             binding.lineChart.setTouchEnabled(true)
             val mv2: IMarker = CustomMarkerView(
                 requireContext(),
@@ -210,7 +211,7 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= LAST_DAYS) {
+                    if (totalList.size!! >= LAST_DAYS) {
                         totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
@@ -228,7 +229,7 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList?.size!! >= LAST_DAYS) {
+                    if (totalList.size!! >= LAST_DAYS) {
                         totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
@@ -461,13 +462,17 @@ class GraphsFragment : Fragment() {
                             }
                         }
                         is Resource.Error -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastServerError = TranslationsManager().getString("server_error")
+                                if(!toastServerError.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
                         }
                         is Resource.Loading -> {
-                            ToastStateHandling.toastWarning(
-                                requireContext(),
-                                "Loading",
-                                Toast.LENGTH_SHORT
-                            )
 
                         }
                     }

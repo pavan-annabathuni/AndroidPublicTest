@@ -130,7 +130,15 @@ class CropHealthFragment : Fragment() {
         binding.tvCheckCrop.isSelected = true
         historyAdapter.onItemClick = {
             if (it?.disease_id==null) {
-                ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastUploadImage = TranslationsManager().getString("upload_quality")
+                    if(!toastUploadImage.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastUploadImage,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please upload quality image",
+                        Toast.LENGTH_SHORT
+                    ) }}}
             } else {
                 val eventBundle=Bundle()
                 eventBundle.putString("cropname",it.cropName)
@@ -138,7 +146,7 @@ class CropHealthFragment : Fragment() {
                 eventBundle.putString("image",it.image_url)
                 EventItemClickHandling.calculateItemClickEvent("crophealth_requestHistory",eventBundle)
                 val bundle = Bundle()
-                it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+                it.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
 //            it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
                 findNavController().navigate(
                     R.id.action_cropHealthFragment_to_navigation_pest_and_disease_details,
@@ -181,14 +189,16 @@ class CropHealthFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
             binding.addFab.visibility=View.GONE
-
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check internet connectivity",
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        Toast.LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
                     Toast.LENGTH_SHORT
-                )
-            }
+                ) }}}
+
         } else {
             binding.clInclude.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -331,13 +341,9 @@ class CropHealthFragment : Fragment() {
                         binding.clTopGuide.visibility = View.GONE
                         binding.clProgressBar.visibility=View.GONE
 
-//                        Log.d(TAG, "bindObserversData:" + model.data.toString())
-//                        historyAdapter.submitList(it.data)
-
                         val response = it.data
                         if (response?.size!! <=2) {
                             historyAdapter.submitList(response)
-//                            historyAdapter.submitList(response)
 
                         }
                         else{
@@ -347,16 +353,6 @@ class CropHealthFragment : Fragment() {
                             historyAdapter.submitList(arrayList)
 
                         }
-//                        else if (response.size==2){
-//                            historyAdapter = NoteAdapter(2)
-//                            historyAdapter.submitList(response)
-//
-//                        }
-//                        else{
-//                            historyAdapter= NoteAdapter(2)
-//                            historyAdapter.submitList(response)
-//
-//                        }
                     }
                     is Resource.Error -> {
                         ToastStateHandling.toastError(
@@ -380,7 +376,7 @@ class CropHealthFragment : Fragment() {
 //    }
     private fun fabButton(){
         var isVisible = false
-        binding.addFab.setOnClickListener(){
+        binding.addFab.setOnClickListener {
             if(!isVisible){
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
@@ -395,13 +391,13 @@ class CropHealthFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener(){
+        binding.addCall.setOnClickListener {
             EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener(){
+        binding.addChat.setOnClickListener {
             EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }

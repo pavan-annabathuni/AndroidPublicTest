@@ -35,6 +35,8 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -149,13 +151,13 @@ class EditProfileFragment : Fragment() {
 
         }
 
-        if (selecteduri != null) {
-            viewModel.viewModelScope.launch {
-            var toast = TranslationsManager().getString("profile_updated")
-                if(!toast.isNullOrEmpty())
-            context?.let { ToastStateHandling.toastSuccess(it,toast, Toast.LENGTH_SHORT) }
-                else context?.let { ToastStateHandling.toastSuccess(it,"Profile Updated", Toast.LENGTH_SHORT) }
-        }}
+//        if (selecteduri != null) {
+//            viewModel.viewModelScope.launch {
+//            val toast = TranslationsManager().getString("profile_updated")
+//                if(!toast.isNullOrEmpty())
+//            context?.let { ToastStateHandling.toastSuccess(it,toast, Toast.LENGTH_SHORT) }
+//                else context?.let { ToastStateHandling.toastSuccess(it,"Profile Updated", Toast.LENGTH_SHORT) }
+//        }}
     }
 
     private fun editProfile() {
@@ -178,22 +180,31 @@ class EditProfileFragment : Fragment() {
         /* Checking all fields are not empty */
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
             && state.isNotEmpty() && city.isNotEmpty()
-        ) {
-                viewModel.getProfileRepository(field)
+        ) {viewModel.viewModelScope.launch {
+            val toast = TranslationsManager().getString("profile_updated")
+        viewModel.getProfileRepository(field)
                     .observe(viewLifecycleOwner) {
                         when(it){
+
                             is Resource.Success->{
-                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Profile Updated", Toast.LENGTH_SHORT) }
+                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast, Toast.LENGTH_SHORT) }
                                 findNavController().navigateUp()
                             }
                             is Resource.Loading->{}
                             is Resource.Error->{
-                                context?.let { it1 -> ToastStateHandling.toastSuccess(it1, "Error", Toast.LENGTH_SHORT) }
-                            }
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    val toastError = TranslationsManager().getString("error")
+                                    if(!toastError.isNullOrEmpty()){
+                                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                            Toast.LENGTH_SHORT
+                                        ) }}
+                                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                                        Toast.LENGTH_SHORT
+                                    ) }}}                            }
                         }
                         Log.d("ProfileUpdate", "editProfile: $it")
 
-                    }
+                    }}
 
             if (selecteduri != null) {
 
@@ -228,7 +239,7 @@ class EditProfileFragment : Fragment() {
         binding.addImage.setOnClickListener {
             mGetContent.launch("image/*")
         }
-        binding.imgAutoText.setOnClickListener() {
+        binding.imgAutoText.setOnClickListener {
 
             getLocation()
         }
