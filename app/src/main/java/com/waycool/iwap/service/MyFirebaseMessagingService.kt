@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -63,12 +64,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (message.notification?.link != null) {
             intent = Intent(Intent.ACTION_VIEW)
             intent.data = message.notification?.link
-        } else
+        } else {
+
             intent = Intent(this.applicationContext, SplashActivity::class.java)
+//            intent.action = System.currentTimeMillis().toString()
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            intent.identifier ="$notificationId"
+        }
 
         Log.d(TAG, "DeeplinkCheck: ${message.notification?.link}")
 
-        intent.action = System.currentTimeMillis().toString()
+
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent = PendingIntent.getActivity(

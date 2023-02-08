@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -315,7 +316,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({binding.imgShare.isEnabled = true
+                    Handler(Looper.myLooper()!!).postDelayed({binding.imgShare.isEnabled = true
                     },1000)
 
                     val shortLink: Uri? = task.result.shortLink
@@ -542,7 +543,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (runnable != null) {
-                        AppUtil.handlerSet(handler!!,runnable!!,3000)
+//                        AppUtil.handlerSet(handler!!,runnable!!,3000)
                     }
                 }
             })

@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import java.net.URLDecoder
 
 class CropProtectActivity : AppCompatActivity() {
     lateinit var navHost: Fragment
@@ -23,6 +24,8 @@ class CropProtectActivity : AppCompatActivity() {
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
+                Log.d("cropprotect","$deepLink")
+
             }
             if (deepLink != null) {
                 if (deepLink.lastPathSegment!!.contains(
@@ -50,6 +53,10 @@ class CropProtectActivity : AppCompatActivity() {
                 ) {
                     val cropId = deepLink.getQueryParameter("crop_id")
                     val cropName = deepLink.getQueryParameter("crop_name")
+
+                    Log.d("cropprotect","$cropId ${URLDecoder.decode(cropName,"UTF-8")}")
+                    Log.d("cropprotect","$cropId $cropName")
+
                     if (!cropId.isNullOrEmpty() && !cropName.isNullOrEmpty()) {
                         val args = Bundle()
                         args.putInt("cropid", cropId.toInt())
