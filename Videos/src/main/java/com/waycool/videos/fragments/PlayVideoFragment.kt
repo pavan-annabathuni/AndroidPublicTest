@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,9 @@ import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.adapter.itemClick
 import com.waycool.videos.databinding.FragmentPlayVideoBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class PlayVideoFragment : Fragment(), itemClick {
@@ -152,14 +156,7 @@ class PlayVideoFragment : Fragment(), itemClick {
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
-//    override fun onConfigurationChanged(newConfig: Configuration) {
+    //    override fun onConfigurationChanged(newConfig: Configuration) {
 //        super.onConfigurationChanged(newConfig)
 //
 //        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -225,22 +222,19 @@ class PlayVideoFragment : Fragment(), itemClick {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
     private fun networkCall() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check your internet connectivity",
-                    Toast.LENGTH_SHORT
-                )
-            }
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE

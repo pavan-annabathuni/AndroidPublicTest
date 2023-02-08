@@ -76,7 +76,16 @@ class CropHistoryFragment : Fragment() {
 
         historyAdapter.onItemClick = {
             if (it?.disease_id == null) {
-                ToastStateHandling.toastError(requireContext(), "Please upload quality image", Toast.LENGTH_SHORT)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastUploadImage = TranslationsManager().getString("upload_quality")
+                    if(!toastUploadImage.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastUploadImage,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please upload quality image",
+                        Toast.LENGTH_SHORT
+                    ) }}}
+
             } else {
                 val eventBundle=Bundle()
                 eventBundle.putString("cropname",it.cropName)
@@ -84,7 +93,7 @@ class CropHistoryFragment : Fragment() {
                 eventBundle.putString("image",it.image_url)
                 EventItemClickHandling.calculateItemClickEvent("crophealth_requestHistory",eventBundle)
                 val bundle = Bundle()
-                it?.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
+                it.disease_id?.let { it1 -> bundle.putInt("diseaseid", it1) }
                 findNavController().navigate(
                     R.id.action_cropHistoryFragment_to_navigation_pest_and_disease_details,
                     bundle

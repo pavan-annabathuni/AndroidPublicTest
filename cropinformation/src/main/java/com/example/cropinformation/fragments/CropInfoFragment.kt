@@ -8,6 +8,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
+import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -103,7 +105,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         handler = Handler(Looper.myLooper()!!)
 
         binding.topName.text = cropName
-        binding.back.setOnClickListener() {
+        binding.back.setOnClickListener {
             findNavController().popBackStack()
         }
         newsBinding.viewAllNews.setOnClickListener {
@@ -127,6 +129,18 @@ class CropInfoFragment : Fragment(), onItemClick {
             startActivity(intent)
         }
 
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this@CropInfoFragment.findNavController().navigateUp()
+                }
+            }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
         setTabs()
         Glide.with(requireContext()).load(cropLogo).into(binding.cropLogo)
         tabCount()
@@ -280,7 +294,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                         customView
                     }
                     "Irrigation Type" -> {
-                        tab.setText(data[position].label_name)
+                        tab.text = data[position].label_name
                         tab.setIcon(R.drawable.ci_irrigation_img)
                         customView
                     }
@@ -413,7 +427,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                 binding.tvCount.text = (position + 1).toString()
                 if (position < (size - 1)) {
                     binding.imgNext.visibility = View.VISIBLE
-                    binding.imgNext.setOnClickListener() {
+                    binding.imgNext.setOnClickListener {
                         binding.ViewPager.currentItem = position + 1
                     }
                 } else {
@@ -436,7 +450,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     //Zendesk Chat and Calling Function
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_cross))
                 binding.addChat.show()
@@ -451,13 +465,13 @@ class CropInfoFragment : Fragment(), onItemClick {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
@@ -516,6 +530,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility=View.GONE

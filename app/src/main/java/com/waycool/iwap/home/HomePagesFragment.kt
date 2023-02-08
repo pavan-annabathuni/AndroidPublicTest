@@ -531,7 +531,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                         binding.tvGoodMorning.visibility = View.VISIBLE
                         binding.IvNotification.visibility = View.GONE
                         binding.ll.visibility = View.GONE
-                        binding.tvOurServiceViewAll.visibility = View.GONE
+                        binding.tvOurServiceViewAll.visibility = View.INVISIBLE
                         binding.ivOurService.visibility = View.INVISIBLE
                     }else{
                         lifecycleScope.launch {
@@ -568,14 +568,16 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             newsBinding.newsListRv.visibility = View.GONE
             newsBinding.viewAllNews.visibility = View.GONE
             newsBinding.ivViewAll.visibility = View.GONE
-
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Check internet",
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        Toast.LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
                     Toast.LENGTH_SHORT
-                )
-            }
+                ) }}}
+
         } else {
             newsBinding.videoCardNoInternet.visibility = View.GONE
             newsBinding.newsListRv.visibility = View.VISIBLE
@@ -595,13 +597,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             videosBinding.viewAllVideos.visibility = View.GONE
             videosBinding.ivViewAll.visibility = View.GONE
             videosBinding.videosScroll.visibility = View.GONE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Check internet",
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        Toast.LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
                     Toast.LENGTH_SHORT
-                )
-            }
+                ) }}}
         } else {
             videosBinding.videoCardNoInternet.visibility = View.GONE
             videosBinding.videosListRv.visibility = View.VISIBLE

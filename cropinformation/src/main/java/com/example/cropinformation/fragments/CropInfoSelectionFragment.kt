@@ -43,6 +43,8 @@ import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -100,7 +102,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val bundle = Bundle()
-            bundle.putString("",it?.cropNameTag)
+            bundle.putString("", it.cropNameTag)
             bundle.putString("","CropInfoSelectionFragment")
             EventItemClickHandling.calculateItemClickEvent("cropinformation_landing",bundle)
 
@@ -108,8 +110,8 @@ class CropInfoSelectionFragment : Fragment() {
             var id2:Int? = null
             val args = Bundle()
             it.idd?.let { it1 -> args.putInt("cropid", it1) }
-            it?.cropName?.let { it1 -> args.putString("cropname", it1) }
-            it?.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
+            it.cropName?.let { it1 -> args.putString("cropname", it1) }
+            it.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             viewModel.getCropMaster().observe(viewLifecycleOwner){
                 for (i in 0 until it.data?.size!!){
 
@@ -194,12 +196,26 @@ class CropInfoSelectionFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 else -> {}
             }
@@ -264,9 +280,16 @@ class CropInfoSelectionFragment : Fragment() {
                     binding.progressBar.visibility=View.VISIBLE
                 }
                 is Resource.Error -> {
-                    viewModel.viewModelScope.launch{
-                    val txtServerError=  TranslationsManager().getString("binding!!ver_error")
-                    ToastStateHandling.toastError(requireContext(), txtServerError, Toast.LENGTH_SHORT )}
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+
                 }
                 else -> {}
             }
@@ -318,7 +341,7 @@ class CropInfoSelectionFragment : Fragment() {
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),
                     R.drawable.ic_cross
@@ -335,13 +358,13 @@ class CropInfoSelectionFragment : Fragment() {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             EventClickHandling.calculateClickEvent("chat_icon")
 
             FeatureChat.zenDeskInit(requireContext())
@@ -389,7 +412,7 @@ class CropInfoSelectionFragment : Fragment() {
         dialog.show()
         TranslationsManager().loadString("str_information",tvInformation,"Information")
         TranslationsManager().loadString("crop_info_message",tvMessage,"Thanks for showing your interest. Currently, we’re working on a Crop Information for this crop. We look forward to serving you shortly")
-        viewModel.viewModelScope.launch(){
+        viewModel.viewModelScope.launch {
             var ok = TranslationsManager().getString("str_ok")
             if(ok.isNullOrEmpty())
                 yesBtn.text = "Ok"

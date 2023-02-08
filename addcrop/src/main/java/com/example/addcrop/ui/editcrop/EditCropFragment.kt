@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,8 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class EditCropFragment : Fragment() {
@@ -42,7 +45,34 @@ class EditCropFragment : Fragment() {
                 val toast = TranslationsManager().getString("crop_deleted")
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
                  if(toast.isNullOrEmpty())
-                 context?.let { it1 ->ToastStateHandling.toastSuccess(it1, "Crop Deleted",Toast.LENGTH_SHORT)}
+                     CoroutineScope(Dispatchers.Main).launch {
+                         val toastCheckInternet = TranslationsManager().getString("crop_deleted")
+                         if(!toastCheckInternet.isNullOrEmpty()){
+                             context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                                 LENGTH_SHORT
+                             ) }}
+                         else {
+                                 CoroutineScope(Dispatchers.Main).launch {
+                                     val toastCheckInternet =
+                                         TranslationsManager().getString("crop_deleted")
+                                     if (!toastCheckInternet.isNullOrEmpty()) {
+                                         context?.let { it1 ->
+                                             ToastStateHandling.toastSuccess(
+                                                 it1, toastCheckInternet,
+                                                 LENGTH_SHORT
+                                             )
+                                         }
+                                     } else {
+                                         context?.let { it1 ->
+                                             ToastStateHandling.toastSuccess(
+                                                 it1, "Crop deleted",
+                                                 LENGTH_SHORT
+                                             )
+                                         }
+                                     }
+                                 }
+                             }
+                         }
                  else context?.let { it1 ->ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT)}
              }
                  //myCrops()

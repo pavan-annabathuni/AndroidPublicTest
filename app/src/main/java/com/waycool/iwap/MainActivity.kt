@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -16,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -113,9 +115,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 is Resource.Error -> {
-//                    Toast.makeText(this, it.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-//                        .show()
+
                 }
             }
 

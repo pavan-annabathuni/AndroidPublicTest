@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -185,13 +186,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             binding.cardCheckHealth.visibility = View.GONE
             binding.addFab.visibility = View.GONE
 
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check internet connectivity",
-                    Toast.LENGTH_SHORT
-                )
-            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE

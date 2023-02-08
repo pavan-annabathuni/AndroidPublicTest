@@ -37,6 +37,9 @@ import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseBinding
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 
@@ -123,12 +126,26 @@ class PestDiseaseFragment : Fragment() {
                         }
                     }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(requireContext(), "Loading.", Toast.LENGTH_SHORT)
-
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastLoading = TranslationsManager().getString("loading")
+                            if(!toastLoading.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                                Toast.LENGTH_SHORT
+                            ) }}}
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
-
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastServerError = TranslationsManager().getString("server_error")
+                            if(!toastServerError.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                Toast.LENGTH_SHORT
+                            ) }}}
                     }
                 }
             }

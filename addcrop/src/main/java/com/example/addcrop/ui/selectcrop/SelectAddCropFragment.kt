@@ -181,13 +181,27 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     binding.clProgressBar.visibility=View.GONE
-                    ToastStateHandling.toastError(requireContext(), "Server Error", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
                     binding.clProgressBar.visibility=View.VISIBLE
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }
@@ -249,11 +263,15 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        "Error Occurred",
-                        Toast.LENGTH_SHORT
-                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }

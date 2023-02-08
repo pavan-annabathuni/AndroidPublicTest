@@ -477,6 +477,7 @@
                         android:layout_marginEnd="8dp"
                         android:orientation="horizontal"
                         android:weightSum="1"
+                        android:gravity="center_vertical"
                         app:layout_constraintEnd_toStartOf="@id/ivViewAll"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -497,12 +498,12 @@
                         <TextView
                             android:id="@+id/tvViewAll"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="end"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="0.3"
-                            android:gravity="end"
                             android:maxWidth="@dimen/space150"
+                            android:layout_gravity="center_vertical"
                             android:text="View All"
                             android:textAlignment="textEnd"
                             android:textColor="#146133"

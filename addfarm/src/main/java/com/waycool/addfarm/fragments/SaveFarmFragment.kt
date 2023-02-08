@@ -87,6 +87,8 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         )
         CoroutineScope(Dispatchers.Main).launch {
             binding.flowrateEtAddfarm.hint= TranslationsManager().getString("enter_flow_rate")
+            var farmNameHint = TranslationsManager().getString("enter_farm_name")
+            binding.farmnameEtAddfarm.hint =farmNameHint
         }
         TranslationsManager().loadString("add_existing_crops",binding.textView2,"Add existing crops to this Farm")
 
@@ -143,30 +145,30 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
 
         binding.riverSource.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
-            if (b && !waterSourcesSelected?.contains("River")!!) {
-                waterSourcesSelected?.add("River")
-            } else if (!b) waterSourcesSelected?.remove("River")
+            if (b && !waterSourcesSelected.contains("River")) {
+                waterSourcesSelected.add("River")
+            } else if (!b) waterSourcesSelected.remove("River")
         }
 
         binding.canalSource.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            if (b && !waterSourcesSelected?.contains("Canal")!!) {
-                waterSourcesSelected?.add("Canal")
-            } else if (!b) waterSourcesSelected?.remove("Canal")
+            if (b && !waterSourcesSelected.contains("Canal")) {
+                waterSourcesSelected.add("Canal")
+            } else if (!b) waterSourcesSelected.remove("Canal")
         }
         binding.rainSource.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            if (b && !waterSourcesSelected?.contains("Rain")!!) {
-                waterSourcesSelected?.add("Rain")
-            } else if (!b) waterSourcesSelected?.remove("Rain")
+            if (b && !waterSourcesSelected.contains("Rain")) {
+                waterSourcesSelected.add("Rain")
+            } else if (!b) waterSourcesSelected.remove("Rain")
         }
         binding.lakeSource.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            if (b && !waterSourcesSelected?.contains("Lake")!!) {
-                waterSourcesSelected?.add("Lake")
-            } else if (!b) waterSourcesSelected?.remove("Lake")
+            if (b && !waterSourcesSelected.contains("Lake")) {
+                waterSourcesSelected.add("Lake")
+            } else if (!b) waterSourcesSelected.remove("Lake")
         }
         binding.borewellSource.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            if (b && !waterSourcesSelected?.contains("Borewell")!!) {
-                waterSourcesSelected?.add("Borewell")
-            } else if (!b) waterSourcesSelected?.remove("Borewell")
+            if (b && !waterSourcesSelected.contains("Borewell")) {
+                waterSourcesSelected.add("Borewell")
+            } else if (!b) waterSourcesSelected.remove("Borewell")
         }
 
 
@@ -188,13 +190,15 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                 } else watersources = null
 
                 if (binding.farmnameEtAddfarm.text.toString().isEmpty()) {
-                    context?.let { it1 ->
-                        ToastStateHandling.toastError(
-                            it1,
-                            "Farm name is mandatory",
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("farm_name_mandatory")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Farm name is Mandatory",
                             Toast.LENGTH_SHORT
-                        )
-                    }
+                        ) }}}
                 } else {
 
                     isPrimary = if (binding.setPrimaryFarm.isChecked) {
@@ -245,11 +249,15 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                             accountId?.let { it1 ->
                                 viewModel.getFarms().observe(viewLifecycleOwner) {}
                             }
-                            ToastStateHandling.toastSuccess(
-                                requireContext(),
-                                "Farm Saved",
-                                Toast.LENGTH_SHORT
-                            )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastServerError = TranslationsManager().getString("farm_saved")
+                                if(!toastServerError.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Farm Saved",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
                             activity?.finish()
                         }
                     }else{
@@ -358,6 +366,13 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         TranslationsManager().loadString("pipe_height", binding.addfarmpipeheightTitle,"Pipe Height in ft")
         TranslationsManager().loadString("pump_flow", binding.textView23,"Pump Flow Rate (LPH)")
         TranslationsManager().loadString("str_save", binding.saveFarmBtn,"Save")
+        TranslationsManager().loadString("rain", binding.rainSource,"Rain")
+        TranslationsManager().loadString("river", binding.riverSource,"River")
+        TranslationsManager().loadString("borewell", binding.borewellSource,"Borewell")
+        TranslationsManager().loadString("canal", binding.canalSource,"Canal")
+        TranslationsManager().loadString("lake_pond", binding.lakeSource,"Lake/Pond")
+
+
     }
 
     override fun onMapReady(mMap: GoogleMap?) {

@@ -45,6 +45,8 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
@@ -151,7 +153,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     }
 
     fun translations() {
-//        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
         TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
         TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
         TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
@@ -176,10 +177,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
         TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
         TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
-//        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
-
-
-
+        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
     }
 
     private fun initObserveDevice(farmId: Int) {
@@ -204,18 +202,31 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                                 binding.deviceParamsCL.visibility=View.GONE
                                 binding.deviceFarm.visibility=View.GONE
                                 binding.devicesEmptyText.visibility=View.VISIBLE
+                                TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
 
                             }
                     }
                     is Resource.Error -> {
-                        ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
-                    }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastServerError = TranslationsManager().getString("server_error")
+                            if(!toastServerError.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 ->
+                                ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                Toast.LENGTH_SHORT
+                            ) }}}                    }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(
-                            requireContext(),
-                            "Loading",
-                            Toast.LENGTH_SHORT
-                        )
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                            if(!toastCheckInternet.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
+                                Toast.LENGTH_SHORT
+                            ) }}}
 
                     }
                 }
@@ -346,7 +357,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             EventClickHandling.calculateClickEvent("AddFabBtnHomePremiumFragment")
 
             if (!isVisible) {
@@ -373,14 +384,14 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             EventClickHandling.calculateClickEvent("call_icon")
 
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(requireContext())
         }
@@ -410,7 +421,17 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     it.data?.roleId?.let { it1 -> checkRole(it1) }
                 }
                 is Resource.Error -> {}
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+                }
             }
         }
     }
@@ -456,6 +477,15 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
 //                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }

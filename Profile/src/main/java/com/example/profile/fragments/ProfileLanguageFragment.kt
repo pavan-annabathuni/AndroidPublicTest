@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -63,7 +64,15 @@ class ProfileLanguageFragment : Fragment() {
             }
         }
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_LONG) }
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {
@@ -98,8 +107,15 @@ class ProfileLanguageFragment : Fragment() {
 
             }
             if (selectedLanguage == null)
-
-                ToastStateHandling.toastError(requireContext(), "Select Language", Toast.LENGTH_SHORT)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastCheckInternet = TranslationsManager().getString("select_your_language")
+                    if(!toastCheckInternet.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                            LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Select your Language",
+                        LENGTH_SHORT
+                    ) }}}
             else {
                 languageViewModel.setSelectedLanguage(
                     selectedLanguage!!.langCode,
@@ -126,7 +142,7 @@ class ProfileLanguageFragment : Fragment() {
             }
         }
 
-        binding.imgBack.setOnClickListener() {
+        binding.imgBack.setOnClickListener {
             this.findNavController().navigateUp()
         }
         return binding.root

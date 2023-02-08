@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -44,6 +45,8 @@ import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -138,14 +141,32 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
     }
 
     private fun networkCall() {
-        if(NetworkUtil.getConnectivityStatusString(this)==0){
-            binding.clInclude.visibility= View.VISIBLE
-            apiErrorHandlingBinding.clInternetError.visibility= View.VISIBLE
-            binding.addFab.visibility= View.GONE
-            binding.materialCardView.visibility=View.GONE
-            this?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+        if(NetworkUtil.getConnectivityStatusString(this)==0) {
+            binding.clInclude.visibility = View.VISIBLE
+            apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
+            binding.addFab.visibility = View.GONE
+            binding.materialCardView.visibility = View.GONE
+            this.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                    if (!toastCheckInternet.isNullOrEmpty()) {
 
+                        ToastStateHandling.toastError(
+                            this@NewsAndArticlesActivity, toastCheckInternet,
+                            LENGTH_SHORT
+                        )
 
+                    } else {
+
+                        ToastStateHandling.toastError(
+                            this@NewsAndArticlesActivity, "Please check your internet connection",
+                            LENGTH_SHORT
+                        )
+
+                    }
+                }
+
+            }
         }else{
             binding.clInclude.visibility= View.GONE
             apiErrorHandlingBinding.clInternetError.visibility= View.GONE
@@ -303,7 +324,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
 
     private fun fabButton() {
         var isVisible = false
-        binding.addFab.setOnClickListener() {
+        binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(this,com.waycool.uicomponents.R.drawable.ic_cross))
                 binding.addChat.show()
@@ -318,13 +339,13 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 isVisible = false
             }
         }
-        binding.addCall.setOnClickListener() {
+        binding.addCall.setOnClickListener {
             EventClickHandling.calculateClickEvent("call_icon")
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse(Contants.CALL_NUMBER)
             startActivity(intent)
         }
-        binding.addChat.setOnClickListener() {
+        binding.addChat.setOnClickListener {
             EventClickHandling.calculateClickEvent("chat_icon")
             FeatureChat.zenDeskInit(this)
         }

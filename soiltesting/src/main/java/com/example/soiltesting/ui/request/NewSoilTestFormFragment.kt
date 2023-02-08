@@ -17,6 +17,9 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NewSoilTestFormFragment : Fragment() {
     private var _binding: FragmentNewSoilTestFormBinding? = null
@@ -77,7 +80,15 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.tvContact.text = contactNumber
                 var accountId = it.data?.accountId
                 if (it.data?.accountId == null) {
-                    ToastStateHandling.toastError(requireContext(), "Please Select Account", Toast.LENGTH_SHORT)
+                   CoroutineScope(Dispatchers.IO).launch{
+                        val toastSelectAccount = TranslationsManager().getString("select_account")
+                        if(!toastSelectAccount.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastSelectAccount,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please Select Account",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 } else if (it.data?.accountId != null) {
                     Log.d(TAG, "onCreateViewAccountID:$accountID")
                     itemClicked(accountId!!, lat!!, long!!, onp_id!!, contactNumber,crop_id.toString().toInt(),cropName,onpName)
@@ -145,7 +156,16 @@ class NewSoilTestFormFragment : Fragment() {
                 binding.etPincodeNumber.error = "Enter Pincode "
                 return@setOnClickListener
             } else if (pincode.length != 6) {
-                ToastStateHandling.toastError(requireContext(), "PLease Enter 6 Digit Pincode", Toast.LENGTH_SHORT)
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastPinCode = TranslationsManager().getString("txt_error_pincode")
+                    if(!toastPinCode.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastPinCode,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please give a correct Pincode",
+                        Toast.LENGTH_SHORT
+                    ) }}}
+//                ToastStateHandling.toastError(requireContext(), "PLease Enter 6 Digit Pincode", Toast.LENGTH_SHORT)
             } else if (address.isEmpty()) {
                 binding.etState.error = "Enter Address"
                 return@setOnClickListener
@@ -199,16 +219,30 @@ class NewSoilTestFormFragment : Fragment() {
                             )
                         }
                         is Resource.Loading -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastLoading = TranslationsManager().getString("loading")
+                                if(!toastLoading.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
                             binding.cardCheckHealth.visibility = View.GONE
                             binding.progressBar2.visibility = View.VISIBLE
 
                         }
                         is Resource.Error -> {
-                            ToastStateHandling.toastError(
-                                requireContext(),
-                                it.message.toString(),
-                                Toast.LENGTH_SHORT
-                            )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastError = TranslationsManager().getString("error")
+                                if(!toastError.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
+
                             binding.cardCheckHealth.visibility = View.VISIBLE
                             binding.progressBar2.visibility = View.GONE
                         }

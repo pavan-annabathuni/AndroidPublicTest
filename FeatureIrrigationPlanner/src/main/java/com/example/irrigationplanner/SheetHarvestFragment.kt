@@ -18,6 +18,8 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,10 +51,10 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSheetHarvestBinding.inflate(inflater)
-        binding.close.setOnClickListener() {
+        binding.close.setOnClickListener {
             this.dismiss()
         }
-        binding.save.setOnClickListener() {
+        binding.save.setOnClickListener {
             EventClickHandling.calculateClickEvent("Harvest_details_save")
             var date = binding.editText2.text.toString()
             if (binding.editText.text.toString() != "" && date != "") {
@@ -66,13 +68,15 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                                 }
                                 is Resource.Loading -> {}
                                 is Resource.Error -> {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastError(
-                                            it1,
-                                            "Error",
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastServerError = TranslationsManager().getString("server_error")
+                                        if(!toastServerError.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                                Toast.LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
                                             Toast.LENGTH_SHORT
-                                        )
-                                    }
+                                        ) }}}
                                     Log.d("cropInfo", "onCreateView: ${it.message}")
                                 }
                             }
@@ -80,16 +84,19 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                         }
                 }
             } else {
-                context?.let { it1 ->
-                    ToastStateHandling.toastError(
-                        it1,
-                        "Enter All Fields",
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastEnterFields = TranslationsManager().getString("toast_enter_all_field")
+                    if(!toastEnterFields.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastEnterFields,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please enter all the mandatory fields",
                         Toast.LENGTH_SHORT
-                    )
-                }
+                    ) }}}
+
             }
         }
-        binding.editText2.setOnClickListener() {
+        binding.editText2.setOnClickListener {
             showCalender()
         }
         translation()
@@ -106,11 +113,11 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, -1);
-                view.setMinDate(myCalendar.timeInMillis)
+                myCalendar.add(Calendar.YEAR, -1)
+                view.minDate = myCalendar.timeInMillis
                 updateLabel(myCalendar)
                 myCalendar.add(Calendar.YEAR, 1)
-                view.setMaxDate(myCalendar.timeInMillis)
+                view.maxDate = myCalendar.timeInMillis
             }
         val dialog = DatePickerDialog(
             requireContext(),
@@ -120,14 +127,14 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
         dateCrop = dateofBirthFormat.format(myCalendar.time)
-        myCalendar.add(Calendar.YEAR, -1);
-        dialog.datePicker.setMinDate(myCalendar.timeInMillis)
-        myCalendar.add(Calendar.YEAR, 2); // add 4 years to min date to have 2 years after now
-        dialog.datePicker.setMaxDate(myCalendar.getTimeInMillis());
+        myCalendar.add(Calendar.YEAR, -1)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
+        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+        dialog.datePicker.maxDate = myCalendar.timeInMillis
         dialog.show()
         dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
             Color.parseColor("#7946A9")
-        );
+        )
         dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
             Color.parseColor("#7946A9")
         )
@@ -136,7 +143,7 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        binding.editText2.setText(dateFormat.format(myCalendar.getTime()))
+        binding.editText2.text = dateFormat.format(myCalendar.time)
     }
 
     private fun translation() {

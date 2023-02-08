@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -184,13 +185,15 @@ class AddCropDetailsFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardSaveDetailsCrop.visibility = View.GONE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check internet connectivity",
-                    Toast.LENGTH_SHORT
-                )
-            }
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
+                if(!toastCheckInternet.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                        LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
+                    LENGTH_SHORT
+                ) }}}
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -312,15 +315,26 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        it.message.toString(),
-                        Toast.LENGTH_SHORT
-                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastError = TranslationsManager().getString("error")
+                        if(!toastError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }

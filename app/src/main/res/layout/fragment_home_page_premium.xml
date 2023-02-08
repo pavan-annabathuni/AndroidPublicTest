@@ -920,49 +920,32 @@
                         android:text="No Devices added for this farm"
                         android:textColor="@color/textdark"
                         android:visibility="gone"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/titleMyDevice" />
+                        app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"
+                        tools:visibility="visibility" />
 
                     <com.waycool.uicomponents.Text.Title3Bold
                         android:id="@+id/titleMyDevice"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:gravity="start"
+
                         android:text="My Devices"
                         android:textColor="@color/textdark"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/MyDevice"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <!--                            <androidx.cardview.widget.CardView-->
-                    <!--                                android:id="@+id/cardView6"-->
-                    <!--                                android:layout_width="23dp"-->
-                    <!--                                android:layout_height="22dp"-->
-                    <!--                                android:layout_marginStart="8dp"-->
-                    <!--                                app:cardBackgroundColor="#FFEACE"-->
-                    <!--                                app:cardCornerRadius="50dp"-->
-                    <!--                                app:layout_constraintBottom_toBottomOf="@+id/title3SemiBold"-->
-                    <!--                                app:layout_constraintStart_toEndOf="@+id/title3SemiBold"-->
-                    <!--                                app:layout_constraintTop_toTopOf="@+id/title3SemiBold">-->
-
-                    <!--                                <TextView-->
-                    <!--                                    android:id="@+id/tv_count"-->
-                    <!--                                    android:layout_width="wrap_content"-->
-                    <!--                                    android:layout_height="wrap_content"-->
-                    <!--                                    android:layout_gravity="center"-->
-                    <!--                                    android:text="2"-->
-                    <!--                                    android:textColor="@color/black"-->
-                    <!--                                    android:textSize="14sp" />-->
-                    <!--                            </androidx.cardview.widget.CardView>-->
-
                     <TextView
                         android:id="@+id/MyDevice"
                         style="@style/SemiBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="end"
                         android:layout_marginEnd="4dp"
                         android:drawablePadding="4dip"
                         android:text="Add Device"
@@ -970,6 +953,7 @@
                         android:textSize="14sp"
                         android:visibility="visible"
                         app:drawableEndCompat="@drawable/ic_add"
+                        app:layout_constraintStart_toEndOf="@id/titleMyDevice"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/titleMyDevice"
                         app:layout_constraintBottom_toBottomOf="@+id/titleMyDevice"/>
@@ -986,6 +970,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"
                         tools:itemCount="6"
+                        tools:visibility="gone"
                         tools:listitem="@layout/item_flex_box_add_form" />
                     <!--                        <androidx.viewpager2.widget.ViewPager2-->
                     <!--                            android:id="@+id/id_view_pager"-->

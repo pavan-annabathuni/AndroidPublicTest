@@ -328,13 +328,26 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         }
                     }
                     is Resource.Error -> {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastServerError = TranslationsManager().getString("server_error")
+                            if(!toastServerError.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                Toast.LENGTH_SHORT
+                            ) }}}
                     }
                     is Resource.Loading -> {
-//                        ToastStateHandling.toastWarning(
-//                            requireContext(),
-//                            "Loading",
-//                            Toast.LENGTH_SHORT
-//                        )
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastLoading = TranslationsManager().getString("loading")
+                            if(!toastLoading.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                                Toast.LENGTH_SHORT
+                            ) }}}
 
                     }
                 }
@@ -417,14 +430,27 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastServerError = TranslationsManager().getString("server_error")
+                            if(!toastServerError.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                Toast.LENGTH_SHORT
+                            ) }}}
 //                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
                     }
                     is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(
-                            requireContext(),
-                            "Loading",
-                            Toast.LENGTH_SHORT
-                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val toastLoading = TranslationsManager().getString("alert_valid_number")
+                            if(!toastLoading.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Enter Valid Mobile Number",
+                                Toast.LENGTH_SHORT
+                            ) }}}
 
                     }
                 }
@@ -475,6 +501,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val toastServerError = TranslationsManager().getString("server_error")
+                            if(!toastServerError.isNullOrEmpty()){
+                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    Toast.LENGTH_SHORT
+                                ) }}
+                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                                Toast.LENGTH_SHORT
+                            ) }}}
                     }
                 }
 
@@ -550,12 +585,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
 
 
-            binding.callDevice.setOnClickListener() {
+            binding.callDevice.setOnClickListener {
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse(Contants.CALL_NUMBER)
                 startActivity(intent)
             }
-            binding.messageDevice.setOnClickListener() {
+            binding.messageDevice.setOnClickListener {
                 FeatureChat.zenDeskInit(requireContext())
             }
             binding.addDeviceFree.setOnClickListener {
@@ -862,8 +897,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         if (map != null) {
             mMap = map
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
-            map!!.uiSettings.setAllGesturesEnabled(false)
-            map!!.uiSettings.isMapToolbarEnabled = false
+            map.uiSettings.setAllGesturesEnabled(false)
+            map.uiSettings.isMapToolbarEnabled = false
             drawFarm()
 
         }
@@ -900,13 +935,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 )
                 val area: Double =
                     getArea(points) / 4046.86
-                binding.farmAreaSingleFarm.setText(
-                    (String.format(
-                        Locale.ENGLISH,
-                        "%.2f",
-                        area
-                    )).trim { it <= ' ' } + " Acre"
-                )
+                binding.farmAreaSingleFarm.text = (String.format(
+                    Locale.ENGLISH,
+                    "%.2f",
+                    area
+                )).trim { it <= ' ' } + " Acre"
             }
         }
     }

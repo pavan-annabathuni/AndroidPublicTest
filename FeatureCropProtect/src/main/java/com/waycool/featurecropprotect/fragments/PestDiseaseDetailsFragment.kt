@@ -59,6 +59,7 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -118,6 +119,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 callback
             )
         }
+        binding.toolbarTitle.isSelected = true
         return binding.root
     }
 
@@ -125,6 +127,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         super.onViewCreated(view, savedInstanceState)
          videosBinding = binding.layoutVideos
          newsBinding = binding.layoutNews
+        handler = Handler(Looper.myLooper()!!)
 
         videosBinding.viewAllVideos.setOnClickListener {
             EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
@@ -186,98 +189,109 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         var chemical = "Chemical"
         var biological = "Biological"
         var cultural = "Cultural"
+
         viewModel.viewModelScope.launch {
             chemical = TranslationsManager().getString("chemical")
-            biological = TranslationsManager().getString("str_biological")
             cultural = TranslationsManager().getString("str_cultural")
-        }
+            biological = TranslationsManager().getString("str_biological")
 
-        val audioNewLayoutBinding: AudioNewLayoutBinding =
-            AudioNewLayoutBinding.inflate(layoutInflater)
 
-        binding.subRecycler.adapter = adapter
+            val audioNewLayoutBinding: AudioNewLayoutBinding =
+                AudioNewLayoutBinding.inflate(layoutInflater)
 
-        diseaseId?.let { diseaseId ->
-            viewModel.getSelectedDisease(diseaseId).observe(viewLifecycleOwner) {
-                when (it) {
-                    is Resource.Success -> {
-                        binding.toolbarTitle.text = it.data?.diseaseName
-                        binding.cropProtectDiseaseName.text = it.data?.diseaseName
+            binding.subRecycler.adapter = adapter
 
-                        if (it.data?.imageUrl == null)
-                            adapter.submitList(emptyList())
-                        else adapter.submitList(it.data?.imageUrl)
-                        activity?.let { act ->
-                            Glide.with(act).load(it.data?.thumb)
-                                .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
-                                .into(binding.cropProtectDiseaseImage)
-                        }
+            diseaseId?.let { diseaseId ->
+                viewModel.getSelectedDisease(diseaseId).observe(viewLifecycleOwner) {
+                    when (it) {
+                        is Resource.Success -> {
+                            binding.toolbarTitle.text = it.data?.diseaseName
+                            binding.cropProtectDiseaseName.text = it.data?.diseaseName
 
-                        binding.cropProtectDiseaseImage.setOnClickListener { _ ->
-                            StfalconImageViewer.Builder<String>(binding.cropProtectDiseaseImage.context,
-                                listOf(it.data?.thumb)
-                            ) { imageView: ImageView, image: String? ->
-                                Glide.with(binding.cropProtectDiseaseImage.context)
-                                    .load(image)
-                                    .into(imageView)
-                            }.allowSwipeToDismiss(true)
-                                .allowZooming(true)
-                                .withTransitionFrom(binding.cropProtectDiseaseImage)
-                                .show(true)
-                        }
+                            if (it.data?.imageUrl == null)
+                                adapter.submitList(emptyList())
+                            else adapter.submitList(it.data?.imageUrl)
+                            activity?.let { act ->
+                                Glide.with(act).load(it.data?.thumb)
+                                    .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
+                                    .into(binding.cropProtectDiseaseImage)
+                            }
 
-                        if (it.data?.audioUrl != null)
-                            audioNewLayoutBinding.root.visibility = VISIBLE
-                        else
-                            audioNewLayoutBinding.root.visibility = GONE
-                        if (it.data != null && it.data!!.symptoms != null) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                Log.d("Symp","${it.data?.symptoms}")
-                                binding.symptomBodyTv.text = Html.fromHtml(
-                                    it.data?.symptoms!!,
-                                    Html.FROM_HTML_MODE_COMPACT
-                                )
+                            binding.cropProtectDiseaseImage.setOnClickListener { _ ->
+                                StfalconImageViewer.Builder<String>(
+                                    binding.cropProtectDiseaseImage.context,
+                                    listOf(it.data?.thumb)
+                                ) { imageView: ImageView, image: String? ->
+                                    Glide.with(binding.cropProtectDiseaseImage.context)
+                                        .load(image)
+                                        .into(imageView)
+                                }.allowSwipeToDismiss(true)
+                                    .allowZooming(true)
+                                    .withTransitionFrom(binding.cropProtectDiseaseImage)
+                                    .show(true)
+                            }
+
+                            if (it.data?.audioUrl != null)
+                                audioNewLayoutBinding.root.visibility = VISIBLE
+                            else
+                                audioNewLayoutBinding.root.visibility = GONE
+                            if (it.data != null && it.data!!.symptoms != null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    Log.d("Symp", "${it.data?.symptoms}")
+                                    binding.symptomBodyTv.text = Html.fromHtml(
+                                        it.data?.symptoms!!,
+                                        Html.FROM_HTML_MODE_COMPACT
+                                    )
+                                } else {
+                                    binding.symptomBodyTv.text =
+                                        Html.fromHtml(it.data?.symptoms!!)
+                                }
                             } else {
-                                binding.symptomBodyTv.text =
-                                    Html.fromHtml(it.data?.symptoms!!) }
-                        } else {
-                            binding.symptomBodyTv.text = "NA"
-                        }
-                        binding.tabLayout.removeAllTabs()
-                        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
-                            override fun onTabSelected(tab: Tab?) {
-                                populateTabText(tab, it.data)
+                                binding.symptomBodyTv.text = "NA"
                             }
-                            override fun onTabUnselected(tab: Tab?) {
+                            binding.tabLayout.removeAllTabs()
+                            binding.tabLayout.addOnTabSelectedListener(object :
+                                OnTabSelectedListener {
+                                override fun onTabSelected(tab: Tab?) {
+                                    populateTabText(tab, it.data)
+                                }
 
+                                override fun onTabUnselected(tab: Tab?) {
+
+                                }
+
+                                override fun onTabReselected(tab: Tab?) {
+                                    populateTabText(tab, it.data)
+                                }
+                            })
+                            if (it.data != null && it.data!!.chemical != null) {
+                                addTab(chemical)
                             }
-                            override fun onTabReselected(tab: Tab?) {
-                                populateTabText(tab, it.data)
+                            if (it.data != null && it.data!!.biological != null) {
+                                addTab(biological)
                             }
-                        })
-                        if (it.data != null && it.data!!.chemical != null) {
-                            addTab(chemical)
+                            if (it.data != null && it.data!!.cultural != null) {
+                                addTab(cultural)
+                            }
                         }
-                        if (it.data != null && it.data!!.biological != null) {
-                            addTab(biological)
+                        is Resource.Loading -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val toastLoading = TranslationsManager().getString("loading")
+                                if(!toastLoading.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                                    Toast.LENGTH_SHORT
+                                ) }}}
+
                         }
-                        if (it.data != null && it.data!!.cultural != null) {
-                            addTab(cultural)
+                        is Resource.Error -> {
+
+
                         }
-                    }
-                    is Resource.Loading -> {
-                        ToastStateHandling.toastWarning(
-                            requireContext(),
-                            "Loading..",
-                            Toast.LENGTH_SHORT
-                        )
 
                     }
-                    is Resource.Error -> {
-
-
-                    }
-
                 }
             }
         }
@@ -316,7 +330,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             .buildShortDynamicLink().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     binding.clShareProgress.visibility=View.GONE
-                    Handler(Looper.myLooper()!!).postDelayed({binding.imgShare.isEnabled = true
+                    Handler().postDelayed({binding.imgShare.isEnabled = true
                     },1000)
 
                     val shortLink: Uri? = task.result.shortLink
@@ -543,7 +557,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (runnable != null) {
-//                        AppUtil.handlerSet(handler!!,runnable!!,3000)
+                        AppUtil.handlerSet(handler,runnable!!,3000)
                     }
                 }
             })
@@ -591,11 +605,17 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         .setRuntimeView(binding.totalTime)
                     // .setTotalTimeView(mTotalTime);
                     audio?.play()
-                } else ToastStateHandling.toastError(
-                    requireContext(),
-                    "Audio is not there",
-                    Toast.LENGTH_SHORT
-                )
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastAudioFile = TranslationsManager().getString("audio_file")
+                        if(!toastAudioFile.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastAudioFile,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Audio file not found",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+                }
 
             }
         }

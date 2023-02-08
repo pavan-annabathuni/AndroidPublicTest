@@ -100,9 +100,9 @@ class CropSelectFragment : Fragment() {
             val id = it.cropId
             var id2 = 0
             val args = Bundle()
-            it?.idd?.let { it1 -> args.putInt("crop_id", it1) }
-            it?.cropName?.let { it1 -> args.putString("name", it1) }
-            it?.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
+            it.idd?.let { it1 -> args.putInt("crop_id", it1) }
+            it.cropName?.let { it1 -> args.putString("name", it1) }
+            it.cropLogo?.let { it2 -> args.putString("crop_logo", it2) }
             viewModel.getCropMaster().observe(viewLifecycleOwner) {
                 for (i in 0 until it.data?.size!!) {
                     Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
@@ -206,8 +206,15 @@ class CropSelectFragment : Fragment() {
 
                 }
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }
@@ -268,13 +275,28 @@ class CropSelectFragment : Fragment() {
                     } else
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+                }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        "Error Occurred",
-                        Toast.LENGTH_SHORT
-                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
+
                 }
             }
         }
@@ -370,7 +392,7 @@ class CropSelectFragment : Fragment() {
             tvMessage,
             "Thanks for showing your interest. Currently, we’re working on a pest & disease detection model for this crop. We look forward to serving you shortly."
         )
-        viewModel.viewModelScope.launch() {
+        viewModel.viewModelScope.launch {
             var ok = TranslationsManager().getString("str_ok")
             if (ok.isNullOrEmpty())
                 yesBtn.text = "Ok"
