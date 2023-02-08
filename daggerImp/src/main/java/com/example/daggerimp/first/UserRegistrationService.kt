@@ -36,7 +36,7 @@ class UserRegistrationService(private val userRepository: UserRepository  ,
 class UserRegistrationService @Inject constructor(private val userRepository: UserRepository,
                                                   private val emailService: EmailServices
 ) {
-
+//object
 fun registerUser(email: String, password: String) {
 userRepository.saveUser(email, password)
 emailService.send(email, "abc@waycool.in", "User registered")
