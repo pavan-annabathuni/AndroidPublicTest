@@ -244,6 +244,7 @@ class CropHealthFragment : Fragment() {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                         videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.ivViewAll.visibility = View.GONE
 

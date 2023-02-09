@@ -112,7 +112,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             if (deepLink != null) {
 
                 val intent =
-                    Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+                    Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -362,7 +362,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_landing",eventBundle)
-        val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+        val intent = Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
         intent.putExtra("title", it?.title)
         intent.putExtra("content", it?.desc)
         intent.putExtra("image", it?.thumbnailUrl)

@@ -2,7 +2,6 @@ package com.example.adddevice.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -236,31 +235,22 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 
                 }
                 is Resource.Error -> {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,"GWX Device Already in Farm",Toast.LENGTH_SHORT) }
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,"Enter the valid mobile number",
                                 Toast.LENGTH_SHORT
                             ) }}
 

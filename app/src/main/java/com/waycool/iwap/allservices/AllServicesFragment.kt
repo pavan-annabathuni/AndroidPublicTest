@@ -51,8 +51,8 @@ class AllServicesFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             binding.topAppBar.title=TranslationsManager().getString("str_all_services")
         }
-        TranslationsManager().loadString("explore_services",binding.tvExplore,"Explore our Services")
-        TranslationsManager().loadString("explore_premium_services",binding.tvExplorePremium,"Explore our Premium Services")
+        TranslationsManager().loadString("str_explore",binding.tvExplore,"Explore our Services")
+        TranslationsManager().loadString("str_premimum_explore",binding.tvExplorePremium,"Explore our Premium Services")
 
         binding.topAppBar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()
@@ -147,7 +147,6 @@ class AllServicesFragment : Fragment() {
                         val eventBundle=Bundle()
                         eventBundle.putString("View_all_services",it.title)
                         EventItemClickHandling.calculateItemClickEvent("View_all_services",eventBundle)
-
                         val bundle =Bundle()
                         bundle.putString("title",it.title)
                         bundle.putString("desc",it.moduleDesc)

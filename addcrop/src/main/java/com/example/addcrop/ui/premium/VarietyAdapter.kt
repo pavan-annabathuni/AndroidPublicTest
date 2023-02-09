@@ -21,7 +21,7 @@ private var row_index = -1
         val details = varietyList[position]
         holder.binding.tvSand.setText(varietyList[position].name)
         if (row_index == position) {
-            holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
+            holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility= View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
         }

@@ -26,7 +26,7 @@
     </fragment>
     <activity
         android:id="@+id/newsFullviewActivity"
-        android:name="com.waycool.newsandarticles.view.NewsFullviewActivity"
+        android:name="com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity"
         android:label="NewsFullviewActivity" />
     <fragment
         android:id="@+id/playVideoFragment3"

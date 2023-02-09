@@ -115,6 +115,7 @@ class CropDetailsCaptureFragment : Fragment() {
                 "of your crop")
         TranslationsManager().loadString("leaf", binding.rb1,"Leaf")
         TranslationsManager().loadString("add_image", binding.addPhotoTxt,"Add Image")
+        TranslationsManager().loadString("or", binding.orTxt,"Or")
         TranslationsManager().loadString("how_to_capture", binding.howTo,"How to capture image?")
         TranslationsManager().loadString("capture_image", binding.camptureImage,"Capture Image")
         TranslationsManager().loadString("upload_image", binding.camptureImageCamera,"Upload Image")
@@ -278,8 +279,7 @@ class CropDetailsCaptureFragment : Fragment() {
                 labeler.process(image)
                     .addOnSuccessListener { labels ->
                         labels.sortByDescending { it.confidence }
-//          val imageModelFilters = arrayListOf<String>("plant", "Petal", "fruit", "flower", "Vegetable", "insect")
-                        Log.d("Plant Health", labels.toString())
+
 
                         if (!labels.any { it.text.lowercase() == "plant" || it.text.lowercase() == "petal" || it.text.lowercase() == "fruit" || it.text.lowercase() == "flower" || it.text.lowercase() == "vegetable" || it.text.lowercase() == "insect" } && !labels.isNullOrEmpty()) {
                             MaterialAlertDialogBuilder(requireContext()).setTitle("Incorrect Image")

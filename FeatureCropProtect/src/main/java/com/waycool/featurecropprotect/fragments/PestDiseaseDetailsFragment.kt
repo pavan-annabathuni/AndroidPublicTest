@@ -153,15 +153,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
-           Log.d("TAG", "onViewCreatedDiseaseName: $diseaseName")
             audioUrl = it.getString("audioUrl")
         }
 
-
-
-//        binding.toolbar.setNavigationOnClickListener {
-//            findNavController().navigateUp()
-//        }
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
@@ -232,9 +226,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
 
                             if (it.data?.audioUrl != null)
-                                audioNewLayoutBinding.root.visibility = VISIBLE
+                                binding.audioLayout.visibility= VISIBLE
+//                                audioNewLayoutBinding.root.visibility = VISIBLE
                             else
-                                audioNewLayoutBinding.root.visibility = GONE
+                                binding.audioLayout.visibility= GONE
+
+//                            audioNewLayoutBinding.root.visibility = GONE
                             if (it.data != null && it.data!!.symptoms != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     Log.d("Symp", "${it.data?.symptoms}")
@@ -379,6 +376,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility=View.GONE
@@ -437,6 +435,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility=View.GONE
@@ -587,16 +586,19 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
         }
         private fun audioPlayer() {
-            binding.playPauseLayout.setOnClickListener {
-                if (audioUrl != null) {
+            if(audioUrl.isNullOrEmpty()){
+                binding.audioLayout.visibility=View.GONE
+            }
+            else{
+                binding.audioLayout.visibility=View.VISIBLE
+                binding.playPauseLayout.setOnClickListener {
+
                     mediaPlayer = MediaPlayer()
                     mediaPlayer!!.setOnCompletionListener {
                         binding.mediaSeekbar.progress = 0
                         binding.pause.visibility = View.GONE
                         binding.play.visibility = View.VISIBLE
-                    }
 
-                    Log.d("Audio", "audioPlayer: $audioUrl")
                     audio = AudioWife.getInstance()
                         .init(requireContext(), Uri.parse(audioUrl))
                         .setPlayView(binding.play)
@@ -605,17 +607,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         .setRuntimeView(binding.totalTime)
                     // .setTotalTimeView(mTotalTime);
                     audio?.play()
-                } else {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastAudioFile = TranslationsManager().getString("audio_file")
-                        if(!toastAudioFile.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastAudioFile,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Audio file not found",
-                            Toast.LENGTH_SHORT
-                        ) }}}
                 }
+            }
 
             }
         }

@@ -9,7 +9,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -510,6 +509,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
+                                    TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
                                     newsBinding.viewAllNews.visibility=View.GONE
@@ -519,6 +519,7 @@ class CropInfoFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.Error ) {
                                     if(adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
@@ -584,8 +585,6 @@ class CropInfoFragment : Fragment(), onItemClick {
                     videosBinding.videosListRv.visibility = View.INVISIBLE
                     videosBinding.viewAllVideos.visibility=View.GONE
                     videosBinding.ivViewAll.visibility=View.GONE
-
-
                 }
                 else {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -594,26 +593,16 @@ class CropInfoFragment : Fragment(), onItemClick {
                             .collect { it1 ->
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    videosBinding.tvNoVANs.text = "Videos are being loaded.Please wait for some time"
                                     videosBinding.videoCardNoInternet.visibility = View.GONE
                                     videosBinding.videosListRv.visibility = View.INVISIBLE
                                     videosBinding.viewAllVideos.visibility=View.GONE
                                     videosBinding.ivViewAll.visibility=View.GONE
-
                                 }
-                                if (it1 is LoadState.Error && adapter.itemCount == 0) {
-                                    videosBinding.noDataVideo.visibility = View.VISIBLE
-                                    videosBinding.videoCardNoInternet.visibility = View.GONE
-                                    videosBinding.videosListRv.visibility = View.INVISIBLE
-                                    videosBinding.viewAllVideos.visibility=View.GONE
-                                    videosBinding.ivViewAll.visibility=View.GONE
-
-                                }
-
                                 if (it1 is LoadState.NotLoading) {
-                                    Log.d("HomePage", "Adapter Size: ${adapter.itemCount}")
-
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility=View.GONE

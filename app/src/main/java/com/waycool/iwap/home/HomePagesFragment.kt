@@ -806,6 +806,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
@@ -860,6 +861,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             if (it1 is LoadState.NotLoading) {
                                 if (adapter.itemCount == 0) {
                                     videosBinding.noDataVideo.visibility = View.VISIBLE
+                                    TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                     videosBinding.ivViewAll.visibility = View.GONE
                                     videosBinding.viewAllVideos.visibility = View.GONE
                                     videosBinding.videoCardNoInternet.visibility = View.GONE

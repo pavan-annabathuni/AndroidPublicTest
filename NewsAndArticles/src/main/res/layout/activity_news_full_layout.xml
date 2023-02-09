@@ -27,10 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Articles"
-            android:visibility="gone"
+            android:text="News &amp; Articles"
+            android:visibility="visible"
             android:textColor="@color/textdark"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            android:fontFamily="@font/notosans_bold"/>
 
         <com.waycool.uicomponents.Text.ParagraphMedium
             android:id="@+id/shareBtn"

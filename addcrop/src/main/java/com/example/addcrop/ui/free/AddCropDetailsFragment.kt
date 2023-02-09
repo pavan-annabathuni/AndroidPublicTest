@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -299,10 +298,8 @@ class AddCropDetailsFragment : Fragment() {
         val eventBundle = Bundle()
         eventBundle.putString("cropCategoryTagName", "Crop_category_${cropCategoryTagName}")
         eventBundle.putString("cropTagName", cropNameTag)
-//        eventBundle.putString("cropArea",binding.etCropArea.text toString())
         eventBundle.putString("sowingDate", binding.tvDateSelected.text.toString())
         EventItemClickHandling.calculateItemClickEvent("Add_crop", eventBundle)
-
         viewModel.addCropDataPass(
             map
         ).observe(requireActivity()) {
@@ -319,10 +316,10 @@ class AddCropDetailsFragment : Fragment() {
                         val toastError = TranslationsManager().getString("error")
                         if(!toastError.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
                         else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
+                            LENGTH_SHORT
                         ) }}}
                 }
                 is Resource.Loading -> {
@@ -330,10 +327,10 @@ class AddCropDetailsFragment : Fragment() {
                         val toastLoading = TranslationsManager().getString("loading")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
                         else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
+                            LENGTH_SHORT
                         ) }}}
                 }
             }

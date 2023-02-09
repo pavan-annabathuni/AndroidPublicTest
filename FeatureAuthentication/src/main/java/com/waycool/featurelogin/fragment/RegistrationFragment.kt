@@ -89,7 +89,6 @@ class RegistrationFragment : Fragment() {
     lateinit var placesClient: PlacesClient
 
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
-    private var audioUrl: String? = null
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -394,7 +393,7 @@ class RegistrationFragment : Fragment() {
             UserTYpeTV!!.text = "Subscription"
             icon!!.visibility = View.VISIBLE
         }
-        if (audiourl == null) {
+        if (audiourl.isNullOrEmpty()) {
             audioLayout!!.visibility = View.GONE
         } else {
             audioLayout!!.visibility = View.VISIBLE
@@ -428,34 +427,9 @@ class RegistrationFragment : Fragment() {
 
         play!!.setOnClickListener { view ->
             //if audio url is not null go to "IF" condition
-            if (audiourl != null) {
                 if (pause != null) {
-                    playAudio(context, audiourl, play, pause, seekbar!!, totalTime!!)
+                    audiourl?.let { playAudio(context, it, play, pause, seekbar!!, totalTime!!) }
                 }
-            }
-            //if audio url is  null go to "ELSE" condition
-            else {
-                //showing toast for "Audio file not found"
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastAudioNotFound = TranslationsManager().getString("audio_file")
-                    if (!toastAudioNotFound.isNullOrEmpty()) {
-                        context.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, toastAudioNotFound,
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    } else {
-                        context.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, "Audio file not found",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    }
-                }
-
-            }
             //Event Click on clicking the audio play button
             EventClickHandling.calculateClickEvent("Listen$tittle")
         }
@@ -835,7 +809,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                val searchTag: String = Objects.requireNonNull(result).get(0) ?: ""
+                val searchTag: String = Objects.requireNonNull(result)?.get(0) ?: ""
                 binding.nameEt.setText(searchTag)
 
             }
