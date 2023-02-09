@@ -32,7 +32,7 @@ class AboutOutgrowFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
-        TranslationsManager().loadString("str_about_outgrow",binding.tvAboutOutgrowDescription,resources.getString(
+        TranslationsManager().loadString("about_outgrow",binding.tvAboutOutgrowDescription,resources.getString(
             R.string.str_about_outGrow
         ))
         GlobalScope.launch {

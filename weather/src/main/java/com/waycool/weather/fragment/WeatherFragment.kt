@@ -93,7 +93,7 @@ class WeatherFragment : Fragment() {
 
 
         shareLayout = binding.shareScreen
-        binding.imgShare.setOnClickListener() {
+        binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
             binding.imgShare.isEnabled = false
             EventClickHandling.calculateClickEvent("weather_share")
@@ -174,37 +174,19 @@ class WeatherFragment : Fragment() {
         outputFile.close()
         val URI = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
 
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://outgrowdev.page.link/weathershare"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
-            .setAndroidParameters(
-                DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                    .build()
-            )
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Outgrow - View weather details")
-                    .setDescription("View weather details and more on Outgrow app")
-                    .build()
-            )
-            .buildShortDynamicLink().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({binding.imgShare.isEnabled = true
-                    },1000)
-                    val shortLink: Uri? = task.result.shortLink
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                    sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
-                    startActivity(Intent.createChooser(sendIntent, "choose one"))
 
+     val share = Intent(Intent.ACTION_SEND)
+     share.type = "text/plain"
+     share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 
+     share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
+     share.putExtra(Intent.EXTRA_STREAM, URI)
+     share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+     binding.clShareProgress.visibility=View.GONE
+     Handler().postDelayed({ binding.imgShare.isEnabled = true
+     },1000)
+     startActivity(Intent.createChooser(share, "Share link!"))
 
-                }
-            }
 
     }
 
@@ -334,7 +316,7 @@ class WeatherFragment : Fragment() {
                 //Toast.makeText(context, "${it.data?.current?.weather?.get(0)?.icon}", Toast.LENGTH_SHORT).show()
                 binding.weatherMaster = it.data
 
-                if (null != it?.data) {
+                if (null != it.data) {
                     val date: Long? = it.data?.current?.dt?.times(1000L)
                     val dateTime = Date()
                     if (date != null) {

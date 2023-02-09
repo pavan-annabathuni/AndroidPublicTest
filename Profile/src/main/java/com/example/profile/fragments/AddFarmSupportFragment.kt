@@ -104,7 +104,7 @@ class AddFarmSupportFragment : Fragment() {
         binding = FragmentAddFarmSupportBinding.inflate(inflater)
         onClick()
         getLocation()
-        binding.imgLocation.setOnClickListener() {
+        binding.imgLocation.setOnClickListener {
             viewModel.viewModelScope.launch {
             val toast = TranslationsManager().getString("loading")
                 if(!toast.isNullOrEmpty()){
@@ -124,10 +124,10 @@ class AddFarmSupportFragment : Fragment() {
             accountId = it.data?.accountId
         }
         var roleid = 30
-        binding.topAppBar.setNavigationOnClickListener() {
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
-        binding.farmManger.setOnClickListener() {
+        binding.farmManger.setOnClickListener {
             EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
             binding.farmManger.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.text_border_gray)
@@ -138,7 +138,7 @@ class AddFarmSupportFragment : Fragment() {
             roleid = 30
             EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
         }
-        binding.mandiBench.setOnClickListener() {
+        binding.mandiBench.setOnClickListener {
             binding.mandiBench.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.text_border_gray)
             binding.farmManger.background =
@@ -148,7 +148,7 @@ class AddFarmSupportFragment : Fragment() {
             roleid = 31
             EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
         }
-        binding.submit.setOnClickListener() {
+        binding.submit.setOnClickListener {
             var contact: Long? = null
             val name = binding.tvName.text.toString()
 
@@ -159,7 +159,7 @@ class AddFarmSupportFragment : Fragment() {
             }
 
             if (name.isNullOrEmpty() || lat2.isNullOrEmpty() || long2.isNullOrEmpty()) {
-                viewModel.viewModelScope.launch(){
+                viewModel.viewModelScope.launch {
                 val toast = TranslationsManager().getString("str_fill_all_fields")
                     if(toast.isNullOrEmpty()){
                 context?.let { it1 -> ToastStateHandling.toastError(it1, "Fill all Fields", Toast.LENGTH_SHORT)}
@@ -187,13 +187,16 @@ class AddFarmSupportFragment : Fragment() {
                             findNavController().navigateUp()
                         }
                         is Resource.Error -> {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1,
-                                    "Enter Valid Mobile Number",
+
+                            viewModel.viewModelScope.launch {
+                                val toastLoading = TranslationsManager().getString("alert_valid_number")
+                                if(!toastLoading.isNullOrEmpty()){
+                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                        Toast.LENGTH_SHORT
+                                    ) }}
+                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Enter Valid Mobile Number",
                                     Toast.LENGTH_SHORT
-                                )
-                            }
+                                ) }}}
                         }
                         is Resource.Loading -> {}
                     }

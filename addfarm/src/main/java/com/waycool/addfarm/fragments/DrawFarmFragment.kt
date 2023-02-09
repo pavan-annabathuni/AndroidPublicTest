@@ -248,7 +248,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             isPolygonDraw = false
             binding.areaCard.visibility = View.GONE
             if (isMarkerSelected) {
-                binding.markerImageview.setVisibility(View.INVISIBLE)
+                binding.markerImageview.visibility = View.INVISIBLE
                 isMarkerSelected = false
             }
             if (!markerList.isNullOrEmpty()) {
@@ -273,23 +273,23 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             EventClickHandling.calculateClickEvent("farm_undo")
             if (isMarkerSelected) {
                 isMarkerSelected = false
-                binding.markerImageview.setVisibility(View.INVISIBLE)
+                binding.markerImageview.visibility = View.INVISIBLE
                 val ll = mMap!!.projection
                     .fromScreenLocation(
                         Point(
-                            binding.markerImageview.getX()
-                                .toInt() + binding.markerImageview.getWidth() / 2,
-                            binding.markerImageview.getY()
-                                .toInt() + binding.markerImageview.getHeight() / 2
+                            binding.markerImageview.x
+                                .toInt() + binding.markerImageview.width / 2,
+                            binding.markerImageview.y
+                                .toInt() + binding.markerImageview.height / 2
                         )
                     )
-                markerList[selectedMarkerIndex!!].setPosition(ll)
+                markerList[selectedMarkerIndex!!].position = ll
                 points[selectedMarkerIndex!!] = ll
                 markerList[selectedMarkerIndex!!].isVisible = true
                 if (polyline != null) {
                     polyline!!.points = points
                     addCenterMarkersToPolyline(polyline)
-                    binding.areaCard.setVisibility(View.GONE)
+                    binding.areaCard.visibility = View.GONE
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
 
@@ -302,7 +302,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             /*else if(getIntent().hasExtra("edit_map")){
                 }*/if (previousStateStack.size == 1) {
             previousStateStack.pop()
-            binding.areaCard.setVisibility(View.GONE)
+            binding.areaCard.visibility = View.GONE
             //binding.savemapBtn.setVisibility(View.GONE)
             for (m in markerList) {
                 m.remove()
@@ -353,7 +353,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         PolylineOptions().addAll(points)
                             .color(-0x44000001).geodesic(true).pattern(dashedPattern)
                     )
-                    binding.areaCard.setVisibility(View.GONE)
+                    binding.areaCard.visibility = View.GONE
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
                 if (polygon != null) {
@@ -362,7 +362,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 }
                 polyline!!.points = points
                 addCenterMarkersToPolyline(polyline)
-                binding.areaCard.setVisibility(View.GONE)
+                binding.areaCard.visibility = View.GONE
                 //binding.savemapBtn.setVisibility(View.GONE)
             }
         }
@@ -460,24 +460,40 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
         binding.savemapBtn.setOnClickListener {
             if (points.isEmpty() && searchLocationMarker == null) {
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Please Mark your Farm or nearest location of your farm.",
-                    Toast.LENGTH_LONG
-                )
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastServerError = TranslationsManager().getString("please_mark")
+                    if(!toastServerError.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please Mark your Farm or nearest location of your farm.",
+                        Toast.LENGTH_SHORT
+                    ) }}}
             } else if (points.size < 3) {
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Please Mark more than 2 points to plot your Farm or nearest location of your farm.",
-                    Toast.LENGTH_LONG
-                )
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastServerError = TranslationsManager().getString("please_mark_points")
+                    if(!toastServerError.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please Mark more than 2 points to plot your Farm or nearest location of your farm.",
+
+                        Toast.LENGTH_SHORT
+                    ) }}}
+
 
             } else if (getAreaInAcre(points) > 100) {
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Farm Area is large. Draw smaller Farm.",
-                    Toast.LENGTH_LONG
-                )
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastServerError = TranslationsManager().getString("farm_area_draw")
+                    if(!toastServerError.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Farm Area is large. Draw smaller Farm.",
+                        Toast.LENGTH_SHORT
+                    ) }}}
+
             } else {
                 val bundle = Bundle()
                 if (points.isNotEmpty()) {
@@ -527,7 +543,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 for (latLng in pnts) {
                     val marker = mMap!!.addMarker(
                         MarkerOptions().position(
-                            latLng!!
+                            latLng
                         )
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
                             .anchor(0.5f, .5f)
@@ -579,13 +595,15 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.tutorial.isClickable = false
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            context?.let {
-                ToastStateHandling.toastError(
-                    it,
-                    "Please check your internet connectivity",
+            CoroutineScope(Dispatchers.Main).launch {
+                val toastServerError = TranslationsManager().getString("server_error")
+                if(!toastServerError.isNullOrEmpty()){
+                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                        Toast.LENGTH_SHORT
+                    ) }}
+                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
                     Toast.LENGTH_SHORT
-                )
-            }
+                ) }}}
         } else {
             binding.tutorial.isClickable = true
             binding.clInclude.visibility = View.GONE
@@ -690,16 +708,16 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 //binding.savemapBtn.setVisibility(View.GONE)
             } else if (isMarkerSelected) {
                 isMarkerSelected = false
-                binding.markerImageview.setVisibility(View.INVISIBLE)
+                binding.markerImageview.visibility = View.INVISIBLE
                 val ll = mMap!!.projection.fromScreenLocation(
                     Point(
-                        binding.markerImageview.getX()
-                            .toInt() + binding.markerImageview.getWidth() / 2,
-                        binding.markerImageview.getY()
-                            .toInt() + binding.markerImageview.getHeight() / 2
+                        binding.markerImageview.x
+                            .toInt() + binding.markerImageview.width / 2,
+                        binding.markerImageview.y
+                            .toInt() + binding.markerImageview.height / 2
                     )
                 )
-                markerList[selectedMarkerIndex!!].setPosition(ll)
+                markerList[selectedMarkerIndex!!].position = ll
                 points[selectedMarkerIndex!!] = ll
                 markerList[selectedMarkerIndex!!].isVisible = true
                 if (polyline != null) {
@@ -720,22 +738,22 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             if (marker1 == currentMarker) return@OnMarkerClickListener true
             if (isMarkerSelected) {
                 isMarkerSelected = false
-                binding.markerImageview.setVisibility(View.INVISIBLE)
+                binding.markerImageview.visibility = View.INVISIBLE
                 val ll = mMap!!.projection.fromScreenLocation(
                     Point(
-                        binding.markerImageview.getX()
-                            .toInt() + binding.markerImageview.getWidth() / 2,
-                        binding.markerImageview.getY()
-                            .toInt() + binding.markerImageview.getHeight() / 2
+                        binding.markerImageview.x
+                            .toInt() + binding.markerImageview.width / 2,
+                        binding.markerImageview.y
+                            .toInt() + binding.markerImageview.height / 2
                     )
                 )
-                markerList[selectedMarkerIndex!!].setPosition(ll)
+                markerList[selectedMarkerIndex!!].position = ll
                 points[selectedMarkerIndex!!] = ll
                 markerList[selectedMarkerIndex!!].isVisible = true
                 if (polyline != null) {
                     polyline!!.points = points
                     addCenterMarkersToPolyline(polyline)
-                    binding.areaCard.setVisibility(View.GONE)
+                    binding.areaCard.visibility = View.GONE
                     //binding.savemapBtn.setVisibility(View.GONE)
                 }
 
@@ -801,8 +819,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 val markerPointOnScreen = mMap!!.projection.toScreenLocation(
                     markerList[selectedMarkerIndex!!].position
                 )
-                binding.markerImageview.setX((markerPointOnScreen.x - binding.markerImageview.getWidth() / 2).toFloat())
-                binding.markerImageview.setY((markerPointOnScreen.y - binding.markerImageview.getHeight() / 2).toFloat())
+                binding.markerImageview.x = (markerPointOnScreen.x - binding.markerImageview.width / 2).toFloat()
+                binding.markerImageview.y = (markerPointOnScreen.y - binding.markerImageview.height / 2).toFloat()
             }
         }
 
@@ -984,7 +1002,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
         if (centerMarkerList?.size == centerPOintsList.size) {
             for (i in centerPOintsList.indices) {
-                centerMarkerList?.get(i)?.setPosition(centerPOintsList[i])
+                centerMarkerList?.get(i)?.position = centerPOintsList[i]
             }
         }
         if (centerMarkerList?.size!! < centerPOintsList.size) {
@@ -1048,7 +1066,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
         if (centerMarkerList!!.size == centerPOintsList.size) {
             for (i in centerPOintsList.indices) {
-                centerMarkerList!!.get(i).setPosition(centerPOintsList[i])
+                centerMarkerList!!.get(i).position = centerPOintsList[i]
             }
         }
         if (centerMarkerList!!.size < centerPOintsList.size) {
@@ -1137,14 +1155,12 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     lParams.rightMargin = -250
                     lParams.bottomMargin = -250
                     view.layoutParams = lParams
-                    markerList.get(selectedMarkerIndex!!).setPosition(
-                        mMap?.projection!!.fromScreenLocation(
-                            Point(
-                                binding.markerImageview.x
-                                    .toInt() + binding.markerImageview.width / 2,
-                                binding.markerImageview.y
-                                    .toInt() + binding.markerImageview.height / 2
-                            )
+                    markerList.get(selectedMarkerIndex!!).position = mMap?.projection!!.fromScreenLocation(
+                        Point(
+                            binding.markerImageview.x
+                                .toInt() + binding.markerImageview.width / 2,
+                            binding.markerImageview.y
+                                .toInt() + binding.markerImageview.height / 2
                         )
                     )
                     points.set(
@@ -1154,11 +1170,11 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                     if (polyline != null) {
                         polyline?.points = points
                         addCenterMarkersToPolyline(polyline)
-                        binding.areaCard.setVisibility(View.GONE)
+                        binding.areaCard.visibility = View.GONE
                         //binding.savemapBtn.setVisibility(View.GONE)
                     }
                     if (polygon != null) {
-                        polygon!!.setPoints(points)
+                        polygon!!.points = points
                         addCenterMarkersToPolygon(polygon)
                         showAreaCard()
                     }
@@ -1167,20 +1183,18 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                 MotionEvent.ACTION_UP -> {
                     mMap?.uiSettings?.setAllGesturesEnabled(true)
                     mMap?.projection?.let {
-                        markerList[selectedMarkerIndex!!].setPosition(
-                            it.fromScreenLocation(
-                                Point(
-                                    binding.markerImageview.x
-                                        .toInt() + binding.markerImageview.width / 2,
-                                    binding.markerImageview.y
-                                        .toInt() + binding.markerImageview.height / 2
-                                )
+                        markerList[selectedMarkerIndex!!].position = it.fromScreenLocation(
+                            Point(
+                                binding.markerImageview.x
+                                    .toInt() + binding.markerImageview.width / 2,
+                                binding.markerImageview.y
+                                    .toInt() + binding.markerImageview.height / 2
                             )
                         )
                     }
                     points.set(
                         selectedMarkerIndex!!,
-                        markerList.get(selectedMarkerIndex!!).getPosition()
+                        markerList.get(selectedMarkerIndex!!).position
                     )
                     val state = MapState()
                     state.isPolygonDrawn = isPolygonDraw
@@ -1197,7 +1211,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         var isPolygonDrawn = false
         private var latLngList: MutableList<LatLng> = ArrayList()
 
-        constructor() {}
+        constructor()
         constructor(isPolygonDrawn: Boolean, latLngList: MutableList<LatLng>) {
             this.isPolygonDrawn = isPolygonDrawn
             this.latLngList = latLngList

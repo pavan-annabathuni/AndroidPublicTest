@@ -21,6 +21,7 @@ import com.waycool.data.Network.NetworkModels.ReportDetails
 import com.waycool.data.Network.NetworkModels.ReportResult
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -214,18 +215,33 @@ class ViewReportFragment : Fragment() {
 
                         }
                         if (soilTestReportMaster.data!!.data.get(0) != null) {
-                            fullData = soilTestReportMaster.data!!.data.get(0);
-                            setOtherData(fullData!!);
+                            fullData = soilTestReportMaster.data!!.data.get(0)
+                            setOtherData(fullData!!)
                         }
                     }
                 }
 
                 is Resource.Error -> {
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastError = TranslationsManager().getString("error")
+                        if(!toastError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
         }
@@ -255,12 +271,26 @@ class ViewReportFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastError = TranslationsManager().getString("error")
+                        if(!toastError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
-                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastLoading = TranslationsManager().getString("loading")
+                        if(!toastLoading.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
             }
 
@@ -297,7 +327,7 @@ class ViewReportFragment : Fragment() {
                     if (read == -1) {
                         break
                     }
-                    outputStream?.write(fileReader, 0, read)
+                    outputStream.write(fileReader, 0, read)
                     fileSizeDownloaded += read.toLong()
                     Log.d("g56", "file download: $fileSizeDownloaded of $fileSize")
                 }

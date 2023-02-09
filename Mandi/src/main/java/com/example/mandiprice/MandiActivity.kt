@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 
 
 class MandiActivity : AppCompatActivity() {
@@ -17,15 +18,13 @@ class MandiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mandi)
 
-        DeepLinkNavigator.navigateFromDeeplink(this@MandiActivity) { pendingDynamicLinkData ->
+      navigateFromDeeplink(this@MandiActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment.equals("/mandi")) {
-                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
-                } else {
+                if (deepLink.lastPathSegment.equals("/mandigraph")) {
                     val cropMasterId = deepLink.getQueryParameter("crop_master_id")
                     val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
                     val subRecordId = deepLink.getQueryParameter("sub_record_id")
@@ -43,6 +42,9 @@ class MandiActivity : AppCompatActivity() {
                         args.putString("fragment", fragment)
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                     }
+                } else if(deepLink.lastPathSegment.equals("/mandi")){
+                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
+
                 }
 
             }

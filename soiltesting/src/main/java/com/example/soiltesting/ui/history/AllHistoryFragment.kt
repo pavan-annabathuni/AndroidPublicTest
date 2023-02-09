@@ -81,16 +81,21 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
-            binding.tvToolBar.text=TranslationsManager().getString("txt_soil_testing")
+            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
+            if(toolbarTitle!=null){
+                binding.tvToolBar.text=toolbarTitle
+            }
+            else
+                binding.tvToolBar.text="Soil Testing Requests"
         }
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
-        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
+//        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
 
 
     private fun speechToText() {
-        binding.textToSpeach.setOnClickListener() {
+        binding.textToSpeach.setOnClickListener {
             binding.searchView.text.clear()
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
@@ -183,8 +188,15 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
-                }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastError = TranslationsManager().getString("server_error")
+                        if(!toastError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}                }
                 is Resource.Loading -> {
 
                 }
@@ -331,18 +343,29 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        it.message.toString(),
-                                        Toast.LENGTH_SHORT
-                                    )
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastError = TranslationsManager().getString("error")
+                                        if(!toastError.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
+                                                Toast.LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
+                                            Toast.LENGTH_SHORT
+                                        ) }}}
 
                                 }
                                 is Resource.Loading -> {
                                     binding.progressBar.isVisible = true
                                     binding.clProgressBar.visibility = View.VISIBLE
-                                    ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
-
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastLoading = TranslationsManager().getString("loading")
+                                        if(!toastLoading.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
+                                                Toast.LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
+                                            Toast.LENGTH_SHORT
+                                        ) }}}
                                 }
                             }
 
