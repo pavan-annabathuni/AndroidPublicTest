@@ -248,6 +248,9 @@ object LocalSource {
 
 
     fun insertViewDevice(devices: List<ViewDeviceEntity>) {
+
+        Log.d("devices","devices list: $devices")
+
         OutgrowDB.getDatabase().runInTransaction {
             outgrowDao.deleteAllDevices()
             outgrowDao.insertViewDevice(devices)

@@ -61,7 +61,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
     private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
-    private var handler: Handler? = null
+    private lateinit var handler: Handler
     private var runnable: Runnable?=null
     private var lastUpdatedTime: String? = null
 
@@ -613,12 +613,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.soilMoistureTwo.marksNumber = 0
             binding.soilMoistureOne.maxSpeed = 60F
             binding.soilMoistureTwo.maxSpeed = 60F
-            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat())
-            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat())
+            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat()?:0f)
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat()?:0f)
 
 
-            binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
-            binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
+            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat()?:0f, 100)
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat()?:0f, 100)
 
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
@@ -851,7 +851,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (runnable != null) {
-                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                    AppUtil.handlerSet(handler,runnable,3000)
                 }
             }
         })
@@ -915,20 +915,20 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
-            binding.MyDevice.visibility=View.VISIBLE
+            binding.MyDevice.visibility=View.GONE
         }
     }
     override fun onPause() {
         super.onPause()
         if (runnable != null) {
-            handler?.removeCallbacks(runnable!!)
+            handler.removeCallbacks(runnable!!)
         }
     }
     override fun onResume() {
         super.onResume()
 
         if (runnable != null) {
-            handler?.postDelayed(runnable!!, 3000)
+            handler.postDelayed(runnable!!, 3000)
         }
         EventScreenTimeHandling.calculateScreenTime("HomePagePremiumFragment")
     }
