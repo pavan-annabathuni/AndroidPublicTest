@@ -66,7 +66,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent.data = message.notification?.link
         } else {
 
-            intent = Intent(this.applicationContext, SplashActivity::class.java)
+            intent = Intent(this, SplashActivity::class.java)
 //            intent.action = System.currentTimeMillis().toString()
         }
 
