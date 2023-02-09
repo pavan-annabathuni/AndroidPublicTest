@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import zendesk.android.Zendesk
 import zendesk.android.events.ZendeskEvent
 import zendesk.android.events.ZendeskEventListener
@@ -32,14 +34,17 @@ object FeatureChat {
     fun zenDeskInit(context: Context) {
 
 
-        GlobalScope.launch {
+
+           CoroutineScope(Dispatchers.Main).launch(){
+
+
             val jwt = getJwtToken() ?: ""
 
             Zendesk.initialize(
 
                 context = context,
                 channelKey = AppSecrets.getChatChannelKey(),
-                successCallback = { zendesk ->
+                successCallback = {
                     Log.i("IntegrationApplication", "Initialization successful")
                     Zendesk.instance.loginUser(jwt = jwt,
                         successCallback = { user ->
@@ -68,9 +73,11 @@ object FeatureChat {
             )
             addZendeskEventListener()
         }
-    }
 
-    suspend fun addZendeskEventListener() {
+
+}
+
+    private suspend fun addZendeskEventListener() {
         Zendesk.instance.addEventListener(zendeskEventListener)
         PushNotifications.updatePushNotificationToken(getFCMToken())
     }
@@ -81,7 +88,7 @@ object FeatureChat {
 
     fun zendeskLogout() {
         Zendesk.instance.logoutUser(
-            successCallback = { user -> Log.d("zendesktest", "zendeskChat: ${user.toString()} ") },
+            successCallback = { user -> Log.d("zendesktest", "zendeskChat: $user ") },
             failureCallback = { error -> Log.d("zendesktest", "zendeskChat: ${error.message} ") }
         )
     }

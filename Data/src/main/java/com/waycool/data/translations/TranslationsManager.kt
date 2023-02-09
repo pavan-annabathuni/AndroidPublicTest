@@ -5,21 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.waycool.data.Local.Entity.AppTranslationsEntity
 import com.waycool.data.Sync.syncer.AppTranslationsSyncer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class TranslationsManager {
     fun init() {
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             AppTranslationsSyncer.getData("")
         }
     }
 
     fun refreshTranslations() {
-        GlobalScope.launch {
+       CoroutineScope(Dispatchers.IO).launch {
             AppTranslationsSyncer.getData("")
         }
     }
@@ -34,7 +31,7 @@ class TranslationsManager {
 
 
     fun loadString(stringId: String, textview: TextView,defaultValue:String?="") {
-        GlobalScope.launch(Dispatchers.Main) {
+        CoroutineScope(Dispatchers.Main).launch {
             textview.text = AppTranslationsSyncer.getData(stringId)?.appValue ?: defaultValue
         }
     }
