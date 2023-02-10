@@ -25,7 +25,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_view_more"
+                android:src="@drawable/ic_viewall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/llVideos"
                 app:layout_constraintBottom_toBottomOf="@+id/llVideos"/>

@@ -35,7 +35,7 @@ class StatusTrackerAdapter(private val feedbackListerner: FeedbackListerner) : R
             holder.binding.tvTitle.text = details.title
 //            val output: String? = formatter.format(parser.parse(details.date?.toString()))
             holder.binding.tvDate.text = details.date.toString()
-            holder.binding.mcvCircle.setImageResource(R.drawable.ic_ellipse_default)
+            holder.binding.mcvCircle.setImageResource(com.waycool.uicomponents.R.drawable.ic_ellipse_cream)
         }
        else if (details.is_approved == 0 && details.date.toString().isNotEmpty()) {
             holder.binding.mcvCircle.setImageResource(R.drawable.ic_pending_status)

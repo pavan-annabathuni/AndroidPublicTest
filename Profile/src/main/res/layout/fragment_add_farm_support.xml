@@ -126,7 +126,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/text_border_gray"
-                android:drawableEnd="@drawable/ic_tick_profile"
+                android:drawableEnd="@drawable/tick"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
@@ -148,7 +148,7 @@
                     android:id="@+id/image1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick_profile"
+                    android:src="@drawable/tick"
                     android:visibility="visible"/>
             </LinearLayout>
 
@@ -160,7 +160,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="16dp"
                 android:background="@color/white"
-                android:drawableEnd="@drawable/ic_tick_profile"
+                android:drawableEnd="@drawable/tick"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingEnd="16dp"
@@ -182,7 +182,7 @@
                     android:id="@+id/image2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick_profile"
+                    android:src="@drawable/tick"
                     android:visibility="gone" />
             </LinearLayout>
 

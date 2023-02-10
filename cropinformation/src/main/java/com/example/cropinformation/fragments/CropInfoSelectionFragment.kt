@@ -344,7 +344,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                    R.drawable.ic_cross
+                    com.waycool.uicomponents.R.drawable.ic_cross
                 ))
                 binding.addChat.show()
                 binding.addCall.show()
