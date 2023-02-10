@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 if (dashboardDomain?.subscription?.iot != it.data?.subscription?.iot) {
-
+                    dashboardDomain = it.data
                     when (it) {
                         is Resource.Success -> {
                             Log.d("dashboard", "${it.data?.subscription?.iot}")
