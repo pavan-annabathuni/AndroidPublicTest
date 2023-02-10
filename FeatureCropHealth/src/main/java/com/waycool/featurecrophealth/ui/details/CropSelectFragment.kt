@@ -309,7 +309,7 @@ class CropSelectFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
+                   // categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -317,6 +317,8 @@ class CropSelectFragment : Fragment() {
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if(charSequence.isEmpty()){
+                    bindObserversCategory() }
                 EventClickHandling.calculateClickEvent("Search_crophealth")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)

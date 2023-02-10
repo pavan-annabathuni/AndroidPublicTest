@@ -9,7 +9,7 @@ import com.waycool.data.Network.NetworkModels.*
 @Entity(tableName = "my_devices")
 data class ViewDeviceEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "uniqueid"                    ) var uniqueId                 : Int?                = null,
+    @ColumnInfo(name = "uniqueid"                    ) var uniqueId                 : String,
     @ColumnInfo(name = "id"                    ) var id                 : Int?                = null,
     @ColumnInfo(name = "data_timestamp"        ) var dataTimestamp      : String?             = null,
     @ColumnInfo(name = "temperature"           ) var temperature        : String?             = null,

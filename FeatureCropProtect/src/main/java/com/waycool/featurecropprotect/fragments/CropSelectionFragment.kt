@@ -146,7 +146,7 @@ class CropSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
+                    //categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }

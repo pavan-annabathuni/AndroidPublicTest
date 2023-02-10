@@ -236,10 +236,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 

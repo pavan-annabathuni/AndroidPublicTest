@@ -7,5 +7,5 @@
             android:id="@+id/banner_image"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:src="@drawable/ad_banner"/>
+            android:src="@drawable/ads"/>
 </LinearLayout>

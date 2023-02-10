@@ -648,7 +648,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 it.tvWindDegree.text = data.rainfall.toString() + " mm"
                 it.tvHumidityDegree.text = data.humidity.toString() + " %"
                 it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-                if (data.leafWetness != null && data.leafWetness!!.equals(1)) {
+                if (data.leafWetness != null && data.leafWetness!! == 1) {
                     it.tvLeafWetnessDegree.text = "Wet"
                     it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
                 } else {
@@ -698,8 +698,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.kpaOne.text = "${data.soilMoisture1} kPa"
                 binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
-                binding.soilMoistureOne.speedTo(data.soilMoisture1!!.toFloat(), 100)
-                binding.soilMoistureTwo.speedTo(data.soilMoisture2!!.toFloat(), 100)
+                binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat()?:0f, 100)
+                binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat()?:0f, 100)
 
                 it.clTemp.setOnClickListener {
                     EventClickHandling.calculateClickEvent("Temparature_card_today")
