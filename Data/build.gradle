@@ -76,11 +76,10 @@ dependencies {
 
     implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
 
-    def roomVersion = '2.4.3'
+    def roomVersion = '2.5.0'
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
-    implementation("androidx.room:room-ktx:$roomVersion")
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
@@ -93,6 +92,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
+    //WorkManager
+    api "androidx.work:work-runtime-ktx:2.8.0"
 
 }
 repositories {
