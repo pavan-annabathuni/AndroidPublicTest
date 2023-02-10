@@ -276,7 +276,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_tick
+                    com.waycool.uicomponents.R.drawable.ic_tick
                 ), null, null, null
             )
             binding.tvScanned.setTextColor(
