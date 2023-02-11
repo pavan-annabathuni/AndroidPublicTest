@@ -482,16 +482,22 @@ class OtpFragment : Fragment() {
                                             }
                                         }
                                 }, 200)
-
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val toastSuccessfullyRegistered = TranslationsManager().getString("logged_in")
-                                    if(!toastSuccessfullyRegistered.isNullOrEmpty()){
-                                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastSuccessfullyRegistered,
-                                            Toast.LENGTH_SHORT
-                                        ) }}
-                                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Logged in successfully",
+                                context?.let { it1 ->
+                                    ToastStateHandling.toastSuccess(
+                                        it1,"Logged in successfully",
                                         Toast.LENGTH_SHORT
-                                    ) }}}
+                                    )
+                                }
+
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    val toastSuccessfullyRegistered = TranslationsManager().getString("logged_in")
+//                                    if(!toastSuccessfullyRegistered.isNullOrEmpty()){
+//                                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastSuccessfullyRegistered,
+//                                            Toast.LENGTH_SHORT
+//                                        ) }}
+//                                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Logged in successfully",
+//                                        Toast.LENGTH_SHORT
+//                                    ) }}}
 
 
                             } else {

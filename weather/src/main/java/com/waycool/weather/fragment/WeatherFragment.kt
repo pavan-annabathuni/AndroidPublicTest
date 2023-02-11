@@ -3,7 +3,6 @@ package com.waycool.weather.fragment
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,10 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +27,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -56,7 +53,7 @@ import java.util.*
 class WeatherFragment : Fragment() {
     private var selectedFarm: MyFarmsDomain? = null
     private lateinit var binding: FragmentWeatherBinding
-    private lateinit var shareLayout: LinearLayout
+    private lateinit var shareLayout: ConstraintLayout
     lateinit var mWeatherAdapter: WeatherAdapter
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var handler: Handler? = null
@@ -92,7 +89,7 @@ class WeatherFragment : Fragment() {
         TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
 
 
-        shareLayout = binding.shareScreen
+        shareLayout = binding.clScreenShare
         binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
             binding.imgShare.isEnabled = false
@@ -160,12 +157,15 @@ class WeatherFragment : Fragment() {
 
  /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
+     val uriString="https://outgrowdev.page.link/weathershare"
+     val title="Outgrow - Weather Details"
+     val description="View weather details"
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmap)
         shareLayout.draw(canvas)
         val imageFile = File(path)
         val outputFile = FileOutputStream(imageFile)
@@ -178,7 +178,6 @@ class WeatherFragment : Fragment() {
      val share = Intent(Intent.ACTION_SEND)
      share.type = "text/plain"
      share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
-
      share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
      share.putExtra(Intent.EXTRA_STREAM, URI)
      share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
