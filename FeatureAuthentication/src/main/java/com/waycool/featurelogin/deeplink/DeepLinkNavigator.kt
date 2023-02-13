@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object DeepLinkNavigator {
-
     fun navigateFromDeeplink(activity: Activity, onSuccessCallback : (pendingDynamicLinkData: PendingDynamicLinkData?) -> Unit){
         CoroutineScope(Dispatchers.Main).launch {
             if (!FeatureLogin.getLoginStatus()) {

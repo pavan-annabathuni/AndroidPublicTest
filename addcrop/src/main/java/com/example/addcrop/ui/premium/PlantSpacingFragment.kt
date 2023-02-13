@@ -1,6 +1,5 @@
 package com.example.addcrop.ui.premium
 
-import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +13,7 @@ import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -165,15 +165,10 @@ class PlantSpacingFragment : Fragment() {
                                         addCropDrip.message.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    Log.d(
-                                        ContentValues.TAG,
-                                        "postAddCropExption: ${addCropDrip.message.toString()}"
-                                    )
+
                                 }
                                 is Resource.Loading -> {
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
-
+                                AppUtils.translatedToastLoading(context)
                                 }
                             }
                         }
@@ -196,7 +191,7 @@ class PlantSpacingFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             binding.title?.text= TranslationsManager().getString("add_crop")
 
-            var NickNamehint = TranslationsManager().getString("e_g_50")
+            val NickNamehint = TranslationsManager().getString("e_g_50")
             binding.etNumber.hint = NickNamehint
             binding.etNumberWidth.hint = NickNamehint
             binding.etNumberWidthDistance.hint = NickNamehint
@@ -214,7 +209,6 @@ class PlantSpacingFragment : Fragment() {
     private fun passDataDripIrrigation(map: String) {
         val map = mutableMapOf<String, Any>()
         map["map"] = map
-        Log.d("TAG", "passDataDripIrrigation: $map")
 
     }
 

@@ -168,7 +168,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
 
         apiErrorHandlingBinding = binding.errorState
-    networkErrorStateTranslations(apiErrorHandlingBinding)
+        networkErrorStateTranslations(apiErrorHandlingBinding)
 
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
@@ -567,13 +567,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                             (com.waycool.uicomponents.R.color.white)
                         )
                     )
-
-                    /*      mMap?.addPolygon(
-                              PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
-                                  .strokeColor(
-                                      Color.argb(255, 255, 255, 255)
-                                  )
-                          )*/
                     showAreaCard()
 
                 }

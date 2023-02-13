@@ -51,7 +51,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-
 class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var isQRScanned: Boolean = false
     private var longitutde: String? = null
@@ -178,6 +177,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else {
+                binding.progressBar.visibility=View.VISIBLE
+                binding.frameLayout2.visibility=View.GONE
+
                 val  eventBundle=Bundle()
                 eventBundle.putString("deviceName",binding.device1.text.toString())
                 eventBundle.putString("scanQr",isQRScanned.toString())
@@ -207,8 +209,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         translationAddDevice()
         binding.topAppBar.setOnClickListener{
             activity?.finish()
-//            val isSuccess = findNavController().navigateUp()
-//            if (!isSuccess) requireActivity().onBackPressed()
         }
     }
 
@@ -223,7 +223,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             latLng2.longitude,
             distance
         )
-        Log.d("Add Device", "Distance Calculated: ${distance[0]}")
         return distance[0]
     }
 
@@ -231,6 +230,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                     findNavController().navigateUp()
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
@@ -270,7 +271,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
         if (scanResult != null) {
             isQRScanned = true
-//            binding.tvScanned.text = "QR Scanned."
             TranslationsManager().loadString("str_scanned_device", binding.tvScanned,"QR Scanned.")
 
             binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(

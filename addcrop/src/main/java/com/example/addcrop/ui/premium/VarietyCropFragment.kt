@@ -80,7 +80,6 @@ class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
             var crop_id_selected = arguments?.getInt("cropid")
             binding.cardCheckHealth.isEnabled = true
             binding.cardCheckHealth.setOnClickListener {
-//                categoryAdapter.upDateList()
                 if (name.isSelected == false) {
                     ToastStateHandling.toastError(
                         requireContext(),
@@ -90,7 +89,6 @@ class VarietyCropFragment : Fragment(), ItemSelectedListener, ItemGraphsClicked 
 
                 } else {
                     val bundle = Bundle()
-//                    bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
                     bundle.putString("pom", name.name)
                     bundle.putString("cropName",crop_name)

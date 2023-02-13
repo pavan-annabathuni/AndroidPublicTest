@@ -187,20 +187,15 @@ class AddFarmSupportFragment : Fragment() {
                             findNavController().navigateUp()
                         }
                         is Resource.Error -> {
-                            viewModel.viewModelScope.launch {
-                                val toastLoading = TranslationsManager().getString("alert_valid_number")
-                                if(!toastLoading.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Enter Valid Mobile Number",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1,it.message.toString(),Toast.LENGTH_SHORT
+                                )
+                            }
                         }
                         is Resource.Loading -> {}
                     }
                 }
-                // findNavController().navigateUp()
             }
         }
     }
