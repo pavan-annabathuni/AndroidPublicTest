@@ -19,11 +19,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - uses: actions/cache@v2
-          with:
-            path: |
+        with:
+          path: |
               ~/.gradle/caches
               ~/.gradle/wrapper
-            key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
