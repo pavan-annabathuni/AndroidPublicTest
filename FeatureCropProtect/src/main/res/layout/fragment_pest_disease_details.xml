@@ -30,10 +30,9 @@
 
             <com.waycool.uicomponents.Text.Title2SemiBold
                 android:id="@+id/toolbar_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,27 +41,32 @@
                 tools:text="Bird Fly Pest Rot"
                 android:ellipsize="marquee"
                 android:focusable="true"
+                android:gravity="center"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:singleLine="true"/>
 
-            <com.waycool.uicomponents.Text.Title2SemiBold
+            <TextView
                 android:id="@+id/imgShare"
+                style="@style/Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
-                android:drawableStart="@drawable/ic_share_protect"
                 android:drawablePadding="8dp"
-                android:gravity="center"
-                android:text="@string/share"
+                android:text="Share"
+                android:gravity="end"
+                android:textColor="#146133"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_share_solid"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:fontFamily="@font/notosans_medium"
-                android:textColor="@color/textdark" />
+                />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>

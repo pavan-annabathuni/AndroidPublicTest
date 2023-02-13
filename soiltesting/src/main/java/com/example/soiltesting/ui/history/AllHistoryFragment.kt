@@ -57,6 +57,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         _binding = FragmentAllHistoryBinding.inflate(inflater, container, false)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.tvToolBar.isSelected = true
+
         return binding.root
     }
 
