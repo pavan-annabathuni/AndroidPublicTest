@@ -252,10 +252,10 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                             CoroutineScope(Dispatchers.Main).launch {
                                 val toastServerError = TranslationsManager().getString("farm_saved")
                                 if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastServerError,
                                         Toast.LENGTH_SHORT
                                     ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Farm Saved",
+                                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Farm Saved",
                                     Toast.LENGTH_SHORT
                                 ) }}}
                             activity?.finish()

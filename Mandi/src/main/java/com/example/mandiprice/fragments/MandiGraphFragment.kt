@@ -96,8 +96,10 @@ class MandiGraphFragment : Fragment() {
                 cropMasterId = arguments?.getInt("cropId")
                 marketName = arguments?.getString("market")
                 sub_record_id=arguments?.getString("subRecordId")
+
             }
         }
+
 
     }
 
@@ -109,6 +111,9 @@ class MandiGraphFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
         apiErrorHandlingBinding = binding.errorState
+        binding.cropName.text = cropName
+        binding.tvMarket.text=marketName
+        Log.d("MandiGraph","MandiGraph CropName ${cropName} : MarketName ${marketName} ")
         TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
         TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
         TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
@@ -125,13 +130,7 @@ class MandiGraphFragment : Fragment() {
             marketName = mandiDomain?.market
             sub_record_id = mandiDomain?.sub_record_id
         }
-        else{
-            cropMasterId = cropMasterId
-            mandiMasterId = mandiMasterId
-            cropName = cropName
-            marketName = marketName
-            sub_record_id=sub_record_id
-        }
+
 
         binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
@@ -148,12 +147,13 @@ class MandiGraphFragment : Fragment() {
             mandiGraphPageApi()
         }
         mandiGraphPageApi()
-        Log.d("cropName", "onCreateView: $cropName")
 
 
         binding.tvMarket.isSelected = true
         binding.cropName.isSelected = true
-        checkLang()
+        if(mandiDomain!=null) {
+            checkLang()
+        }
         EventClickHandling.calculateClickEvent("Mandi_graph_landing")
         return binding.root
     }
@@ -336,11 +336,7 @@ class MandiGraphFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
+
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -397,7 +393,6 @@ class MandiGraphFragment : Fragment() {
     private fun checkLang(){
         viewModel.viewModelScope.launch {
             var langCode = LocalSource.getLanguageCode() ?: "en"
-
             when (langCode) {
                 "en" -> {
                     binding.cropName.text = mandiDomain?.crop

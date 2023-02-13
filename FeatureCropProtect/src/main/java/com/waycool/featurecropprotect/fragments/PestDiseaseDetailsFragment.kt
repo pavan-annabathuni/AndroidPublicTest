@@ -17,6 +17,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
+import androidx.core.content.FileProvider
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -66,7 +68,7 @@ import kotlin.math.roundToInt
 
 class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private var handler: Handler? = null
-    private var runnable: Runnable?=null
+    private var runnable: Runnable? = null
     private lateinit var newsBinding: GenericLayoutNewsListBinding
     private lateinit var videosBinding: GenericLayoutVideosListBinding
     private var audio: AudioWife? = null
@@ -84,6 +86,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     private var diseaseName: String? = null
     private var audioUrl: String? = null
+
+    var chemical = "Chemical"
+    var biological = "Biological"
+    var cultural = "Cultural"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,8 +124,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         videosBinding = binding.layoutVideos
-         newsBinding = binding.layoutNews
+        videosBinding = binding.layoutVideos
+        newsBinding = binding.layoutNews
         handler = Handler(Looper.myLooper()!!)
 
         videosBinding.viewAllVideos.setOnClickListener {
@@ -146,15 +152,20 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
+            Log.d("TAG", "onViewCreatedDiseaseName: $diseaseName")
             audioUrl = it.getString("audioUrl")
         }
 
+
+//        binding.toolbar.setNavigationOnClickListener {
+//            findNavController().navigateUp()
+//        }
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener {
-            binding.clShareProgress.visibility=View.VISIBLE
+            binding.clShareProgress.visibility = View.VISIBLE
             binding.imgShare.isEnabled = false
             screenShot(diseaseId, diseaseName)
         }
@@ -162,8 +173,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
         TranslationsManager().loadString("control_measures", binding.controlMeasuresTitle)
-        TranslationsManager().loadString("videos_not_available",videosBinding.tvNoVANs,"Videos are not available with us.")
-        TranslationsManager().loadString("news_not_available",newsBinding.tvNoVANS,"News and Articles are not \navailable with us.")
+        TranslationsManager().loadString(
+            "videos_not_available",
+            videosBinding.tvNoVANs,
+            "Videos are not available with us."
+        )
+        TranslationsManager().loadString(
+            "news_not_available",
+            newsBinding.tvNoVANS,
+            "News and Articles are not \navailable with us."
+        )
 
 
 
@@ -173,9 +192,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         audioPlayer()
 
 
-        var chemical = "Chemical"
-        var biological = "Biological"
-        var cultural = "Cultural"
+
 
         viewModel.viewModelScope.launch {
             chemical = TranslationsManager().getString("chemical")
@@ -190,6 +207,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
             diseaseId?.let { diseaseId ->
                 viewModel.getSelectedDisease(diseaseId).observe(viewLifecycleOwner) {
+                    Log.d("pestAndDisease", "onViewCreated: ${it.data?.chemical} ")
                     when (it) {
                         is Resource.Success -> {
                             binding.toolbarTitle.text = it.data?.diseaseName
@@ -228,13 +246,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             if (it.data != null && it.data!!.symptoms != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     Log.d("Symp", "${it.data?.symptoms}")
-                                    binding.symptomBodyTv.text = Html.fromHtml(
+                                    binding.symptomBodyTv.text = HtmlCompat.fromHtml(
                                         it.data?.symptoms!!,
-                                        Html.FROM_HTML_MODE_COMPACT
+                                        HtmlCompat.FROM_HTML_MODE_COMPACT
                                     )
                                 } else {
                                     binding.symptomBodyTv.text =
-                                        Html.fromHtml(it.data?.symptoms!!)
+                                        HtmlCompat.fromHtml(
+                                            it.data?.symptoms!!,
+                                            HtmlCompat.FROM_HTML_MODE_COMPACT
+                                        )
                                 }
                             } else {
                                 binding.symptomBodyTv.text = "NA"
@@ -267,13 +288,22 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         is Resource.Loading -> {
                             CoroutineScope(Dispatchers.Main).launch {
                                 val toastLoading = TranslationsManager().getString("loading")
-                                if(!toastLoading.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                                if (!toastLoading.isNullOrEmpty()) {
+                                    context?.let { it1 ->
+                                        ToastStateHandling.toastError(
+                                            it1, toastLoading,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                } else {
+                                    context?.let { it1 ->
+                                        ToastStateHandling.toastError(
+                                            it1, "Loading",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                }
+                            }
 
                         }
                         is Resource.Error -> {
@@ -293,9 +323,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.clShareProgress.visibility=View.VISIBLE
         getScreenShotAndCreateDeepLink(context,shareLayout,uriString,title,description){ task, uri ->
             if (task.isSuccessful) {
-                binding.clShareProgress.visibility=View.GONE
-                Handler().postDelayed({binding.imgShare.isEnabled = true
-                },1000)
+                binding.clShareProgress.visibility = View.GONE
+                Handler().postDelayed({
+                        binding.imgShare.isEnabled = true
+                }, 1000)
 
                 val shortLink: Uri? = task.result.shortLink
                 val sendIntent = Intent()
@@ -310,17 +341,17 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun setNews() {
-        val adapter = NewsGenericAdapter(context,this)
+        val adapter = NewsGenericAdapter(context, this)
         newsBinding.newsListRv.adapter = adapter
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.getVansNewsList(cropId, moduleId).collect{ pagingData ->
+            viewModel.getVansNewsList(cropId, moduleId).collect { pagingData ->
                 adapter.submitData(lifecycle, pagingData)
                 if (NetworkUtil.getConnectivityStatusString(context) == NetworkUtil.TYPE_NOT_CONNECTED) {
                     newsBinding.videoCardNoInternet.visibility = View.VISIBLE
                     newsBinding.noDataNews.visibility = View.GONE
                     newsBinding.newsListRv.visibility = View.INVISIBLE
-                    newsBinding.viewAllNews.visibility=View.GONE
-                    newsBinding.ivViewAll.visibility=View.GONE
+                    newsBinding.viewAllNews.visibility = View.GONE
+                    newsBinding.ivViewAll.visibility = View.GONE
 
 
                 } else {
@@ -331,10 +362,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.Error && adapter.itemCount == 0) {
                                     newsBinding.noDataNews.visibility = View.VISIBLE
                                     newsBinding.videoCardNoInternet.visibility = View.GONE
-                                    newsBinding.tvNoVANS.text="News and Articles are being loaded.Please wait for some time"
+                                    newsBinding.tvNoVANS.text =
+                                        "News and Articles are being loaded.Please wait for some time"
                                     newsBinding.newsListRv.visibility = View.INVISIBLE
-                                    newsBinding.viewAllNews.visibility=View.GONE
-                                    newsBinding.ivViewAll.visibility=View.GONE
+                                    newsBinding.viewAllNews.visibility = View.GONE
+                                    newsBinding.ivViewAll.visibility = View.GONE
 
                                 }
                                 if (it1 is LoadState.NotLoading) {
@@ -344,16 +376,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                         TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
-                                        newsBinding.viewAllNews.visibility=View.GONE
-                                        newsBinding.ivViewAll.visibility=View.GONE
+                                        newsBinding.viewAllNews.visibility = View.GONE
+                                        newsBinding.ivViewAll.visibility = View.GONE
 
 
                                     } else {
                                         newsBinding.noDataNews.visibility = View.GONE
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.VISIBLE
-                                        newsBinding.viewAllNews.visibility=View.VISIBLE
-                                        newsBinding.ivViewAll.visibility=View.VISIBLE
+                                        newsBinding.viewAllNews.visibility = View.VISIBLE
+                                        newsBinding.ivViewAll.visibility = View.VISIBLE
 
 
                                     }
@@ -376,17 +408,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     videosBinding.videoCardNoInternet.visibility = View.VISIBLE
                     videosBinding.noDataVideo.visibility = View.GONE
                     videosBinding.videosListRv.visibility = View.INVISIBLE
-                    videosBinding.viewAllVideos.visibility=View.GONE
-                    videosBinding.ivViewAll.visibility=View.GONE
+                    videosBinding.viewAllVideos.visibility = View.GONE
+                    videosBinding.ivViewAll.visibility = View.GONE
 
-                }
-                else {
+                } else {
                     lifecycleScope.launch(Dispatchers.Main) {
                         adapter.loadStateFlow.map { it.refresh }
                             .distinctUntilChanged()
                             .collect { it1 ->
-                                if (it1 is LoadState.Error ) {
-                                    if(adapter.itemCount == 0) {
+                                if (it1 is LoadState.Error) {
+                                    if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.tvNoVANs.text =
@@ -403,16 +434,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                         TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
-                                        videosBinding.viewAllVideos.visibility=View.GONE
-                                        videosBinding.ivViewAll.visibility=View.GONE
+                                        videosBinding.viewAllVideos.visibility = View.GONE
+                                        videosBinding.ivViewAll.visibility = View.GONE
 
                                     } else {
                                         videosBinding.noDataVideo.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.VISIBLE
-                                        videosBinding.viewAllVideos.visibility=View.VISIBLE
-                                        videosBinding.ivViewAll.visibility=View.VISIBLE
-
+                                        videosBinding.viewAllVideos.visibility = View.VISIBLE
+                                        videosBinding.ivViewAll.visibility = View.VISIBLE
 
 
                                     }
@@ -426,132 +456,141 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
 
-            adapter.onItemClick = {
-                val eventBundle=Bundle()
-                eventBundle.putString("title",it?.title)
-                EventItemClickHandling.calculateItemClickEvent("PestDiseaseDetailVideo",eventBundle)
-                val bundle = Bundle()
-                bundle.putParcelable("video", it)
-                findNavController().navigate(
-                    R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
-                    bundle
-                )
+        adapter.onItemClick = {
+            val eventBundle = Bundle()
+            eventBundle.putString("title", it?.title)
+            EventItemClickHandling.calculateItemClickEvent("PestDiseaseDetailVideo", eventBundle)
+            val bundle = Bundle()
+            bundle.putParcelable("video", it)
+            findNavController().navigate(
+                R.id.action_pestDiseaseDetailsFragment_to_playVideoFragment3,
+                bundle
+            )
+        }
+        videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
+
+        videosBinding.videosListRv.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                videosBinding.videosScroll.value =
+                    calculateScrollPercentage(videosBinding).toFloat()
             }
-            videosBinding.videosScroll.setCustomThumbDrawable(com.waycool.uicomponents.R.drawable.slider_custom_thumb)
+        })
+    }
 
-            videosBinding.videosListRv.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    videosBinding.videosScroll.value =
-                        calculateScrollPercentage(videosBinding).toFloat()
-                }
-            })
+    fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
+        val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
+        val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
+        val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
+        val scroll = 100.0f * offset / (range - extent).toFloat()
+        if (scroll.isNaN())
+            return 0
+        return scroll.roundToInt()
+    }
+
+
+    private fun addTab(title: String) {
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title))
+        if (binding.tabLayout.tabCount == 1) {
+            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
         }
+    }
 
-        fun calculateScrollPercentage(videosBinding: GenericLayoutVideosListBinding): Int {
-            val offset: Int = videosBinding.videosListRv.computeHorizontalScrollOffset()
-            val extent: Int = videosBinding.videosListRv.computeHorizontalScrollExtent()
-            val range: Int = videosBinding.videosListRv.computeHorizontalScrollRange()
-            val scroll = 100.0f * offset / (range - extent).toFloat()
-            if (scroll.isNaN())
-                return 0
-            return scroll.roundToInt()
-        }
-
-
-        private fun addTab(title: String) {
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title))
-            if (binding.tabLayout.tabCount == 1) {
-                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-            }
-        }
-
-        private fun populateTabText(tab: Tab?, pestDisease: PestDiseaseDomain?) {
-            when (tab?.text) {
-                "Chemical" -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        binding.measuresTv.text = Html.fromHtml(
-                            pestDisease?.chemical!!,
-                            Html.FROM_HTML_MODE_COMPACT
+    private fun populateTabText(tab: Tab?, pestDisease: PestDiseaseDomain?) {
+        when (tab?.text) {
+            chemical -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    binding.measuresTv.text = HtmlCompat.fromHtml(
+                        pestDisease?.chemical!!,
+                        HtmlCompat.FROM_HTML_MODE_COMPACT
+                    )
+                } else {
+                    binding.measuresTv.text =
+                        HtmlCompat.fromHtml(
+                            pestDisease?.chemical!!, HtmlCompat.FROM_HTML_MODE_COMPACT
                         )
-                    } else {
-                        binding.measuresTv.text =
-                            Html.fromHtml(pestDisease?.chemical!!)
-                    }
                 }
-                "Biological" -> {
+            }
+            biological -> {
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        binding.measuresTv.text = Html.fromHtml(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    binding.measuresTv.text = HtmlCompat.fromHtml(
+                        pestDisease?.biological!!,
+                        HtmlCompat.FROM_HTML_MODE_COMPACT
+                    )
+                } else {
+                    binding.measuresTv.text =
+                        HtmlCompat.fromHtml(
                             pestDisease?.biological!!,
-                            Html.FROM_HTML_MODE_COMPACT
+                            HtmlCompat.FROM_HTML_MODE_COMPACT
                         )
-                    } else {
-                        binding.measuresTv.text =
-                            Html.fromHtml(pestDisease?.biological!!)
-                    }
                 }
-                "Cultural" -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        binding.measuresTv.text = Html.fromHtml(
+            }
+            cultural -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    binding.measuresTv.text = HtmlCompat.fromHtml(
+                        pestDisease?.cultural!!,
+                        HtmlCompat.FROM_HTML_MODE_COMPACT
+                    )
+                } else {
+                    binding.measuresTv.text =
+                        HtmlCompat.fromHtml(
                             pestDisease?.cultural!!,
-                            Html.FROM_HTML_MODE_COMPACT
+                            HtmlCompat.FROM_HTML_MODE_COMPACT
                         )
-                    } else {
-                        binding.measuresTv.text =
-                            Html.fromHtml(pestDisease?.cultural!!)
-                    }
                 }
             }
-
         }
 
-        private fun setBanners() {
+    }
 
-            val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
-            runnable =Runnable {
-                if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
-                    binding.bannerViewpager.currentItem = 0
-                else
-                    binding.bannerViewpager.currentItem += 1
-            }
-            binding.bannerViewpager.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    if (runnable != null) {
-                        AppUtil.handlerSet(handler,runnable!!,3000)
-                    }
+    private fun setBanners() {
+
+        val bannerAdapter = AdsAdapter(activity ?: requireContext(), binding.bannerViewpager)
+        runnable = Runnable {
+            if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
+                binding.bannerViewpager.currentItem = 0
+            else
+                binding.bannerViewpager.currentItem += 1
+        }
+        binding.bannerViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (runnable != null) {
+                    AppUtil.handlerSet(handler, runnable!!, 3000)
                 }
-            })
-            viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
-
-                bannerAdapter.submitList( it.data)
-                TabLayoutMediator(
-                    binding.bannerIndicators, binding.bannerViewpager
-                ) { tab: Tab, position: Int ->
-                    tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
-                }.attach()
             }
-            binding.bannerViewpager.adapter = bannerAdapter
+        })
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
-            binding.bannerViewpager.clipToPadding = false
-            binding.bannerViewpager.clipChildren = false
-            binding.bannerViewpager.offscreenPageLimit = 3
-            binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-
-            val compositePageTransformer = CompositePageTransformer()
-            compositePageTransformer.addTransformer(MarginPageTransformer(40))
-            compositePageTransformer.addTransformer { page, position ->
-                val r = 1 - abs(position)
-                page.scaleY = 0.85f + r * 0.15f
-            }
-            binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-
+            bannerAdapter.submitList(it.data)
+            TabLayoutMediator(
+                binding.bannerIndicators, binding.bannerViewpager
+            ) { tab: Tab, position: Int ->
+                tab.text = "${position + 1} / ${bannerAdapter.itemCount}"
+            }.attach()
         }
-        private fun audioPlayer() {
-            if(audioUrl.isNullOrEmpty()){
+        binding.bannerViewpager.adapter = bannerAdapter
+
+        binding.bannerViewpager.clipToPadding = false
+        binding.bannerViewpager.clipChildren = false
+        binding.bannerViewpager.offscreenPageLimit = 3
+        binding.bannerViewpager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.bannerViewpager.setPageTransformer(compositePageTransformer)
+
+    }
+
+    private fun audioPlayer() {
+        if(audioUrl.isNullOrEmpty()){
                 binding.audioLayout.visibility=View.GONE
             }
             else{
@@ -572,24 +611,51 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         .setRuntimeView(binding.totalTime)
                     // .setTotalTimeView(mTotalTime);
                     audio?.play()
+                Log.d("Audio", "audioPlayer: $audioUrl")
+                audio = AudioWife.getInstance()
+                    .init(requireContext(), Uri.parse(audioUrl))
+                    .setPlayView(binding.play)
+                    .setPauseView(binding.pause)
+                    .setSeekBar(binding.mediaSeekbar)
+                    .setRuntimeView(binding.totalTime)
+                // .setTotalTimeView(mTotalTime);
+                audio?.play()
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastAudioFile = TranslationsManager().getString("audio_file")
+                    if (!toastAudioFile.isNullOrEmpty()) {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, toastAudioFile,
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    } else {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, "Audio file not found",
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    }
                 }
             }
 
-            }
         }
+    }
 
-        override fun onPause() {
-            super.onPause()
-            audio?.release()
-            if (runnable != null) {
-                handler?.removeCallbacks(runnable!!)
-            }
+    override fun onPause() {
+        super.onPause()
+        audio?.release()
+        if (runnable != null) {
+            handler?.removeCallbacks(runnable!!)
         }
+    }
 
     override fun onItemClickListener(vans: VansFeederListDomain?) {
         val bundleEvents = Bundle()
-        bundleEvents.putString("","${vans?.title}")
-        EventItemClickHandling.calculateItemClickEvent("cropprotection_news",bundleEvents)
+        bundleEvents.putString("", "${vans?.title}")
+        EventItemClickHandling.calculateItemClickEvent("cropprotection_news", bundleEvents)
         val bundle = Bundle()
         bundle.putString("title", vans?.title)
         bundle.putString("content", vans?.desc)
@@ -603,7 +669,6 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             bundle
         )
     }
-
 
 
     override fun onResume() {

@@ -138,7 +138,7 @@ class CropInfoSelectionFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
+                  //  categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -246,7 +246,7 @@ class CropInfoSelectionFragment : Fragment() {
             selectedCategory = category
             getSelectedCategoryCrops(
                 categoryId = category.id,
-               // searchQuery = searchCharSequence.toString()
+                searchQuery = searchCharSequence.toString()
             )
         }
 
@@ -256,7 +256,7 @@ class CropInfoSelectionFragment : Fragment() {
                 selectedCategory = category
                 getSelectedCategoryCrops(
                     categoryId = category.id,
-                 //   searchQuery = searchCharSequence.toString()
+                    searchQuery = searchCharSequence.toString()
                 )
             }
           //  EventClickHandling.calculateClickEvent(chip.text.toString())

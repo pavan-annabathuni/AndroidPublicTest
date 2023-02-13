@@ -932,7 +932,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="start"
-
+                        android:visibility="gone"
                         android:text="My Devices"
                         android:textColor="@color/textdark"
                         android:textSize="20sp"
@@ -951,7 +951,7 @@
                         android:text="Add Device"
                         android:textColor="@color/primaryColor"
                         android:textSize="14sp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:drawableEndCompat="@drawable/ic_viewall"
                         app:layout_constraintStart_toEndOf="@id/titleMyDevice"
                         app:layout_constraintEnd_toEndOf="parent"

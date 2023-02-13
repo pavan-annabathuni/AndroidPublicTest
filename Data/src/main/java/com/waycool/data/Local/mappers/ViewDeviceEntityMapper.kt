@@ -12,7 +12,7 @@ import com.waycool.data.Network.NetworkModels.ViewDeviceData
 class ViewDeviceEntityMapper : EntityMapper<ViewDeviceEntity, ViewDeviceData> {
     override fun mapToEntity(dto: ViewDeviceData): ViewDeviceEntity {
         return ViewDeviceEntity(
-            uniqueId = "${dto.id}${dto.farmId}".toInt(),
+            uniqueId = "${dto.deviceNumber}${dto.farmId}",
             id = dto.id,
             dataTimestamp = dto.dataTimestamp,
             temperature = dto.temperature,

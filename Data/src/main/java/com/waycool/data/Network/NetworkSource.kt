@@ -653,7 +653,7 @@ object NetworkSource {
                 }
             } catch (e: Exception) {
                 CrashAnalytics.crashAnalyticsError("getIotDevice Exception--${e.message}")
-                Log.d("farmCheck", "getIotDevice: $e")
+                Log.d("farmCheck-exception", "getIotDevice: $e")
 //                catch(Resource.Error(e.message))
             }
         }
@@ -1112,7 +1112,7 @@ object NetworkSource {
     fun getAppTranslations() = flow<Resource<AppTranlationsDTO?>> {
         try {
             val langCode = LocalSource.getLanguageCode() ?: "en"
-            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic() ?: emptyMap()
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 

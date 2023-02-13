@@ -6,19 +6,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
+import com.waycool.data.worker.MasterDownloadWorker
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -84,16 +85,30 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
-
-        tokenCheckViewModel.getUserDetails().observe(this) {
+        tokenCheckViewModel.getUserDetails().observe(this, Observer {
             accountID = it.data?.accountId
             if (accountID != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val token: String = tokenCheckViewModel.getUserToken()
                     validateToken(accountID.toString().toInt(), token)
                 }
+            }
+        })
+
+        //First Time Master Download.
+        CoroutineScope(Dispatchers.IO).launch {
+            val value: String? = DataStoreManager.read("FirstTime")
+            if (value != "true") {
+                val constraints: Constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+                val oneTimeWorkRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MasterDownloadWorker::class.java)
+                    .setConstraints(constraints)
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
+                    .build()
+                WorkManager.getInstance(this@MainActivity)
+                    .beginUniqueWork("MasterDownload", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest)
+                    .enqueue()
             }
         }
     }
@@ -102,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
             when (it) {
                 is Resource.Success -> {
-                   if (it.data?.status != true) {
+                    if (it.data?.status != true) {
                         clearData()
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
@@ -144,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 if (dashboardDomain?.subscription?.iot != it.data?.subscription?.iot) {
-
+                    dashboardDomain = it.data
                     when (it) {
                         is Resource.Success -> {
                             Log.d("dashboard", "${it.data?.subscription?.iot}")
@@ -191,34 +206,40 @@ class MainActivity : AppCompatActivity() {
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
-            TranslationsManager().getStringAsLiveData("home")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.nav_home_premium)!=null){
-                bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue?:"Home"}
+            TranslationsManager().getStringAsLiveData("home")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.nav_home_premium) != null) {
+                    bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue ?: "Home"
+                }
             }
-            TranslationsManager().getStringAsLiveData("services")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.nav_home)!=null){
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Services"}
+            TranslationsManager().getStringAsLiveData("services")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Services"
+                }
             }
-            TranslationsManager().getStringAsLiveData("my_farm")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.nav_myfarms)!=null){
-                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue?:"My Farms"}
+            TranslationsManager().getStringAsLiveData("my_farm")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.nav_myfarms) != null) {
+                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue ?: "My Farms"
+                }
             }
-            TranslationsManager().getStringAsLiveData("profile")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.navigation_profile)!=null){
-                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue?:"Profile"}
+            TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
+                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue ?: "Profile"
+                }
             }
         } else {
             navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
-            TranslationsManager().getStringAsLiveData("home")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.nav_home)!=null){
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue?:"Home"}
+            TranslationsManager().getStringAsLiveData("home")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Home"
+                }
             }
-            TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this){
-                if(bottomNavigationView.menu.findItem(R.id.navigation_mandi)!=null){
-                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue?:"Market Place"}
+            TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this) {
+                if (bottomNavigationView.menu.findItem(R.id.navigation_mandi) != null) {
+                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue ?: "Market Place"
+                }
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_crop_protect) != null) {
@@ -227,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
-                if(bottomNavigationView.menu.findItem(R.id.navigation_profile)!=null) {
+                if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
 
                     bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
                         it?.appValue ?: "Profile"
@@ -277,7 +298,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return if(navController.navigateUp())
+        return if (navController.navigateUp())
             true
         else {
             finish()
@@ -300,7 +321,7 @@ class MainActivity : AppCompatActivity() {
         return wrappedObserver
     }
 
-    private fun clearData(){
+    private fun clearData() {
         GlobalScope.launch {
             LocalSource.deleteAllMyCrops()
             LocalSource.deleteTags()
