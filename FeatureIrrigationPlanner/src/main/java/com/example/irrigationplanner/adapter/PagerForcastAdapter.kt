@@ -48,11 +48,11 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         var length = myCropDataDomain.lenDrip
         var areaPerPlant = (length?.toFloat()?.times(width?.toFloat() as Double)).toString().trim()
 
-        if(!area.isNullOrEmpty()){
-           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
-            holder.acres.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * area?.toFloat()!! / 0.9) + " L")
+        if(!area.isNullOrEmpty() && !dep.isNullOrEmpty()){
+//           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
+            holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area)?.toFloat()!! / 0.9) + " L"
         }else holder.acres.text = "0"
-        if(!length.isNullOrEmpty()||!width.isNullOrEmpty()){
+        if(!length.isNullOrEmpty()&&!width.isNullOrEmpty()){
         holder.areaPerPlant.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * areaPerPlant!!.toFloat() / 0.9) + " L")
 
 }else{
@@ -64,7 +64,7 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         holder.etc.text = properties.etc[position]+"mm"
         holder.eto.text = properties.eto[position].toString()+"mm"
 
-        if (properties!!.mad[position] == 0) {
+        if (properties!!.mad[position] == 0.0) {
             val value = 30 - properties.depletion[position].toFloat()
             if (value <= 0) {
                 holder.irrigationReq.text = "Irrigation Required"

@@ -27,7 +27,7 @@ data class Irrigation (
 ):Parcelable
 data class IrrigationForecast (
 
-    @SerializedName("mad"         ) var mad        : ArrayList<Int>    = arrayListOf(),
+    @SerializedName("mad"         ) var mad        : ArrayList<Double>    = arrayListOf(),
     @SerializedName("etc"         ) var etc        : ArrayList<String> = arrayListOf(),
     @SerializedName("days"        ) var days       : ArrayList<String> = arrayListOf(),
     @SerializedName("rain_precip" ) var rainPrecip : ArrayList<String> = arrayListOf(),
@@ -72,14 +72,14 @@ data class Gdd (
 data class CurrentData (
 
     @SerializedName("id"                ) var id               : Int?    = null,
-    @SerializedName("irrigation"        ) var irrigation       : Int?    = null,
-    @SerializedName("depletion_current" ) var depletionCurrent : Int?    = null,
-    @SerializedName("eto_current"       ) var etoCurrent       : Int?    = null,
-    @SerializedName("crop_factor"       ) var cropFactor       : Int?    = null,
-    @SerializedName("etc"               ) var etc              : Int?    = null,
-    @SerializedName("mad"               ) var mad              : Int?    = null,
-    @SerializedName("vol_per_plant"     ) var volPerPlant      : Int?    = null,
-    @SerializedName("vol_per_farm"      ) var volPerFarm       : Int?    = null,
+    @SerializedName("irrigation"        ) var irrigation       : Double?    = null,
+    @SerializedName("depletion_current" ) var depletionCurrent : Double?    = null,
+    @SerializedName("eto_current"       ) var etoCurrent       : Double?    = null,
+    @SerializedName("crop_factor"       ) var cropFactor       : Double?    = null,
+    @SerializedName("etc"               ) var etc              : Double?    = null,
+    @SerializedName("mad"               ) var mad              : Double?    = null,
+    @SerializedName("vol_per_plant"     ) var volPerPlant      : Double?    = null,
+    @SerializedName("vol_per_farm"      ) var volPerFarm       : Double?    = null,
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null
 

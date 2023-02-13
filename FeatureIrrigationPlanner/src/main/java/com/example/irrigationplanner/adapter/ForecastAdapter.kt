@@ -30,7 +30,7 @@ class ForecastAdapter:RecyclerView.Adapter<ForecastAdapter.MyViewHolder>() {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = details
         val level = (properties.mad[position].toFloat()) - (properties.depletion[position].toFloat())
-        if (properties.mad[position] == 0) {
+        if (properties.mad[position] == 0.0) {
             val value = 30 - properties.depletion[position].toFloat()
             if (value <= 0) {
                 holder.waterLevel.progress = 0F
@@ -45,8 +45,8 @@ class ForecastAdapter:RecyclerView.Adapter<ForecastAdapter.MyViewHolder>() {
                 holder.waterLevel.progress = 0F
             } else {
                 val value = properties.mad[position] - properties.depletion[position].toFloat()
-                val percentage = (value / properties.mad[position]) * 100
-                holder.waterLevel.progress = percentage
+                val percentage:Double = (value / properties.mad[position]) * 100
+                holder.waterLevel.progress = percentage.toFloat()
             }
         }
     }
