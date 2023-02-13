@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
-import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -603,45 +601,18 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         binding.pause.visibility = View.GONE
                         binding.play.visibility = View.VISIBLE
 
-                    audio = AudioWife.getInstance()
-                        .init(requireContext(), Uri.parse(audioUrl))
-                        .setPlayView(binding.play)
-                        .setPauseView(binding.pause)
-                        .setSeekBar(binding.mediaSeekbar)
-                        .setRuntimeView(binding.totalTime)
-                    // .setTotalTimeView(mTotalTime);
-                    audio?.play()
-                Log.d("Audio", "audioPlayer: $audioUrl")
-                audio = AudioWife.getInstance()
-                    .init(requireContext(), Uri.parse(audioUrl))
-                    .setPlayView(binding.play)
-                    .setPauseView(binding.pause)
-                    .setSeekBar(binding.mediaSeekbar)
-                    .setRuntimeView(binding.totalTime)
-                // .setTotalTimeView(mTotalTime);
-                audio?.play()
-            } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastAudioFile = TranslationsManager().getString("audio_file")
-                    if (!toastAudioFile.isNullOrEmpty()) {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, toastAudioFile,
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    } else {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, "Audio file not found",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                        audio = AudioWife.getInstance()
+                            .init(requireContext(), Uri.parse(audioUrl))
+                            .setPlayView(binding.play)
+                            .setPauseView(binding.pause)
+                            .setSeekBar(binding.mediaSeekbar)
+                            .setRuntimeView(binding.totalTime)
+                        // .setTotalTimeView(mTotalTime);
+                        audio?.play()
+
                     }
                 }
             }
-
-        }
     }
 
     override fun onPause() {
