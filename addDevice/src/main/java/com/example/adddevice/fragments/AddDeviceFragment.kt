@@ -51,6 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private var isQRScanned: Boolean = false
     private var longitutde: String? = null
@@ -177,9 +178,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else {
-                binding.progressBar.visibility=View.VISIBLE
-                binding.frameLayout2.visibility=View.GONE
-
                 val  eventBundle=Bundle()
                 eventBundle.putString("deviceName",binding.device1.text.toString())
                 eventBundle.putString("scanQr",isQRScanned.toString())
@@ -230,28 +228,35 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    binding.progressBar.visibility=View.GONE
-                    binding.frameLayout2.visibility=View.VISIBLE
                     findNavController().navigateUp()
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 
                 }
                 is Resource.Error -> {
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,"GWX Device Already in Farm",Toast.LENGTH_SHORT) }
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if(!toastServerError.isNullOrEmpty()){
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                Toast.LENGTH_SHORT
+                            ) }}
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
+                            Toast.LENGTH_SHORT
+                        ) }}}
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,"Enter the valid mobile number",
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
                                 Toast.LENGTH_SHORT
                             ) }}
 
@@ -271,6 +276,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
         if (scanResult != null) {
             isQRScanned = true
+//            binding.tvScanned.text = "QR Scanned."
             TranslationsManager().loadString("str_scanned_device", binding.tvScanned,"QR Scanned.")
 
             binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
