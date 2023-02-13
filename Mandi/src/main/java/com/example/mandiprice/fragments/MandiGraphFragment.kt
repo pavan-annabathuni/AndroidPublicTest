@@ -40,7 +40,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.data.utils.AppUtils.getScreenShotAndCreateDeepLink
+import com.waycool.data.utils.AppUtils.getDeepLinkAndScreenShot
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -363,7 +363,7 @@ class MandiGraphFragment : Fragment() {
         val title="Outgrow - Mandi Detail for $crop_name"
         val description="Find Mandi details and more on Outgrow app"
         binding.clShareProgress.visibility=View.VISIBLE
-        getScreenShotAndCreateDeepLink(context,shareLayout,uriString,title,description){ task, uri ->
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
             if (task.isSuccessful) {
                 binding.clShareProgress.visibility=View.GONE
                 Handler().postDelayed({ binding.imgShare.isEnabled = true

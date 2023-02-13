@@ -38,7 +38,7 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.data.utils.AppUtils.getScreenShotAndCreateDeepLink
+import com.waycool.data.utils.AppUtils.getDeepLinkAndScreenShot
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
@@ -319,7 +319,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         val title="Outgrow - Pest Disease Detail for $diseaseName"
         val description="Find Pest Management and more on Outgrow app"
         binding.clShareProgress.visibility=View.VISIBLE
-        getScreenShotAndCreateDeepLink(context,shareLayout,uriString,title,description){ task, uri ->
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
             if (task.isSuccessful) {
                 binding.clShareProgress.visibility = View.GONE
                 Handler().postDelayed({

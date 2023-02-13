@@ -15,7 +15,7 @@ import java.io.FileOutputStream
 import java.util.*
 
 object AppUtils {
-    fun getScreenShotAndCreateDeepLink(
+    fun getDeepLinkAndScreenShot(
         context: Context?,
         shareLayout: ConstraintLayout,
         uriString: String,
@@ -56,4 +56,6 @@ object AppUtils {
 
 
     }
+
+
 }
