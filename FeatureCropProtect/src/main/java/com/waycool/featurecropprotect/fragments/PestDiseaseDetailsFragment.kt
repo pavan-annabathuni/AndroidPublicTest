@@ -37,7 +37,6 @@ import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
-import com.waycool.data.utils.AppUtils.getDeepLinkAndScreenShot
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
@@ -45,6 +44,7 @@ import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -284,11 +284,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         is Resource.Loading -> {
                             AppUtils.translatedToastLoading(context)
                         }
-                        is Resource.Error -> {
-
-
-                        }
-
+                        is Resource.Error -> {}
                     }
                 }
             }
