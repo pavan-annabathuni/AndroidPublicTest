@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
@@ -31,13 +30,13 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stfalcon.imageviewer.StfalconImageViewer
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.getDeepLinkAndScreenShot
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
@@ -55,7 +54,6 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -284,25 +282,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
                         }
                         is Resource.Loading -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastLoading = TranslationsManager().getString("loading")
-                                if (!toastLoading.isNullOrEmpty()) {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastError(
-                                            it1, toastLoading,
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                } else {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastError(
-                                            it1, "Loading",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                }
-                            }
-
+                            AppUtils.translatedToastLoading(context)
                         }
                         is Resource.Error -> {
 

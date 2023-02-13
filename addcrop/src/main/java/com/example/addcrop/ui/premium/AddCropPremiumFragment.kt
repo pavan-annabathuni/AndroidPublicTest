@@ -28,6 +28,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -674,15 +675,8 @@ class AddCropPremiumFragment : Fragment() {
                             activity?.finish()
                         }
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastServerError = TranslationsManager().getString("server_error")
-                                if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                            AppUtils.translatedToastServerErrorOccurred(context)
+
                         }
                         is Resource.Loading -> {
                             ToastStateHandling.toastWarning(

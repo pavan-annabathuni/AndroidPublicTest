@@ -12,12 +12,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -35,19 +32,17 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -143,23 +138,8 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-        viewModel.viewModelScope.launch {
-            TranslationsManager().loadString(
-                "txt_internet_problem",
-                apiErrorHandlingBinding.tvInternetProblem,
-                "There is a problem with Internet."
-            )
-            TranslationsManager().loadString(
-                "txt_check_net",
-                apiErrorHandlingBinding.tvCheckInternetConnection,
-                "Please check your Internet connection"
-            )
-            TranslationsManager().loadString(
-                "txt_tryagain",
-                apiErrorHandlingBinding.tvTryAgainInternet,
-                "TRY AGAIN"
-            )
-        }
+        AppUtils.networkErrorStateTranslations(apiErrorHandlingBinding)
+
             handler = Handler(Looper.myLooper()!!)
 
             viewModel.viewModelScope.launch {
@@ -205,15 +185,8 @@ class MandiFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.addFab.visibility = View.GONE
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastCheckInternet(context)
+
         } else {
             getMandiData(selectedCropCategory, selectedState, selectedCrop, sortBy, orderBy)
             //binding.progressBar.visibility = View.GONE

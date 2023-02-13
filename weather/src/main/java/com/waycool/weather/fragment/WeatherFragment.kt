@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -27,11 +26,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -83,11 +83,7 @@ class WeatherFragment : Fragment() {
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
         apiErrorHandlingBinding = binding.errorState
-
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
-
+       networkErrorStateTranslations(apiErrorHandlingBinding)
 
         shareLayout = binding.clScreenShare
         binding.imgShare.setOnClickListener {
@@ -144,7 +140,7 @@ class WeatherFragment : Fragment() {
         if(NetworkUtil.getConnectivityStatusString(context)==0){
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            AppUtils.translatedToastCheckInternet(context)
         }
         else{
             binding.clInclude.visibility=View.GONE

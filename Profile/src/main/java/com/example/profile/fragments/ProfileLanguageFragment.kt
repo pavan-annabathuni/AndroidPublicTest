@@ -18,17 +18,20 @@ import com.example.profile.adapter.LanguageAdapter
 import com.example.profile.databinding.FragmentProfileLanguageBinding
 import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.Sync.syncer.*
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.data.worker.MasterDownloadWorker
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 class ProfileLanguageFragment : Fragment() {
@@ -63,24 +66,8 @@ class ProfileLanguageFragment : Fragment() {
             }
         }
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if (!toastCheckInternet.isNullOrEmpty()) {
-                    context?.let { it1 ->
-                        ToastStateHandling.toastError(
-                            it1, toastCheckInternet,
-                            LENGTH_SHORT
-                        )
-                    }
-                } else {
-                    context?.let { it1 ->
-                        ToastStateHandling.toastError(
-                            it1, "Please check your internet connection",
-                            LENGTH_SHORT
-                        )
-                    }
-                }
-            }
+            AppUtils.translatedToastCheckInternet(context)
+
         } else {
             languageViewModel.getLanguageList().observe(viewLifecycleOwner) {
                 when (it) {

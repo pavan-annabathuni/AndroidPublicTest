@@ -43,6 +43,7 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -184,11 +185,7 @@ class OtpFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        "Error Occurred",
-                        Toast.LENGTH_SHORT
-                    )
+                    AppUtils.translatedToastServerErrorOccurred(context)
 
                 }
             }
@@ -304,15 +301,7 @@ class OtpFragment : Fragment() {
                         }
                         is Resource.Loading -> {}
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastServerError = TranslationsManager().getString("server_error")
-                                if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                       AppUtils.translatedToastServerErrorOccurred(context)
 
                         }
                     }
@@ -455,7 +444,6 @@ class OtpFragment : Fragment() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
-
             loginViewModel.login(mobileNumber, fcmToken!!, mobileModel!!, mobileManufacturer!!)
                 .observeOnce(
                     requireActivity()

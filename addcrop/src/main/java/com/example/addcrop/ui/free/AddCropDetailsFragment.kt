@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
-import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,11 +18,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
+import com.waycool.data.utils.AppUtils.translatedToastCheckInternet
+import com.waycool.data.utils.AppUtils.translatedToastLoading
+import com.waycool.data.utils.AppUtils.translatedToastServerErrorOccurred
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
@@ -42,11 +44,6 @@ class AddCropDetailsFragment : Fragment() {
     private var accountID: Int? = null
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     lateinit var binding:FragmentAddCropDetailsBinding
-
-    //    private var _binding: FragmentAddCropDetailsBinding? = null
-//    private val binding get() = _binding!!
-//    private lateinit var _binding: FragmentAddCropDetailsBinding
-//    private val binding get() = _binding
     private val myCalendar = Calendar.getInstance()
     private var dateCrop: String = ""
     var area: String = ""
@@ -71,19 +68,12 @@ class AddCropDetailsFragment : Fragment() {
         binding = FragmentAddCropDetailsBinding.inflate(layoutInflater,container,false)
         binding.viewModel=viewModel
          return binding.root
-
-//        _binding = FragmentAddCropDetailsBinding.inflate(inflater, container, false)
-//        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val window: Window? = null
-//        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
         if (arguments != null) {
             cropIdSelected = arguments?.getInt("cropid")
             cropNameTag = arguments?.getString("cropNameTag")
@@ -184,15 +174,8 @@ class AddCropDetailsFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardSaveDetailsCrop.visibility = View.GONE
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            translatedToastCheckInternet(context)
+
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -312,26 +295,10 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            LENGTH_SHORT
-                        ) }}}
+            translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            LENGTH_SHORT
-                        ) }}}
+                  translatedToastLoading(context)
                 }
             }
         }

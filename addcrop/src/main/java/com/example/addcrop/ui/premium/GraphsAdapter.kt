@@ -21,13 +21,10 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
         if (row_index == position) {
             holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility= View.VISIBLE
-//            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
         }
         else {
             holder.binding.clSand.setBackgroundResource(R.drawable.item_unselected)
             holder.binding.ngClick.visibility= View.GONE
-//            holder.binding.skillName.setTextColor(Color.parseColor("#111827"))
-//            holder.binding.clTop.setBackgroundResource(R.drawable.bd_flex)
         }
 
         holder.binding.clSand .setOnClickListener {

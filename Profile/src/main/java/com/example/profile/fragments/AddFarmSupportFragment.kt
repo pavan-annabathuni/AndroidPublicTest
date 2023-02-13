@@ -187,7 +187,6 @@ class AddFarmSupportFragment : Fragment() {
                             findNavController().navigateUp()
                         }
                         is Resource.Error -> {
-
                             viewModel.viewModelScope.launch {
                                 val toastLoading = TranslationsManager().getString("alert_valid_number")
                                 if(!toastLoading.isNullOrEmpty()){

@@ -2,10 +2,8 @@ package com.waycool.data.Sync.syncer
 
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
-import com.waycool.data.Local.Entity.CropInformationEntityData
 import com.waycool.data.Local.Entity.MyCropDataEntity
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.Local.mappers.CropInformationEntityMapper
 import com.waycool.data.Local.mappers.MyCropEntityMapper
 import com.waycool.data.Network.NetworkSource
 import com.waycool.data.Sync.SyncInterface
@@ -65,8 +63,6 @@ class MyCropSyncer : SyncInterface {
 
                                 }
                                 is Resource.Error -> {
-                                    Log.d("MyCrops", " ${it.message}")
-
                                     setSyncStatus(false)
                                 }
 

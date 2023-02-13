@@ -26,6 +26,7 @@ import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
@@ -230,15 +231,8 @@ class CropDetailsCaptureFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                   viewModel.viewModelScope.launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
                     binding.progressBar?.visibility = View.GONE
                     binding.cardCheckHealth.visibility = View.VISIBLE
                 }

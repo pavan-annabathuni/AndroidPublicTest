@@ -22,6 +22,8 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.AiCropHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -71,9 +73,8 @@ class CropHealthFragment : Fragment() {
         videosBinding = binding.layoutVideos
 
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+       networkErrorStateTranslations(apiErrorHandlingBinding)
+
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -96,11 +97,8 @@ class CropHealthFragment : Fragment() {
         binding.recyclerview.adapter = historyAdapter
         binding.cardCheckHealth.setOnClickListener {
             if(NetworkUtil.getConnectivityStatusString(context)==0){
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Please check you internet connectivity",
-                    Toast.LENGTH_SHORT
-                )            }else{
+                AppUtils.translatedToastCheckInternet(context)
+            }else{
                 findNavController().navigate(R.id.action_cropHealthFragment_to_cropSelectFragment)
 
             }
@@ -188,16 +186,8 @@ class CropHealthFragment : Fragment() {
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
-            binding.addFab.visibility=View.GONE
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_connectivity")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                        Toast.LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
-                    Toast.LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastCheckInternet(context)
+
 
         } else {
             binding.clInclude.visibility=View.GONE
