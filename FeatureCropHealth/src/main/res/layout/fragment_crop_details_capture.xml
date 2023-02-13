@@ -322,7 +322,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:scaleType="fitXY"
-                            android:src="@drawable/ic_close"
+                            android:src="@drawable/ic_close_white_bg"
                             android:visibility="gone"
                             app:layout_constraintBottom_toTopOf="@+id/uploaded_img"
                             app:layout_constraintEnd_toEndOf="parent"

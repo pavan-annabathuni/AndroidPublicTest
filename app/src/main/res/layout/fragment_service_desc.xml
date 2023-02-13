@@ -56,7 +56,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_close_white_bg" />
             </LinearLayout>
 
             <TextView
