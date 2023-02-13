@@ -84,9 +84,9 @@ dependencies {
     implementation(libraries.material)
     implementation(libraries.constraintLayout)
 
-    debugImplementation(libraries.stetho)
-    debugImplementation(libraries.stethohttp)
-    debugImplementation 'com.facebook.stetho:stetho-urlconnection:1.5.1'
+    implementation(libraries.stetho)
+    implementation(libraries.stethohttp)
+    implementation 'com.facebook.stetho:stetho-urlconnection:1.5.1'
 
 
     //Glide
