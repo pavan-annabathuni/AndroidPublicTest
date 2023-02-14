@@ -41,8 +41,10 @@ class EditCropFragment : Fragment() {
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
             val eventBundle=Bundle()
             eventBundle.putString("",it.cropName)
+            EventClickHandling.calculateClickEvent("Edit_crop_${it.cropName}")
             viewModel.viewModelScope.launch {
                 val toast = TranslationsManager().getString("crop_deleted")
+
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
                  if(toast.isNullOrEmpty())
                      CoroutineScope(Dispatchers.Main).launch {
@@ -75,7 +77,6 @@ class EditCropFragment : Fragment() {
                          }
                  else context?.let { it1 ->ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT)}
              }
-                 //myCrops()
              }
 
         })
@@ -99,13 +100,10 @@ class EditCropFragment : Fragment() {
         return binding.root
     }
     private fun myCrops() {
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
-                if(!it.data!![0].cropNameTag.isNullOrEmpty())
-                EventClickHandling.calculateClickEvent("Edit_crop_${it.data!![0].cropNameTag}")
             }
                 if(it.data.isNullOrEmpty()){
                     this@EditCropFragment.findNavController().navigateUp()
@@ -127,11 +125,9 @@ class EditCropFragment : Fragment() {
     private fun translation(){
         viewModel.viewModelScope.launch {
             val title = TranslationsManager().getString("edit_crop")
-            if(title.isNullOrEmpty()){
-                binding.toolbar.title = "Edit Crop"
-            }else binding.toolbar.title  = title
-
-            TranslationsManager().loadString("my_crop",binding.title3SemiBold)
+            if(title.isNullOrEmpty()) binding.toolbar.title = "Edit Crop"
+            else binding.toolbar.title  = title
+            TranslationsManager().loadString("str_mycrops",binding.title3SemiBold,"My Crops")
 
         }
     }
