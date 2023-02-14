@@ -44,6 +44,7 @@ import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.uicomponents.utils.AppUtil
+import com.waycool.uicomponents.utils.DateFormatUtils
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,10 +61,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private val viewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
     private val viewDevice by lazy { ViewModelProvider(requireActivity())[ViewDeviceViewModel::class.java] }
     private val myCropPremiumAdapter by lazy { MyCropPremiumAdapter(this) }
-    private var myFarmPremiumAdapter:MyFarmPremiumAdapter? = null
+    private var myFarmPremiumAdapter: MyFarmPremiumAdapter? = null
     private lateinit var handler: Handler
-    private var runnable: Runnable?=null
+    private var runnable: Runnable? = null
     private var lastUpdatedTime: String? = null
+
+    var selectedDevice: ViewDeviceDomain? = null
 
 
     var viewDeviceListAdapter = ViewDeviceListAdapter(this)
@@ -97,7 +100,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         initViewAddCrop()
         initMyCropObserve()
         initObserveMYFarm()
-        progressColor()
         translations()
         fabButton()
         setBanners()
@@ -125,114 +127,153 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
         binding.tvAddFromOne.isSelected = true
 
+        viewModel.selectedDeviceLiveData.observe(viewLifecycleOwner){
+            if(it!=null){
+                populateDevice(it)
+            }
+        }
+
+        viewModel.selectedFarmIdLiveData.observe(viewLifecycleOwner){
+            if(it!=null){
+                populateFarm(it)
+            }
+        }
+
     }
 
     private fun movingTextViewEnable() {
         binding.tvAddFromOne.isSelected = true
-        binding.tvTemp.isSelected=true
-        binding.tvWind.isSelected=true
-        binding.tvHumidity.isSelected=true
-        binding.tvWindSpeed.isSelected=true
-        binding.tvLeafWetness.isSelected=true
-        binding.tvPressureDegree.isSelected=true
+        binding.tvTemp.isSelected = true
+        binding.tvWind.isSelected = true
+        binding.tvHumidity.isSelected = true
+        binding.tvWindSpeed.isSelected = true
+        binding.tvLeafWetness.isSelected = true
+        binding.tvPressureDegree.isSelected = true
     }
 
     private fun setWishes() {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
             in (1..11) -> {
-                TranslationsManager().loadString("good_morning",binding.tvGoodMorning,"Good Morning")}
+                TranslationsManager().loadString("good_morning", binding.tvGoodMorning, "Good Morning")
+            }
             in 12..15 -> {
-                TranslationsManager().loadString("good_afternoon",binding.tvGoodMorning,"Good Afternoon")}
+                TranslationsManager().loadString("good_afternoon", binding.tvGoodMorning, "Good Afternoon")
+            }
             in 16..20 -> {
-                TranslationsManager().loadString("good_evening",binding.tvGoodMorning,"Good Evening")}
+                TranslationsManager().loadString("good_evening", binding.tvGoodMorning, "Good Evening")
+            }
             in 21..23 -> {
-                TranslationsManager().loadString("good_night",binding.tvGoodMorning,"Good Night")}
-            else ->{
-                TranslationsManager().loadString("namaste",binding.tvGoodMorning,"Namaste")  }
+                TranslationsManager().loadString("good_night", binding.tvGoodMorning, "Good Night")
+            }
+            else -> {
+                TranslationsManager().loadString("namaste", binding.tvGoodMorning, "Namaste")
+            }
         }
     }
 
     fun translations() {
-        TranslationsManager().loadString("welcome", binding.tvName,"Welcome")
-        TranslationsManager().loadString("add_crop_info",binding.tvYourForm,"Add your Crop and get more details.")
-        TranslationsManager().loadString("add_crop",binding.tvAddFrom,"Add crops")
-        TranslationsManager().loadString("my_crops", binding.title3SemiBold,"My Crops")
-        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops,"Add crops")
-        TranslationsManager().loadString("add_farm", binding.tvAddFromOne,"Add your farm")
-        TranslationsManager().loadString("my_farm", binding.titleMyFarm,"")
-        TranslationsManager().loadString("add_farm_top", binding.MyFarm,"Add Farm")
-        TranslationsManager().loadString("my_device", binding.titleMyDevice,"My Devices")
-        TranslationsManager().loadString("str_add_device", binding.MyDevice,"My Devices")
-        TranslationsManager().loadString("view_tepm", binding.tvTemp,"Temperature")
-        TranslationsManager().loadString("view_rainfall", binding.tvWind,"Rainfall")
-        TranslationsManager().loadString("str_humidity", binding.tvHumidity,"Humidity")
-        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed,"Wind Speed")
-        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness,"Leaf wetness")
-        TranslationsManager().loadString("view_pressure", binding.tvPressure,"Pressure")
-        TranslationsManager().loadString("view_light", binding.ivSoilTempText,"Light Intensity")
-        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture,"Soil Moisture")
-        TranslationsManager().loadString("view_top", binding.tvTop,"Top")
-        TranslationsManager().loadString("view_bottom", binding.tvBottom,"Bottom")
-        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp,"Soil Temperature")
-        TranslationsManager().loadString("battery", binding.tvEnableAddDevice,"Battery")
-        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo,"Elevation")
-        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh,"Update")
-        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
+        TranslationsManager().loadString("welcome", binding.tvName, "Welcome")
+        TranslationsManager().loadString("add_crop_info", binding.tvYourForm, "Add your Crop and get more details.")
+        TranslationsManager().loadString("add_crop", binding.tvAddFrom, "Add crops")
+        TranslationsManager().loadString("my_crops", binding.title3SemiBold, "My Crops")
+        TranslationsManager().loadString("add_crop", binding.tvEditMyCrops, "Add crops")
+        TranslationsManager().loadString("add_farm", binding.tvAddFromOne, "Add your farm")
+        TranslationsManager().loadString("my_farm", binding.titleMyFarm, "")
+        TranslationsManager().loadString("add_farm_top", binding.MyFarm, "Add Farm")
+        TranslationsManager().loadString("my_device", binding.titleMyDevice, "My Devices")
+        TranslationsManager().loadString("str_add_device", binding.MyDevice, "My Devices")
+        TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
+        TranslationsManager().loadString("view_rainfall", binding.tvWind, "Rainfall")
+        TranslationsManager().loadString("str_humidity", binding.tvHumidity, "Humidity")
+        TranslationsManager().loadString("str_wind_speed", binding.tvWindSpeed, "Wind Speed")
+        TranslationsManager().loadString("view_leaf", binding.tvLeafWetness, "Leaf wetness")
+        TranslationsManager().loadString("view_pressure", binding.tvPressure, "Pressure")
+        TranslationsManager().loadString("view_light", binding.ivSoilTempText, "Light Intensity")
+        TranslationsManager().loadString("soil_moisture", binding.SoilMoisture, "Soil Moisture")
+        TranslationsManager().loadString("view_top", binding.tvTop, "Top")
+        TranslationsManager().loadString("view_bottom", binding.tvBottom, "Bottom")
+        TranslationsManager().loadString("view_soil_temp", binding.ivSoilTemp, "Soil Temperature")
+        TranslationsManager().loadString("battery", binding.tvEnableAddDevice, "Battery")
+        TranslationsManager().loadString("elevation", binding.tvEnableAddDeviceTwo, "Elevation")
+        TranslationsManager().loadString("update", binding.tvLastUpdateRefresh, "Update")
+        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText, "No Devices added for this farm")
     }
 
     private fun initObserveDevice(farmId: Int) {
+        viewModel.setSelectedFarm(farmId)
+        populateFarm(farmId)
+    }
+
+    private fun populateFarm(farmId: Int){
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
-           checkForDeviceApiUpdate()
+            checkForDeviceApiUpdate()
 //            if (it.data?.isEmpty() == true) {
 //                binding.cardMYDevice.visibility = View.GONE
 //            } else
 
-            Log.d("DeviceSelected","${it.data}")
-                when (it) {
-                    is Resource.Success -> {
-                            if (!it.data.isNullOrEmpty()) {
-                                binding.cardMYDevice.visibility = View.VISIBLE
-                                binding.deviceParamsCL.visibility=View.VISIBLE
-                                binding.deviceFarm.visibility=View.VISIBLE
-                                binding.devicesEmptyText.visibility=View.GONE
-                                binding.deviceFarm.adapter = viewDeviceListAdapter
-                                viewDeviceListAdapter.setMovieList(it.data!!)
-                            }else{
-                                binding.cardMYDevice.visibility = View.VISIBLE
-                                binding.deviceParamsCL.visibility=View.GONE
-                                binding.deviceFarm.visibility=View.GONE
-                                binding.devicesEmptyText.visibility=View.VISIBLE
-                                TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText,"No Devices added for this farm")
-
-                            }
-                    }
-                    is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 ->
-                                ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}                    }
-                    is Resource.Loading -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastCheckInternet = TranslationsManager().getString("check_connectivity")
-                            if(!toastCheckInternet.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+            Log.d("DeviceSelected", "${it.data}")
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        binding.cardMYDevice.visibility = View.VISIBLE
+                        binding.deviceParamsCL.visibility = View.VISIBLE
+                        binding.deviceFarm.visibility = View.VISIBLE
+                        binding.devicesEmptyText.visibility = View.GONE
+                        binding.deviceFarm.adapter = viewDeviceListAdapter
+                        viewDeviceListAdapter.setMovieList(it.data!!)
+                    } else {
+                        binding.cardMYDevice.visibility = View.VISIBLE
+                        binding.deviceParamsCL.visibility = View.GONE
+                        binding.deviceFarm.visibility = View.GONE
+                        binding.devicesEmptyText.visibility = View.VISIBLE
+                        TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText, "No Devices added for this farm")
 
                     }
                 }
+                is Resource.Error -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastServerError = TranslationsManager().getString("server_error")
+                        if (!toastServerError.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastServerError,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val toastCheckInternet = TranslationsManager().getString("check_connectivity")
+                        if (!toastCheckInternet.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastCheckInternet,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Please check your Internet connection",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
+
+                }
+            }
 
         }
-
     }
 
     private fun checkForDeviceApiUpdate() {
@@ -327,8 +368,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             response.reverse()
             myCropPremiumAdapter.setMovieList(response)
 
-            if(myFarmPremiumAdapter==null)
-                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
+            if (myFarmPremiumAdapter == null)
+                myFarmPremiumAdapter = MyFarmPremiumAdapter(this, this, requireContext())
 
             myFarmPremiumAdapter?.updateCropsList(response)
 
@@ -397,6 +438,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
 
     }
+
     @SuppressLint("SetTextI18n")
     private fun initViewProfile() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -424,13 +466,22 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                        if (!toastServerError.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastServerError,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -452,8 +503,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("TAG", "initObserveMYFarmPraveen: ")
                     } else if (it.data != null)
                         if (it.data!!.isNotEmpty()) {
-                            if(myFarmPremiumAdapter==null)
-                                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
+                            if (myFarmPremiumAdapter == null)
+                                myFarmPremiumAdapter = MyFarmPremiumAdapter(this, this, requireContext())
                             binding.rvMyFarm.adapter = myFarmPremiumAdapter
                             myCropPremiumAdapter.updateMyfarms(it.data)
                             binding.clAddForm.visibility = View.GONE
@@ -479,13 +530,22 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 is Resource.Error -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                        if (!toastServerError.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastServerError,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Server Error Occurred",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
 //                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -500,7 +560,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
         }
     }
-
 
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagePremiumBinding): Int {
@@ -523,14 +582,16 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         return scroll.roundToInt()
     }
 
-    fun progressColor() {
-//        binding.soilMoistureOne.progress = 60
-
-    }
 
     @SuppressLint("SetTextI18n")
     override fun viewDevice(data: ViewDeviceDomain) {
+        selectedDevice = data
+        viewModel.setSelectedDevice(data)
+//        populateDevice(data)
+//        deviceDataAdapter.notifyDataSetChanged()
+    }
 
+    private fun populateDevice(data: ViewDeviceDomain) {
         binding.let {
 
             it.totalAreea.text = data.battery.toString()
@@ -538,9 +599,9 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.clBattery.visibility = View.GONE
             }
             it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
-            it.deviceNumber.text="Device Number : ${data.deviceNumber?.uppercase()}"
-            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
-            it.tvWindDegree.text = data.rainfall.toString() + " mm"
+            it.deviceNumber.text = "Device Number : ${data.deviceNumber?.uppercase()}"
+            it.tvTempDegree.text = "${(data.temperature?:"--")} \u2103"
+            it.tvWindDegree.text = "${(data.rainfall?:"--")} mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
             if (data.leafWetness != null && data.leafWetness!!.equals(1)) {
@@ -551,21 +612,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
             }
 
-            if(data.isApproved==0){
-                it.approvedCV.visibility=View.VISIBLE
-                it.tvTextAlert.text="Your device is not approved. Contact us."
-                it.cardTopParent.visibility=View.GONE
-                it.cardSpeedMeter.visibility=View.GONE
-                it.clSoilTemp.visibility=View.GONE
-                it.clTempView.visibility=View.GONE
-            }else{
-                it.approvedCV.visibility=View.GONE
-                it.cardTopParent.visibility=View.VISIBLE
-                it.cardSpeedMeter.visibility=View.VISIBLE
-                it.clSoilTemp.visibility=View.VISIBLE
-                it.clTempView.visibility=View.VISIBLE
+            if (data.isApproved == 0) {
+                it.approvedCV.visibility = View.VISIBLE
+                it.tvTextAlert.text = "Your device is not approved. Contact us."
+                it.cardTopParent.visibility = View.GONE
+                it.cardSpeedMeter.visibility = View.GONE
+                it.clSoilTemp.visibility = View.GONE
+                it.clTempView.visibility = View.GONE
+            } else {
+                it.approvedCV.visibility = View.GONE
+                it.cardTopParent.visibility = View.VISIBLE
+                it.cardSpeedMeter.visibility = View.VISIBLE
+                it.clSoilTemp.visibility = View.VISIBLE
+                it.clTempView.visibility = View.VISIBLE
 
-                if (data.modelSeries.equals( "GSX", ignoreCase = true)) {
+                if (data.modelSeries.equals("GSX", ignoreCase = true)) {
                     binding.cardTopParent.visibility = View.GONE
                     binding.clTempView.visibility = View.GONE
                 } else {
@@ -573,11 +634,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     binding.clTempView.visibility = View.VISIBLE
                 }
 
+                if(data.temperature==null){
+                    it.cardTopParent.visibility = View.GONE
+                    it.cardSpeedMeter.visibility = View.GONE
+                    it.clSoilTemp.visibility = View.GONE
+                    it.clTempView.visibility = View.GONE
+                }
+
+
             }
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = data.dataTimestamp.toString()
+            it.tvLastUpdate.text = DateFormatUtils.dateFormatterDevice(data.dataTimestamp)
             binding.soilMoistureOne.clearSections()
             binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -590,7 +659,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 it.bottomTop.visibility = View.GONE
             }
 
-            var colorSectionListSM1= mutableListOf<Section>()
+            var colorSectionListSM1 = mutableListOf<Section>()
 
             binding.soilMoistureOne.addSections(
                 Section(0f, .16f, Color.parseColor("#32A9FF"), binding.soilMoistureOne.dpTOpx(12f)),
@@ -613,12 +682,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.soilMoistureTwo.marksNumber = 0
             binding.soilMoistureOne.maxSpeed = 60F
             binding.soilMoistureTwo.maxSpeed = 60F
-            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat()?:0f)
-            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat()?:0f)
+            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat() ?: 0f)
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat() ?: 0f)
 
 
-            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat()?:0f, 100)
-            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat()?:0f, 100)
+            binding.soilMoistureOne.speedTo(data.soilMoisture1?.toFloat() ?: 0f, 100)
+            binding.soilMoistureTwo.speedTo(data.soilMoisture2?.toFloat() ?: 0f, 100)
 
             it.clTemp.setOnClickListener {
                 val bundle = Bundle()
@@ -811,14 +880,12 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            }
         }
 
-
-//        deviceDataAdapter.notifyDataSetChanged()
     }
 
     override fun onFarmDetailsClicked(data: MyFarmsDomain) {
-        val  eventBundle=Bundle()
-        eventBundle.putString("added_farm",data.farmName)
-        EventItemClickHandling.calculateItemClickEvent("View_farm_details",eventBundle)
+        val eventBundle = Bundle()
+        eventBundle.putString("added_farm", data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("View_farm_details", eventBundle)
         val bundle = Bundle()
         bundle.putParcelable("farm", data)
         findNavController().navigate(
@@ -839,8 +906,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 
     private fun setBanners() {
 
-        val bannerAdapter = AdsAdapter(activity?:requireContext(), binding.bannerViewpager)
-        runnable =Runnable {
+        val bannerAdapter = AdsAdapter(activity ?: requireContext(), binding.bannerViewpager)
+        runnable = Runnable {
             if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
                 binding.bannerViewpager.currentItem = 0
             else
@@ -851,13 +918,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (runnable != null) {
-                    AppUtil.handlerSet(handler,runnable,3000)
+                    AppUtil.handlerSet(handler, runnable, 3000)
                 }
             }
         })
         viewModel.getVansAdsList("49").observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitList( it.data)
+            bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
@@ -877,53 +944,56 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        bannerAdapter.onItemClick={
+        bannerAdapter.onItemClick = {
             EventClickHandling.calculateClickEvent("Home_page_adbanner")
         }
     }
 
     override fun onFarmSelected(data: MyFarmsDomain) {
-        val  eventBundle=Bundle()
-        eventBundle.putString("SelectedFarmHomePremiumFrag",data.farmName)
-        EventItemClickHandling.calculateItemClickEvent("View_farm_details",eventBundle)
+        val eventBundle = Bundle()
+        eventBundle.putString("SelectedFarmHomePremiumFrag", data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("View_farm_details", eventBundle)
         data.id?.let { initObserveDevice(it) }
     }
 
 
-    private fun notification(){
-        viewModel.getNotification().observe(viewLifecycleOwner){
-            val data = it.data?.data?.filter { itt->
-                itt.readAt== null
+    private fun notification() {
+        viewModel.getNotification().observe(viewLifecycleOwner) {
+            val data = it.data?.data?.filter { itt ->
+                itt.readAt == null
             }
-            if(data?.size!=0){
+            if (data?.size != 0) {
                 binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
-            }else{
+            } else {
                 binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
             }
         }
     }
-    private fun checkRole(roleId:Int){
-        if(roleId==31){
+
+    private fun checkRole(roleId: Int) {
+        if (roleId == 31) {
             binding.tvEditMyCrops.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.GONE
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
-            binding.MyDevice.visibility=View.GONE
-        }else{
+            binding.MyDevice.visibility = View.GONE
+        } else {
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
-            binding.MyDevice.visibility=View.GONE
+            binding.MyDevice.visibility = View.GONE
         }
     }
+
     override fun onPause() {
         super.onPause()
         if (runnable != null) {
             handler.removeCallbacks(runnable!!)
         }
     }
+
     override fun onResume() {
         super.onResume()
 

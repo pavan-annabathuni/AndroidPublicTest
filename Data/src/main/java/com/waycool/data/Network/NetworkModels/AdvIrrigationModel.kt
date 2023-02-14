@@ -21,18 +21,18 @@ data class AdvIrrigationData (
 @Parcelize
 data class Irrigation (
     @SerializedName("current_data"        ) var currentData        : @RawValue CurrentData?                  = CurrentData(),
-    @SerializedName("historic_data"       ) var historicData       : @RawValue ArrayList<HistoricData>       = arrayListOf(),
-    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?     = IrrigationForecast()
+    @SerializedName("historic_data"       ) var historicData       : @RawValue List<HistoricData>            = emptyList(),
+    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?           = IrrigationForecast()
 
 ):Parcelable
 data class IrrigationForecast (
 
-    @SerializedName("mad"         ) var mad        : ArrayList<Double>    = arrayListOf(),
-    @SerializedName("etc"         ) var etc        : ArrayList<String> = arrayListOf(),
-    @SerializedName("days"        ) var days       : ArrayList<String> = arrayListOf(),
-    @SerializedName("rain_precip" ) var rainPrecip : ArrayList<String> = arrayListOf(),
-    @SerializedName("depletion"   ) var depletion  : ArrayList<String> = arrayListOf(),
-    @SerializedName("eto"         ) var eto        : ArrayList<Double> = arrayListOf()
+    @SerializedName("mad"         ) var mad        : List<Double>    = emptyList(),
+    @SerializedName("etc"         ) var etc        : List<String> = emptyList(),
+    @SerializedName("days"        ) var days       : List<String> = emptyList(),
+    @SerializedName("rain_precip" ) var rainPrecip : List<String> = emptyList(),
+    @SerializedName("depletion"   ) var depletion  : List<String> = emptyList(),
+    @SerializedName("eto"         ) var eto        : List<Double> = emptyList()
 
 )
 @Parcelize

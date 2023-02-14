@@ -458,17 +458,17 @@ class IrrigationFragment : Fragment() {
             val data = it.data?.first { plot->
                 plot.id == plotId
             }
-//            if(data?.irrigationRequired==null){
-//                binding.gwxIrrigation.visibility=View.GONE
-//                binding.btHarvest.visibility=View.GONE
-//                binding.noDeviceCv.visibility=View.VISIBLE
-//            }else{
+            if(data?.irrigationRequired==null){
+                binding.gwxIrrigation.visibility=View.GONE
+                binding.btHarvest.visibility=View.GONE
+                binding.noDeviceCv.visibility=View.VISIBLE
+            }else{
                 binding.gwxIrrigation.visibility=View.VISIBLE
                 binding.btHarvest.visibility=View.VISIBLE
                 binding.noDeviceCv.visibility=View.GONE
 
 
-//            }
+            }
         }
     }
 

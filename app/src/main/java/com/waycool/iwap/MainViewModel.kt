@@ -1,6 +1,7 @@
 package com.waycool.iwap
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MainViewModel : ViewModel() {
+
+    var selectedDeviceLiveData: MutableLiveData<ViewDeviceDomain> = MutableLiveData()
+    var selectedFarmIdLiveData: MutableLiveData<Int> = MutableLiveData()
     fun getUserDetails() = LoginRepository.getUserDetails().asLiveData()
 
     //Videos
@@ -79,16 +83,25 @@ class MainViewModel : ViewModel() {
     fun getMyFarms(): LiveData<Resource<List<MyFarmsDomain>>> =
         FarmsRepository.getMyFarms().asLiveData()
 
-    fun getNotification():LiveData<Resource<NotificationModel?>>{
+    fun getNotification(): LiveData<Resource<NotificationModel?>> {
         return NotificationRepository.getNotification().asLiveData()
     }
-    fun updateNotification(id:String):LiveData<Resource<UpdateNotification?>>{
+
+    fun updateNotification(id: String): LiveData<Resource<UpdateNotification?>> {
         return NotificationRepository.updateNotification(id).asLiveData()
     }
 
     fun getLatestTimeStamp(): LiveData<String> = DevicesRepository.getLatestTimeStamp().asLiveData()
     fun updateDevices() {
         DevicesRepository.refreshDevices()
+    }
+
+    fun setSelectedDevice(data: ViewDeviceDomain) {
+        selectedDeviceLiveData.postValue(data)
+    }
+
+    fun setSelectedFarm(farmId: Int) {
+        selectedFarmIdLiveData.postValue(farmId)
     }
 
 

@@ -10,8 +10,8 @@ import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 object NdviRepository {
-     fun getNdvi(farmId:Int,account_id: Int): Flow<Resource<NdviModel?>> {
-        return NetworkSource.getNdvi(farmId,account_id)
+     fun getNdvi(farmId:Int): Flow<Resource<NdviModel?>> {
+        return NetworkSource.getNdvi(farmId)
     }
 
     fun getNDVIMean(url:String):Flow<Resource<NDVIMean?>>{

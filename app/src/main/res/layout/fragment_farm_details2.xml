@@ -911,7 +911,7 @@
                                 android:layout_marginTop="@dimen/space12"
                                 android:layout_marginBottom="@dimen/space12"
                                 android:text="Last Updated: Today Tue 26, Jul"
-                                android:textColor="#5D6571"
+                                android:textColor="@color/textdark"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"

@@ -39,6 +39,7 @@ import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
 import com.waycool.iwap.premium.*
+import com.waycool.uicomponents.utils.DateFormatUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -692,7 +693,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
                 it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
                 it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-                it.tvLastUpdate.text = data.dataTimestamp.toString()
+                it.tvLastUpdate.text = DateFormatUtils.dateFormatterDevice(data.dataTimestamp)
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
                 binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -882,7 +883,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.currentDelta.visibility = View.VISIBLE
                 binding.deltaText.visibility = View.VISIBLE
                 binding.updateDate.visibility = View.VISIBLE
-                binding.updateDate.text = "Last Updated: ${data.dataTimestamp}"
+                binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
             }
 
 //        binding.currentDelta.clearSections()

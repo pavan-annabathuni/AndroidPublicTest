@@ -43,7 +43,7 @@ class AddUseAdapter(val onClickListener: OnClickListener,val userDetailsDomain: 
             holder.delete.visibility = View.INVISIBLE
         }
 
-        holder.roleName.text = properties.roles[0].title
+        holder.roleName.text = properties.roles.firstOrNull { it.title == "Farmer"||it.title == "Farm Support" }?.title
     }
     companion object DiffCallback : DiffUtil.ItemCallback<GetFarmSupportData>() {
 
