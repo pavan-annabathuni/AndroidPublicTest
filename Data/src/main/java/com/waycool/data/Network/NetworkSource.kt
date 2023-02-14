@@ -990,6 +990,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("Irrigation","Exception: ${e.cause}~~${e.message}~~${e.stackTrace}")
             CrashAnalytics.crashAnalyticsError("getAdvIrrigation Exception--${e.message}")
 
             //  emit(Resource.Error(e.message))
@@ -1259,21 +1260,25 @@ object NetworkSource {
             }
         }
 
-    fun getNdvi(farmId: Int, accountId: Int) = flow<Resource<NdviModel?>> {
+    fun getNdvi(farmId: Int) = flow<Resource<NdviModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
-        emit(Resource.Loading())
-        try {
-            val response = apiInterface.getNdvi(map, farmId, accountId)
-            if (response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+        val accountId = LocalSource.getUserDetailsEntity()?.accountId
+        if(accountId!=null) {
+            try {
+                val response = apiInterface.getNdvi(map, farmId, accountId)
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+
+            } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getNdvi Exception--${e.message}")
+
+                //   emit(Resource.Error(e.message))
             }
-
-        } catch (e: Exception) {
-            CrashAnalytics.crashAnalyticsError("getNdvi Exception--${e.message}")
-
-            //   emit(Resource.Error(e.message))
+        }else{
+            CrashAnalytics.crashAnalyticsError("getNdvi Exception-- No Account ID Exception")
         }
     }
 

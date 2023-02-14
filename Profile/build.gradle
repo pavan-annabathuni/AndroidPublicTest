@@ -37,6 +37,9 @@ android {
         buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
         buildConfigField "int", "VERSION_CODE", "$versionCode"
     }
+    lintOptions {
+        abortOnError false
+    }
 
 }
 

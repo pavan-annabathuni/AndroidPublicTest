@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
+import com.example.addcrop.ui.CategoryViewHolder
 
 class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGraphsClicked: ItemGraphsClicked) : RecyclerView.Adapter<GraphsViewHolder>() {
     private var row_index = -1
@@ -16,9 +17,9 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
     }
 
     override fun onBindViewHolder(holder: GraphsViewHolder, position: Int) {
-        val details = varietyList[position]
+        val details = varietyList[holder.layoutPosition]
         holder.binding.tvSand .text = details.name
-        if (row_index == position) {
+        if (row_index == holder.layoutPosition) {
             holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility= View.VISIBLE
         }
@@ -28,7 +29,7 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
         }
 
         holder.binding.clSand .setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             itemGraphsClicked.clickGraphs(details)
 //            itemSelectedListener.clickOnCategory(details.name)

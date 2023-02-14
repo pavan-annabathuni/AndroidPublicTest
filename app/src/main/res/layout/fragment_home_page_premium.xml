@@ -932,11 +932,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="start"
-                        android:visibility="gone"
                         android:text="My Devices"
                         android:textColor="@color/textdark"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toStartOf="@id/MyDevice"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -970,8 +970,8 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"
                         tools:itemCount="6"
-                        tools:visibility="gone"
-                        tools:listitem="@layout/item_flex_box_add_form" />
+                        tools:listitem="@layout/item_flex_box_add_form"
+                        tools:visibility="visible" />
                     <!--                        <androidx.viewpager2.widget.ViewPager2-->
                     <!--                            android:id="@+id/id_view_pager"-->
                     <!--                            android:layout_width="match_parent"-->
@@ -1183,7 +1183,7 @@
                                     android:layout_marginTop="@dimen/space12"
                                     android:layout_marginBottom="@dimen/space12"
                                     android:text="Last Updated: Today Tue 26, Jul"
-                                    android:textColor="#5D6571"
+                                    android:textColor="@color/textdark"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
