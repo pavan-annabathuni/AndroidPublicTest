@@ -56,7 +56,6 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     implementation 'com.github.yalantis:ucrop:2.2.6-native'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
 
     implementation(navGraph.navfragment)
     implementation(navGraph.navui)
