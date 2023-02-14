@@ -17,22 +17,19 @@ class GraphsAdapter (val varietyList:ArrayList<GraphsModel>,private val itemGrap
     }
 
     override fun onBindViewHolder(holder: GraphsViewHolder, position: Int) {
-        val details = varietyList[position]
+        val details = varietyList[holder.layoutPosition]
         holder.binding.tvSand .text = details.name
-        if (row_index == position) {
-            holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
+        if (row_index == holder.layoutPosition) {
+            holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility= View.VISIBLE
-//            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
         }
         else {
             holder.binding.clSand.setBackgroundResource(R.drawable.item_unselected)
             holder.binding.ngClick.visibility= View.GONE
-//            holder.binding.skillName.setTextColor(Color.parseColor("#111827"))
-//            holder.binding.clTop.setBackgroundResource(R.drawable.bd_flex)
         }
 
         holder.binding.clSand .setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             itemGraphsClicked.clickGraphs(details)
 //            itemSelectedListener.clickOnCategory(details.name)

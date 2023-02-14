@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +46,8 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -89,7 +90,6 @@ class RegistrationFragment : Fragment() {
     lateinit var placesClient: PlacesClient
 
     private val blockCharacterSet = "@~#^|$%&*!-<>+$*()[]{}/,';:?"
-    private var audioUrl: String? = null
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -155,9 +155,7 @@ class RegistrationFragment : Fragment() {
         binding = FragmentRegistrationBinding.inflate(layoutInflater)
         //Network Error state layout binding
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
         //method to set translations
         setTranslations()
         binding.registerDoneBtn.isEnabled = true
@@ -394,7 +392,7 @@ class RegistrationFragment : Fragment() {
             UserTYpeTV!!.text = "Subscription"
             icon!!.visibility = View.VISIBLE
         }
-        if (audiourl == null) {
+        if (audiourl.isNullOrEmpty()) {
             audioLayout!!.visibility = View.GONE
         } else {
             audioLayout!!.visibility = View.VISIBLE
@@ -428,34 +426,9 @@ class RegistrationFragment : Fragment() {
 
         play!!.setOnClickListener { view ->
             //if audio url is not null go to "IF" condition
-            if (audiourl != null) {
                 if (pause != null) {
-                    playAudio(context, audiourl, play, pause, seekbar!!, totalTime!!)
+                    audiourl?.let { playAudio(context, it, play, pause, seekbar!!, totalTime!!) }
                 }
-            }
-            //if audio url is  null go to "ELSE" condition
-            else {
-                //showing toast for "Audio file not found"
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastAudioNotFound = TranslationsManager().getString("audio_file")
-                    if (!toastAudioNotFound.isNullOrEmpty()) {
-                        context.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, toastAudioNotFound,
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    } else {
-                        context.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, "Audio file not found",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    }
-                }
-
-            }
             //Event Click on clicking the audio play button
             EventClickHandling.calculateClickEvent("Listen$tittle")
         }
@@ -613,15 +586,8 @@ class RegistrationFragment : Fragment() {
     fun userCreater() {
         if (latitude.isNotEmpty() && longitutde.isNotEmpty()) {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                            LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                        LENGTH_SHORT
-                    ) }}}
+                AppUtils.translatedToastCheckInternet(context)
+
             } else {
                 query = HashMap()
                 query["name"] = binding.nameEt.text.toString().trim()
@@ -733,15 +699,8 @@ class RegistrationFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     //It shows a toast message with "Server Error Occurred" or with a translated message from the TranslationsManager class.
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
 
                 }
             }
@@ -776,15 +735,8 @@ class RegistrationFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     //It shows a toast message with "Server Error Occurred" or with a translated message from the TranslationsManager class.
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
 
                 }
             }

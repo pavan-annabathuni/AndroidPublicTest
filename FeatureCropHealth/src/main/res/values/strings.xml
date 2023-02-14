@@ -1,21 +1,8 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="crop_health">Crop Health</string>
     <string name="tomato">Tomato</string>
     <string name="request_history">Request history</string>
-    <string name="avocado">Avocado</string>
-    <string name="algal_leaf_spot">Algal leaf spot</string>
     <string name="crop_affects_region">Crop Affects Region</string>
-
-    <string name="home_fragment">Chemical</string>
-    <string name="sport_fragment">Biological</string>
-    <string name="movie_fragment">Cultural</string>
-    <string name="powdery_mildew">Powdery mildew</string>
-
-    <string name="click_only_the_image_of_the_leaf">Click only the Image of the Leaf</string>
-    <string name="do_not_capture_the_full_plant">Do not Capture the full Plant.</string>
-    <string name="do_not_click_a_nblur_image">Do not Click a \nBlur Image</string>
-    <string name="do_not_capture_other_objects">Do not Capture other objects</string>
 
 </resources>

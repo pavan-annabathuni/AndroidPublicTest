@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Toolbar Title"
+                tools:text="Toolbar Title"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -431,11 +431,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         android:paddingTop="7dp"
                         android:text="Pump Flow Rate (LPH)"
                         android:textColor="@color/black"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardView34" />
 
                     <androidx.cardview.widget.CardView
@@ -445,8 +446,10 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@drawable/bg_plot_edittext"
                         app:cardCornerRadius="3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView23">
@@ -481,7 +484,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mycrops_rv" />
+                    app:layout_constraintTop_toBottomOf="@+id/mycrops_rv"
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <com.waycool.uicomponents.Text.ParagraphMedium
                     android:id="@+id/textView2"

@@ -18,7 +18,7 @@
         android:id="@+id/mcvCircle"
         android:layout_width="@dimen/txt32"
         android:layout_height="@dimen/txt32"
-        android:src="@drawable/ic_ellipse_default"
+        android:src="@drawable/ic_ellipse_cream"
         app:cardElevation="0dp"
         android:layout_marginStart="24dp"
         app:layout_constraintStart_toStartOf="parent"

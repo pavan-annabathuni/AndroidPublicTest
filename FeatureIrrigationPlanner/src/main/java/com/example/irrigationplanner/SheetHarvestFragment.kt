@@ -3,7 +3,6 @@ package com.example.irrigationplanner
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,19 +68,9 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
                                 }
                                 is Resource.Loading -> {}
                                 is Resource.Error -> {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        val toastServerError = TranslationsManager().getString("server_error")
-                                        if(!toastServerError.isNullOrEmpty()){
-                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                                Toast.LENGTH_SHORT
-                                            ) }}
-                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                            Toast.LENGTH_SHORT
-                                        ) }}}
-                                    Log.d("cropInfo", "onCreateView: ${it.message}")
+                                AppUtils.translatedToastServerErrorOccurred(context)
                                 }
                             }
-                            Log.d("Harvest", "onCreateView: ${it.message}")
                         }
                 }
             } else {

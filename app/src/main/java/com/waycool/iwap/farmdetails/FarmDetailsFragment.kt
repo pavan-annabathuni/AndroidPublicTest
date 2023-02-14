@@ -31,6 +31,7 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -39,6 +40,7 @@ import com.waycool.iwap.R
 import com.waycool.iwap.TokenViewModel
 import com.waycool.iwap.databinding.FragmentFarmDetails2Binding
 import com.waycool.iwap.premium.*
+import com.waycool.uicomponents.utils.DateFormatUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -328,15 +330,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         }
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
+
                     }
                     is Resource.Loading -> {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -430,16 +425,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
-//                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                        AppUtils.translatedToastServerErrorOccurred(context)
                     }
                     is Resource.Loading -> {
                         CoroutineScope(Dispatchers.IO).launch {
@@ -501,15 +487,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
+
                     }
                 }
 
@@ -692,7 +671,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
                 it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
                 it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-                it.tvLastUpdate.text = data.dataTimestamp.toString()
+                it.tvLastUpdate.text = DateFormatUtils.dateFormatterDevice(data.dataTimestamp)
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
                 binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -882,7 +861,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 binding.currentDelta.visibility = View.VISIBLE
                 binding.deltaText.visibility = View.VISIBLE
                 binding.updateDate.visibility = View.VISIBLE
-                binding.updateDate.text = "Last Updated: ${data.dataTimestamp}"
+                binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
             }
 
 //        binding.currentDelta.clearSections()

@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -30,6 +31,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +59,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         _binding = FragmentAllHistoryBinding.inflate(inflater, container, false)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.tvToolBar.isSelected = true
+
         return binding.root
     }
 
@@ -76,19 +80,30 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
         translationSoilTesting()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+                findNavController().navigateUp()
+
+//                val isSuccess = activity?.let { findNavController().popBackStack() }
+//                if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
-            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
-            if(toolbarTitle!=null){
-                binding.tvToolBar.text=toolbarTitle
-            }
-            else
-                binding.tvToolBar.text="Soil Testing Requests"
         }
+
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("soil_testing_requests", binding.tvToolBar,"Soil Testing Requests")
 //        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
@@ -188,15 +203,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("server_error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}                }
+                    AppUtils.translatedToastServerErrorOccurred(context)
+                }
                 is Resource.Loading -> {
 
                 }
@@ -343,15 +351,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        val toastError = TranslationsManager().getString("error")
-                                        if(!toastError.isNullOrEmpty()){
-                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                                Toast.LENGTH_SHORT
-                                            ) }}
-                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                                            Toast.LENGTH_SHORT
-                                        ) }}}
+                                AppUtils.translatedToastServerErrorOccurred(context)
 
                                 }
                                 is Resource.Loading -> {

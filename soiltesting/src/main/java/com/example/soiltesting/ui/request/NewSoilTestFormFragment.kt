@@ -16,6 +16,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +56,7 @@ class NewSoilTestFormFragment : Fragment() {
             val cropName = arguments?.getString("cropName")
 
 
-            traslationSoilTesting()
+            translationSoilTesting()
             soilViewModel.getReverseGeocode("${lat},${long}")
                 .observe(viewLifecycleOwner) {
                     if (it.results.isNotEmpty()) {
@@ -110,7 +111,7 @@ class NewSoilTestFormFragment : Fragment() {
 
 
     }
-    fun traslationSoilTesting() {
+    fun translationSoilTesting() {
         TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot,"Plot Number and Sample Collection Address")
         TranslationsManager().loadString("plot_number", binding.plotNumber,"Plot Number ")
         TranslationsManager().loadString("pincode", binding.pincodeNumber,"Pincode ")
@@ -233,15 +234,7 @@ class NewSoilTestFormFragment : Fragment() {
 
                         }
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastError = TranslationsManager().getString("error")
-                                if(!toastError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                      AppUtils.translatedToastServerErrorOccurred(context)
 
                             binding.cardCheckHealth.visibility = View.VISIBLE
                             binding.progressBar2.visibility = View.GONE

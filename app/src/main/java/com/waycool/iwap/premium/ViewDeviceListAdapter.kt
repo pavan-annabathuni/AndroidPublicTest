@@ -1,13 +1,12 @@
 package com.waycool.iwap.premium
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.soiltesting.databinding.ItemFlexBoxAddFormBinding
+
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.iwap.R
 
@@ -29,13 +28,13 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
 
     @SuppressLint("ResourceAsColor", "UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewDeviceListViewHolder, position: Int) {
-        val details = itemsList[position]
+        val details = itemsList[holder.layoutPosition]
         holder.binding.skillName.text=details.modelName
 //        if (position==0){
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
 //            viewDeviceFlexListener.viewDevice(details)
 //        }
-        if (row_index == position) {
+        if (row_index == holder.layoutPosition) {
             holder.binding.clTop.setBackgroundResource(R.drawable.bg_selected_item)
             holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
             viewDeviceFlexListener.viewDevice(details)
@@ -43,11 +42,11 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
         }
         else {
             holder.binding.skillName.setTextColor(Color.parseColor("#111827"))
-            holder.binding.clTop.setBackgroundResource(com.example.soiltesting.R.drawable.bd_flex)
+            holder.binding.clTop.setBackgroundResource(com.waycool.uicomponents.R.drawable.bd_flex)
 
         }
         holder.binding.skillName.setOnClickListener {
-            row_index=position
+            row_index=holder.layoutPosition
             notifyDataSetChanged()
             viewDeviceFlexListener.viewDevice(details)
         }

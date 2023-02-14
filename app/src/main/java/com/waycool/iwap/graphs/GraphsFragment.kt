@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,15 +20,16 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
 import com.waycool.iwap.premium.ViewDeviceViewModel
 import com.waycool.iwap.utils.CustomMarkerView
+import com.waycool.uicomponents.utils.DateFormatUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -98,7 +98,7 @@ class GraphsFragment : Fragment() {
             translationToolBar(data.toString())
             binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
-            binding.date.text = updateDate
+            binding.date.text = DateFormatUtils.dateFormatterDevice(updateDate)
 
             populateGraph(paramType, GraphSelection.LAST12HRS)
             graphApiData(serialNo, deviceModelId, paramType)
@@ -149,7 +149,7 @@ class GraphsFragment : Fragment() {
             lDataSet.lineWidth = 4f
             lDataSet.setDrawValues(false)
             if (paramType.equals(
-                    "leaf_wetness",
+                    "leaf_wetness_hrs",
                     ignoreCase = true
                 ) && duration == GraphSelection.LAST12HRS
             ) {
@@ -158,7 +158,7 @@ class GraphsFragment : Fragment() {
                 binding.lineChart.axisLeft.valueFormatter = IndexAxisValueFormatter(yAxisVals)
                 binding.lineChart.axisLeft.labelCount = 2
                 binding.lineChart.axisLeft.axisMaximum = 1f
-            } else if (paramType.equals("leaf_wetness", ignoreCase = true)) {
+            } else if (paramType.equals("leaf_wetness_hrs", ignoreCase = true)) {
                 binding.lineChart.axisLeft.valueFormatter = DefaultValueFormatter(1)
                 binding.lineChart.axisLeft.resetAxisMaximum()
                 lDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
@@ -211,7 +211,7 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList.size!! >= LAST_DAYS) {
+                    if (totalList.size > LAST_DAYS) {
                         totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
@@ -229,7 +229,7 @@ class GraphsFragment : Fragment() {
             GraphSelection.LAST7DAYS -> {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
-                    if (totalList.size!! >= LAST_DAYS) {
+                    if (totalList.size > LAST_DAYS) {
                         totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
                     } else {
                         totalList
@@ -245,7 +245,7 @@ class GraphsFragment : Fragment() {
             "rainfall" -> "Rainfall in mm"
             "humidity" -> "Humidity in %"
             "windspeed" -> "Windspeed in Kmph"
-            "leaf_wetness" -> "Leaf Wetness in %"
+            "leaf_wetness_hrs" -> "Leaf Wetness in %"
             "pressure" -> "Pressure in KPa"
             "soil_moisture_1", "soil_moisture_2" -> "Soil Moisture in KPa"
             "lux" -> "Lux in lux"
@@ -462,15 +462,8 @@ class GraphsFragment : Fragment() {
                             }
                         }
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastServerError = TranslationsManager().getString("server_error")
-                                if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                            AppUtils.translatedToastServerErrorOccurred(context)
+
                         }
                         is Resource.Loading -> {
 

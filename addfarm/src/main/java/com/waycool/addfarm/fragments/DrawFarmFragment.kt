@@ -58,10 +58,8 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
-import com.waycool.data.utils.NetworkUtil
-import com.waycool.data.utils.PlacesSearchEventError
-import com.waycool.data.utils.PlacesSearchEventFound
-import com.waycool.data.utils.PlacesSearchEventLoading
+import com.waycool.data.utils.*
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -170,9 +168,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
 
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
+
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -570,13 +567,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                             (com.waycool.uicomponents.R.color.white)
                         )
                     )
-
-                    /*      mMap?.addPolygon(
-                              PolygonOptions().addAll(points).fillColor(Color.argb(100, 58, 146, 17))
-                                  .strokeColor(
-                                      Color.argb(255, 255, 255, 255)
-                                  )
-                          )*/
                     showAreaCard()
 
                 }
@@ -595,15 +585,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             binding.tutorial.isClickable = false
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastServerError = TranslationsManager().getString("server_error")
-                if(!toastServerError.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                        Toast.LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                    Toast.LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastServerErrorOccurred(context)
         } else {
             binding.tutorial.isClickable = true
             binding.clInclude.visibility = View.GONE

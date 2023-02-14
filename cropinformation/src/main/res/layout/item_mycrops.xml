@@ -44,7 +44,7 @@
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_tick"
+        app:srcCompat="@drawable/tick"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

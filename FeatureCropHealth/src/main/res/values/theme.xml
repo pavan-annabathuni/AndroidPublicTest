@@ -14,10 +14,4 @@
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
-    <style name="Widget.AppTheme.MaterialButton"
-        parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/button_state_colors</item>
-        <item name="android:textColor">@color/button_text_state_colors</item>
-    </style>
-
 </resources>

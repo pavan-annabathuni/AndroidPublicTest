@@ -17,8 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,10 +24,10 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.truecaller.android.sdk.*
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -227,15 +225,8 @@ class LoginFragment : Fragment() {
      */
     fun AuthorizeMobileNumber(mobileNo: String) {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastCheckInternet(context)
+
         } else {
             loginViewModel.setMobileNumber(mobileNo)
             fragmentLoginBinding.getotpBtn.isEnabled = false
@@ -292,12 +283,7 @@ class LoginFragment : Fragment() {
                                                             bottomSheetDialog.dismiss()
                                                         }
                                                         is Resource.Loading -> {}
-                                                        is Resource.Error -> {
-/*
-                                                            context?.let { ToastStateHandling.toastError(it,"Error occurred",Toast.LENGTH_SHORT) }
-*/
-
-                                                        }
+                                                        is Resource.Error -> {}
                                                     }
 
                                                 }
@@ -309,15 +295,8 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                            is Resource.Loading -> {
-
-                            }
-                            is Resource.Error -> {
-/*
-                                context?.let { ToastStateHandling.toastError(it,"Error occurred",Toast.LENGTH_LONG) }
-*/
-
-                            }
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {}
                         }
 
                     }

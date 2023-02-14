@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_back_btn_toolbar"
+                android:src="@drawable/ic_back"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="20dp" />
 
@@ -277,7 +277,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_margin="@dimen/space16"
-                            android:src="@drawable/ic_add"
+                            android:src="@drawable/ic_viewall"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -512,7 +512,7 @@
                             android:text="Add Crop"
                             android:textColor="@color/primaryColor"
                             android:textSize="14sp"
-                            app:drawableEndCompat="@drawable/ic_add_home"
+                            app:drawableEndCompat="@drawable/ic_add"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -602,7 +602,7 @@
                         android:id="@+id/ivViewAll"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_add_home"
+                        android:src="@drawable/ic_add"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -911,7 +911,7 @@
                                 android:layout_marginTop="@dimen/space12"
                                 android:layout_marginBottom="@dimen/space12"
                                 android:text="Last Updated: Today Tue 26, Jul"
-                                android:textColor="#5D6571"
+                                android:textColor="@color/textdark"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"

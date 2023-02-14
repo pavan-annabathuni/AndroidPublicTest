@@ -18,7 +18,7 @@
           android:layout_height="?android:attr/actionBarSize"
           android:background="@android:color/transparent"
           android:padding="16dp"
-          android:src="@drawable/ic_arrow_back_black_24dp"
+          android:src="@drawable/ic_back"
           android:textSize="16dp"
           app:tint="@color/green" />
       <TextView

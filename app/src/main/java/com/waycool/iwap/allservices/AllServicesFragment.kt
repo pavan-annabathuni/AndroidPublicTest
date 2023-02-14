@@ -14,6 +14,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.MainViewModel
 import com.waycool.iwap.R
@@ -51,8 +52,8 @@ class AllServicesFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             binding.topAppBar.title=TranslationsManager().getString("str_all_services")
         }
-        TranslationsManager().loadString("explore_services",binding.tvExplore,"Explore our Services")
-        TranslationsManager().loadString("explore_premium_services",binding.tvExplorePremium,"Explore our Premium Services")
+        TranslationsManager().loadString("str_explore",binding.tvExplore,"Explore our Services")
+        TranslationsManager().loadString("str_premimum_explore",binding.tvExplorePremium,"Explore our Premium Services")
 
         binding.topAppBar.setNavigationOnClickListener {
             val isSuccess = findNavController().navigateUp()
@@ -107,26 +108,11 @@ class AllServicesFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastCheckInternet = TranslationsManager().getString("check_connectivity")
-                        if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastCheckInternet(context)
+
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 else -> {}
             }
@@ -147,7 +133,6 @@ class AllServicesFragment : Fragment() {
                         val eventBundle=Bundle()
                         eventBundle.putString("View_all_services",it.title)
                         EventItemClickHandling.calculateItemClickEvent("View_all_services",eventBundle)
-
                         val bundle =Bundle()
                         bundle.putString("title",it.title)
                         bundle.putString("desc",it.moduleDesc)
@@ -164,15 +149,7 @@ class AllServicesFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 else -> {}
             }

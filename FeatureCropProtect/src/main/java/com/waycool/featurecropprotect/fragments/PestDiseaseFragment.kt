@@ -26,6 +26,8 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -88,9 +90,8 @@ class PestDiseaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         handler = Handler(Looper.myLooper()!!)
         apiErrorHandlingBinding=binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
+
         arguments?.let {
             cropId = it.getInt("cropid")
             cropName = it.getString("cropname")
@@ -137,15 +138,7 @@ class PestDiseaseFragment : Fragment() {
                             ) }}}
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
                     }
                 }
             }
@@ -176,13 +169,15 @@ class PestDiseaseFragment : Fragment() {
         if(NetworkUtil.getConnectivityStatusString(context)==0){
             binding.diseasesRv.visibility=View.GONE
             binding.clInclude.visibility=View.VISIBLE
+            binding.appbarlayout.visibility=View.GONE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
             binding.addFab.visibility=View.GONE
-            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            AppUtils.translatedToastCheckInternet(context)
 
 
         }else{
             binding.clInclude.visibility=View.GONE
+            binding.appbarlayout.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.GONE
             binding.addFab.visibility=View.VISIBLE
             binding.diseasesRv.visibility=View.VISIBLE
