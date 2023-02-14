@@ -55,6 +55,7 @@ class EditCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        translation()
         //get list of crops
         myCrops()
         //callback for back press
