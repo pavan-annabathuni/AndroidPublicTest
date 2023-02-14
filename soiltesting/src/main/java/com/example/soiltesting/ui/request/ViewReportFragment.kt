@@ -22,13 +22,13 @@ import com.waycool.data.Network.NetworkModels.ReportResult
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import java.io.*
-import java.lang.RuntimeException
 
 
 class ViewReportFragment : Fragment() {
@@ -222,15 +222,7 @@ class ViewReportFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+              AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -271,15 +263,7 @@ class ViewReportFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+              AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {

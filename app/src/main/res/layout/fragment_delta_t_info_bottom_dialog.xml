@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:padding="4dp"
-        android:src="@drawable/ic_close"
+        android:src="@drawable/ic_close_white_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

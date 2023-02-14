@@ -18,6 +18,7 @@ import com.example.soiltesting.databinding.FragmentStatusTrackerBinding
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.TrackerDemain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -56,16 +57,8 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                 }
                 is Resource.Error -> {
                     binding.progressBar.visibility=View.GONE
-                    viewModel.viewModelScope.launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
-                        ) }}}
 
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     binding.progressBar.visibility=View.VISIBLE

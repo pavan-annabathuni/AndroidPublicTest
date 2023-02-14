@@ -39,6 +39,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -196,15 +197,8 @@ class CropInfoSelectionFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -280,16 +274,7 @@ class CropInfoSelectionFragment : Fragment() {
                     binding.progressBar.visibility=View.VISIBLE
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
-
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 else -> {}
             }
@@ -344,7 +329,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                    R.drawable.ic_cross
+                    com.waycool.uicomponents.R.drawable.ic_cross
                 ))
                 binding.addChat.show()
                 binding.addCall.show()

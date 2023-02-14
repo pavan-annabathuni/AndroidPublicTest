@@ -23,11 +23,6 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="textStyle" parent="android:Widget.TextView">
-        <item name="fontFamily">@font/noto_sans_bold</item>
-        <item name="textColor">@color/Red</item>
-    </style>
-
     <style name="YourLightTheme" parent="Theme.MaterialComponents.NoActionBar">
 
         <item name="colorPrimary">@color/white</item>
