@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -94,6 +96,21 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
         binding.recyclerviewStatusTracker.adapter = statusTrackerAdapter
         initViewBackClick()
 //        bindObservers()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+                findNavController().navigateUp()
+
+//                val isSuccess = activity?.let { findNavController().popBackStack() }
+//                if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
 
     private fun initViewBackClick() {

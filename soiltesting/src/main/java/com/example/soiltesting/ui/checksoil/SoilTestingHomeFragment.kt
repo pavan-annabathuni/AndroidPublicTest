@@ -161,8 +161,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         setBanners()
         locationClick()
         translationSoilTesting()
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     activity?.finish()
 

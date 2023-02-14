@@ -55,7 +55,7 @@ class NewSoilTestFormFragment : Fragment() {
             val cropName = arguments?.getString("cropName")
 
 
-            traslationSoilTesting()
+            translationSoilTesting()
             soilViewModel.getReverseGeocode("${lat},${long}")
                 .observe(viewLifecycleOwner) {
                     if (it.results.isNotEmpty()) {
@@ -110,7 +110,7 @@ class NewSoilTestFormFragment : Fragment() {
 
 
     }
-    fun traslationSoilTesting() {
+    fun translationSoilTesting() {
         TranslationsManager().loadString("plot_number_and_sample_collection_address", binding.plot,"Plot Number and Sample Collection Address")
         TranslationsManager().loadString("plot_number", binding.plotNumber,"Plot Number ")
         TranslationsManager().loadString("pincode", binding.pincodeNumber,"Pincode ")

@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -76,6 +77,21 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
         translationSoilTesting()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+                findNavController().navigateUp()
+
+//                val isSuccess = activity?.let { findNavController().popBackStack() }
+//                if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
