@@ -74,13 +74,17 @@ class CropInfoSelectionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
-        translation()
         EventClickHandling.calculateClickEvent("cropinformation_landing")
+        TranslationsManager().loadString("str_description",binding.textView,"Our My Crop feature will help you to understand the complete information about your crops." )
+        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold,"My Crops" )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        translation()
 
 
         binding.toolbar.setNavigationOnClickListener {
@@ -98,7 +102,6 @@ class CropInfoSelectionFragment : Fragment() {
                 callback
             )
         }
-        binding.toolbarTitle.text = "Crop information"
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
@@ -372,8 +375,6 @@ class CropInfoSelectionFragment : Fragment() {
     }
     private fun translation(){
         var title:String
-        TranslationsManager().loadString("str_description",binding.textView )
-        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
         viewModel.viewModelScope.launch{
             title = TranslationsManager().getString("str_title")
             binding.toolbarTitle.text = title

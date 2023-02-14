@@ -101,6 +101,8 @@ class CropInfoFragment : Fragment(), onItemClick {
         super.onViewCreated(view, savedInstanceState)
          newsBinding = binding.layoutNews
          videosBinding = binding.layoutVideos
+        translation()
+
         handler = Handler(Looper.myLooper()!!)
 
         binding.topName.text = cropName
@@ -151,7 +153,6 @@ class CropInfoFragment : Fragment(), onItemClick {
         fabButton()
 
         ViewModel.downloadCropInfo()
-        translation()
     }
 
 

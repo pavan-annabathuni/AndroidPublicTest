@@ -31,6 +31,7 @@ ext {
     googleIdentity = '17.0.0'
     googleAuth = '19.0.0'
     googleAuthPhone = '17.5.0'
+    dynamicLinkVersion = '21.1.0'
     autoSlider = '1.3.9'
     picasso = '2.5.2'
     slider = '1.6.8'
@@ -89,7 +90,8 @@ ext {
     firebase = [
             bom        : "com.google.firebase:firebase-bom:$firebaseVersion",
             analytics  : 'com.google.firebase:firebase-analytics-ktx',
-            crashlytics: 'com.google.firebase:firebase-crashlytics'
+            crashlytics: 'com.google.firebase:firebase-crashlytics',
+            dynamiclink: "com.google.firebase:firebase-dynamic-links-ktx:$dynamicLinkVersion"
     ]
 
     kaptLibraries = [

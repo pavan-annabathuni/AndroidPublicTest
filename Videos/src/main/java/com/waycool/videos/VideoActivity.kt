@@ -48,9 +48,7 @@ class VideoActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment == "videoslist") {
-                    this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
-                } else {
+                if(deepLink.lastPathSegment=="videoshare") {
                     val id = deepLink.getQueryParameter("video_id")
                     val title = deepLink.getQueryParameter("video_name")
                     val description = deepLink.getQueryParameter("video_desc")

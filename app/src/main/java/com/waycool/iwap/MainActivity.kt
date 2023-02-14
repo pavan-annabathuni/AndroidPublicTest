@@ -23,7 +23,9 @@ import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
+import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
+import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -78,6 +80,14 @@ class MainActivity : AppCompatActivity() {
                 } else if (deepLink?.lastPathSegment!!.contains("call")) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
+                    startActivity(intent)
+                }
+                else if(deepLink?.lastPathSegment!!.contains("newslist")){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+                }
+                else if (deepLink.lastPathSegment == "videoslist") {
+                    val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
                 }
             }
