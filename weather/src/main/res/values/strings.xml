@@ -2,18 +2,11 @@
     <string name="app_name">Weather</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="str_wednesday">Wednesday, July 20</string>
     <string name="str_humidity">Humidity</string>
     <string name="str_visibility">Visibility</string>
     <string name="str_wind">Wind</string>
     <string name="_7_km_h">7 Km/h</string>
-    <string name="C">\u2103</string>
-    <string name="str_feels_like">feels like -</string>
-    <string name="format">%1$td/%1$tm/%1$tY</string>
-    <string name="image">http://openweathermap.org/img/w/</string>
     <string name="str_weather">Weather</string>
-    <string name="str_bangalore">Bangalore</string>
-    <string name="url">https://openweathermap.org/img/wn/</string>
     <string name="str_chance_of_rain">Chance of rain</string>
     <string name="hourly_weather">Hourly Weather</string>
     <string name="bangalore">Bangalore</string>

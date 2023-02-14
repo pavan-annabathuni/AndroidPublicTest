@@ -63,12 +63,10 @@ class WeatherSyncer : SyncInterface {
                     }
 
                     is Resource.Loading -> {
-                        Log.d("Weather-network", "Loading")
 
                     }
                     is Resource.Error -> {
                         SyncManager.syncFailure(getSyncKeyForLatLon(lat, lon))
-                        Log.d("Weather-network", "Error:${it.message}")
                     }
                 }
             }

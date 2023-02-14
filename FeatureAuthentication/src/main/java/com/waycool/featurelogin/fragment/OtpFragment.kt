@@ -29,10 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -46,6 +43,7 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.OTPResponseDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -173,7 +171,7 @@ class OtpFragment : Fragment() {
             "Don’t receive OTP?"
         )
         TranslationsManager().loadString("resend_otp", binding.resendMsgBtn, "Resend OTP")
-        TranslationsManager().loadString("txt_or", binding.otpResendOr, "Or")
+        TranslationsManager().loadString("or", binding.otpResendOr, "Or")
         TranslationsManager().loadString("get_otp_call", binding.otpViaCall, "Get OTP via Call")
     }
 
@@ -187,11 +185,7 @@ class OtpFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    ToastStateHandling.toastError(
-                        requireContext(),
-                        "Error Occurred",
-                        Toast.LENGTH_SHORT
-                    )
+                    AppUtils.translatedToastServerErrorOccurred(context)
 
                 }
             }
@@ -278,11 +272,17 @@ class OtpFragment : Fragment() {
                                 verifyUser()
                             } else if (otpResponse?.type == "error") {
                                 if (otpResponse.message == "Max limit reached for this otp verification") {
-                                    ToastStateHandling.toastError(
-                                        requireContext(),
-                                        "You have reached the maximum limit for the otp verification.Get OTP again",
-                                        Toast.LENGTH_LONG
-                                    )
+
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val toastServerError = TranslationsManager().getString("otp_verification_limit")
+                                        if(!toastServerError.isNullOrEmpty()){
+                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
+                                                Toast.LENGTH_SHORT
+                                            ) }}
+                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"You have reached the maximum limit for the otp verification.Get OTP again",
+                                            Toast.LENGTH_SHORT
+                                        ) }}}
+
                                     //go to login fragment
                                     findNavController().popBackStack()
                                 } else {
@@ -301,15 +301,7 @@ class OtpFragment : Fragment() {
                         }
                         is Resource.Loading -> {}
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastServerError = TranslationsManager().getString("server_error")
-                                if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                       AppUtils.translatedToastServerErrorOccurred(context)
 
                         }
                     }
@@ -452,7 +444,6 @@ class OtpFragment : Fragment() {
         if (NetworkUtil.getConnectivityStatusString(context) == 0) {
             context?.let { ToastStateHandling.toastError(it, "No internet", Toast.LENGTH_SHORT) }
         } else {
-
             loginViewModel.login(mobileNumber, fcmToken!!, mobileModel!!, mobileManufacturer!!)
                 .observeOnce(
                     requireActivity()
@@ -479,11 +470,17 @@ class OtpFragment : Fragment() {
                                             }
                                         }
                                 }, 200)
-                                ToastStateHandling.toastSuccess(
-                                    requireContext(),
-                                    "Logged in successfully",
-                                    Toast.LENGTH_SHORT
-                                )
+
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    val toastSuccessfullyRegistered = TranslationsManager().getString("logged_in")
+//                                    if(!toastSuccessfullyRegistered.isNullOrEmpty()){
+//                                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastSuccessfullyRegistered,
+//                                            Toast.LENGTH_SHORT
+//                                        ) }}
+//                                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Logged in successfully",
+//                                        Toast.LENGTH_SHORT
+//                                    ) }}}
+
 
                             } else {
                                 if (loginMaster?.data == "406") {
@@ -553,13 +550,15 @@ class OtpFragment : Fragment() {
     fun apiOTP(mobileNumber: String) {
         loginViewModel.getOtp(mobileNumber).observe(requireActivity()) {
             if (it is Resource.Success) {
-                context?.let { it1 ->
-                    ToastStateHandling.toastSuccess(
-                        it1,
-                        "OTP Sent",
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastServerError = TranslationsManager().getString("otp_sent")
+                    if(!toastServerError.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastServerError,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Otp Sent",
                         Toast.LENGTH_SHORT
-                    )
-                }
+                    ) }}}
             }
         }
     }

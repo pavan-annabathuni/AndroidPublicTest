@@ -2,31 +2,19 @@
     <string name="app_name">profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="str_marathahalli">Marathahalli -Sarjapur Outer Ring Rd,</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="str_delete_acc">Are you Sure you want to delete Krishna kumar’s account?</string>
     <string name="str_mobile_number">Mobile Number</string>
     <string name="str_farmer_name">Farmer name <font color='#000000'>*</font></string>
     <string name="str_address_line_1">Address Line 1 <font color='#FF0000'>*</font></string>
-    <string name="str_address_line_2">Address Line 2 <font color='#FF0000'>*</font></string>
 
     <string name="address_line_2">City/Village <font color='#FF0000'>*</font></string>
     <string name="str_city">District <font color='#FF0000'>*</font></string>
     <string name="str_state">State <font color='#FF0000'>*</font></string>
     <string name="str_pincode">Pincode <font color='#FF0000'>*</font></string>
     <string name="submit">Submit</string>
-    <string name="zui_toolbar_title">Chat and Support</string>
-    <string name="str_plz">Please let us know how can we help you. You can ask any question about your crop or field</string>
     <string name="str_about_outGrow"><![CDATA[Outgrow is an Easy & Intuitive App made in 6 Languages that help us connect with the Indian farmers locally across the 5 States viz. Karnataka, Tamil Nadu, Andhra Pradesh, Telangana & Maharashtra. With a host of services like, Automated Soil Labs, Microclimatic Weather, Artificial Intelligence, Regenerative Farming & a larger Farmer Service Network, this app will aid farmers to improve their productivity & reduce losses in the crop lifecycle management. We are in the pursuit of revolutionizing the agricultural landscape in India.]]></string>
     <string name="submit2">Submit</string>
     <string name="role_type">Role Type</string>
-    <string name="terms_of_use">Terms of Use</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="logout">Logout</string>
-    <string name="my_profile">My Profile</string>
-    <string name="farm_support">Farm Support</string>
-    <string name="about_outgrow">About Outgrow</string>
-    <string name="invite_farmer">Invite Farmer</string>
-    <string name="app_ver_2_5_10">App Ver. 2.5.10</string>
 </resources>

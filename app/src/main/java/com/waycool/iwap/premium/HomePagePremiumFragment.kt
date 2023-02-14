@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,7 +28,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -37,6 +35,7 @@ import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -45,8 +44,6 @@ import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
@@ -207,26 +204,10 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                             }
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 ->
-                                ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}                    }
+                        AppUtils.translatedToastServerErrorOccurred(context)
+                    }
                     is Resource.Loading -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastCheckInternet = TranslationsManager().getString("check_connectivity")
-                            if(!toastCheckInternet.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your Internet connection",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastCheckInternet(context)
 
                     }
                 }
@@ -422,15 +403,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
                 is Resource.Error -> {}
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
             }
         }
@@ -470,23 +443,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         } else {
                             binding.clAddForm.visibility = View.VISIBLE
                             binding.cardMYFarm.visibility = View.GONE
-//                                        binding.farmsDetailsCl.visibility = View.GONE
-//                                        binding.tvAddress.visibility=View.VISIBLE
+
 
                         }
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
             }
         }
@@ -494,9 +457,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId = it.data?.accountId
-                Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
-//                if (accountId != null)
             }
         }
     }

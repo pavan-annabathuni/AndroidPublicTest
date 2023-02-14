@@ -18,6 +18,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,26 +68,10 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                     categoryAdapter.setSoilTypeList (response)
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                  AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+              AppUtils.translatedToastLoading(context)
                 }
             }
 

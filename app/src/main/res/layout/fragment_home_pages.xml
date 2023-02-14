@@ -268,7 +268,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_margin="@dimen/space16"
-                                    android:src="@drawable/ic_add"
+                                    android:src="@drawable/ic_viewall"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -443,7 +443,7 @@
                                                     android:layout_width="24dp"
                                                     android:layout_height="24dp"
                                                     android:layout_gravity="center"
-                                                    android:src="@drawable/ic_add_home" />
+                                                    android:src="@drawable/ic_add" />
                                             </com.google.android.material.card.MaterialCardView>
 
                                             <TextView
@@ -720,7 +720,7 @@
                                 android:layout_height="24dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="70dp"
-                                android:src="@drawable/ic_know_more"
+                                android:src="@drawable/ic_viewall"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -1456,7 +1456,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
                                     android:layout_marginEnd="@dimen/txt8"
-                                    android:src="@drawable/ic_know_more"
+                                    android:src="@drawable/ic_viewall"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/tvSoilTestingKnowMore"
@@ -1568,7 +1568,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
                                     android:layout_marginEnd="@dimen/txt8"
-                                    android:src="@drawable/ic_know_more"
+                                    android:src="@drawable/ic_viewall"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/tvCropHealthKnowMore"
@@ -1683,7 +1683,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
                                     android:layout_marginEnd="@dimen/txt8"
-                                    android:src="@drawable/ic_know_more"
+                                    android:src="@drawable/ic_viewall"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/tvCropInformationKnowMore"
@@ -1800,7 +1800,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/txt8"
                                     android:layout_marginEnd="@dimen/txt8"
-                                    android:src="@drawable/ic_know_more"
+                                    android:src="@drawable/ic_viewall"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/tvCropProtectKnowMore"

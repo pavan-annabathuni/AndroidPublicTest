@@ -20,7 +20,6 @@ import com.example.soiltesting.databinding.FragmentCheckSoilTestBinding
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.waycool.data.Network.NetworkModels.CheckSoilTestData
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
@@ -43,6 +42,8 @@ class CheckSoilTestFragment : Fragment() {
     ): View? {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.toolBarTittle.isSelected = true
+
         if (arguments != null) {
             val your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
             binding.tvLabTitle.text = your_list?.get(0)?.onpName.toString()

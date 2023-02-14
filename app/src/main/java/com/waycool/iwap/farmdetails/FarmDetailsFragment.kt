@@ -31,6 +31,7 @@ import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -328,15 +329,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         }
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
+
                     }
                     is Resource.Loading -> {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -430,16 +424,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
-//                    ToastStateHandling.toastError(requireContext(), "Error", Toast.LENGTH_SHORT)
+                        AppUtils.translatedToastServerErrorOccurred(context)
                     }
                     is Resource.Loading -> {
                         CoroutineScope(Dispatchers.IO).launch {
@@ -501,15 +486,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
                     }
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    Toast.LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                Toast.LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
+
                     }
                 }
 
