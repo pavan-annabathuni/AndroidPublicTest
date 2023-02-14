@@ -97,14 +97,16 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
-            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
-            if(toolbarTitle!=null){
-                binding.tvToolBar.text=toolbarTitle
-            }
-            else
-                binding.tvToolBar.text="Soil Testing Requests"
+//            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
+//            if(toolbarTitle!=null){
+//                binding.tvToolBar.text=toolbarTitle
+//            }
+//            else
+//                binding.tvToolBar.text="Soil Testing Requests"
         }
+
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 //        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
