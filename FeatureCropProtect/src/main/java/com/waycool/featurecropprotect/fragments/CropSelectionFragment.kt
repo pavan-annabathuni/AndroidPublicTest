@@ -74,8 +74,6 @@ class CropSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         apiErrorHandlingBinding=binding.errorState
         networkErrorStateTranslations(apiErrorHandlingBinding)
         binding.toolbar.setOnClickListener {
