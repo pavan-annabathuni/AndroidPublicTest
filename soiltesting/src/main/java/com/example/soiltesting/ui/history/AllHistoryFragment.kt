@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -79,19 +80,30 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
         translationSoilTesting()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+                findNavController().navigateUp()
+
+//                val isSuccess = activity?.let { findNavController().popBackStack() }
+//                if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
-            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
-            if(toolbarTitle!=null){
-                binding.tvToolBar.text=toolbarTitle
-            }
-            else
-                binding.tvToolBar.text="Soil Testing Requests"
         }
+
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("soil_testing_requests", binding.tvToolBar,"Soil Testing Requests")
 //        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
