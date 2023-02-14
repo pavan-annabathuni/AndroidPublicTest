@@ -39,6 +39,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -73,13 +74,17 @@ class CropInfoSelectionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
-        translation()
         EventClickHandling.calculateClickEvent("cropinformation_landing")
+        TranslationsManager().loadString("str_description",binding.textView,"Our My Crop feature will help you to understand the complete information about your crops." )
+        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold,"My Crops" )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        translation()
 
 
         binding.toolbar.setNavigationOnClickListener {
@@ -97,7 +102,6 @@ class CropInfoSelectionFragment : Fragment() {
                 callback
             )
         }
-        binding.toolbarTitle.text = "Crop information"
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
@@ -196,15 +200,8 @@ class CropInfoSelectionFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -280,16 +277,7 @@ class CropInfoSelectionFragment : Fragment() {
                     binding.progressBar.visibility=View.VISIBLE
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
-
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 else -> {}
             }
@@ -344,7 +332,7 @@ class CropInfoSelectionFragment : Fragment() {
         binding.addFab.setOnClickListener {
             if (!isVisible) {
                 binding.addFab.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                    R.drawable.ic_cross
+                    com.waycool.uicomponents.R.drawable.ic_cross
                 ))
                 binding.addChat.show()
                 binding.addCall.show()
@@ -387,8 +375,6 @@ class CropInfoSelectionFragment : Fragment() {
     }
     private fun translation(){
         var title:String
-        TranslationsManager().loadString("str_description",binding.textView )
-        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
         viewModel.viewModelScope.launch{
             title = TranslationsManager().getString("str_title")
             binding.toolbarTitle.text = title

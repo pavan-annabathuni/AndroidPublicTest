@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -14,23 +13,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class EditCropFragment : Fragment() {
     private lateinit var binding: FragmentEditCropBinding
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
     private lateinit var myCropAdapter: EditMyCropsAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,53 +29,36 @@ class EditCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentEditCropBinding.inflate(inflater)
+        //set translations
+        translation()
+        //click of item
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
+            //event listener when a crop is deleted
             val eventBundle=Bundle()
             eventBundle.putString("",it.cropName)
+            //translation of crop deleted
             viewModel.viewModelScope.launch {
                 val toast = TranslationsManager().getString("crop_deleted")
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
-                 if(toast.isNullOrEmpty())
-                     CoroutineScope(Dispatchers.Main).launch {
-                         val toastCheckInternet = TranslationsManager().getString("crop_deleted")
-                         if(!toastCheckInternet.isNullOrEmpty()){
-                             context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                                 LENGTH_SHORT
-                             ) }}
-                         else {
-                                 CoroutineScope(Dispatchers.Main).launch {
-                                     val toastCheckInternet =
-                                         TranslationsManager().getString("crop_deleted")
-                                     if (!toastCheckInternet.isNullOrEmpty()) {
-                                         context?.let { it1 ->
-                                             ToastStateHandling.toastSuccess(
-                                                 it1, toastCheckInternet,
-                                                 LENGTH_SHORT
-                                             )
-                                         }
-                                     } else {
-                                         context?.let { it1 ->
-                                             ToastStateHandling.toastSuccess(
-                                                 it1, "Crop deleted",
-                                                 LENGTH_SHORT
-                                             )
-                                         }
-                                     }
-                                 }
-                             }
-                         }
-                 else context?.let { it1 ->ToastStateHandling.toastSuccess(it1,toast,Toast.LENGTH_SHORT)}
+                 if(!toast.isNullOrEmpty())
+                     context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast, LENGTH_SHORT)
+                     }
+                 else context?.let { it1 ->ToastStateHandling.toastSuccess(it1,"Crop deleted",
+                     LENGTH_SHORT
+                 )}
              }
-                 //myCrops()
              }
 
         })
+        //set adapter
         binding.rvMyCrops.adapter = myCropAdapter
+        //navigation back
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        //get list of crops
         myCrops()
-        translation()
+        //callback for back press
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true)
             {
@@ -99,19 +73,17 @@ class EditCropFragment : Fragment() {
         return binding.root
     }
     private fun myCrops() {
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
-                if(!it.data!![0].cropNameTag.isNullOrEmpty())
+                if(!it.data!![0].cropNameTag.isNullOrEmpty()){
                 EventClickHandling.calculateClickEvent("Edit_crop_${it.data!![0].cropNameTag}")
+                }
             }
                 if(it.data.isNullOrEmpty()){
                     this@EditCropFragment.findNavController().navigateUp()
                 }
-
-
         }
     }
 
@@ -131,7 +103,7 @@ class EditCropFragment : Fragment() {
                 binding.toolbar.title = "Edit Crop"
             }else binding.toolbar.title  = title
 
-            TranslationsManager().loadString("my_crop",binding.title3SemiBold)
+            TranslationsManager().loadString("my_crops",binding.title3SemiBold,"My Crops")
 
         }
     }

@@ -4,7 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="e_g_crop_name">e.g crop name</string>
     <string name="promote">Please Select</string>
-    <string name="add_crop">Add Crop</string>
     <string name="select_soil_type">Select Soil Type</string>
     <string name="next">Next</string>
     <string name="add_crop_information">Add Crop information</string>
@@ -23,5 +22,4 @@
     <string name="select_variety">Select variety</string>
     <string name="mulching">Mulching</string>
     <string name="no_of_plants_per_acre">No of Plants Per Acre</string>
-    <string name="mtr">mtr</string>
 </resources>

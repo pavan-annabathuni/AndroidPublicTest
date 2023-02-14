@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,10 +20,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Network.NetworkModels.GraphViewData
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.iwap.R
 import com.waycool.iwap.databinding.FragmentGraphsBinding
@@ -463,15 +462,8 @@ class GraphsFragment : Fragment() {
                             }
                         }
                         is Resource.Error -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastServerError = TranslationsManager().getString("server_error")
-                                if(!toastServerError.isNullOrEmpty()){
-                                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                        Toast.LENGTH_SHORT
-                                    ) }}
-                                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                ) }}}
+                            AppUtils.translatedToastServerErrorOccurred(context)
+
                         }
                         is Resource.Loading -> {
 

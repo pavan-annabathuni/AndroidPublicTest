@@ -26,6 +26,7 @@ import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
@@ -115,6 +116,7 @@ class CropDetailsCaptureFragment : Fragment() {
                 "of your crop")
         TranslationsManager().loadString("leaf", binding.rb1,"Leaf")
         TranslationsManager().loadString("add_image", binding.addPhotoTxt,"Add Image")
+        TranslationsManager().loadString("or", binding.orTxt,"Or")
         TranslationsManager().loadString("how_to_capture", binding.howTo,"How to capture image?")
         TranslationsManager().loadString("capture_image", binding.camptureImage,"Capture Image")
         TranslationsManager().loadString("upload_image", binding.camptureImageCamera,"Upload Image")
@@ -229,15 +231,8 @@ class CropDetailsCaptureFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
-                   viewModel.viewModelScope.launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
                     binding.progressBar?.visibility = View.GONE
                     binding.cardCheckHealth.visibility = View.VISIBLE
                 }
@@ -278,8 +273,7 @@ class CropDetailsCaptureFragment : Fragment() {
                 labeler.process(image)
                     .addOnSuccessListener { labels ->
                         labels.sortByDescending { it.confidence }
-//          val imageModelFilters = arrayListOf<String>("plant", "Petal", "fruit", "flower", "Vegetable", "insect")
-                        Log.d("Plant Health", labels.toString())
+
 
                         if (!labels.any { it.text.lowercase() == "plant" || it.text.lowercase() == "petal" || it.text.lowercase() == "fruit" || it.text.lowercase() == "flower" || it.text.lowercase() == "vegetable" || it.text.lowercase() == "insect" } && !labels.isNullOrEmpty()) {
                             MaterialAlertDialogBuilder(requireContext()).setTitle("Incorrect Image")

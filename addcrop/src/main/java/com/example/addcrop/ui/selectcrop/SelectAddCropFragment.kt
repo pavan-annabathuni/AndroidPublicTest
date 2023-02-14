@@ -7,7 +7,6 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +23,14 @@ import com.example.addcrop.databinding.FragmentSelectAddCropBinding
 import com.example.addcrop.ui.SelectCropAdapter
 import com.example.addcrop.viewmodel.SelectAddCropViewModel
 import com.google.android.material.chip.Chip
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.translatedToastLoading
+import com.waycool.data.utils.AppUtils.translatedToastServerErrorOccurred
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import kotlinx.coroutines.CoroutineScope
@@ -44,10 +45,8 @@ class SelectAddCropFragment : Fragment() {
     private lateinit var binding: FragmentSelectAddCropBinding
     private val viewModel: SelectAddCropViewModel by lazy {
         ViewModelProvider(requireActivity())[SelectAddCropViewModel::class.java]
-
     }
     private val adapter: SelectCropAdapter by lazy { SelectCropAdapter() }
-
     private var handler: Handler? = null
     private var searchCharSequence: CharSequence? = ""
     private var dashboardDomain: DashboardDomain? = null
@@ -111,7 +110,6 @@ class SelectAddCropFragment : Fragment() {
         }
 
         adapter.onItemClick = {
-            Log.d("Categorydata","Category Data $selectedCategory")
             val args = Bundle()
             it?.cropId?.let { it1 -> args.putInt("cropid", it1) }
             it?.cropName?.let { it1 ->
@@ -181,27 +179,12 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     binding.clProgressBar.visibility=View.GONE
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                   translatedToastServerErrorOccurred(context)
+
                 }
                 is Resource.Loading -> {
                     binding.clProgressBar.visibility=View.VISIBLE
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                 translatedToastLoading(context)
                 }
             }
         }
@@ -263,15 +246,8 @@ class SelectAddCropFragment : Fragment() {
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastServerErrorOccurred(context)
+
                 }
             }
         }

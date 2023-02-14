@@ -15,6 +15,9 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
+import com.waycool.data.utils.AppUtils.translatedToastCheckInternet
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.R
@@ -43,9 +46,7 @@ class LanguageFragment : Fragment() {
         binding = FragmentLanguageBinding.inflate(layoutInflater)
 
         val apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
         binding.languageRecyclerview.layoutManager = GridLayoutManager(context, 3)
         languageSelectionAdapter = LanguageSelectionAdapter()
         binding.languageRecyclerview.adapter = languageSelectionAdapter
@@ -202,15 +203,7 @@ class LanguageFragment : Fragment() {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
             //Here We are showing the toast as "Please check your internet connection"
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            translatedToastCheckInternet(context)
             //Setting visibility of some views as "GONE
             binding.doneBtn.visibility = View.GONE
             binding.helloTv.visibility = View.GONE
@@ -243,15 +236,7 @@ class LanguageFragment : Fragment() {
                     }
                     //Error State
                     is Resource.Error -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val toastServerError = TranslationsManager().getString("server_error")
-                            if(!toastServerError.isNullOrEmpty()){
-                                context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                    LENGTH_SHORT
-                                ) }}
-                            else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                LENGTH_SHORT
-                            ) }}}
+                        AppUtils.translatedToastServerErrorOccurred(context)
                     }
                 }
             }

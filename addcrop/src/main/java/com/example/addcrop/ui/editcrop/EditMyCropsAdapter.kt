@@ -17,9 +17,7 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
      val cropImg = binding.imageView
         val cropName = binding.tvCrops
         val closeIcon = binding.close
-
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
             ItemEditCropBinding.inflate(
@@ -27,7 +25,6 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
                 parent, false)
         return MyViewHolder(binding)
     }
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
         Glide.with(holder.itemView.context).load(properties.cropLogo).into(holder.cropImg)
@@ -37,7 +34,6 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
         }
     }
     companion object DiffCallback : DiffUtil.ItemCallback<MyCropDataDomain>() {
-
         override fun areItemsTheSame(oldItem: MyCropDataDomain, newItem: MyCropDataDomain): Boolean {
             return oldItem == newItem
         }
@@ -45,7 +41,6 @@ class EditMyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCro
         override fun areContentsTheSame(oldItem: MyCropDataDomain, newItem:MyCropDataDomain): Boolean {
             return oldItem.id == newItem.id
         }
-
         class OnClickListener(val clickListener: (data: MyCropDataDomain) -> Unit) {
             fun onClick(data: MyCropDataDomain) = clickListener(data)
         }

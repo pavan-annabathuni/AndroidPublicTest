@@ -5,18 +5,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -26,7 +23,9 @@ import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
-import com.waycool.newsandarticles.view.NewsFullviewActivity
+import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
+import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     val newsDate = deepLink.getQueryParameter("date")
                     val source = deepLink.getQueryParameter("source")
                     if (!title.isNullOrEmpty()) {
-                        val intent = Intent(this, NewsFullviewActivity::class.java)
+                        val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
                         intent.putExtra("title", title)
                         intent.putExtra("content", desc)
                         intent.putExtra("image", image)
@@ -81,6 +80,14 @@ class MainActivity : AppCompatActivity() {
                 } else if (deepLink?.lastPathSegment!!.contains("call")) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
+                    startActivity(intent)
+                }
+                else if(deepLink?.lastPathSegment!!.contains("newslist")){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+                }
+                else if (deepLink.lastPathSegment == "videoslist") {
+                    val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
                 }
             }

@@ -26,7 +26,7 @@ class CategoryAdapter(private val addCropItemClick: AddCropItemClick) : Recycler
         val details = details[holder.layoutPosition]
         holder.binding.tvSand .text = details.soil_type
         if (row_index == holder.layoutPosition) {
-            holder.binding.clSand.setBackgroundResource(R.drawable.bg_selected)
+            holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility=View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
         }

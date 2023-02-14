@@ -19,7 +19,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -53,6 +52,8 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -138,9 +139,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+    networkErrorStateTranslations(apiErrorHandlingBinding)
+
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -185,17 +185,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
             binding.addFab.visibility = View.GONE
+            AppUtils.translatedToastCheckInternet(context)
 
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -204,8 +195,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             setBanners()
             getAllHistory()
             getVideos()
-
-
         }
     }
 
@@ -537,13 +526,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1,
-                                "Error",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                   AppUtils.translatedToastServerErrorOccurred(context)
 
                     }
                     is Resource.Loading -> {
@@ -632,18 +615,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 }
                                 is Resource.Error -> {
                                     if(NetworkUtil.getConnectivityStatusString(context)==0){
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                            "Please check you internet connectivity",
-                                            Toast.LENGTH_SHORT
-                                        )
+                                        AppUtils.translatedToastCheckInternet(context)
+
                                     }
                                     else{
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                           "Server Error. Try again later",
-                                            Toast.LENGTH_SHORT
-                                        )
+                                        AppUtils.translatedToastServerErrorOccurred(context)
+
                                     }
 
                                     binding.clProgressBar.visibility = View.GONE
@@ -784,11 +761,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 }
                 is Resource.Error -> {
                     if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Please check you internet connectivity",
-                            Toast.LENGTH_SHORT
-                        )
+                        AppUtils.translatedToastCheckInternet(context)
+
                     } else {
                         ToastStateHandling.toastError(
                             requireContext(),

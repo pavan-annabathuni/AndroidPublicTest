@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,7 +28,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.addfarm.AddFarmActivity
 import com.waycool.data.Local.DataStorePref.DataStoreManager
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -37,6 +35,7 @@ import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
@@ -46,8 +45,6 @@ import com.waycool.iwap.databinding.FragmentHomePagePremiumBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.uicomponents.utils.DateFormatUtils
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
@@ -228,52 +225,19 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         binding.devicesEmptyText.visibility = View.VISIBLE
                         TranslationsManager().loadString("no_devices_add", binding.devicesEmptyText, "No Devices added for this farm")
 
+                            }
                     }
-                }
-                is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if (!toastServerError.isNullOrEmpty()) {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, toastServerError,
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        } else {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, "Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        }
+                    is Resource.Error -> {
+                        AppUtils.translatedToastServerErrorOccurred(context)
                     }
-                }
-                is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastCheckInternet = TranslationsManager().getString("check_connectivity")
-                        if (!toastCheckInternet.isNullOrEmpty()) {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, toastCheckInternet,
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        } else {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, "Please check your Internet connection",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        }
-                    }
+                    is Resource.Loading -> {
+                        AppUtils.translatedToastCheckInternet(context)
 
+                    }
                 }
-            }
 
         }
+
     }
 
     private fun checkForDeviceApiUpdate() {
@@ -368,8 +332,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             response.reverse()
             myCropPremiumAdapter.setMovieList(response)
 
-            if (myFarmPremiumAdapter == null)
-                myFarmPremiumAdapter = MyFarmPremiumAdapter(this, this, requireContext())
+            if(myFarmPremiumAdapter==null)
+                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
 
             myFarmPremiumAdapter?.updateCropsList(response)
 
@@ -438,7 +402,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
 
     }
-
     @SuppressLint("SetTextI18n")
     private fun initViewProfile() {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
@@ -464,24 +427,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                 }
                 is Resource.Error -> {}
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if (!toastServerError.isNullOrEmpty()) {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, toastServerError,
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        } else {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, "Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        }
-                    }
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
             }
         }
@@ -503,8 +449,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         Log.d("TAG", "initObserveMYFarmPraveen: ")
                     } else if (it.data != null)
                         if (it.data!!.isNotEmpty()) {
-                            if (myFarmPremiumAdapter == null)
-                                myFarmPremiumAdapter = MyFarmPremiumAdapter(this, this, requireContext())
+                            if(myFarmPremiumAdapter==null)
+                                myFarmPremiumAdapter=MyFarmPremiumAdapter(this, this, requireContext())
                             binding.rvMyFarm.adapter = myFarmPremiumAdapter
                             myCropPremiumAdapter.updateMyfarms(it.data)
                             binding.clAddForm.visibility = View.GONE
@@ -521,32 +467,13 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                         } else {
                             binding.clAddForm.visibility = View.VISIBLE
                             binding.cardMYFarm.visibility = View.GONE
-//                                        binding.farmsDetailsCl.visibility = View.GONE
-//                                        binding.tvAddress.visibility=View.VISIBLE
+
 
                         }
                 }
                 is Resource.Loading -> {}
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if (!toastServerError.isNullOrEmpty()) {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, toastServerError,
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        } else {
-                            context?.let { it1 ->
-                                ToastStateHandling.toastError(
-                                    it1, "Server Error Occurred",
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        }
-                    }
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
             }
         }
@@ -554,12 +481,11 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
             if (it.data != null) {
                 var accountId = it.data?.accountId
-                Log.d("TAG", "initObserveMYFarmAccount $accountId: ")
 
-//                if (accountId != null)
             }
         }
     }
+
 
 
     fun calculateScrollPercentage2(videosBinding: FragmentHomePagePremiumBinding): Int {
@@ -880,6 +806,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
 //            }
         }
 
+
+//        deviceDataAdapter.notifyDataSetChanged()
     }
 
     override fun onFarmDetailsClicked(data: MyFarmsDomain) {
@@ -944,56 +872,53 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        bannerAdapter.onItemClick = {
+        bannerAdapter.onItemClick={
             EventClickHandling.calculateClickEvent("Home_page_adbanner")
         }
     }
 
     override fun onFarmSelected(data: MyFarmsDomain) {
-        val eventBundle = Bundle()
-        eventBundle.putString("SelectedFarmHomePremiumFrag", data.farmName)
-        EventItemClickHandling.calculateItemClickEvent("View_farm_details", eventBundle)
+        val  eventBundle=Bundle()
+        eventBundle.putString("SelectedFarmHomePremiumFrag",data.farmName)
+        EventItemClickHandling.calculateItemClickEvent("View_farm_details",eventBundle)
         data.id?.let { initObserveDevice(it) }
     }
 
 
-    private fun notification() {
-        viewModel.getNotification().observe(viewLifecycleOwner) {
-            val data = it.data?.data?.filter { itt ->
-                itt.readAt == null
+    private fun notification(){
+        viewModel.getNotification().observe(viewLifecycleOwner){
+            val data = it.data?.data?.filter { itt->
+                itt.readAt== null
             }
-            if (data?.size != 0) {
+            if(data?.size!=0){
                 binding.IvNotification.setImageResource(com.example.soiltesting.R.drawable.ic_notification)
-            } else {
+            }else{
                 binding.IvNotification.setImageResource(R.drawable.ic_simple_notification)
             }
         }
     }
-
-    private fun checkRole(roleId: Int) {
-        if (roleId == 31) {
+    private fun checkRole(roleId:Int){
+        if(roleId==31){
             binding.tvEditMyCrops.visibility = View.GONE
             binding.tvEditMyCrops.visibility = View.GONE
             binding.clAddForm.visibility = View.GONE
             binding.ivViewAll.visibility = View.GONE
             binding.MyFarm.visibility = View.GONE
-            binding.MyDevice.visibility = View.GONE
-        } else {
+            binding.MyDevice.visibility=View.GONE
+        }else{
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.tvEditMyCrops.visibility = View.VISIBLE
             binding.ivViewAll.visibility = View.VISIBLE
             binding.MyFarm.visibility = View.VISIBLE
-            binding.MyDevice.visibility = View.GONE
+            binding.MyDevice.visibility=View.GONE
         }
     }
-
     override fun onPause() {
         super.onPause()
         if (runnable != null) {
             handler.removeCallbacks(runnable!!)
         }
     }
-
     override fun onResume() {
         super.onResume()
 

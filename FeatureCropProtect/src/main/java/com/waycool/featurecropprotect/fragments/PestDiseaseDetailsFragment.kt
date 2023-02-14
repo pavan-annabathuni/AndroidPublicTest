@@ -1,25 +1,20 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
-import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,16 +29,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.PestDiseaseDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
@@ -51,6 +44,7 @@ import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
@@ -60,15 +54,11 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import nl.changer.audiowife.AudioWife
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -243,9 +233,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
 
                             if (it.data?.audioUrl != null)
-                                audioNewLayoutBinding.root.visibility = VISIBLE
+                                binding.audioLayout.visibility= VISIBLE
+//                                audioNewLayoutBinding.root.visibility = VISIBLE
                             else
-                                audioNewLayoutBinding.root.visibility = GONE
+                                binding.audioLayout.visibility= GONE
+
+//                            audioNewLayoutBinding.root.visibility = GONE
                             if (it.data != null && it.data!!.symptoms != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     Log.d("Symp", "${it.data?.symptoms}")
@@ -289,86 +282,36 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
                         }
                         is Resource.Loading -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val toastLoading = TranslationsManager().getString("loading")
-                                if (!toastLoading.isNullOrEmpty()) {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastError(
-                                            it1, toastLoading,
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                } else {
-                                    context?.let { it1 ->
-                                        ToastStateHandling.toastError(
-                                            it1, "Loading",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                }
-                            }
-
+                            AppUtils.translatedToastLoading(context)
                         }
-                        is Resource.Error -> {
-
-
-                        }
-
+                        is Resource.Error -> {}
                     }
                 }
             }
         }
-
-
     }
-
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
-        val now = Date()
-        android.text.format.DateFormat.format("", now)
-        val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
-        val bitmap =
-            Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        shareLayout.draw(canvas)
-        val imageFile = File(path)
-        val outputFile = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
-        outputFile.flush()
-        outputFile.close()
-        val uri = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
-            .setAndroidParameters(
-                DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                    .build()
-            )
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
-                    .setDescription("Find Pest Management and more on Outgrow app")
-                    .build()
-            )
-            .buildShortDynamicLink().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.clShareProgress.visibility = View.GONE
-                    Handler().postDelayed({
+        val uriString="https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
+        val title="Outgrow - Pest Disease Detail for $diseaseName"
+        val description="Find Pest Management and more on Outgrow app"
+        binding.clShareProgress.visibility=View.VISIBLE
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
+            if (task.isSuccessful) {
+                binding.clShareProgress.visibility = View.GONE
+                Handler().postDelayed({
                         binding.imgShare.isEnabled = true
-                    }, 1000)
+                }, 1000)
 
-                    val shortLink: Uri? = task.result.shortLink
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                    sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
-                    startActivity(Intent.createChooser(sendIntent, "choose one"))
+                val shortLink: Uri? = task.result.shortLink
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                sendIntent.type = "text/plain"
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
+                startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-                }
             }
-
-
+        }
     }
 
     private fun setNews() {
@@ -404,6 +347,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
@@ -461,6 +405,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
+                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility = View.GONE
@@ -619,46 +564,31 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
-        binding.playPauseLayout.setOnClickListener {
-            if (audioUrl != null) {
-                mediaPlayer = MediaPlayer()
-                mediaPlayer!!.setOnCompletionListener {
-                    binding.mediaSeekbar.progress = 0
-                    binding.pause.visibility = View.GONE
-                    binding.play.visibility = View.VISIBLE
-                }
+        if(audioUrl.isNullOrEmpty()){
+                binding.audioLayout.visibility=View.GONE
+            }
+            else{
+                binding.audioLayout.visibility=View.VISIBLE
+                binding.playPauseLayout.setOnClickListener {
 
-                Log.d("Audio", "audioPlayer: $audioUrl")
-                audio = AudioWife.getInstance()
-                    .init(requireContext(), Uri.parse(audioUrl))
-                    .setPlayView(binding.play)
-                    .setPauseView(binding.pause)
-                    .setSeekBar(binding.mediaSeekbar)
-                    .setRuntimeView(binding.totalTime)
-                // .setTotalTimeView(mTotalTime);
-                audio?.play()
-            } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastAudioFile = TranslationsManager().getString("audio_file")
-                    if (!toastAudioFile.isNullOrEmpty()) {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, toastAudioFile,
-                                Toast.LENGTH_SHORT
-                            )
-                        }
-                    } else {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1, "Audio file not found",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                    mediaPlayer = MediaPlayer()
+                    mediaPlayer!!.setOnCompletionListener {
+                        binding.mediaSeekbar.progress = 0
+                        binding.pause.visibility = View.GONE
+                        binding.play.visibility = View.VISIBLE
+
+                        audio = AudioWife.getInstance()
+                            .init(requireContext(), Uri.parse(audioUrl))
+                            .setPlayView(binding.play)
+                            .setPauseView(binding.pause)
+                            .setSeekBar(binding.mediaSeekbar)
+                            .setRuntimeView(binding.totalTime)
+                        // .setTotalTimeView(mTotalTime);
+                        audio?.play()
+
                     }
                 }
             }
-
-        }
     }
 
     override fun onPause() {

@@ -33,6 +33,8 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
@@ -78,9 +80,8 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         }
 
         apiErrorHandlingBinding=binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        networkErrorStateTranslations(apiErrorHandlingBinding)
+
         networkCall()
         if(NetworkUtil.getConnectivityStatusString(this)==0){
             networkCall()
@@ -112,7 +113,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             if (deepLink != null) {
 
                 val intent =
-                    Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+                    Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -157,12 +158,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                         )
 
                     } else {
-
-                        ToastStateHandling.toastError(
-                            this@NewsAndArticlesActivity, "Please check your internet connection",
-                            LENGTH_SHORT
-                        )
-
+                        AppUtils.translatedToastCheckInternet(this@NewsAndArticlesActivity)
                     }
                 }
 
@@ -362,7 +358,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_landing",eventBundle)
-        val intent = Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
+        val intent = Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
         intent.putExtra("title", it?.title)
         intent.putExtra("content", it?.desc)
         intent.putExtra("image", it?.thumbnailUrl)

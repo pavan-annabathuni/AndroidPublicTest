@@ -30,6 +30,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         _binding = FragmentAllHistoryBinding.inflate(inflater, container, false)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.tvToolBar.isSelected = true
+
         return binding.root
     }
 
@@ -188,15 +191,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("server_error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}                }
+                    AppUtils.translatedToastServerErrorOccurred(context)
+                }
                 is Resource.Loading -> {
 
                 }
@@ -343,15 +339,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        val toastError = TranslationsManager().getString("error")
-                                        if(!toastError.isNullOrEmpty()){
-                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                                Toast.LENGTH_SHORT
-                                            ) }}
-                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                                            Toast.LENGTH_SHORT
-                                        ) }}}
+                                AppUtils.translatedToastServerErrorOccurred(context)
 
                                 }
                                 is Resource.Loading -> {

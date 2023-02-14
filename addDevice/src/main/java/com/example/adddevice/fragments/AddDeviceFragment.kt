@@ -2,7 +2,6 @@ package com.example.adddevice.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -208,8 +207,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         translationAddDevice()
         binding.topAppBar.setOnClickListener{
             activity?.finish()
-//            val isSuccess = findNavController().navigateUp()
-//            if (!isSuccess) requireActivity().onBackPressed()
         }
     }
 
@@ -224,7 +221,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             latLng2.longitude,
             distance
         )
-        Log.d("Add Device", "Distance Calculated: ${distance[0]}")
         return distance[0]
     }
 
@@ -236,10 +232,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 
@@ -286,7 +282,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_tick
+                    com.waycool.uicomponents.R.drawable.ic_tick
                 ), null, null, null
             )
             binding.tvScanned.setTextColor(
