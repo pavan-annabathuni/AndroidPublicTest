@@ -178,6 +178,8 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else {
+                binding.progressBar.visibility=View.VISIBLE
+                binding.frameLayout2.visibility=View.GONE
                 val  eventBundle=Bundle()
                 eventBundle.putString("deviceName",binding.device1.text.toString())
                 eventBundle.putString("scanQr",isQRScanned.toString())
@@ -228,14 +230,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                     findNavController().navigateUp()
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 
@@ -279,12 +283,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //            binding.tvScanned.text = "QR Scanned."
             TranslationsManager().loadString("str_scanned_device", binding.tvScanned,"QR Scanned.")
 
-            binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    com.waycool.uicomponents.R.drawable.ic_tick
-                ), null, null, null
-            )
+            binding.ivClick.setImageResource(com.waycool.uicomponents.R.drawable.ic_tick)
             binding.tvScanned.setTextColor(
                 ContextCompat.getColorStateList(
                     requireContext(),

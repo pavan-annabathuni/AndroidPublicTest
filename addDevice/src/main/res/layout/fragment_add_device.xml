@@ -332,4 +332,16 @@
                 android:focusable="true" />
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+
+
+        />
 </LinearLayout>

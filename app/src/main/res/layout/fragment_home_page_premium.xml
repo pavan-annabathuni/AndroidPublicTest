@@ -924,7 +924,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/titleMyDevice"
-                        tools:visibility="visibility" />
+                        tools:visibility="visible" />
 
                     <com.waycool.uicomponents.Text.Title3Bold
                         android:id="@+id/titleMyDevice"
