@@ -73,7 +73,6 @@ class CropInfoSelectionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
-        translation()
         EventClickHandling.calculateClickEvent("cropinformation_landing")
         return binding.root
     }
@@ -97,8 +96,7 @@ class CropInfoSelectionFragment : Fragment() {
                 callback
             )
         }
-        binding.toolbarTitle.text = "Crop information"
-
+        translation()
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
             val bundle = Bundle()
@@ -114,7 +112,6 @@ class CropInfoSelectionFragment : Fragment() {
             it.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             viewModel.getCropMaster().observe(viewLifecycleOwner){
                 for (i in 0 until it.data?.size!!){
-
                     if(it.data?.get(i)?.cropId==id) {
                         id2 = it.data?.get(i)?.cropId!!
                         Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
@@ -130,7 +127,6 @@ class CropInfoSelectionFragment : Fragment() {
             }}
         })
         binding.rvMyCrops.adapter = myCropAdapter
-
         fabButton()
         myCrops()
 
@@ -372,7 +368,6 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun myCrops() {
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
@@ -385,18 +380,16 @@ class CropInfoSelectionFragment : Fragment() {
         }
 
     }
+
     private fun translation(){
-        var title:String
-        TranslationsManager().loadString("str_description",binding.textView )
-        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
+            TranslationsManager().loadString("str_description",binding.textView )
+            TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
+        TranslationsManager().loadString("str_title",binding.toolbarTitle )
         viewModel.viewModelScope.launch{
-            title = TranslationsManager().getString("str_title")
-            binding.toolbarTitle.text = title
             binding.search.hint = TranslationsManager().getString("search")
         }
     }
     private fun dialog(){
-
         val dialog = Dialog(requireContext())
         //dialog.setCancelable(false)
         dialog.setContentView(R.layout.dailog_crop_info)
