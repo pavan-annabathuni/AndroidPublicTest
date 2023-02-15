@@ -29,16 +29,15 @@ class EditCropFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentEditCropBinding.inflate(inflater)
-        //set translations
-        translation()
-        //click of item
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
             //event listener when a crop is deleted
             val eventBundle=Bundle()
             eventBundle.putString("",it.cropName)
+            EventClickHandling.calculateClickEvent("Edit_crop_${it.cropName}")
             //translation of crop deleted
             viewModel.viewModelScope.launch {
                 val toast = TranslationsManager().getString("crop_deleted")
+
              viewModel.getEditMyCrop(it.id!!).observe(viewLifecycleOwner) {
                  if(!toast.isNullOrEmpty())
                      context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toast, LENGTH_SHORT)
@@ -56,6 +55,7 @@ class EditCropFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        translation()
         //get list of crops
         myCrops()
         //callback for back press
@@ -77,9 +77,6 @@ class EditCropFragment : Fragment() {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
                 binding.tvCount.text = it.data!!.size.toString()
-                if(!it.data!![0].cropNameTag.isNullOrEmpty()){
-                EventClickHandling.calculateClickEvent("Edit_crop_${it.data!![0].cropNameTag}")
-                }
             }
                 if(it.data.isNullOrEmpty()){
                     this@EditCropFragment.findNavController().navigateUp()
