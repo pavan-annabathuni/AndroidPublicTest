@@ -210,7 +210,6 @@ class CropDetailsCaptureFragment : Fragment() {
                     val data = it.data
                     data?.diseaseId
 
-                    selecteduri=null
 
                     if (data?.diseaseId == null) {
                         MaterialAlertDialogBuilder(requireContext()).setTitle("Incorrect Image")
@@ -219,7 +218,9 @@ class CropDetailsCaptureFragment : Fragment() {
                             }.show()
                         binding.progressBar?.visibility = View.GONE
                         binding.cardCheckHealth.visibility = View.VISIBLE
+                        binding.closeImage?.visibility=View.VISIBLE
                     } else {
+                        selecteduri=null
                         val bundle = Bundle()
                         data.diseaseId?.let { it1 -> bundle.putInt("diseaseid", it1) }
                         findNavController().navigate(

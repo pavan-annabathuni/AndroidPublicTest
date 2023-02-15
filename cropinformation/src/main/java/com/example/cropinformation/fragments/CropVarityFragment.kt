@@ -2,6 +2,7 @@ package com.example.cropinformation.fragments
 
 import android.os.Bundle
 import android.util.Log
+import android.util.MalformedJsonException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,9 @@ import com.example.cropinformation.databinding.FragmentCropVarityBinding
 import com.example.cropinformation.viewModle.CropInfoViewModel
 import com.google.gson.JsonParseException
 import com.waycool.data.Local.utils.TypeConverter
+import com.waycool.data.error.CrashAnalytics
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.repository.domainModels.CropVarityDomain
 
 
 class CropVarityFragment : Fragment() {
@@ -55,11 +58,18 @@ class CropVarityFragment : Fragment() {
                         try {
                             TypeConverter.convertStringToCropVariety(data[i].label_value!!)
                         } catch (jsonException: JsonParseException) {
+                            CrashAnalytics.crashAnalyticsError("$jsonException")
                             data[i].labelValueTag?.let { it1 ->
                                 TypeConverter.convertStringToCropVariety(
                                     it1
-                                )
-                            }
+                                )}
+
+                        }catch (e:MalformedJsonException){
+                            CrashAnalytics.crashAnalyticsError("$e")
+                            data[i].labelValueTag?.let { it1 ->
+                                TypeConverter.convertStringToCropVariety(
+                                    it1
+                                )}
                         }
 //                    if (varietyList.isNullOrEmpty())
 //                        varietyList =

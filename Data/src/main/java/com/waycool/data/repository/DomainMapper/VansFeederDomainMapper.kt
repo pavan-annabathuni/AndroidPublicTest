@@ -29,7 +29,7 @@ class VansFeederDomainMapper : DomainMapper<VansFeederDomain, VansNetwork> {
            thumbnailUrl=dto.thumbnailUrl,
            isActive=dto.isActive,
            audioUrl=dto.audioUrl,
-           startDate=dto.startDate,
+           startDate=dto.updatedAt,
            endDate=dto.endDate,
            priorityOrder=dto.priorityOrder,
            sourceName=dto.sourceName,
