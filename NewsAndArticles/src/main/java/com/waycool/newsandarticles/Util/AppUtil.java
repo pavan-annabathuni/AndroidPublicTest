@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class AppUtil {
@@ -58,7 +56,7 @@ public class AppUtil {
 
     public static void showLoadImage(Context context, ImageView image) {
         try {
-            Glide.with(context).asGif().load(R.raw.loading).into(image);
+            Glide.with(context).asGif().load(com.waycool.uicomponents.R.raw.loading).into(image);
         } catch (Exception e) {
             e.printStackTrace();
         }

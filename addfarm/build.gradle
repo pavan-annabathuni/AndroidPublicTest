@@ -54,18 +54,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
-    //Maps
-    implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
-    implementation 'com.google.maps.android:android-maps-utils-v3:1.3.1'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
-    implementation 'com.google.maps.android:places-ktx:2.0.0'
     implementation 'com.google.android.libraries.places:places:2.7.0'
-
-    implementation(libraries.glide)
 
     //ShowCaseView
     implementation 'com.github.mreram:showcaseview:1.4.1'
-//    implementation 'com.github.iammert:MaterialIntroView:1.6.0'
 
 }

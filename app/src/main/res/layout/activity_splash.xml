@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="INTEGRATED WAYCOOL AGRITECH PLATFORM\nA WAYCOOL PRODUCT"
-        android:fontFamily="@font/noto_sans_medium"
+        android:fontFamily="@font/notosans_medium"
         android:textColor="@color/white"
         android:textSize="12sp"
          app:layout_constraintBottom_toTopOf="@+id/progressBar"

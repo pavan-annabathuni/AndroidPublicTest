@@ -46,25 +46,10 @@ dependencies {
     implementation project(path: ':FeatureAuthentication')
 
 
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-//    implementation 'com.google.android.gms:play-services-measurement-api:21.2.0'
-
-
-
-    // coroutine
-
-    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
-    
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-
-
-
     implementation 'com.jjoe64:graphview:4.2.2'
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-   // implementation 'com.github.ar-android:AndroidSvgLoader:1.0.2'
 
-    implementation "androidx.paging:paging-runtime:3.0.0-alpha03"
+    implementation "androidx.paging:paging-runtime-ktx:3.2.0-alpha04"
 
 
     testImplementation 'junit:junit:4.13.2'
