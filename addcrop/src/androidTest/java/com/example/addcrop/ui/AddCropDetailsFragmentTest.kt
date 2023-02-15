@@ -29,6 +29,7 @@ import org.junit.runner.RunWith
 class AddCropDetailsFragmentTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+
 //    @Test
 //    fun testNavigation() {
 //        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
