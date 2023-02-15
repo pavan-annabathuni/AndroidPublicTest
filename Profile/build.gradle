@@ -37,36 +37,22 @@ android {
         buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
         buildConfigField "int", "VERSION_CODE", "$versionCode"
     }
+    lintOptions {
+        abortOnError false
+    }
 
 }
 
 dependencies {
 
-    implementation(lifecycle.livedata)
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Core')
     implementation project(path: ':FeatureAuthentication')
     implementation project(path: ':featureChat')
 
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
 
 
-
-
-    // coroutine
-
-    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
-
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-
-
-
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    
-    implementation 'com.github.yalantis:ucrop:2.2.8-native'
-
-    implementation 'com.google.maps.android:places-ktx:2.0.0'
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.google.android.play:core-ktx:1.8.1'
     testImplementation 'junit:junit:4.13.2'

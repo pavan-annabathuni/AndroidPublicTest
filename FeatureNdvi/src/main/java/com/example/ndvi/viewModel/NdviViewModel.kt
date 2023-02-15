@@ -13,8 +13,8 @@ import com.waycool.data.utils.Resource
 import retrofit2.Response
 
 class NdviViewModel:ViewModel() {
-    fun getNdvi(farmId:Int,account_id: Int): LiveData<Resource<NdviModel?>> =
-        NdviRepository.getNdvi(farmId,account_id).asLiveData()
+    fun getNdvi(farmId:Int): LiveData<Resource<NdviModel?>> =
+        NdviRepository.getNdvi(farmId).asLiveData()
 
     fun getNdviMean(url:String): LiveData<Resource<NDVIMean?>> =
         NdviRepository.getNDVIMean(url).asLiveData()

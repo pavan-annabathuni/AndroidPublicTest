@@ -41,11 +41,9 @@ class ForecastFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            if(accountId!=null&&irrigation!=null) {
-                irrigation = it.getParcelable("IrrigationHis")!!
-                accountId = it.getInt("accountId")!!
-                plotId = it.getInt("plotId")!!
-            }
+            irrigation = it.getParcelable("IrrigationHis")!!
+            accountId = it.getInt("accountId")!!
+            plotId = it.getInt("plotId")!!
         }
     }
 
@@ -90,8 +88,8 @@ class ForecastFragment : Fragment() {
             /** calculating are per plant */
             if(data?.get(0)?.area !=null) {
                 area = data[0].area.toString()
-                length = data.get(0).lenDrip.toString()
-                width = data.get(0).widthDrip.toString()
+                length = data[0].lenDrip?:"0"
+                width = data[0].widthDrip?:"0"
               areaperPlant = (length.toDouble() * width.toDouble()).toString().trim()
                 mPagerForcastAdapter = PagerForcastAdapter(data[0])
 //            }else{

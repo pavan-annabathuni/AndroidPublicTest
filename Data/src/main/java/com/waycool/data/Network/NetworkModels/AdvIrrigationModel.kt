@@ -21,18 +21,18 @@ data class AdvIrrigationData (
 @Parcelize
 data class Irrigation (
     @SerializedName("current_data"        ) var currentData        : @RawValue CurrentData?                  = CurrentData(),
-    @SerializedName("historic_data"       ) var historicData       : @RawValue ArrayList<HistoricData>       = arrayListOf(),
-    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?     = IrrigationForecast()
+    @SerializedName("historic_data"       ) var historicData       : @RawValue List<HistoricData>            = emptyList(),
+    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?           = IrrigationForecast()
 
 ):Parcelable
 data class IrrigationForecast (
 
-    @SerializedName("mad"         ) var mad        : ArrayList<Int>    = arrayListOf(),
-    @SerializedName("etc"         ) var etc        : ArrayList<String> = arrayListOf(),
-    @SerializedName("days"        ) var days       : ArrayList<String> = arrayListOf(),
-    @SerializedName("rain_precip" ) var rainPrecip : ArrayList<String> = arrayListOf(),
-    @SerializedName("depletion"   ) var depletion  : ArrayList<String> = arrayListOf(),
-    @SerializedName("eto"         ) var eto        : ArrayList<Double> = arrayListOf()
+    @SerializedName("mad"         ) var mad        : List<Double>    = emptyList(),
+    @SerializedName("etc"         ) var etc        : List<String> = emptyList(),
+    @SerializedName("days"        ) var days       : List<String> = emptyList(),
+    @SerializedName("rain_precip" ) var rainPrecip : List<String> = emptyList(),
+    @SerializedName("depletion"   ) var depletion  : List<String> = emptyList(),
+    @SerializedName("eto"         ) var eto        : List<Double> = emptyList()
 
 )
 @Parcelize
@@ -72,14 +72,14 @@ data class Gdd (
 data class CurrentData (
 
     @SerializedName("id"                ) var id               : Int?    = null,
-    @SerializedName("irrigation"        ) var irrigation       : Int?    = null,
-    @SerializedName("depletion_current" ) var depletionCurrent : Int?    = null,
-    @SerializedName("eto_current"       ) var etoCurrent       : Int?    = null,
-    @SerializedName("crop_factor"       ) var cropFactor       : Int?    = null,
-    @SerializedName("etc"               ) var etc              : Int?    = null,
-    @SerializedName("mad"               ) var mad              : Int?    = null,
-    @SerializedName("vol_per_plant"     ) var volPerPlant      : Int?    = null,
-    @SerializedName("vol_per_farm"      ) var volPerFarm       : Int?    = null,
+    @SerializedName("irrigation"        ) var irrigation       : Double?    = null,
+    @SerializedName("depletion_current" ) var depletionCurrent : Double?    = null,
+    @SerializedName("eto_current"       ) var etoCurrent       : Double?    = null,
+    @SerializedName("crop_factor"       ) var cropFactor       : Double?    = null,
+    @SerializedName("etc"               ) var etc              : Double?    = null,
+    @SerializedName("mad"               ) var mad              : Double?    = null,
+    @SerializedName("vol_per_plant"     ) var volPerPlant      : Double?    = null,
+    @SerializedName("vol_per_farm"      ) var volPerFarm       : Double?    = null,
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null
 

@@ -49,7 +49,7 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         holder.eto.text = properties.etoCurrent.toString()
         holder.etc.text = properties.etc.toString()
 
-        if (properties.irrigation?.toFloat()!!>0) {
+        if (properties.irrigation!=null && properties.irrigation?.toFloat()!!>0) {
             holder.view.setBackgroundResource(R.color.DarkGreen)
             holder.image.setImageResource(R.drawable.ic_holo_green)
             holder.date.setTextColor(Color.parseColor("#146133"))

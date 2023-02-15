@@ -2,13 +2,13 @@
 <resources>
 
     <style name="Medium">
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:fontFamily">@font/notosans_medium</item>
     </style>
     <style name="SemiBold">
-        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+        <item name="android:fontFamily">@font/notosans_semibold</item>
     </style>
     <style name="Bold">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
     </style>
     <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Add attributes here -->
@@ -19,10 +19,10 @@
         <item name="android:textAlignment">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">18sp</item>
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/notosans_bold</item>
     </style>
     <style name="button">
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/notosans_bold</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:radius">8dp</item>
         <item name="cornerRadius">8dp</item>

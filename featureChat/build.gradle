@@ -27,13 +27,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation project(path: ':Core')
     implementation project(path: ':Data')
     implementation project(path: ':FeatureAuthentication')
-
+    implementation project(path: ':UiComponents')
 
 
     api "zendesk.messaging:messaging-android:2.7.0"

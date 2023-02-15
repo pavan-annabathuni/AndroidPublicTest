@@ -39,7 +39,7 @@ public class CustomMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
 
         try {
-            if (paramType.equalsIgnoreCase("leaf_wetness") && duration == GraphsFragment.GraphSelection.LAST12HRS) {
+            if (paramType.equalsIgnoreCase("leaf_wetness_hrs") && duration == GraphsFragment.GraphSelection.LAST12HRS) {
                 tvContent.setText((e.getY() >= 1f ? "Wet" : "Dry"  + "\n" + dates.get((int) e.getX())));
             } else {
                 tvContent.setText(e.getY() + units + "\n" + dates.get((int) e.getX()));
