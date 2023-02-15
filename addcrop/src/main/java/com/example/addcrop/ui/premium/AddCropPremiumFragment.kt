@@ -49,6 +49,7 @@ class AddCropPremiumFragment : Fragment() {
     var numberOfPlanets: String = ""
     var date: String = ""
     var crop_id: Int? = null
+    var crop_variety:Int?=null
     var crop_type: Int? = null
     val arrayList = ArrayList<String>()
     lateinit var irrigation_selected: String
@@ -241,6 +242,8 @@ class AddCropPremiumFragment : Fragment() {
     fun initView() {
         if (arguments != null) {
             crop_id = arguments?.getInt("cropid")
+           crop_variety=arguments?.getInt("pom")
+
             crop_type = arguments?.getInt("soil_type_id")
             cropNameTag = arguments?.getString("cropNameTag")
             cropCategoryTagName = arguments?.getString("selectedCategory")
@@ -331,6 +334,7 @@ class AddCropPremiumFragment : Fragment() {
                             bundle.putString("area_type", areaTypeSelected)
                             bundle.putString("nick_name", nickName)
                             bundle.putString("area", area)
+                            bundle.putInt("pom",crop_variety.toString().toInt())
                             bundle.putString("date", date)
                             bundle.putString("irrigation_selected", irrigation_selected)
                             bundle.putString("numberOfPlanets", numberOfPlanets)
@@ -364,13 +368,13 @@ class AddCropPremiumFragment : Fragment() {
                     binding.clCropNickname.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.text = "Save Crop"
-                    cropFieldVerification(account_id, crop_id, soil_type_id, item)
+                    cropFieldVerification(account_id, crop_id, soil_type_id, item,crop_variety)
                 } else if (cropIrrigationList[3] == (item)) {
                     TranslationsManager().loadString("save_crop", binding.tvCheckCrop)
                     binding.clCropNickname.visibility = View.VISIBLE
                     binding.plotNumber.visibility = View.VISIBLE
                     binding.tvCheckCrop.text = "Save Crop"
-                    cropFieldVerification(account_id, crop_id, soil_type_id, item)
+                    cropFieldVerification(account_id, crop_id, soil_type_id, item,crop_variety)
 //                    if (nickName.isNotEmpty() && area.isNotEmpty() && date.isNotEmpty() && numberOfPlanets.isNotEmpty()) {
 //                        Toast.makeText(requireContext(), "Api Call Success 3", Toast.LENGTH_SHORT).show()
 //                    }
@@ -457,7 +461,9 @@ class AddCropPremiumFragment : Fragment() {
         account_id: Int?,
         crop_id: Int?,
         soil_type_id: Int?,
-        irrigation_type: Any
+        irrigation_type: Any,
+        crop_variety:Int?
+
     ) {
         binding.btnSaveCropDetails.setOnClickListener { it ->
             it.hideSoftInput()
@@ -489,6 +495,12 @@ class AddCropPremiumFragment : Fragment() {
                 if (crop_id != null) {
                     map["crop_id"] = crop_id
                 }
+                if (crop_variety==0 ){
+
+                }else{
+                    map["crop_variety_id"]=crop_variety.toString().toInt()
+                }
+
                 if (soil_type_id != null) {
                     map["soil_type_id"] = soil_type_id
                 }
