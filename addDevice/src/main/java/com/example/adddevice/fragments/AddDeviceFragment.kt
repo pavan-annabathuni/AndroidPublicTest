@@ -133,9 +133,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             nickName = binding.device1.text.toString().trim()
             if (longitutde == null || latitude == null) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("error_current_location")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                    val toastCurrentLoc = TranslationsManager().getString("error_current_location")
+                    if(!toastCurrentLoc.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCurrentLoc,
                             LENGTH_SHORT
                         ) }}
                     else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error getting current Location",
@@ -152,9 +152,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             ) {
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("device_location")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                    val toastDeviceLoc = TranslationsManager().getString("device_location")
+                    if(!toastDeviceLoc.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
                     else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
@@ -163,13 +163,19 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else if (nickName.isEmpty()) {
-                binding.device1.error = "Device Name should not be empty"
+                CoroutineScope(Dispatchers.IO).launch {
+                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
+                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
+                    else{ binding.device1.error= "Device Name should not be empty" }
+                }
+
+
                 return@setOnClickListener
             } else if (scanResult.isNullOrEmpty()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("please_scan")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                    val toastScan= TranslationsManager().getString("please_scan")
+                    if(!toastScan.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
                             LENGTH_SHORT
                         ) }}
                     else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",

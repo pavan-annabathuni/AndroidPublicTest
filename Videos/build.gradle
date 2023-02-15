@@ -53,23 +53,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
 
-    //used to load images
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation "androidx.browser:browser:1.5.0"
 
-    implementation('com.facebook.stetho:stetho:1.6.0')
-    implementation(lifecycle.viewmodel)
-    implementation(lifecycle.livedata)
-
-    implementation(navGraph.navfragment)
-    implementation(navGraph.navui)
-
-    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
-
-    implementation "androidx.browser:browser:1.4.0"
-
-
-//    //Firebase
-//    implementation platform(firebase.bom)
-//    implementation(firebase.analytics)
-//    implementation(firebase.crashlytics)
 }
