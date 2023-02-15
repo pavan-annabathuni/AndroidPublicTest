@@ -496,6 +496,7 @@ object NetworkSource {
         flow<Resource<PestDiseaseDTO?>> {
             emit(Resource.Loading())
             try {
+
                 val langCode = LocalSource.getLanguageCode() ?: "en"
 
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()

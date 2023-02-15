@@ -48,7 +48,9 @@ dependencies {
     //material
     api(libraries.material)
 
-  api(libraries.glide)
+    //glide
+    api(libraries.glide)
+
     //graphs
     api 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //flexbox dependency
@@ -63,11 +65,13 @@ dependencies {
 
     //meter speed
     api 'com.github.anastr:speedviewlib:1.6.0'
+
     //Audio
     api 'net.the4thdimension:audio-wife:1.0.3'
 
     //used to load images
     api 'com.squareup.picasso:picasso:2.71828'
+
     //image cropping
     api 'com.github.yalantis:ucrop:2.2.6-native'
 
@@ -77,13 +81,15 @@ dependencies {
     //transitions
     api "android.arch.navigation:navigation-fragment-ktx:1.0.0"
 
+
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.pixplicity.sharp:library:1.1.0"
+
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "androidx.core:core-ktx:+"
-    implementation "com.squareup.okhttp3:okhttp:3.10.0"
-    implementation "com.pixplicity.sharp:library:1.1.0"
-    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 
 

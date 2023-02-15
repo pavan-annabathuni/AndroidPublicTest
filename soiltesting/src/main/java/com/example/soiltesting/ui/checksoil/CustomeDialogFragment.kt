@@ -33,6 +33,7 @@ class CustomeDialogFragment : DialogFragment() {
             dialog!!.cancel()
             dialog!!.dismiss()
         }
+        translationSoilTesting()
         return binding.root
     }
     fun translationSoilTesting() {

@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_arrow_back">
+            app:navigationIcon="@drawable/ic_back">
 
             <TextView
                 android:id="@+id/toolbar_title"

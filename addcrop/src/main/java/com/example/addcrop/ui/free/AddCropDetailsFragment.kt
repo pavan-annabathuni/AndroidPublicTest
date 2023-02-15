@@ -133,7 +133,6 @@ class AddCropDetailsFragment : Fragment() {
             })
     }
     private fun navigateBack() {
-        Log.d("TAG", "backButtonClicked:")
         val isSuccess = findNavController().navigateUp()
         if (!isSuccess) requireActivity().onBackPressed()
     }

@@ -76,6 +76,8 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
                     .setRuntimeView(binding.totalTime)
                 // .setTotalTimeView(mTotalTime);
                 audio?.play()
+
+
             }
 
         }

@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
 import com.example.addcrop.ui.CategoryViewHolder
+import com.example.addcrop.ui.selectcrop.VariatyModel
 
-class VarietyAdapter(val varietyList:ArrayList<VariatyModel>,private val itemSelectedListener: ItemSelectedListener) : RecyclerView.Adapter<CategoryViewHolder>() {
+class VarietyAdapter(val varietyList:ArrayList<VariatyModel>, private val itemSelectedListener: ItemSelectedListener) : RecyclerView.Adapter<CategoryViewHolder>() {
 private var row_index = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {

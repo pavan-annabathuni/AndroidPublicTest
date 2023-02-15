@@ -36,31 +36,31 @@ class ViewReportFragment : Fragment() {
     private val binding get() = _binding!!
 
     var language = ""
-    var id: kotlin.String? = ""
-    var header: kotlin.String? = ""
-    var soilConditioner: kotlin.String? = ""
-    var recommendation: kotlin.String? = ""
-    var macronutrient: kotlin.String? = ""
-    var micronutrient: kotlin.String? = ""
-    var scale: kotlin.String? = ""
-    var scale_text1: kotlin.String? = ""
-    var scale_text2: kotlin.String? = ""
+    var id: String? = ""
+    var header: String? = ""
+    var soilConditioner: String? = ""
+    var recommendation: String? = ""
+    var macronutrient: String? = ""
+    var micronutrient: String? = ""
+    var scale: String? = ""
+    var scale_text1: String? = ""
+    var scale_text2: String? = ""
     var scale_text3 = ""
-    var scale_text4: kotlin.String? = ""
-    var scale_text5: kotlin.String? = ""
-    var scale_text6: kotlin.String? = ""
-    var sample_info: kotlin.String? = ""
-    var farmer: kotlin.String? = ""
-    var testCenter: kotlin.String? = ""
+    var scale_text4: String? = ""
+    var scale_text5: String? = ""
+    var scale_text6: String? = ""
+    var sample_info: String? = ""
+    var farmer: String? = ""
+    var testCenter: String? = ""
     var selected_crop = ""
-    var plot_size: kotlin.String? = ""
-    var location: kotlin.String? = ""
-    var survey_no: kotlin.String? = ""
-    var sampling_date: kotlin.String? = ""
-    var test_date: kotlin.String? = ""
-    var name: kotlin.String? = ""
-    var address: kotlin.String? = ""
-    var mobile: kotlin.String? = ""
+    var plot_size: String? = ""
+    var location: String? = ""
+    var survey_no: String? = ""
+    var sampling_date: String? = ""
+    var test_date: String? = ""
+    var name: String? = ""
+    var address: String? = ""
+    var mobile: String? = ""
     var soilReportResultAdapter: SoilReportResultAdapter? = null
     var soilConditionerAdapter: SoilReportRecommendationAdapter? = null
     var macroAdapter: SoilReportRecommendationAdapter? = null
@@ -92,6 +92,7 @@ class ViewReportFragment : Fragment() {
 //        if (getIntent().getStringExtra("id") != null) id = getIntent().getStringExtra("id")
 
 
+        translations()
         language = "1"
         soilConditioner = "Soil Conditioner / Amendment"
         recommendation = "Recommendation :"
@@ -99,7 +100,6 @@ class ViewReportFragment : Fragment() {
         micronutrient = "Micronutrient Fertilizer"
         scale = "Scale"
         scale_text1 = "High, Acid, Saline,Highly Alkaline," + "Low (OC,OM)"
-
         scale_text2 = "Low, Deficient"
         scale_text3 = "Medium (OC,OM,mbc)"
         scale_text4 = "Medium, Neutral,Sufficient, Alkaline," + "Slightly Acidic"
@@ -158,14 +158,7 @@ class ViewReportFragment : Fragment() {
         val gridLayoutManager =
             GridLayoutManager(requireContext(), 2, LinearLayoutManager.VERTICAL, false)
         binding.soilResultRecyclerView.layoutManager = gridLayoutManager
-//        binding.soilReportHeaderLayout.backBtn.setOnClickListener { onBackPressed() }
-//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                findNavController().navigateUp()
-//            }
-//
-//        })
-        val bundle = Bundle()
+        Bundle()
         if (arguments != null) {
             trackerID = arguments?.getInt("id")
 
@@ -173,9 +166,6 @@ class ViewReportFragment : Fragment() {
             binding.soilReportHeaderLayout.title.text = "ID: $soitestNumber"
             Log.d("TAG", "onViewCreatedbdhsvbhdbvhb:$trackerID ")
             setData(trackerID!!)
-            CoroutineScope(Dispatchers.IO).launch {
-
-            }
 
         }
         binding.soilReportHeaderLayout.backBtn.setOnClickListener {
@@ -190,15 +180,33 @@ class ViewReportFragment : Fragment() {
 
     }
 
+    private fun translations() {
+        TranslationsManager().loadString("str_recommendation",binding.recommandationText,"Recommendation: ")
+        TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
+        TranslationsManager().loadString("str_recommendation",binding.macronutrientText,"Recommendation: ")
+        TranslationsManager().loadString("str_recommendation",binding.micronutrientFertilizerText,"Recommendation: ")
+        TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
+        TranslationsManager().loadString("str_high_acide",binding.scaleLayout.scaleTv1,scale_text1)
+        TranslationsManager().loadString("str_low",binding.scaleLayout.scaleTv2,scale_text2)
+        TranslationsManager().loadString("str_medium_oc",binding.scaleLayout.scaleTv3,scale_text3)
+        TranslationsManager().loadString("str_medium_neutral",binding.scaleLayout.scaleTv4,scale_text4)
+        TranslationsManager().loadString("str_high_oc_om_mbc",binding.scaleLayout.scaleTv5,scale_text5)
+//        TranslationsManager().loadString("str_high_acide",binding.scaleLayout.scaleTv6,scale_text6)
+
+
+
+
+
+
+
+
+    }
+
 
     fun setData(id: Int) {
         viewModel.viewReport(id).observe(requireActivity()) { soilTestReportMaster ->
             when (soilTestReportMaster) {
                 is Resource.Success -> {
-                    Log.d("TAG", "setDataBHBHxbdb:${soilTestReportMaster} ")
-                    Log.d("TAG", "setDataBHBHxb:${soilTestReportMaster.data!!.data} ")
-
-
                     if (soilTestReportMaster.data!!.status) {
                         if (soilTestReportMaster.data!!.data.get(0).results != null) {
 
@@ -207,8 +215,6 @@ class ViewReportFragment : Fragment() {
                             if (fullList.isNotEmpty()) {
                                 dataSetToRecommendation(fullList)
                             }
-//                            fullData = soilTestReportMaster.data!!.data.get(0)
-//                            setOtherData(fullData!!)
                             resultList =
                                 soilTestReportMaster.data!!.data.get(0).results.reportData.parameterInfos
                             soilReportResultAdapter!!.updateList(resultList)

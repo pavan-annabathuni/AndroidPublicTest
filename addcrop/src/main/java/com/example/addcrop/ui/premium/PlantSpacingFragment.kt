@@ -1,7 +1,6 @@
 package com.example.addcrop.ui.premium
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +74,6 @@ class PlantSpacingFragment : Fragment() {
                 if (farm_id != null && farm_id != 0) {
                     farm_id?.let { it1 ->
                         map["farm_id"] = it1
-                        Log.d("TAG", "onViewCreated: $farm_id")
                     }
                 }
                 crop_id?.let { map.put("crop_id", it) }

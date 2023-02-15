@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentVeriatyCropBinding
+import com.example.addcrop.ui.selectcrop.MockList
+import com.example.addcrop.ui.selectcrop.VariatyModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager

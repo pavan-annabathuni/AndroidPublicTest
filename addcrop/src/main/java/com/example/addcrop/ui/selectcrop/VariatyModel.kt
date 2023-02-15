@@ -1,4 +1,4 @@
-package com.example.addcrop.ui.premium
+package com.example.addcrop.ui.selectcrop
 
 data class VariatyModel(val id: Int, val name: String, val isSelected: Boolean? = null)
 object MockList {
