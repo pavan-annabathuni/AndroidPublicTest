@@ -128,7 +128,7 @@ class GraphsFragment : Fragment() {
             binding.paramProgressBar.visibility = View.GONE
 
             val entries: MutableList<Entry> = ArrayList()
-            for (i in 0 until valList.size?.let { keysList?.size?.coerceAtMost(it) }!!) {
+            for (i in 0 until valList.size.let { keysList?.size?.coerceAtMost(it) }!!) {
                 val entryVal: Float = if (valList[i] == null) 0.0F else valList[i].toFloat()
                 entries.add(Entry(i.toFloat(), entryVal))
             }
@@ -212,7 +212,7 @@ class GraphsFragment : Fragment() {
                 val totalList = graphsData?.last30DaysData?.keys?.toList()
                 if (!totalList.isNullOrEmpty()) {
                     if (totalList.size > LAST_DAYS) {
-                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
+                        totalList.subList(totalList.size - LAST_DAYS, totalList.size)
                     } else {
                         totalList
                     }
@@ -230,7 +230,7 @@ class GraphsFragment : Fragment() {
                 val totalList = graphsData?.last30DaysData?.values?.toList()
                 if (!totalList.isNullOrEmpty()) {
                     if (totalList.size > LAST_DAYS) {
-                        totalList.subList(totalList.size - LAST_DAYS - 1, totalList.size - 1)
+                        totalList.subList(totalList.size - LAST_DAYS, totalList.size)
                     } else {
                         totalList
                     }

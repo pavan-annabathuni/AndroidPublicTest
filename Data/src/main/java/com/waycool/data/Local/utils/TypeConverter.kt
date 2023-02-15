@@ -1,6 +1,7 @@
 package com.waycool.data.Local.utils
 
 import android.util.Log
+import android.util.MalformedJsonException
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.android.libraries.maps.model.LatLng
@@ -124,15 +125,16 @@ object TypeConverter {
         return Gson().fromJson(s, listType)
     }
 
-    @Throws(JsonParseException::class)
+    @Throws(JsonParseException::class,MalformedJsonException::class)
     fun convertStringToCropVariety(s: String): List<CropVarityDomain>?{
-        Log.d("TypeConverterFrom", s)
         return try {
             val listType = object : TypeToken<List<CropVarityDomain>?>() {}.type
             Gson().fromJson(s, listType)
         } catch (e: JsonParseException) {
             throw e
     //            Log.d("cropVariety", "convertStringToCropVariety: $e")
+        }catch (e:MalformedJsonException){
+            throw e
         }
 
     }

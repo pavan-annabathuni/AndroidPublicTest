@@ -44,7 +44,7 @@ object AppUtil {
 
     fun showLoadImage(context: Context?, image: ImageView?) {
         try {
-            Glide.with(context!!).asGif().load(R.raw.loading).into(image!!)
+            Glide.with(context!!).asGif().load(com.waycool.uicomponents.R.raw.loading).into(image!!)
         } catch (e: Exception) {
             e.printStackTrace()
         }

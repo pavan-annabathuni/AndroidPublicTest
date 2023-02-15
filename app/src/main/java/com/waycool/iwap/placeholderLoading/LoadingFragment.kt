@@ -1,10 +1,10 @@
 package com.waycool.iwap.placeholderLoading
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.iwap.R
@@ -23,7 +23,7 @@ class LoadingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(requireContext())
-            .load(R.raw.loading)
+            .load(com.waycool.uicomponents.R.raw.loading)
             .into(view.findViewById(R.id.loading_gif))
     }
     override fun onResume() {
