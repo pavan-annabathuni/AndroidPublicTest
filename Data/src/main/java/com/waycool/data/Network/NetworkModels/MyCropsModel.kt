@@ -43,8 +43,8 @@ data class MyCropDataModel (
     @SerializedName("soil_type_id"          ) var soilTypeId          : Int?    = null,
     @SerializedName("crop_variety_id"       ) var cropVarietyId       : String? = null,
 
-    @SerializedName("irrigation_required"   ) var irrigationRequired  : Int?  = null,
-    @SerializedName("disease"               ) var disease             : Int?  = null,
+    @SerializedName("irrigation_required"   ) var irrigationRequired  : Boolean?  = null,
+    @SerializedName("disease"               ) var disease             : Boolean?  = null,
     @SerializedName("crop"                  ) var crop                : CropModel?   = CropModel(),
     @SerializedName("soil_type"             ) var soilType            : SoilType? = SoilType()
 )

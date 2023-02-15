@@ -1,5 +1,6 @@
 package com.waycool.uicomponents.utils
 
+import android.util.Log
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -15,6 +16,7 @@ object DateFormatUtils {
             outputFormat2.format(date)
         } catch (e: ParseException) {
             e.printStackTrace()
+            Log.d("DateFormater","${e.message}")
             mDate
         }
     }

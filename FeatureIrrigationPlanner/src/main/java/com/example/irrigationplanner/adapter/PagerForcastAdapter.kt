@@ -55,7 +55,7 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
             holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area)?.toFloat()!! / 0.9) + " L"
         } else holder.acres.text = "0"
         if (!length.isNullOrEmpty() && !width.isNullOrEmpty()) {
-            holder.areaPerPlant.setText(String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * areaPerPlant!!.toFloat() / 0.9) + " L")
+            holder.areaPerPlant.setText(String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * areaPerPlant!!.toFloat() / 0.9) + " L")
 
         } else {
             holder.areaPerPlant.text = "0"
@@ -67,16 +67,16 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         holder.eto.text = properties.eto[position].toString() + "mm"
 
         if (properties!!.mad[position] == 0.0) {
-            val value = 30 - properties.depletion[position].toFloat()
+            val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
             if (value <= 0) {
                 holder.irrigationReq.text = "Irrigation Required"
             } else {
-                val value = 30 - properties.depletion[position].toFloat()
+                val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
                 val percentage = (value / 30) * 100
                 holder.irrigationReq.text = "Irrigation Not Required"
             }
         } else {
-            val value = properties.mad[position] ?: 0.0 - properties.depletion[position].toFloat()
+            val value = properties.mad[position] ?: 0.0 - (properties.depletion[position]?.toFloat()?:0f)
             if (value <= 0) {
                 holder.irrigationReq.text = "Irrigation Required"
             } else {
