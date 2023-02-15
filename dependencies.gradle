@@ -17,7 +17,7 @@ ext {
     rxAndroidVersion = "2.1.0"
     retrofitVersion = "2.9.0"
     okHttp3Version = "3.11.0"
-    glideVersion = "4.14.1"
+    glideVersion = "4.11.0"
 
     junit4Version = "4.12"
     testRunnerVersion = "1.0.2"
@@ -39,14 +39,12 @@ ext {
     wrappingViewPager = '1.2'
     flowLayoutManager = '1.2.3.2'
     indicatorSeekbar = '2.1.2'
-    appsFlyer = '6.3.2'
     navGraph = '2.5.3'
     airLocation = '2.5.2'
 
 
     libraries = [
             appCompat              : "androidx.appcompat:appcompat:$appCompatVersion",
-            appsFlyer              : "com.appsflyer:af-android-sdk:$appsFlyer",
             material               : "com.google.android.material:material:$materialVersion",
             kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             constraintLayout       : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
