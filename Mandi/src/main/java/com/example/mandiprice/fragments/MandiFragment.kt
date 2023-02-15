@@ -154,7 +154,7 @@ class MandiFragment : Fragment() {
                         .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                 }, LocalSource.getLanguageCode() ?: "en")
 
-                viewModel.getUserDetails()?.observe(viewLifecycleOwner) {
+                viewModel.getUserDetails().observe(viewLifecycleOwner) {
                     lat = it.data?.profile?.lat.toString()
                     long = it.data?.profile?.long.toString()
                     if (it.data?.accountId != null)
@@ -209,7 +209,7 @@ class MandiFragment : Fragment() {
             }
         }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             val today = TranslationsManager().getString("str_today")
             binding.textView2.text = "$today $sdf"
         }
@@ -225,27 +225,30 @@ class MandiFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_crick -> {
+
                         item.isChecked = !item.isChecked
                         sortBy = "asc"
-                        binding.filter.text = "Low to High"
+                           TranslationsManager().loadString("low_to_high",binding.filter)
+//                        viewModel.viewModelScope.launch {
+//                            item.title = TranslationsManager().getString("low_to_high")
+//                        }
                         binding.recycleViewDis.adapter = adapterMandi
                         mandiApiCall()
 //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                     }
-                    R.id.action_ftbal -> {
-                        if (item.isChecked) {
-                            item.isChecked = false
-                        } else {
-                            item.isChecked = true
-                        }
+                    R.id.action_ftbal -> { viewModel.viewModelScope.launch {
+                        item.title = TranslationsManager().getString("high_to_low")
+                    }
+                        item.isChecked = !item.isChecked
                         sortBy = "desc"
                         binding.recycleViewDis.adapter = adapterMandi
                         mandiApiCall()
-
 //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
-
-                        binding.filter.text = "High to Low"
+                        TranslationsManager().loadString("high_to_low",binding.filter)
+//                        viewModel.viewModelScope.launch {
+//                            item.title = TranslationsManager().getString("low_to_high")
+//                        }
                     }
                 }
                 true
@@ -256,9 +259,9 @@ class MandiFragment : Fragment() {
 
     private fun spinnerSetup() {
         /** Spinner for crop category */
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var category = TranslationsManager().getString("str_category")
-            viewModel.getCropCategory()?.observe(viewLifecycleOwner) { it ->
+            viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
                 val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
                     data.categoryName
@@ -295,14 +298,14 @@ class MandiFragment : Fragment() {
                                 selectedCropCategory = text
                                 mandiApiCall()
 
-//                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                             } else {
                                 if (selectedCropCategory != null) {
                                     selectedCropCategory = ""
                                     mandiApiCall()
 
-//                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                    //                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                                 }
                             }
@@ -319,9 +322,9 @@ class MandiFragment : Fragment() {
         }
 
         /** Spinner for state */
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var state = TranslationsManager().getString("str_state")
-            viewModel.getState()?.observe(viewLifecycleOwner) {
+            viewModel.getState().observe(viewLifecycleOwner) {
                 val stateNameList = (it?.data?.data?.map { data ->
                     data.state_name
                 } ?: emptyList()).toMutableList()
@@ -369,7 +372,7 @@ class MandiFragment : Fragment() {
 
     /** Tab for price and distance */
     private fun tabs() {
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             distance = TranslationsManager().getString("distance")
             binding.tabLayout.addTab(
                 binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
@@ -465,7 +468,7 @@ class MandiFragment : Fragment() {
                 }
             }
         })
-        viewModel.getVansAdsList(moduleId)?.observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList(it?.data)
             TabLayoutMediator(
@@ -539,7 +542,7 @@ class MandiFragment : Fragment() {
     ) {
         if (lat != null && long != null) {
             viewModel.getMandiDetails(lat!!, long!!, cropCategory, state, crop, sortBy, orderBy, search)
-                ?.observe(requireActivity()) {
+                .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
                         binding.llPorgressBar.visibility = View.GONE
@@ -550,7 +553,7 @@ class MandiFragment : Fragment() {
 
     private fun translation() {
         var mandi = "Market Prices"
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi
         }
@@ -566,10 +569,10 @@ class MandiFragment : Fragment() {
 
     /** Spinner for crops */
     private fun cropSpinner(categoryId: Int? = null) {
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var cropName = TranslationsManager().getString("str_crops")
 
-            viewModel.getAllCrops()?.observe(viewLifecycleOwner) {
+            viewModel.getAllCrops().observe(viewLifecycleOwner) {
                 val filter = it.data?.filter { it1 -> it1.cropCategory_id == categoryId }
                 var cropNameList = (filter?.map { data -> data.cropName } ?: emptyList()).toMutableList()
 

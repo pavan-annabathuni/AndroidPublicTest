@@ -173,8 +173,8 @@ class EditProfileFragment : Fragment() {
         field.put("pincode",pincode)
         field.put("state",state)
         field.put("district",city)
-        field.put("latitude",lat)
-        field.put("longitude",long)
+        field.put("lat",lat)
+        field.put("long",long)
 
         /* Checking all fields are not empty */
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
