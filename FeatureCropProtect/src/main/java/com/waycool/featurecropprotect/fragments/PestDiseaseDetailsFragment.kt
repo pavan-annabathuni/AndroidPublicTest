@@ -533,7 +533,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (runnable != null) {
-                    AppUtil.handlerSet(handler, runnable!!, 3000)
+                    handler?.let { AppUtil.handlerSet(it, runnable!!, 3000) }
                 }
             }
         })

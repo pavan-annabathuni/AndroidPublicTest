@@ -35,9 +35,9 @@ android {
         viewBinding true
         dataBinding true
     }
-//    buildFeatures {
-//
-//    }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

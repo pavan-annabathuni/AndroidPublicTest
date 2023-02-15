@@ -8,7 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -61,6 +63,20 @@ class CheckSoilTestFragment : Fragment() {
             }
             latitude = arguments?.getString("lat")
             longitude = arguments?.getString("lon")
+        }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+                    if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
         }
         return binding.root
     }

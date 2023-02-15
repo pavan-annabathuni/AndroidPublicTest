@@ -42,9 +42,9 @@ class HistoryAdapter(val onClickListener:OnClickListener):ListAdapter<HistoricDa
         val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("MMM dd", Locale.ENGLISH)
         val date: Date = inputDateFormatter.parse(properties.createdAt)
 
-        holder.x.text = outputDateFormatter.format(date)
+        holder.x.text = "${outputDateFormatter.format(date)}"
 
-            if (properties.irrigation?.toFloat()!!>0) {
+            if (properties.irrigation!=null && properties.irrigation?.toFloat()!! > 0f) {
                 holder.image.setImageResource(R.drawable.ic_irrigation_2)
                 holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
                 holder.x.setTextColor(Color.parseColor("#146133"))
