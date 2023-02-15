@@ -6,7 +6,6 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.ImageView
 import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.waycool.featurecrophealth.R
 
@@ -32,7 +31,7 @@ object NetworkUtils {
             .build()
 
         val request = ImageRequest.Builder(this.context)
-            .placeholder(R.drawable.disease)
+            .placeholder(com.waycool.uicomponents.R.drawable.disease)
             .error(R.drawable.card_shape)
             .data(url)
             .target(this)
