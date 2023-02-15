@@ -1,6 +1,7 @@
 package com.waycool.iwap.spotlight
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,14 +54,31 @@ class SpotLightFragment : Fragment() {
         viewpager.adapter = viewPagerAdapter
         var myPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position != imageList.size) {
-                    binding.next.setOnClickListener() {
+                if (position != imageList.size-1) {
+                    binding.next.setOnClickListener {
+                        binding.idViewPager.setCurrentItem(position + 1, true)
+                    }
+                    binding.next2.setOnClickListener {
                         binding.idViewPager.setCurrentItem(position + 1, true)
                     }
                 }
-                if (position == imageList.size - 1) {
-                    binding.next.setOnClickListener() {
-
+                if(position == imageList.size-1){
+                    binding.next.setOnClickListener {
+                    lifecycleScope.launch {
+                        DataStoreManager.save("FirstTime", "true")
+                        this@SpotLightFragment.findNavController().popBackStack()
+//                            .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
+                    }}
+                        binding.next2.setOnClickListener {
+                            lifecycleScope.launch {
+                                DataStoreManager.save("FirstTime", "true")
+                                this@SpotLightFragment.findNavController().popBackStack()
+//                            .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
+                            }
+                    Log.d("sportLight", "onPageSelected: ${imageList.size},$position")
+                }}
+                if (position == imageList.size) {
+                    binding.next.setOnClickListener {
                         when(position){
                             0-> EventClickHandling.calculateClickEvent("Next(1/5)")
                             1-> EventClickHandling.calculateClickEvent("Next(2/5)")
@@ -68,22 +86,15 @@ class SpotLightFragment : Fragment() {
                             3-> EventClickHandling.calculateClickEvent("Next(4/5)")
                             4-> EventClickHandling.calculateClickEvent("Next(5/5)")
                             5-> EventClickHandling.calculateClickEvent("Done(6/6)")
-                        }
-
-                        lifecycleScope.launch {
-                            DataStoreManager.save("FirstTime", "true")
-                            this@SpotLightFragment.findNavController().popBackStack()
-//                                .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-
-                        }
-                    }
+                        }}
+//                             .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
 
 
                 }
-                binding.prev.setOnClickListener() {
+                binding.prev.setOnClickListener {
                     binding.idViewPager.setCurrentItem(position - 1, true)
                 }
-                binding.skip.setOnClickListener() {
+                binding.skip.setOnClickListener {
                     when(position){
                         0-> EventClickHandling.calculateClickEvent("Skip(1/5))")
                         1-> EventClickHandling.calculateClickEvent("Skip(2/5)")
@@ -96,8 +107,6 @@ class SpotLightFragment : Fragment() {
                         DataStoreManager.save("FirstTime", "true")
                         this@SpotLightFragment.findNavController().popBackStack()
 //                            .navigate(R.id.action_spotLightFragment_to_homePagesFragment)
-
-
                     }
                 }
             }
