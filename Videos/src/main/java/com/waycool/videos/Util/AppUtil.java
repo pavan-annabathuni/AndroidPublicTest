@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.waycool.videos.R;
 
@@ -41,11 +42,11 @@ public class AppUtil {
     }
 
     public static void showLoadImage(Context context, ImageView image) {
-//        try {
-//            Glide.with(context).asGif().load(R.raw.loading).into(image);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Glide.with(context).asGif().load(R.raw.loading).into(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String changeDateFormat(String givenDate) {
