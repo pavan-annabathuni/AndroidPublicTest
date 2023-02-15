@@ -20,21 +20,23 @@ data class AdvIrrigationData (
 
 @Parcelize
 data class Irrigation (
-    @SerializedName("current_data"        ) var currentData        : @RawValue CurrentData?                  = CurrentData(),
-    @SerializedName("historic_data"       ) var historicData       : @RawValue List<HistoricData>            = emptyList(),
-    @SerializedName("irrigation_forecast" ) var irrigationForecast : @RawValue IrrigationForecast?           = IrrigationForecast()
-
+    @SerializedName("current_data"        ) var currentData        : CurrentData?        = CurrentData(),
+    @SerializedName("historic_data"       ) var historicData       : ArrayList<HistoricData?>?   = arrayListOf(),
+    @SerializedName("irrigation_forecast" ) var irrigationForecast : IrrigationForecast? = IrrigationForecast()
 ):Parcelable
+
+@Parcelize
 data class IrrigationForecast (
 
-    @SerializedName("mad"         ) var mad        : List<Double>    = emptyList(),
-    @SerializedName("etc"         ) var etc        : List<String> = emptyList(),
-    @SerializedName("days"        ) var days       : List<String> = emptyList(),
-    @SerializedName("rain_precip" ) var rainPrecip : List<String> = emptyList(),
-    @SerializedName("depletion"   ) var depletion  : List<String> = emptyList(),
-    @SerializedName("eto"         ) var eto        : List<Double> = emptyList()
+    @SerializedName("mad"         ) var mad        : ArrayList<Double?> = arrayListOf(),
+    @SerializedName("etc"         ) var etc        : ArrayList<String?> = arrayListOf(),
+    @SerializedName("days"        ) var days       : ArrayList<String?> = arrayListOf(),
+    @SerializedName("rain_precip" ) var rainPrecip : ArrayList<String?> = arrayListOf(),
+    @SerializedName("depletion"   ) var depletion  : ArrayList<String?> = arrayListOf(),
+    @SerializedName("eto"         ) var eto        : ArrayList<Double?> = arrayListOf()
 
-)
+):Parcelable
+
 @Parcelize
 data class HistoricData (
 
@@ -53,6 +55,7 @@ data class HistoricData (
 
 ):Parcelable
 
+
 data class Gdd (
 
     @SerializedName("id"           ) var id          : Int?    = null,
@@ -69,6 +72,8 @@ data class Gdd (
     @SerializedName("crop_id"      ) var cropId      : Int?    = null
 
 )
+
+@Parcelize
 data class CurrentData (
 
     @SerializedName("id"                ) var id               : Int?    = null,
@@ -83,4 +88,4 @@ data class CurrentData (
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null
 
-)
+):Parcelable
