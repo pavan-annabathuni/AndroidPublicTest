@@ -58,18 +58,8 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
-    implementation 'com.github.yalantis:ucrop:2.2.6-native'
 
-    implementation(navGraph.navfragment)
-    implementation(navGraph.navui)
 
-    implementation(libraries.stetho)
 
-    implementation platform('com.google.firebase:firebase-bom:31.1.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //Firebase
-//    implementation platform(firebase.bom)
-//    implementation(firebase.analytics)
-//    implementation(firebase.crashlytics)
 }

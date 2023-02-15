@@ -7,7 +7,7 @@ ext {
 
     kotlinVersion = '1.3.11'
     appCompatVersion = "1.5.0"
-    materialVersion = "1.6.1"
+    materialVersion = "1.8.0"
     constraintLayoutVersion = "2.1.4"
     archLifeCycleVersion = "2.1.0"
     lifecycle_version = '2.6.0-alpha02'
@@ -17,7 +17,7 @@ ext {
     rxAndroidVersion = "2.1.0"
     retrofitVersion = "2.9.0"
     okHttp3Version = "3.11.0"
-    glideVersion = "4.11.0"
+    glideVersion = "4.14.1"
 
     junit4Version = "4.12"
     testRunnerVersion = "1.0.2"
@@ -40,7 +40,7 @@ ext {
     flowLayoutManager = '1.2.3.2'
     indicatorSeekbar = '2.1.2'
     appsFlyer = '6.3.2'
-    navGraph = '2.5.2'
+    navGraph = '2.5.3'
     airLocation = '2.5.2'
 
 
@@ -90,8 +90,7 @@ ext {
     firebase = [
             bom        : "com.google.firebase:firebase-bom:$firebaseVersion",
             analytics  : 'com.google.firebase:firebase-analytics-ktx',
-            crashlytics: 'com.google.firebase:firebase-crashlytics',
-            dynamiclink: "com.google.firebase:firebase-dynamic-links-ktx:$dynamicLinkVersion"
+            crashlytics: 'com.google.firebase:firebase-crashlytics'
     ]
 
     kaptLibraries = [
