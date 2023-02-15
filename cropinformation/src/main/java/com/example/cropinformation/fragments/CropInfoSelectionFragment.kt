@@ -74,17 +74,13 @@ class CropInfoSelectionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCropSelectionInfoBinding.inflate(inflater)
+        translation()
         EventClickHandling.calculateClickEvent("cropinformation_landing")
-        TranslationsManager().loadString("str_description",binding.textView,"Our My Crop feature will help you to understand the complete information about your crops." )
-        TranslationsManager().loadString("str_mycrops",binding.title3SemiBold,"My Crops" )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        translation()
 
 
         binding.toolbar.setNavigationOnClickListener {
@@ -102,6 +98,7 @@ class CropInfoSelectionFragment : Fragment() {
                 callback
             )
         }
+        translation()
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
@@ -118,7 +115,6 @@ class CropInfoSelectionFragment : Fragment() {
             it.cropLogo?.let { it1 -> args.putString("cropLogo", it1) }
             viewModel.getCropMaster().observe(viewLifecycleOwner){
                 for (i in 0 until it.data?.size!!){
-
                     if(it.data?.get(i)?.cropId==id) {
                         id2 = it.data?.get(i)?.cropId!!
                         Log.d("CropId", "onViewCreated: ${id} ${it.data?.get(i)?.cropId}")
@@ -360,7 +356,6 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun myCrops() {
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             myCropAdapter.submitList(it.data)
             if ((it.data != null)) {
@@ -373,11 +368,13 @@ class CropInfoSelectionFragment : Fragment() {
         }
 
     }
+
     private fun translation(){
         var title:String
+            TranslationsManager().loadString("str_description",binding.textView )
+            TranslationsManager().loadString("str_mycrops",binding.title3SemiBold )
+        TranslationsManager().loadString("str_title",binding.toolbarTitle )
         viewModel.viewModelScope.launch{
-            title = TranslationsManager().getString("str_title")
-            binding.toolbarTitle.text = title
             binding.search.hint = TranslationsManager().getString("search")
         }
     }
