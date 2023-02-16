@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.irrigationplanner.adapter.CropStageAdapter
 import com.example.irrigationplanner.databinding.FragmentCropStageBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,8 +59,13 @@ class CropStageFragment : Fragment() {
 
 
     fun onClick() {
-        binding.topAppBar.setOnClickListener(){
+        binding.topAppBar.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        viewModel.viewModelScope.launch {
+            binding.topAppBar.title = TranslationsManager().getString("str_crop_stage")
+            binding.saveCropStage.text = TranslationsManager().getString("")
         }
     }
 
@@ -79,14 +87,14 @@ class CropStageFragment : Fragment() {
                 mCropStageAdapter.submitList(it.data?.data)
             }
         /** saving the date for crop stage */
-        binding.saveCropStage.setOnClickListener(){
+        binding.saveCropStage.setOnClickListener {
             viewModel.updateCropStage(accountId, cropStageId!!,plotId,date).observe(viewLifecycleOwner){
                 Log.d("Date", "getCropStage: $date")
             }
-//            viewModel.getCropStage(accountId  , plotId).observe(viewLifecycleOwner) {
-//                binding.recycleViewHis.adapter = mCropStageAdapter
-//                mCropStageAdapter.submitList(it.data?.data)
-//            }
+            viewModel.getCropStage(accountId  , plotId).observe(viewLifecycleOwner) {
+                binding.recycleViewHis.adapter = mCropStageAdapter
+                mCropStageAdapter.submitList(it.data?.data)
+            }
 
         }
         }

@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -59,18 +60,17 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
             var date = binding.editText2.text.toString()
             if (binding.editText.text.toString() != "" && date != "") {
                 var yield_tone = binding.editText.text.toString().toInt()
-                plotId?.let { it1 ->
-                    viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone)
+                    viewModel.updateHarvest(plotId!!, accountId!!, cropId!!, date, yield_tone)
                         .observe(viewLifecycleOwner) {
                             when (it) {
                                 is Resource.Success -> {
                                     this.dismiss()
+                                    LocalSource.deleteAllMyCrops()
                                 }
                                 is Resource.Loading -> {}
                                 is Resource.Error -> {
                                 AppUtils.translatedToastServerErrorOccurred(context)
                                 }
-                            }
                         }
                 }
             } else {
