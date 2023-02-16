@@ -93,7 +93,6 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
-        audio = AudioWife.getInstance()
 
         binding.toolbar.setOnClickListener {
 
@@ -152,8 +151,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
         }
+        audio = AudioWife.getInstance()
+        mediaPlayer = MediaPlayer()
 
-        audioUrl="https://outgrow.blob.core.windows.net/outgrowstorage/Prod/AiCropHealth/PestDisease/Audio/English/Apple/Disease/AlternariaBlotch/1_25.mp3"
         if (audioUrl.isNullOrEmpty()) {
             binding.audioLayout.visibility = View.GONE
         } else {
@@ -161,17 +161,18 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
         binding.playPauseLayout.setOnClickListener {
-//            count++
-//            if (count % 2 != 0) {
-//                binding.pause.visibility = View.VISIBLE
-//                binding.play.visibility = View.GONE
-//
-//            } else {
-//                binding.pause.visibility = View.GONE
-//                binding.play.visibility = View.VISIBLE
-//                audio?.pause()
-//            }
-            audioPlayer()
+            count++
+            if (count % 2 != 0) {
+                binding.pause.visibility = View.VISIBLE
+                binding.play.visibility = View.GONE
+                audioPlayer()
+
+            } else {
+                binding.pause.visibility = View.GONE
+                binding.play.visibility = View.VISIBLE
+                audio?.pause()
+            }
+//            audioPlayer()
         }
 
         binding.toolbarTitle.text = diseaseName
@@ -580,20 +581,19 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             .setRuntimeView(binding.totalTime)
         // .setTotalTimeView(mTotalTime);
         audio?.play()
-                    mediaPlayer = MediaPlayer()
                     mediaPlayer!!.setOnCompletionListener {
                         binding.mediaSeekbar.progress = 0
                         binding.pause.visibility = View.GONE
                         binding.play.visibility = View.VISIBLE
                 }
-        if(mediaPlayer!!.isPlaying){
-            binding.pause.visibility = View.VISIBLE
-            binding.play.visibility = View.GONE
-        }else{
-            binding.play.visibility = View.GONE
-            binding.pause.visibility = View.VISIBLE
-
-        }
+//        if(mediaPlayer!!.isPlaying){
+//            binding.pause.visibility = View.VISIBLE
+//            binding.play.visibility = View.GONE
+//        }else{
+//            binding.play.visibility = View.GONE
+//            binding.pause.visibility = View.VISIBLE
+//
+//        }
 
     }
 

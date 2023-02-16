@@ -92,7 +92,6 @@ class ViewReportFragment : Fragment() {
 //        if (getIntent().getStringExtra("id") != null) id = getIntent().getStringExtra("id")
 
 
-        translations()
         language = "1"
         soilConditioner = "Soil Conditioner / Amendment"
         recommendation = "Recommendation :"
@@ -117,6 +116,8 @@ class ViewReportFragment : Fragment() {
         location = "Location - "
         sampling_date = "Sampling Date - "
         test_date = "Testing Date - "
+        translations()
+
 
         binding.soilConditionerText.text = soilConditioner
         binding.recommandationText.text = recommendation
@@ -181,6 +182,7 @@ class ViewReportFragment : Fragment() {
     }
 
     private fun translations() {
+        TranslationsManager().loadString("str_recommendation",binding.soilReportHeaderLayout.title,"ID: ")
         TranslationsManager().loadString("str_recommendation",binding.recommandationText,"Recommendation: ")
         TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
         TranslationsManager().loadString("str_recommendation",binding.macronutrientText,"Recommendation: ")
@@ -191,7 +193,9 @@ class ViewReportFragment : Fragment() {
         TranslationsManager().loadString("str_medium_oc",binding.scaleLayout.scaleTv3,scale_text3)
         TranslationsManager().loadString("str_medium_neutral",binding.scaleLayout.scaleTv4,scale_text4)
         TranslationsManager().loadString("str_high_oc_om_mbc",binding.scaleLayout.scaleTv5,scale_text5)
-//        TranslationsManager().loadString("str_high_acide",binding.scaleLayout.scaleTv6,scale_text6)
+        TranslationsManager().loadString("not_selected",binding.scaleLayout.scaleTv6,scale_text6)
+        TranslationsManager().loadString("scale",binding.scaleLayout.scaleTittle,scale)
+
 
 
 
