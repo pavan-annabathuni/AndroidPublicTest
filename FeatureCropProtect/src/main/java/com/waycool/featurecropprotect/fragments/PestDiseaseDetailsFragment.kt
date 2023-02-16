@@ -572,20 +572,21 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
+        if(mediaPlayer!=null){
+            audio = AudioWife.getInstance()
+                .init(requireContext(), Uri.parse(audioUrl))
+                .setPlayView(binding.play)
+                .setPauseView(binding.pause)
+                .setSeekBar(binding.mediaSeekbar)
+                .setRuntimeView(binding.totalTime)
+            audio?.play()
+            mediaPlayer!!.setOnCompletionListener {
+                binding.mediaSeekbar.progress = 0
+                binding.pause.visibility = View.GONE
+                binding.play.visibility = View.VISIBLE
+            }
+        }
 
-        audio = AudioWife.getInstance()
-            .init(requireContext(), Uri.parse(audioUrl))
-            .setPlayView(binding.play)
-            .setPauseView(binding.pause)
-            .setSeekBar(binding.mediaSeekbar)
-            .setRuntimeView(binding.totalTime)
-        // .setTotalTimeView(mTotalTime);
-        audio?.play()
-                    mediaPlayer!!.setOnCompletionListener {
-                        binding.mediaSeekbar.progress = 0
-                        binding.pause.visibility = View.GONE
-                        binding.play.visibility = View.VISIBLE
-                }
 //        if(mediaPlayer!!.isPlaying){
 //            binding.pause.visibility = View.VISIBLE
 //            binding.play.visibility = View.GONE
