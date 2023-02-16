@@ -268,6 +268,7 @@ class IrrigationFragment : Fragment() {
                         }
                     is Resource.Success -> {
                         /** setting adapter data for historicData data */
+                        if(!it.data?.data?.irrigation?.historicData.isNullOrEmpty())
                         mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData as MutableList<HistoricData>)
                         //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
                         if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty() && it.data?.data?.irrigation?.historicData?.get(0)?.irrigation != null) {

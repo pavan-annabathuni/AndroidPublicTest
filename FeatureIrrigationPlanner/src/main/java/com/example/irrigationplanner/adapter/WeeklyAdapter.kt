@@ -72,7 +72,9 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return details.days.size
+        return if(!details.days.isNullOrEmpty())
+            details.days.size
+        else 0
     }
 
 }

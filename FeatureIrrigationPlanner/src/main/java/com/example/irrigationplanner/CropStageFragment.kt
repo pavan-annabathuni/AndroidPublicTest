@@ -65,7 +65,7 @@ class CropStageFragment : Fragment() {
 
         viewModel.viewModelScope.launch {
             binding.topAppBar.title = TranslationsManager().getString("str_crop_stage")
-            binding.saveCropStage.text = TranslationsManager().getString("")
+            binding.saveCropStage.text = TranslationsManager().getString("str_update")
         }
     }
 
