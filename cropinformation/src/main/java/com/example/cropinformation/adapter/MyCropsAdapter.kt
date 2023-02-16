@@ -30,8 +30,9 @@ class MyCropsAdapter(val onClickListener: OnClickListener):ListAdapter<MyCropDat
         val properties = getItem(position)
         Glide.with(holder.itemView.context).load(properties.cropLogo).into(holder.cropImg)
         holder.cropName.text = properties.cropName
-        val count=0;
+        var count=0
         holder.itemView.setOnClickListener() {
+            count += 1
             if(count%2!=0){
                 holder.ivTick.visibility= View.VISIBLE
             }

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -508,7 +507,6 @@ class AddCropPremiumFragment : Fragment() {
                     map["farm_id"] = selectedFarmId!!
                 map["crop_year"] = year_selected
                 map["area_type"] = areaTypeSelected.lowercase()
-                Log.d("TAG", "itemClickedBHSCbjzdnjvnbtn: $year_selected")
                 map["plot_nickname"] = binding.etNickName.text.toString()
                 map["area"] = binding.etAreaNumber.text
                 map["irrigation_type"] = irrigation_type

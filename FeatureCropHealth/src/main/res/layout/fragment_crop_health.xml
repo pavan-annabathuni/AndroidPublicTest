@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/actionBarSize"
             app:layout_scrollEffect="compress"
-            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIcon="@drawable/ic_back"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <TextView

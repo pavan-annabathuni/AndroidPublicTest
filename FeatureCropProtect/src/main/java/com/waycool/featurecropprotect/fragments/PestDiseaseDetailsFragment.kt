@@ -42,7 +42,6 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
-import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
@@ -82,6 +81,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     private var diseaseName: String? = null
     private var audioUrl: String? = null
+    var count=0
 
     var chemical = "Chemical"
     var biological = "Biological"
@@ -144,18 +144,37 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             val intent = Intent(activity, NewsAndArticlesActivity::class.java)
             startActivity(intent)
         }
+
         arguments?.let {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
-            Log.d("TAG", "onViewCreatedDiseaseName: $diseaseName")
             audioUrl = it.getString("audioUrl")
         }
+        audio = AudioWife.getInstance()
+        mediaPlayer = MediaPlayer()
 
+        if (audioUrl.isNullOrEmpty()) {
+            binding.audioLayout.visibility = View.GONE
+        } else {
+            binding.audioLayout.visibility = View.VISIBLE
+        }
 
-//        binding.toolbar.setNavigationOnClickListener {
-//            findNavController().navigateUp()
-//        }
+        binding.playPauseLayout.setOnClickListener {
+            count++
+            if (count % 2 != 0) {
+                binding.pause.visibility = View.VISIBLE
+                binding.play.visibility = View.GONE
+                audioPlayer()
+
+            } else {
+                binding.pause.visibility = View.GONE
+                binding.play.visibility = View.VISIBLE
+                audio?.pause()
+            }
+//            audioPlayer()
+        }
+
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
@@ -179,25 +198,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             newsBinding.tvNoVANS,
             "News and Articles are not \navailable with us."
         )
-
-
-
         setVideos()
         setNews()
         setBanners()
-        audioPlayer()
-
-
-
 
         viewModel.viewModelScope.launch {
             chemical = TranslationsManager().getString("chemical")
             cultural = TranslationsManager().getString("str_cultural")
             biological = TranslationsManager().getString("str_biological")
-
-
-            val audioNewLayoutBinding: AudioNewLayoutBinding =
-                AudioNewLayoutBinding.inflate(layoutInflater)
 
             binding.subRecycler.adapter = adapter
 
@@ -564,31 +572,30 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
-        if(audioUrl.isNullOrEmpty()){
-                binding.audioLayout.visibility=View.GONE
+        if(mediaPlayer!=null){
+            audio = AudioWife.getInstance()
+                .init(requireContext(), Uri.parse(audioUrl))
+                .setPlayView(binding.play)
+                .setPauseView(binding.pause)
+                .setSeekBar(binding.mediaSeekbar)
+                .setRuntimeView(binding.totalTime)
+            audio?.play()
+            mediaPlayer!!.setOnCompletionListener {
+                binding.mediaSeekbar.progress = 0
+                binding.pause.visibility = View.GONE
+                binding.play.visibility = View.VISIBLE
             }
-            else{
-                binding.audioLayout.visibility=View.VISIBLE
-                binding.playPauseLayout.setOnClickListener {
+        }
 
-                    mediaPlayer = MediaPlayer()
-                    mediaPlayer!!.setOnCompletionListener {
-                        binding.mediaSeekbar.progress = 0
-                        binding.pause.visibility = View.GONE
-                        binding.play.visibility = View.VISIBLE
+//        if(mediaPlayer!!.isPlaying){
+//            binding.pause.visibility = View.VISIBLE
+//            binding.play.visibility = View.GONE
+//        }else{
+//            binding.play.visibility = View.GONE
+//            binding.pause.visibility = View.VISIBLE
+//
+//        }
 
-                        audio = AudioWife.getInstance()
-                            .init(requireContext(), Uri.parse(audioUrl))
-                            .setPlayView(binding.play)
-                            .setPauseView(binding.pause)
-                            .setSeekBar(binding.mediaSeekbar)
-                            .setRuntimeView(binding.totalTime)
-                        // .setTotalTimeView(mTotalTime);
-                        audio?.play()
-
-                    }
-                }
-            }
     }
 
     override fun onPause() {
