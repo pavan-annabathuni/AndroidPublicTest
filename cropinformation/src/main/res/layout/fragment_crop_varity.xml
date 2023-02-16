@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#FFFAF0"
         app:cardCornerRadius="12dp"
-        android:minHeight="350dp"
+        android:minHeight="450dp"
         android:theme="@style/Theme.MaterialComponents.Light"
         app:cardUseCompatPadding="true"
         tools:context=".fragments.SeedRateFragment">

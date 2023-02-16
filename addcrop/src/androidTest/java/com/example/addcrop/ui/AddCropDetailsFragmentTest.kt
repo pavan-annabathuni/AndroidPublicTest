@@ -1,6 +1,7 @@
 package com.example.addcrop.ui
 
 
+import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 
@@ -9,10 +10,14 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
 import com.example.addcrop.AddCropActivity
 import com.example.addcrop.test.R
+import com.example.addcrop.ui.free.AddCropDetailsFragment
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +25,32 @@ import org.junit.runner.RunWith
 
 
 //@RunWith(AndroidJUnit4::class)
+@MediumTest
 class AddCropDetailsFragmentTest {
+    @get:Rule
+    val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+//    @Test
+//    fun testNavigation() {
+//        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+//        val myFragmentScenario = launchFragmentInContainer<AddCropDetailsFragment>()
+//
+//        myFragmentScenario.onFragment { fragment ->
+//            Navigation.setViewNavController(fragment.requireView(), navController)
+//        }
+//
+//        navController.setGraph(com.example.addcrop.R.navigation.nav_add_crop)
+//        navController.setCurrentDestination(com.example.addcrop.R.id.selectAddCropFragment)
+//
+//        onView(withId(com.example.addcrop.R.id.card_save_details_crop)).perform(click())
+//
+//        assertThat(navController.currentDestination?.id).isEqualTo(com.example.addcrop.R.id.addCropDetailsFragment)
+//    }
+
+
+
+
+
+
 
 //
 //    @get:Rule
@@ -38,22 +68,22 @@ class AddCropDetailsFragmentTest {
 //    @Test
 //    fun testNavigateToInnerFragment() {
 //        navController.navigate(com.example.addcrop.R.id.addCropDetailsFragment)
-////        onView(withId(R.id.inner_fragment_text)).check(matches(withText("Inner Fragment")))
-////        onView(withId(R.id.inner_fragment_button)).perform(click())
-////        onView(withId(R.id.inner_fragment_text)).check(matches(withText("Button clicked")))
+//        onView(withId(R.id.inner_fragment_text)).check(matches(withText("Inner Fragment")))
+//        onView(withId(R.id.inner_fragment_button)).perform(click())
+//        onView(withId(R.id.inner_fragment_text)).check(matches(withText("Button clicked")))
 //
 //
 //        onView(withId(com.example.addcrop.R.id.et_nickname_crop)).perform(typeText("praveen"))
-////        onView(withId(R.id.cl_calender_date_select)).perform(click())
-////        onView(withClassName(equalTo(CalendarView::class.java.name))).check(matches(isDisplayed()))
+//        onView(withId(R.id.cl_calender_date_select)).perform(click())
+//        onView(withClassName(equalTo(CalendarView::class.java.name))).check(matches(isDisplayed()))
 //        onView(withId(com.example.addcrop.R.id.et_crop_area)).perform(typeText("123"), closeSoftKeyboard())
-////        onView(withId(R.id.cardCheckHealth)).perform(closeSoftKeyboard())
+//        onView(withId(R.id.cardCheckHealth)).perform(closeSoftKeyboard())
 //        onView(withId(com.example.addcrop.R.id.card_save_details_crop)).perform(click())
-////        onView(withText("Error: Field cannot be empty")).check(matches(isDisplayed()))
+//        onView(withText("Error: Field cannot be empty")).check(matches(isDisplayed()))
 //    }
-}
-
-
+//}
+//
+//
 //    @Test
 //    fun testNavigationToInGameScreen() {
 //        // Create a TestNavHostController
@@ -72,7 +102,7 @@ class AddCropDetailsFragmentTest {
 //            Navigation.setViewNavController(fragment.requireView(), navController)
 //        }
 //    }
-
+//
 //    @get:Rule
 //    val activityRule = ActivityTestRule(AddCropActivity::class.java)
 //    @Before
@@ -83,7 +113,7 @@ class AddCropDetailsFragmentTest {
 //
 //
 //    }
-
+//
 //    @Before
 //    fun setUp() {
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -103,17 +133,15 @@ class AddCropDetailsFragmentTest {
 //        // Increase timeout value
 //        activity.asyncMonitor.setLaunchTimeout(60000)
 //    }
-//}
-//}
 //    @Test
 //    fun testSave_cropDetails() {
 //        onView(withId(R.id.et_nickname_crop)).perform(typeText("praveen"))
-////        onView(withId(R.id.cl_calender_date_select)).perform(click())
-////        onView(withClassName(equalTo(CalendarView::class.java.name))).check(matches(isDisplayed()))
+//        onView(withId(R.id.cl_calender_date_select)).perform(click())
+//        onView(withClassName(equalTo(CalendarView::class.java.name))).check(matches(isDisplayed()))
 //        onView(withId(R.id.et_crop_area)).perform(typeText("123"), closeSoftKeyboard())
-////        onView(withId(R.id.cardCheckHealth)).perform(closeSoftKeyboard())
+//        onView(withId(R.id.cardCheckHealth)).perform(closeSoftKeyboard())
 //        onView(withId(R.id.card_save_details_crop)).perform(click())
-////        onView(withText("Error: Field cannot be empty")).check(matches(isDisplayed()))
+//        onView(withText("Error: Field cannot be empty")).check(matches(isDisplayed()))
 //    }
-//
-//}
+
+}

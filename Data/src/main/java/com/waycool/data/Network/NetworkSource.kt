@@ -935,6 +935,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("Mycrops","${e.message}")
             CrashAnalytics.crashAnalyticsError("getMyCrop2 Exception--${e.message}")
             emit(Resource.Error(e.message))
         }
@@ -979,19 +980,22 @@ object NetworkSource {
     }
 
     fun getAdvIrrigation(
-        headerMap: Map<String, String>, account_id: Int, plot_id: Int
+       account_id: Int, plot_id: Int
     ) = flow<Resource<AdvIrrigationModel?>> {
 
-        try {
-            val response = apiInterface.advIrrigation(headerMap, account_id, plot_id)
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
 
-            if (response.isSuccessful)
+        try {
+            val response = apiInterface.advIrrigation(map, account_id, plot_id)
+
+            if (response.isSuccessful) {
+                Log.d("Irrigation","${response.body()}")
                 emit(Resource.Success(response.body()))
-            else {
+            }else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
-            Log.d("Irrigation","Exception: ${e.cause}~~${e.message}~~${e.stackTrace}")
+            Log.d("Irrigation","Exception: ${e.message}")
             CrashAnalytics.crashAnalyticsError("getAdvIrrigation Exception--${e.message}")
 
             //  emit(Resource.Error(e.message))

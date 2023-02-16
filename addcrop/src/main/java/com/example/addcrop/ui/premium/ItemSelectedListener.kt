@@ -1,7 +1,7 @@
 package com.example.addcrop.ui.premium
 
-import com.example.addcrop.ui.selectcrop.VariatyModel
+import com.waycool.data.repository.domainModels.VarietyCropDomain
 
 interface ItemSelectedListener {
-    fun clickOnCategory(name: VariatyModel)
+    fun clickOnCategory(name: VarietyCropDomain)
 }

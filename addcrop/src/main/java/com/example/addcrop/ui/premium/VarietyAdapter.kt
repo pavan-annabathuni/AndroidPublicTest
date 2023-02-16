@@ -7,21 +7,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.addcrop.R
 import com.example.addcrop.databinding.ItemSandBinding
 import com.example.addcrop.ui.CategoryViewHolder
-import com.example.addcrop.ui.selectcrop.VariatyModel
+import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
+import com.waycool.data.repository.domainModels.VarietyCropDomain
 
-class VarietyAdapter(val varietyList:ArrayList<VariatyModel>, private val itemSelectedListener: ItemSelectedListener) : RecyclerView.Adapter<CategoryViewHolder>() {
-private var row_index = -1
+class VarietyAdapter(private val itemSelectedListener: ItemSelectedListener) : RecyclerView.Adapter<CropVarietyViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val binding =
-            ItemSandBinding .inflate(LayoutInflater.from(parent.context), parent, false)
-        return CategoryViewHolder(binding)
+    var details = mutableListOf<VarietyCropDomain>()
+    private var row_index = -1
+    fun setCropVariety(cropVariety: List<VarietyCropDomain>) {
+        this.details = cropVariety.toMutableList()
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val details = varietyList[holder.layoutPosition]
-        holder.binding.tvSand.setText(varietyList[holder.layoutPosition].name)
-        if (row_index == holder.layoutPosition) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CropVarietyViewHolder {
+        val binding =
+            ItemSandBinding .inflate(LayoutInflater.from(parent.context), parent, false)
+        return CropVarietyViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: CropVarietyViewHolder, position: Int) {
+        val details = details[position]
+        holder.binding.tvSand.text=details.variety
+        if (row_index == position) {
             holder.binding.clSand.setBackgroundResource(com.waycool.uicomponents.R.drawable.bg_search)
             holder.binding.ngClick.visibility= View.VISIBLE
 //            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
@@ -34,7 +42,7 @@ private var row_index = -1
         }
 //
         holder.binding.clSand .setOnClickListener {
-            row_index=holder.layoutPosition
+            row_index=position
             notifyDataSetChanged()
             itemSelectedListener.clickOnCategory(details)
             holder.binding.ngClick.visibility= View.GONE
@@ -46,10 +54,16 @@ private var row_index = -1
     }
 
     override fun getItemCount(): Int {
-        return varietyList.size
+        return details.size
+    }
+    fun upDateList() {
+        row_index=-1
+        this.details = details
+        notifyDataSetChanged()
+
     }
 }
-class CategoryViewHolder(val binding: ItemSandBinding) : RecyclerView.ViewHolder(binding.root) {
+class CropVarietyViewHolder(val binding: ItemSandBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
 }
