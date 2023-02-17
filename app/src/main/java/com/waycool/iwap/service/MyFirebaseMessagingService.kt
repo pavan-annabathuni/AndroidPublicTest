@@ -30,7 +30,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d(TAG, "Message Notification Body: ${message.notification}")
+        Log.d(TAG, "Message Data Body: ${message.data}")
 
 
         when (PushNotifications.shouldBeDisplayed(message.data)) {
@@ -51,31 +51,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendMyNotification(message: RemoteMessage) {
-        if (message.notification != null) {
-            Log.d(TAG, "Message Notification Link: " + message.notification?.link)
-            Log.d(TAG, "Message Notification Body: " + message.notification?.body)
-        } else {
-            Log.d(TAG, "Message Notification Body: NULL")
-        }
 
         val notificationId = NotificationID.iD
         val intent: Intent
 
-        if (message.notification?.link != null) {
+        message.data.get("link")
+        if (message.data["link"] != null) {
             intent = Intent(Intent.ACTION_VIEW)
-            intent.data = message.notification?.link
-        } else {
-
+            intent.data = Uri.parse(message.data["link"])
+        }
+        else {
             intent = Intent(this, SplashActivity::class.java)
-//            intent.action = System.currentTimeMillis().toString()
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             intent.identifier ="$notificationId"
         }
-
-        Log.d(TAG, "DeeplinkCheck: ${message.notification?.link}")
-
 
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
@@ -89,13 +80,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        Uri soundUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.cricket);
         val notificationBuilder = NotificationCompat.Builder(this, "outgrow")
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(message.notification?.title ?: "")
-            .setContentText(message.notification?.body ?: "")
+            .setContentTitle(message.data["title"] ?: "")
+            .setContentText(message.data["body"] ?: "")
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
-        if (message.notification?.imageUrl != null) {
-            val bitmap = getBitmapFromUrl(message.notification?.imageUrl.toString())
+        if (message.data["image"] != null) {
+            val bitmap = getBitmapFromUrl(message.data["image"].toString())
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
@@ -140,7 +131,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         //    private Call call;
         var token: String? = null
-        private const val REQUEST_CODE = 12
     }
 
 }
