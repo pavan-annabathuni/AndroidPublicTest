@@ -157,7 +157,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Your current Location is far from your Farm",
                         LENGTH_SHORT
                     ) }}}
 
