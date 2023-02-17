@@ -518,7 +518,7 @@ class GraphsFragment : Fragment() {
 
             }
             "Soil Temperature" -> {
-                TranslationsManager().loadString("soil_moisture", binding.tvToolbar,"Soil Moisture")
+                TranslationsManager().loadString("soil_temperature", binding.tvToolbar,"Soil Temperature")
 
             }
         }
