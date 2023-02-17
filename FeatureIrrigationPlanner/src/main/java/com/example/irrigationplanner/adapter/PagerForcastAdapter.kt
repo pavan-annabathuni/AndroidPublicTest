@@ -8,6 +8,8 @@ import com.example.irrigationplanner.databinding.ItemPagerForecastBinding
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
@@ -48,14 +50,14 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         var area = myCropDataDomain.area
         var width: String? = myCropDataDomain.widthDrip
         var length = myCropDataDomain.lenDrip
-        var areaPerPlant = (length?.toFloat()?.times(width?.toFloat() as Double)).toString().trim()
+        var areaPerPlant = (length?.toDouble()?.times(width?.toDouble() as Double)).toString().trim()
 
         if (!area.isNullOrEmpty() && !dep.isNullOrEmpty()) {
 //           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
-            holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area)?.toFloat()!! / 0.9) + " L"
+            holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area).toFloat() / 0.9) + " L"
         } else holder.acres.text = "0"
         if (!length.isNullOrEmpty() && !width.isNullOrEmpty()) {
-            holder.areaPerPlant.setText(String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * areaPerPlant!!.toFloat() / 0.9) + " L")
+            holder.areaPerPlant.text = String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * areaPerPlant.toFloat() / 0.9) + " L"
 
         } else {
             holder.areaPerPlant.text = "0"
@@ -66,24 +68,32 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         holder.etc.text = properties.etc[position] + "mm"
         holder.eto.text = properties.eto[position].toString() + "mm"
 
-        if (properties!!.mad[position] == 0.0) {
+        var irrigationReq:String
+        var irrigationNotReq:String
+        GlobalScope.launch {
+            irrigationNotReq = TranslationsManager().getString("str_irrigation_not_req")
+            irrigationReq = TranslationsManager().getString("str_Irrigation_req")
+
+        if (properties.mad[position] == 0.0) {
             val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
             if (value <= 0) {
-                holder.irrigationReq.text = "Irrigation Required"
+                holder.irrigationReq.text = irrigationReq
             } else {
                 val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
                 val percentage = (value / 30) * 100
-                holder.irrigationReq.text = "Irrigation Not Required"
+                holder.irrigationReq.text = irrigationNotReq
             }
         } else {
-            val value = properties.mad[position] ?: 0.0 - (properties.depletion[position]?.toFloat()?:0f)
-            if (value <= 0) {
-                holder.irrigationReq.text = "Irrigation Required"
-            } else {
-//                val value = properties.mad[position] ?: 0.0 - properties.depletion[position].toFloat()
-//                if (properties.mad[position] != null)
-//                val percentage = (value / properties.mad[position]!!) * 100
-                holder.irrigationReq.text = "Irrigation Not Required"
+            val value = properties.mad[position]?.minus((properties.depletion[position]?.toFloat()!!))
+            if (value != null) {
+                if (value <= 0) {
+                    holder.irrigationReq.text = irrigationReq
+                } else {
+        //                val value = properties.mad[position] ?: 0.0 - properties.depletion[position].toFloat()
+        //                if (properties.mad[position] != null)
+        //                val percentage = (value / properties.mad[position]!!) * 100
+                    holder.irrigationReq.text = irrigationNotReq
+                }
             }
 
         }
@@ -93,7 +103,7 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         TranslationsManager().loadString("str_total_water_loss", holder.totalWaterLoss)
         TranslationsManager().loadString("str_evapotranspiration", holder.eva)
 
-    }
+    }}
 
     override fun getItemCount(): Int {
         return 7

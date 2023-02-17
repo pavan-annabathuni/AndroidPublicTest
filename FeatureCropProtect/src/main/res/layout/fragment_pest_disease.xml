@@ -19,7 +19,7 @@
             android:minHeight="?android:attr/actionBarSize"
             app:layout_scrollEffect="compress"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:navigationIcon="@drawable/ic_arrow_back">
+            app:navigationIcon="@drawable/ic_back">
 
             <com.waycool.uicomponents.Text.Title2SemiBold
                 android:id="@+id/toolbar_title"

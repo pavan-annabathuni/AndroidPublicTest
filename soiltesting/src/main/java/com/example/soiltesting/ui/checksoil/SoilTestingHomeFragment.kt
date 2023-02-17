@@ -2,7 +2,6 @@ package com.example.soiltesting.ui.checksoil
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -258,7 +257,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
             if (accountID != null) {
-                Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
                 bindObserversSoilTestHistory(accountID!!)
 
             }
@@ -505,8 +503,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility = View.VISIBLE
-
-                        Log.d("TAG", "bindObserversData:" + it.data.toString())
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
                             if (response.size <= 2) {
@@ -741,15 +737,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             )
                         } catch (e: Exception) {
                             binding.clProgressBar.visibility = View.GONE
-                            Log.d(
-                                "TAGPraveen",
-                                "isLocationPermissionGranted: SetPass"
-                            )
+
                         } catch (e: Exception) {
-                            Log.d(
-                                "TAGPraveenAade",
-                                "isLocationPermissionGranted: NotPassed $e"
-                            )
+
                         }
                         binding.clProgressBar.visibility = View.GONE
                                         binding.view.visibility=View.GONE

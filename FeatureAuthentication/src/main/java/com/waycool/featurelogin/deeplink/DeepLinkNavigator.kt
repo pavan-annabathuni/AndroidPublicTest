@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
-import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import com.google.android.gms.tasks.Task
@@ -81,7 +80,6 @@ object DeepLinkNavigator {
                         onSuccessCallback(pendingDynamicLinkData)
                     }
                     .addOnFailureListener { e ->
-                        Log.w("TAG", "getDynamicLink:onFailure", e)
                     }
             }
         }

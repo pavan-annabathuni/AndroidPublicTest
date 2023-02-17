@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back" />
+        app:srcCompat="@drawable/ic_back" />
 
     <com.waycool.uicomponents.Text.Title2Bold
         android:id="@+id/toolbar_tile"

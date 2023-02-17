@@ -305,15 +305,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             viewDevice.farmDetailsDelta(myFarm?.id!!).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Success -> {
-
-//                            deltaAdapter.setMovieList(it.data?.data?.Today)
-//                        binding.soilMoistureOne.progress=60
-//                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data}")
-//                        deltaAdapter.notifyDataSetChanged()
-
-//                        deltaAdapter.update(getSprayingItems(sprayingTime.getToday()))
-//                        Log.d(TAG, "initiFarmDeltT: ${it.data!!.data[0].Today} ")
-
                         if (it.data?.data?.Today.isNullOrEmpty()) {
                             binding.textView159.visibility = View.GONE
                             binding.sparayingRv.visibility = View.GONE
@@ -587,7 +578,6 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 val intent = Intent(activity, AddCropActivity::class.java)
                 val bundle = Bundle()
                 bundle.putInt("farmID", myFarm?.id.toString().toInt())
-                Log.d("TAG", "initViewCliccndsbvck:${myFarm?.id.toString().toInt()} ")
                 intent.putExtras(bundle)
                 startActivity(intent)
             }
