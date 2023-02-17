@@ -143,7 +143,7 @@ class GraphsFragment : Fragment() {
             binding.lineChart.xAxis.valueFormatter = valueFormatter2
             binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
             val line: MutableList<ILineDataSet> = ArrayList()
-            val lDataSet = LineDataSet(entries, getGraphDataSetTitle(paramType))
+            val lDataSet = LineDataSet(entries, getGraphDataSetTitle(paramType,duration))
             lDataSet.color = resources.getColor(com.example.mandiprice.R.color.WoodBrown)
             lDataSet.setCircleColor(Color.WHITE)
             lDataSet.lineWidth = 4f
@@ -239,15 +239,19 @@ class GraphsFragment : Fragment() {
         }
     }
 
-    private fun getGraphDataSetTitle(paramType: String): String {
+    private fun getGraphDataSetTitle(paramType: String,duration: GraphSelection): String {
         return when (paramType) {
             "temperature", "soil_temperature_1" -> "Temperature in °C"
             "rainfall" -> "Rainfall in mm"
             "humidity" -> "Humidity in %"
             "windspeed" -> "Windspeed in Kmph"
-            "leaf_wetness_hrs" -> "Leaf Wetness in %"
-            "pressure" -> "Pressure in KPa"
-            "soil_moisture_1", "soil_moisture_2" -> "Soil Moisture in KPa"
+            "leaf_wetness_hrs" -> {
+                if(duration == GraphSelection.LAST12HRS)
+                    "Leaf Wetness - Dry/Wet"
+                else "Leaf Wetness in Hrs"
+            }
+            "pressure" -> "Pressure in kpa"
+            "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> "Soil Moisture in kpa"
             "lux" -> "Lux in lux"
             else -> " "
         }
