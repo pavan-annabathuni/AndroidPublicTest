@@ -24,11 +24,17 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 
-//@RunWith(AndroidJUnit4::class)
-@MediumTest
+@RunWith(AndroidJUnit4::class)
+//@MediumTest
 class AddCropDetailsFragmentTest {
-    @get:Rule
-    val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+    @Test
+    fun testAddCropFragmentNavigation(){
+        val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+
+
+    }
+//    @get:Rule
+//    val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
 
 //    @Test
 //    fun testNavigation() {

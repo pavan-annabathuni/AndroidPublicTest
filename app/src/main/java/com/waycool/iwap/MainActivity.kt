@@ -11,6 +11,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -38,6 +42,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
+    private lateinit var inAppUpdate: InAppUpdate
+//    private var appUpdate:AppUpdateManager?=null
+//    private val REQUEST_CODE=100
 
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -47,6 +54,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getDashBoard()
+        inAppUpdate = InAppUpdate(this)
+//        appUpdate= AppUpdateManagerFactory.create(this)
+//        checkUpdate()
 
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
@@ -121,6 +131,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        inAppUpdate.onActivityResult(requestCode,resultCode, data)
+    }
+    override fun onResume() {
+        super.onResume()
+        inAppUpdate.onResume()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        inAppUpdate.onDestroy()
+    }
+
+//    fun checkUpdate(){
+//        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
+//            if (updateInfo.updateAvailability()==UpdateAvailability.UPDATE_AVAILABLE && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+//                appUpdate?.startUpdateFlowForResult(updateInfo,AppUpdateType.FLEXIBLE,this,REQUEST_CODE)
+//            }
+//
+//        }
+//    }
+
 
     private fun validateToken(user_id: Int, token: String) {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
