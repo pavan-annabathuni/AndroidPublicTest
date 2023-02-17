@@ -154,7 +154,7 @@ class CropSelectFragment : Fragment() {
         viewModel.viewModelScope.launch {
             binding.searchView.hint = TranslationsManager().getString("search")
         }
-        TranslationsManager().loadString("crop_selection", binding.toolbarTitle, "Crop Selection")
+        TranslationsManager().loadString("crop_selection", binding.tvToolBar, "Crop Selection")
         TranslationsManager().loadString("", binding.myCropsTitle, "My Crops")
     }
 

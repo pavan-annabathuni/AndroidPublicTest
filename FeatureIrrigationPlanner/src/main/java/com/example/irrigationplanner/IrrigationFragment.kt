@@ -172,8 +172,6 @@ class IrrigationFragment : Fragment() {
         binding.btDisease.setOnClickListener {
             EventClickHandling.calculateClickEvent("Disease_outbreak_chances_view")
             val args = Bundle()
-
-            args.putParcelable("IrrigationHis", irrigation)
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             this.findNavController()
@@ -184,7 +182,6 @@ class IrrigationFragment : Fragment() {
             EventClickHandling.calculateClickEvent("weekly_irrigation_forecast_view")
             val args = Bundle()
             if (irrigation != null) {
-
                 args.putParcelable("IrrigationHis", irrigation)
                 args.putInt("plotId", plotId)
             }
@@ -305,6 +302,7 @@ class IrrigationFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             binding.btHistory.visibility = View.GONE
                             binding.dailyIrrigation.visibility = View.GONE
+                            binding.view3.visibility = View.GONE
                         }
                         if(it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()){
                             binding.btForecast.visibility = View.GONE

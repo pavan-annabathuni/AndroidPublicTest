@@ -88,6 +88,7 @@ class CropStageFragment : Fragment() {
             }
         /** saving the date for crop stage */
         binding.saveCropStage.setOnClickListener {
+            if(cropStageId!=null)
             viewModel.updateCropStage(accountId, cropStageId!!,plotId,date).observe(viewLifecycleOwner){
                 Log.d("Date", "getCropStage: $date")
             }
