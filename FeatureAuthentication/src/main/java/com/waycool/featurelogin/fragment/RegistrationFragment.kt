@@ -414,9 +414,7 @@ class RegistrationFragment : Fragment() {
 
 // AudioWife- A simple audio player wrapper for Android
         audioWife = AudioWife.getInstance()
-        audioWife.addOnCompletionListener {
-            //                audioWife.release();
-        }
+
 
         bottomSheetDialog.setOnDismissListener {
             audioWife.release()
@@ -424,7 +422,7 @@ class RegistrationFragment : Fragment() {
 
         //play audio functionality of audio
 
-        play!!.setOnClickListener { view ->
+        play!!.setOnClickListener {
             //if audio url is not null go to "IF" condition
                 if (pause != null) {
                     audiourl?.let { playAudio(context, it, play, pause, seekbar!!, totalTime!!) }

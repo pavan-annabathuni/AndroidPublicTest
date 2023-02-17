@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
 import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
-import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.error.ToastStateHandling
@@ -239,7 +238,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         }
                     }
                 soilHistoryAdapter.upDateList(temp)
-                Log.d("TAG", "::::stderr  $temp")
                 }
             }
 
@@ -285,21 +283,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
-                        // use your location object
-                        // get latitude , longitude and other info from this
-                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
-//                        getAddress(location.latitude, location.longitude)
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
-                        )
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
-                        )
-
-//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
-//                        bindObserversCheckSoilTest()
 
                         val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
@@ -324,15 +307,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                             CustomeDialogFragment.TAG
                                         )
                                         binding.cardCheckHealth.isClickable = true
-//                                        binding.clProgressBar.visibility = View.VISIBLE
-//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
-                                        Log.d(
-                                            Constant.TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response"
-                                        )
+
                                         var bundle = Bundle().apply {
                                             putParcelableArrayList(
                                                 "list",

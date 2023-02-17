@@ -26,16 +26,16 @@ class MasterDownloadWorker(val context: Context, workerParams: WorkerParameters)
                 CropInformationSyncer().downloadData()
 
                 //CropProtection Master
-                PestDiseaseSyncer().invalidateSync()
-                PestDiseaseSyncer().downloadData()
+//                PestDiseaseSyncer().invalidateSync()
+//                PestDiseaseSyncer().downloadData()
 
                 //Module Master
                 ModuleMasterSyncer().invalidateSync()
                 ModuleMasterSyncer().getData()
 
                 //VansCategory Master
-                VansCategorySyncer().invalidateSync()
-                VansCategorySyncer().getData()
+//                VansCategorySyncer().invalidateSync()
+//                VansCategorySyncer().getData()
 
             }
 

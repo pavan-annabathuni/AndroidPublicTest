@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# zxing-android-embedded
+-keep class com.google.zxing.** {*;}
+-keep class com.journeyapps.** {*;}
+
+# ZXing library rules
+-keep class com.google.zxing.** { *; }
+-keepclassmembers class com.google.zxing.** {
+    *;
+}
+

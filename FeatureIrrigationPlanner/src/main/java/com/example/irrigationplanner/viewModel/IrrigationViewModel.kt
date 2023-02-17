@@ -16,7 +16,7 @@ class IrrigationViewModel:ViewModel() {
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
         CropsRepository.getMyCrop2().asLiveData()
 
-    suspend fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
+     fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
         AdvIrrigationRepository.getAdvIrrigation(account_id,plot_id).asLiveData()
 
     fun updateHarvest(plot_id: Int,account_id: Int,cropId:Int,harvestDate:String,Yield:Int):LiveData<Resource<HarvestDateModel?>> =

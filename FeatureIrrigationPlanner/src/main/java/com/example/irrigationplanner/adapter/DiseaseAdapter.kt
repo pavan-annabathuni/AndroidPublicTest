@@ -65,7 +65,10 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
             dialog.show()
 
     }
-        holder.name.text = properties.disease?.diseaseName
+        holder.name.text = if (properties.disease?.diseaseNameTranslated.equals("--", ignoreCase = true))
+            properties.disease?.diseaseName
+        else
+            properties.disease?.diseaseNameTranslated
 
     }
 

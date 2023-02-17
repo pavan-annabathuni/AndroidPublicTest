@@ -27,7 +27,8 @@ class IrrigationHistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            historyDetails = it.getParcelable("IrrigationHis")
+            //TODO
+//            historyDetails = it.getParcelable("IrrigationHis")
         }
     }
 
