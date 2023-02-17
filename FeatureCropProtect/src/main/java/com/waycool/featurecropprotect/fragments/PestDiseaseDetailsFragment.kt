@@ -11,11 +11,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -57,9 +59,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import nl.changer.audiowife.AudioWife
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
 
 class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private var handler: Handler? = null
@@ -74,14 +78,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private val adapter: DiseasesChildAdapter by lazy { DiseasesChildAdapter() }
     private var moduleId = "2"
 
-    private var mediaPlayer: MediaPlayer? = null
 
     private var diseaseId: Int? = null
     private var cropId: Int? = null
 
     private var diseaseName: String? = null
     private var audioUrl: String? = null
-    var count=0
 
     var chemical = "Chemical"
     var biological = "Biological"
@@ -150,9 +152,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
+//            if(audioUrl!=null)
+//                initializeMediaPlayer()
         }
-        audio = AudioWife.getInstance()
-        mediaPlayer = MediaPlayer()
+//        audio = AudioWife.getInstance()
+
+//        mediaPlayer = MediaPlayer()
 
         if (audioUrl.isNullOrEmpty()) {
             binding.audioLayout.visibility = View.GONE
@@ -160,20 +165,20 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             binding.audioLayout.visibility = View.VISIBLE
         }
 
-        binding.playPauseLayout.setOnClickListener {
-            count++
-            if (count % 2 != 0) {
-                binding.pause.visibility = View.VISIBLE
-                binding.play.visibility = View.GONE
-                audioPlayer()
-
-            } else {
-                binding.pause.visibility = View.GONE
-                binding.play.visibility = View.VISIBLE
-                audio?.pause()
-            }
-//            audioPlayer()
-        }
+//        binding.playPauseLayout.setOnClickListener {
+//            Log.d("health", "onViewCreated: $audioUrl")
+//            if (binding.play.isVisible) {
+//                binding.pause.visibility = View.VISIBLE
+//                binding.play.visibility = View.GONE
+//                audioPlayer()
+//
+//            } else {
+//                binding.pause.visibility = View.GONE
+//                binding.play.visibility = View.VISIBLE
+//                audio?.pause()
+//            }
+////            audioPlayer()
+//        }
 
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
@@ -202,6 +207,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         setNews()
         setBanners()
 
+        handler?.postDelayed({
+             audioPlayer()
+            binding.clProgress.visibility = View.GONE
+            binding.constraintLayout2.visibility = View.GONE
+        },3000)
+
         viewModel.viewModelScope.launch {
             chemical = TranslationsManager().getString("chemical")
             cultural = TranslationsManager().getString("str_cultural")
@@ -216,6 +227,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         is Resource.Success -> {
                             binding.toolbarTitle.text = it.data?.diseaseName
                             binding.cropProtectDiseaseName.text = it.data?.diseaseName
+                            audioUrl = it.data?.audioUrl
 
                             if (it.data?.imageUrl == null)
                                 adapter.submitList(emptyList())
@@ -224,6 +236,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 Glide.with(act).load(it.data?.thumb)
                                     .placeholder(com.waycool.uicomponents.R.drawable.outgrow_logo_new)
                                     .into(binding.cropProtectDiseaseImage)
+
+//                                Handler(Looper.myLooper()!!).postDelayed({
+//                                    initializeMediaPlayer()
+//                                    binding.clProgress.visibility=View.GONE
+//                                    binding.constraintLayout2.visibility=View.GONE
+//                                }, 300)
                             }
 
                             binding.cropProtectDiseaseImage.setOnClickListener { _ ->
@@ -241,10 +259,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
 
                             if (it.data?.audioUrl != null)
-                                binding.audioLayout.visibility= VISIBLE
+                                binding.audioLayout.visibility = VISIBLE
 //                                audioNewLayoutBinding.root.visibility = VISIBLE
                             else
-                                binding.audioLayout.visibility= GONE
+                                binding.audioLayout.visibility = GONE
 
 //                            audioNewLayoutBinding.root.visibility = GONE
                             if (it.data != null && it.data!!.symptoms != null) {
@@ -288,6 +306,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             if (it.data != null && it.data!!.cultural != null) {
                                 addTab(cultural)
                             }
+
+
                         }
                         is Resource.Loading -> {
                             AppUtils.translatedToastLoading(context)
@@ -298,16 +318,30 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             }
         }
     }
+
+
+//    private fun initializeMediaPlayer() {
+//
+//        audio = AudioWife.getInstance()
+//            .init(activity, Uri.parse(audioUrl))
+//            .setPlayView(binding.play)
+//            .setPauseView(binding.pause)
+//            .setSeekBar(binding.mediaSeekbar)
+//            .setRuntimeView(binding.totalTime)
+//
+//    }
+
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
-        val uriString="https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
-        val title="Outgrow - Pest Disease Detail for $diseaseName"
-        val description="Find Pest Management and more on Outgrow app"
-        binding.clShareProgress.visibility=View.VISIBLE
-        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
+        val uriString =
+            "https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
+        val title = "Outgrow - Pest Disease Detail for $diseaseName"
+        val description = "Find Pest Management and more on Outgrow app"
+        binding.clShareProgress.visibility = View.VISIBLE
+        getDeepLinkAndScreenShot(context, shareLayout, uriString, title, description) { task, uri ->
             if (task.isSuccessful) {
                 binding.clShareProgress.visibility = View.GONE
                 Handler().postDelayed({
-                        binding.imgShare.isEnabled = true
+                    binding.imgShare.isEnabled = true
                 }, 1000)
 
                 val shortLink: Uri? = task.result.shortLink
@@ -355,7 +389,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
-                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
+                                        TranslationsManager().loadString(
+                                            "news_not_available",
+                                            newsBinding.tvNoVANS,
+                                            "News and Articles are not \navailable with us."
+                                        )
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
@@ -413,7 +451,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
-                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
+                                        TranslationsManager().loadString(
+                                            "videos_not_available",
+                                            videosBinding.tvNoVANs,
+                                            "Videos are not available with us."
+                                        )
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility = View.GONE
@@ -572,20 +614,60 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
-        if(mediaPlayer!=null){
-            audio = AudioWife.getInstance()
-                .init(requireContext(), Uri.parse(audioUrl))
-                .setPlayView(binding.play)
-                .setPauseView(binding.pause)
-                .setSeekBar(binding.mediaSeekbar)
-                .setRuntimeView(binding.totalTime)
-            audio?.play()
-            mediaPlayer!!.setOnCompletionListener {
+
+
+                audio = AudioWife.getInstance()
+                    .init(activity?.applicationContext, Uri.parse(audioUrl))
+                    .setPlayView(binding.play)
+                    .setPauseView(binding.pause)
+                    .setSeekBar(binding.mediaSeekbar)
+                    .setRuntimeView(binding.totalTime)
+
+//            if (audioUrl!=null && URLUtil.isValidUrl(audioUrl)){
+//                audio?.play()
+//                binding.audioProgress.visibility = INVISIBLE
+//                binding.play.visibility = INVISIBLE
+//            }
+
+//            AudioWife.getInstance().addOnPlayClickListener {
+//                if(audio==null){
+//                    binding.audioProgress.visibility = VISIBLE
+//                    binding.play.visibility = INVISIBLE
+//                }
+//            }
+
+            AudioWife.getInstance().addOnCompletionListener {
                 binding.mediaSeekbar.progress = 0
                 binding.pause.visibility = View.GONE
                 binding.play.visibility = View.VISIBLE
             }
+
+
+        AudioWife.getInstance().addOnPlayClickListener {
+            binding.pause.visibility = View.VISIBLE
+            binding.play.visibility = View.GONE
+            audio?.play()
         }
+
+        AudioWife.getInstance().addOnPauseClickListener {
+            binding.pause.visibility = View.GONE
+            binding.play.visibility = View.VISIBLE
+            audio?.pause()
+        }
+//        binding.playPauseLayout.setOnClickListener {
+//            Log.d("health", "onViewCreated: $audioUrl")
+//            if (binding.play.isVisible) {
+//                binding.pause.visibility = View.VISIBLE
+//                binding.play.visibility = View.GONE
+//                audioPlayer()
+//
+//            } else {
+//                binding.pause.visibility = View.GONE
+//                binding.play.visibility = View.VISIBLE
+//                audio?.pause()
+//            }
+////            audioPlayer()
+//        }
 
 //        if(mediaPlayer!!.isPlaying){
 //            binding.pause.visibility = View.VISIBLE
@@ -627,6 +709,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     override fun onResume() {
         super.onResume()
+
         if (runnable != null) {
             handler?.postDelayed(runnable!!, 3000)
         }

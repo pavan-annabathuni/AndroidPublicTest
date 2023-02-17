@@ -38,7 +38,7 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
             index = position
         }
         val properties = details
@@ -55,21 +55,26 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
 
             holder.x.text = outputDateFormatter.format(date)
 
-        val level = (properties.mad[position]?.toFloat())?:0f - (properties.depletion[position]?.toFloat()?:0f)
-        if(level<=0) {
-            holder.image.setImageResource(R.drawable.ic_irrigation_2)
-            holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
-            holder.x.setTextColor(Color.parseColor("#146133"))
+        val level = (properties.mad[position]?.toFloat())?.minus((properties.depletion[position]?.toFloat()!!))
+        if (level != null) {
+            if(level<=0.0) {
+                holder.image.setImageResource(R.drawable.ic_irrigation_2)
+                holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
+                holder.x.setTextColor(Color.parseColor("#146133"))
+            }
+            else{
+                holder.ll.setBackgroundResource(R.drawable.border_irrigation)
+                holder.x.setTextColor(Color.parseColor("#000000"))
+                holder.image.setImageResource(R.drawable.ic_irrigation_his2)
+            }
         }
-        else{
-            holder.ll.setBackgroundResource(R.drawable.border_irrigation)
-            holder.x.setTextColor(Color.parseColor("#000000"))
-            holder.image.setImageResource(R.drawable.ic_irrigation_his2)
-        }
+        Log.d("irrigationLevel", "onBindViewHolder: $level")
     }
 
     override fun getItemCount(): Int {
-        return details.days.size
+        return if(!details.days.isNullOrEmpty())
+            details.days.size
+        else 0
     }
 
 }

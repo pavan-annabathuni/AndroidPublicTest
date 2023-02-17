@@ -29,6 +29,7 @@ class CustomeDialogFragment : DialogFragment() {
         // Inflate the layout for this fragment
         dialog!!.window?.setBackgroundDrawableResource(R.drawable.bg_custome_dialog)
         binding = FragmentCustomeDialogBinding.inflate(inflater, container, false)
+        translationSoilTesting()
         binding.tvOk .setOnClickListener {
             dialog!!.cancel()
             dialog!!.dismiss()
