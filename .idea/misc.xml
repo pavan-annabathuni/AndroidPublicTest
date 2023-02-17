@@ -16,7 +16,7 @@
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_details_capture.xml" value="0.34839630126953125" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_health.xml" value="0.21481481481481482" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_history.xml" value="0.21481481481481482" />
-        <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_select.xml" value="0.21481481481481482" />
+        <entry key="FeatureCropHealth/src/main/res/layout/fragment_crop_select.xml" value="0.3271196632591702" />
         <entry key="FeatureCropHealth/src/main/res/layout/fragment_how_to_click.xml" value="0.2833333333333333" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_iconpest_disease.xml" value="0.1385" />
         <entry key="FeatureCropProtect/src/main/res/drawable/ic_mic.xml" value="0.1385" />
@@ -29,7 +29,7 @@
         <entry key="FeatureCropProtect/src/main/res/layout/dailog_pest.xml" value="0.2833333333333333" />
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_crop_selection.xml" value="0.15358361774744028" />
         <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease.xml" value="0.17335882727852134" />
-        <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease_details.xml" value="0.2212962962962963" />
+        <entry key="FeatureCropProtect/src/main/res/layout/fragment_pest_disease_details.xml" value="0.165" />
         <entry key="FeatureCropProtect/src/main/res/layout/item_mycrops.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/border.xml" value="0.124" />
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/ic_close.xml" value="0.145" />
