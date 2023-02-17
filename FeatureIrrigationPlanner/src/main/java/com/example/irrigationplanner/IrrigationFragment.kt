@@ -1,5 +1,6 @@
 package com.example.irrigationplanner
 
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -19,18 +20,25 @@ import com.example.irrigationplanner.adapter.DiseaseAdapter
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
+import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class IrrigationFragment : Fragment() {
     private lateinit var binding: FragmentIrrigationBinding
@@ -48,6 +56,9 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
+    var dateCrop: String = ""
+    val myCalendar = Calendar.getInstance()
+    var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
 
     //private lateinit var args:Bundle
     var dificiency: String = "noData"
@@ -121,7 +132,6 @@ class IrrigationFragment : Fragment() {
         }
 
 
-        setDetails()
         translation()
 
 
@@ -200,8 +210,9 @@ class IrrigationFragment : Fragment() {
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             cropId?.let { it1 -> args.putInt("cropId", it1) }
-            this.findNavController()
-                .navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment, args)
+//            this.findNavController()
+//                .navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment, args)
+            harvestDialog()
 
         }
         /** clicking view all history  navigation history fragment */
@@ -212,6 +223,16 @@ class IrrigationFragment : Fragment() {
             this.findNavController()
                 .navigate(R.id.action_irrigationFragment_to_cropOverviewFragment, args)
         }
+
+//        viewModel.cropHarvestedLiveData.observe(viewLifecycleOwner){
+//            if(it==true){
+//                viewModel.cropHarvestedLiveData.postValue(false)
+//                findNavController().navigateUp()
+//            }else{
+//                setDetails()
+//            }
+//        }
+        setDetails()
     }
 
     private fun setAdapter(accountId: Int) {
@@ -251,7 +272,6 @@ class IrrigationFragment : Fragment() {
                     is Resource.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.btForecast.visibility = View.GONE
-                        binding.btDisease.visibility = View.GONE
                         binding.btHistory.visibility = View.GONE
                         binding.dailyIrrigation.visibility = View.GONE
                         Log.d("History", "setAdapter: loading")
@@ -260,7 +280,6 @@ class IrrigationFragment : Fragment() {
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE
                         binding.btForecast.visibility = View.GONE
-                        binding.btDisease.visibility = View.GONE
                         binding.btHistory.visibility = View.GONE
                         binding.dailyIrrigation.visibility = View.GONE
                       AppUtils.translatedToastServerErrorOccurred(context)
@@ -280,11 +299,15 @@ class IrrigationFragment : Fragment() {
                         irrigation = it.data?.data?.irrigation!!
                         binding.progressBar.visibility = View.GONE
                         binding.btForecast.visibility = View.VISIBLE
-                        binding.btDisease.visibility = View.VISIBLE
                         binding.btHistory.visibility = View.VISIBLE
                         Log.d("History", "setAdapter: Success")
                         if(it.data?.data?.irrigation?.historicData.isNullOrEmpty()){
+                            binding.progressBar.visibility = View.GONE
+                            binding.btHistory.visibility = View.GONE
                             binding.dailyIrrigation.visibility = View.GONE
+                        }
+                        if(it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()){
+                            binding.btForecast.visibility = View.GONE
                         }
                     }
                 }
@@ -302,6 +325,9 @@ class IrrigationFragment : Fragment() {
 
         /** calling disease api */
         viewModel.getDisease(accountId, plotId).observe(viewLifecycleOwner) {
+            when(it){
+                is Resource.Success->{
+
             val data = it.data?.data?.currentData?.filter { itt ->
                 itt.disease?.diseaseType == "Disease"
             }
@@ -311,7 +337,18 @@ class IrrigationFragment : Fragment() {
             }
             if (data2 != null) dificiency = "dif"
             else dificiency = "noData"
+                    binding.btDisease.visibility = View.VISIBLE
+                    if(it.data?.data?.historicData.isNullOrEmpty())
+                        binding.btDisease.visibility = View.GONE
         }
+                is Resource.Loading->{
+                    binding.btDisease.visibility = View.GONE
+                }
+                is Resource.Error->{
+                    binding.btDisease.visibility = View.GONE
+                }
+            }
+            }
     }
 
     private fun tabs() {
@@ -515,4 +552,89 @@ class IrrigationFragment : Fragment() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("IrrigationFragment")
     }
+
+    private fun harvestDialog() {
+        val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
+        val harvestBinding:FragmentSheetHarvestBinding = FragmentSheetHarvestBinding.inflate(layoutInflater)
+        dialog.setContentView(harvestBinding.root)
+        harvestBinding.close.setOnClickListener {
+            dialog.dismiss()
+        }
+        harvestBinding.save.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Harvest_details_save")
+            var date = harvestBinding.editText2.text.toString()
+            if (harvestBinding.editText.text.toString() != "" && date != "") {
+                var yield_tone = harvestBinding.editText.text.toString().toInt()
+                viewModel.updateHarvest(plotId, accountId!!, cropId!!, date, yield_tone)
+                    .observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Success -> {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        MyCropSyncer().invalidateSync()
+                                        LocalSource.deleteAllMyCrops()
+                                        MyCropSyncer().getMyCrop()
+                                    }
+                                findNavController().navigateUp()
+//                                    viewModel.setCropHarvested()
+                                dialog.dismiss()
+                            }
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {
+                                AppUtils.translatedToastServerErrorOccurred(context)
+                            }
+                        }
+                    }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastEnterFields = TranslationsManager().getString("toast_enter_all_field")
+                    if(!toastEnterFields.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastEnterFields,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please enter all the mandatory fields",
+                        Toast.LENGTH_SHORT
+                    ) }}}
+
+            }
+        }
+        harvestBinding.editText2.setOnClickListener {
+            var date: DatePickerDialog.OnDateSetListener? =
+                DatePickerDialog.OnDateSetListener { view, year, month, day ->
+                    myCalendar.set(Calendar.YEAR, year)
+                    myCalendar.set(Calendar.MONTH, month)
+                    myCalendar.set(Calendar.DAY_OF_MONTH, day)
+                    myCalendar.add(Calendar.YEAR, -1)
+                    view.minDate = myCalendar.timeInMillis
+                    val myFormat = "yyyy-MM-dd"
+                    val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+                    harvestBinding.editText2.text = dateFormat.format(myCalendar.time)
+                    myCalendar.add(Calendar.YEAR, 1)
+                    view.maxDate = myCalendar.timeInMillis
+                }
+            val dialog = DatePickerDialog(
+                requireContext(),
+                date,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)
+            )
+            dateCrop = dateofBirthFormat.format(myCalendar.time)
+            myCalendar.add(Calendar.YEAR, -1)
+            dialog.datePicker.minDate = myCalendar.timeInMillis
+            myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
+            dialog.datePicker.maxDate = myCalendar.timeInMillis
+            dialog.show()
+            dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
+                Color.parseColor("#7946A9")
+            )
+            dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
+                Color.parseColor("#7946A9")
+            )
+        }
+
+        dialog.show()
+
+
+    }
+
 }

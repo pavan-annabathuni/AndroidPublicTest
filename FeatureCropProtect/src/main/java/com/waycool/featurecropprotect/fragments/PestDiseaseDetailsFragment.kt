@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -53,6 +54,7 @@ import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
 import com.waycool.videos.databinding.GenericLayoutVideosListBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -81,7 +83,6 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     private var diseaseName: String? = null
     private var audioUrl: String? = null
-    var count=0
 
     var chemical = "Chemical"
     var biological = "Biological"
@@ -150,9 +151,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
             audioUrl = it.getString("audioUrl")
+//            if(audioUrl!=null)
+//                initializeMediaPlayer()
         }
         audio = AudioWife.getInstance()
         mediaPlayer = MediaPlayer()
+
 
         if (audioUrl.isNullOrEmpty()) {
             binding.audioLayout.visibility = View.GONE
@@ -161,8 +165,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
 
         binding.playPauseLayout.setOnClickListener {
-            count++
-            if (count % 2 != 0) {
+            Log.d("health", "onViewCreated: $audioUrl")
+            if (binding.play.isVisible) {
                 binding.pause.visibility = View.VISIBLE
                 binding.play.visibility = View.GONE
                 audioPlayer()
@@ -216,6 +220,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                         is Resource.Success -> {
                             binding.toolbarTitle.text = it.data?.diseaseName
                             binding.cropProtectDiseaseName.text = it.data?.diseaseName
+                            audioUrl = it.data?.audioUrl
 
                             if (it.data?.imageUrl == null)
                                 adapter.submitList(emptyList())
@@ -241,10 +246,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             }
 
                             if (it.data?.audioUrl != null)
-                                binding.audioLayout.visibility= VISIBLE
+                                binding.audioLayout.visibility = VISIBLE
 //                                audioNewLayoutBinding.root.visibility = VISIBLE
                             else
-                                binding.audioLayout.visibility= GONE
+                                binding.audioLayout.visibility = GONE
 
 //                            audioNewLayoutBinding.root.visibility = GONE
                             if (it.data != null && it.data!!.symptoms != null) {
@@ -288,6 +293,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             if (it.data != null && it.data!!.cultural != null) {
                                 addTab(cultural)
                             }
+
+                            Handler(Looper.myLooper()!!).postDelayed({
+                                initializeMediaPlayer()
+                            }, 700)
                         }
                         is Resource.Loading -> {
                             AppUtils.translatedToastLoading(context)
@@ -298,16 +307,29 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             }
         }
     }
+
+    private fun initializeMediaPlayer() {
+
+        audio = AudioWife.getInstance()
+            .init(requireContext(), Uri.parse(audioUrl))
+            .setPlayView(binding.play)
+            .setPauseView(binding.pause)
+            .setSeekBar(binding.mediaSeekbar)
+            .setRuntimeView(binding.totalTime)
+
+    }
+
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
-        val uriString="https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
-        val title="Outgrow - Pest Disease Detail for $diseaseName"
-        val description="Find Pest Management and more on Outgrow app"
-        binding.clShareProgress.visibility=View.VISIBLE
-        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
+        val uriString =
+            "https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
+        val title = "Outgrow - Pest Disease Detail for $diseaseName"
+        val description = "Find Pest Management and more on Outgrow app"
+        binding.clShareProgress.visibility = View.VISIBLE
+        getDeepLinkAndScreenShot(context, shareLayout, uriString, title, description) { task, uri ->
             if (task.isSuccessful) {
                 binding.clShareProgress.visibility = View.GONE
                 Handler().postDelayed({
-                        binding.imgShare.isEnabled = true
+                    binding.imgShare.isEnabled = true
                 }, 1000)
 
                 val shortLink: Uri? = task.result.shortLink
@@ -355,7 +377,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
                                     if (adapter.itemCount == 0) {
                                         newsBinding.noDataNews.visibility = View.VISIBLE
-                                        TranslationsManager().loadString("news_not_available", newsBinding.tvNoVANS, "News and Articles are not \navailable with us.")
+                                        TranslationsManager().loadString(
+                                            "news_not_available",
+                                            newsBinding.tvNoVANS,
+                                            "News and Articles are not \navailable with us."
+                                        )
                                         newsBinding.videoCardNoInternet.visibility = View.GONE
                                         newsBinding.newsListRv.visibility = View.INVISIBLE
                                         newsBinding.viewAllNews.visibility = View.GONE
@@ -413,7 +439,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                 if (it1 is LoadState.NotLoading) {
                                     if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
-                                        TranslationsManager().loadString("videos_not_available", videosBinding.tvNoVANs, "Videos are not available with us.")
+                                        TranslationsManager().loadString(
+                                            "videos_not_available",
+                                            videosBinding.tvNoVANs,
+                                            "Videos are not available with us."
+                                        )
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
                                         videosBinding.viewAllVideos.visibility = View.GONE
@@ -572,15 +602,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
-        if(mediaPlayer!=null){
-            audio = AudioWife.getInstance()
-                .init(requireContext(), Uri.parse(audioUrl))
-                .setPlayView(binding.play)
-                .setPauseView(binding.pause)
-                .setSeekBar(binding.mediaSeekbar)
-                .setRuntimeView(binding.totalTime)
+        if (mediaPlayer != null) {
+//            audio = AudioWife.getInstance()
+//                .init(requireContext(), Uri.parse(audioUrl))
+//                .setPlayView(binding.play)
+//                .setPauseView(binding.pause)
+//                .setSeekBar(binding.mediaSeekbar)
+//                .setRuntimeView(binding.totalTime)
             audio?.play()
-            mediaPlayer!!.setOnCompletionListener {
+            mediaPlayer?.setOnCompletionListener {
                 binding.mediaSeekbar.progress = 0
                 binding.pause.visibility = View.GONE
                 binding.play.visibility = View.VISIBLE

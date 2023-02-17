@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -92,10 +93,10 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun onClicks() {
-        binding.floatingActionButton1.setOnClickListener() {
+        binding.floatingActionButton1.setOnClickListener {
             this.findNavController().navigate(R.id.action_ndviFragment_to_infoSheetFragment)
         }
-        binding.topAppBar.setOnClickListener() {
+        binding.topAppBar.setOnClickListener {
             this.findNavController().navigateUp()
         }
 
@@ -170,7 +171,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
                 when(it){
                     is Resource.Success ->{
-                        ndviDataList = it?.data?.data
+                        ndviDataList = it.data?.data
                             ?.filter { ndviData -> ndviData.dt != null }
 
                         val datesList: List<String?> = ndviDataList
@@ -241,7 +242,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             } else {
                 selectedNdvi?.tile?.truecolor
             }
-            if (tileUrl.isNullOrEmpty()) {
+            if (tileUrl.isNullOrEmpty() && URLUtil.isValidUrl(tileUrl)) {
                 ToastStateHandling.toastError(
                     requireContext(),
                     "Image Not Available",
@@ -263,7 +264,8 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                         return try {
                             URL(url)
                         } catch (e: MalformedURLException) {
-                            throw java.lang.AssertionError(e)
+                            URL("")
+//                            throw java.lang.AssertionError(e)
                         }
                     }
                 }
@@ -340,7 +342,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             "This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health."
         )
 
-        viewModel.viewModelScope.launch() {
+        viewModel.viewModelScope.launch {
             val title = TranslationsManager().getString("str_ndvi")
             binding.topAppBar.title = title
         }

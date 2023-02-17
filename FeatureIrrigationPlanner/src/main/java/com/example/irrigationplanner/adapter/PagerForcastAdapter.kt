@@ -50,11 +50,11 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         var area = myCropDataDomain.area
         var width: String? = myCropDataDomain.widthDrip
         var length = myCropDataDomain.lenDrip
-        var areaPerPlant = (length?.toFloat()?.times(width?.toFloat() as Double)).toString().trim()
+        var areaPerPlant = (length?.toDouble()?.times(width?.toDouble() as Double)).toString().trim()
 
         if (!area.isNullOrEmpty() && !dep.isNullOrEmpty()) {
 //           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
-            holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area).toFloat()!! / 0.9) + " L"
+            holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area).toFloat() / 0.9) + " L"
         } else holder.acres.text = "0"
         if (!length.isNullOrEmpty() && !width.isNullOrEmpty()) {
             holder.areaPerPlant.text = String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * areaPerPlant.toFloat() / 0.9) + " L"
