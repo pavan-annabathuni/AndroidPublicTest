@@ -20,3 +20,18 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Google Places
+-keep class com.google.android.gms.maps.model.** { *; }
+-keep class com.google.android.gms.maps.** { *; }
+-keep class com.google.android.gms.location.places.** { *; }
+-keep class com.google.android.libraries.places.** { *; }
+
+-keep interface com.google.android.gms.maps.internal.IProjectionDelegate { *; }
+-keep interface com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate { *; }
+-keep interface com.google.android.gms.maps.internal.IMapFragmentDelegate { *; }
+-keep interface com.google.android.gms.maps.internal.IMapViewDelegate { *; }
+-keep interface com.google.android.gms.maps.internal.IUiSettingsDelegate { *; }
+
+-dontwarn com.google.android.gms.maps.**
+-dontwarn com.google.android.gms.location.places.**
+-dontwarn com.google.android.libraries.places.**

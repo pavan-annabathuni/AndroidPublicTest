@@ -99,8 +99,12 @@
 -keep class de.hdodenhof.circleimageview.** { *; }
 
 
-# -----SpeedView
+#-----SpeedView
 -keep class com.github.anastr.speedviewlib.** { *; }
 -keepclassmembers class com.github.anastr.speedviewlib.** { *; }
+
+# AudioWife
+-keep class com.saki4510tice.audio.AudioWife.*
+
 
 

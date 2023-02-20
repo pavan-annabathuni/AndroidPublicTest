@@ -19,6 +19,10 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -55,7 +59,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
 
-    implementation 'com.google.android.libraries.places:places:3.0.0'
 
     //ShowCaseView
     implementation 'com.github.mreram:showcaseview:1.4.1'

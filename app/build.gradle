@@ -31,15 +31,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        debug {
-//            minifyEnabled true
-//            shrinkResources true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -90,7 +90,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf'
 
     //Google play services for authentications
-    implementation 'com.google.android.gms:play-services-base:18.1.0'
+    implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-identity:18.0.1'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'

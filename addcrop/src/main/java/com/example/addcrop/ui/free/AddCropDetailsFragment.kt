@@ -142,28 +142,6 @@ class AddCropDetailsFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             checkInternet()
         }
-//        binding.cardCheckHealth.setOnClickListener {
-//            it.hideSoftInput()
-//            viewModel.eventHandler.saveButtonClicked()
-//        }
-//        binding.clCalenderDateSelect.setOnClickListener {
-//            viewModel.eventHandler.calenderShow()
-//        }
-
-//        binding.backBtn.setOnClickListener {
-//            viewModel.eventHandler.backButton()
-//        }
-
-//
-//        val debouncedClickListener = DebouncedClickListener(1000) {
-//            // Code to execute on click event
-//            CoroutineScope(Dispatchers.Main).launch{
-//                postCropDetails()
-//            }
-//
-//
-//        }
-//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
 
     }
 
@@ -294,6 +272,7 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
+//                    ToastStateHandling.toastError(requireContext(),it.message.toString(), Toast.LENGTH_LONG)
             translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {

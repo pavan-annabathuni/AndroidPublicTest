@@ -1683,25 +1683,6 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
-
-                                    <!--                                    <ProgressBar-->
-                                    <!--                                        android:id="@+id/soil_moisture_one"-->
-                                    <!--                                        android:layout_width="100dp"-->
-                                    <!--                                        android:layout_height="100dp"-->
-                                    <!--                                        android:indeterminateOnly="false"-->
-                                    <!--                                        android:max="140"-->
-                                    <!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
-                                    <!--                                        android:rotation="-120"-->
-                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
-                                    <!--                                        app:layout_constraintTop_toTopOf="parent"-->
-                                    <!--                                        />-->
-                                    <!--                                    <com.ekn.gruzer.gaugelibrary.HalfGauge-->
-                                    <!--                                        android:id="@+id/soil_smoisture_one"-->
-                                    <!--                                        android:layout_width="100dp"-->
-                                    <!--                                        android:layout_height="100dp"-->
-                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
-                                    <!--                                        app:layout_constraintTop_toTopOf="parent"-->
-                                    <!--                                      />-->
                                     <com.github.anastr.speedviewlib.SpeedView
                                         android:id="@+id/current_delta"
                                         android:layout_width="100dp"

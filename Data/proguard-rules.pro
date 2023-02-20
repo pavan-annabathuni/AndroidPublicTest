@@ -107,16 +107,15 @@
 }
 
 # For code using Room annotations
--keepclassmembers @androidx.room.* {
-    *;
-}
+#-keepclassmembers @androidx.room.* {
+#    *;
+#}
 
 # For Kotlin code using Room annotations
 -dontwarn kotlin.Unit
 -keepclassmembers class * implements androidx.room.RoomDatabase {
     public static ** getDatabase(android.content.Context);
 }
-
 -keep class kotlinx.coroutines.** { *; }
 
 

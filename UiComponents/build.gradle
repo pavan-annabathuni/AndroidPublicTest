@@ -22,7 +22,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -53,6 +57,7 @@ dependencies {
 
     //graphs
     api 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     //flexbox dependency
     api 'com.google.android.flexbox:flexbox:3.0.0'
 

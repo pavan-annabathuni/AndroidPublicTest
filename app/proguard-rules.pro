@@ -39,3 +39,6 @@
 }
 -keep class com.google.android.gms.auth.api.** { *; }
 -keep class com.google.android.gms.auth.api.identity.** { *; }
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

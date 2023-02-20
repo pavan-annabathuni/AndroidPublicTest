@@ -314,7 +314,9 @@ object NetworkSource {
                 }
             } catch (e: Exception) {
                 CrashAnalytics.crashAnalyticsError("postNewSoil Exception--${e.message}")
-                emit(Resource.Error(e.message))
+//                Log.d("Soil", "postNewSoil Exception ${e.message.toString()}")
+//
+//                emit(Resource.Error(e.message.toString()))
             }
         }
 

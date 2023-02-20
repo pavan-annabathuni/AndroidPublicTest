@@ -20,8 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.google.android.libraries.places.** { *; }
--dontwarn com.google.android.libraries.places.**
 
+
+
+
+
+#-showcase view
 -keep class com.github.amlcurran.showcaseview.** { *; }
 -dontwarn com.github.amlcurran.showcaseview.**
