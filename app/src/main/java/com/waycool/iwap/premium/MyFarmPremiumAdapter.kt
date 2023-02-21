@@ -90,7 +90,11 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         cropList.addAll(list)
         notifyDataSetChanged()
     }
-
+    fun updateDeviceList(list: List<ViewDeviceDomain>) {
+        deviceList.clear()
+        deviceList.addAll(list)
+        notifyDataSetChanged()
+    }
 
     inner class MyFarmPremiumViewHolder(val binding: ItemPremiumAddFarmBinding) :
         RecyclerView.ViewHolder(binding.root) {
