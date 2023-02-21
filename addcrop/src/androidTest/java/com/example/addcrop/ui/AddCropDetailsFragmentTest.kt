@@ -9,11 +9,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.example.addcrop.AddCropActivity
 import com.example.addcrop.test.R
@@ -25,15 +25,51 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 
-@RunWith(AndroidJUnit4::class)
-//@MediumTest
+@RunWith(AndroidJUnit4ClassRunner::class)
 class AddCropDetailsFragmentTest {
+//    @Test
+//    fun testAddCropFragmentNavigation(){
+//        val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+//
+//
+//    }
+
+//    @get:Rule
+//    val activityScenarioRule = activityScenarioRule<AddCropActivity>()
+
+    //    @get:Rule
+//    val activityRule = ActivityTestRule(AddCropActivity::class.java)
+//    @Test
+//    val activityScenario = ActivityScenario.launch(AddCropActivity::class.java)
+
     @Test
-    fun testAddCropFragmentNavigation(){
-        val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
+    fun testEditTextViews() {
+        val activityScenario = ActivityScenario.launch(AddCropActivity::class.java)
+        onView(withId(com.example.addcrop.R.id.et_nickname_crop)).perform(typeText("Hello"))
+        onView(withId(com.example.addcrop.R.id.et_crop_area)).perform(typeText("123"))
 
-
+        onView(withId(com.example.addcrop.R.id.et_nickname_crop)).check(matches(withText("Hello")))
+        onView(withId(com.example.addcrop.R.id.et_crop_area)).check(matches(withText("123")))
     }
+        //    @Test
+//    fun testDatePicker() {
+//        onView(withId(com.example.addcrop.R.id.cl_calender_date_select)).perform(click())
+//
+//        onView(withId(R.id.date_picker)).perform(PickerActions.setDate(2023, 2, 20))
+//        onView(withId(R.id.iv_calender_icon)).perform(click())
+//
+//        onView(withId(R.id.selected_date_text_view)).check(matches(withText("2023-02-20")))
+//    }
+        @Test
+        fun testNavigation() {
+            // Assuming the fragment with the edit text fields and date picker is called "MyFragment"
+            onView(withId(com.example.addcrop.R.id.addCropDetailsFragment)).perform(click())
+            onView(withId(com.example.addcrop.R.id.et_nickname_crop)).check(matches(isDisplayed()))
+            onView(withId(com.example.addcrop.R.id.et_crop_area)).check(matches(isDisplayed()))
+
+//        onView(withId(R.id.date_picker_button)).perform(click())
+//        onView(withId(R.id.date_picker)).check(matches(isDisplayed()))
+        }
 //    @get:Rule
 //    val activityRule = ActivityScenarioRule(AddCropActivity::class.java)
 
@@ -53,11 +89,6 @@ class AddCropDetailsFragmentTest {
 //
 //        assertThat(navController.currentDestination?.id).isEqualTo(com.example.addcrop.R.id.addCropDetailsFragment)
 //    }
-
-
-
-
-
 
 
 //
@@ -151,5 +182,6 @@ class AddCropDetailsFragmentTest {
 //        onView(withId(R.id.card_save_details_crop)).perform(click())
 //        onView(withText("Error: Field cannot be empty")).check(matches(isDisplayed()))
 //    }
+
 
 }

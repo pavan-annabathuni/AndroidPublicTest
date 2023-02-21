@@ -530,6 +530,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvWindDegree.text = "${(data.rainfall?:"--")} mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
+            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
             if (data.leafWetness != null && data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)

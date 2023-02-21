@@ -8,6 +8,7 @@ data class CropMasterDomain(
     var cropLogo: String? = null,
     var cropType: String? = null,
     var translation: String? = null,
-    var cropNameTag: String? = null
+    var cropNameTag: String? = null,
+    var isWaterModel:Int?
 )
 
