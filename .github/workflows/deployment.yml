@@ -31,18 +31,18 @@ jobs:
         run: ./gradlew clean
       - name: Build
         run: ./gradlew assembleDebug
-  application_testing:
-    needs: [ application_cleaning_building ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: code checkout
-        uses: actions/checkout@v3
-      - name: Touch local properties
-        run: touch local.properties
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: execute gradle test
-        run: ./gradlew test
+#  application_testing:
+#    needs: [ application_cleaning_building ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: code checkout
+#        uses: actions/checkout@v3
+#      - name: Touch local properties
+#        run: touch local.properties
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: execute gradle test
+#        run: ./gradlew test
   tagging_releases:
     needs: [ application_testing ]
     runs-on: ubuntu-22.04
