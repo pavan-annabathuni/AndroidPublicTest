@@ -570,7 +570,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = DateFormatUtils.dateFormatterDevice(data.dataTimestamp)
+            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
             binding.soilMoistureOne.clearSections()
             binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
