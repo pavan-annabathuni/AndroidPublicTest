@@ -204,11 +204,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun populateFarm(farmId: Int){
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
             checkForDeviceApiUpdate()
-//            if (it.data?.isEmpty() == true) {
-//                binding.cardMYDevice.visibility = View.GONE
-//            } else
-
-            Log.d("DeviceSelected", "${it.data}")
             when (it) {
                 is Resource.Success -> {
                     if (!it.data.isNullOrEmpty()) {
@@ -478,11 +473,16 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
         }
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
             if (it.data != null) {
                 var accountId = it.data?.accountId
 
             }
+        }
+
+        viewDevice.getIotDevice().observe(viewLifecycleOwner){
+            if(!it.data.isNullOrEmpty()){
+                myFarmPremiumAdapter?.updateDeviceList(it.data!!)}
         }
     }
 
@@ -513,8 +513,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     override fun viewDevice(data: ViewDeviceDomain) {
         selectedDevice = data
         viewModel.setSelectedDevice(data)
-//        populateDevice(data)
-//        deviceDataAdapter.notifyDataSetChanged()
     }
 
     private fun populateDevice(data: ViewDeviceDomain) {
@@ -646,18 +644,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     )
                 }
             }
-//            it.clWindSpeed.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "pressure")
-//                    findNavController().navigate(
-//                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
-//                        bundle
-//                    )
-//                }
-//            }
             it.clHumidity.setOnClickListener {
 
                 val bundle = Bundle()
