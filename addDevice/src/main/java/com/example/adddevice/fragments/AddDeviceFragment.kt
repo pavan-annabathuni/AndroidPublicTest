@@ -163,11 +163,12 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else if (nickName.isEmpty()) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
-                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
-                    else{ binding.device1.error= "Device Name should not be empty" }
-                }
+                binding.device1.error =  "Device Name should not be empty"
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
+//                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
+//                    else{ binding.device1.error= "Device Name should not be empty" }
+//                }
 
 
                 return@setOnClickListener
