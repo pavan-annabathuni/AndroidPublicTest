@@ -92,15 +92,15 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         }
 
         deviceViewModel.getIotDevice().observe(viewLifecycleOwner){
-            if(!it.data.isNullOrEmpty())
-            adapter.updateDeviceList(it.data!!)
+            if(!it.data.isNullOrEmpty()){
+            adapter.updateDeviceList(it.data!!)}
         }
 
-        translationSoilTesting()
+        translationMyFarm()
         checkRole()
     }
 
-    fun translationSoilTesting() {
+   private fun translationMyFarm() {
         TranslationsManager().loadString("add_farm_top", binding.addFarmFab,"Add Farm")
         TranslationsManager().loadString("add_farm_top", binding.toolBar,"Add Farm")
     }

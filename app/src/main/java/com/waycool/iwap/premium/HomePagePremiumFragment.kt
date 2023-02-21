@@ -204,11 +204,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun populateFarm(farmId: Int){
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
             checkForDeviceApiUpdate()
-//            if (it.data?.isEmpty() == true) {
-//                binding.cardMYDevice.visibility = View.GONE
-//            } else
-
-            Log.d("DeviceSelected", "${it.data}")
             when (it) {
                 is Resource.Success -> {
                     if (!it.data.isNullOrEmpty()) {
@@ -478,11 +473,16 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
         }
 
-        viewModel.getUserDetails().observe(viewLifecycleOwner) { it ->
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
             if (it.data != null) {
                 var accountId = it.data?.accountId
 
             }
+        }
+
+        viewDevice.getIotDevice().observe(viewLifecycleOwner){
+            if(!it.data.isNullOrEmpty()){
+                myFarmPremiumAdapter?.updateDeviceList(it.data!!)}
         }
     }
 
@@ -513,8 +513,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     override fun viewDevice(data: ViewDeviceDomain) {
         selectedDevice = data
         viewModel.setSelectedDevice(data)
-//        populateDevice(data)
-//        deviceDataAdapter.notifyDataSetChanged()
     }
 
     private fun populateDevice(data: ViewDeviceDomain) {
@@ -530,6 +528,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvWindDegree.text = "${(data.rainfall?:"--")} mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
+            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
             if (data.leafWetness != null && data.leafWetness!!.equals(1)) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
@@ -572,7 +571,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = DateFormatUtils.dateFormatterDevice(data.dataTimestamp)
+            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
             binding.soilMoistureOne.clearSections()
             binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -646,18 +645,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     )
                 }
             }
-//            it.clWindSpeed.setOnClickListener {
-//                val bundle = Bundle()
-//                if (data.serialNoId != null && data.modelId != null) {
-//                    bundle.putInt("serial_no", data.serialNoId!!.toInt())
-//                    bundle.putInt("device_model_id", data.modelId!!.toInt())
-//                    bundle.putString("value", "pressure")
-//                    findNavController().navigate(
-//                        R.id.action_homePagePremiumFragment3_to_graphsFragment2,
-//                        bundle
-//                    )
-//                }
-//            }
             it.clHumidity.setOnClickListener {
 
                 val bundle = Bundle()

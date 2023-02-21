@@ -162,14 +162,13 @@ class ViewReportFragment : Fragment() {
         Bundle()
         if (arguments != null) {
             trackerID = arguments?.getInt("id")
-
             val soitestNumber = arguments?.getString("soil_test_number")
-            binding.soilReportHeaderLayout.title.text = "ID: $soitestNumber"
-            Log.d("TAG", "onViewCreatedbdhsvbhdbvhb:$trackerID ")
+            binding.tvToolBar.text = "ID: ${soitestNumber ?: "N/A"}"
+            Log.d("Praaasd", "onViewCreatedbdhsvbhdbvhb:$soitestNumber ")
             setData(trackerID!!)
 
         }
-        binding.soilReportHeaderLayout.backBtn.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
         }
@@ -182,7 +181,7 @@ class ViewReportFragment : Fragment() {
     }
 
     private fun translations() {
-        TranslationsManager().loadString("str_recommendation",binding.soilReportHeaderLayout.title,"ID: ")
+//        TranslationsManager().loadString("str_recommendation",binding.tvToolBar,"ID: ")
         TranslationsManager().loadString("str_recommendation",binding.recommandationText,"Recommendation: ")
         TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
         TranslationsManager().loadString("str_recommendation",binding.macronutrientText,"Recommendation: ")
