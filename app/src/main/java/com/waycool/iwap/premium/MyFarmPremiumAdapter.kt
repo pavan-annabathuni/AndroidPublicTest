@@ -1,12 +1,14 @@
 package com.waycool.iwap.premium
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.ViewDeviceDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.databinding.ItemPremiumAddFarmBinding
 import com.waycool.iwap.home.FarmCropsAdapter
@@ -17,6 +19,8 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
     var details = mutableListOf<MyFarmsDomain>()
     var selectedFarmPosition: Int? = null
     private var cropList:MutableList<MyCropDataDomain> = mutableListOf()
+    private var deviceList: MutableList<ViewDeviceDomain> = mutableListOf()
+
 //    var onFarmSelected: ((MyFarmsDomain?) -> Unit)? = null
 
     fun setMovieList(movies: List<MyFarmsDomain>?) {
@@ -43,6 +47,13 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         val farmsCropsAdapter=FarmCropsAdapter()
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
+        val deviceList = deviceList.filter { it.farmId==detail.id }
+        Log.d("DeviceList","DeviceList $deviceList")
+        if(deviceList.isNullOrEmpty()){
+            holder.binding.deviceIv.visibility=View.GONE
+        }else{
+            holder.binding.deviceIv.visibility=View.VISIBLE
+        }
         if ((detail.isPrimary ?: 0) == 1) {
             holder.binding.ivFeedback.visibility = View.VISIBLE
         } else
@@ -53,13 +64,6 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
             farmSelectedListener.onFarmSelected(detail)
         }
 
-
-//        val deviceList = deviceList.filter { it.farmId==detail.id }
-//        if(deviceList.isNullOrEmpty()){
-//            holder.binding.deviceIv.visibility=View.GONE
-//        }else{
-//            holder.binding.deviceIv.visibility=View.VISIBLE
-//        }
         if (position == selectedFarmPosition) {
             holder.binding.farmcl.setBackgroundResource(com.example.soiltesting.R.drawable.bg_add_form)
         } else {
@@ -88,6 +92,7 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         cropList.addAll(list)
         notifyDataSetChanged()
     }
+
 
     inner class MyFarmPremiumViewHolder(val binding: ItemPremiumAddFarmBinding) :
         RecyclerView.ViewHolder(binding.root) {
