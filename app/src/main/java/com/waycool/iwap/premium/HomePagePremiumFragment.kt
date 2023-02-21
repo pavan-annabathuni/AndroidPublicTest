@@ -204,10 +204,6 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
     private fun populateFarm(farmId: Int){
         viewDevice.getIotDeviceByFarm(farmId).observe(requireActivity()) {
             checkForDeviceApiUpdate()
-//            if (it.data?.isEmpty() == true) {
-//                binding.cardMYDevice.visibility = View.GONE
-//            } else
-
             Log.d("DeviceSelected", "${it.data}")
             when (it) {
                 is Resource.Success -> {

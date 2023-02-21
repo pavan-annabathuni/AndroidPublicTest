@@ -89,12 +89,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-perf'
 
-    //Google play services for authentications
-    implementation 'com.google.android.gms:play-services-base:18.2.0'
-    implementation 'com.google.android.gms:play-services-identity:18.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
 
     //For Firebase messaging Notifications services
     implementation 'com.google.firebase:firebase-messaging:23.1.1'
@@ -104,7 +99,6 @@ dependencies {
     //view page
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
 
-    implementation 'com.google.android.libraries.places:places:3.0.0'
 
     implementation 'com.github.Gruzer:simple-gauge-android:0.3.1'
 

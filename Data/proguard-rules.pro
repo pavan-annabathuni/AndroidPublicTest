@@ -51,12 +51,8 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 # A resource is loaded with a relative path so the package of this class must be preserved.
--keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 ##---------------End: proguard configuration for OkHttp  ---------------
 
-
-#Google Play Services
--keep class com.google.android.gms.measurement.** { *; }
 
 #navigation component
 -keep class androidx.navigation.** { *; }
@@ -83,15 +79,7 @@
 -keep class androidx.lifecycle.** {
     *;
 }
--keepclasseswithmembers class * {
-    @androidx.lifecycle.OnLifecycleEvent *;
-}
--keepclassmembers class * extends androidx.lifecycle.ViewModel {
-    <init>(...);
-}
--keepclassmembers class * implements androidx.lifecycle.LifecycleObserver {
-    *;
-}
+
 #room db
 -keep class androidx.room.** {
     *;
@@ -111,12 +99,51 @@
 #    *;
 #}
 
-# For Kotlin code using Room annotations
--dontwarn kotlin.Unit
--keepclassmembers class * implements androidx.room.RoomDatabase {
-    public static ** getDatabase(android.content.Context);
+
+# Keep resources that are used by Google Maps
+-keepclassmembers class * {
+    @com.google.android.gms.maps.* <methods>;
 }
--keep class kotlinx.coroutines.** { *; }
+
+# Keep the names of classes that are used in XML layouts
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+
+
+# Keep Google Maps Utils library
+-keep class com.google.maps.android.** { *; }
+-keep interface com.google.maps.android.** { *; }
+-keep class com.google.android.libraries.maps.** { *; }
+-keep interface com.google.android.libraries.maps.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn com.google.android.gms.maps.**
+-dontwarn org.xmlpull.v1.**
+
+# Keep Google Places library
+-keep class com.google.android.libraries.places.** { *; }
+-keep class com.google.android.gms.location.places.** { *; }
+-keep interface com.google.android.gms.location.places.** { *; }
+-keep interface com.google.android.libraries.places.** { *; }
+
+
+# Keep Google Play Services libraries
+-keep class com.google.android.gms.** { *; }
+-keep interface com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep class com.google.android.gms.auth.api.** { *; }
+-keep interface com.google.android.gms.auth.api.** { *; }
+-dontwarn com.google.android.gms.auth.api.**
+-keep class com.google.android.gms.common.api.** { *; }
+-keep interface com.google.android.gms.common.api.** { *; }
+-dontwarn com.google.android.gms.common.api.**
+
+
 
 
 
