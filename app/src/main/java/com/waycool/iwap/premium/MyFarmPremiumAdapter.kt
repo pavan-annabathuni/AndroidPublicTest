@@ -1,7 +1,6 @@
 package com.waycool.iwap.premium
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,7 +47,6 @@ class MyFarmPremiumAdapter(val farmdetailslistener: Farmdetailslistener,val farm
         holder.binding.cropFarmRv.adapter=farmsCropsAdapter
         farmsCropsAdapter.submitList(cropList.filter { it.farmId==detail.id })
         val deviceList = deviceList.filter { it.farmId==detail.id }
-        Log.d("DeviceList","DeviceList $deviceList")
         if(deviceList.isNullOrEmpty()){
             holder.binding.deviceIv.visibility=View.GONE
         }else{
