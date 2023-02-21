@@ -30,7 +30,7 @@ jobs:
       - name: execute gradle clean
         run: ./gradlew clean
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew assembleDebug
   application_testing:
     needs: [ application_cleaning_building ]
     runs-on: ubuntu-latest
