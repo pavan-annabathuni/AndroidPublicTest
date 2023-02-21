@@ -144,16 +144,20 @@
 
                         <TextView
                             android:id="@+id/cropStage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="32dp"
                             android:layout_marginEnd="16dp"
                             android:drawableEnd="@drawable/ic_viewall"
                             android:drawablePadding="8dp"
                             android:text="View All"
                             android:textColor="@color/DarkGreen"
                             android:textStyle="bold"
+                            android:gravity="end"
                             app:layout_constraintBottom_toBottomOf="@+id/graps"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.96"
+                            app:layout_constraintStart_toEndOf="@+id/graps"
                             app:layout_constraintTop_toTopOf="@+id/graps" />
 
                         <TextView
@@ -169,53 +173,63 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/materialCardViewGraps"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_cropStageClick"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:theme="@style/Theme.MaterialComponents.Light"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="8dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/graps"
-                            app:strokeColor="@color/LightGray"
-                            app:strokeWidth="1dp">
+                            app:layout_constraintStart_toStartOf="@+id/graps"
+                            app:layout_constraintTop_toBottomOf="@+id/graps">
 
-                            <ImageView
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/materialCardViewGraps"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_marginTop="16dp"
+                                android:theme="@style/Theme.MaterialComponents.Light"
+                                app:cardBackgroundColor="@color/white"
+                                app:cardCornerRadius="8dp"
+
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:strokeColor="@color/LightGray"
+                                app:strokeWidth="1dp">
+
+                                <ImageView
+                                    android:id="@+id/cropStageImg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_irrigation_2" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:id="@+id/topping"
+                                style="@style/Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_irrigation_2" />
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <TextView
-                            android:id="@+id/topping"
-                            style="@style/Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="Topping"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toEndOf="@+id/materialCardViewGraps"
-                            app:layout_constraintTop_toBottomOf="@id/graps" />
+                                android:layout_marginStart="16dp"
+                                tools:text="Topping"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toEndOf="@+id/materialCardViewGraps"
+                                app:layout_constraintTop_toTopOf="@+id/materialCardViewGraps" />
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|start"
-                            android:layout_marginTop="8dp"
-                            android:drawablePadding="8dp"
-                            android:text="15 August 22 16:00pm"
-                            android:textColor="@color/black"
-                            app:layout_constraintStart_toStartOf="@+id/topping"
-                            app:layout_constraintTop_toBottomOf="@+id/topping" />
-
+                            <TextView
+                                android:id="@+id/cropStageDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|start"
+                                android:layout_marginTop="8dp"
+                                android:drawablePadding="8dp"
+                                tools:text="15 August 22 16:00pm"
+                                android:textColor="@color/black"
+                                app:layout_constraintStart_toStartOf="@+id/topping"
+                                app:layout_constraintTop_toBottomOf="@+id/topping" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

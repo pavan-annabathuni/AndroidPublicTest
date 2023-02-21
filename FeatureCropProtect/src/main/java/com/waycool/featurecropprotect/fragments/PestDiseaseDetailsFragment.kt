@@ -183,12 +183,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         binding.toolbarTitle.text = diseaseName
         binding.cropProtectDiseaseName.text = diseaseName
 
-        shareLayout = binding.shareScreen
-        binding.imgShare.setOnClickListener {
-            binding.clShareProgress.visibility = View.VISIBLE
-            binding.imgShare.isEnabled = false
-            screenShot(diseaseId, diseaseName)
-        }
+
         TranslationsManager().loadString("str_share", binding.imgShare, "Share")
         TranslationsManager().loadString("related_images", binding.cropProtectRelatedImageTv)
         TranslationsManager().loadString("symptoms", binding.symptomsTitle)
@@ -211,8 +206,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
              audioPlayer()
             binding.clProgress.visibility = View.GONE
             binding.constraintLayout2.visibility = View.GONE
-        },3000)
+        },1000)
 
+        shareLayout = binding.shareScreen
+        binding.imgShare.setOnClickListener {
+            binding.clShareProgress.visibility = View.VISIBLE
+            binding.imgShare.isEnabled = false
+            screenShot(diseaseId, diseaseName)
+        }
         viewModel.viewModelScope.launch {
             chemical = TranslationsManager().getString("chemical")
             cultural = TranslationsManager().getString("str_cultural")
@@ -614,10 +615,9 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     }
 
     private fun audioPlayer() {
-
-
+        if(audioUrl!=null)
                 audio = AudioWife.getInstance()
-                    .init(activity?.applicationContext, Uri.parse(audioUrl))
+                    .init(requireActivity(), Uri.parse(audioUrl))
                     .setPlayView(binding.play)
                     .setPauseView(binding.pause)
                     .setSeekBar(binding.mediaSeekbar)
@@ -654,6 +654,8 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             binding.play.visibility = View.VISIBLE
             audio?.pause()
         }
+
+
 //        binding.playPauseLayout.setOnClickListener {
 //            Log.d("health", "onViewCreated: $audioUrl")
 //            if (binding.play.isVisible) {
@@ -714,5 +716,14 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             handler?.postDelayed(runnable!!, 3000)
         }
         EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
+        binding.clProgress.visibility = View.VISIBLE
+        binding.constraintLayout2.visibility = View.VISIBLE
+        binding.pause.visibility = View.GONE
+        binding.play.visibility = View.VISIBLE
+        handler?.postDelayed({
+            audioPlayer()
+            binding.clProgress.visibility = View.GONE
+            binding.constraintLayout2.visibility = View.GONE
+        },700)
     }
 }

@@ -30,6 +30,7 @@ data class DiseaseDetails (
 
     @SerializedName("id"           ) var id          : Int?    = null,
     @SerializedName("disease_name" ) var diseaseName : String? = null,
+    @SerializedName("disease_name_tag" ) var diseaseNameTag : String? = null,
     @SerializedName("disease_name_translated" ) var diseaseNameTranslated : String? = null,
     @SerializedName("disease_type" ) var diseaseType : String? = null,
     @SerializedName("disease_img"  ) var diseaseImg  : String? = null

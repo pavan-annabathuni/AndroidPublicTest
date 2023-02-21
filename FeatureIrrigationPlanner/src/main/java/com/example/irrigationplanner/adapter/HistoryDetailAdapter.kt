@@ -12,6 +12,8 @@ import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryDetailAdapter(val onClickListener:OnClickListener):
     ListAdapter<HistoricData, HistoryDetailAdapter.MyViewHolder>(HistoryAdapter) {
@@ -20,9 +22,10 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         val date = binding.textView16
         val irrigation = binding.irrigation
         val image = binding.imageView9
+        val irrigationImage = binding.irrigationImage
         val view = binding.sideView
         val eto = binding.eto
-        val etc = binding.textView2
+        val rainfallValue = binding.textView2
         val eva = binding.textView19
         val rainfall = binding.textView4
     }
@@ -35,7 +38,7 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
             index = position
             onClickListener.clickListener
 
@@ -45,17 +48,29 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
           irrigated   = TranslationsManager().getString("str_Irrigated ")
         }
         holder.date.text = properties.createdAt
+        val inputDateFormatter: SimpleDateFormat =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+        val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("dd MMMM yy hh:mm a", Locale.ENGLISH)
+        val date: Date = inputDateFormatter.parse(properties.createdAt)
+        holder.date.text = "${outputDateFormatter.format(date)}"
+
+        if(properties.irrigation!=null)
         holder.irrigation.text = "$irrigated ${properties.irrigation}L"
+        else
+            holder.irrigation.text = "0L"
         holder.eto.text = properties.etoCurrent.toString()
-        holder.etc.text = properties.etc.toString()
+
+        if(!properties.rainfall.isNullOrEmpty())
+        holder.rainfallValue.text = properties.rainfall.toString()
+        else
+            holder.rainfallValue.text = "0"
 
         if (properties.irrigation!=null && properties.irrigation?.toFloat()!!>0) {
-            holder.view.setBackgroundResource(R.color.DarkGreen)
+            holder.irrigationImage.setImageResource(R.drawable.ic_irrigation_2)
             holder.image.setImageResource(R.drawable.ic_holo_green)
             holder.date.setTextColor(Color.parseColor("#146133"))
         } else {
-            holder.image.setImageResource(R.drawable.ic_irrigation_his2)
-            holder.view.setBackgroundResource(R.color.LightGray)
+            holder.irrigationImage.setImageResource(R.drawable.ic_irrigation_his2)
             holder.image.setImageResource(R.drawable.ic_holo_gray)
             holder.date.setTextColor(Color.parseColor("#070D09"))
         }
