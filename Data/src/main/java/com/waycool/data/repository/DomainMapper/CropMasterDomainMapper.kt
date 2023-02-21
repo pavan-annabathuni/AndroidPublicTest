@@ -13,7 +13,10 @@ class CropMasterDomainMapper : DomainMapper<CropMasterDomain, CropMasterEntity> 
             cropLogo = dto.cropLogo,
             cropType = dto.cropType,
             translation = dto.translation,
-            cropNameTag = dto.cropNameTag
+            cropNameTag = dto.cropNameTag,
+            isWaterModel = dto.waterModel
+
+
         )
     }
 

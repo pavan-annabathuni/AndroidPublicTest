@@ -38,7 +38,8 @@ class ViewDeviceEntityMapper : EntityMapper<ViewDeviceEntity, ViewDeviceData> {
             modelName = dto.model?.modelName,
             modelSeries = dto.model?.series,
             deviceNumber = dto.deviceNumber,
-            isApproved = dto.isApproved
+            isApproved = dto.isApproved,
+            deviceElevation = dto.deviceElevation
         )
     }
 
