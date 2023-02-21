@@ -44,7 +44,7 @@ jobs:
 #      - name: execute gradle test
 #        run: ./gradlew test
   tagging_releases:
-    needs: [ application_testing ]
+    needs: [ application_cleaning_building ]
     runs-on: ubuntu-22.04
     outputs:
       new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
