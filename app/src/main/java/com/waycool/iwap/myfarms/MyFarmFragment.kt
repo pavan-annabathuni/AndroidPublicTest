@@ -92,8 +92,8 @@ class MyFarmFragment : Fragment(), Farmdetailslistener {
         }
 
         deviceViewModel.getIotDevice().observe(viewLifecycleOwner){
-            if(!it.data.isNullOrEmpty())
-            adapter.updateDeviceList(it.data!!)
+            if(!it.data.isNullOrEmpty()){
+            adapter.updateDeviceList(it.data!!)}
         }
 
         translationMyFarm()
