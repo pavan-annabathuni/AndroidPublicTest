@@ -52,6 +52,7 @@ class AddCropPremiumFragment : Fragment() {
     var crop_type: Int? = null
     val arrayList = ArrayList<String>()
     lateinit var irrigation_selected: String
+    var bahar_selected: String?=null
     lateinit var year_selected: String
     lateinit var areaTypeSelected: String
     var dateOfBirthFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -131,7 +132,8 @@ class AddCropPremiumFragment : Fragment() {
                             p2: Int,
                             p3: Long
                         ) {
-                            p0?.selectedItem
+                            val item = p0?.selectedItem.toString()
+                            bahar_selected = item
                         }
 
                         override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -358,6 +360,7 @@ class AddCropPremiumFragment : Fragment() {
                             bundle.putString("date", date)
                             bundle.putString("irrigation_selected", irrigation_selected)
                             bundle.putString("numberOfPlanets", numberOfPlanets)
+                            bundle.putString("crop_season",bahar_selected)
 
                             if (accountID != null) {
                                 bundle.putInt("account_id", accountID!!)
@@ -545,6 +548,9 @@ class AddCropPremiumFragment : Fragment() {
                 map["irrigation_type"] = irrigation_type
                 map["sowing_date"] = binding.etCalender.text.toString()
                 map["no_of_plants"] = binding.etNoOfAcre.text.toString()
+                bahar_selected?.let {
+                    map.put("crop_season",it)
+                }
                 binding.progressBar.visibility = View.VISIBLE
                 binding.btnSaveCropDetails.visibility = View.GONE
                 val eventBundle = Bundle()
