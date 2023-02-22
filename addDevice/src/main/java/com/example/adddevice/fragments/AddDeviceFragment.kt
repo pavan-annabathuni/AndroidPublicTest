@@ -18,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -253,7 +252,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
 
                 }
