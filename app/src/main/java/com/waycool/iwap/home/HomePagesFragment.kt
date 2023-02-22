@@ -161,19 +161,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
-
-//        val callback: OnBackPressedCallback =
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    findNavController().popBackStack()
-//                }
-//            }
-//        activity?.let {
-//            it.onBackPressedDispatcher.addCallback(
-//                it,
-//                callback
-//            )
-//        }
         setWishes()
         checkNetwork()
         initClick()
@@ -1274,6 +1261,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         val listType = object : TypeToken<List<LatLng?>?>() {}.type
         return Gson().fromJson(s, listType)
     }
+
 
     override fun onMapReady(mMap: GoogleMap?) {
         mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
