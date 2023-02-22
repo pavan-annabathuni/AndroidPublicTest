@@ -6,7 +6,7 @@
     android:background="@drawable/top_corner">
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tv_harvest_details"
         style="@style/Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:textColor="@color/darkGray"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_harvest_details" />
 
     <EditText
         android:id="@+id/editText"

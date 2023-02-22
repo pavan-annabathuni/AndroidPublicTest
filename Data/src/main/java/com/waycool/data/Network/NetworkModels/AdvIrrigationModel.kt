@@ -51,6 +51,7 @@ data class HistoricData (
     @SerializedName("vol_per_farm"      ) var volPerFarm       : String? = null,
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null,
+    @SerializedName("rainfall"          ) var rainfall         : String? = null,
     @SerializedName("deleted_at"        ) var deletedAt        : String? = null
 
 ):Parcelable
