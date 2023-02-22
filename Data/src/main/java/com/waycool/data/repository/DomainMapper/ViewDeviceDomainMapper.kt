@@ -38,7 +38,8 @@ class ViewDeviceDomainMapper:DomainMapper<ViewDeviceDomain,ViewDeviceEntity> {
             modelName = dto.modelName,
             modelSeries = dto.modelSeries,
             deviceNumber = dto.deviceNumber,
-            isApproved = dto.isApproved
+            isApproved = dto.isApproved,
+            deviceElevation = dto.deviceElevation
         )
     }
 
