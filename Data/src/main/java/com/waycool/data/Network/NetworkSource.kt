@@ -1405,9 +1405,10 @@ object NetworkSource {
 
     fun getDisease(account_id: Int, plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val langCode = LocalSource.getLanguageCode() ?: "en"
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getDisease(map, account_id, plot_id)
+            val response = apiInterface.getDisease(map, account_id, plot_id,lang = langCode)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

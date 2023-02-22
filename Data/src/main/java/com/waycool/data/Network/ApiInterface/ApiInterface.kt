@@ -541,7 +541,8 @@ interface ApiInterface {
     suspend fun getDisease(
         @HeaderMap map: Map<String, String>?,
         @Query("account_id") accountId: Int,
-        @Query("plot_id") plotId: Int
+        @Query("plot_id") plotId: Int,
+        @Query("lang")lang: String = "en"
     ): Response<PestAndDiseaseModel>
 
     @GET("api/v1/get-mandi-master")

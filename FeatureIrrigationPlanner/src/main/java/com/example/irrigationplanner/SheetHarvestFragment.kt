@@ -141,11 +141,11 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     }
 
     private fun translation() {
-        TranslationsManager().loadString(
-            "str_harvest_details",
-            harvestBinding.textView13,
-            "Harvest Details"
-        )
+//        TranslationsManager().loadString(
+//            "str_harvest_details",
+//            harvestBinding.textView13,
+//            "Harvest Details"
+//        )
         TranslationsManager().loadString(
             "str_actual_yeild",
             harvestBinding.textView14,
