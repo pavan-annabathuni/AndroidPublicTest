@@ -163,29 +163,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else if (nickName.isEmpty()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
-                    if(!toastDeviceName.isNullOrEmpty()){
-                        binding.device1.error = toastDeviceName}
-                    else{ binding.device1.error= "Device Name should not be empty" }
-                }
-
-
+                binding.device1.error= "Device Name should not be empty"
                 return@setOnClickListener
             }
-//            else if (scanResult.isNullOrEmpty()) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    val toastScan= TranslationsManager().getString("please_scan")
-//                    if(!toastScan.isNullOrEmpty()){
-//                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
-//                            LENGTH_SHORT
-//                        ) }}
-//                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
-//                        LENGTH_SHORT
-//                    ) }}}
-//
-//
-//            }
             else {
                 binding.progressBar.visibility=View.VISIBLE
                 binding.frameLayout2.visibility=View.GONE
@@ -201,9 +181,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     map["device_lat"] = latitude!!
                 if (longitutde != null)
                     map["device_long"] = longitutde!!
-//                map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
-////
                 map["device_number"]=binding.imeiAddress.text
                 activityDevice(map)
             }
@@ -487,17 +465,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                                 )
                         )
                     }
-//                    for (latLng in points) {
-//                        val marker = map.addMarker(
-//                            MarkerOptions().position(
-//                                latLng
-//                            )
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
-//                                .anchor(0.5f, .5f)
-//                                .draggable(false)
-//                                .flat(true)
-//                        )
-//                    }
                     map.animateCamera(
                         CameraUpdateFactory.newLatLngBounds(
                             getLatLnBounds(points), 20

@@ -139,7 +139,7 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //firebase
-    api platform('com.google.firebase:firebase-bom:31.1.1')
+    api platform('com.google.firebase:firebase-bom:31.2.2')
     api 'com.google.firebase:firebase-analytics-ktx'
     api 'com.google.firebase:firebase-crashlytics-ktx'
     api 'com.google.firebase:firebase-dynamic-links-ktx'

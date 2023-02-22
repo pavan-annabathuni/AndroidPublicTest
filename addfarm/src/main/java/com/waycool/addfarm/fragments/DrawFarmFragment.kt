@@ -80,6 +80,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var points: MutableList<LatLng> = mutableListOf()
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
+    private var _binding: FragmentDrawFarmBinding? = null
+    private val binding get() = _binding!!
 
     private var markerList: MutableList<Marker> = mutableListOf()
     private var polygon: Polygon? = null
@@ -130,25 +132,22 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private val binding by lazy { FragmentDrawFarmBinding.inflate(layoutInflater) }
+//    private val binding by lazy { FragmentDrawFarmBinding.inflate(layoutInflater) }
     private val adapter by lazy { PlacesListAdapter() }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        if (!Places.isInitialized()) {
-            Places.initialize(requireContext().applicationContext, AppSecrets.getMapsKey())
-        }
-        placesClient = Places.createClient(requireContext())
-
+    ): View? {
+        _binding = FragmentDrawFarmBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.requireView().isClickable = false
+        mapFragment.getMapAsync(this)
 
         CoroutineScope(Dispatchers.IO).launch {
             binding.toolbarTitle.text = TranslationsManager().getString("str_add_farm")
@@ -175,9 +174,13 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             networkCall()
         }
 
+
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext().applicationContext, AppSecrets.getMapsKey())
+        }
+        placesClient = Places.createClient(requireContext())
         binding.placesRv.adapter = adapter
 
-        (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)?.getMapAsync(this)
         showCaseDataList.add(
             ShowCaseViewModel(
                 binding.gpsFab,
