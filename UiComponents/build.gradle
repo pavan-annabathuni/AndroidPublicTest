@@ -81,6 +81,7 @@ dependencies {
     //transitions
     api "android.arch.navigation:navigation-fragment-ktx:1.0.0"
 
+    api "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha11"
 
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation "com.pixplicity.sharp:library:1.1.0"

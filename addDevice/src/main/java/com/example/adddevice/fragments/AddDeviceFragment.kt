@@ -65,6 +65,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
     private var scanResult: String? = null
     private var plotId: Int? = null
+//    private var plot_id_no:Int
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -205,6 +206,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
 ////
                 map["device_number"]=binding.imeiAddress.text
+                plotId?.let { map.put("plot_id", it) }
                 activityDevice(map)
             }
 
@@ -321,6 +323,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     }
                     adapter.onItemClick = { plot ->
                         plotId = plot?.id
+
+
+
                     }
                 }
             }

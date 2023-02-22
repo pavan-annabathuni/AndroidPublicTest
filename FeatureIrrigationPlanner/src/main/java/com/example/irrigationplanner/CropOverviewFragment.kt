@@ -41,6 +41,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         information()
         translation()
         binding.tvDrip.isSelected = true
+        binding.tvWeek.isSelected = true
         return binding.root
     }
 
@@ -74,9 +75,9 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
 
                 else tvHarvest.text = "NA"
 
-                if (data?.cropYear != null)
-                    tvWeek.text = data.cropYear.toString()
-                else tvWeek.text = "NA"
+                if (data?.estimatedYield != null)
+                    tvYield.text = data.estimatedYield.toString()
+                else binding.cvYield.visibility = View.INVISIBLE
 
                 /** setting crop age value */
                 if (data?.sowingDate != null)
@@ -88,11 +89,11 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                         val dateTime1 = DateTime(sowindate)
                         val dateTime2 = DateTime(currentdate)
                         val weeksOld = Weeks.weeksBetween(dateTime1, dateTime2).weeks
-                        tvYield.text = weeksOld.toString() + " Weeks Old"
+                        tvWeek.text = weeksOld.toString() + " Weeks Old"
                     } catch (e: ParseException) {
-                        tvYield.text = ""
+                        tvWeek.text = ""
                     }
-                else tvYield.text = "NA"
+                else tvWeek.text = "NA"
             }
         }
     }
