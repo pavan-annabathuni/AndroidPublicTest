@@ -4,7 +4,7 @@ import android.util.Log
 import android.util.MalformedJsonException
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.google.android.libraries.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken

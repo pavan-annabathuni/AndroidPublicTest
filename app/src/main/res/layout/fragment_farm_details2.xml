@@ -92,7 +92,7 @@
 
                     <fragment
                         android:id="@+id/map_farmdetails"
-                        android:name="com.google.android.libraries.maps.SupportMapFragment"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="0dp"
                         android:layout_height="140dp"
                         app:layout_constraintEnd_toEndOf="parent"

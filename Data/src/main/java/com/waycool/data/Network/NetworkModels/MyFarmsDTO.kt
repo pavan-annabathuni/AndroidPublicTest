@@ -1,6 +1,6 @@
 package com.waycool.data.Network.NetworkModels
 
-import com.google.android.libraries.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 
 data class MyFarmsDTO(

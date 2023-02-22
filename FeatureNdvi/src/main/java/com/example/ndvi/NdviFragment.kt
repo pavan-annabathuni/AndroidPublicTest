@@ -18,11 +18,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.ndvi.adapter.DateAdapter
 import com.example.ndvi.databinding.FragmentNdviBinding
 import com.example.ndvi.viewModel.NdviViewModel
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
@@ -103,12 +103,16 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         binding.floatingActionButton2.setOnClickListener {
             if (myFarm != null && googleMap != null) {
                 val points = myFarm?.farmJson as ArrayList
-                googleMap?.animateCamera(
+                getLatLnBounds(points)?.let { it1 ->
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points),
+                        it1,
                         50
                     )
-                )
+                }?.let { it2 ->
+                    googleMap?.animateCamera(
+                        it2
+                    )
+                }
             }
         }
 
@@ -153,11 +157,11 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         // val url = it.data?.data?.get(0)?.truecolorTile
 
         googleMap = map
-        map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
         drawFarmPolygon(map)
 
         getNdviFromAPI()
@@ -292,11 +296,15 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                             )
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 50
+                        it, 50
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
@@ -305,7 +313,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

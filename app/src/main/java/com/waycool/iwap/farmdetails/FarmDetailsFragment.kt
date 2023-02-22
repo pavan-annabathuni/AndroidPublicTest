@@ -17,11 +17,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.github.anastr.speedviewlib.components.Section
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.Chip
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
@@ -862,7 +862,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
         }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             mMap = map
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -897,11 +897,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 20
+                        it, 20
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
                 val area: Double =
                     getArea(points) / 4046.86
                 binding.farmAreaSingleFarm.text = (String.format(
@@ -917,7 +921,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
             val builder = LatLngBounds.builder()
             for (ll in points) {
-                builder.include(ll)
+                if (ll != null) {
+                    builder.include(ll)
+                }
             }
             return builder.build()
         }

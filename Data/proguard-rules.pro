@@ -123,6 +123,8 @@
 
 
 # Google Play Services Location
+-keep,allowoptimization class com.google.android.libraries.maps.** { *; }
+
 -keep class com.google.android.gms.location.** { *; }
 -keep interface com.google.android.gms.location.** { *; }
 -dontwarn com.google.android.gms.location.**
