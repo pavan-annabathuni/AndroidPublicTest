@@ -116,6 +116,7 @@
 
 
 # Keep Google Maps Utils library
+-keep,allowoptimization class com.google.android.libraries.maps.** { *; }
 -keep class com.google.maps.android.** { *; }
 -keep interface com.google.maps.android.** { *; }
 -keep class com.google.android.libraries.maps.** { *; }
@@ -124,12 +125,19 @@
 -keepattributes *Annotation*
 -dontwarn com.google.android.gms.maps.**
 -dontwarn org.xmlpull.v1.**
+# Fix maps 3.0.0-beta crash:
+-keep,allowoptimization class com.google.android.libraries.maps.** { *; }
+
+# Fix maps 3.0.0-beta marker taps ignored:
+-keep,allowoptimization class com.google.android.apps.gmm.renderer.** { *; }
 
 # Keep Google Places library
 -keep class com.google.android.libraries.places.** { *; }
 -keep class com.google.android.gms.location.places.** { *; }
 -keep interface com.google.android.gms.location.places.** { *; }
 -keep interface com.google.android.libraries.places.** { *; }
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.** { *; }
 
 
 # Keep Google Play Services libraries

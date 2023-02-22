@@ -13,11 +13,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.maps.android.SphericalUtil
@@ -57,6 +57,7 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
         arrayOf("--Select--", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500")
 
     private var myFarmEdit: MyFarmsDomain? = null
+    private lateinit var mMap:GoogleMap
 
 
     override fun onCreateView(
@@ -375,7 +376,8 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    override fun onMapReady(mMap: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
+        mMap=p0
         mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
         if (farmjson != null) {
@@ -400,11 +402,15 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 50
+                        it, 50
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
                 val area: Double =
                     getArea(points) / 4046.86
                 binding.farmareaEtAddfarm.setText((String.format("%.2f", area)).trim { it <= ' ' })
@@ -419,7 +425,9 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

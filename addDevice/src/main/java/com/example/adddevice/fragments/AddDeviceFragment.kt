@@ -33,12 +33,12 @@ import com.example.adddevice.viewmodel.AddDeviceViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -398,11 +398,15 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             val points = myFarm?.farmJson?.toMutableList()
             points?.add(latLng)
             if (!points.isNullOrEmpty()) {
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 10
+                        it, 10
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
@@ -463,7 +467,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
             mMap = map
@@ -493,11 +497,15 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //                                .flat(true)
 //                        )
 //                    }
-                    map.animateCamera(
+                    getLatLnBounds(points)?.let {
                         CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(points), 20
+                            it, 20
                         )
-                    )
+                    }?.let {
+                        map.animateCamera(
+                            it
+                        )
+                    }
 
                 }
             }
@@ -507,7 +515,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

@@ -1,7 +1,7 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
-import com.google.android.libraries.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

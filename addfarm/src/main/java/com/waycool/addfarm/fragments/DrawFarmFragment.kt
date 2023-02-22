@@ -33,12 +33,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
@@ -322,18 +322,20 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
             markerList.clear()
             for (p in points) {
-                markerList.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            p
-                        ).draggable(false)
-                            .icon(
-                                BitmapDescriptorFactory.fromResource(
-                                    R.drawable.circle_green
-                                )
-                            ).flat(true).anchor(.5f, .5f)
+                mMap!!.addMarker(
+                    MarkerOptions().position(
+                        p
+                    ).draggable(false)
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(
+                                R.drawable.circle_green
+                            )
+                        ).flat(true).anchor(.5f, .5f)
+                )?.let { it1 ->
+                    markerList.add(
+                        it1
                     )
-                )
+                }
             }
             if (state.isPolygonDrawn) {
                 polygon!!.points = points
@@ -522,18 +524,26 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private fun editFarm() {
         if (myFarmEdit != null) {
             val pnts: ArrayList<LatLng>? = myFarmEdit?.farmJson
-            polygon = mMap!!.addPolygon(
-                PolygonOptions().addAll(pnts).fillColor(Color.argb(100, 58, 146, 17))
+            polygon = pnts?.let {
+                PolygonOptions().addAll(it).fillColor(Color.argb(100, 58, 146, 17))
                     .strokeColor(
                         Color.argb(180, 58, 146, 17)
                     )
-            )
-            mMap!!.animateCamera(
+            }?.let {
+                mMap!!.addPolygon(
+                    it
+                )
+            }
+            pnts?.let { getLatLnBounds(it) }?.let {
                 CameraUpdateFactory.newLatLngBounds(
-                    pnts?.let { getLatLnBounds(it) },
+                    it,
                     250
                 )
-            )
+            }?.let {
+                mMap!!.animateCamera(
+                    it
+                )
+            }
             val state = MapState()
             isPolygonDraw = true
             if (pnts != null) {
@@ -547,8 +557,10 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                             .draggable(false)
                             .flat(true)
                     )
-                    marker.tag = latLng
-                    markerList.add(marker)
+                    marker?.tag = latLng
+                    if (marker != null) {
+                        markerList.add(marker)
+                    }
                     points.add(latLng)
                 }
             }
@@ -621,7 +633,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         mMap = p0
         mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
@@ -633,17 +645,19 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
                         ArrayList()
                     points = ArrayList()
                 }
-                markerList.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(latLng)
-                            .draggable(false)
-                            .icon(
-                                BitmapDescriptorFactory.fromResource(
-                                    R.drawable.circle_green
-                                )
-                            ).flat(true).anchor(.5f, .5f)
+                mMap!!.addMarker(
+                    MarkerOptions().position(latLng)
+                        .draggable(false)
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(
+                                R.drawable.circle_green
+                            )
+                        ).flat(true).anchor(.5f, .5f)
+                )?.let {
+                    markerList.add(
+                        it
                     )
-                )
+                }
 
                 points.add(latLng)
                 if (points != null) {
@@ -931,15 +945,19 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
     private fun placeSearchLocationMarker(latLng: LatLng?) {
         if (searchLocationMarker != null) {
-            searchLocationMarker?.position = latLng
+            if (latLng != null) {
+                searchLocationMarker?.position = latLng
+            }
         } else {
-            searchLocationMarker = mMap!!.addMarker(
-                latLng?.let {
-                    MarkerOptions()
-                        .position(it)
-                        .draggable(false)
-                }
-            )
+            searchLocationMarker = latLng?.let {
+                MarkerOptions()
+                    .position(it)
+                    .draggable(false)
+            }?.let {
+                mMap!!.addMarker(
+                    it
+                )
+            }
         }
     }
 
@@ -971,15 +989,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         if (centerMarkerList == null) {
             centerMarkerList = java.util.ArrayList<Marker>()
             for (i in centerPOintsList.indices) {
-                centerMarkerList?.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            centerPOintsList[i]
-                        ).anchor(.5f, .5f).draggable(false)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                            .flat(true)
+                mMap!!.addMarker(
+                    MarkerOptions().position(
+                        centerPOintsList[i]
+                    ).anchor(.5f, .5f).draggable(false)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                        .flat(true)
+                )?.let {
+                    centerMarkerList?.add(
+                        it
                     )
-                )
+                }
             }
         }
         if (centerMarkerList?.size == centerPOintsList.size) {
@@ -991,15 +1011,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             for (i in centerPOintsList.indices) {
                 if (i < centerMarkerList!!.size) centerMarkerList!!.get(i)
                     .setPosition(centerPOintsList[i]) else {
-                    centerMarkerList!!.add(
-                        mMap!!.addMarker(
-                            MarkerOptions().position(
-                                centerPOintsList[i]
-                            ).anchor(.5f, .5f).draggable(false)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                                .flat(true)
+                    mMap!!.addMarker(
+                        MarkerOptions().position(
+                            centerPOintsList[i]
+                        ).anchor(.5f, .5f).draggable(false)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                            .flat(true)
+                    )?.let {
+                        centerMarkerList!!.add(
+                            it
                         )
-                    )
+                    }
                 }
             }
         }
@@ -1009,15 +1031,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
             centerMarkerList!!.clear()
             for (i in centerPOintsList.indices) {
-                centerMarkerList!!.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            centerPOintsList[i]
-                        ).anchor(.5f, .5f).draggable(false)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                            .flat(true)
+                mMap!!.addMarker(
+                    MarkerOptions().position(
+                        centerPOintsList[i]
+                    ).anchor(.5f, .5f).draggable(false)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                        .flat(true)
+                )?.let {
+                    centerMarkerList!!.add(
+                        it
                     )
-                )
+                }
             }
         }
     }
@@ -1035,15 +1059,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         if (centerMarkerList == null) {
             centerMarkerList = java.util.ArrayList<Marker>()
             for (i in centerPOintsList.indices) {
-                centerMarkerList!!.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            centerPOintsList[i]
-                        ).anchor(.5f, .5f).draggable(false)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                            .flat(true)
+                mMap!!.addMarker(
+                    MarkerOptions().position(
+                        centerPOintsList[i]
+                    ).anchor(.5f, .5f).draggable(false)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                        .flat(true)
+                )?.let {
+                    centerMarkerList!!.add(
+                        it
                     )
-                )
+                }
             }
         }
         if (centerMarkerList!!.size == centerPOintsList.size) {
@@ -1055,15 +1081,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             for (i in centerPOintsList.indices) {
                 if (i < centerMarkerList!!.size) centerMarkerList!!.get(i)
                     .setPosition(centerPOintsList[i]) else {
-                    centerMarkerList!!.add(
-                        mMap!!.addMarker(
-                            MarkerOptions().position(
-                                centerPOintsList[i]
-                            ).anchor(.5f, .5f).draggable(false)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                                .flat(true)
+                    mMap!!.addMarker(
+                        MarkerOptions().position(
+                            centerPOintsList[i]
+                        ).anchor(.5f, .5f).draggable(false)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                            .flat(true)
+                    )?.let {
+                        centerMarkerList!!.add(
+                            it
                         )
-                    )
+                    }
                 }
             }
         }
@@ -1073,15 +1101,17 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
             centerMarkerList!!.clear()
             for (i in centerPOintsList.indices) {
-                centerMarkerList!!.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            centerPOintsList[i]
-                        ).anchor(.5f, .5f).draggable(false)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
-                            .flat(true)
+                mMap!!.addMarker(
+                    MarkerOptions().position(
+                        centerPOintsList[i]
+                    ).anchor(.5f, .5f).draggable(false)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_circle_small))
+                        .flat(true)
+                )?.let {
+                    centerMarkerList!!.add(
+                        it
                     )
-                )
+                }
             }
         }
     }
@@ -1089,7 +1119,9 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

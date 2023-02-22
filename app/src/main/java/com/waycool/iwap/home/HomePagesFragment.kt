@@ -27,11 +27,11 @@ import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics.*
@@ -654,11 +654,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             )
                     )
 
-                    mMap?.animateCamera(
+                    getLatLnBounds(points)?.let {
                         CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(points), 10
+                            it, 10
                         )
-                    )
+                    }?.let {
+                        mMap?.animateCamera(
+                            it
+                        )
+                    }
                 } else {
                     mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(points[0], 16f))
                 }
@@ -669,7 +673,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }
@@ -1275,7 +1281,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         return Gson().fromJson(s, listType)
     }
 
-    override fun onMapReady(mMap: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmjson != null) {
             val points = convertStringToLatLnList(farmjson)
@@ -1299,11 +1305,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 50
+                        it, 50
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
