@@ -1,7 +1,6 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,14 +10,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
 import androidx.core.text.HtmlCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -64,10 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import nl.changer.audiowife.AudioWife
 import kotlin.math.abs
-import kotlin.math.log
 import kotlin.math.roundToInt
 
 
@@ -723,6 +717,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         bundle.putString("audio", vans?.audioUrl)
         bundle.putString("date", vans?.startDate)
         bundle.putString("source", vans?.sourceName)
+        bundle.putString("vansType", vans?.vansType)
 
         findNavController().navigate(
             R.id.action_pestDiseaseDetailsFragment_to_newsFullviewActivity,
