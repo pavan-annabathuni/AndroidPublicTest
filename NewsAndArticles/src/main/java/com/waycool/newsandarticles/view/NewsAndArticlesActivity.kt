@@ -365,6 +365,8 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         intent.putExtra("audio", it?.audioUrl)
         intent.putExtra("date", it?.startDate)
         intent.putExtra("source", it?.sourceName)
+        intent.putExtra("vansType", it?.vansType)
+
         startActivity(intent)
     }
 
