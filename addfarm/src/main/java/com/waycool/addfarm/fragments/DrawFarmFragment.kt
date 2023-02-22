@@ -271,29 +271,31 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             if (isMarkerSelected) {
                 isMarkerSelected = false
                 binding.markerImageview.visibility = View.INVISIBLE
-                val ll = mMap!!.projection
-                    .fromScreenLocation(
-                        Point(
-                            binding.markerImageview.x
-                                .toInt() + binding.markerImageview.width / 2,
-                            binding.markerImageview.y
-                                .toInt() + binding.markerImageview.height / 2
+                if (mMap != null) {
+                    val ll = mMap!!.projection
+                        .fromScreenLocation(
+                            Point(
+                                binding.markerImageview.x
+                                    .toInt() + binding.markerImageview.width / 2,
+                                binding.markerImageview.y
+                                    .toInt() + binding.markerImageview.height / 2
+                            )
                         )
-                    )
-                markerList[selectedMarkerIndex!!].position = ll
-                points[selectedMarkerIndex!!] = ll
-                markerList[selectedMarkerIndex!!].isVisible = true
-                if (polyline != null) {
-                    polyline!!.points = points
-                    addCenterMarkersToPolyline(polyline)
-                    binding.areaCard.visibility = View.GONE
-                    //binding.savemapBtn.setVisibility(View.GONE)
-                }
+                    markerList[selectedMarkerIndex!!].position = ll
+                    points[selectedMarkerIndex!!] = ll
+                    markerList[selectedMarkerIndex!!].isVisible = true
+                    if (polyline != null) {
+                        polyline!!.points = points
+                        addCenterMarkersToPolyline(polyline)
+                        binding.areaCard.visibility = View.GONE
+                        //binding.savemapBtn.setVisibility(View.GONE)
+                    }
 
-                if (polygon != null) {
-                    polygon!!.points = points
-                    addCenterMarkersToPolygon(polygon)
-                    showAreaCard()
+                    if (polygon != null) {
+                        polygon!!.points = points
+                        addCenterMarkersToPolygon(polygon)
+                        showAreaCard()
+                    }
                 }
             }
             /*else if(getIntent().hasExtra("edit_map")){
@@ -322,18 +324,20 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             }
             markerList.clear()
             for (p in points) {
-                markerList.add(
-                    mMap!!.addMarker(
-                        MarkerOptions().position(
-                            p
-                        ).draggable(false)
-                            .icon(
-                                BitmapDescriptorFactory.fromResource(
-                                    R.drawable.circle_green
-                                )
-                            ).flat(true).anchor(.5f, .5f)
+                if(mMap!=null) {
+                    markerList.add(
+                        mMap!!.addMarker(
+                            MarkerOptions().position(
+                                p
+                            ).draggable(false)
+                                .icon(
+                                    BitmapDescriptorFactory.fromResource(
+                                        R.drawable.circle_green
+                                    )
+                                ).flat(true).anchor(.5f, .5f)
+                        )
                     )
-                )
+                }
             }
             if (state.isPolygonDrawn) {
                 polygon!!.points = points

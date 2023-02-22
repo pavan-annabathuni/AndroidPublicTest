@@ -94,54 +94,93 @@
     *;
 }
 
-# For code using Room annotations
-#-keepclassmembers @androidx.room.* {
-#    *;
-#}
+
+#Firebase
+-keepattributes *Annotation*
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+
+-keep class com.google.firebase.analytics.** { *; }
+-keepnames class com.google.android.gms.common.internal.safeparcel.SafeParcelable
 
 
-# Keep resources that are used by Google Maps
--keepclassmembers class * {
-    @com.google.android.gms.maps.* <methods>;
-}
+# Keep the classes and methods used by Firebase Crashlytics
+-keep class com.google.firebase.crashlytics.** { *; }
+-keep class com.google.android.gms.common.internal.safeparcel.SafeParcelable { *; }
+-keep class com.google.android.gms.tasks.Task { *; }
 
-# Keep the names of classes that are used in XML layouts
--keep public class * extends android.view.View {
-    public <init>(android.content.Context);
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-    public void set*(...);
-}
+-keepattributes Signature
+
+# Keep the classes and methods used by Firebase Dynamic Links
+-keep class com.google.firebase.dynamiclinks.** { *; }
 
 
+# Keep any custom classes or methods that are accessed by name reflectively by your app
+#-keepclassmembers class com.yourcompany.yourapp.YourClass {
+ #  private void yourMethod(java.lang.String);}
 
-# Keep Google Maps Utils library
--keep class com.google.maps.android.** { *; }
--keep interface com.google.maps.android.** { *; }
+
+# Google Play Services Location
+-keep class com.google.android.gms.location.** { *; }
+-keep interface com.google.android.gms.location.** { *; }
+-dontwarn com.google.android.gms.location.**
+
+# Google Play Services Maps
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.** { *; }
+-dontwarn com.google.android.gms.maps.**
+
+# Google Maps Utils
+-keep class com.google.maps.android.clustering.** { *; }
+-keep interface com.google.maps.android.clustering.** { *; }
+-keep class com.google.maps.android.heatmaps.** { *; }
+-keep interface com.google.maps.android.heatmaps.** { *; }
+-keep class com.google.maps.android.ui.** { *; }
+-keep interface com.google.maps.android.ui.** { *; }
+-dontwarn com.google.maps.android.**
+
+# Google Maps
 -keep class com.google.android.libraries.maps.** { *; }
 -keep interface com.google.android.libraries.maps.** { *; }
+-dontwarn com.google.android.libraries.maps.**
+
+-keep class com.google.android.libraries.places.** { *; }
+-keep class com.google.android.gms.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
--dontwarn com.google.android.gms.maps.**
--dontwarn org.xmlpull.v1.**
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
 
-# Keep Google Places library
--keep class com.google.android.libraries.places.** { *; }
--keep class com.google.android.gms.location.places.** { *; }
--keep interface com.google.android.gms.location.places.** { *; }
--keep interface com.google.android.libraries.places.** { *; }
-
-
-# Keep Google Play Services libraries
--keep class com.google.android.gms.** { *; }
--keep interface com.google.android.gms.** { *; }
--dontwarn com.google.android.gms.**
--keep class com.google.android.gms.auth.api.** { *; }
--keep interface com.google.android.gms.auth.api.** { *; }
--dontwarn com.google.android.gms.auth.api.**
 -keep class com.google.android.gms.common.api.** { *; }
--keep interface com.google.android.gms.common.api.** { *; }
--dontwarn com.google.android.gms.common.api.**
+-keep class com.google.android.gms.common.internal.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class com.google.android.gms.auth.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class com.google.android.gms.auth.api.phone.** { *; }
+-keep class com.google.android.gms.common.api.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-dontwarn kotlinx.coroutines.**
+-keep class kotlinx.coroutines.** { *; }
+-keepclassmembers class kotlinx.coroutines.internal.MainDispatcherFactory { *; }
+
+
+#--------------------------------
+
+
 
 
 
