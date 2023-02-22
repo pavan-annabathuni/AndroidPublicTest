@@ -80,8 +80,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var points: MutableList<LatLng> = mutableListOf()
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-    private var _binding: FragmentDrawFarmBinding? = null
-    private val binding get() = _binding!!
 
     private var markerList: MutableList<Marker> = mutableListOf()
     private var polygon: Polygon? = null
@@ -98,7 +96,8 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private var searchCharSequence: CharSequence? = ""
     private val showCaseDataList: ArrayList<ShowCaseViewModel> = ArrayList<ShowCaseViewModel>()
     private var myFarmEdit: MyFarmsDomain? = null
-
+    private var _binding: FragmentDrawFarmBinding? = null
+    private val binding get() = _binding!!
 
     private val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
@@ -132,7 +131,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-//    private val binding by lazy { FragmentDrawFarmBinding.inflate(layoutInflater) }
     private val adapter by lazy { PlacesListAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -141,13 +139,16 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentDrawFarmBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.requireView().isClickable = false
         mapFragment.getMapAsync(this)
+
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext().applicationContext, AppSecrets.getMapsKey())
+        }
+        placesClient = Places.createClient(requireContext())
 
         CoroutineScope(Dispatchers.IO).launch {
             binding.toolbarTitle.text = TranslationsManager().getString("str_add_farm")
@@ -174,11 +175,6 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
             networkCall()
         }
 
-
-        if (!Places.isInitialized()) {
-            Places.initialize(requireContext().applicationContext, AppSecrets.getMapsKey())
-        }
-        placesClient = Places.createClient(requireContext())
         binding.placesRv.adapter = adapter
 
         showCaseDataList.add(
@@ -527,71 +523,71 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
     private fun editFarm() {
         if (myFarmEdit != null) {
             val pnts: ArrayList<LatLng>? = myFarmEdit?.farmJson
-            polygon = pnts?.let {
-                PolygonOptions().addAll(it).fillColor(Color.argb(100, 58, 146, 17))
-                    .strokeColor(
-                        Color.argb(180, 58, 146, 17)
-                    )
-            }?.let {
-                mMap!!.addPolygon(
-                    it
-                )
-            }
-            pnts?.let { getLatLnBounds(it) }?.let {
-                CameraUpdateFactory.newLatLngBounds(
-                    it,
-                    250
-                )
-            }?.let {
-                mMap!!.animateCamera(
-                    it
-                )
-            }
-            val state = MapState()
-            isPolygonDraw = true
-            if (pnts != null) {
-                for (latLng in pnts) {
-                    val marker = mMap!!.addMarker(
-                        MarkerOptions().position(
-                            latLng
+            mMap?.setOnMapLoadedCallback {
+                polygon = pnts?.let {
+                    PolygonOptions().addAll(it).fillColor(Color.argb(100, 58, 146, 17))
+                        .strokeColor(
+                            Color.argb(180, 58, 146, 17)
                         )
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
-                            .anchor(0.5f, .5f)
-                            .draggable(false)
-                            .flat(true)
+                }?.let {
+                    mMap?.addPolygon(
+                        it
                     )
-                    marker?.tag = latLng
-                    if (marker != null) {
-                        markerList.add(marker)
+                }
+
+
+                pnts?.let { getLatLnBounds(it) }?.let {
+                    CameraUpdateFactory.newLatLngBounds(it, 250)
+                }?.let {
+                    mMap?.animateCamera(it)
+                }
+
+                val state = MapState()
+                isPolygonDraw = true
+                if (pnts != null) {
+                    for (latLng in pnts) {
+                        val marker = mMap!!.addMarker(
+                            MarkerOptions().position(
+                                latLng
+                            )
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.circle_green))
+                                .anchor(0.5f, .5f)
+                                .draggable(false)
+                                .flat(true)
+                        )
+                        marker?.tag = latLng
+                        if (marker != null) {
+                            markerList.add(marker)
+                        }
+                        points.add(latLng)
                     }
-                    points.add(latLng)
                 }
-            }
 
-            if (points != null) {
-                if (points.size >= 3) {
-                    binding.savemapBtn.background.setTint(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            (com.waycool.uicomponents.R.color.primaryColor)
+                if (points != null) {
+                    if (points.size >= 3) {
+                        binding.savemapBtn.background.setTint(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                (com.waycool.uicomponents.R.color.primaryColor)
+                            )
                         )
-                    )
-                    binding.savemapBtn.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            (com.waycool.uicomponents.R.color.white)
+                        binding.savemapBtn.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                (com.waycool.uicomponents.R.color.white)
+                            )
                         )
-                    )
-                    showAreaCard()
+                        showAreaCard()
 
+                    }
                 }
-            }
 
-            addCenterMarkersToPolygon(polygon)
-            showAreaCard()
-            state.isPolygonDrawn = (isPolygonDraw)
-            state.copyArrayList(pnts)
-            previousStateStack.push(state)
+                addCenterMarkersToPolygon(polygon)
+                showAreaCard()
+                state.isPolygonDrawn = (isPolygonDraw)
+                state.copyArrayList(pnts)
+                previousStateStack.push(state)
+            }
         }
     }
 
