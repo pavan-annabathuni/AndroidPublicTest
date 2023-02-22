@@ -8,9 +8,19 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallState
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -39,6 +49,13 @@ class MainActivity : AppCompatActivity() {
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
 
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val APP_UPDATE_REQUEST_CODE = 1001
+    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
+
+//    private var appUpdate:AppUpdateManager?=null
+//    private val REQUEST_CODE=100
+
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
 
@@ -47,6 +64,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getDashBoard()
+//        inAppUpdate = InAppUpdate(this)
+//        appUpdate= AppUpdateManagerFactory.create(this)
+//        checkUpdate()
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    APP_UPDATE_REQUEST_CODE
+                )
+            }
+        }
+        installStateUpdatedListener = object : InstallStateUpdatedListener {
+            override fun onStateUpdate(state: InstallState) {
+                if (state.installStatus() == InstallStatus.DOWNLOADED) {
+                    // notify user to install the update
+                    popupSnackbarForCompleteUpdate()
+                }
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
 
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
@@ -81,12 +126,10 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
                     startActivity(intent)
-                }
-                else if(deepLink?.lastPathSegment!!.contains("newslist")){
+                } else if (deepLink?.lastPathSegment!!.contains("newslist")) {
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
-                }
-                else if (deepLink.lastPathSegment == "videoslist") {
+                } else if (deepLink.lastPathSegment == "videoslist") {
                     val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
                 }
@@ -111,16 +154,42 @@ class MainActivity : AppCompatActivity() {
                 val constraints: Constraints = Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
-                val oneTimeWorkRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MasterDownloadWorker::class.java)
-                    .setConstraints(constraints)
-                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
-                    .build()
+                val oneTimeWorkRequest: OneTimeWorkRequest =
+                    OneTimeWorkRequest.Builder(MasterDownloadWorker::class.java)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
+                        .build()
                 WorkManager.getInstance(this@MainActivity)
-                    .beginUniqueWork("MasterDownload", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest)
+                    .beginUniqueWork(
+                        "MasterDownload",
+                        ExistingWorkPolicy.REPLACE,
+                        oneTimeWorkRequest
+                    )
                     .enqueue()
             }
         }
     }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        val snackbar = Snackbar.make(
+            findViewById(R.id.nav_home),
+            "An update has just been downloaded.",
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
+        snackbar.setActionTextColor(resources.getColor(R.color.red))
+        snackbar.show()
+    }
+
+//    fun checkUpdate(){
+//        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
+//            if (updateInfo.updateAvailability()==UpdateAvailability.UPDATE_AVAILABLE && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+//                appUpdate?.startUpdateFlowForResult(updateInfo,AppUpdateType.FLEXIBLE,this,REQUEST_CODE)
+//            }
+//
+//        }
+//    }
+
 
     private fun validateToken(user_id: Int, token: String) {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
@@ -217,22 +286,26 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
             TranslationsManager().getStringAsLiveData("home")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home_premium) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue ?: "Home"
+                    bottomNavigationView.menu.findItem(R.id.nav_home_premium).title =
+                        it?.appValue ?: "Home"
                 }
             }
             TranslationsManager().getStringAsLiveData("services")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Services"
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title =
+                        it?.appValue ?: "Services"
                 }
             }
             TranslationsManager().getStringAsLiveData("my_farm")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_myfarms) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue ?: "My Farms"
+                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title =
+                        it?.appValue ?: "My Farms"
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
-                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue ?: "Profile"
+                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
+                        it?.appValue ?: "Profile"
                 }
             }
         } else {
@@ -247,7 +320,8 @@ class MainActivity : AppCompatActivity() {
             }
             TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_mandi) != null) {
-                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue ?: "Market Place"
+                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title =
+                        it?.appValue ?: "Market Place"
                 }
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
@@ -312,6 +386,28 @@ class MainActivity : AppCompatActivity() {
         else {
             finish()
             true
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == APP_UPDATE_REQUEST_CODE) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    // The update was successfully installed
+                    if (appUpdateManager != null) {
+                        appUpdateManager.unregisterListener(installStateUpdatedListener)
+                    }
+                    // Step 5: Update the NavGraph
+                    val navController = findNavController(R.id.homePagesFragment)
+                    navController.navigate(R.id.homePagesFragment)
+                }
+                RESULT_CANCELED -> {
+                    // The user canceled the update
+                }
+                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+                    // The update failed to install
+                }
+            }
         }
     }
 

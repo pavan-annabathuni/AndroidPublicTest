@@ -558,8 +558,7 @@ class MandiFragment : Fragment() {
             binding.topAppBar.title = mandi
         }
         TranslationsManager().loadString(
-            "str_no_data",
-            binding.tvNoData,
+            "str_no_data", binding.tvNoData,
             "Selected Crop or Mandi is not available with us."
         )
         TranslationsManager().loadString("search_crop_mandi", binding.searchBar)

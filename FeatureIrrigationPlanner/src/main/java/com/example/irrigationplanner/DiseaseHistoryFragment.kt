@@ -41,7 +41,7 @@ class DiseaseHistoryFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentDisaseHistoryBinding.inflate(inflater)
-        binding.topAppBar.setNavigationOnClickListener(){
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
         mHistoryAdapter = DiseaseHistoryAdapter()
@@ -70,52 +70,65 @@ class DiseaseHistoryFragment : Fragment() {
     }
 
     private fun tabs() {
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Disease").setCustomView(R.layout.item_tab)
-        )
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Pest").setCustomView(R.layout.item_tab)
-        )
-        /** if Deficiency is there we showing Deficiency tab*/
-        if(dificiency == "diff"){
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Deficiency").setCustomView(R.layout.item_tab)
-        )}
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(binding.tabLayout.selectedTabPosition) {
-                    0->viewModel.viewModelScope.launch {
-                        viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
-                            val data = it.data?.data?.historicData?.filter { itt ->
-                                itt.disease?.diseaseType == "Disease"
-                            }
-                            mHistoryAdapter.submitList(data)
-                        }
-                    }
-                    1->{viewModel.viewModelScope.launch {
-                        viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
-                            val data = it.data?.data?.historicData?.filter { itt ->
-                                itt.disease?.diseaseType == "Pest"
-                            }
-                            mHistoryAdapter.submitList(data)
-                            Log.d("hostry", "setAdapter: ${it.message}")
-                        }
-                    }}
-                    2->{viewModel.viewModelScope.launch {
-                        accountId?.let {
-                            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
+        viewModel.viewModelScope.launch {
+            val disease: String = TranslationsManager().getString("str_disease")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(disease).setCustomView(R.layout.item_tab)
+            )
+            var pest: String = TranslationsManager().getString("str_pest")
+            binding.tabLayout.addTab(
+                binding.tabLayout.newTab().setText(pest).setCustomView(R.layout.item_tab)
+            )
+            /** if Deficiency is there we showing Deficiency tab*/
+            if (dificiency == "diff") {
+                binding.tabLayout.addTab(
+                    binding.tabLayout.newTab().setText(dificiency)
+                        .setCustomView(R.layout.item_tab)
+                )
+            }
+            binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (binding.tabLayout.selectedTabPosition) {
+                        0 -> viewModel.viewModelScope.launch {
+                            viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
                                 val data = it.data?.data?.historicData?.filter { itt ->
-                                    itt.disease?.diseaseType == "Deficiency"
+                                    itt.disease?.diseaseType == "Disease"
                                 }
                                 mHistoryAdapter.submitList(data)
                             }
                         }
-                    }}
-                }}
+                        1 -> {
+                            viewModel.viewModelScope.launch {
+                                viewModel.getDisease(accountId!!, plotId)
+                                    .observe(viewLifecycleOwner) {
+                                        val data = it.data?.data?.historicData?.filter { itt ->
+                                            itt.disease?.diseaseType == "Pest"
+                                        }
+                                        mHistoryAdapter.submitList(data)
+                                        Log.d("hostry", "setAdapter: ${it.message}")
+                                    }
+                            }
+                        }
+                        2 -> {
+                            viewModel.viewModelScope.launch {
+                                accountId?.let {
+                                    viewModel.getDisease(accountId!!, plotId)
+                                        .observe(viewLifecycleOwner) {
+                                            val data = it.data?.data?.historicData?.filter { itt ->
+                                                itt.disease?.diseaseType == "Deficiency"
+                                            }
+                                            mHistoryAdapter.submitList(data)
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            })
+        }
     }
     override fun onResume() {
         super.onResume()

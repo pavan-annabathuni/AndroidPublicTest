@@ -41,11 +41,10 @@ class PlacesListAdapter :
     }
 
     override fun getItemCount(): Int {
-        if (currentList.size >= 4)
-            return 4
+        return if (currentList.size >= 4)
+            4
         else
             currentList.size
-        return super.getItemCount()
     }
 
 

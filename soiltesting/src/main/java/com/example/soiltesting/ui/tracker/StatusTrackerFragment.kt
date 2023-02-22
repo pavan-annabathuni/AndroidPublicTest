@@ -77,8 +77,7 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                 }
             }
         }
-
-
+        TranslationsManager().loadString("str_view_report", binding.tvCheckCrop,"View Report")
         return binding.root
     }
 

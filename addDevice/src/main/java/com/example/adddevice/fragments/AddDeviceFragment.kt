@@ -157,33 +157,36 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Your current Location is far from your Farm",
                         LENGTH_SHORT
                     ) }}}
 
 
             } else if (nickName.isEmpty()) {
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     val toastDeviceName=TranslationsManager().getString("device_name_empty")
-                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
+                    if(!toastDeviceName.isNullOrEmpty()){
+                        binding.device1.error = toastDeviceName}
                     else{ binding.device1.error= "Device Name should not be empty" }
                 }
 
 
                 return@setOnClickListener
-            } else if (scanResult.isNullOrEmpty()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastScan= TranslationsManager().getString("please_scan")
-                    if(!toastScan.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
-                            LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
-                        LENGTH_SHORT
-                    ) }}}
-
-
-            } else {
+            }
+//            else if (scanResult.isNullOrEmpty()) {
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    val toastScan= TranslationsManager().getString("please_scan")
+//                    if(!toastScan.isNullOrEmpty()){
+//                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
+//                            LENGTH_SHORT
+//                        ) }}
+//                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
+//                        LENGTH_SHORT
+//                    ) }}}
+//
+//
+//            }
+            else {
                 binding.progressBar.visibility=View.VISIBLE
                 binding.frameLayout2.visibility=View.GONE
                 val  eventBundle=Bundle()
@@ -198,8 +201,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     map["device_lat"] = latitude!!
                 if (longitutde != null)
                     map["device_long"] = longitutde!!
-                map["device_number"] = scanResult!!
+//                map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
+////
+                map["device_number"]=binding.imeiAddress.text
                 activityDevice(map)
             }
 
@@ -544,7 +549,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-    fun translationAddDevice() {
+   private fun translationAddDevice() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("str_add_device")
             binding.topAppBar.title = title
