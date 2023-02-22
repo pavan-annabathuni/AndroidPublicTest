@@ -395,8 +395,7 @@ class ViewReportFragment : Fragment() {
     fun setOtherData(data: ReportDetails) {
         if (data.StSamplingdDate != null) binding.sampleLayout.soilReportTv5.text =
             "Sampling Date - " + data.StSamplingdDate
-        if (data.FdName != null) binding.farmerLayout.soilReportTv1.text =
-            name + data.FdName
+        if (data.FdName != null) binding.farmerLayout.soilReportTv1.text = name + data.FdName
         if (data.FdAddress != null) binding.farmerLayout.soilReportTv2.text =
             address + data.FdAddress
         if (data.FdNumber != null) binding.farmerLayout.soilReportTv3.text =
@@ -405,8 +404,14 @@ class ViewReportFragment : Fragment() {
             name + data.TcName
         if (data.TcAddress != null) binding.testCenterLayout.soilReportTv2.text =
             address + data.TcAddress
-        if (data.TcLatitude != null) binding.sampleLayout.soilReportTv3.text =
-            location + data.StLatitude.toString() + "," + data.StLongitude
+        if (data.TcLatitude != null) binding.sampleLayout.soilReportTv3.text = location + data.StLatitude.toString() + "," + data.StLongitude
+        if (data.crop_name !=null) binding.sampleLayout.soilReportTv1.text=selected_crop+data.crop_name
+        if (data.soil_test_testing_date !=null) binding.sampleLayout.soilReportTv6.text=
+            test_date+data.soil_test_testing_date
+        binding.sampleLayout.soilReportTv2.visibility=View.GONE
+        binding.sampleLayout.soilReportTv4.visibility=View.GONE
+
+
     }
     override fun onResume() {
         super.onResume()

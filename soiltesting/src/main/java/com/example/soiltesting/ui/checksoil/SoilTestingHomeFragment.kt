@@ -590,6 +590,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            binding.clProgressBar.visibility = View.GONE
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
@@ -667,7 +668,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                 }
+            binding.clProgressBar.visibility = View.GONE
             true
+
         }
     }
 

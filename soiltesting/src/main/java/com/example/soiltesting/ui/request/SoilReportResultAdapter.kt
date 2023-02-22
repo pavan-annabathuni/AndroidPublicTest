@@ -16,8 +16,8 @@ class SoilReportResultAdapter(context: Context, serviceType: List<ReportResult>)
     var serviceType: List<ReportResult>
     var list: List<String> = ArrayList()
     var saclelist1 = Arrays.asList("High", "Acid", "Saline", "Highly Alkaline Low (OC,OM)")
-    var saclelist3 = Arrays.asList("Medium", "Normal")
     var saclelist2 = Arrays.asList("Low", "Deficient")
+    var saclelist3 = Arrays.asList("Medium", "Normal")
     var saclelist4 = Arrays.asList("Neutral", "Sufficient", "Alkaline", "Slightly Acidic")
     var saclelist5 = Arrays.asList("Not selected")
     private val onBind = false
@@ -63,19 +63,19 @@ ${data.recommendation .toString()} kg/ha"""
             )
         }
         if (saclelist1.contains(data.rating)) {
-            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_onp_scale1)
+            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_red_image)
         }
         if (saclelist3.contains(data.rating)) {
-            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_onp_scale3)
+            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_yellow_image)
         }
         if (saclelist2.contains(data.rating)) {
-            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_onp_scale2)
+            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_yellow_two_image)
         }
         if (saclelist4.contains(data.rating)) {
-            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_onp_scale4)
+            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_green_image)
         }
         if (saclelist5.contains(data.rating)) {
-            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_onp_scale6)
+            holder.binding.statusIcon.setBackgroundResource(R.drawable.ic_brown_image)
         }
     }
 

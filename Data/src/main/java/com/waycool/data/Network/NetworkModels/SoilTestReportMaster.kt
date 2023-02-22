@@ -34,7 +34,11 @@ data class ReportDetails(
     @SerializedName("test_center_country") var TcCountry: String,
     @SerializedName("test_center_latitude") var TcLatitude: String,
     @SerializedName("test_center_longitude") var TcLongitude: String,
-    @SerializedName("result") var results: Result
+    @SerializedName("result") var results: Result,
+    @SerializedName("crop_name")var crop_name:String,
+    @SerializedName("soil_test_testing_date")var soil_test_testing_date:String,
+
+
 )
 
 data class Result(
