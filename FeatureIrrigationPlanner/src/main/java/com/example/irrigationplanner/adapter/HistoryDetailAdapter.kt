@@ -46,6 +46,10 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         var irrigated = ""
         GlobalScope.launch {
           irrigated   = TranslationsManager().getString("str_Irrigated ")
+            if(properties.irrigation!=null)
+                holder.irrigation.text = "$irrigated ${properties.irrigation}L"
+            else
+                holder.irrigation.text = "$irrigated 0L"
         }
         holder.date.text = properties.createdAt
         val inputDateFormatter: SimpleDateFormat =
@@ -54,10 +58,7 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
         val date: Date = inputDateFormatter.parse(properties.createdAt)
         holder.date.text = "${outputDateFormatter.format(date)}"
 
-        if(properties.irrigation!=null)
-        holder.irrigation.text = "$irrigated ${properties.irrigation}L"
-        else
-            holder.irrigation.text = "0L"
+
         holder.eto.text = properties.etoCurrent.toString()
 
         if(!properties.rainfall.isNullOrEmpty())
