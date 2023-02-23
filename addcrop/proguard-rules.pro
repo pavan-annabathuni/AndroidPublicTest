@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+#3
+-keep class androidx.test.** { *; }
+-dontwarn org.hamcrest.**
+-dontwarn org.junit.**

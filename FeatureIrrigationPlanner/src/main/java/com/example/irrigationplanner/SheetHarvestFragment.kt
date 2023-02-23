@@ -3,7 +3,6 @@ package com.example.irrigationplanner
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import java.util.*
 
 
 class SheetHarvestFragment : BottomSheetDialogFragment() {
-    private lateinit var binding: FragmentSheetHarvestBinding
+    private lateinit var harvestBinding: FragmentSheetHarvestBinding
     private val viewModel: IrrigationViewModel by lazy {
         ViewModelProvider(this)[IrrigationViewModel::class.java]
     }
@@ -50,37 +50,31 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSheetHarvestBinding.inflate(inflater)
-        binding.close.setOnClickListener {
+        harvestBinding = FragmentSheetHarvestBinding.inflate(inflater)
+        harvestBinding.close.setOnClickListener {
             this.dismiss()
         }
-        binding.save.setOnClickListener {
+        harvestBinding.save.setOnClickListener {
             EventClickHandling.calculateClickEvent("Harvest_details_save")
-            var date = binding.editText2.text.toString()
-            if (binding.editText.text.toString() != "" && date != "") {
-                var yield_tone = binding.editText.text.toString().toInt()
-                plotId?.let { it1 ->
-                    viewModel.updateHarvest(it1, accountId!!, cropId!!, date, yield_tone)
+            var date = harvestBinding.editText2.text.toString()
+            if (harvestBinding.editText.text.toString() != "" && date != "") {
+                var yield_tone = harvestBinding.editText.text.toString().toInt()
+                    viewModel.updateHarvest(plotId!!, accountId!!, cropId!!, date, yield_tone)
                         .observe(viewLifecycleOwner) {
                             when (it) {
                                 is Resource.Success -> {
-                                    this.dismiss()
+//                                    CoroutineScope(Dispatchers.IO).launch {
+//                                        MyCropSyncer().invalidateSync()
+//                                        LocalSource.deleteAllMyCrops()
+//                                        MyCropSyncer().getMyCrop()
+//                                    }
+//                                    viewModel.setCropHarvested()
+                                    dismiss()
                                 }
                                 is Resource.Loading -> {}
                                 is Resource.Error -> {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        val toastServerError = TranslationsManager().getString("server_error")
-                                        if(!toastServerError.isNullOrEmpty()){
-                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                                Toast.LENGTH_SHORT
-                                            ) }}
-                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                                            Toast.LENGTH_SHORT
-                                        ) }}}
-                                    Log.d("cropInfo", "onCreateView: ${it.message}")
+                                AppUtils.translatedToastServerErrorOccurred(context)
                                 }
-                            }
-                            Log.d("Harvest", "onCreateView: ${it.message}")
                         }
                 }
             } else {
@@ -96,11 +90,11 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
 
             }
         }
-        binding.editText2.setOnClickListener {
+        harvestBinding.editText2.setOnClickListener {
             showCalender()
         }
         translation()
-        return binding.root
+        return harvestBinding.root
     }
 
     override fun getTheme(): Int {
@@ -143,29 +137,29 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
     private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "yyyy-MM-dd"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        binding.editText2.text = dateFormat.format(myCalendar.time)
+        harvestBinding.editText2.text = dateFormat.format(myCalendar.time)
     }
 
     private fun translation() {
-        TranslationsManager().loadString(
-            "str_harvest_details",
-            binding.textView13,
-            "Harvest Details"
-        )
+//        TranslationsManager().loadString(
+//            "str_harvest_details",
+//            harvestBinding.textView13,
+//            "Harvest Details"
+//        )
         TranslationsManager().loadString(
             "str_actual_yeild",
-            binding.textView14,
+            harvestBinding.textView14,
             "Actual Yeild in Tonne"
         )
         TranslationsManager().loadString(
             "str_actual_harvest_date",
-            binding.textView2,
+            harvestBinding.textView2,
             "Actual Harvest Date"
         )
 
         viewModel.viewModelScope.launch {
             val save = TranslationsManager().getString("str_save")
-            binding.save.text = save
+            harvestBinding.save.text = save
         }
 
     }
@@ -174,4 +168,5 @@ class SheetHarvestFragment : BottomSheetDialogFragment() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("SheetHarvestFragment")
     }
+
 }

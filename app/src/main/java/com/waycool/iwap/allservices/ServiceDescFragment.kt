@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -29,7 +28,7 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
             title = it.getString("title").toString()
             description = it.getString("desc").toString()
             image = it.getString("icon").toString()
-            audioUrl = it.getString("audioUrl").toString()
+           audioUrl = it.getString("audioUrl")
         }
     }
 
@@ -43,7 +42,6 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
             this.dismiss()
             audio?.release()
         }
-        Log.d("Audio123", "audioPlayer: $audioUrl")
         setData()
         audioPlayer()
         return binding.root
@@ -57,14 +55,17 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
     }
 
     private fun audioPlayer() {
-        binding.playPauseLayout.setOnClickListener() {
-            if (audioUrl != null) {
-                mediaPlayer = MediaPlayer();
-                mediaPlayer!!.setOnCompletionListener {
-                    binding.mediaSeekbar.progress = 0
-                    binding.pause.visibility = View.GONE
-                    binding.play.visibility = View.VISIBLE
-                }
+        Log.d("audioUrl", "audioPlayer: $audioUrl")
+        if (audioUrl.isNullOrEmpty()) {
+            binding.audioLayout.visibility = View.GONE
+        }else{
+            binding.audioLayout.visibility = View.VISIBLE
+            binding.playPauseLayout.setOnClickListener() {
+            mediaPlayer = MediaPlayer()
+            mediaPlayer!!.setOnCompletionListener {
+                binding.mediaSeekbar.progress = 0
+                binding.pause.visibility = View.GONE
+                binding.play.visibility = View.VISIBLE
 
 
                 audio = AudioWife.getInstance()
@@ -75,13 +76,12 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
                     .setRuntimeView(binding.totalTime)
                 // .setTotalTimeView(mTotalTime);
                 audio?.play()
-            } else {
-                Toast.makeText(context, "Audio is not there", Toast.LENGTH_SHORT).show()
-                Log.d("Audio", "audioPlayer: $audioUrl")
+
+
             }
 
         }
-    }
+    }}
 
     override fun onPause() {
         super.onPause()
@@ -92,6 +92,7 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
         return com.example.irrigationplanner.R.style.BottomSheetDialog
 
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("ServiceDescFragment")

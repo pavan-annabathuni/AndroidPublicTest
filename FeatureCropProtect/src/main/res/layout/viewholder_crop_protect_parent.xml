@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:drawableEnd="@drawable/ic_view_more"
+                android:drawableEnd="@drawable/ic_viewall"
                 android:drawablePadding="8dp"
                 android:padding="4dp"
                 android:text="View more"

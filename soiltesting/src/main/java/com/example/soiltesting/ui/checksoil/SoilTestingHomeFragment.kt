@@ -2,7 +2,6 @@ package com.example.soiltesting.ui.checksoil
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -19,7 +18,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -36,6 +34,7 @@ import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.addcrop.ui.selectcrop.DebouncedClickListener
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
 import com.example.soiltesting.ui.history.HistoryDataAdapter
@@ -53,6 +52,8 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
@@ -138,9 +139,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+    networkErrorStateTranslations(apiErrorHandlingBinding)
+
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
@@ -161,8 +161,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         setBanners()
         locationClick()
         translationSoilTesting()
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     activity?.finish()
 
@@ -185,17 +184,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.cardCheckHealth.visibility = View.GONE
             binding.addFab.visibility = View.GONE
+            AppUtils.translatedToastCheckInternet(context)
 
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
         } else {
             binding.clInclude.visibility = View.GONE
             apiErrorHandlingBinding.clInternetError.visibility = View.GONE
@@ -204,8 +194,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             setBanners()
             getAllHistory()
             getVideos()
-
-
         }
     }
 
@@ -270,7 +258,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountID = it.data?.accountId
             if (accountID != null) {
-                Log.d(ContentValues.TAG, "onCreateViewAccountID:$$accountID")
                 bindObserversSoilTestHistory(accountID!!)
 
             }
@@ -290,11 +277,28 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 accountID = it.data?.accountId
                 if (accountID != null) {
                     isLocationPermissionGranted(accountID!!)
-                    binding.cardCheckHealth.isClickable = false
+//                    binding.cardCheckHealth.isClickable = false
 
                 }
             }
         }
+//        val debouncedClickListener = DebouncedClickListener(2000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch {
+////                postCropDetails()
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    binding.clProgressBar.visibility = View.VISIBLE
+//
+//                    accountID = it.data?.accountId
+//                    if (accountID != null) {
+//                        isLocationPermissionGranted(accountID!!)
+//                        binding.cardCheckHealth.isClickable = false
+//
+//                    }
+//                }
+//            }
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
     }
 
     private fun initViewClick() {
@@ -468,13 +472,29 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun locationClick() {
         binding.cardCheckHealth.setOnClickListener {
+            binding.clProgressBar.visibility = View.VISIBLE
             EventClickHandling.calculateClickEvent("Soiltesting_checksoilhealth")
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
                 isLocationPermissionGranted(accountID!!)
+//                binding.cardCheckHealth.isClickable = false
 
             }
         }
+//        val debouncedClickListener = DebouncedClickListener(2000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch {
+//                EventClickHandling.calculateClickEvent("Soiltesting_checksoilhealth")
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    accountID = it.data?.accountId
+//                    isLocationPermissionGranted(accountID!!)
+//
+//                }
+//            }
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
+
+
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
@@ -517,8 +537,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility = View.VISIBLE
-
-                        Log.d("TAG", "bindObserversData:" + it.data.toString())
                         if (it.data != null) {
                             val response = it.data as ArrayList<SoilTestHistoryDomain>
                             if (response.size <= 2) {
@@ -537,13 +555,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                        context?.let { it1 ->
-                            ToastStateHandling.toastError(
-                                it1,
-                                "Error",
-                                Toast.LENGTH_SHORT
-                            )
-                        }
+                   AppUtils.translatedToastServerErrorOccurred(context)
 
                     }
                     is Resource.Loading -> {
@@ -578,6 +590,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            binding.clProgressBar.visibility = View.GONE
+            binding.cardCheckHealth.isClickable = true
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
@@ -586,6 +600,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 ),
                 100
             )
+            binding.cardCheckHealth.isClickable = true
             // use your location object
             false
         } else {
@@ -632,18 +647,12 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                 }
                                 is Resource.Error -> {
                                     if(NetworkUtil.getConnectivityStatusString(context)==0){
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                            "Please check you internet connectivity",
-                                            Toast.LENGTH_SHORT
-                                        )
+                                        AppUtils.translatedToastCheckInternet(context)
+
                                     }
                                     else{
-                                        ToastStateHandling.toastError(
-                                            requireContext(),
-                                           "Server Error. Try again later",
-                                            Toast.LENGTH_SHORT
-                                        )
+                                        AppUtils.translatedToastServerErrorOccurred(context)
+
                                     }
 
                                     binding.clProgressBar.visibility = View.GONE
@@ -661,7 +670,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                 }
+//            binding.clProgressBar.visibility = View.GONE
+//            binding.cardCheckHealth.isClickable = true
             true
+
         }
     }
 
@@ -739,6 +751,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             binding.clProgressBar.visibility = View.VISIBLE
             when (it) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility = View.GONE
                     if (it.data!!.isEmpty()) {
 
                         CustomeDialogFragment.newInstance().show(
@@ -765,15 +778,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             )
                         } catch (e: Exception) {
                             binding.clProgressBar.visibility = View.GONE
-                            Log.d(
-                                "TAGPraveen",
-                                "isLocationPermissionGranted: SetPass"
-                            )
+
                         } catch (e: Exception) {
-                            Log.d(
-                                "TAGPraveenAade",
-                                "isLocationPermissionGranted: NotPassed $e"
-                            )
+
                         }
                         binding.clProgressBar.visibility = View.GONE
                                         binding.view.visibility=View.GONE
@@ -784,11 +791,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 }
                 is Resource.Error -> {
                     if (NetworkUtil.getConnectivityStatusString(context) == 0) {
-                        ToastStateHandling.toastError(
-                            requireContext(),
-                            "Please check you internet connectivity",
-                            Toast.LENGTH_SHORT
-                        )
+                        AppUtils.translatedToastCheckInternet(context)
+
                     } else {
                         ToastStateHandling.toastError(
                             requireContext(),

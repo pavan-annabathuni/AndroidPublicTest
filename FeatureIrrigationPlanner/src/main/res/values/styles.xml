@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyTransparentBottomSheetDialogTheme" parent="Theme.AppCompat.Light">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:colorBackground">@android:color/transparent</item>
-    </style>
+
     <style name="Medium">
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:fontFamily">@font/notosans_medium</item>
     </style>
     <style name="SemiBold">
-        <item name="android:fontFamily">@font/noto_sans_semibold</item>
+        <item name="android:fontFamily">@font/notosans_semibold</item>
     </style>
     <style name="Bold">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
     </style>
     <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Add attributes here -->
         <item name="colorPrimary">@color/WoodBrown</item>
     </style>
-    <style name="Theme.App" parent="Theme.Design.NoActionBar">
 
-        <item name="colorPrimary">@color/WoodBrown</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnSurface">@color/WoodBrown</item>
-    </style>
     <style name="ActionBar">
         <item name="android:textAlignment">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">18sp</item>
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/notosans_bold</item>
     </style>
     <style name="button">
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/notosans_bold</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:radius">8dp</item>
         <item name="cornerRadius">8dp</item>
@@ -44,13 +36,7 @@
         <!--Optional: This attribute makes the dialog window non-floating-->
         <item name="android:windowIsFloating">false</item>
     </style>
-    <style name="MyTextViewStyle" parent="TextAppearance.AppCompat">
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
-        <item name="android:color">@color/black</item>
-        <item name="android:colorPrimary">@color/black</item>
 
-    </style>
     <style name="BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetModal</item>
     </style>

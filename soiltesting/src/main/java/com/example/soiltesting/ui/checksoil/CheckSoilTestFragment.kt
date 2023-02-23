@@ -8,7 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,7 +20,6 @@ import com.example.soiltesting.databinding.FragmentCheckSoilTestBinding
 import com.example.soiltesting.ui.history.HistoryViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.waycool.data.Network.NetworkModels.CheckSoilTestData
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CheckSoilTestDomain
@@ -41,6 +42,8 @@ class CheckSoilTestFragment : Fragment() {
     ): View? {
         _binding = FragmentCheckSoilTestBinding.inflate(inflater, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.toolBarTittle.isSelected = true
+
         if (arguments != null) {
             val your_list = arguments?.getParcelableArrayList<CheckSoilTestDomain>("list")
             binding.tvLabTitle.text = your_list?.get(0)?.onpName.toString()
@@ -60,6 +63,20 @@ class CheckSoilTestFragment : Fragment() {
             }
             latitude = arguments?.getString("lat")
             longitude = arguments?.getString("lon")
+        }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+
+                    val isSuccess = activity?.let { findNavController().popBackStack() }
+                    if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
         }
         return binding.root
     }

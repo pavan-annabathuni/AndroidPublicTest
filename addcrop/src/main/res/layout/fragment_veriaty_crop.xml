@@ -20,7 +20,7 @@
             android:layout_width="16dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_back_btn_toolbar" />
+            android:src="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/toolbarTitle"
@@ -55,6 +55,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/cardCheckHealth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

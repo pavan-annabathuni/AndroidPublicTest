@@ -1,8 +1,6 @@
 package com.example.mandiprice.fragments
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -35,28 +33,25 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
-import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
+import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -108,6 +103,7 @@ class MandiGraphFragment : Fragment() {
             }
         }
 
+
     }
 
 
@@ -118,9 +114,9 @@ class MandiGraphFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMandiGraphBinding.inflate(inflater)
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
+        binding.cropName.text = cropName
+        binding.tvMarket.text=marketName
+       networkErrorStateTranslations(apiErrorHandlingBinding)
 
         binding.lifecycleOwner = this
         shareLayout = binding.shareCl2
@@ -158,7 +154,6 @@ class MandiGraphFragment : Fragment() {
             mandiGraphPageApi()
         }
         mandiGraphPageApi()
-        Log.d("cropName", "onCreateView: $cropName")
 
 
         binding.tvMarket.isSelected = true
@@ -172,15 +167,8 @@ class MandiGraphFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastCheckInternet(context)
+
         } else {
             viewModel.viewModelScope.launch {
                 viewModel.getMandiHistoryDetails(cropMasterId, mandiMasterId, sub_record_id)
@@ -345,11 +333,7 @@ class MandiGraphFragment : Fragment() {
             }.attach()
         }
         binding.bannerViewpager.adapter = bannerAdapter
-//        TabLayoutMediator(
-//            binding.bannerIndicators, binding.bannerViewpager
-//        ) { tab: TabLayout.Tab, position: Int ->
-//            tab.text = "${position + 1} / ${bannerImageList.size}"
-//        }.attach()
+
 
         binding.bannerViewpager.clipToPadding = false
         binding.bannerViewpager.clipChildren = false
@@ -372,35 +356,20 @@ class MandiGraphFragment : Fragment() {
         market_name: String?,
         fragment: String?
     ) {
-        /** taking screen shot and sharing whole graph and list with dynamic link */
-        val now = Date()
-        android.text.format.DateFormat.format("", now)
-        val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
-        val bitmap =
-            Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        shareLayout.draw(canvas)
-        val imageFile = File(path)
-        val outputFile = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
-        outputFile.flush()
-        outputFile.close()
-        val URI = com.example.mandiprice.FileProvider.getUriForFile(
-            requireContext(),
-            "com.example.outgrow",
-            imageFile
-        )
+        val uriString="https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"
+        val title="Outgrow - Mandi Detail for $crop_name"
+        val description="Find Mandi details and more on Outgrow app"
         binding.clShareProgress.visibility=View.VISIBLE
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("http://app.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
             .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
-                AndroidParameters.Builder()
+                DynamicLink.AndroidParameters.Builder()
                     .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(
-                SocialMetaTagParameters.Builder()
+                DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle("Outgrow - Mandi Detail for $crop_name")
                     .setDescription("Find Mandi details and more on Outgrow app")
                     .build()
@@ -421,15 +390,10 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-                }else{
-                    Log.d("MandiGraph", "MandiGraph:onFailure ${task.exception}")
+
 
                 }
             }
-            .addOnFailureListener {
-                Log.d("MandiGraph", "MandiGraph:onFailure $it")
-            }
-
 
     }
 
@@ -444,7 +408,6 @@ class MandiGraphFragment : Fragment() {
     private fun checkLang(){
         viewModel.viewModelScope.launch {
             var langCode = LocalSource.getLanguageCode() ?: "en"
-
             when (langCode) {
                 "en" -> {
                     binding.cropName.text = mandiDomain?.crop

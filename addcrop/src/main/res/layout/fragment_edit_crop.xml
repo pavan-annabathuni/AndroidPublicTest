@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/actionBarSize"
             app:layout_scrollEffect="compress"
-            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIcon="@drawable/ic_back"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <TextView
@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="Edit Crop"
                 android:textSize="18sp"
                 android:textColor="@color/textdark" />

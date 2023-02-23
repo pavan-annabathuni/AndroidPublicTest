@@ -28,6 +28,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
@@ -69,21 +70,7 @@ class MyProfileFragment : Fragment() {
         binding = FragmentMyProfileBinding.inflate(inflater)
 
         apiErrorHandlingBinding = binding.errorState
-        TranslationsManager().loadString(
-            "txt_internet_problem",
-            apiErrorHandlingBinding.tvInternetProblem,
-            "There is a problem with Internet."
-        )
-        TranslationsManager().loadString(
-            "txt_check_net",
-            apiErrorHandlingBinding.tvCheckInternetConnection,
-            "Please check your Internet connection"
-        )
-        TranslationsManager().loadString(
-            "txt_tryagain",
-            apiErrorHandlingBinding.tvTryAgainInternet,
-            "TRY AGAIN"
-        )
+       AppUtils.networkErrorStateTranslations(apiErrorHandlingBinding)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -166,15 +153,7 @@ class MyProfileFragment : Fragment() {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
                 binding.clInclude.visibility = View.VISIBLE
                 apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                            LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                        LENGTH_SHORT
-                    ) }}}
+               AppUtils.translatedToastCheckInternet(context)
             } else {
                 binding.clInclude.visibility = View.GONE
                 apiErrorHandlingBinding.clInternetError.visibility = View.GONE

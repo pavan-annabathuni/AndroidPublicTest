@@ -26,20 +26,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.CropCategoryMasterDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurecrophealth.CropHealthViewModel
 import com.waycool.featurecrophealth.R
 import com.waycool.featurecrophealth.databinding.FragmentCropSelectBinding
 import com.waycool.featurecropprotect.Adapter.MyCropsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -156,7 +154,7 @@ class CropSelectFragment : Fragment() {
         viewModel.viewModelScope.launch {
             binding.searchView.hint = TranslationsManager().getString("search")
         }
-        TranslationsManager().loadString("crop_selection", binding.toolbarTitle, "Crop Selection")
+        TranslationsManager().loadString("crop_selection", binding.tvToolBar, "Crop Selection")
         TranslationsManager().loadString("", binding.myCropsTitle, "My Crops")
     }
 
@@ -194,27 +192,10 @@ class CropSelectFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
-
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastLoading(context)
                 }
             }
         }
@@ -246,7 +227,7 @@ class CropSelectFragment : Fragment() {
             selectedCategory = category
             getSelectedCategoryCrops(
                 categoryId = category.id,
-               // searchQuery = searchCharSequence.toString()
+                // searchQuery = searchCharSequence.toString()
             )
         }
 
@@ -256,7 +237,7 @@ class CropSelectFragment : Fragment() {
                 selectedCategory = category
                 getSelectedCategoryCrops(
                     categoryId = category.id,
-                 //   searchQuery = searchCharSequence.toString()
+                    //   searchQuery = searchCharSequence.toString()
                 )
             }
         }
@@ -276,26 +257,12 @@ class CropSelectFragment : Fragment() {
                         adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
                 }
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                    AppUtils.translatedToastLoading(context)
+
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+
+                    AppUtils.translatedToastServerErrorOccurred(context)
 
                 }
             }
@@ -309,7 +276,7 @@ class CropSelectFragment : Fragment() {
         val searchRunnable =
             Runnable {
                 getSelectedCategoryCrops(
-                    categoryId = selectedCategory?.id,
+                    // categoryId = selectedCategory?.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
@@ -317,6 +284,9 @@ class CropSelectFragment : Fragment() {
         binding.searchView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if (charSequence.isEmpty()) {
+                    bindObserversCategory()
+                }
                 EventClickHandling.calculateClickEvent("Search_crophealth")
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)

@@ -52,7 +52,7 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
         }
         Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(holder.image)
         /** showing large image of when user click on image*/
-        holder.image.setOnClickListener() {
+        holder.image.setOnClickListener {
             val dialog = Dialog(holder.itemView.context)
             dialog.setCancelable(true)
             dialog.setContentView(R.layout.item_large_image)
@@ -65,7 +65,13 @@ class DiseaseAdapter:ListAdapter<DiseaseCurrentData,DiseaseAdapter.MyViewHolder>
             dialog.show()
 
     }
+        if(properties.disease?.diseaseNameTag==null)
         holder.name.text = properties.disease?.diseaseName
+//            if (properties.disease?.diseaseNameTranslated.equals("--", ignoreCase = true))
+//            properties.disease?.diseaseName
+        else
+            holder.name.text = "${properties.disease?.diseaseName}(${properties.disease?.diseaseNameTag})"
+           // properties.disease?.diseaseNameTranslated
 
     }
 

@@ -71,7 +71,7 @@ class CropHistoryFragment : Fragment() {
         bindObservers()
         onclick()
         fabButton()
-        translationSoilTesting()
+        translationForAiCropHistory()
 
 
         historyAdapter.onItemClick = {
@@ -238,9 +238,9 @@ class CropHistoryFragment : Fragment() {
             }
         }
     }
-    fun translationSoilTesting() {
+    fun translationForAiCropHistory() {
         CoroutineScope(Dispatchers.Main).launch {
-            val search = TranslationsManager().getString("peast_diease")
+            val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
         }
         TranslationsManager().loadString("request_history", binding.tvToolBarTest)

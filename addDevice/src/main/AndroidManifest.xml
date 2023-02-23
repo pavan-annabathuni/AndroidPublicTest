@@ -17,6 +17,8 @@
         android:hardwareAccelerated="true">
         <activity
             android:name=".AddDeviceActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:exported="false"
             />
         <activity

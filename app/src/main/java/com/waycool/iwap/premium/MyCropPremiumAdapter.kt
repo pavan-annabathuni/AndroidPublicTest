@@ -52,19 +52,31 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         holder.binding.tvCloudy.isSelected = true
         if (myCrop.irrigationRequired == true) {
             holder.binding.tvCloudy.text = "Irrigation required"
+            //red-ic_cloudy_deng
+            holder.binding.ivCloudy.setImageResource(com.example.soiltesting.R.drawable.ic_cloudy_deng)
+            holder.binding.clCloudy.setBackgroundResource(com.example.soiltesting.R.drawable.bg_spirical)
         } else if (myCrop.irrigationRequired == false){
             holder.binding.tvCloudy.text = "Irrigation not required"
+            //green-ic_no_didease_found
+            holder.binding.ivCloudy.setImageResource(com.example.soiltesting.R.drawable.ic_no_didease_found)
+            holder.binding.clCloudy.setBackgroundResource(com.example.soiltesting.R.drawable.bg_no_disease)
+
         }else{
             holder.binding.tvCloudy.text = "-NA-"
         }
-//            TranslationsManager().loadString("view_cloudy", holder.binding.tvCloudy)
-//        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
-
+//
         holder.binding.tvCloudyNoDisease.isSelected = true
         if (myCrop.disease == true) {
+        if (myCrop.disease == true) {
+            //red-ic_cloudy_deng
             holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
+            holder.binding.ivCloudyNoDisease.setImageResource(com.example.soiltesting.R.drawable.ic_cloudy_deng)
+            holder.binding.clCloudyNoDisease.setBackgroundResource(com.example.soiltesting.R.drawable.bg_spirical)
         } else if (myCrop.disease == false){
+            //green-ic_no_didease_found
             holder.binding.tvCloudyNoDisease.text = "No diseases alerts today"
+            holder.binding.ivCloudyNoDisease.setImageResource(com.example.soiltesting.R.drawable.ic_no_didease_found)
+            holder.binding.clCloudyNoDisease.setBackgroundResource(com.example.soiltesting.R.drawable.bg_no_disease)
         }else {
             holder.binding.tvCloudyNoDisease.text = "-NA-"
         }

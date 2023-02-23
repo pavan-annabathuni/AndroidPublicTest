@@ -3,10 +3,12 @@ package com.example.ndvi
 import android.animation.LayoutTransition
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -31,6 +33,7 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URL
@@ -50,11 +53,6 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     private enum class TileType {
         NDVI, TRUE_COLOR
     }
-
-    lateinit var ndviTile: String
-    lateinit var trueColor: String
-    private var accountId: Int? = null
-
     private var selectedTileType = TileType.NDVI
     private var tileOverlay: TileOverlay? = null
     private var selectedNdvi: NdviData? = null
@@ -71,7 +69,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentNdviBinding.inflate(inflater)
         binding.farmName.text = myFarm?.farmName
@@ -81,11 +79,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            if (accountId == null) {
-                accountId = it.data?.accountId
-                binding.farmLocation.text = it.data?.profile?.district
-                getNdviFromAPI()
-            }
+            binding.farmLocation.text = it.data?.profile?.district
         }
 
         binding.roolLlNdvi.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
@@ -100,10 +94,10 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun onClicks() {
-        binding.floatingActionButton1.setOnClickListener() {
+        binding.floatingActionButton1.setOnClickListener {
             this.findNavController().navigate(R.id.action_ndviFragment_to_infoSheetFragment)
         }
-        binding.topAppBar.setOnClickListener() {
+        binding.topAppBar.setOnClickListener {
             this.findNavController().navigateUp()
         }
 
@@ -170,43 +164,55 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         getNdviFromAPI()
 
 
-
     }
 
     private fun getNdviFromAPI() {
         myFarm?.id?.let {
-            accountId?.let { it1 ->
-                viewModel.getNdvi(it, it1).observe(viewLifecycleOwner) {
+            viewModel.getNdvi(it).observe(viewLifecycleOwner) {
 
-                    ndviDataList = it?.data?.data
-                        ?.filter { ndviData -> ndviData.dt != null }
+                when(it){
+                    is Resource.Success ->{
+                        ndviDataList = it.data?.data
+                            ?.filter { ndviData -> ndviData.dt != null }
 
-                    val datesList: List<String?> = ndviDataList
-                        ?.map { data -> changeDateFormat(data.dt) } ?: mutableListOf()
+                        val datesList: List<String?> = ndviDataList
+                            ?.map { data -> changeDateFormat(data.dt) } ?: mutableListOf()
 
-                    val arrayAdapter =
-                        ArrayAdapter(requireContext(), R.layout.item_spinner, datesList)
-                    binding.dateSpinner.adapter = arrayAdapter
-                    binding.dateSpinner.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                p0: AdapterView<*>?,
-                                p1: View?,
-                                position: Int,
-                                p3: Long
-                            ) {
-                                selectedNdvi = ndviDataList?.get(position)
-                                showTileNDVI()
+                        val arrayAdapter =
+                            ArrayAdapter(requireContext(), R.layout.item_spinner, datesList)
+                        binding.dateSpinner.adapter = arrayAdapter
+                        binding.dateSpinner.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    p0: AdapterView<*>?,
+                                    p1: View?,
+                                    position: Int,
+                                    p3: Long
+                                ) {
+                                    binding.dateSpinner.isEnabled = false
+                                    Handler().postDelayed({
+                                      binding.dateSpinner.isEnabled = true
+                                    },1000)
+                                    selectedNdvi = ndviDataList?.get(position)
+                                    showTileNDVI()
 
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                }
                             }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                            }
-                        }
+                    }
+                    is Resource.Error ->{
+                        ToastStateHandling.toastWarning(requireContext(),"No NDVI available. Please try after sometime.",Toast.LENGTH_SHORT)
+                    }
+                    is Resource.Loading ->{}
                 }
+
+
             }
         }
+
 
     }
 
@@ -236,19 +242,19 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 }
             }
 
-            var tileUrl: String? = if (selectedTileType == TileType.NDVI) {
+            val tileUrl: String? = if (selectedTileType == TileType.NDVI) {
                 selectedNdvi?.tile?.ndvi
             } else {
                 selectedNdvi?.tile?.truecolor
             }
-            if (tileUrl.isNullOrEmpty()) {
+            if (tileUrl.isNullOrEmpty() || !URLUtil.isValidUrl(tileUrl)) {
+                Log.d("g56", "NDVI Url: $tileUrl")
                 ToastStateHandling.toastError(
                     requireContext(),
                     "Image Not Available",
                     Toast.LENGTH_LONG
                 )
             } else {
-
                 val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
                         var url: String = if (selectedTileType == TileType.NDVI) {
@@ -259,11 +265,12 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                         url = url.replace("{x}", x.toString() + "")
                         url = url.replace("{y}", y.toString() + "")
                         url = url.replace("{z}", zoom.toString() + "")
-                        Log.d("g56", "NDVI Url: $url")
+                        Log.d("g56", "NDVI Url: $tileUrl")
                         return try {
                             URL(url)
                         } catch (e: MalformedURLException) {
-                            throw java.lang.AssertionError(e)
+                            URL("")
+//                            throw java.lang.AssertionError(e)
                         }
                     }
                 }
@@ -326,23 +333,28 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun translation() {
-        TranslationsManager().loadString("str_date", binding.textView8,"Date")
-        TranslationsManager().loadString("str_low", binding.textView3,"Low")
-        TranslationsManager().loadString("str_high", binding.textView4,"High")
-        TranslationsManager().loadString("str_unhealthy", binding.unhealthy,"Unhealthy")
-        TranslationsManager().loadString("moderately_healthy", binding.moderate,"Moderately Healthy")
-        TranslationsManager().loadString("healthy", binding.healthy,"Healthy")
-        TranslationsManager().loadString("mean_ndvi", binding.textView5,"Mean NDVI")
-        TranslationsManager().loadString("opacity", binding.textView6,"Opacity")
-        TranslationsManager().loadString("str_cloud_coverage",binding.tvTextAlert,"This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health.")
+        TranslationsManager().loadString("str_date", binding.textView8, "Date")
+        TranslationsManager().loadString("str_low", binding.textView3, "Low")
+        TranslationsManager().loadString("str_high", binding.textView4, "High")
+        TranslationsManager().loadString("str_unhealthy", binding.unhealthy, "Unhealthy")
+        TranslationsManager().loadString("moderately_healthy", binding.moderate, "Moderately Healthy")
+        TranslationsManager().loadString("healthy", binding.healthy, "Healthy")
+        TranslationsManager().loadString("mean_ndvi", binding.textView5, "Mean NDVI")
+        TranslationsManager().loadString("opacity", binding.textView6, "Opacity")
+        TranslationsManager().loadString(
+            "str_cloud_coverage",
+            binding.tvTextAlert,
+            "This Satellite Image has high Cloud Cover. This Imagery may not be an accurate representation of Crop Health."
+        )
 
-        viewModel.viewModelScope.launch() {
+        viewModel.viewModelScope.launch {
             val title = TranslationsManager().getString("str_ndvi")
             binding.topAppBar.title = title
         }
 
 
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("NdviFragment")

@@ -1,8 +1,12 @@
 package com.example.irrigationplanner.adapter
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemWeeklyIrrgationBinding
@@ -34,7 +38,7 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
             index = position
         }
         val properties = details
@@ -51,23 +55,25 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
 
             holder.x.text = outputDateFormatter.format(date)
 
-        val level = (properties.mad[position].toFloat()) - (properties.depletion[position].toFloat())
-        if(level<=0) {
-            holder.image.setImageResource(R.drawable.ic_irrigation_2)
-            holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
-            holder.x.setTextColor(Color.parseColor("#146133"))
-        }
-        else{
-            holder.ll.setBackgroundResource(R.drawable.border_irrigation)
-            holder.x.setTextColor(Color.parseColor("#000000"))
-            holder.image.setImageResource(R.drawable.ic_irrigation_his2)
+        val level = (properties.mad[position]?.toFloat())?.minus((properties.depletion[position]?.toFloat()!!))
+        if (level != null) {
+            if(level<=0.0) {
+                holder.image.setImageResource(R.drawable.ic_irrigation_2)
+                holder.ll.setBackgroundResource(R.drawable.green_border_irrigation)
+                holder.x.setTextColor(Color.parseColor("#146133"))
+            }
+            else{
+                holder.ll.setBackgroundResource(R.drawable.border_irrigation)
+                holder.x.setTextColor(Color.parseColor("#000000"))
+                holder.image.setImageResource(R.drawable.ic_irrigation_his2)
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        if(details.days.isNullOrEmpty())
-            return 0
-        return details.days.size
+        return if(!details.days.isNullOrEmpty())
+            details.days.size
+        else 0
     }
 
 }

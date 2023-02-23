@@ -1,5 +1,6 @@
 package com.example.irrigationplanner
 
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -22,15 +23,28 @@ import com.example.irrigationplanner.adapter.DiseaseAdapter
 import com.example.irrigationplanner.adapter.HistoryAdapter
 import com.example.irrigationplanner.adapter.WeeklyAdapter
 import com.example.irrigationplanner.databinding.FragmentIrrigationBinding
+import com.example.irrigationplanner.databinding.FragmentSheetHarvestBinding
 import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import com.waycool.data.Local.LocalSource
+import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.Sync.syncer.MyCropSyncer
+import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
+import java.text.SimpleDateFormat
+import java.util.*
 
 class IrrigationFragment : Fragment() {
     private lateinit var binding: FragmentIrrigationBinding
@@ -48,9 +62,13 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
+    val myCalendar = Calendar.getInstance()
+
 
     //private lateinit var args:Bundle
     var dificiency: String = "noData"
+
+    private var CropStageDate:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,12 +98,17 @@ setDetails()
         /** calling user detail api and passing the value account id in set adapter function*/
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountId = it.data?.accountId!!
-            if (accountId != null)
+            if (accountId != null) {
                 setAdapter(accountId!!)
+                cropStageCheck(accountId!!)
+            }
             /** checking user role id and */
-            if(it.data!!.roleId==31)
-            binding.btExit.visibility = View.GONE
+            if (it.data!!.roleId == 31){
+                binding.btExit.visibility = View.GONE
+            binding.btHarvest.visibility = View.GONE
+            }
             else binding.btExit.visibility = View.VISIBLE
+
         }
 
         // binding.recycleViewHis.adapter = mHistoryAdapter
@@ -103,12 +126,12 @@ setDetails()
         deleteCropDialog()
 
         /** if irrigation need to be added clicking yes and showing dialog*/
-        binding.irrigationYes.setOnClickListener() {
+        binding.irrigationYes.setOnClickListener {
             EventClickHandling.calculateClickEvent("crop_irrigated_today_yes")
             dialog()
         }
         /** if irrigation need to be added clicking edit and showing dialog*/
-        binding.tvEdit.setOnClickListener() {
+        binding.tvEdit.setOnClickListener {
             EventClickHandling.calculateClickEvent("crop_irrigated_today_edit")
             binding.perDay.visibility = View.VISIBLE
             dialog()
@@ -116,6 +139,7 @@ setDetails()
 
 
         translation()
+
 
 
         var yes: String
@@ -135,15 +159,16 @@ setDetails()
         }
 
         /** when user click on no then hiding the view */
-        binding.irrigationNo.setOnClickListener() {
+        binding.irrigationNo.setOnClickListener {
             EventClickHandling.calculateClickEvent("crop_irrigated_today_no")
             binding.dailyIrrigation.visibility = View.GONE
             binding.perDay.visibility = View.VISIBLE
         }
         /** clicking view all history  navigation history fragment*/
-        binding.btHistory.setOnClickListener() {
+        binding.btHistory.setOnClickListener {
             EventClickHandling.calculateClickEvent("Irrigation_history_view")
             val args = Bundle()
+
             args.putParcelable("IrrigationHis", irrigation)
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
@@ -151,17 +176,16 @@ setDetails()
                 .navigate(R.id.action_irrigationFragment_to_irrigationHistoryFragment, args)
         }
         /** clicking view all history  navigation disease fragment*/
-        binding.btDisease.setOnClickListener() {
+        binding.btDisease.setOnClickListener {
             EventClickHandling.calculateClickEvent("Disease_outbreak_chances_view")
             val args = Bundle()
-            args.putParcelable("IrrigationHis", irrigation)
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             this.findNavController()
                 .navigate(R.id.action_irrigationFragment_to_diseaseHistoryFragment, args)
         }
         /** clicking view all history  navigation forecast fragment*/
-        binding.btForecast.setOnClickListener() {
+        binding.btForecast.setOnClickListener {
             EventClickHandling.calculateClickEvent("weekly_irrigation_forecast_view")
             val args = Bundle()
             if (irrigation != null) {
@@ -173,35 +197,54 @@ setDetails()
                 .navigate(R.id.action_irrigationFragment_to_forecastFragment, args)
         }
         /** clicking view all history  navigation cropStage fragment*/
-        binding.cropStage.setOnClickListener() {
+        binding.cropStage.setOnClickListener {
             val args = Bundle()
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             this.findNavController()
                 .navigate(R.id.action_irrigationFragment_to_cropStageFragment, args)
         }
-        binding.topAppBar.setOnClickListener() {
+        binding.topAppBar.setOnClickListener {
             this.findNavController().navigateUp()
         }
         /** clicking view all history  navigation harvest dialog*/
-        binding.btHarvest.setOnClickListener() {
+        binding.btHarvest.setOnClickListener {
             EventClickHandling.calculateClickEvent("Harvest_crop")
             val args = Bundle()
             args.putInt("plotId", plotId)
             accountId?.let { it1 -> args.putInt("accountId", it1) }
             cropId?.let { it1 -> args.putInt("cropId", it1) }
-            this.findNavController()
-                .navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment, args)
+//            this.findNavController()
+//                .navigate(R.id.action_irrigationFragment_to_sheetHarvestFragment, args)
+            harvestDialog()
 
         }
         /** clicking view all history  navigation history fragment */
-        binding.tvCropInfo.setOnClickListener() {
+        binding.tvCropInfo.setOnClickListener {
             EventClickHandling.calculateClickEvent("Irrigation_landing_crop_overview")
             val args = Bundle()
             args.putInt("plotId", plotId)
             this.findNavController()
                 .navigate(R.id.action_irrigationFragment_to_cropOverviewFragment, args)
         }
+
+        binding.clCropStageClick.setOnClickListener {
+            val args = Bundle()
+            args.putInt("plotId", plotId)
+            accountId?.let { it1 -> args.putInt("accountId", it1) }
+            this.findNavController()
+                .navigate(R.id.action_irrigationFragment_to_cropStageFragment, args)
+        }
+
+//        viewModel.cropHarvestedLiveData.observe(viewLifecycleOwner){
+//            if(it==true){
+//                viewModel.cropHarvestedLiveData.postValue(false)
+//                findNavController().navigateUp()
+//            }else{
+//                setDetails()
+//            }
+//        }
+        setDetails()
     }
 
     private fun setAdapter(accountId: Int) {
@@ -222,7 +265,7 @@ setDetails()
         binding.rvDis.adapter = mDiseaseAdapter
 
 
-        viewModel.viewModelScope.launch {
+
             viewModel.getIrrigationHis(accountId, plotId).observe(viewLifecycleOwner) {
                 viewModel.viewModelScope.launch {
                     if (it.data?.data?.irrigation?.currentData?.irrigation != null)
@@ -236,20 +279,25 @@ setDetails()
                     is Resource.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.btForecast.visibility = View.GONE
-                        binding.btDisease.visibility = View.GONE
                         binding.btHistory.visibility = View.GONE
+                        binding.dailyIrrigation.visibility = View.GONE
+                        Log.d("History", "setAdapter: loading")
+
                     }
                     is Resource.Error -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
                         binding.btForecast.visibility = View.GONE
-                        binding.btDisease.visibility = View.GONE
                         binding.btHistory.visibility = View.GONE
-                    }
+                        binding.dailyIrrigation.visibility = View.GONE
+                      AppUtils.translatedToastServerErrorOccurred(context)
+                        Log.d("History", "setAdapter: Error")
+                        }
                     is Resource.Success -> {
                         /** setting adapter data for historicData data */
-                        mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData)
+                        if(!it.data?.data?.irrigation?.historicData.isNullOrEmpty())
+                        mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData as MutableList<HistoricData>)
                         //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
-                        if (it.data?.data?.irrigation?.historicData?.get(0)?.irrigation != null) {
+                        if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty() && it.data?.data?.irrigation?.historicData?.get(0)?.irrigation != null) {
                             binding.dailyIrrigation.visibility = View.GONE
                             binding.perDay.visibility = View.VISIBLE
                             binding.textViewL.text =
@@ -258,8 +306,17 @@ setDetails()
                         irrigation = it.data?.data?.irrigation!!
                         binding.progressBar.visibility = View.GONE
                         binding.btForecast.visibility = View.VISIBLE
-                        binding.btDisease.visibility = View.VISIBLE
                         binding.btHistory.visibility = View.VISIBLE
+                        Log.d("History", "setAdapter: Success")
+                        if(it.data?.data?.irrigation?.historicData.isNullOrEmpty()){
+                            binding.progressBar.visibility = View.GONE
+                            binding.btHistory.visibility = View.GONE
+                            binding.dailyIrrigation.visibility = View.GONE
+                            binding.view3.visibility = View.GONE
+                        }
+                        if(it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()){
+                            binding.btForecast.visibility = View.GONE
+                        }
                     }
                 }
                 /** setting adapter data for weekly data */
@@ -273,9 +330,12 @@ setDetails()
 
             }
 
-        }
+
         /** calling disease api */
         viewModel.getDisease(accountId, plotId).observe(viewLifecycleOwner) {
+            when(it){
+                is Resource.Success->{
+
             val data = it.data?.data?.currentData?.filter { itt ->
                 itt.disease?.diseaseType == "Disease"
             }
@@ -285,15 +345,26 @@ setDetails()
             }
             if (data2 != null) dificiency = "dif"
             else dificiency = "noData"
+                    binding.btDisease.visibility = View.VISIBLE
+                    if(it.data?.data?.historicData.isNullOrEmpty())
+                        binding.btDisease.visibility = View.GONE
         }
+                is Resource.Loading->{
+                    binding.btDisease.visibility = View.GONE
+                }
+                is Resource.Error->{
+                    binding.btDisease.visibility = View.GONE
+                }
+            }
+            }
     }
 
     private fun tabs() {
 
         viewModel.viewModelScope.launch {
-            val Disease: String = TranslationsManager().getString("str_disease")
+            val disease: String = TranslationsManager().getString("str_disease")
             binding.tabLayout.addTab(
-                binding.tabLayout.newTab().setText(Disease).setCustomView(R.layout.item_tab)
+                binding.tabLayout.newTab().setText(disease).setCustomView(R.layout.item_tab)
             )
 
             var pest: String = TranslationsManager().getString("str_pest")
@@ -386,17 +457,27 @@ setDetails()
             val saveTv = TranslationsManager().getString("str_save")
             save.text = saveTv
         }
-        save.setOnClickListener() {
+        save.setOnClickListener {
             EventClickHandling.calculateClickEvent("Irrigation_plant_save")
             val value = irrigation?.text.toString().toInt()
             if (irrigationId != null) {
                 viewModel.updateIrrigation(irrigationId!!, value).observe(viewLifecycleOwner) {
-                    binding.textViewL.text = value.toString() + "L"
+                    when(it){
+                        is Resource.Success->{
+                            binding.dailyIrrigation.visibility = View.GONE
+                            binding.perDay.visibility = View.VISIBLE
+                            binding.textViewL.text = value.toString() + "L"
+                        }
+                        is Resource.Error->{}
+                        is Resource.Loading->{}
+                    }
+
+
                 }
             }
             dialog.dismiss()
         }
-        close!!.setOnClickListener() {
+        close!!.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
@@ -405,7 +486,7 @@ setDetails()
     /** delete a crop dialog */
     private fun deleteCropDialog() {
         EventClickHandling.calculateClickEvent("Irrigation_delete")
-        binding.btExit.setOnClickListener() {
+        binding.btExit.setOnClickListener {
             val dialog = Dialog(requireContext())
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.dailog_delete_irrigartion)
@@ -423,14 +504,16 @@ setDetails()
                 dialog.dismiss()
             }
             /** no button to delete crop*/
-            cancel.setOnClickListener { dialog.dismiss()
-                EventClickHandling.calculateClickEvent("Confirm_cancel_crop")}
+            cancel.setOnClickListener {
+                dialog.dismiss()
+                EventClickHandling.calculateClickEvent("Confirm_cancel_crop")
+            }
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
 
             //translation
-            TranslationsManager().loadString("str_delete", deleteTv,"Delete")
-            TranslationsManager().loadString("str_delete_crop_desc", deleteDesc,"Are you sure? Do you want to delete this crop?")
+            TranslationsManager().loadString("str_delete", deleteTv, "Delete")
+            TranslationsManager().loadString("str_delete_crop_desc", deleteDesc, "Are you sure? Do you want to delete this crop?")
             viewModel.viewModelScope.launch {
                 val deletetv = TranslationsManager().getString("str_delete")
                 delete.text = deletetv
@@ -446,7 +529,7 @@ setDetails()
         Log.d("CropName2", "setDetails: $cropName")
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
-            val data = it.data?.first { plot->
+            val data = it.data?.first { plot ->
                 plot.id == plotId
 
             }
@@ -463,39 +546,180 @@ setDetails()
                 binding.clCropStage.visibility = View.GONE
             }
 
-            if(data?.irrigationRequired==null){
-                binding.gwxIrrigation.visibility=View.GONE
-                binding.btHarvest.visibility=View.GONE
-                binding.noDeviceCv.visibility=View.VISIBLE
-            }else{
-                binding.gwxIrrigation.visibility=View.VISIBLE
-                binding.btHarvest.visibility=View.VISIBLE
-                binding.noDeviceCv.visibility=View.GONE
-
-
+            if (data?.irrigationRequired == null) {
+                binding.gwxIrrigation.visibility = View.GONE
+                binding.btHarvest.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
             }
+            else {
+                binding.gwxIrrigation.visibility = View.VISIBLE
+                binding.noDeviceCv.visibility = View.GONE
+            }
+
+
+            if(data?.disease==false){
+                binding.tabLayout.visibility = View.GONE
+                binding.rvDis.visibility = View.GONE
+            }else {
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.rvDis.visibility = View.VISIBLE
+            }
+
+            viewModel.viewModelScope.launch {
+            if(data?.irrigationRequired==false){
+                TranslationsManager().loadString("str_irrigation_not_req",binding.irrigationReq,"Irrigation Not Required")
+                binding.irrigationReq.text = TranslationsManager().getString("str_irrigation_not_req")
+                }else if(data?.irrigationRequired==true){
+                TranslationsManager().loadString("str_irrigation_req",binding.irrigationReq,"Irrigation Required")
+                }else{
+                binding.irrigationReq.text = "-NA-"
+                }
+            }
+
+            if(data?.irrigationType=="Drip Irrigation"){
+                TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay, "Irrigation done today per Plant")
+            }
+            else{
+                TranslationsManager().loadString("str_irrigation_done_area", binding.tvPerDay, "Irrigation done today per area")
+            }
+
+            CropStageDate = data?.sowingDate
+
+            CropStageDate?.let { it1 -> checkingFutureDate(it1) }
         }
     }
 
     private fun translation() {
 //        TranslationsManager().loadString("",binding.graps)
-        TranslationsManager().loadString("str_view_all", binding.cropStage,"View all")
-        TranslationsManager().loadString("str_irrigation", binding.textView3,"Irrigation")
-        TranslationsManager().loadString("str_crop _nformation", binding.tvCropInfo,"Crop information")
-        TranslationsManager().loadString("str_today", binding.textView4,"Today")
-        TranslationsManager().loadString("str_weekly_irrigation", binding.textView5,"Weekly Irrigation Forecast")
-        TranslationsManager().loadString("str_have_you _irrigated", binding.textView6,"Have you Irrigated your Crop today?")
-        TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay,"Irrigation done today per Plant")
-        TranslationsManager().loadString("str_view_all", binding.tvViewDeatils,"View details")
-        TranslationsManager().loadString("str_view_all", binding.tvViewDetails2,"View details")
-        TranslationsManager().loadString("str_view_all", binding.viewDetails3,"View details")
-        TranslationsManager().loadString("str_edit", binding.tvEdit,"Edit")
-        TranslationsManager().loadString("str_risk_outbreak", binding.textView9,"Risk Outbreak Chances")
-        TranslationsManager().loadString("str_irrigation_history", binding.textView8,"Irrigation History")
+        TranslationsManager().loadString("str_view_all", binding.cropStage, "View all")
+        TranslationsManager().loadString("str_irrigation", binding.textView3, "Irrigation")
+        TranslationsManager().loadString("str_crop _nformation", binding.tvCropInfo, "Crop information")
+        TranslationsManager().loadString("str_today", binding.textView4, "Today")
+        TranslationsManager().loadString("str_weekly_irrigation", binding.textView5, "Weekly Irrigation Forecast")
+        TranslationsManager().loadString("str_have_you _irrigated", binding.textView6, "Have you Irrigated your Crop today?")
+        TranslationsManager().loadString("view_details", binding.tvViewDeatils, "View details")
+        TranslationsManager().loadString("view_details", binding.tvViewDetails2, "View details")
+        TranslationsManager().loadString("view_details", binding.viewDetails3, "View details")
+        TranslationsManager().loadString("str_edit", binding.tvEdit, "Edit")
+        TranslationsManager().loadString("str_risk_outbreak", binding.textView9, "Today Risk Outbreak Chances")
+        TranslationsManager().loadString("str_irrigation_history", binding.textView8, "Irrigation History")
+        TranslationsManager().loadString("str_crop_stage", binding.graps, "Crop Stage")
+        TranslationsManager().loadString("topping", binding.topping, "Topping")
 //        TranslationsManager().loadString("str_irrigation_history",binding.textView8)
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("IrrigationFragment")
+    }
+
+    private fun harvestDialog() {
+
+        val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
+        val harvestBinding:FragmentSheetHarvestBinding = FragmentSheetHarvestBinding.inflate(layoutInflater)
+        TranslationsManager().loadString("str_harvest_details",harvestBinding.tvHarvestDetails,"Harvest Details")
+        TranslationsManager().loadString("str_actual_yeild",harvestBinding.textView14,"Actual Yield in Tone")
+        TranslationsManager().loadString("str_actual_harvest_date",harvestBinding.tvHarvestDetails,"Actual Harvest Date")
+        dialog.setContentView(harvestBinding.root)
+        harvestBinding.close.setOnClickListener {
+            dialog.dismiss()
+        }
+        harvestBinding.save.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Harvest_details_save")
+            var date = harvestBinding.editText2.text.toString()
+            if (harvestBinding.editText.text.toString() != "" && date != "") {
+                var yield_tone = harvestBinding.editText.text.toString().toInt()
+                viewModel.updateHarvest(plotId, accountId!!, cropId!!, date, yield_tone)
+                    .observe(viewLifecycleOwner) {
+                        when (it) {
+                            is Resource.Success -> {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        MyCropSyncer().invalidateSync()
+                                        LocalSource.deleteAllMyCrops()
+                                        MyCropSyncer().getMyCrop()
+                                    }
+                                findNavController().navigateUp()
+//                                    viewModel.setCropHarvested()
+                                dialog.dismiss()
+                            }
+                            is Resource.Loading -> {}
+                            is Resource.Error -> {
+                                AppUtils.translatedToastServerErrorOccurred(context)
+                            }
+                        }
+                    }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastEnterFields = TranslationsManager().getString("toast_enter_all_field")
+                    if(!toastEnterFields.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastEnterFields,
+                            Toast.LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please enter all the mandatory fields",
+                        Toast.LENGTH_SHORT
+                    ) }}}
+
+            }
+        }
+        harvestBinding.editText2.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            val dpd = DatePickerDialog(
+                requireContext(),
+                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    val month = monthOfYear+1
+                    // Display Selected date in textbox
+                    val inputDateFormatter: SimpleDateFormat =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val date2: Date = inputDateFormatter.parse("$year-$month-$dayOfMonth")
+                    harvestBinding.editText2.text = outputDateFormatter.format(date2)
+                    // date1 = binding.cal1.text.toString()
+                },
+                year,
+                month,
+                day
+            )
+            dpd.show()
+        }
+        dialog.show()
+    }
+
+    private fun cropStageCheck(accountId: Int){
+        viewModel.getCropStage(accountId,plotId).observe(viewLifecycleOwner){
+            if(it.data?.data!=null)
+                if(it.data?.data!![0].date?.first()!=null){
+            for(i in 0 until it.data?.data!!.size)
+                if(it.data?.data!![i].date==null) {
+                    binding.topping.text = it.data?.data!![i - 1].stageName
+                    val image = it.data?.data!![i - 1].stageIcon
+                    Glide.with(requireContext()).load(image).into(binding.cropStageImg)
+                    binding.cropStageDate.text = it.data?.data!![i - 1].date
+                    break
+                }}else {
+                    binding.topping.text = it.data?.data!!.first().stageName
+                    val image = it.data?.data!!.first().stageIcon
+                    Glide.with(requireContext()).load(image).into(binding.cropStageImg)
+                    binding.cropStageDate.text = CropStageDate
+                }
+        }
+    }
+
+    private fun checkingFutureDate(sowingDate:String){
+        val currentTime = Calendar.getInstance().time
+
+// Create a Date object for the date you want to compare
+        val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(sowingDate)
+
+// Compare the two dates
+        if (sowingDate.after(currentTime)) {
+            // The compareDate is in the future
+            // Do something
+            binding.FutureCv.visibility = View.VISIBLE
+            binding.gwxIrrigation.visibility = View.GONE
+            binding.btHarvest.visibility = View.GONE
+        }
     }
 }

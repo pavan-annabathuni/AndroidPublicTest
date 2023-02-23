@@ -43,7 +43,7 @@ public class AppUtil {
 
     public static void showLoadImage(Context context, ImageView image) {
         try {
-            Glide.with(context).asGif().load(R.raw.loading).into(image);
+            Glide.with(context).asGif().load(com.waycool.uicomponents.R.raw.loading).into(image);
         } catch (Exception e) {
             e.printStackTrace();
         }

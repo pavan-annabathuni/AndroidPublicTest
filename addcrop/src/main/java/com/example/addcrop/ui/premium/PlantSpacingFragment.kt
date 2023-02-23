@@ -1,8 +1,6 @@
 package com.example.addcrop.ui.premium
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,7 @@ import com.example.addcrop.databinding.FragmentPlantSpacingBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,14 +26,17 @@ class PlantSpacingFragment : Fragment() {
     var date: String? = null
     var account_id: Int? = null
     var crop_id: Int? = null
+    var crop_variety: Int? = null
     var nickname: String? = null
     var crop_type: Int? = null
     var irrigation_selected: String? = null
     var noOFPlants: String? = null
+    var crop_season: String? = null
     var farm_id: Int? = null
     var acrea_type: String? = null
     var plantToPlant: String = ""
     var planetBed: String = ""
+    var crop_year: String? =null
     var dripEmitterRate: String = ""
 
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
@@ -56,6 +58,7 @@ class PlantSpacingFragment : Fragment() {
                 nickname = arguments?.getString("nick_name")
                 account_id = arguments?.getInt("account_id")
                 crop_id = arguments?.getInt("cropid")
+                crop_variety = arguments?.getInt("pom")
                 crop_type = arguments?.getInt("crop_type")
                 area = arguments?.getString("area")
                 date = arguments?.getString("date")
@@ -63,6 +66,9 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants = arguments?.getString("numberOfPlanets")
                 farm_id = arguments?.getInt("farm_id")
                 acrea_type = arguments?.getString("area_type")
+                crop_season=arguments?.getString("crop_season")
+                crop_year=arguments?.getString("crop_year")
+
 
 
                 val map = mutableMapOf<String, Any>()
@@ -75,10 +81,19 @@ class PlantSpacingFragment : Fragment() {
                 if (farm_id != null && farm_id != 0) {
                     farm_id?.let { it1 ->
                         map["farm_id"] = it1
-                        Log.d("TAG", "onViewCreated: $farm_id")
                     }
                 }
                 crop_id?.let { map.put("crop_id", it) }
+                if (crop_variety == 0) {
+                } else {
+                    map["crop_variety_id"] = crop_variety.toString().toInt()
+                }
+                crop_season?.let {
+                    map.put("crop_season",it)
+                }
+                crop_year?.let {
+                    map.put("crop_year",it)
+                }
                 crop_type?.let { map.put("soil_type_id", it) }
                 nickname?.let { map.put("plot_nickname", it) }
                 area?.let { map.put("area", it) }
@@ -87,7 +102,9 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants?.let { map.put("no_of_plants", it) }
                 map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
-                binding.constraintLayout3.setOnSelectListener {selectPlantDistance->
+                map["len_drip"] = binding.etNumber.text
+                map["width_drip"] = binding.etNumberWidth.text
+                binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
                     try {
                         if (selectPlantDistance.text.trim().isEmpty()) {
                             Toast.makeText(
@@ -113,7 +130,7 @@ class PlantSpacingFragment : Fragment() {
 
                 }
 
-                binding.constraintLayoutBedWidth.setOnSelectListener {selectBedWidth->
+                binding.constraintLayoutBedWidth.setOnSelectListener { selectBedWidth ->
                     try {
                         if (selectBedWidth.text.trim().isEmpty()) {
                             Toast.makeText(
@@ -123,13 +140,13 @@ class PlantSpacingFragment : Fragment() {
                             ).show()
                         } else {
                             if (selectBedWidth.text == "ft") {
-                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.305
                             } else if (selectBedWidth.text == "cm") {
-                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.01
                             } else if (selectBedWidth.text == "mtr") {
-                                map["width_drip"] = binding.etNumber.text
+                                map["width_drip"] = binding.etNumberWidth.text
                             } else {
-                                map["width_drip"] = binding.etNumber.text
+                                map["width_drip"] = binding.etNumberWidth.text
                             }
 
                         }
@@ -152,7 +169,7 @@ class PlantSpacingFragment : Fragment() {
                     } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
                         binding.progressBar?.visibility = View.VISIBLE
                         binding.cardCheckHealth.visibility = View.GONE
-                        viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip->
+                        viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip ->
                             when (addCropDrip) {
                                 is Resource.Success -> {
                                     binding.progressBar?.visibility = View.INVISIBLE
@@ -165,15 +182,10 @@ class PlantSpacingFragment : Fragment() {
                                         addCropDrip.message.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    Log.d(
-                                        ContentValues.TAG,
-                                        "postAddCropExption: ${addCropDrip.message.toString()}"
-                                    )
+
                                 }
                                 is Resource.Loading -> {
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
-
+                                    AppUtils.translatedToastLoading(context)
                                 }
                             }
                         }
@@ -194,9 +206,9 @@ class PlantSpacingFragment : Fragment() {
 
     private fun translationForPlantSpacingDripIrrigation() {
         CoroutineScope(Dispatchers.Main).launch {
-            binding.title?.text= TranslationsManager().getString("add_crop")
+            binding.title?.text = TranslationsManager().getString("add_crop")
 
-            var NickNamehint = TranslationsManager().getString("e_g_50")
+            val NickNamehint = TranslationsManager().getString("e_g_50")
             binding.etNumber.hint = NickNamehint
             binding.etNumberWidth.hint = NickNamehint
             binding.etNumberWidthDistance.hint = NickNamehint
@@ -214,7 +226,6 @@ class PlantSpacingFragment : Fragment() {
     private fun passDataDripIrrigation(map: String) {
         val map = mutableMapOf<String, Any>()
         map["map"] = map
-        Log.d("TAG", "passDataDripIrrigation: $map")
 
     }
 

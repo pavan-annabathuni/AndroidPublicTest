@@ -26,7 +26,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale1"
+            android:src="@drawable/ic_red_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv1"
@@ -49,14 +49,13 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale2"
+            android:src="@drawable/ic_yellow_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="High, Acid, Saline"
-
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/space16"
             android:textColor="@color/black_two"/>
@@ -72,7 +71,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale3"
+            android:src="@drawable/ic_yellow_two_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv3"
@@ -95,7 +94,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale4"
+            android:src="@drawable/ic_green_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv4"
@@ -118,7 +117,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale5"
+            android:src="@drawable/ic_red_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv5"
@@ -142,7 +141,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale6"
+            android:src="@drawable/ic_brown_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv6"

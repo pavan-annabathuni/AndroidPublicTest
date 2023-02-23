@@ -10,15 +10,11 @@ class AddCropTypeDomainMapper : DomainMapper<SoilTypeDomain, AddCropTypeEntity> 
             id = dto.id,
             isSelected = dto.isSelected,
             soil_type = dto.soil_type
-
-
         )
     }
-
     fun toDomainList(initial: List<AddCropTypeEntity>): List<SoilTypeDomain> {
         return initial.map {
             mapToDomain(it)
         }
     }
-
 }

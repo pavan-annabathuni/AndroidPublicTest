@@ -20,6 +20,7 @@ class ChatActivity : AppCompatActivity() {
                 if (deepLink.lastPathSegment.equals(CHAT)) {
                     FeatureChat.zenDeskInit(this)
                 }
+                finish()
             }
         }
 

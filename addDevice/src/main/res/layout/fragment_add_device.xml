@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".fragments.AddDeviceFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,7 +20,6 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
-            android:theme="@style/Theme.MaterialComponents.Light"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="64dp"
@@ -29,6 +28,7 @@
             android:elevation="0dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:theme="@style/Theme.MaterialComponents.Light"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_back"
             app:title="Add Device"
@@ -41,11 +41,14 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/white"
         android:fillViewport="false"
+        map:layout_constraintBottom_toTopOf="@+id/frameLayout2"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         tools:context=".fragments.EditProfileFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,11 +66,11 @@
                 android:layout_marginEnd="16dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
-                tools:visibility="visible"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,57 +94,49 @@
                             map:liteMode="true" />
 
                     </com.google.android.material.card.MaterialCardView>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="16sp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="16sp"
-                        android:layout_height="wrap_content">
+                        android:layout_marginTop="16sp">
+
                         <TextView
                             android:id="@+id/latitude"
                             style="@style/SemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="12.93"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <TextView
                             android:id="@+id/camma"
                             style="@style/SemiBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" , "
-                            android:visibility="gone"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/latitude"
                             android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toEndOf="@+id/latitude"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <TextView
                             android:id="@+id/longitude"
                             style="@style/SemiBold"
-                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" 77.23"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/camma"
                             android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toEndOf="@+id/camma"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-                    <!--                    <TextView-->
-                    <!--                        style="@style/SemiBold"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginStart="16sp"-->
-                    <!--                        android:layout_marginTop="8sp"-->
-                    <!--                        android:text="@string/elevation_802_92"-->
-                    <!--                        android:textColor="@color/black"-->
-                    <!--                        android:textSize="14sp" />-->
 
 
                 </LinearLayout>
@@ -168,7 +163,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
+                android:background="@drawable/bg_plot_edittext"
                 android:hint="Eg. Zone 1 Device"
                 android:inputType="textCapWords"
                 android:paddingStart="16dp"
@@ -203,6 +198,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
+
                 <ImageView
                     android:id="@+id/ivClick"
                     android:layout_width="25dp"
@@ -217,30 +213,26 @@
                 <TextView
                     android:id="@+id/tvScanned"
                     android:layout_width="0dp"
-                    map:layout_constraintEnd_toEndOf="parent"
-                    android:textAlignment="textStart"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:drawablePadding="8dp"
-                    map:layout_constraintStart_toEndOf="@+id/ivClick"
-                    android:padding="8dp"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
+                    android:padding="8dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:text="@string/sacn_qr_code"
-                    android:layout_marginStart="8dp"
-                    map:layout_constraintTop_toTopOf="parent"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/DarkGreen"
                     map:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/DarkGreen" />
+                    map:layout_constraintEnd_toEndOf="parent"
+                    map:layout_constraintStart_toEndOf="@+id/ivClick"
+                    map:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <!--            <EditText-->
-            <!--                android:id="@+id/etLocatioOne"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"/>-->
 
             <TextView
                 android:id="@+id/textView3"
@@ -263,7 +255,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/text_border"
+                android:background="@drawable/bg_plot_edittext"
                 android:hint="@string/e_g_50"
                 android:inputType="textPassword"
                 android:paddingStart="16dp"
@@ -279,11 +271,11 @@
                 android:id="@+id/plotl_cl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imeiAddress">
+                app:layout_constraintTop_toBottomOf="@+id/imeiAddress"
+                tools:visibility="visible">
 
 
                 <com.waycool.uicomponents.Text.ParagraphMedium
@@ -311,121 +303,16 @@
                     tools:listitem="@layout/viewholder_crop_select" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/textView4"-->
-            <!--                style="@style/Medium"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:text="@string/select_device"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/imeiAddress" />-->
-
-            <!--            <LinearLayout-->
-            <!--                android:id="@+id/linearLayout2"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:background="@drawable/text_border"-->
-            <!--                android:gravity="center"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView4">-->
-
-            <!--                <Spinner-->
-            <!--                    android:id="@+id/spinner1"-->
-            <!--                    style="@style/spinner_style"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:dropDownWidth="match_parent"-->
-            <!--                    android:dropDownVerticalOffset="50dp"-->
-            <!--                    android:backgroundTint="@color/black"-->
-            <!--                    android:spinnerMode="dropdown"-->
-            <!--                    tools:listitem="@layout/item_spinner" />-->
-            <!--            </LinearLayout>-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/textView5"-->
-            <!--                style="@style/Medium"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:text="@string/model_name"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />-->
-
-            <!--            <LinearLayout-->
-            <!--                android:id="@+id/linearLayout3"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:background="@drawable/text_border"-->
-            <!--                android:gravity="center"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView5">-->
-
-            <!--                <Spinner-->
-            <!--                    android:id="@+id/spinner3"-->
-            <!--                    style="@style/spinner_style"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="48dp"-->
-            <!--                    android:dropDownWidth="match_parent"-->
-            <!--                    android:dropDownVerticalOffset="50dp"-->
-            <!--                    android:backgroundTint="@color/black"-->
-            <!--                    android:spinnerMode="dropdown"-->
-            <!--                    tools:listitem="@layout/item_spinner" />-->
-            <!--            </LinearLayout>-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/textView6"-->
-            <!--                style="@style/Medium"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:text="@string/mobile_number"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/mobile_no"-->
-            <!--                style="@style/SemiBold"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="48dp"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:layout_marginEnd="16dp"-->
-            <!--                android:layout_marginBottom="8dp"-->
-            <!--                android:background="@drawable/text_border"-->
-            <!--                android:hint="@string/str_mobile"-->
-            <!--                android:paddingStart="16dp"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                android:textColorHint="@color/darkGray"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView6" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-    <FrameLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView5"
@@ -446,14 +333,27 @@
                 android:layout_height="56dp"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/DarkGreen"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="submit"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:clickable="true"
                 android:theme="@style/button"
-                app:cornerRadius="8dp"
-                android:focusable="true" />
+                app:cornerRadius="8dp" />
         </com.google.android.material.card.MaterialCardView>
-    </FrameLayout>
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="invisible"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

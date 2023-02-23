@@ -11,10 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +31,8 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
+import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.WEATHER_SHARE_LINK
@@ -54,7 +55,7 @@ import java.util.*
 class WeatherFragment : Fragment() {
     private var selectedFarm: MyFarmsDomain? = null
     private lateinit var binding: FragmentWeatherBinding
-    private lateinit var shareLayout: LinearLayout
+    private lateinit var shareLayout: ConstraintLayout
     lateinit var mWeatherAdapter: WeatherAdapter
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var handler: Handler? = null
@@ -84,13 +85,9 @@ class WeatherFragment : Fragment() {
         binding = FragmentWeatherBinding.inflate(inflater)
         binding.lifecycleOwner = this
         apiErrorHandlingBinding = binding.errorState
+       networkErrorStateTranslations(apiErrorHandlingBinding)
 
-        TranslationsManager().loadString("txt_internet_problem",apiErrorHandlingBinding.tvInternetProblem,"There is a problem with Internet.")
-        TranslationsManager().loadString("txt_check_net",apiErrorHandlingBinding.tvCheckInternetConnection,"Please check your Internet connection")
-        TranslationsManager().loadString("txt_tryagain",apiErrorHandlingBinding.tvTryAgainInternet,"TRY AGAIN")
-
-
-        shareLayout = binding.shareScreen
+        shareLayout = binding.clScreenShare
         binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
             binding.imgShare.isEnabled = false
@@ -145,7 +142,7 @@ class WeatherFragment : Fragment() {
         if(NetworkUtil.getConnectivityStatusString(context)==0){
             binding.clInclude.visibility=View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility=View.VISIBLE
-            context?.let { ToastStateHandling.toastError(it,"Please check your internet connectivity",Toast.LENGTH_SHORT) }
+            AppUtils.translatedToastCheckInternet(context)
         }
         else{
             binding.clInclude.visibility=View.GONE
@@ -158,12 +155,15 @@ class WeatherFragment : Fragment() {
 
  /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
+     val uriString="https://outgrowdev.page.link/weathershare"
+     val title="Outgrow - Weather Details"
+     val description="View weather details"
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
         val bitmap =
             Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmap)
         shareLayout.draw(canvas)
         val imageFile = File(path)
         val outputFile = FileOutputStream(imageFile)
@@ -176,7 +176,6 @@ class WeatherFragment : Fragment() {
      val share = Intent(Intent.ACTION_SEND)
      share.type = "text/plain"
      share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
-
      share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
      share.putExtra(Intent.EXTRA_STREAM, URI)
      share.putExtra(Intent.EXTRA_TEXT, WEATHER_SHARE_LINK)

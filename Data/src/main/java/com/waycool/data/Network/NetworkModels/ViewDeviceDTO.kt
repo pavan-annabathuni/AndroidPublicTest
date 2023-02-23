@@ -24,6 +24,7 @@ data class ViewDeviceData(
     @SerializedName("soil_temperature_2"        ) var soilTemperature2      : String?                = null,
     @SerializedName("lux"                       ) var lux                   : String?                = null,
     @SerializedName("model_id"                  ) var modelId               : Int?                   = null,
+    @SerializedName("device_elevation"          ) var deviceElevation       :Double?                    = null,
     @SerializedName("serial_no_id"              ) var serialNoId            : Int?                   = null,
     @SerializedName("iot_devices_data_id"       ) var iotDevicesDataId      : Int?                   = null,
     @SerializedName("is_approved"               ) var isApproved            : Int?                   = null,

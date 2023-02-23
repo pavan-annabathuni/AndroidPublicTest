@@ -12,8 +12,8 @@ import com.waycool.data.translations.TranslationsManager
 class HistoryDataAdapter( private val statusTrackerListener: StatusTrackerListener) : RecyclerView.Adapter<HistoryDataHolder>() {
 
     var details = mutableListOf<SoilTestHistoryDomain>()
-    fun setTrackerList(movies: List<SoilTestHistoryDomain>) {
-        this.details = movies.toMutableList()
+    fun setTrackerList(trackerList: List<SoilTestHistoryDomain>) {
+        this.details = trackerList.toMutableList()
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryDataHolder {

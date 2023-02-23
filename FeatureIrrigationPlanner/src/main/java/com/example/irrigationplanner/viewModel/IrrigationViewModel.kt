@@ -1,22 +1,26 @@
 package com.example.irrigationplanner.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
+import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.*
+import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.repository.AdvIrrigationRepository
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.LoginRepository
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
 import com.waycool.data.utils.Resource
+import kotlinx.coroutines.launch
 import java.util.*
 
 class IrrigationViewModel:ViewModel() {
+
+    val cropHarvestedLiveData:MutableLiveData<Boolean> = MutableLiveData()
+
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
         CropsRepository.getMyCrop2().asLiveData()
 
-    suspend fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
+     fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
         AdvIrrigationRepository.getAdvIrrigation(account_id,plot_id).asLiveData()
 
     fun updateHarvest(plot_id: Int,account_id: Int,cropId:Int,harvestDate:String,Yield:Int):LiveData<Resource<HarvestDateModel?>> =
@@ -49,4 +53,16 @@ class IrrigationViewModel:ViewModel() {
         return AdvIrrigationRepository.getDisease(account_id,plot_id).asLiveData()
     }
 
+    fun refreshMyCrops(){
+
+        viewModelScope.launch {
+            MyCropSyncer().invalidateSync()
+            LocalSource.deleteAllMyCrops()
+            MyCropSyncer().getMyCrop()
+        }
+    }
+
+    fun setCropHarvested(){
+        cropHarvestedLiveData.postValue(true)
+    }
 }

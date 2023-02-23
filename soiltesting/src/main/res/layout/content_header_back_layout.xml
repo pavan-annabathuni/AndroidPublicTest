@@ -18,7 +18,7 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="@android:color/transparent"
             android:padding="@dimen/space16"
-            android:src="@drawable/ic_back_button"
+            android:src="@drawable/ic_back"
             android:textSize="@dimen/space16"
             app:tint="@color/black" />
 
@@ -41,7 +41,7 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="@android:color/transparent"
             android:padding="@dimen/space16"
-            android:src="@drawable/ic_back_button"
+            android:src="@drawable/ic_back"
             android:textSize="@dimen/space16"
             app:tint="@color/black"
             android:layout_alignParentEnd="true"

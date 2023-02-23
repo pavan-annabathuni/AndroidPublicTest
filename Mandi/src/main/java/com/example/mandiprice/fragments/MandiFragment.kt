@@ -12,12 +12,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -35,19 +32,17 @@ import com.example.mandiprice.viewModel.MandiViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.waycool.data.Local.LocalSource
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -143,23 +138,8 @@ class MandiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewDis.layoutManager = LinearLayoutManager(requireContext())
         apiErrorHandlingBinding = binding.errorState
-        viewModel.viewModelScope.launch {
-            TranslationsManager().loadString(
-                "txt_internet_problem",
-                apiErrorHandlingBinding.tvInternetProblem,
-                "There is a problem with Internet."
-            )
-            TranslationsManager().loadString(
-                "txt_check_net",
-                apiErrorHandlingBinding.tvCheckInternetConnection,
-                "Please check your Internet connection"
-            )
-            TranslationsManager().loadString(
-                "txt_tryagain",
-                apiErrorHandlingBinding.tvTryAgainInternet,
-                "TRY AGAIN"
-            )
-        }
+        AppUtils.networkErrorStateTranslations(apiErrorHandlingBinding)
+
             handler = Handler(Looper.myLooper()!!)
 
             viewModel.viewModelScope.launch {
@@ -174,7 +154,7 @@ class MandiFragment : Fragment() {
                         .navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                 }, LocalSource.getLanguageCode() ?: "en")
 
-                viewModel.getUserDetails()?.observe(viewLifecycleOwner) {
+                viewModel.getUserDetails().observe(viewLifecycleOwner) {
                     lat = it.data?.profile?.lat.toString()
                     long = it.data?.profile?.long.toString()
                     if (it.data?.accountId != null)
@@ -205,15 +185,8 @@ class MandiFragment : Fragment() {
             binding.clInclude.visibility = View.VISIBLE
             apiErrorHandlingBinding.clInternetError.visibility = View.VISIBLE
             binding.addFab.visibility = View.GONE
-            CoroutineScope(Dispatchers.Main).launch {
-                val toastCheckInternet = TranslationsManager().getString("check_your_interent")
-                if(!toastCheckInternet.isNullOrEmpty()){
-                    context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
-                        LENGTH_SHORT
-                    ) }}
-                else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Please check your internet connection",
-                    LENGTH_SHORT
-                ) }}}
+            AppUtils.translatedToastCheckInternet(context)
+
         } else {
             getMandiData(selectedCropCategory, selectedState, selectedCrop, sortBy, orderBy)
             //binding.progressBar.visibility = View.GONE
@@ -236,7 +209,7 @@ class MandiFragment : Fragment() {
             }
         }
         val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault()).format(Date())
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             val today = TranslationsManager().getString("str_today")
             binding.textView2.text = "$today $sdf"
         }
@@ -252,27 +225,30 @@ class MandiFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_crick -> {
+
                         item.isChecked = !item.isChecked
                         sortBy = "asc"
-                        binding.filter.text = "Low to High"
+                           TranslationsManager().loadString("low_to_high",binding.filter)
+//                        viewModel.viewModelScope.launch {
+//                            item.title = TranslationsManager().getString("low_to_high")
+//                        }
                         binding.recycleViewDis.adapter = adapterMandi
                         mandiApiCall()
 //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                     }
-                    R.id.action_ftbal -> {
-                        if (item.isChecked) {
-                            item.isChecked = false
-                        } else {
-                            item.isChecked = true
-                        }
+                    R.id.action_ftbal -> { viewModel.viewModelScope.launch {
+                        item.title = TranslationsManager().getString("high_to_low")
+                    }
+                        item.isChecked = !item.isChecked
                         sortBy = "desc"
                         binding.recycleViewDis.adapter = adapterMandi
                         mandiApiCall()
-
 //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
-
-                        binding.filter.text = "High to Low"
+                        TranslationsManager().loadString("high_to_low",binding.filter)
+//                        viewModel.viewModelScope.launch {
+//                            item.title = TranslationsManager().getString("low_to_high")
+//                        }
                     }
                 }
                 true
@@ -283,9 +259,9 @@ class MandiFragment : Fragment() {
 
     private fun spinnerSetup() {
         /** Spinner for crop category */
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var category = TranslationsManager().getString("str_category")
-            viewModel.getCropCategory()?.observe(viewLifecycleOwner) { it ->
+            viewModel.getCropCategory().observe(viewLifecycleOwner) { it ->
 
                 val cropCategoryList: MutableList<String> = (it?.data?.map { data ->
                     data.categoryName
@@ -322,14 +298,14 @@ class MandiFragment : Fragment() {
                                 selectedCropCategory = text
                                 mandiApiCall()
 
-//                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                //                        getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                             } else {
                                 if (selectedCropCategory != null) {
                                     selectedCropCategory = ""
                                     mandiApiCall()
 
-//                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
+                                    //                            getMandiData(cropCategory, state, crop, sortBy, orderBy)
 
                                 }
                             }
@@ -346,9 +322,9 @@ class MandiFragment : Fragment() {
         }
 
         /** Spinner for state */
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var state = TranslationsManager().getString("str_state")
-            viewModel.getState()?.observe(viewLifecycleOwner) {
+            viewModel.getState().observe(viewLifecycleOwner) {
                 val stateNameList = (it?.data?.data?.map { data ->
                     data.state_name
                 } ?: emptyList()).toMutableList()
@@ -396,7 +372,7 @@ class MandiFragment : Fragment() {
 
     /** Tab for price and distance */
     private fun tabs() {
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             distance = TranslationsManager().getString("distance")
             binding.tabLayout.addTab(
                 binding.tabLayout.newTab().setText(distance).setCustomView(R.layout.item_tab)
@@ -492,7 +468,7 @@ class MandiFragment : Fragment() {
                 }
             }
         })
-        viewModel.getVansAdsList(moduleId)?.observe(viewLifecycleOwner) {
+        viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
             bannerAdapter.submitList(it?.data)
             TabLayoutMediator(
@@ -566,7 +542,7 @@ class MandiFragment : Fragment() {
     ) {
         if (lat != null && long != null) {
             viewModel.getMandiDetails(lat!!, long!!, cropCategory, state, crop, sortBy, orderBy, search)
-                ?.observe(requireActivity()) {
+                .observe(requireActivity()) {
                     adapterMandi.submitData(lifecycle, it)
                     Handler().postDelayed({
                         binding.llPorgressBar.visibility = View.GONE
@@ -577,13 +553,12 @@ class MandiFragment : Fragment() {
 
     private fun translation() {
         var mandi = "Market Prices"
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             mandi = TranslationsManager().getString("mandi_price")
             binding.topAppBar.title = mandi
         }
         TranslationsManager().loadString(
-            "str_no_data",
-            binding.tvNoData,
+            "str_no_data", binding.tvNoData,
             "Selected Crop or Mandi is not available with us."
         )
         TranslationsManager().loadString("search_crop_mandi", binding.searchBar)
@@ -593,10 +568,10 @@ class MandiFragment : Fragment() {
 
     /** Spinner for crops */
     private fun cropSpinner(categoryId: Int? = null) {
-        viewModel.viewModelScope?.launch {
+        viewModel.viewModelScope.launch {
             var cropName = TranslationsManager().getString("str_crops")
 
-            viewModel.getAllCrops()?.observe(viewLifecycleOwner) {
+            viewModel.getAllCrops().observe(viewLifecycleOwner) {
                 val filter = it.data?.filter { it1 -> it1.cropCategory_id == categoryId }
                 var cropNameList = (filter?.map { data -> data.cropName } ?: emptyList()).toMutableList()
 

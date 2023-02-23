@@ -33,10 +33,9 @@ import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -174,8 +173,8 @@ class EditProfileFragment : Fragment() {
         field.put("pincode",pincode)
         field.put("state",state)
         field.put("district",city)
-        field.put("latitude",lat)
-        field.put("longitude",long)
+        field.put("lat",lat)
+        field.put("long",long)
 
         /* Checking all fields are not empty */
         if (name.isNotEmpty() && address.isNotEmpty() && village.isNotEmpty() && pincode.isNotEmpty()
@@ -192,15 +191,7 @@ class EditProfileFragment : Fragment() {
                             }
                             is Resource.Loading->{}
                             is Resource.Error->{
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    val toastError = TranslationsManager().getString("error")
-                                    if(!toastError.isNullOrEmpty()){
-                                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                            Toast.LENGTH_SHORT
-                                        ) }}
-                                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                                        Toast.LENGTH_SHORT
-                                    ) }}}                            }
+                             AppUtils.translatedToastServerErrorOccurred(context)                         }
                         }
                         Log.d("ProfileUpdate", "editProfile: $it")
 

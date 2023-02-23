@@ -2,7 +2,6 @@ package com.example.adddevice.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -19,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -66,6 +64,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
     private var scanResult: String? = null
     private var plotId: Int? = null
+//    private var plot_id_no:Int
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -134,9 +133,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             nickName = binding.device1.text.toString().trim()
             if (longitutde == null || latitude == null) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("error_current_location")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                    val toastCurrentLoc = TranslationsManager().getString("error_current_location")
+                    if(!toastCurrentLoc.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCurrentLoc,
                             LENGTH_SHORT
                         ) }}
                     else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error getting current Location",
@@ -153,32 +152,31 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             ) {
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("device_location")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                    val toastDeviceLoc = TranslationsManager().getString("device_location")
+                    if(!toastDeviceLoc.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Your current Location is far from your Farm",
                         LENGTH_SHORT
                     ) }}}
 
 
             } else if (nickName.isEmpty()) {
-                binding.device1.error = "Device Name should not be empty"
-                return@setOnClickListener
-            } else if (scanResult.isNullOrEmpty()) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val toastCheckInternet = TranslationsManager().getString("please_scan")
-                    if(!toastCheckInternet.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
-                            LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
-                        LENGTH_SHORT
-                    ) }}}
+                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
+                    if(!toastDeviceName.isNullOrEmpty()){
+                        binding.device1.error = toastDeviceName}
+                    else{ binding.device1.error= "Device Name should not be empty" }
+                }
 
 
-            } else {
+                return@setOnClickListener
+            }
+
+            else {
+                binding.progressBar.visibility=View.VISIBLE
+                binding.frameLayout2.visibility=View.GONE
                 val  eventBundle=Bundle()
                 eventBundle.putString("deviceName",binding.device1.text.toString())
                 eventBundle.putString("scanQr",isQRScanned.toString())
@@ -191,8 +189,11 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     map["device_lat"] = latitude!!
                 if (longitutde != null)
                     map["device_long"] = longitutde!!
-                map["device_number"] = scanResult!!
+//                map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
+////
+                map["device_number"]=binding.imeiAddress.text
+                plotId?.let { map.put("plot_id", it) }
                 activityDevice(map)
             }
 
@@ -208,8 +209,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         translationAddDevice()
         binding.topAppBar.setOnClickListener{
             activity?.finish()
-//            val isSuccess = findNavController().navigateUp()
-//            if (!isSuccess) requireActivity().onBackPressed()
         }
     }
 
@@ -224,7 +223,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             latLng2.longitude,
             distance
         )
-        Log.d("Add Device", "Distance Calculated: ${distance[0]}")
         return distance[0]
     }
 
@@ -232,36 +230,31 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         viewModel.activateDevice(map).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                     findNavController().navigateUp()
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastCheckInternet = TranslationsManager().getString("device_added")
                         if(!toastCheckInternet.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastCheckInternet,
+                            context?.let { it1 -> ToastStateHandling.toastSuccess(it1,toastCheckInternet,
                                 LENGTH_SHORT
                             ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device added successfully",
+                        else {context?.let { it1 -> ToastStateHandling.toastSuccess(it1,"Device added successfully",
                             LENGTH_SHORT
                         ) }}}
 
                 }
                 is Resource.Error -> {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                ToastStateHandling.toastError(requireContext(),"Device already registered", LENGTH_SHORT)
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
 
                 }
@@ -283,12 +276,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //            binding.tvScanned.text = "QR Scanned."
             TranslationsManager().loadString("str_scanned_device", binding.tvScanned,"QR Scanned.")
 
-            binding.tvScanned.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_tick
-                ), null, null, null
-            )
+            binding.ivClick.setImageResource(com.waycool.uicomponents.R.drawable.ic_tick)
             binding.tvScanned.setTextColor(
                 ContextCompat.getColorStateList(
                     requireContext(),
@@ -315,6 +303,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     }
                     adapter.onItemClick = { plot ->
                         plotId = plot?.id
+
+
+
                     }
                 }
             }
@@ -543,7 +534,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-    fun translationAddDevice() {
+   private fun translationAddDevice() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("str_add_device")
             binding.topAppBar.title = title

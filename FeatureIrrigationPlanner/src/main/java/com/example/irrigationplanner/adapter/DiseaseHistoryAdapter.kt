@@ -13,11 +13,12 @@ import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemDiseaseHistoryBinding
 import com.waycool.data.Network.NetworkModels.DiseaseCurrentData
 import com.waycool.data.Network.NetworkModels.DiseaseHistoricData
+import com.waycool.uicomponents.utils.DateFormatUtils
 
-class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapter.MyViewHolder>(DiffCallback) {
+class DiseaseHistoryAdapter : ListAdapter<DiseaseHistoricData, DiseaseHistoryAdapter.MyViewHolder>(DiffCallback) {
     class MyViewHolder(private val binding: ItemDiseaseHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-       val date = binding.tvDate
+        val date = binding.tvDate
         val slider2 = binding.slider2
         val risk = binding.tvRisk
         val image = binding.disImg2
@@ -32,26 +33,23 @@ class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapt
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val properties = getItem(position)
-        holder.date.text = properties.createdAt
+        holder.date.text = DateFormatUtils.dateFormatterDevice(properties.createdAt)
         holder.slider2.value = properties.probability!!.toFloat()
         holder.risk.text = properties.probabilityDesc
         /** Checking the risk factor for plant */
-        if(properties.probabilityDesc=="Low Risk") {
+        if (properties.probabilityDesc == "Low Risk") {
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_green)
-        }
-        else if (properties.probabilityDesc=="Nil"){
+        } else if (properties.probabilityDesc == "Nil") {
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_gray)
-        }
-        else if (properties.probabilityDesc=="Medium Risk"){
+        } else if (properties.probabilityDesc == "Medium Risk") {
             holder.risk.text = "Medium Risk"
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_yellow)
-        }
-        else {
+        } else {
             holder.slider2.setCustomThumbDrawable(R.drawable.ic_holo_red)
         }
         Glide.with(holder.itemView.context).load(properties.disease?.diseaseImg).into(holder.image)
         /** showing large image of when user click on image*/
-        holder.image.setOnClickListener() {
+        holder.image.setOnClickListener {
             val dialog = Dialog(holder.itemView.context)
             dialog.setCancelable(true)
             dialog.setContentView(R.layout.item_large_image)
@@ -64,7 +62,14 @@ class DiseaseHistoryAdapter: ListAdapter<DiseaseHistoricData,DiseaseHistoryAdapt
             dialog.show()
 
         }
-        holder.name.text = properties.disease?.diseaseName
+        if(properties.disease?.diseaseNameTag==null)
+            holder.name.text = properties.disease?.diseaseName
+//            if (properties.disease?.diseaseNameTranslated.equals("--", ignoreCase = true))
+//            properties.disease?.diseaseName
+        else
+            holder.name.text = "${properties.disease?.diseaseName}(${properties.disease?.diseaseNameTag})"
+        // properties.disease?.diseaseNameTranslated
+
     }
 
 

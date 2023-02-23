@@ -19,6 +19,23 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class com.waycool.data.Network.NetworkModels.*
--keep class com.waycool.data.Local.Entity.*
--keep class com.waycool.data.repository.domainModels.*
+
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+
+# Keep the classes used by Firebase Performance Monitoring
+-keep class com.google.firebase.perf.** { *; }
+-dontwarn com.google.firebase.perf.**
+
+-keep class com.google.android.gms.common.api.** { *; }
+-keep class com.google.android.gms.common.ConnectionResult {
+    int SUCCESS;
+}
+-keep class com.google.firebase.FirebaseApp {
+    <init>(...);
+}
+-keep class com.google.firebase.** {
+    *;
+}
+-keep class com.google.android.gms.auth.api.** { *; }
+-keep class com.google.android.gms.auth.api.identity.** { *; }

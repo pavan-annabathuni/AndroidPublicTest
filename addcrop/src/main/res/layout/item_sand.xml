@@ -39,7 +39,7 @@
             android:id="@+id/ng_click"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_item_click"
+            android:src="@drawable/ic_tick"
             android:visibility="visible"
             android:layout_margin="@dimen/txt9"
             app:layout_constraintBottom_toBottomOf="parent"

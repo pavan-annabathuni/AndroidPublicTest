@@ -18,6 +18,7 @@ import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
     private var categoryAdapter = CategoryAdapter(this)
     private var crop_id_selected:Int?=null
-    private var pomo:String?=""
+    private var pomo:Int?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,26 +68,10 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                     categoryAdapter.setSoilTypeList (response)
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                  AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+              AppUtils.translatedToastLoading(context)
                 }
             }
 
@@ -105,7 +90,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
     override fun clickOnCategory(name: SoilTypeDomain) {
         if (arguments != null) {
             crop_id_selected = arguments?.getInt("cropid")
-            pomo= arguments?.getString("pom")
+            pomo= arguments?.getInt("pom")
             binding.cardCheckHealth.isEnabled = true
             binding.cardCheckHealth.setOnClickListener {
                 categoryAdapter.upDateList()
@@ -116,7 +101,7 @@ class AddCropFragment : Fragment(), AddCropItemClick {
                     val bundle = Bundle()
                     bundle.putInt("soil_type_id", name.id!!)
                     bundle.putInt("cropid", crop_id_selected!!)
-                    bundle.putString("pom",pomo)
+                    bundle.putInt("pom",pomo.toString().toInt())
                     findNavController().navigate(
                         R.id.action_addCropFragment_to_addCropPremiumFragment, bundle)
                 }

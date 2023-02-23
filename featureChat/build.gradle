@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk appCompileSdkVersion
 
     defaultConfig {
-        minSdk 21
-        targetSdk 32
+        minSdk appMinSdkVersion
+        targetSdk appTargetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -27,21 +27,19 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation project(path: ':Core')
     implementation project(path: ':Data')
     implementation project(path: ':FeatureAuthentication')
+    implementation project(path: ':UiComponents')
 
-
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     api "zendesk.messaging:messaging-android:2.7.0"
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

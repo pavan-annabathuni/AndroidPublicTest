@@ -1,19 +1,18 @@
 package com.example.addcrop.viewmodel
 
-import android.util.Log
 import android.view.View
-import androidx.databinding.Bindable
-import androidx.lifecycle.*
-
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.waycool.data.Network.NetworkModels.AddCropResponseDTO
 import com.waycool.data.repository.CropsRepository
 import com.waycool.data.repository.FarmsRepository
 import com.waycool.data.repository.LoginRepository
-import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
+import com.waycool.data.repository.domainModels.SoilTypeDomain
 import com.waycool.data.repository.domainModels.UserDetailsDomain
-
 import com.waycool.data.utils.Resource
 
 class AddCropViewModel : ViewModel() {
@@ -53,40 +52,16 @@ class AddCropViewModel : ViewModel() {
         "Flood Irrigation"
     ))
     val selectNumberOfYearBahar =MutableLiveData(arrayOf(
-        "0-1",
-        "1-2",
-        "2-3",
-        "3-4"
+        "Ambe Bahar",
+        "Mrig Bahar",
+        "Hasta Bahar"
     ))
 
 
     val eventHandler = EventHandler(this)
-
-//    private val _saveButtonPassData = MutableLiveData<String>()
-//    val saveButtonPassData: LiveData<String> get() = _saveButtonPassData
-//
-//    private val _calenderShow = MutableLiveData<String>()
-//    val calenderShow: LiveData<String> get() = _calenderShow
-//
-//   private val _navigateBack = MutableLiveData<Boolean>()
-//   val navigateBack : LiveData<Boolean> get()=_navigateBack
-
-
-//    fun saveButtonClicked() {
-//        _saveButtonPassData.value = SUBMIT_BUTTON
-//    }
-//    fun calenderShow() {
-//        _calenderShow.value = CALENDER_SHOW
-//    }
-//    fun backButton() {
-//        _navigateBack.value =false
-//    }
-
-
     fun getAddCropType(): LiveData<Resource<List<SoilTypeDomain>?>> {
         return CropsRepository.getSoilType().asLiveData()
     }
-
     fun addCropDataPass(map: MutableMap<String, Any> = mutableMapOf<String, Any>()): LiveData<Resource<AddCropResponseDTO?>> =
         CropsRepository.addCropDataPass(map).asLiveData()
 
@@ -125,17 +100,14 @@ class AddCropViewModel : ViewModel() {
         }
 
         fun calenderShow(view: View?) {
-            Log.d(viewModel.TAG, "CalenderClicked:")
             viewModel._navigation.value = CALENDER_SHOW
         }
 
         fun backButton(view: View?) {
-            Log.i(viewModel.TAG, "backButtonClicked:")
             viewModel._navigation.value = BACK_BUTTON
         }
 
         fun checkInternet(view: View?) {
-            Log.i(viewModel.TAG, "Internet:")
             viewModel._navigation.value = CHECK_INTERNET
         }
 

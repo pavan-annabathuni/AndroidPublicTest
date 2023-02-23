@@ -27,6 +27,7 @@ class IrrigationHistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            //TODO
             historyDetails = it.getParcelable("IrrigationHis")
         }
     }
@@ -52,7 +53,7 @@ class IrrigationHistoryFragment : Fragment() {
         return binding.root
     }
     private fun onClick(){
-        binding.topAppBar.setNavigationOnClickListener(){
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
     }

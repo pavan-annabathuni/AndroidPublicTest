@@ -2,6 +2,7 @@ package com.waycool.data.Network.PagingSource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.ApiInterface.ApiInterface
 import com.waycool.data.Network.NetworkModels.VansFeederListNetwork
@@ -15,8 +16,9 @@ class VansPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, VansFeederListNetwork> {
         return try {
 
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()
-                ?: throw RuntimeException("Header Map is Null")
+            val headerMap: MutableMap<String, String> = (LocalSource.getHeaderMapSanctum()
+                ?: throw RuntimeException("Header Map is Null")).toMutableMap()
+            headerMap["x-api-key"] = AppSecrets.getApiKey()
 
             val position = params.key ?: 1
             queryMap["page"] = position.toString()

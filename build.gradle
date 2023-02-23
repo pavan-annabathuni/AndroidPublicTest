@@ -13,7 +13,6 @@ buildscript {
     }
 
     dependencies {
-
         classpath 'com.android.tools.build:gradle:7.2.2'
         classpath 'com.google.gms:google-services:4.3.13'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
@@ -22,15 +21,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
         classpath 'com.google.firebase:perf-plugin:1.4.2'
-
-
-//        def navigation_version = "2.4.2"
-//        implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-//        implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
-
-
     }
 }
 

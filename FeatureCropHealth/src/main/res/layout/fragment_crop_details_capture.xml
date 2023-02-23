@@ -29,35 +29,39 @@
                 android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clOurAll"
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:background="@drawable/toolbar_background"
+                    android:elevation="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/backBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:paddingStart="@dimen/space16"
+                        android:paddingEnd="@dimen/space16"
+                        android:src="@drawable/ic_back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clRequest"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/backBtn"
-                            android:layout_width="16dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
-                            android:src="@drawable/ic_back_btn_toolbar"
-                            app:layout_constraintBottom_toBottomOf="@+id/tvRequest"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvRequest" />
 
                         <TextView
                             android:id="@+id/tvRequest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:layout_marginTop="@dimen/space16"
                             android:layout_marginBottom="16dp"
                             android:text="Tomato"
@@ -66,7 +70,8 @@
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/cardName"
+
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.cardview.widget.CardView
@@ -74,11 +79,13 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginEnd="8dp"
                             app:cardCornerRadius="@dimen/space50"
-                            app:layout_constraintBottom_toBottomOf="@+id/tvRequest"
-                            app:layout_constraintEnd_toStartOf="@+id/tvRequest"
-                            app:layout_constraintTop_toTopOf="@+id/tvRequest">
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+
+
+                            >
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="wrap_content"
@@ -95,11 +102,84 @@
                             </androidx.appcompat.widget.LinearLayoutCompat>
                         </androidx.cardview.widget.CardView>
 
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--                    android:id="@+id/clOurAll"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+                <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--                        android:id="@+id/clRequest"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                <!--                        app:layout_constraintTop_toTopOf="parent">-->
+
+                <!--                        <ImageView-->
+                <!--                            android:id="@+id/backBtn"-->
+                <!--                            android:layout_width="16dp"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_margin="16dp"-->
+                <!--                            android:src="@drawable/ic_back"-->
+                <!--                            app:layout_constraintBottom_toBottomOf="@+id/tvRequest"-->
+                <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                <!--                            app:layout_constraintTop_toTopOf="@+id/tvRequest" />-->
+
+                <!--                        <TextView-->
+                <!--                            android:id="@+id/tvRequest"-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_marginTop="@dimen/space16"-->
+                <!--                            android:layout_marginBottom="16dp"-->
+                <!--                            android:text="Tomato"-->
+                <!--                            android:textColor="#070D09"-->
+                <!--                            android:textSize="18sp"-->
+                <!--                            android:textStyle="bold"-->
+                <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                <!--                            app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--                        <androidx.cardview.widget.CardView-->
+                <!--                            android:id="@+id/cardName"-->
+                <!--                            android:layout_width="32dp"-->
+                <!--                            android:layout_height="32dp"-->
+                <!--                            android:layout_gravity="center_horizontal"-->
+                <!--                            android:layout_marginEnd="8dp"-->
+                <!--                            app:cardCornerRadius="@dimen/space50"-->
+                <!--                            app:layout_constraintBottom_toBottomOf="@+id/tvRequest"-->
+                <!--                            app:layout_constraintEnd_toStartOf="@+id/tvRequest"-->
+                <!--                            app:layout_constraintTop_toTopOf="@+id/tvRequest">-->
+
+                <!--                            <androidx.appcompat.widget.LinearLayoutCompat-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:layout_gravity="center">-->
+
+                <!--                                <ImageView-->
+                <!--                                    android:id="@+id/crop_img"-->
+                <!--                                    android:layout_width="30dp"-->
+                <!--                                    android:layout_height="30dp"-->
+                <!--                                    android:layout_gravity="center_horizontal"-->
+                <!--                                    android:src="@drawable/ic_tomoto" />-->
+
+                <!--                            </androidx.appcompat.widget.LinearLayoutCompat>-->
+                <!--                        </androidx.cardview.widget.CardView>-->
+
+
+                <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+                <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clCamera"
@@ -108,7 +188,7 @@
                     android:background="@drawable/card_background_"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/clOurAll">
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
                     <TextView
                         android:id="@+id/tvCropEffect"
@@ -174,13 +254,13 @@
                         android:id="@+id/how_to_"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
                         android:layout_marginStart="8dp"
+                        android:gravity="end"
                         android:text="How to Click this Image?"
                         android:textColor="#146133"
                         android:textSize="@dimen/txt16"
-                        app:layout_constraintStart_toEndOf="@id/add_photo_txt"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/add_photo_txt"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -322,7 +402,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:scaleType="fitXY"
-                            android:src="@drawable/ic_close"
+                            android:src="@drawable/ic_close_white_bg"
                             android:visibility="gone"
                             app:layout_constraintBottom_toTopOf="@+id/uploaded_img"
                             app:layout_constraintEnd_toEndOf="parent"

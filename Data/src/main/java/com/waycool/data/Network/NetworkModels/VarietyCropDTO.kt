@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class VarietyCropDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
-    @SerializedName("data") var data: VarietyCrop? = VarietyCrop()
+    @SerializedName("data") var data:  ArrayList<VarietyCrop> = arrayListOf()
 )
 data class VarietyCrop(
     @SerializedName("id") var id: Int? = null,

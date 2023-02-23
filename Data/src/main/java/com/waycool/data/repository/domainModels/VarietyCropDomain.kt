@@ -8,4 +8,5 @@ data class VarietyCropDomain(
     var variety: String? = null,
     var cropId: Int? = null,
     var purpose: String? = null,
+    val isSelected: Boolean? = null
 )

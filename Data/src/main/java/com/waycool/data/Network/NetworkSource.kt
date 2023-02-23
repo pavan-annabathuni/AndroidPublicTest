@@ -185,7 +185,9 @@ object NetworkSource {
     fun getVansFeederSinglePage(queryMap: MutableMap<String, String>) = flow<Resource<VansFeederDTO?>> {
 
         try {
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            val headerMap: MutableMap<String, String> = (LocalSource.getHeaderMapSanctum()?: emptyMap()).toMutableMap()
+            headerMap["x-api-key"] = AppSecrets.getApiKey()
+
             queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
 
             val response = apiInterface.getVansFeeder(headerMap, queryMap)
@@ -496,6 +498,7 @@ object NetworkSource {
         flow<Resource<PestDiseaseDTO?>> {
             emit(Resource.Loading())
             try {
+
                 val langCode = LocalSource.getLanguageCode() ?: "en"
 
                 val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
@@ -653,7 +656,7 @@ object NetworkSource {
                 }
             } catch (e: Exception) {
                 CrashAnalytics.crashAnalyticsError("getIotDevice Exception--${e.message}")
-                Log.d("farmCheck", "getIotDevice: $e")
+                Log.d("farmCheck-exception", "getIotDevice: $e")
 //                catch(Resource.Error(e.message))
             }
         }
@@ -718,7 +721,7 @@ object NetworkSource {
             }
         } catch (e: Exception) {
             CrashAnalytics.crashAnalyticsError("pdfDownload Exception--${e.message}")
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 
@@ -934,6 +937,7 @@ object NetworkSource {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("Mycrops","${e.message}")
             CrashAnalytics.crashAnalyticsError("getMyCrop2 Exception--${e.message}")
             Log.d("mycrops","Message: ${e.message}")
             emit(Resource.Error(e.message))
@@ -979,18 +983,22 @@ object NetworkSource {
     }
 
     fun getAdvIrrigation(
-        headerMap: Map<String, String>, account_id: Int, plot_id: Int
+       account_id: Int, plot_id: Int
     ) = flow<Resource<AdvIrrigationModel?>> {
 
-        try {
-            val response = apiInterface.advIrrigation(headerMap, account_id, plot_id)
+        val map= LocalSource.getHeaderMapSanctum()?: emptyMap()
 
-            if (response.isSuccessful)
+        try {
+            val response = apiInterface.advIrrigation(map, account_id, plot_id)
+
+            if (response.isSuccessful) {
+                Log.d("Irrigation","${response.body()}")
                 emit(Resource.Success(response.body()))
-            else {
+            }else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("Irrigation","Exception: ${e.message}")
             CrashAnalytics.crashAnalyticsError("getAdvIrrigation Exception--${e.message}")
 
             //  emit(Resource.Error(e.message))
@@ -1113,7 +1121,7 @@ object NetworkSource {
     fun getAppTranslations() = flow<Resource<AppTranlationsDTO?>> {
         try {
             val langCode = LocalSource.getLanguageCode() ?: "en"
-            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic() ?: emptyMap()
+            val headerMap: Map<String, String> = AppSecrets.getHeaderPublic()
 
             val response = apiInterface.getTranslations(headerMap, lang = langCode)
 
@@ -1260,21 +1268,25 @@ object NetworkSource {
             }
         }
 
-    fun getNdvi(farmId: Int, accountId: Int) = flow<Resource<NdviModel?>> {
+    fun getNdvi(farmId: Int) = flow<Resource<NdviModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
-        emit(Resource.Loading())
-        try {
-            val response = apiInterface.getNdvi(map, farmId, accountId)
-            if (response.isSuccessful)
-                emit(Resource.Success(response.body()))
-            else {
-                emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+        val accountId = LocalSource.getUserDetailsEntity()?.accountId
+        if(accountId!=null) {
+            try {
+                val response = apiInterface.getNdvi(map, farmId, accountId)
+                if (response.isSuccessful)
+                    emit(Resource.Success(response.body()))
+                else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+
+            } catch (e: Exception) {
+                CrashAnalytics.crashAnalyticsError("getNdvi Exception--${e.message}")
+
+                //   emit(Resource.Error(e.message))
             }
-
-        } catch (e: Exception) {
-            CrashAnalytics.crashAnalyticsError("getNdvi Exception--${e.message}")
-
-            //   emit(Resource.Error(e.message))
+        }else{
+            CrashAnalytics.crashAnalyticsError("getNdvi Exception-- No Account ID Exception")
         }
     }
 
@@ -1359,7 +1371,9 @@ object NetworkSource {
     }
 
     fun getNotification() = flow<Resource<NotificationModel?>> {
-        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val map = (LocalSource.getHeaderMapSanctum() ?: emptyMap()).toMutableMap()
+        map["x-api-key"] = AppSecrets.getApiKey()
+
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNotification(map)
@@ -1396,9 +1410,10 @@ object NetworkSource {
 
     fun getDisease(account_id: Int, plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val langCode = LocalSource.getLanguageCode() ?: "en"
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getDisease(map, account_id, plot_id)
+            val response = apiInterface.getDisease(map, account_id, plot_id,lang = langCode)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

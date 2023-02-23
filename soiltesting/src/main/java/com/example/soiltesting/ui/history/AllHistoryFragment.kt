@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -22,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentAllHistoryBinding
 import com.example.soiltesting.ui.checksoil.CustomeDialogFragment
-import com.example.soiltesting.utils.Constant
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.waycool.data.error.ToastStateHandling
@@ -30,6 +30,7 @@ import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.SoilTestHistoryDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
         _binding = FragmentAllHistoryBinding.inflate(inflater, container, false)
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.tvToolBar.isSelected = true
+
         return binding.root
     }
 
@@ -76,19 +79,30 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             }
         }
         translationSoilTesting()
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//                activity?.finish()
+                findNavController().navigateUp()
+
+//                val isSuccess = activity?.let { findNavController().popBackStack() }
+//                if (!isSuccess!!) activity?.let { NavUtils.navigateUpFromSameTask(it) }
+            }
+        }
+        activity?.let {
+            activity?.onBackPressedDispatcher?.addCallback(
+                it,
+                callback
+            )
+        }
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
-            val toolbarTitle=TranslationsManager().getString("txt_soil_testing")
-            if(toolbarTitle!=null){
-                binding.tvToolBar.text=toolbarTitle
-            }
-            else
-                binding.tvToolBar.text="Soil Testing Requests"
         }
+
         TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
+        TranslationsManager().loadString("soil_testing_requests", binding.tvToolBar,"Soil Testing Requests")
 //        TranslationsManager().loadString("txt_soil_testing", binding.tvToolBar,"Soil Testing Requests")
 
     }
@@ -188,15 +202,8 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                     filteredList.addAll(response)
                 }
                 is Resource.Error -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastError = TranslationsManager().getString("server_error")
-                        if(!toastError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}                }
+                    AppUtils.translatedToastServerErrorOccurred(context)
+                }
                 is Resource.Loading -> {
 
                 }
@@ -231,7 +238,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                         }
                     }
                 soilHistoryAdapter.upDateList(temp)
-                Log.d("TAG", "::::stderr  $temp")
                 }
             }
 
@@ -277,21 +283,6 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null && account_id != null) {
-                        // use your location object
-                        // get latitude , longitude and other info from this
-                        Log.d("checkLocation", "isLocationPermissionGranted: $location")
-//                        getAddress(location.latitude, location.longitude)
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.latitude}"
-                        )
-                        Log.d(
-                            Constant.TAG,
-                            "isLocationPermissionGrantedLotudetude: ${location.longitude}"
-                        )
-
-//                        checkSoilTestViewModel.getSoilTest(1, location.latitude, location.longitude)
-//                        bindObserversCheckSoilTest()
 
                         val latitude = String.format(Locale.ENGLISH, "%.2f", location.latitude)
                         val longitutde = String.format(Locale.ENGLISH, "%.2f", location.longitude)
@@ -316,15 +307,9 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
                                             CustomeDialogFragment.TAG
                                         )
                                         binding.cardCheckHealth.isClickable = true
-//                                        binding.clProgressBar.visibility = View.VISIBLE
-//                        binding.constraintLayout.setBackgroundColor(R.color.background_dialog)
-                                        //                           findNavController().navigate(R.id.action_soilTestingHomeFragment_to_customeDialogFragment)
                                     } else if (it.data!!.isNotEmpty()) {
                                         val response = it.data
-                                        Log.d(
-                                            Constant.TAG,
-                                            "bindObserversCheckSoilTestModelFJndsj: $response"
-                                        )
+
                                         var bundle = Bundle().apply {
                                             putParcelableArrayList(
                                                 "list",
@@ -343,15 +328,7 @@ class AllHistoryFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        val toastError = TranslationsManager().getString("error")
-                                        if(!toastError.isNullOrEmpty()){
-                                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastError,
-                                                Toast.LENGTH_SHORT
-                                            ) }}
-                                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Error",
-                                            Toast.LENGTH_SHORT
-                                        ) }}}
+                                AppUtils.translatedToastServerErrorOccurred(context)
 
                                 }
                                 is Resource.Loading -> {
