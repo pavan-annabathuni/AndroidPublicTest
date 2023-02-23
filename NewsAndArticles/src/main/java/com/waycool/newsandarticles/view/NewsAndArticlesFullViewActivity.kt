@@ -64,6 +64,9 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
         else if(vansType=="articles"){
             vansType="Articles"
         }
+        else{
+            vansType="Latest"
+        }
         binding.newsHeading.text = "$vansType Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
