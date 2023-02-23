@@ -1,6 +1,8 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
@@ -56,7 +59,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import nl.changer.audiowife.AudioWife
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -66,7 +69,10 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private var runnable: Runnable? = null
     private lateinit var newsBinding: GenericLayoutNewsListBinding
     private lateinit var videosBinding: GenericLayoutVideosListBinding
-    private var audio: AudioWife? = null
+
+    //    private var audio: AudioWife? = null
+    lateinit var mediaPlayer: MediaPlayer
+
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
 
@@ -84,6 +90,25 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     var chemical = "Chemical"
     var biological = "Biological"
     var cultural = "Cultural"
+
+    private val AUDIO_PROGRESS_UPDATE_TIME: Long = 100
+
+    private val mProgressUpdateHandler: Handler = Handler(Looper.myLooper()!!)
+
+    private val mUpdateProgress: Runnable = object : Runnable {
+        override fun run() {
+            if (mProgressUpdateHandler != null && mediaPlayer.isPlaying) {
+                binding.mediaSeekbar.progress = mediaPlayer.currentPosition
+                val currentTime: Int = mediaPlayer.currentPosition
+                updatePlaytime(currentTime)
+                updateRuntime(currentTime)
+                // repeat the process
+                mProgressUpdateHandler.postDelayed(this, AUDIO_PROGRESS_UPDATE_TIME)
+            } else {
+                // DO NOT update UI if the player is paused
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,6 +146,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         videosBinding = binding.layoutVideos
         newsBinding = binding.layoutNews
         handler = Handler(Looper.myLooper()!!)
+
 
         videosBinding.viewAllVideos.setOnClickListener {
             EventClickHandling.calculateClickEvent("crop_protect_video_viewall")
@@ -177,11 +203,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         setNews()
         setBanners()
 
-            handler?.postDelayed({
-                audioPlayer()
-                binding.clProgress.visibility = View.GONE
-                binding.constraintLayout2.visibility = View.GONE
-            }, 2000)
+//        handler?.postDelayed({
+//            audioPlayer()
+//            binding.clProgress.visibility = View.GONE
+//            binding.constraintLayout2.visibility = View.GONE
+//        }, 2000)
 
 
 
@@ -206,6 +232,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             binding.toolbarTitle.text = it.data?.diseaseName
                             binding.cropProtectDiseaseName.text = it.data?.diseaseName
                             audioUrl = it.data?.audioUrl
+                            audioUrl?.let { it1 -> initMediaPlayer(it1) }
 
                             if (it.data?.imageUrl == null)
                                 adapter.submitList(emptyList())
@@ -288,8 +315,32 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 }
             }
         }
+
+        binding.play.setOnClickListener {
+            playerPlay()
+            binding.play.visibility = View.INVISIBLE
+            binding.pause.visibility = View.VISIBLE
+        }
+
+        binding.pause.setOnClickListener {
+            playerPause()
+            binding.play.visibility = View.VISIBLE
+            binding.pause.visibility = View.INVISIBLE
+        }
+
     }
 
+
+//    private fun initializeMediaPlayer() {
+//
+//        audio = AudioWife.getInstance()
+//            .init(activity, Uri.parse(audioUrl))
+//            .setPlayView(binding.play)
+//            .setPauseView(binding.pause)
+//            .setSeekBar(binding.mediaSeekbar)
+//            .setRuntimeView(binding.totalTime)
+//
+//    }
 
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
         val uriString =
@@ -569,43 +620,233 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 
     }
 
-    private fun audioPlayer() {
-        if(audioUrl!=null)
-                audio = AudioWife.getInstance()
-                    .init(requireActivity(), Uri.parse(audioUrl))
-                    .setPlayView(binding.play)
-                    .setPauseView(binding.pause)
-                    .setSeekBar(binding.mediaSeekbar)
-                    .setRuntimeView(binding.totalTime)
+//    private fun audioPlayer() {
+//        if (audioUrl != null)
+//            audio = AudioWife.getInstance()
+//                .init(requireActivity(), Uri.parse(audioUrl))
+//                .setPlayView(binding.play)
+//                .setPauseView(binding.pause)
+//                .setSeekBar(binding.mediaSeekbar)
+//                .setRuntimeView(binding.totalTime)
+//
+////            if (audioUrl!=null && URLUtil.isValidUrl(audioUrl)){
+////                audio?.play()
+////                binding.audioProgress.visibility = INVISIBLE
+////                binding.play.visibility = INVISIBLE
+////            }
+//
+////            AudioWife.getInstance().addOnPlayClickListener {
+////                if(audio==null){
+////                    binding.audioProgress.visibility = VISIBLE
+////                    binding.play.visibility = INVISIBLE
+////                }
+////            }
+//
+//        AudioWife.getInstance().addOnCompletionListener {
+//            binding.mediaSeekbar.progress = 0
+//            binding.pause.visibility = View.GONE
+//            binding.play.visibility = View.VISIBLE
+//        }
+//
+//
+//        AudioWife.getInstance().addOnPlayClickListener {
+//            binding.pause.visibility = View.VISIBLE
+//            binding.play.visibility = View.GONE
+//            audio?.play()
+//        }
+//
+//        AudioWife.getInstance().addOnPauseClickListener {
+//            binding.pause.visibility = View.GONE
+//            binding.play.visibility = View.VISIBLE
+//            audio?.pause()
+//        }
+//
+//
+////        binding.playPauseLayout.setOnClickListener {
+////            Log.d("health", "onViewCreated: $audioUrl")
+////            if (binding.play.isVisible) {
+////                binding.pause.visibility = View.VISIBLE
+////                binding.play.visibility = View.GONE
+////                audioPlayer()
+////
+////            } else {
+////                binding.pause.visibility = View.GONE
+////                binding.play.visibility = View.VISIBLE
+////                audio?.pause()
+////            }
+//////            audioPlayer()
+////        }
+//
+////        if(mediaPlayer!!.isPlaying){
+////            binding.pause.visibility = View.VISIBLE
+////            binding.play.visibility = View.GONE
+////        }else{
+////            binding.play.visibility = View.GONE
+////            binding.pause.visibility = View.VISIBLE
+////
+////        }
+//
+//    }
 
+    private fun initMediaPlayer(audioUrl: String) {
 
-            AudioWife.getInstance().addOnCompletionListener {
-                binding.mediaSeekbar.progress = 0
-                binding.pause.visibility = View.GONE
-                binding.play.visibility = View.VISIBLE
+        mediaPlayer = MediaPlayer()
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer.apply {
+            setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
+        }
+        mediaPlayer.setDataSource(audioUrl)
+        mediaPlayer.prepareAsync()
+
+        mediaPlayer.setOnPreparedListener {
+            binding.mediaSeekbar.max = mediaPlayer.duration
+            Log.d("pestdisease", "Duration: ${mediaPlayer.duration}")
+
+        }
+
+        binding.mediaSeekbar.progress = 0
+
+        binding.mediaSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                mediaPlayer.seekTo(seekBar.progress)
+
+                // if the audio is paused and seekbar is moved,
+                // update the play time in the UI.
+                updateRuntime(seekBar.progress)
             }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
+        })
 
-        AudioWife.getInstance().addOnPlayClickListener {
-            binding.pause.visibility = View.VISIBLE
-            binding.play.visibility = View.GONE
-            audio?.play()
-        }
-
-        AudioWife.getInstance().addOnPauseClickListener {
-            binding.pause.visibility = View.GONE
+        mediaPlayer.setOnCompletionListener {
             binding.play.visibility = View.VISIBLE
-            audio?.pause()
+            binding.pause.visibility = View.INVISIBLE
         }
+    }
+
+    private fun updateRuntime(currentTime: Int) {
+        val playbackStr = StringBuilder()
+        playbackStr.append(
+            String.format(
+                "%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(currentTime.toLong()),
+                TimeUnit.MILLISECONDS.toSeconds(currentTime.toLong()) - TimeUnit.MINUTES.toSeconds(
+                    TimeUnit.MILLISECONDS.toMinutes(currentTime.toLong())
+                )
+            )
+        )
+        binding.totalTime.text = playbackStr
+    }
+
+    private fun updatePlaytime(currentTime: Int) {
+
+        val playbackStr = java.lang.StringBuilder()
+        playbackStr.append(
+            String.format(
+                "%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(currentTime.toLong()),
+                TimeUnit.MILLISECONDS.toSeconds(currentTime.toLong()) - TimeUnit.MINUTES.toSeconds(
+                    TimeUnit.MILLISECONDS.toMinutes(currentTime.toLong())
+                )
+            )
+        )
+        playbackStr.append("/")
+
+        // show total duration.
+        var totalDuration: Long = 0
+        if (mediaPlayer != null) {
+            try {
+                totalDuration = mediaPlayer.getDuration().toLong()
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        // set total time as the audio is being played
+        if (totalDuration != 0L) {
+            playbackStr.append(
+                String.format(
+                    "%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(totalDuration), TimeUnit.MILLISECONDS.toSeconds(
+                        totalDuration
+                    ) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(totalDuration))
+                )
+            )
+        } else {
+            Log.w("pestdisease", "Something strage this audio track duration in zero")
+        }
+        binding.totalTime.setText(playbackStr)
+
+        // DebugLog.i(currentTime + " / " + totalDuration);
+    }
+
+
+    private fun playerPlay() {
+
+
+//        mediaPlayer.apply {
+//            setAudioAttributes(
+//                AudioAttributes.Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+//                    .setUsage(AudioAttributes.USAGE_MEDIA)
+//                    .build()
+//            )
+//        }
+        // on below line we are running a try
+        // and catch block for our media player.
+        try {
+            // on below line we are setting audio
+            // source as audio url on below line.
+            mediaPlayer.start()
+
+            mProgressUpdateHandler.postDelayed(mUpdateProgress, AUDIO_PROGRESS_UPDATE_TIME)
+
+            // on below line we are
+            // preparing our media player.
+
+            // on below line we are
+            // starting our media player.
+
+        } catch (e: Exception) {
+
+            // on below line we are handling our exception.
+            e.printStackTrace()
+        }
+    }
+
+    private fun playerPause() {
+        if (mediaPlayer.isPlaying) {
+            // if media player is playing we
+            // are stopping it on below line.
+            mediaPlayer.pause()
+        }
+    }
+
+    private fun playerRelease() {
+        mediaPlayer.reset()
+        mediaPlayer.release()
 
     }
 
     override fun onPause() {
         super.onPause()
-        audio?.release()
+        playerPause()
+
         if (runnable != null) {
             handler?.removeCallbacks(runnable!!)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        playerRelease()
     }
 
     override fun onItemClickListener(vans: VansFeederListDomain?) {
@@ -635,14 +876,18 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             handler?.postDelayed(runnable!!, 3000)
         }
         EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
+
+        audioUrl?.let {
+            initMediaPlayer(it)
+        }
         binding.clProgress.visibility = View.VISIBLE
         binding.constraintLayout2.visibility = View.VISIBLE
         binding.pause.visibility = View.GONE
         binding.play.visibility = View.VISIBLE
-        handler?.postDelayed({
-            audioPlayer()
-            binding.clProgress.visibility = View.GONE
-            binding.constraintLayout2.visibility = View.GONE
-        },3000)
+//        handler?.postDelayed({
+//            audioPlayer()
+        binding.clProgress.visibility = View.GONE
+        binding.constraintLayout2.visibility = View.GONE
+//        }, 1000)
     }
 }

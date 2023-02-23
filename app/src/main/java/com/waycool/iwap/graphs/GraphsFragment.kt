@@ -98,6 +98,9 @@ class GraphsFragment : Fragment() {
             translationToolBar(data.toString())
             binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
+            if(paramType.equals("leaf_wetness_hrs",ignoreCase = true)){
+                binding.paramValue.text = if(paramValue == "0") "Dry" else "Wet"
+            }
             binding.date.text = DateFormatUtils.dateFormatterDevice(updateDate)
 
             populateGraph(paramType, GraphSelection.LAST12HRS)
@@ -153,7 +156,7 @@ class GraphsFragment : Fragment() {
                     ignoreCase = true
                 ) && duration == GraphSelection.LAST12HRS
             ) {
-                lDataSet.mode = LineDataSet.Mode.STEPPED
+                lDataSet.mode = LineDataSet.Mode.LINEAR
                 val yAxisVals = ArrayList(Arrays.asList("Dry", "Wet"))
                 binding.lineChart.axisLeft.valueFormatter = IndexAxisValueFormatter(yAxisVals)
                 binding.lineChart.axisLeft.labelCount = 2
@@ -182,7 +185,8 @@ class GraphsFragment : Fragment() {
                 binding.lineChart.axisLeft.axisMaximum = 100f
             }
 
-            binding.lineChart.xAxis.setLabelCount(keysList!!.size, true)
+//            binding.lineChart.xAxis.setLabelCount(keysList!!.size, false)
+
             binding.lineChart.data = LineData(line)
             binding.lineChart.setTouchEnabled(true)
             val mv2: IMarker = CustomMarkerView(
