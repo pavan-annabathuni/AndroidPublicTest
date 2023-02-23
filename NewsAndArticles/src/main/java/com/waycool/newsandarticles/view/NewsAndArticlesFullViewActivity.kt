@@ -64,6 +64,9 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
         else if(vansType=="articles"){
             vansType="Articles"
         }
+        else{
+            vansType="Latest"
+        }
         binding.newsHeading.text = "$vansType Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
@@ -81,7 +84,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
                 "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
             }
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}&vansType=${vansType}"))
                 .setDomainUriPrefix("https://outgrowdev.page.link")
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()

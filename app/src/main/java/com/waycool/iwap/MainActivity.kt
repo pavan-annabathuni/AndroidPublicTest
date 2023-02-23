@@ -96,14 +96,23 @@ class MainActivity : AppCompatActivity() {
                     val audioUrl = deepLink.getQueryParameter("audio")
                     val newsDate = deepLink.getQueryParameter("date")
                     val source = deepLink.getQueryParameter("source")
+                    val vansType = deepLink.getQueryParameter("vansType")
+
                     if (!title.isNullOrEmpty()) {
                         val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
+                        if(!vansType.isNullOrEmpty()){
+                            intent.putExtra("vansType", vansType)
+                        }
+                        else{
+                            intent.putExtra("vansType", "")
+                        }
                         intent.putExtra("title", title)
                         intent.putExtra("content", desc)
                         intent.putExtra("image", image)
                         intent.putExtra("audio", audioUrl)
                         intent.putExtra("date", newsDate)
                         intent.putExtra("source", source)
+
                         startActivity(intent)
                     }
                 } else if (deepLink?.lastPathSegment == "rating") {
