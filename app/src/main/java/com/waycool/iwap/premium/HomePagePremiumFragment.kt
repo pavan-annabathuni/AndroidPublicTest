@@ -558,13 +558,21 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     binding.clTempView.visibility = View.VISIBLE
                 }
 
-                if(data.temperature==null){
-                    it.cardTopParent.visibility = View.GONE
-                    it.cardSpeedMeter.visibility = View.GONE
-                    it.clSoilTemp.visibility = View.GONE
-                    it.clTempView.visibility = View.GONE
+                if(data.modelSeries.equals("GSX",ignoreCase = true)){
+                    if (data.soilMoisture1 == null) {
+                        it.cardTopParent.visibility = View.GONE
+                        it.cardSpeedMeter.visibility = View.GONE
+                        it.clSoilTemp.visibility = View.GONE
+                        it.clTempView.visibility = View.GONE
+                    }
+                }else {
+                    if (data.temperature == null) {
+                        it.cardTopParent.visibility = View.GONE
+                        it.cardSpeedMeter.visibility = View.GONE
+                        it.clSoilTemp.visibility = View.GONE
+                        it.clTempView.visibility = View.GONE
+                    }
                 }
-
 
             }
             it.tvPressureDegree.text = data.pressure.toString() + " hPa"
