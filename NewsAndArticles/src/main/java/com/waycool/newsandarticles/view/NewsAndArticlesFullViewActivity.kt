@@ -84,7 +84,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
                 "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
             }
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
+                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}&vansType=${vansType}"))
                 .setDomainUriPrefix("https://outgrowdev.page.link")
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()

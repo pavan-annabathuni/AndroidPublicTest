@@ -185,7 +185,9 @@ object NetworkSource {
     fun getVansFeederSinglePage(queryMap: MutableMap<String, String>) = flow<Resource<VansFeederDTO?>> {
 
         try {
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            val headerMap: MutableMap<String, String> = (LocalSource.getHeaderMapSanctum()?: emptyMap()).toMutableMap()
+            headerMap["x-api-key"] = AppSecrets.getApiKey()
+
             queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
 
             val response = apiInterface.getVansFeeder(headerMap, queryMap)
@@ -1368,7 +1370,9 @@ object NetworkSource {
     }
 
     fun getNotification() = flow<Resource<NotificationModel?>> {
-        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val map = (LocalSource.getHeaderMapSanctum() ?: emptyMap()).toMutableMap()
+        map["x-api-key"] = AppSecrets.getApiKey()
+
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNotification(map)
