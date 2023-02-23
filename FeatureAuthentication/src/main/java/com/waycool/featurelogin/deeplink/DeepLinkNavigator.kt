@@ -61,11 +61,11 @@ object DeepLinkNavigator {
 
     const val CHAT="chat"
 
-    const val DOMAIN_URI_PREFIX="https://outgrowdev.page.link"
+    const val DOMAIN_URI_PREFIX="https://outgrow.page.link"
     const val DEFAULT_IMAGE_URL="https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
 
-    const val INVITE_SHARE_LINK="http://app.outgrowdigital.com/invite"
-    const val WEATHER_SHARE_LINK="https://outgrowdev.page.link/weathershare"
+    const val INVITE_SHARE_LINK="https://outgrow.page.link/invite"
+    const val WEATHER_SHARE_LINK="https://outgrow.page.link/weathershare"
 
 
 

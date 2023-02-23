@@ -51,6 +51,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         getDashBoard()
 
+        tokenCheckViewModel.getUserDetails().observe(this) {
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val token: String = tokenCheckViewModel.getUserToken()
+                    validateToken(accountID.toString().toInt(), token)
+                }
+            }
+        }
+    }
+
+    private fun getDeepLink() {
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
@@ -75,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
-               else if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
+                else if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
 
@@ -90,18 +102,28 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
                     startActivity(intent)
+                } else if(dashboardDomain?.subscription?.iot == true){
+                    if (deepLink?.lastPathSegment!! =="irrigation") {
+                        val plotId = deepLink.getQueryParameter("plot_id")
+                        if(!plotId.isNullOrEmpty()){
+                            val args = Bundle()
+                            args.putInt("plotId", plotId.toInt())
+//                            val navHostFragment = supportFragmentManager.findFragmentById(
+//                                R.id.nav_host_mainactivity
+//                            ) as NavHostFragment
+//                            navController = navHostFragment.navController
+
+
+                           navController?.navigate(
+                            R.id.action_homePagePremiumFragment3_to_navigation_irrigation,
+                                args
+                            )
+                        }
+                    }
                 }
             }
         }
-        tokenCheckViewModel.getUserDetails().observe(this) {
-            accountID = it.data?.accountId
-            if (accountID != null) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val token: String = tokenCheckViewModel.getUserToken()
-                    validateToken(accountID.toString().toInt(), token)
-                }
-            }
-        }
+
     }
 
     private fun validateToken(user_id: Int, token: String) {
@@ -137,9 +159,11 @@ class MainActivity : AppCompatActivity() {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
                         if (it.data?.subscription?.iot == true) {
                             setupBottomNavigationAndNavigationGraph(isPremium = true)
+
                         } else {
                             setupBottomNavigationAndNavigationGraph(isPremium = false)
                         }
+                        getDeepLink()
                     }
                     is Resource.Loading -> {
 

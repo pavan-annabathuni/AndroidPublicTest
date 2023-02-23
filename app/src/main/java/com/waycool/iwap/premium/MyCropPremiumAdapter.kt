@@ -6,10 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
-import com.waycool.data.translations.TranslationsManager
 import com.waycool.iwap.databinding.ItemPremiumCropsBinding
-
-import java.util.ArrayList
 
 class MyCropPremiumAdapter(val myCropListener: myCropListener) :
     RecyclerView.Adapter<MyCropPremiumViewHolder>() {
@@ -53,9 +50,9 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         Glide.with(holder.itemView.context).load(myCrop.cropLogo)
             .into(holder.binding.ivAddDeviceEnd)
         holder.binding.tvCloudy.isSelected = true
-        if (myCrop.irrigationRequired == 1) {
+        if (myCrop.irrigationRequired == true) {
             holder.binding.tvCloudy.text = "Irrigation required"
-        } else if (myCrop.irrigationRequired == 0){
+        } else if (myCrop.irrigationRequired == false){
             holder.binding.tvCloudy.text = "Irrigation not required"
         }else{
             holder.binding.tvCloudy.text = "-NA-"
@@ -64,9 +61,9 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
 //        TranslationsManager().loadString("irrigation_required", holder.binding.tvCloudyNoDisease)
 
         holder.binding.tvCloudyNoDisease.isSelected = true
-        if (myCrop.disease == 1) {
+        if (myCrop.disease == true) {
             holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
-        } else if (myCrop.disease == 0){
+        } else if (myCrop.disease == false){
             holder.binding.tvCloudyNoDisease.text = "No diseases alerts today"
         }else {
             holder.binding.tvCloudyNoDisease.text = "-NA-"

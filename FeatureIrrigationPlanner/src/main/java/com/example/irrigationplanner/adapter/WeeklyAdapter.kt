@@ -1,12 +1,8 @@
 package com.example.irrigationplanner.adapter
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemWeeklyIrrgationBinding
@@ -69,6 +65,8 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
     }
 
     override fun getItemCount(): Int {
+        if(details.days.isNullOrEmpty())
+            return 0
         return details.days.size
     }
 

@@ -935,6 +935,7 @@ object NetworkSource {
             }
         } catch (e: Exception) {
             CrashAnalytics.crashAnalyticsError("getMyCrop2 Exception--${e.message}")
+            Log.d("mycrops","Message: ${e.message}")
             emit(Resource.Error(e.message))
         }
     }
