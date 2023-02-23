@@ -26,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -34,6 +35,7 @@ import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.WEATHER_SHARE_LINK
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
@@ -176,7 +178,7 @@ class WeatherFragment : Fragment() {
      share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
      share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
      share.putExtra(Intent.EXTRA_STREAM, URI)
-     share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+     share.putExtra(Intent.EXTRA_TEXT, WEATHER_SHARE_LINK)
      binding.clShareProgress.visibility=View.GONE
      Handler().postDelayed({ binding.imgShare.isEnabled = true
      },1000)

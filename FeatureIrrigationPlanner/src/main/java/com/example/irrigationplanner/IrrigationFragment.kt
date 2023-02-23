@@ -9,7 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +30,8 @@ import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
@@ -69,9 +74,7 @@ class IrrigationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             plotId = it.getInt("plotId")
-            cropId = it.getInt("cropId")
-            cropLogo = it.getString("cropLogo")
-            cropName = it.getString("cropName")
+
         }
     }
 
@@ -81,7 +84,7 @@ class IrrigationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentIrrigationBinding.inflate(inflater)
-
+setDetails()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -116,13 +119,9 @@ class IrrigationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("cropID", "onCreateView: $cropId")
+//        Log.d("cropID", "onCreateView: $cropId")
         /** checking for crop stage if it is grape crop then showing crop stage */
-        if (cropId == 97) {
-            binding.clCropStage.visibility = View.VISIBLE
-        } else {
-            binding.clCropStage.visibility = View.GONE
-        }
+
         tabs()
         deleteCropDialog()
 
@@ -268,11 +267,13 @@ class IrrigationFragment : Fragment() {
 
 
             viewModel.getIrrigationHis(accountId, plotId).observe(viewLifecycleOwner) {
-//                if(it.data?.data?.irrigation?.currentData?.id!=null) {
-//                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
-                //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
-//                }
-                Log.d("irrig","${it.data}")
+                viewModel.viewModelScope.launch {
+                    if (it.data?.data?.irrigation?.currentData?.irrigation != null)
+                        binding.irrigationReq.text =
+                            TranslationsManager().getString("str_irrigation_not_req")
+                    else binding.irrigationReq.text =
+                        TranslationsManager().getString("str_Irrigation_req")
+                }
 
                 when (it) {
                     is Resource.Loading -> {
@@ -524,14 +525,27 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun setDetails() {
-        Glide.with(requireContext()).load(cropLogo).into(binding.imageView)
-        binding.textView.text = cropName
+
         Log.d("CropName2", "setDetails: $cropName")
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val data = it.data?.first { plot ->
                 plot.id == plotId
+
             }
+            cropId = data?.cropId
+            cropLogo = data?.cropLogo
+            cropName = data?.cropName
+
+            Glide.with(requireContext()).load(cropLogo).into(binding.imageView)
+            binding.textView.text = cropName
+
+            if (cropId == 97) {
+                binding.clCropStage.visibility = View.VISIBLE
+            } else {
+                binding.clCropStage.visibility = View.GONE
+            }
+
             if (data?.irrigationRequired == null) {
                 binding.gwxIrrigation.visibility = View.GONE
                 binding.btHarvest.visibility = View.GONE

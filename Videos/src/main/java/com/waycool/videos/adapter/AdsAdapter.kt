@@ -64,24 +64,12 @@ class AdsAdapter(val context: Context, private  var bannerViewpager: ViewPager2)
                 }
             }
 
-          /*  if(position==itemCount-1){
-                bannerViewpager.post(runnable)
-            }*/
 
           Log.d("ITEM","ITEM$itemCount")
 
         }
     }
 
-//    override fun getItemCount(): Int {
-//        return if (currentList.size >= 5) 5
-//        else currentList.size
-//    }
-
-//    private val runnable= Runnable {
-//        submitList(currentList)
-//        notifyDataSetChanged()
-//    }
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<VansFeederListDomain>() {
             override fun areItemsTheSame(

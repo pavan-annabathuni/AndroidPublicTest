@@ -34,8 +34,12 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DEFAULT_IMAGE_URL
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.INVITE_SHARE_LINK
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -109,22 +113,21 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
-    /* this use for sharing app link with user and if user is already installed the it will
-    * it will redirect to app using dynamic links  */
+
         private fun shareInviteLink(view: View) {
             binding.progressBar.visibility = View.VISIBLE
 
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setLink(Uri.parse(INVITE_SHARE_LINK))
+                .setDomainUriPrefix(DOMAIN_URI_PREFIX)
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .setFallbackUrl(Uri.parse(PLAY_STORE_LINK))
                         .build()
                 )
                 .setSocialMetaTagParameters(
                     DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
+                        .setImageUrl(Uri.parse(DEFAULT_IMAGE_URL))
                         .setTitle("Outgrow sends an invitation for you to join us and grow with us")
                         .setDescription("Outgrow app-Let's grow together")
                         .build()
@@ -209,7 +212,7 @@ class MyProfileFragment : Fragment() {
                 EventClickHandling.calculateClickEvent("rate_us")
                 val intent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                    Uri.parse(PLAY_STORE_LINK)
                 )
                 startActivity(intent)
             }

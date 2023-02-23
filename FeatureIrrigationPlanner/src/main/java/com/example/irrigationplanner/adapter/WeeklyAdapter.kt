@@ -68,7 +68,6 @@ class WeeklyAdapter: RecyclerView.Adapter<WeeklyAdapter.MyViewHolder>() {
                 holder.image.setImageResource(R.drawable.ic_irrigation_his2)
             }
         }
-        Log.d("irrigationLevel", "onBindViewHolder: $level")
     }
 
     override fun getItemCount(): Int {
