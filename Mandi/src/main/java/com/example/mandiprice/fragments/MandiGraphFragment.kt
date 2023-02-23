@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -33,8 +32,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -45,11 +42,9 @@ import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
-import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
-import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.launch
 import java.text.ParseException
@@ -356,44 +351,26 @@ class MandiGraphFragment : Fragment() {
         market_name: String?,
         fragment: String?
     ) {
-        val uriString="https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"
+        val uriString="http://app.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"
         val title="Outgrow - Mandi Detail for $crop_name"
         val description="Find Mandi details and more on Outgrow app"
-        binding.clShareProgress.visibility=View.VISIBLE
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("http://app.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
-            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
-            .setAndroidParameters(
-                DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
-                    .build()
-            )
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Outgrow - Mandi Detail for $crop_name")
-                    .setDescription("Find Mandi details and more on Outgrow app")
-                    .build()
-            )
-            .buildShortDynamicLink().addOnCompleteListener { task ->
-                Log.d("MandiGraph", "MandiGraph: Complete listener")
-                if (task.isSuccessful) {
-                    Log.d("MandiGraph", "MandiGraph: Share Success")
-
-                    binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({ binding.imgShare.isEnabled = true
-                    },1000)
-                    val shortLink: Uri? = task.result.shortLink
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                    sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
-                    startActivity(Intent.createChooser(sendIntent, "choose one"))
-
-
-
-                }
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description) { task, uri ->
+            if (task.isSuccessful) {
+                Log.d("MandiGraph", "MandiGraph: Share Success")
+                binding.clShareProgress.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.imgShare.isEnabled = true
+                }, 1000)
+                val shortLink: Uri? = task.result.shortLink
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                sendIntent.type = "text/plain"
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
+                startActivity(Intent.createChooser(sendIntent, "choose one"))
             }
+
+        }
 
     }
 

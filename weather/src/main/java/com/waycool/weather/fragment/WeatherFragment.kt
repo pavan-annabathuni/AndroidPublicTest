@@ -26,7 +26,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.MyFarmsDomain
@@ -155,9 +154,7 @@ class WeatherFragment : Fragment() {
 
  /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
-     val uriString="https://outgrowdev.page.link/weathershare"
-     val title="Outgrow - Weather Details"
-     val description="View weather details"
+
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
