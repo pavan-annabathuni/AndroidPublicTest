@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CROP_HEALTH
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 
 class CropHealthActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class CropHealthActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink?.lastPathSegment != null) {
-                if (deepLink?.lastPathSegment!! == "crophealth") {
+                if (deepLink?.lastPathSegment!! ==CROP_HEALTH) {
                     this.findNavController(com.example.soiltesting.R.id.fragmentContainerView)
                         .navigate(R.id.cropHealthFragment)
 
