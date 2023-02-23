@@ -8,6 +8,8 @@ import com.example.irrigationplanner.databinding.ItemPagerForecastBinding
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
@@ -50,14 +52,18 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         var area = myCropDataDomain.area
         var width: String? = myCropDataDomain.widthDrip
         var length = myCropDataDomain.lenDrip
-        var areaPerPlant = (length?.toDouble()?.times(width?.toDouble() as Double)).toString().trim()
+        var areaPerPlant:String?=null
+        if(!length.isNullOrEmpty()&&!width.isNullOrEmpty()) {
+             areaPerPlant =(length.toDouble().times(width.toDouble())).toString().trim()
+        }
 
         if (!area.isNullOrEmpty() && !dep.isNullOrEmpty()) {
 //           area = (width?.toDouble()?.let { length?.toDouble()?.times(it) }).toString()
             holder.acres.text = String.format(Locale.ENGLISH, "%.0f", dep.toFloat() * 4046.86 * (area).toFloat() / 0.9) + " L"
         } else holder.acres.text = "0"
         if (!length.isNullOrEmpty() && !width.isNullOrEmpty()) {
-            holder.areaPerPlant.text = String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * areaPerPlant.toFloat() / 0.9) + " L"
+            holder.areaPerPlant.text = String.format(Locale.ENGLISH, "%.0f", dep?.toFloat()?:0f * (areaPerPlant?.toFloat()
+                ?:"".toFloat()) / 0.9) + " L"
 
         } else {
             holder.areaPerPlant.text = "0"
@@ -70,7 +76,7 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
 
         var irrigationReq:String
         var irrigationNotReq:String
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             irrigationNotReq = TranslationsManager().getString("str_irrigation_not_req")
             irrigationReq = TranslationsManager().getString("str_Irrigation_req")
 
