@@ -90,7 +90,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
-                    .bigLargeIcon(null)
             ).setLargeIcon(bitmap)
         }
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
