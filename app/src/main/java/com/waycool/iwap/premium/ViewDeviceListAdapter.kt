@@ -30,10 +30,7 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
     override fun onBindViewHolder(holder: ViewDeviceListViewHolder, position: Int) {
         val details = itemsList[holder.layoutPosition]
         holder.binding.skillName.text=details.modelName
-//        if (position==0){
-//            holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
-//            viewDeviceFlexListener.viewDevice(details)
-//        }
+
         if (row_index == holder.layoutPosition) {
             holder.binding.clTop.setBackgroundResource(R.drawable.bg_selected_item)
             holder.binding.skillName.setTextColor(Color.parseColor("#FFFFFF"))
@@ -51,18 +48,7 @@ class ViewDeviceListAdapter(val viewDeviceFlexListener: ViewDeviceFlexListener) 
             viewDeviceFlexListener.viewDevice(details)
         }
 
-//        }
-//        holder.binding.skillName.setOnClickListener { view ->
-//            if (selectedPosition == position) {
-//                holder.binding.skillName.setBackground(mContext.resources.getDrawable(R.drawable.bg_selected_item))
-//            } else {
-//                holder.binding.skillName.setBackground(mContext.resources.getDrawable(com.example.soiltesting.R.drawable.bd_flex))
-//            }
-//            selectedPosition = holder.adapterPosition
-//            viewDeviceFlexListener.viewDevice(details)
-////            checkSoilTestListener.checkBoxSoilTest(details)
-//        }
-//        val checkItem = holder.binding.ivCheck
+
 
 
     }

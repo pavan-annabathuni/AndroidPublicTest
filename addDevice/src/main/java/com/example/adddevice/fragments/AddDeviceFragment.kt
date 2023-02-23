@@ -18,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -174,19 +173,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
                 return@setOnClickListener
             }
-//            else if (scanResult.isNullOrEmpty()) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    val toastScan= TranslationsManager().getString("please_scan")
-//                    if(!toastScan.isNullOrEmpty()){
-//                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
-//                            LENGTH_SHORT
-//                        ) }}
-//                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
-//                        LENGTH_SHORT
-//                    ) }}}
-//
-//
-//            }
+
             else {
                 binding.progressBar.visibility=View.VISIBLE
                 binding.frameLayout2.visibility=View.GONE
@@ -258,23 +245,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
                 }
                 is Resource.Error -> {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                ToastStateHandling.toastError(requireContext(),"Device already registered", LENGTH_SHORT)
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
 
                 }

@@ -8,19 +8,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.InstallState
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.ActivityResult
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -106,14 +96,23 @@ class MainActivity : AppCompatActivity() {
                     val audioUrl = deepLink.getQueryParameter("audio")
                     val newsDate = deepLink.getQueryParameter("date")
                     val source = deepLink.getQueryParameter("source")
+                    val vansType = deepLink.getQueryParameter("vansType")
+
                     if (!title.isNullOrEmpty()) {
                         val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
+                        if(!vansType.isNullOrEmpty()){
+                            intent.putExtra("vansType", vansType)
+                        }
+                        else{
+                            intent.putExtra("vansType", "")
+                        }
                         intent.putExtra("title", title)
                         intent.putExtra("content", desc)
                         intent.putExtra("image", image)
                         intent.putExtra("audio", audioUrl)
                         intent.putExtra("date", newsDate)
                         intent.putExtra("source", source)
+
                         startActivity(intent)
                     }
                 } else if (deepLink?.lastPathSegment == "rating") {
@@ -280,7 +279,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         if (isPremium) {
-            navGraph.startDestination = R.id.nav_home_premium
+            navGraph.setStartDestination(R.id.nav_home_premium)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
@@ -309,7 +308,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else {
-            navGraph.startDestination = R.id.nav_home
+            navGraph.setStartDestination(R.id.nav_home)
             navController.graph = navGraph
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
