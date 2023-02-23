@@ -1,9 +1,12 @@
 package com.example.soiltesting.ui.request
 
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -99,9 +102,9 @@ class ViewReportFragment : Fragment() {
         micronutrient = "Micronutrient Fertilizer"
         scale = "Scale"
         scale_text1 = "High, Acid, Saline,Highly Alkaline," + "Low (OC,OM)"
-        scale_text2 = "Low, Deficient"
-        scale_text3 = "Medium (OC,OM,mbc)"
-        scale_text4 = "Medium, Neutral,Sufficient, Alkaline," + "Slightly Acidic"
+        scale_text2 = "Low," + " Deficient"
+        scale_text3 = "Medium ,Normal"
+        scale_text4 = "Neutral,Sufficient, Alkaline," + "Slightly Acidic"
         scale_text5 = "High (OC,OM,mbc)"
         scale_text6 = "Not selected"
         sample_info = "Sample Information"
@@ -182,25 +185,50 @@ class ViewReportFragment : Fragment() {
 
     private fun translations() {
 //        TranslationsManager().loadString("str_recommendation",binding.tvToolBar,"ID: ")
-        TranslationsManager().loadString("str_recommendation",binding.recommandationText,"Recommendation: ")
-        TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
-        TranslationsManager().loadString("str_recommendation",binding.macronutrientText,"Recommendation: ")
-        TranslationsManager().loadString("str_recommendation",binding.micronutrientFertilizerText,"Recommendation: ")
-        TranslationsManager().loadString("str_recommendation",binding.soilConditionerText,"Recommendation: ")
-        TranslationsManager().loadString("str_high_acide",binding.scaleLayout.scaleTv1,scale_text1)
-        TranslationsManager().loadString("str_low",binding.scaleLayout.scaleTv2,scale_text2)
-        TranslationsManager().loadString("str_medium_oc",binding.scaleLayout.scaleTv3,scale_text3)
-        TranslationsManager().loadString("str_medium_neutral",binding.scaleLayout.scaleTv4,scale_text4)
-        TranslationsManager().loadString("str_high_oc_om_mbc",binding.scaleLayout.scaleTv5,scale_text5)
-        TranslationsManager().loadString("not_selected",binding.scaleLayout.scaleTv6,scale_text6)
-        TranslationsManager().loadString("scale",binding.scaleLayout.scaleTittle,scale)
-
-
-
-
-
-
-
+        TranslationsManager().loadString(
+            "str_recommendation",
+            binding.recommandationText,
+            "Recommendation: "
+        )
+        TranslationsManager().loadString(
+            "str_recommendation",
+            binding.soilConditionerText,
+            "Recommendation: "
+        )
+        TranslationsManager().loadString(
+            "str_recommendation",
+            binding.macronutrientText,
+            "Recommendation: "
+        )
+        TranslationsManager().loadString(
+            "str_recommendation",
+            binding.micronutrientFertilizerText,
+            "Recommendation: "
+        )
+        TranslationsManager().loadString(
+            "str_recommendation",
+            binding.soilConditionerText,
+            "Recommendation: "
+        )
+        TranslationsManager().loadString(
+            "str_high_acide",
+            binding.scaleLayout.scaleTv1,
+            scale_text1
+        )
+//        TranslationsManager().loadString("str_low",binding.scaleLayout.scaleTv2,scale_text2)
+        TranslationsManager().loadString("str_medium_oc", binding.scaleLayout.scaleTv3, scale_text3)
+        TranslationsManager().loadString(
+            "str_medium_neutral",
+            binding.scaleLayout.scaleTv4,
+            scale_text4
+        )
+        TranslationsManager().loadString(
+            "str_high_oc_om_mbc",
+            binding.scaleLayout.scaleTv5,
+            scale_text5
+        )
+        TranslationsManager().loadString("not_selected", binding.scaleLayout.scaleTv6, scale_text6)
+        TranslationsManager().loadString("scale", binding.scaleLayout.scaleTittle, scale)
 
 
     }
@@ -231,18 +259,27 @@ class ViewReportFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-              AppUtils.translatedToastServerErrorOccurred(context)
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                        if (!toastLoading.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastLoading,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Loading",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -253,9 +290,7 @@ class ViewReportFragment : Fragment() {
         viewModel.pdfDownload(soil_test_id).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    val uri: Uri =
-
-                        writeResponseBodyToDisk(it.data!!)
+                    val uri: Uri = writeResponseBodyToDisk(it.data!!)
 //                         val intent = Intent()
 //                         intent.setAction(Intent.ACTION_VIEW)
 //                         intent.setDataAndType(uri, "application/pdf")
@@ -268,27 +303,68 @@ class ViewReportFragment : Fragment() {
                     startActivity(i)
 
                     Log.d("TAG", "initObserveDataggvsx:$uri")
+//
+//                    val filename = "gwx.pdf"
+////                    val fileUri = writeResponseBodyToDisk(it.data!!
+//                    val downloadManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+//                    val request = DownloadManager.Request(uri)
+//                        .setTitle(filename)
+//                        .setDescription("Downloading PDF...")
+//                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+//                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
+//                    downloadManager.enqueue(request)
 
 
                 }
                 is Resource.Error -> {
-              AppUtils.translatedToastServerErrorOccurred(context)
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         val toastLoading = TranslationsManager().getString("loading")
-                        if(!toastLoading.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Loading",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                        if (!toastLoading.isNullOrEmpty()) {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, toastLoading,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        } else {
+                            context?.let { it1 ->
+                                ToastStateHandling.toastError(
+                                    it1, "Loading",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
         }
     }
+//    private fun writeResponseBodyToDisk(body: ResponseBody, filename: String): String {
+//        val file = File(requireContext().externalCacheDir, filename)
+//
+//        try {
+//            val inputStream = body.byteStream()
+//            val outputStream = FileOutputStream(file)
+//
+//            val buffer = ByteArray(4096)
+//            var bytesRead: Int
+//            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+//                outputStream.write(buffer, 0, bytesRead)
+//            }
+//
+//            outputStream.flush()
+//            outputStream.close()
+//            inputStream.close()
+//
+//            return file.absolutePath
+//        } catch (e: IOException) {
+//            throw RuntimeException("Error writing file", e)
+//        }
+//    }
 
 
     private fun writeResponseBodyToDisk(body: ResponseBody): Uri {
@@ -325,7 +401,11 @@ class ViewReportFragment : Fragment() {
                     Log.d("g56", "file download: $fileSizeDownloaded of $fileSize")
                 }
                 outputStream.flush()
-                FileProvider.getUriForFile(requireContext(),"com.example.soiltesting",invoicePdfFile)
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.example.soiltesting",
+                    invoicePdfFile
+                )
             } catch (e: IOException) {
 //                Log.d("g56", e.getMessage())
 //                Uri.fromFile(invoicePdfFile)
@@ -404,15 +484,18 @@ class ViewReportFragment : Fragment() {
             name + data.TcName
         if (data.TcAddress != null) binding.testCenterLayout.soilReportTv2.text =
             address + data.TcAddress
-        if (data.TcLatitude != null) binding.sampleLayout.soilReportTv3.text = location + data.StLatitude.toString() + "," + data.StLongitude
-        if (data.crop_name !=null) binding.sampleLayout.soilReportTv1.text=selected_crop+data.crop_name
-        if (data.soil_test_testing_date !=null) binding.sampleLayout.soilReportTv6.text=
-            test_date+data.soil_test_testing_date
-        binding.sampleLayout.soilReportTv2.visibility=View.GONE
-        binding.sampleLayout.soilReportTv4.visibility=View.GONE
+        if (data.TcLatitude != null) binding.sampleLayout.soilReportTv3.text =
+            location + data.StLatitude.toString() + "," + data.StLongitude
+        if (data.crop_name != null) binding.sampleLayout.soilReportTv1.text =
+            selected_crop + data.crop_name
+        if (data.soil_test_testing_date != null) binding.sampleLayout.soilReportTv6.text =
+            test_date + data.soil_test_testing_date
+        binding.sampleLayout.soilReportTv2.visibility = View.GONE
+        binding.sampleLayout.soilReportTv4.visibility = View.GONE
 
 
     }
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("ViewReportFragment")

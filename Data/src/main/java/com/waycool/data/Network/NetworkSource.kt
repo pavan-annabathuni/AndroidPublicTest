@@ -719,7 +719,7 @@ object NetworkSource {
             }
         } catch (e: Exception) {
             CrashAnalytics.crashAnalyticsError("pdfDownload Exception--${e.message}")
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 

@@ -277,7 +277,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 accountID = it.data?.accountId
                 if (accountID != null) {
                     isLocationPermissionGranted(accountID!!)
-                    binding.cardCheckHealth.isClickable = false
+//                    binding.cardCheckHealth.isClickable = false
 
                 }
             }
@@ -477,7 +477,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
                 isLocationPermissionGranted(accountID!!)
-                binding.cardCheckHealth.isClickable = false
+//                binding.cardCheckHealth.isClickable = false
 
             }
         }
@@ -591,6 +591,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             binding.clProgressBar.visibility = View.GONE
+            binding.cardCheckHealth.isClickable = true
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
@@ -599,6 +600,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 ),
                 100
             )
+            binding.cardCheckHealth.isClickable = true
             // use your location object
             false
         } else {
@@ -668,7 +670,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                 }
-            binding.clProgressBar.visibility = View.GONE
+//            binding.clProgressBar.visibility = View.GONE
+//            binding.cardCheckHealth.isClickable = true
             true
 
         }
