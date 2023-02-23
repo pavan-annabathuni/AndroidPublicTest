@@ -56,6 +56,6 @@ class SplashActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("SplashActivity")
+        EventScreenTimeHandling.calculateScreenTime("Splash Screen")
     }
 }

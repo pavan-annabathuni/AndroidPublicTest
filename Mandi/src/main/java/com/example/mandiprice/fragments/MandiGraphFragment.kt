@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -48,8 +47,10 @@ import com.waycool.data.repository.domainModels.MandiDomainRecord
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
+import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -390,11 +391,11 @@ class MandiGraphFragment : Fragment() {
         )
         binding.clShareProgress.visibility=View.VISIBLE
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setLink(Uri.parse("http://app.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(

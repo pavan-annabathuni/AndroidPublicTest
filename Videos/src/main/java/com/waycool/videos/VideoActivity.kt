@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.VIDEO_LIST
 import com.waycool.videos.adapter.VideosPagerAdapter
 import com.waycool.videos.databinding.ActivityVideoBinding
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +49,7 @@ class VideoActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment == "videoslist") {
+                if (deepLink.lastPathSegment == VIDEO_LIST) {
                     this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
                 } else {
                     val id = deepLink.getQueryParameter("video_id")

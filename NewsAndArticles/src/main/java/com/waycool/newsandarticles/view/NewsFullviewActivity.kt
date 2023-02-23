@@ -16,10 +16,13 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.squareup.picasso.Picasso
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.newsandarticles.R
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
+import com.waycool.uicomponents.utils.Constants
 import nl.changer.audiowife.AudioWife
 
 class NewsFullviewActivity : AppCompatActivity() {
@@ -70,14 +73,14 @@ class NewsFullviewActivity : AppCompatActivity() {
             val thumbnail = if(image.isNullOrEmpty()){
                image
             } else{
-                "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+                DeepLinkNavigator.DEFAULT_IMAGE_URL
             }
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
+                .setDomainUriPrefix(DOMAIN_URI_PREFIX)
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                         .build()
                 )
                 .setSocialMetaTagParameters(

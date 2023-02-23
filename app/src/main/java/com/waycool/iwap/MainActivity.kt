@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -17,16 +16,18 @@ import androidx.navigation.ui.setupWithNavController
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
-import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.repository.domainModels.DashboardDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsFullviewActivity
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -71,24 +72,19 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("source", source)
                         startActivity(intent)
                     }
-                } else if (deepLink?.lastPathSegment == "rating") {
+                } else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                        Uri.parse(PLAY_STORE_LINK)
                     )
                     startActivity(intent)
-                } else if (deepLink?.lastPathSegment!!.contains("call")) {
+                } else if (deepLink?.lastPathSegment!!.contains(CALL)) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
                     startActivity(intent)
                 }
             }
         }
-
-
-
-
-
         tokenCheckViewModel.getUserDetails().observe(this) {
             accountID = it.data?.accountId
             if (accountID != null) {

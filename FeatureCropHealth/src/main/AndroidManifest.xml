@@ -27,9 +27,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/crophealth"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
         </activity>
 

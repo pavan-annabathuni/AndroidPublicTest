@@ -50,11 +50,13 @@ import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.AudioNewLayoutBinding
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.uicomponents.utils.AppUtil
+import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
@@ -314,11 +316,11 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         outputFile.close()
         val uri = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setLink(Uri.parse("http://app.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(
