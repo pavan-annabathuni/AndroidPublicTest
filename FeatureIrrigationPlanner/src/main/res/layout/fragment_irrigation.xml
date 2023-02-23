@@ -230,7 +230,13 @@
                                 app:layout_constraintStart_toStartOf="@+id/topping"
                                 app:layout_constraintTop_toBottomOf="@+id/topping" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
-
+                        <View
+                            android:id="@+id/viewCstage"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="24dp"
+                            android:background="@color/LightGray"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_cropStageClick" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
@@ -755,7 +761,7 @@
                         android:textSize="14sp"
                         android:theme="@style/AppTheme"
                         tools:visibility="visible"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:cornerRadius="12dp"
                         app:elevation="8dp" />
 
@@ -804,7 +810,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:text="Disclaimer: Irrigation Planner is not available for this crop. Either this crop is added to a farm or device is not present."
+                        android:text="Disclaimer: Irrigation Planner is not available for this crop. Either this crop is not added to a farm or device is not present."
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -812,7 +818,39 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/FutureCv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+                tools:visibility="visible">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.waycool.uicomponents.Text.Title3SemiBold
+                        android:id="@+id/tvSowingDateDes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Disclaimer: This feature for this crop will start after sowing date"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

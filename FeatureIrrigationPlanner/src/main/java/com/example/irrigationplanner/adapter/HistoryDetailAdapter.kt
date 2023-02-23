@@ -10,6 +10,8 @@ import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemHistoryDetailsBinding
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.translations.TranslationsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -44,7 +46,7 @@ class HistoryDetailAdapter(val onClickListener:OnClickListener):
 
         }
         var irrigated = ""
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
           irrigated   = TranslationsManager().getString("str_Irrigated ")
             if(properties.irrigation!=null)
                 holder.irrigation.text = "$irrigated ${properties.irrigation}L"
