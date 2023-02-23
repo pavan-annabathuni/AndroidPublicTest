@@ -844,7 +844,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:text="Disclaimer: Irrigation for this crop will start after sowing date"
+                        android:text="Disclaimer: This feature for this crop will start after sowing date"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

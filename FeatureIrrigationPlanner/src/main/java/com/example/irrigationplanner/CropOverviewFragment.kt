@@ -42,6 +42,7 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         translation()
         binding.tvDrip.isSelected = true
         binding.tvWeek.isSelected = true
+        binding.tvSoil.isSelected = true
         return binding.root
     }
 
@@ -61,8 +62,8 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                     tvDate.text = data.sowingDate.toString()
                 else tvDate.text = "NA"
 
-                if(it.data?.get(0)?.soilType!=null)
-                    tvSoil.text = it.data?.get(0)?.soilType
+                if(data?.soilType!=null)
+                    tvSoil.text = data.soilType
                 else
                 tvSoil.text = "NA"
 
@@ -73,7 +74,8 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                 if (data?.actualHarvestDate != null)
                     tvHarvest.text = data.actualHarvestDate
 
-                else tvHarvest.text = "NA"
+                else //tvHarvest.text = "NA"
+                    cvHarvest.visibility = View.GONE
 
                 if (data?.estimatedYield != null)
                     tvYield.text = data.estimatedYield.toString()

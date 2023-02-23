@@ -203,11 +203,13 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         setNews()
         setBanners()
 
-        handler?.postDelayed({
-             audioPlayer()
-            binding.clProgress.visibility = View.GONE
-            binding.constraintLayout2.visibility = View.GONE
-        },2000)
+            handler?.postDelayed({
+                audioPlayer()
+                binding.clProgress.visibility = View.GONE
+                binding.constraintLayout2.visibility = View.GONE
+            }, 2000)
+
+
 
         shareLayout = binding.shareScreen
         binding.imgShare.setOnClickListener {
@@ -725,6 +727,6 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             audioPlayer()
             binding.clProgress.visibility = View.GONE
             binding.constraintLayout2.visibility = View.GONE
-        },1000)
+        },3000)
     }
 }
