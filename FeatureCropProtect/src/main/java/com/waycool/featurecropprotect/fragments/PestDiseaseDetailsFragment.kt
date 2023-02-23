@@ -1,8 +1,6 @@
 package com.waycool.cropprotect.fragments
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
@@ -19,7 +17,6 @@ import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NavUtils
-import androidx.core.content.FileProvider
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,8 +31,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout.*
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -50,14 +45,12 @@ import com.waycool.featurecropprotect.Adapter.DiseasesChildAdapter
 import com.waycool.featurecropprotect.CropProtectViewModel
 import com.waycool.featurecropprotect.R
 import com.waycool.featurecropprotect.databinding.FragmentPestDiseaseDetailsBinding
-import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.getDeepLinkAndScreenShot
 import com.waycool.newsandarticles.adapter.NewsGenericAdapter
 import com.waycool.newsandarticles.adapter.onItemClick
 import com.waycool.newsandarticles.databinding.GenericLayoutNewsListBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.uicomponents.utils.AppUtil
-import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.VideoActivity
 import com.waycool.videos.adapter.AdsAdapter
 import com.waycool.videos.adapter.VideosGenericAdapter
@@ -66,9 +59,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -353,39 +343,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 //    }
 
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
-        val now = Date()
-        android.text.format.DateFormat.format("", now)
-        val path = context?.externalCacheDir?.absolutePath + "/" + now + ".jpg"
-        val bitmap =
-            Bitmap.createBitmap(shareLayout.width, shareLayout.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        shareLayout.draw(canvas)
-        val imageFile = File(path)
-        val outputFile = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputFile)
-        outputFile.flush()
-        outputFile.close()
-        val uri = FileProvider.getUriForFile(requireContext(), "com.example.outgrow", imageFile)
-        FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("http://app.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"))
-            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
-            .setAndroidParameters(
-                DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
-                    .build()
-            )
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Outgrow - Pest Disease Detail for $diseaseName")
-                    .setDescription("Find Pest Management and more on Outgrow app")
-                    .build()
-            )
-            .buildShortDynamicLink().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.clShareProgress.visibility=View.GONE
-                    Handler().postDelayed({binding.imgShare.isEnabled = true
-                    },1000)
-
+        val uriString="http://app.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
+        val title="Outgrow - Pest Disease Detail for $diseaseName"
+        val description="Find Pest Management and more on Outgrow app"
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description) { task, uri ->
+            if (task.isSuccessful) {
+                binding.clShareProgress.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.imgShare.isEnabled = true
+                }, 1000)
                 val shortLink: Uri? = task.result.shortLink
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -393,9 +359,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 sendIntent.type = "text/plain"
                 sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
                 startActivity(Intent.createChooser(sendIntent, "choose one"))
-
             }
+
         }
+
+
+
     }
 
     private fun setNews() {
