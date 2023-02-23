@@ -41,6 +41,8 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
         information()
         translation()
         binding.tvDrip.isSelected = true
+        binding.tvWeek.isSelected = true
+        binding.tvSoil.isSelected = true
         return binding.root
     }
 
@@ -60,8 +62,8 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                     tvDate.text = data.sowingDate.toString()
                 else tvDate.text = "NA"
 
-                if(it.data?.get(0)?.soilType!=null)
-                    tvSoil.text = it.data?.get(0)?.soilType
+                if(data?.soilType!=null)
+                    tvSoil.text = data.soilType
                 else
                 tvSoil.text = "NA"
 
@@ -72,11 +74,12 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                 if (data?.actualHarvestDate != null)
                     tvHarvest.text = data.actualHarvestDate
 
-                else tvHarvest.text = "NA"
+                else //tvHarvest.text = "NA"
+                    cvHarvest.visibility = View.GONE
 
-                if (data?.cropYear != null)
-                    tvWeek.text = data.cropYear.toString()
-                else tvWeek.text = "NA"
+                if (data?.estimatedYield != null)
+                    tvYield.text = data.estimatedYield.toString()
+                else binding.cvYield.visibility = View.INVISIBLE
 
                 /** setting crop age value */
                 if (data?.sowingDate != null)
@@ -88,11 +91,11 @@ class CropOverviewFragment : BottomSheetDialogFragment() {
                         val dateTime1 = DateTime(sowindate)
                         val dateTime2 = DateTime(currentdate)
                         val weeksOld = Weeks.weeksBetween(dateTime1, dateTime2).weeks
-                        tvYield.text = weeksOld.toString() + " Weeks Old"
+                        tvWeek.text = weeksOld.toString() + " Weeks Old"
                     } catch (e: ParseException) {
-                        tvYield.text = ""
+                        tvWeek.text = ""
                     }
-                else tvYield.text = "NA"
+                else tvWeek.text = "NA"
             }
         }
     }

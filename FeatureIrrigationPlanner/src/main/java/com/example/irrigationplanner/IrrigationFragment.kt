@@ -6,12 +6,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -29,14 +29,15 @@ import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -99,8 +100,10 @@ class IrrigationFragment : Fragment() {
                 cropStageCheck(accountId!!)
             }
             /** checking user role id and */
-            if (it.data!!.roleId == 31)
+            if (it.data!!.roleId == 31){
                 binding.btExit.visibility = View.GONE
+            binding.btHarvest.visibility = View.GONE
+            }
             else binding.btExit.visibility = View.VISIBLE
 
         }
@@ -137,6 +140,7 @@ class IrrigationFragment : Fragment() {
 
 
         translation()
+
 
 
         var yes: String
@@ -535,9 +539,18 @@ class IrrigationFragment : Fragment() {
             }
             else {
                 binding.gwxIrrigation.visibility = View.VISIBLE
-                binding.btHarvest.visibility = View.VISIBLE
                 binding.noDeviceCv.visibility = View.GONE
             }
+
+
+            if(data?.disease==false){
+                binding.tabLayout.visibility = View.GONE
+                binding.rvDis.visibility = View.GONE
+            }else {
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.rvDis.visibility = View.VISIBLE
+            }
+
             viewModel.viewModelScope.launch {
             if(data?.irrigationRequired==false){
                 TranslationsManager().loadString("str_irrigation_not_req",binding.irrigationReq,"Irrigation Not Required")
@@ -549,7 +562,7 @@ class IrrigationFragment : Fragment() {
                 }
             }
 
-            if(data?.irrigationType=="Drip"){
+            if(data?.irrigationType=="Drip Irrigation"){
                 TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay, "Irrigation done today per Plant")
             }
             else{
@@ -557,6 +570,8 @@ class IrrigationFragment : Fragment() {
             }
 
             CropStageDate = data?.sowingDate
+
+            CropStageDate?.let { it1 -> checkingFutureDate(it1) }
         }
     }
 
@@ -678,4 +693,19 @@ class IrrigationFragment : Fragment() {
         }
     }
 
+    private fun checkingFutureDate(sowingDate:String){
+        val currentTime = Calendar.getInstance().time
+
+// Create a Date object for the date you want to compare
+        val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(sowingDate)
+
+// Compare the two dates
+        if (sowingDate.after(currentTime)) {
+            // The compareDate is in the future
+            // Do something
+            binding.FutureCv.visibility = View.VISIBLE
+            binding.gwxIrrigation.visibility = View.GONE
+            binding.btHarvest.visibility = View.GONE
+        }
+    }
 }
