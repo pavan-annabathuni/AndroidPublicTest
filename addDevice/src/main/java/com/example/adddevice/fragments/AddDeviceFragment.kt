@@ -18,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -163,28 +162,18 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
 
             } else if (nickName.isEmpty()) {
-                binding.device1.error =  "Device Name should not be empty"
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
-//                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
-//                    else{ binding.device1.error= "Device Name should not be empty" }
-//                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
+                    if(!toastDeviceName.isNullOrEmpty()){
+                        binding.device1.error = toastDeviceName}
+                    else{ binding.device1.error= "Device Name should not be empty" }
+                }
 
 
                 return@setOnClickListener
-            } else if (scanResult.isNullOrEmpty()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val toastScan= TranslationsManager().getString("please_scan")
-                    if(!toastScan.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
-                            LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
-                        LENGTH_SHORT
-                    ) }}}
+            }
 
-
-            } else {
+            else {
                 binding.progressBar.visibility=View.VISIBLE
                 binding.frameLayout2.visibility=View.GONE
                 val  eventBundle=Bundle()
@@ -199,8 +188,10 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     map["device_lat"] = latitude!!
                 if (longitutde != null)
                     map["device_long"] = longitutde!!
-                map["device_number"] = scanResult!!
+//                map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
+////
+                map["device_number"]=binding.imeiAddress.text
                 activityDevice(map)
             }
 
@@ -252,23 +243,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
                 }
                 is Resource.Error -> {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                ToastStateHandling.toastError(requireContext(),"Device already registered", LENGTH_SHORT)
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
 
                 }
@@ -545,7 +529,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-    fun translationAddDevice() {
+   private fun translationAddDevice() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("str_add_device")
             binding.topAppBar.title = title

@@ -31,6 +31,8 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
     var audioUrl: String? = null
     var newsDate: String? = null
     var source: String? = null
+    var vansType: String? = null
+
     var mediaPlayer: MediaPlayer? = null
     var audioWife: AudioWife? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +50,21 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             audioUrl = bundle.getString("audio")
             newsDate = bundle.getString("date")
             source = bundle.getString("source")
+            vansType = bundle.getString("vansType")
+
         }
         if (audioUrl.isNullOrEmpty()) {
             audioNewLayout.root.visibility = View.GONE
         } else {
             audioNewLayout.root.visibility = View.VISIBLE
         }
-        binding.newsHeading.text = "News Updates"
+        if(vansType=="news"){
+            vansType="News"
+        }
+        else if(vansType=="articles"){
+            vansType="Articles"
+        }
+        binding.newsHeading.text = "$vansType Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
         binding.desc.text = Html.fromHtml(desc?:"")

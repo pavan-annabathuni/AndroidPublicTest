@@ -56,12 +56,13 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
-    var dateCrop: String = ""
     val myCalendar = Calendar.getInstance()
-    var dateofBirthFormat = SimpleDateFormat("yyyy-MM-dd")
+
 
     //private lateinit var args:Bundle
     var dificiency: String = "noData"
+
+    private var CropStageDate:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,12 +94,15 @@ class IrrigationFragment : Fragment() {
         /** calling user detail api and passing the value account id in set adapter function*/
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountId = it.data?.accountId!!
-            if (accountId != null)
+            if (accountId != null) {
                 setAdapter(accountId!!)
+                cropStageCheck(accountId!!)
+            }
             /** checking user role id and */
             if (it.data!!.roleId == 31)
                 binding.btExit.visibility = View.GONE
             else binding.btExit.visibility = View.VISIBLE
+
         }
 
         // binding.recycleViewHis.adapter = mHistoryAdapter
@@ -221,6 +225,14 @@ class IrrigationFragment : Fragment() {
                 .navigate(R.id.action_irrigationFragment_to_cropOverviewFragment, args)
         }
 
+        binding.clCropStageClick.setOnClickListener {
+            val args = Bundle()
+            args.putInt("plotId", plotId)
+            accountId?.let { it1 -> args.putInt("accountId", it1) }
+            this.findNavController()
+                .navigate(R.id.action_irrigationFragment_to_cropStageFragment, args)
+        }
+
 //        viewModel.cropHarvestedLiveData.observe(viewLifecycleOwner){
 //            if(it==true){
 //                viewModel.cropHarvestedLiveData.postValue(false)
@@ -257,13 +269,6 @@ class IrrigationFragment : Fragment() {
                 //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
 //                }
                 Log.d("irrig","${it.data}")
-                viewModel.viewModelScope.launch {
-                    if (it.data?.data?.irrigation?.currentData?.irrigation != null)
-                        binding.irrigationReq.text =
-                            TranslationsManager().getString("str_irrigation_not_req")
-                    else binding.irrigationReq.text =
-                        TranslationsManager().getString("str_Irrigation_req")
-                }
 
                 when (it) {
                     is Resource.Loading -> {
@@ -452,7 +457,17 @@ class IrrigationFragment : Fragment() {
             val value = irrigation?.text.toString().toInt()
             if (irrigationId != null) {
                 viewModel.updateIrrigation(irrigationId!!, value).observe(viewLifecycleOwner) {
-                    binding.textViewL.text = value.toString() + "L"
+                    when(it){
+                        is Resource.Success->{
+                            binding.dailyIrrigation.visibility = View.GONE
+                            binding.perDay.visibility = View.VISIBLE
+                            binding.textViewL.text = value.toString() + "L"
+                        }
+                        is Resource.Error->{}
+                        is Resource.Loading->{}
+                    }
+
+
                 }
             }
             dialog.dismiss()
@@ -523,6 +538,25 @@ class IrrigationFragment : Fragment() {
                 binding.btHarvest.visibility = View.VISIBLE
                 binding.noDeviceCv.visibility = View.GONE
             }
+            viewModel.viewModelScope.launch {
+            if(data?.irrigationRequired==false){
+                TranslationsManager().loadString("str_irrigation_not_req",binding.irrigationReq,"Irrigation Not Required")
+                binding.irrigationReq.text = TranslationsManager().getString("str_irrigation_not_req")
+                }else if(data?.irrigationRequired==true){
+                TranslationsManager().loadString("str_irrigation_req",binding.irrigationReq,"Irrigation Required")
+                }else{
+                binding.irrigationReq.text = "-NA-"
+                }
+            }
+
+            if(data?.irrigationType=="Drip"){
+                TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay, "Irrigation done today per Plant")
+            }
+            else{
+                TranslationsManager().loadString("str_irrigation_done_area", binding.tvPerDay, "Irrigation done today per area")
+            }
+
+            CropStageDate = data?.sowingDate
         }
     }
 
@@ -534,12 +568,11 @@ class IrrigationFragment : Fragment() {
         TranslationsManager().loadString("str_today", binding.textView4, "Today")
         TranslationsManager().loadString("str_weekly_irrigation", binding.textView5, "Weekly Irrigation Forecast")
         TranslationsManager().loadString("str_have_you _irrigated", binding.textView6, "Have you Irrigated your Crop today?")
-        TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay, "Irrigation done today per Plant")
-        TranslationsManager().loadString("str_view_all", binding.tvViewDeatils, "View details")
-        TranslationsManager().loadString("str_view_all", binding.tvViewDetails2, "View details")
-        TranslationsManager().loadString("str_view_all", binding.viewDetails3, "View details")
+        TranslationsManager().loadString("view_details", binding.tvViewDeatils, "View details")
+        TranslationsManager().loadString("view_details", binding.tvViewDetails2, "View details")
+        TranslationsManager().loadString("view_details", binding.viewDetails3, "View details")
         TranslationsManager().loadString("str_edit", binding.tvEdit, "Edit")
-        TranslationsManager().loadString("str_risk_outbreak", binding.textView9, "Risk Outbreak Chances")
+        TranslationsManager().loadString("str_risk_outbreak", binding.textView9, "Today Risk Outbreak Chances")
         TranslationsManager().loadString("str_irrigation_history", binding.textView8, "Irrigation History")
         TranslationsManager().loadString("str_crop_stage", binding.graps, "Crop Stage")
         TranslationsManager().loadString("topping", binding.topping, "Topping")
@@ -552,8 +585,12 @@ class IrrigationFragment : Fragment() {
     }
 
     private fun harvestDialog() {
+
         val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
         val harvestBinding:FragmentSheetHarvestBinding = FragmentSheetHarvestBinding.inflate(layoutInflater)
+        TranslationsManager().loadString("str_harvest_details",harvestBinding.tvHarvestDetails,"Harvest Details")
+        TranslationsManager().loadString("str_actual_yeild",harvestBinding.textView14,"Actual Yield in Tone")
+        TranslationsManager().loadString("str_actual_harvest_date",harvestBinding.tvHarvestDetails,"Actual Harvest Date")
         dialog.setContentView(harvestBinding.root)
         harvestBinding.close.setOnClickListener {
             dialog.dismiss()
@@ -596,43 +633,49 @@ class IrrigationFragment : Fragment() {
             }
         }
         harvestBinding.editText2.setOnClickListener {
-            var date: DatePickerDialog.OnDateSetListener? =
-                DatePickerDialog.OnDateSetListener { view, year, month, day ->
-                    myCalendar.set(Calendar.YEAR, year)
-                    myCalendar.set(Calendar.MONTH, month)
-                    myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                    myCalendar.add(Calendar.YEAR, -1)
-                    view.minDate = myCalendar.timeInMillis
-                    val myFormat = "yyyy-MM-dd"
-                    val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-                    harvestBinding.editText2.text = dateFormat.format(myCalendar.time)
-                    myCalendar.add(Calendar.YEAR, 1)
-                    view.maxDate = myCalendar.timeInMillis
-                }
-            val dialog = DatePickerDialog(
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            val dpd = DatePickerDialog(
                 requireContext(),
-                date,
-                myCalendar.get(Calendar.YEAR),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)
+                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    val month = monthOfYear+1
+                    // Display Selected date in textbox
+                    val inputDateFormatter: SimpleDateFormat =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val date2: Date = inputDateFormatter.parse("$year-$month-$dayOfMonth")
+                    harvestBinding.editText2.text = outputDateFormatter.format(date2)
+                    // date1 = binding.cal1.text.toString()
+                },
+                year,
+                month,
+                day
             )
-            dateCrop = dateofBirthFormat.format(myCalendar.time)
-            myCalendar.add(Calendar.YEAR, -1)
-            dialog.datePicker.minDate = myCalendar.timeInMillis
-            myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
-            dialog.datePicker.maxDate = myCalendar.timeInMillis
-            dialog.show()
-            dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
-                Color.parseColor("#7946A9")
-            )
-            dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
-                Color.parseColor("#7946A9")
-            )
+            dpd.show()
         }
-
         dialog.show()
+    }
 
-
+    private fun cropStageCheck(accountId: Int){
+        viewModel.getCropStage(accountId,plotId).observe(viewLifecycleOwner){
+            if(it.data?.data!=null)
+                if(it.data?.data!![0].date?.first()!=null){
+            for(i in 0 until it.data?.data!!.size)
+                if(it.data?.data!![i].date==null) {
+                    binding.topping.text = it.data?.data!![i - 1].stageName
+                    val image = it.data?.data!![i - 1].stageIcon
+                    Glide.with(requireContext()).load(image).into(binding.cropStageImg)
+                    binding.cropStageDate.text = it.data?.data!![i - 1].date
+                    break
+                }}else {
+                    binding.topping.text = it.data?.data!!.first().stageName
+                    val image = it.data?.data!!.first().stageIcon
+                    Glide.with(requireContext()).load(image).into(binding.cropStageImg)
+                    binding.cropStageDate.text = CropStageDate
+                }
+        }
     }
 
 }

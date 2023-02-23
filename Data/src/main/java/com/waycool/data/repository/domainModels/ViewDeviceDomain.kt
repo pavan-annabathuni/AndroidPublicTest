@@ -21,6 +21,7 @@ data class ViewDeviceDomain (
         var iotDevicesDataId   : Int?                = null,
         var farmId             : Int?                = null,
         var deviceName         : String?             = null,
+        var deviceElevation:Double?=null,
         var deltaT             : Double?                = null,
         var deltaTRange        : RangesDomain?        = RangesDomain(),
         var soilMoisture1Range : RangesDomain? = RangesDomain(),
@@ -30,6 +31,7 @@ data class ViewDeviceDomain (
         var modelSeries        : String? =null,
          var deviceNumber         : String?             = null,
         var isApproved         : Int?             = null,
+
         )
 
 data class RangesDomain (

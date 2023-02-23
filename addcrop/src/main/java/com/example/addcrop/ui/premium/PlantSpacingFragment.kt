@@ -91,6 +91,8 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants?.let { map.put("no_of_plants", it) }
                 map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
+                map["len_drip"] = binding.etNumber.text
+                map["width_drip"] = binding.etNumberWidth.text
                 binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
                     try {
                         if (selectPlantDistance.text.trim().isEmpty()) {
@@ -127,13 +129,13 @@ class PlantSpacingFragment : Fragment() {
                             ).show()
                         } else {
                             if (selectBedWidth.text == "ft") {
-                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.305
                             } else if (selectBedWidth.text == "cm") {
-                                map["width_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.01
                             } else if (selectBedWidth.text == "mtr") {
-                                map["width_drip"] = binding.etNumber.text
+                                map["width_drip"] = binding.etNumberWidth.text
                             } else {
-                                map["width_drip"] = binding.etNumber.text
+                                map["width_drip"] = binding.etNumberWidth.text
                             }
 
                         }
