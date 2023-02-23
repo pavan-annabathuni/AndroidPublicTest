@@ -31,8 +31,6 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventClickHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
@@ -117,11 +115,11 @@ setDetails()
         super.onViewCreated(view, savedInstanceState)
         Log.d("cropID", "onCreateView: $cropId")
         /** checking for crop stage if it is grape crop then showing crop stage */
-        if (cropId == 97) {
-            binding.clCropStage.visibility = View.VISIBLE
-        } else {
-            binding.clCropStage.visibility = View.GONE
-        }
+//        if (cropId == 97) {
+//            binding.clCropStage.visibility = View.VISIBLE
+//        } else {
+//            binding.clCropStage.visibility = View.GONE
+//        }
         tabs()
         deleteCropDialog()
 
@@ -340,11 +338,11 @@ setDetails()
                         itt.disease?.diseaseType == "Disease"
                     }
 
-                    if (data.isNullOrEmpty()) {
-                        binding.noPest.visibility = View.VISIBLE
-                    } else {
-                        binding.noPest.visibility = View.GONE
-                    }
+//                    if (data.isNullOrEmpty()) {
+//                        binding.noPest.visibility = View.VISIBLE
+//                    } else {
+//                        binding.noPest.visibility = View.GONE
+//                    }
                     mDiseaseAdapter.submitList(data)
                     val data2 = it.data?.data?.currentData?.filter { itt ->
                         itt.disease?.diseaseType == "Deficiency"
@@ -568,7 +566,7 @@ setDetails()
 
     private fun setDetails() {
 
-        Log.d("CropName2", "setDetails: $cropName")
+//        Log.d("CropName2", "setDetails: $cropName")
 
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val data = it.data?.first { plot ->
