@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.irrigationplanner.R
 import com.example.irrigationplanner.databinding.ItemPagerForecastBinding
 import com.waycool.data.Network.NetworkModels.IrrigationForecast
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +32,8 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
         val totalWaterLoss = binding.textView20
         val eva = binding.textView2
         val totalAcre = binding.textView23
+        val irImage = binding.imgMessage
+        val llIrrigation = binding.llMessage
     }
 
     private var details = IrrigationForecast()
@@ -84,20 +88,29 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
             val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
             if (value <= 0) {
                 holder.irrigationReq.text = irrigationReq
+                holder.irImage.setImageResource(R.drawable.ic_red_irrigation)
+                holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightREd))
+
             } else {
                 val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
                 val percentage = (value / 30) * 100
                 holder.irrigationReq.text = irrigationNotReq
+                holder.irImage.setImageResource(R.drawable.ic_green_irrigation)
+                holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightGreen))
             }
         } else {
             val value = properties.mad[position]?.minus((properties.depletion[position]?.toFloat()!!))
             if (value != null) {
                 if (value <= 0) {
                     holder.irrigationReq.text = irrigationReq
+                    holder.irImage.setImageResource(R.drawable.ic_red_irrigation)
+                    holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightREd))
                 } else {
         //                val value = properties.mad[position] ?: 0.0 - properties.depletion[position].toFloat()
         //                if (properties.mad[position] != null)
         //                val percentage = (value / properties.mad[position]!!) * 100
+                    holder.irImage.setImageResource(R.drawable.ic_green_irrigation)
+                    holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightGreen))
                     holder.irrigationReq.text = irrigationNotReq
                 }
             }

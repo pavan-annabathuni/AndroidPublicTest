@@ -9,8 +9,10 @@
     <color name="darkGray">#505050</color>
     <color name="WoodBrown">#C36F1B</color>
     <color name="DarkGreen">#146133</color>
+    <color name="LightGreen">#EDFFF2</color>
     <color name="LightGray">#EBECF2</color>
     <color name="Red">#FF2C23</color>
+    <color name="LightREd">#FFF3F1</color>
     <color name="Green">#08FA12</color>
     <color name="Skybule">#2196F3</color>
 </resources>

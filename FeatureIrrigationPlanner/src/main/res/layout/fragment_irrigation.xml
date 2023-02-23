@@ -308,17 +308,38 @@
                             app:cardElevation="0dp"
                             app:layout_constraintStart_toStartOf="@+id/textView4"
                             app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-                            <TextView
-                                android:id="@+id/irrigation_req"
-                                android:layout_width="wrap_content"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center|start"
-                                android:drawableStart="@drawable/ic_yellow"
-                                android:drawablePadding="8dp"
-                                android:paddingStart="8dp"
-                                android:text="Irrigation not required"
-                                android:textColor="@color/black" />
+                                android:orientation="horizontal"
+                                android:layout_gravity="center|start">
+
+                                <ImageView
+                                    android:id="@+id/ivCloudy"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginBottom="@dimen/txt8"
+                                    android:src="@drawable/ic_green_irrigation"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/irrigation_req"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:drawablePadding="8dp"
+                                    android:paddingStart="8dp"
+                                    android:text="Irrigation not required"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintBottom_toBottomOf="@+id/ivCloudy"
+                                    app:layout_constraintStart_toEndOf="@+id/ivCloudy"
+                                    app:layout_constraintTop_toTopOf="@+id/ivCloudy" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -657,25 +678,49 @@
                     android:background="@color/LightGray"
                     app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_dis"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_dis"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/item_disease_history"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_dis"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
+                        android:visibility="visible"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:itemCount="7"
+                        tools:listitem="@layout/item_disease_history"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/noPest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:drawablePadding="6dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:text="No risk outbreak for this tab"
+                        android:textColor="@color/DarkGreen"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/bt_disease"
                     android:layout_width="match_parent"
@@ -690,7 +735,7 @@
                     app:cornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_dis"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_dis"
                     app:strokeColor="@color/DarkGreen"
                     app:strokeWidth="1dp"
                     tools:visibility="visible">

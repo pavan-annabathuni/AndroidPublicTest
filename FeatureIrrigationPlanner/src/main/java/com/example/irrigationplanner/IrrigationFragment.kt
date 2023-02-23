@@ -63,7 +63,7 @@ class IrrigationFragment : Fragment() {
     //private lateinit var args:Bundle
     var dificiency: String = "noData"
 
-    private var CropStageDate:String?=null
+    private var CropStageDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +100,10 @@ class IrrigationFragment : Fragment() {
                 cropStageCheck(accountId!!)
             }
             /** checking user role id and */
-            if (it.data!!.roleId == 31){
+            if (it.data!!.roleId == 31) {
                 binding.btExit.visibility = View.GONE
-            binding.btHarvest.visibility = View.GONE
-            }
-            else binding.btExit.visibility = View.VISIBLE
+                binding.btHarvest.visibility = View.GONE
+            } else binding.btExit.visibility = View.VISIBLE
 
         }
 
@@ -140,7 +139,6 @@ class IrrigationFragment : Fragment() {
 
 
         translation()
-
 
 
         var yes: String
@@ -267,95 +265,105 @@ class IrrigationFragment : Fragment() {
 
 
 
-            viewModel.getIrrigationHis(accountId, plotId).observe(viewLifecycleOwner) {
+        viewModel.getIrrigationHis(accountId, plotId).observe(viewLifecycleOwner) {
 //                if(it.data?.data?.irrigation?.currentData?.id!=null) {
 //                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
-                //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
+            //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
 //                }
-                Log.d("irrig","${it.data}")
+            Log.d("irrig", "${it.data}")
 
-                when (it) {
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.btForecast.visibility = View.GONE
-                        binding.btHistory.visibility = View.GONE
-                        binding.dailyIrrigation.visibility = View.GONE
-                        Log.d("History", "setAdapter: loading")
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.btForecast.visibility = View.GONE
+                    binding.btHistory.visibility = View.GONE
+                    binding.dailyIrrigation.visibility = View.GONE
+                    Log.d("History", "setAdapter: loading")
 
-                    }
-                    is Resource.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.btForecast.visibility = View.GONE
-                        binding.btHistory.visibility = View.GONE
-                        binding.dailyIrrigation.visibility = View.GONE
-                      AppUtils.translatedToastServerErrorOccurred(context)
-                        Log.d("History", "setAdapter: Error")
-                        }
-                    is Resource.Success -> {
-                        /** setting adapter data for historicData data */
-                        if(!it.data?.data?.irrigation?.historicData.isNullOrEmpty())
+                }
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.btForecast.visibility = View.GONE
+                    binding.btHistory.visibility = View.GONE
+                    binding.dailyIrrigation.visibility = View.GONE
+                    AppUtils.translatedToastServerErrorOccurred(context)
+                    Log.d("History", "setAdapter: Error")
+                }
+                is Resource.Success -> {
+                    /** setting adapter data for historicData data */
+                    if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty())
                         mHistoryAdapter.submitList(it.data?.data?.irrigation?.historicData as MutableList<HistoricData>)
-                        //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
-                        if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty() && it.data?.data?.irrigation?.historicData?.get(0)?.irrigation != null) {
-                            binding.dailyIrrigation.visibility = View.GONE
-                            binding.perDay.visibility = View.VISIBLE
-                            binding.textViewL.text =
-                                it.data?.data?.irrigation?.historicData?.get(0)?.irrigation + "L"
-                        }
-                        irrigation = it.data?.data?.irrigation!!
+                    //  binding.textViewL.text = it.data?.data?.irrigation?.historicData?.get(0)?.irrigation+" L"
+                    if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty() && it.data?.data?.irrigation?.historicData?.get(
+                            0
+                        )?.irrigation != null
+                    ) {
+                        binding.dailyIrrigation.visibility = View.GONE
+                        binding.perDay.visibility = View.VISIBLE
+                        binding.textViewL.text =
+                            it.data?.data?.irrigation?.historicData?.get(0)?.irrigation + "L"
+                    }
+                    irrigation = it.data?.data?.irrigation!!
+                    binding.progressBar.visibility = View.GONE
+                    binding.btForecast.visibility = View.VISIBLE
+                    binding.btHistory.visibility = View.VISIBLE
+                    Log.d("History", "setAdapter: Success")
+                    if (it.data?.data?.irrigation?.historicData.isNullOrEmpty()) {
                         binding.progressBar.visibility = View.GONE
-                        binding.btForecast.visibility = View.VISIBLE
-                        binding.btHistory.visibility = View.VISIBLE
-                        Log.d("History", "setAdapter: Success")
-                        if(it.data?.data?.irrigation?.historicData.isNullOrEmpty()){
-                            binding.progressBar.visibility = View.GONE
-                            binding.btHistory.visibility = View.GONE
-                            binding.dailyIrrigation.visibility = View.GONE
-                            binding.view3.visibility = View.GONE
-                        }
-                        if(it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()){
-                            binding.btForecast.visibility = View.GONE
-                        }
+                        binding.btHistory.visibility = View.GONE
+                        binding.dailyIrrigation.visibility = View.GONE
+                        binding.view3.visibility = View.GONE
+                    }
+                    if (it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()) {
+                        binding.btForecast.visibility = View.GONE
                     }
                 }
-                /** setting adapter data for weekly data */
-                it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
-                    mWeeklyAdapter.setList(
-                        it1
-                    )
-                }
-                /** setting irrigation id */
-                irrigationId = it.data?.data?.irrigation?.historicData?.get(0)?.id
-
             }
+            /** setting adapter data for weekly data */
+            it.data?.data?.irrigation?.irrigationForecast?.let { it1 ->
+                mWeeklyAdapter.setList(
+                    it1
+                )
+            }
+            /** setting irrigation id */
+            irrigationId = it.data?.data?.irrigation?.historicData?.get(0)?.id
+
+        }
 
 
         /** calling disease api */
         viewModel.getDisease(accountId, plotId).observe(viewLifecycleOwner) {
-            when(it){
-                is Resource.Success->{
+            when (it) {
+                is Resource.Success -> {
 
-            val data = it.data?.data?.currentData?.filter { itt ->
-                itt.disease?.diseaseType == "Disease"
-            }
-            mDiseaseAdapter.submitList(data)
-            val data2 = it.data?.data?.currentData?.filter { itt ->
-                itt.disease?.diseaseType == "Deficiency"
-            }
-            if (data2 != null) dificiency = "dif"
-            else dificiency = "noData"
+                    val data = it.data?.data?.currentData?.filter { itt ->
+                        itt.disease?.diseaseType == "Disease"
+                    }
+
+                    if (data.isNullOrEmpty()) {
+                        binding.noPest.visibility = View.VISIBLE
+                    } else {
+                        binding.noPest.visibility = View.GONE
+                    }
+                    mDiseaseAdapter.submitList(data)
+                    val data2 = it.data?.data?.currentData?.filter { itt ->
+                        itt.disease?.diseaseType == "Deficiency"
+                    }
+                    if (data2 != null) dificiency = "dif"
+                    else dificiency = "noData"
                     binding.btDisease.visibility = View.VISIBLE
-                    if(it.data?.data?.historicData.isNullOrEmpty())
+                    if (it.data?.data?.historicData.isNullOrEmpty())
                         binding.btDisease.visibility = View.GONE
+                }
+                is Resource.Loading -> {
+                    binding.btDisease.visibility = View.GONE
+                    binding.noPest.visibility = View.GONE
+                }
+                is Resource.Error -> {
+                    binding.btDisease.visibility = View.GONE
+                }
+            }
         }
-                is Resource.Loading->{
-                    binding.btDisease.visibility = View.GONE
-                }
-                is Resource.Error->{
-                    binding.btDisease.visibility = View.GONE
-                }
-            }
-            }
     }
 
     private fun tabs() {
@@ -387,10 +395,26 @@ class IrrigationFragment : Fragment() {
                     0 -> viewModel.viewModelScope.launch {
                         accountId?.let {
                             viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
-                                val data = it.data?.data?.currentData?.filter { itt ->
-                                    itt.disease?.diseaseType == "Disease"
+                                when (it) {
+                                    is Resource.Loading -> {
+                                        binding.noPest.visibility = View.GONE
+                                    }
+                                    is Resource.Success -> {
+                                        val data = it.data?.data?.currentData?.filter { itt ->
+                                            itt.disease?.diseaseType == "Disease"
+                                        }
+
+                                        if (data.isNullOrEmpty()) {
+                                            binding.noPest.visibility = View.VISIBLE
+                                        } else {
+                                            binding.noPest.visibility = View.GONE
+                                        }
+                                        mDiseaseAdapter.submitList(data)
+                                    }
+                                    is Resource.Error -> {}
                                 }
-                                mDiseaseAdapter.submitList(data)
+
+
                                 Log.d("hostry", "setAdapter: ${it.message}")
                             }
                         }
@@ -401,11 +425,26 @@ class IrrigationFragment : Fragment() {
                             accountId?.let {
                                 viewModel.getDisease(accountId!!, plotId)
                                     .observe(viewLifecycleOwner) {
-                                        val data = it.data?.data?.currentData?.filter { itt ->
-                                            itt.disease?.diseaseType == "Pest"
+                                        when (it) {
+                                            is Resource.Loading -> {
+                                                binding.noPest.visibility = View.GONE
+                                            }
+                                            is Resource.Success -> {
+                                                val data =
+                                                    it.data?.data?.currentData?.filter { itt ->
+                                                        itt.disease?.diseaseType == "Pest"
+                                                    }
+                                                Log.d("irrigationPlanner", "setAdapter: $data")
+                                                if (data.isNullOrEmpty()) {
+                                                    binding.noPest.visibility = View.VISIBLE
+                                                } else {
+                                                    binding.noPest.visibility = View.GONE
+                                                }
+                                                mDiseaseAdapter.submitList(data)
+                                                Log.d("hostry", "setAdapter: ${it.message}")
+                                            }
+                                            is Resource.Error -> {}
                                         }
-                                        mDiseaseAdapter.submitList(data)
-                                        Log.d("hostry", "setAdapter: ${it.message}")
                                     }
                             }
                         }
@@ -461,14 +500,14 @@ class IrrigationFragment : Fragment() {
             val value = irrigation?.text.toString().toInt()
             if (irrigationId != null) {
                 viewModel.updateIrrigation(irrigationId!!, value).observe(viewLifecycleOwner) {
-                    when(it){
-                        is Resource.Success->{
+                    when (it) {
+                        is Resource.Success -> {
                             binding.dailyIrrigation.visibility = View.GONE
                             binding.perDay.visibility = View.VISIBLE
                             binding.textViewL.text = value.toString() + "L"
                         }
-                        is Resource.Error->{}
-                        is Resource.Loading->{}
+                        is Resource.Error -> {}
+                        is Resource.Loading -> {}
                     }
 
 
@@ -512,7 +551,11 @@ class IrrigationFragment : Fragment() {
 
             //translation
             TranslationsManager().loadString("str_delete", deleteTv, "Delete")
-            TranslationsManager().loadString("str_delete_crop_desc", deleteDesc, "Are you sure? Do you want to delete this crop?")
+            TranslationsManager().loadString(
+                "str_delete_crop_desc",
+                deleteDesc,
+                "Are you sure? Do you want to delete this crop?"
+            )
             viewModel.viewModelScope.launch {
                 val deletetv = TranslationsManager().getString("str_delete")
                 delete.text = deletetv
@@ -536,37 +579,56 @@ class IrrigationFragment : Fragment() {
                 binding.gwxIrrigation.visibility = View.GONE
                 binding.btHarvest.visibility = View.GONE
                 binding.noDeviceCv.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 binding.gwxIrrigation.visibility = View.VISIBLE
                 binding.noDeviceCv.visibility = View.GONE
             }
 
 
-            if(data?.disease==false){
+            if (data?.disease == false) {
                 binding.tabLayout.visibility = View.GONE
                 binding.rvDis.visibility = View.GONE
-            }else {
+            } else {
                 binding.tabLayout.visibility = View.VISIBLE
                 binding.rvDis.visibility = View.VISIBLE
             }
 
             viewModel.viewModelScope.launch {
-            if(data?.irrigationRequired==false){
-                TranslationsManager().loadString("str_irrigation_not_req",binding.irrigationReq,"Irrigation Not Required")
-                binding.irrigationReq.text = TranslationsManager().getString("str_irrigation_not_req")
-                }else if(data?.irrigationRequired==true){
-                TranslationsManager().loadString("str_irrigation_req",binding.irrigationReq,"Irrigation Required")
-                }else{
-                binding.irrigationReq.text = "-NA-"
+                if (data?.irrigationRequired == false) {
+                    TranslationsManager().loadString(
+                        "str_irrigation_not_req",
+                        binding.irrigationReq,
+                        "Irrigation Not Required"
+                    )
+                    binding.cardView.setCardBackgroundColor(resources.getColor(R.color.LightGreen))
+                    binding.ivCloudy.setImageDrawable(resources.getDrawable(R.drawable.ic_green_irrigation))
+                    binding.irrigationReq.text =
+                        TranslationsManager().getString("str_irrigation_not_req")
+                } else if (data?.irrigationRequired == true) {
+                    TranslationsManager().loadString(
+                        "str_irrigation_req",
+                        binding.irrigationReq,
+                        "Irrigation Required"
+                    )
+                    binding.cardView.setCardBackgroundColor(resources.getColor(R.color.LightREd))
+                    binding.ivCloudy.setImageDrawable(resources.getDrawable(R.drawable.ic_red_irrigation))
+                } else {
+                    binding.irrigationReq.text = "-NA-"
                 }
             }
 
-            if(data?.irrigationType=="Drip Irrigation"){
-                TranslationsManager().loadString("str_irrigation_done", binding.tvPerDay, "Irrigation done today per Plant")
-            }
-            else{
-                TranslationsManager().loadString("str_irrigation_done_area", binding.tvPerDay, "Irrigation done today per area")
+            if (data?.irrigationType == "Drip Irrigation") {
+                TranslationsManager().loadString(
+                    "str_irrigation_done",
+                    binding.tvPerDay,
+                    "Irrigation done today per Plant"
+                )
+            } else {
+                TranslationsManager().loadString(
+                    "str_irrigation_done_area",
+                    binding.tvPerDay,
+                    "Irrigation done today per area"
+                )
             }
 
             CropStageDate = data?.sowingDate
@@ -579,16 +641,36 @@ class IrrigationFragment : Fragment() {
 //        TranslationsManager().loadString("",binding.graps)
         TranslationsManager().loadString("str_view_all", binding.cropStage, "View all")
         TranslationsManager().loadString("str_irrigation", binding.textView3, "Irrigation")
-        TranslationsManager().loadString("str_crop _nformation", binding.tvCropInfo, "Crop information")
+        TranslationsManager().loadString(
+            "str_crop _nformation",
+            binding.tvCropInfo,
+            "Crop information"
+        )
         TranslationsManager().loadString("str_today", binding.textView4, "Today")
-        TranslationsManager().loadString("str_weekly_irrigation", binding.textView5, "Weekly Irrigation Forecast")
-        TranslationsManager().loadString("str_have_you _irrigated", binding.textView6, "Have you Irrigated your Crop today?")
+        TranslationsManager().loadString(
+            "str_weekly_irrigation",
+            binding.textView5,
+            "Weekly Irrigation Forecast"
+        )
+        TranslationsManager().loadString(
+            "str_have_you _irrigated",
+            binding.textView6,
+            "Have you Irrigated your Crop today?"
+        )
         TranslationsManager().loadString("view_details", binding.tvViewDeatils, "View details")
         TranslationsManager().loadString("view_details", binding.tvViewDetails2, "View details")
         TranslationsManager().loadString("view_details", binding.viewDetails3, "View details")
         TranslationsManager().loadString("str_edit", binding.tvEdit, "Edit")
-        TranslationsManager().loadString("str_risk_outbreak", binding.textView9, "Today Risk Outbreak Chances")
-        TranslationsManager().loadString("str_irrigation_history", binding.textView8, "Irrigation History")
+        TranslationsManager().loadString(
+            "str_risk_outbreak",
+            binding.textView9,
+            "Today Risk Outbreak Chances"
+        )
+        TranslationsManager().loadString(
+            "str_irrigation_history",
+            binding.textView8,
+            "Irrigation History"
+        )
         TranslationsManager().loadString("str_crop_stage", binding.graps, "Crop Stage")
         TranslationsManager().loadString("topping", binding.topping, "Topping")
 //        TranslationsManager().loadString("str_irrigation_history",binding.textView8)
@@ -602,10 +684,23 @@ class IrrigationFragment : Fragment() {
     private fun harvestDialog() {
 
         val dialog = BottomSheetDialog(this.requireContext(), R.style.BottomSheetDialog)
-        val harvestBinding:FragmentSheetHarvestBinding = FragmentSheetHarvestBinding.inflate(layoutInflater)
-        TranslationsManager().loadString("str_harvest_details",harvestBinding.tvHarvestDetails,"Harvest Details")
-        TranslationsManager().loadString("str_actual_yeild",harvestBinding.textView14,"Actual Yield in Tone")
-        TranslationsManager().loadString("str_actual_harvest_date",harvestBinding.tvHarvestDetails,"Actual Harvest Date")
+        val harvestBinding: FragmentSheetHarvestBinding =
+            FragmentSheetHarvestBinding.inflate(layoutInflater)
+        TranslationsManager().loadString(
+            "str_harvest_details",
+            harvestBinding.tvHarvestDetails,
+            "Harvest Details"
+        )
+        TranslationsManager().loadString(
+            "str_actual_yeild",
+            harvestBinding.textView14,
+            "Actual Yield in Tone"
+        )
+        TranslationsManager().loadString(
+            "str_actual_harvest_date",
+            harvestBinding.tvHarvestDetails,
+            "Actual Harvest Date"
+        )
         dialog.setContentView(harvestBinding.root)
         harvestBinding.close.setOnClickListener {
             dialog.dismiss()
@@ -619,11 +714,11 @@ class IrrigationFragment : Fragment() {
                     .observe(viewLifecycleOwner) {
                         when (it) {
                             is Resource.Success -> {
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        MyCropSyncer().invalidateSync()
-                                        LocalSource.deleteAllMyCrops()
-                                        MyCropSyncer().getMyCrop()
-                                    }
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    MyCropSyncer().invalidateSync()
+                                    LocalSource.deleteAllMyCrops()
+                                    MyCropSyncer().getMyCrop()
+                                }
                                 findNavController().navigateUp()
 //                                    viewModel.setCropHarvested()
                                 dialog.dismiss()
@@ -637,13 +732,22 @@ class IrrigationFragment : Fragment() {
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     val toastEnterFields = TranslationsManager().getString("toast_enter_all_field")
-                    if(!toastEnterFields.isNullOrEmpty()){
-                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastEnterFields,
-                            Toast.LENGTH_SHORT
-                        ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please enter all the mandatory fields",
-                        Toast.LENGTH_SHORT
-                    ) }}}
+                    if (!toastEnterFields.isNullOrEmpty()) {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, toastEnterFields,
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    } else {
+                        context?.let { it1 ->
+                            ToastStateHandling.toastError(
+                                it1, "Please enter all the mandatory fields",
+                                Toast.LENGTH_SHORT
+                            )
+                        }
+                    }
+                }
 
             }
         }
@@ -655,11 +759,12 @@ class IrrigationFragment : Fragment() {
             val dpd = DatePickerDialog(
                 requireContext(),
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    val month = monthOfYear+1
+                    val month = monthOfYear + 1
                     // Display Selected date in textbox
                     val inputDateFormatter: SimpleDateFormat =
                         SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-                    val outputDateFormatter: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val outputDateFormatter: SimpleDateFormat =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
                     val date2: Date = inputDateFormatter.parse("$year-$month-$dayOfMonth")
                     harvestBinding.editText2.text = outputDateFormatter.format(date2)
                     // date1 = binding.cal1.text.toString()
@@ -673,18 +778,19 @@ class IrrigationFragment : Fragment() {
         dialog.show()
     }
 
-    private fun cropStageCheck(accountId: Int){
-        viewModel.getCropStage(accountId,plotId).observe(viewLifecycleOwner){
-            if(it.data?.data!=null)
-                if(it.data?.data!![0].date?.first()!=null){
-            for(i in 0 until it.data?.data!!.size)
-                if(it.data?.data!![i].date==null) {
-                    binding.topping.text = it.data?.data!![i - 1].stageName
-                    val image = it.data?.data!![i - 1].stageIcon
-                    Glide.with(requireContext()).load(image).into(binding.cropStageImg)
-                    binding.cropStageDate.text = it.data?.data!![i - 1].date
-                    break
-                }}else {
+    private fun cropStageCheck(accountId: Int) {
+        viewModel.getCropStage(accountId, plotId).observe(viewLifecycleOwner) {
+            if (it.data?.data != null)
+                if (it.data?.data!![0].date?.first() != null) {
+                    for (i in 0 until it.data?.data!!.size)
+                        if (it.data?.data!![i].date == null) {
+                            binding.topping.text = it.data?.data!![i - 1].stageName
+                            val image = it.data?.data!![i - 1].stageIcon
+                            Glide.with(requireContext()).load(image).into(binding.cropStageImg)
+                            binding.cropStageDate.text = it.data?.data!![i - 1].date
+                            break
+                        }
+                } else {
                     binding.topping.text = it.data?.data!!.first().stageName
                     val image = it.data?.data!!.first().stageIcon
                     Glide.with(requireContext()).load(image).into(binding.cropStageImg)
@@ -693,7 +799,7 @@ class IrrigationFragment : Fragment() {
         }
     }
 
-    private fun checkingFutureDate(sowingDate:String){
+    private fun checkingFutureDate(sowingDate: String) {
         val currentTime = Calendar.getInstance().time
 
 // Create a Date object for the date you want to compare
