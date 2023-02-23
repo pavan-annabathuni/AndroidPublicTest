@@ -112,7 +112,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-
                 val intent =
                     Intent(this@NewsAndArticlesActivity, NewsFullviewActivity::class.java)
                 startActivity(intent)

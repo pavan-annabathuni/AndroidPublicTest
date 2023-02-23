@@ -35,13 +35,14 @@ object DeepLinkNavigator {
 
 
     const val NEWS_ARTICLE = "newsandarticlesfullscreen"
+    const val NEWS_LIST="newslist"
     const val RATING = "rating"
     const val CALL = "call"
 
     const val PROFILE="profile"
 
-    const val MANDI_GRAPH="/mandigraph"
-    const val MANDI="/mandi"
+    const val MANDI_GRAPH="mandigraph"
+    const val MANDI="mandi"
 
     const val ADD_CROP="addcrop"
     const val ADD_FARM= "addfarm"
@@ -57,6 +58,7 @@ object DeepLinkNavigator {
     const val PEST_DISEASE="pestdisease"
 
     const val VIDEO_LIST="videoslist"
+
     const val CHAT="chat"
 
     const val DOMAIN_URI_PREFIX="https://outgrowdev.page.link"

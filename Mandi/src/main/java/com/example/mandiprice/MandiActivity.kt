@@ -25,6 +25,7 @@ class MandiActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
+
                 if (deepLink.lastPathSegment.equals(MANDI_GRAPH)) {
                     val cropMasterId = deepLink.getQueryParameter("crop_master_id")
                     val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
@@ -32,6 +33,8 @@ class MandiActivity : AppCompatActivity() {
                     val cropName = deepLink.getQueryParameter("crop_name")
                     val marketName = deepLink.getQueryParameter("market_name")
                     val fragment = deepLink.getQueryParameter("fragment")
+
+
 
                     if (!cropMasterId.isNullOrEmpty() && !mandiMasterId.isNullOrEmpty()) {
                         val args = Bundle()

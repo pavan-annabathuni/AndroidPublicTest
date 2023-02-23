@@ -21,11 +21,13 @@ import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
+import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.view.NewsFullviewActivity
 import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                if (deepLink?.lastPathSegment == NEWS_ARTICLE) {
+                if (deepLink?.lastPathSegment!!.equals(NEWS_ARTICLE)) {
                     val title = deepLink.getQueryParameter("title")
                     val desc = deepLink.getQueryParameter("content")
                     val image = deepLink.getQueryParameter("image")
@@ -72,7 +74,13 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("source", source)
                         startActivity(intent)
                     }
-                } else if (deepLink?.lastPathSegment == RATING) {
+                }
+               else if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+
+                }
+                else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(PLAY_STORE_LINK)

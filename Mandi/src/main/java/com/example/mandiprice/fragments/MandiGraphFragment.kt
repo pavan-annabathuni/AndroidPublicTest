@@ -90,9 +90,9 @@ class MandiGraphFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            mandiDomain = it.getParcelable("mandiRecord")
-        }
+//        arguments?.let {
+//            mandiDomain = it.getParcelable("mandiRecord")
+//        }
         if (arguments != null) {
             if (arguments?.containsKey("mandiRecord") == true){
                 mandiDomain = arguments?.getParcelable("mandiRecord")
@@ -104,6 +104,7 @@ class MandiGraphFragment : Fragment() {
                 cropMasterId = arguments?.getInt("cropId")
                 marketName = arguments?.getString("market")
                 sub_record_id=arguments?.getString("subRecordId")
+
             }
         }
 
@@ -132,17 +133,18 @@ class MandiGraphFragment : Fragment() {
             cropName = mandiDomain?.crop
             marketName = mandiDomain?.market
             sub_record_id = mandiDomain?.sub_record_id
+            checkLang()
         }
         else{
-            cropMasterId = cropMasterId
-            mandiMasterId = mandiMasterId
-            cropName = cropName
-            marketName = marketName
-            sub_record_id=sub_record_id
+            binding.cropName.text=cropName
+            binding.tvMarket.text=marketName
+
         }
 
         binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
+            Log.d("MandiGraph", "MandiGraph: Share clicked")
+
             binding.imgShare.isEnabled = false
             val bundle=Bundle()
             bundle.putString("","$marketName")
@@ -161,7 +163,6 @@ class MandiGraphFragment : Fragment() {
 
         binding.tvMarket.isSelected = true
         binding.cropName.isSelected = true
-        checkLang()
         EventClickHandling.calculateClickEvent("Mandi_graph_landing")
         return binding.root
     }
@@ -405,8 +406,10 @@ class MandiGraphFragment : Fragment() {
                     .build()
             )
             .buildShortDynamicLink().addOnCompleteListener { task ->
-                Log.d("WeatherTask", "screenShot: $task")
+                Log.d("MandiGraph", "MandiGraph: Complete listener")
                 if (task.isSuccessful) {
+                    Log.d("MandiGraph", "MandiGraph: Share Success")
+
                     binding.clShareProgress.visibility=View.GONE
                     Handler().postDelayed({ binding.imgShare.isEnabled = true
                     },1000)
@@ -418,10 +421,15 @@ class MandiGraphFragment : Fragment() {
                     sendIntent.putExtra(Intent.EXTRA_STREAM, URI)
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
-
+                }else{
+                    Log.d("MandiGraph", "MandiGraph:onFailure ${task.exception}")
 
                 }
             }
+            .addOnFailureListener {
+                Log.d("MandiGraph", "MandiGraph:onFailure $it")
+            }
+
 
     }
 
