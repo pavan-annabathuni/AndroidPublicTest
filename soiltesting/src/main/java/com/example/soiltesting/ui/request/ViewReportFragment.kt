@@ -75,6 +75,7 @@ class ViewReportFragment : Fragment() {
     var fullData: ReportDetails? = null
     var resultList: List<ReportResult> = ArrayList<ReportResult>()
     var trackerID: Int? = null
+    var file_Number:String?=null
 
     //    var soilViewModel: SoilViewModel? = null
     private val viewModel by lazy { ViewModelProvider(this)[SoilTestRequestViewModel::class.java] }
@@ -169,6 +170,7 @@ class ViewReportFragment : Fragment() {
             binding.tvToolBar.text = "ID: ${soitestNumber ?: "N/A"}"
             Log.d("Praaasd", "onViewCreatedbdhsvbhdbvhb:$soitestNumber ")
             setData(trackerID!!)
+            file_Number=soitestNumber
 
         }
         binding.backBtn.setOnClickListener {
@@ -176,7 +178,7 @@ class ViewReportFragment : Fragment() {
             if (!isSuccess) requireActivity().onBackPressed()
         }
         binding.cardCheckHealth.setOnClickListener {
-            initObserve(trackerID!!)
+            initDownloadReportAndShare(trackerID!!,file_Number.toString())
 
 
         }
@@ -286,11 +288,11 @@ class ViewReportFragment : Fragment() {
 
     }
 
-    fun initObserve(soil_test_id: Int) {
+    fun initDownloadReportAndShare(soil_test_id: Int,soitestNumber:String) {
         viewModel.pdfDownload(soil_test_id).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
-                    val uri: Uri = writeResponseBodyToDisk(it.data!!)
+                    val uri: Uri = writeResponseBodyToDisk(it.data!!,soitestNumber)
 //                         val intent = Intent()
 //                         intent.setAction(Intent.ACTION_VIEW)
 //                         intent.setDataAndType(uri, "application/pdf")
@@ -367,7 +369,7 @@ class ViewReportFragment : Fragment() {
 //    }
 
 
-    private fun writeResponseBodyToDisk(body: ResponseBody): Uri {
+    private fun writeResponseBodyToDisk(body: ResponseBody,soitestNumber:String): Uri {
         return try {
 
             // todo change the file location/name according to your needs
@@ -381,7 +383,7 @@ class ViewReportFragment : Fragment() {
             //                test.mkdirs();
 
             //            }
-            var invoicePdfFile = File(requireContext().externalCacheDir, "gwx.pdf")
+            var invoicePdfFile = File(requireContext().externalCacheDir, "$soitestNumber soiltestreport.pdf")
             var inputStream: InputStream? = null
             var outputStream: OutputStream? = null
             try {

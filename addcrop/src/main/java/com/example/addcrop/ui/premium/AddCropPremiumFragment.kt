@@ -361,6 +361,7 @@ class AddCropPremiumFragment : Fragment() {
                             bundle.putString("irrigation_selected", irrigation_selected)
                             bundle.putString("numberOfPlanets", numberOfPlanets)
                             bundle.putString("crop_season",bahar_selected)
+                            bundle.putString("crop_year",year_selected)
 
                             if (accountID != null) {
                                 bundle.putInt("account_id", accountID!!)
