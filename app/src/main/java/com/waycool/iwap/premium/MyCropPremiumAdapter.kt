@@ -66,7 +66,6 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         }
 //
         holder.binding.tvCloudyNoDisease.isSelected = true
-        if (myCrop.disease == true) {
             if (myCrop.disease == true) {
                 //red-ic_cloudy_deng
                 holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
@@ -82,11 +81,8 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
             }
 
 //        holder.binding.tvCloudy.text=details.
-
-            holder.binding.cardAddDevice.setOnClickListener {
-                myCropListener.myCropListener(myCrop)
-            }
-
+        holder.binding.cardAddDevice.setOnClickListener {
+            myCropListener.myCropListener(myCrop)
         }
     }
     override fun getItemCount(): Int {
@@ -95,7 +91,4 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
 }
 
 class MyCropPremiumViewHolder(val binding: ItemPremiumCropsBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-
-}
+    RecyclerView.ViewHolder(binding.root)

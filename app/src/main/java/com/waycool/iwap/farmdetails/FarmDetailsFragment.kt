@@ -693,6 +693,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
             if (data.soilMoisture2 == null) {
                 it.bottomTop.visibility = View.GONE
+            }else{
+                it.bottomTop.visibility = View.VISIBLE
             }
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"

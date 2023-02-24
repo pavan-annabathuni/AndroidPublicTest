@@ -298,10 +298,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
         }
 
 
-        binding.tvLastUpdateRefresh.setOnClickListener {
-            updateDevice()
-
-        }
+        binding.tvLastUpdateRefresh.setOnClickListener { updateDevice() }
+        binding.ivUpdate.setOnClickListener { updateDevice() }
 
     }
 
@@ -590,6 +588,8 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             }
             if (data.soilMoisture2 == null) {
                 it.bottomTop.visibility = View.GONE
+            }else{
+                it.bottomTop.visibility=View.VISIBLE
             }
 
             var colorSectionListSM1 = mutableListOf<Section>()
