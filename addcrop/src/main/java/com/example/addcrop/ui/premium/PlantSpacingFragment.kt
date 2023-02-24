@@ -31,10 +31,12 @@ class PlantSpacingFragment : Fragment() {
     var crop_type: Int? = null
     var irrigation_selected: String? = null
     var noOFPlants: String? = null
+    var crop_season: String? = null
     var farm_id: Int? = null
     var acrea_type: String? = null
     var plantToPlant: String = ""
     var planetBed: String = ""
+    var crop_year: String? =null
     var dripEmitterRate: String = ""
 
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
@@ -64,6 +66,9 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants = arguments?.getString("numberOfPlanets")
                 farm_id = arguments?.getInt("farm_id")
                 acrea_type = arguments?.getString("area_type")
+                crop_season=arguments?.getString("crop_season")
+                crop_year=arguments?.getString("crop_year")
+
 
 
                 val map = mutableMapOf<String, Any>()
@@ -82,6 +87,12 @@ class PlantSpacingFragment : Fragment() {
                 if (crop_variety == 0) {
                 } else {
                     map["crop_variety_id"] = crop_variety.toString().toInt()
+                }
+                crop_season?.let {
+                    map.put("crop_season",it)
+                }
+                crop_year?.let {
+                    map.put("crop_year",it)
                 }
                 crop_type?.let { map.put("soil_type_id", it) }
                 nickname?.let { map.put("plot_nickname", it) }

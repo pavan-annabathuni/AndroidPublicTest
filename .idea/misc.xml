@@ -42,11 +42,11 @@
         <entry key="FeatureIrrigationPlanner/src/main/res/drawable/text_border_gray.xml" value="0.138" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/dailog_delete.xml" value="0.1175925925925926" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/dailog_delete_irrigartion.xml" value="0.2175925925925926" />
-        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_overview.xml" value="0.2640625" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_overview.xml" value="0.3543859649122807" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_crop_stage.xml" value="0.29391304347826086" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_disase_history.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_forecast.xml" value="0.176" />
-        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation.xml" value="0.22572614107883818" />
+        <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation.xml" value="0.21561632976615142" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_irrigation_history.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/fragment_sheet_harvest.xml" value="0.2833333333333333" />
         <entry key="FeatureIrrigationPlanner/src/main/res/layout/irrigation_pre_day.xml" value="0.2833333333333333" />
@@ -112,7 +112,7 @@
         <entry key="Profile/src/main/res/layout/dailog_support_delete.xml" value="0.18333333333333332" />
         <entry key="Profile/src/main/res/layout/fragment_about_outgrow.xml" value="0.1175925925925926" />
         <entry key="Profile/src/main/res/layout/fragment_add_farm.xml" value="0.335" />
-        <entry key="Profile/src/main/res/layout/fragment_add_farm_support.xml" value="0.2175925925925926" />
+        <entry key="Profile/src/main/res/layout/fragment_add_farm_support.xml" value="0.25" />
         <entry key="Profile/src/main/res/layout/fragment_edit_profile.xml" value="0.375" />
         <entry key="Profile/src/main/res/layout/fragment_farm_support.xml" value="0.2640625" />
         <entry key="Profile/src/main/res/layout/fragment_language.xml" value="0.21481481481481482" />
@@ -318,6 +318,7 @@
         <entry key="soiltesting/src/main/res/drawable/ic_add_crop_card.xml" value="0.181" />
         <entry key="soiltesting/src/main/res/drawable/ic_check_box.xml" value="0.1495" />
         <entry key="soiltesting/src/main/res/drawable/ic_location.xml" value="0.181" />
+        <entry key="soiltesting/src/main/res/layout/content_onp_soil_report_scale.xml" value="0.27783452502553624" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_history.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_services.xml" value="0.3098958333333333" />
         <entry key="soiltesting/src/main/res/layout/fragment_all_video.xml" value="0.2796296296296296" />
@@ -329,6 +330,7 @@
         <entry key="soiltesting/src/main/res/layout/fragment_soil_testing_home.xml" value="0.335" />
         <entry key="soiltesting/src/main/res/layout/fragment_status_tracker.xml" value="0.2947916666666667" />
         <entry key="soiltesting/src/main/res/layout/fragment_sucess_full.xml" value="0.21481481481481482" />
+        <entry key="soiltesting/src/main/res/layout/fragment_view_report.xml" value="0.27783452502553624" />
         <entry key="soiltesting/src/main/res/layout/item_flex_box_add_form.xml" value="0.16682113067655235" />
         <entry key="soiltesting/src/main/res/layout/item_labs_sample.xml" value="0.2796296296296296" />
         <entry key="soiltesting/src/main/res/layout/item_mandi.xml" value="0.4556838989257813" />

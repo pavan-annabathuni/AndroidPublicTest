@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Add Crop"
+                android:text="@string/add_crop"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -133,8 +133,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:toggle_requiredAmount="1"
-                        app:toggle_selectableAmount="1"> <!-- this attribute is from the underlying FlexboxLayout -->
+                        app:singleSelection="true">
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn1"
@@ -292,7 +291,8 @@
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayoutBedWidth"
                         app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
                         android:id="@+id/constraintLayoutBedWidth"
@@ -466,6 +466,7 @@
                         android:background="#fff"
                         android:hint="e.g 50 LPH"
                         android:inputType="numberDecimal"
+                        android:minHeight="48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3WidthDistance"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -561,6 +562,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

@@ -15,11 +15,13 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.squareup.picasso.Picasso
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.newsandarticles.R
 import com.waycool.newsandarticles.Util.AppUtil
 import com.waycool.newsandarticles.databinding.ActivityNewsFullLayoutBinding
 import com.waycool.newsandarticles.databinding.AudioNewLayoutBinding
-
+import com.waycool.uicomponents.utils.Constants
 import nl.changer.audiowife.AudioWife
 
 class NewsAndArticlesFullViewActivity : AppCompatActivity() {
@@ -31,6 +33,8 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
     var audioUrl: String? = null
     var newsDate: String? = null
     var source: String? = null
+    var vansType: String? = null
+
     var mediaPlayer: MediaPlayer? = null
     var audioWife: AudioWife? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +52,24 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             audioUrl = bundle.getString("audio")
             newsDate = bundle.getString("date")
             source = bundle.getString("source")
+            vansType = bundle.getString("vansType")
+
         }
         if (audioUrl.isNullOrEmpty()) {
             audioNewLayout.root.visibility = View.GONE
         } else {
             audioNewLayout.root.visibility = View.VISIBLE
         }
-        binding.newsHeading.text = "News Updates"
+        if(vansType=="news"){
+            vansType="News"
+        }
+        else if(vansType=="articles"){
+            vansType="Articles"
+        }
+        else{
+            vansType="Latest"
+        }
+        binding.newsHeading.text = "$vansType Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
         binding.desc.text = Html.fromHtml(desc?:"")
@@ -68,14 +83,14 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             val thumbnail = if(image.isNullOrEmpty()){
                image
             } else{
-                "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+                DeepLinkNavigator.DEFAULT_IMAGE_URL
             }
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
+                .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}&vansType=${vansType}"))
+                .setDomainUriPrefix(DOMAIN_URI_PREFIX)
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                        .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                         .build()
                 )
                 .setSocialMetaTagParameters(

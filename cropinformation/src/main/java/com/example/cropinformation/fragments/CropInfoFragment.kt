@@ -739,7 +739,7 @@ class CropInfoFragment : Fragment(), onItemClick {
         bundle.putString("audio", it?.audioUrl)
         bundle.putString("date", it?.startDate)
         bundle.putString("source", it?.sourceName)
-
+        bundle.putString("vansType", it?.vansType)
         findNavController().navigate(
             R.id.action_cropInfoFragment_to_newsFullviewActivity,
             bundle

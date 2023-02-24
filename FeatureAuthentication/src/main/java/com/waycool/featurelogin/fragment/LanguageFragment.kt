@@ -247,6 +247,6 @@ class LanguageFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         languageViewModel.getSelectedLangCode()
-        EventScreenTimeHandling.calculateScreenTime("LanguageScreen")
+        EventScreenTimeHandling.calculateScreenTime("Language Screen")
     }
 }

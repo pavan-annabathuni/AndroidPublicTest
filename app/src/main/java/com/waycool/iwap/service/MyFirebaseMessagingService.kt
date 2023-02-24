@@ -90,9 +90,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
-                    .bigLargeIcon(null)
             ).setLargeIcon(bitmap)
         }
+//        if (message.data["image"] != null) {
+//            val bitmap = getBitmapFromUrl(message.data["image"].toString())
+//            notificationBuilder.setStyle(
+//                NotificationCompat.BigPictureStyle()
+//                    .bigPicture(bitmap)
+//                    .bigLargeIcon(null as Bitmap?)
+//            ).setLargeIcon(bitmap)
+//        }
+
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Creating Channel

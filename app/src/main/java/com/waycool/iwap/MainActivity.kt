@@ -8,19 +8,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.InstallState
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.ActivityResult
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -30,10 +20,14 @@ import com.waycool.data.utils.Resource
 import com.waycool.data.worker.MasterDownloadWorker
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
 import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
@@ -49,9 +43,9 @@ class MainActivity : AppCompatActivity() {
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
 
-    private lateinit var appUpdateManager: AppUpdateManager
-    private val APP_UPDATE_REQUEST_CODE = 1001
-    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
+//    private lateinit var appUpdateManager: AppUpdateManager
+//    private val APP_UPDATE_REQUEST_CODE = 1001
+//    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
 
 //    private var appUpdate:AppUpdateManager?=null
 //    private val REQUEST_CODE=100
@@ -67,66 +61,111 @@ class MainActivity : AppCompatActivity() {
 //        inAppUpdate = InAppUpdate(this)
 //        appUpdate= AppUpdateManagerFactory.create(this)
 //        checkUpdate()
-        appUpdateManager = AppUpdateManagerFactory.create(this)
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+//        appUpdateManager = AppUpdateManagerFactory.create(this)
+//        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+//
+//
+//        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+//                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+//                // Request the update
+//                appUpdateManager.startUpdateFlowForResult(
+//                    appUpdateInfo,
+//                    AppUpdateType.IMMEDIATE,
+//                    this,
+//                    APP_UPDATE_REQUEST_CODE
+//                )
+//            }
+//        }
+//        installStateUpdatedListener = object : InstallStateUpdatedListener {
+//            override fun onStateUpdate(state: InstallState) {
+//                if (state.installStatus() == InstallStatus.DOWNLOADED) {
+//                    // notify user to install the update
+//                    popupSnackbarForCompleteUpdate()
+//                }
+//            }
+//        }
+//        appUpdateManager.registerListener(installStateUpdatedListener)
 
-
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                // Request the update
-                appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    AppUpdateType.IMMEDIATE,
-                    this,
-                    APP_UPDATE_REQUEST_CODE
-                )
-            }
-        }
-        installStateUpdatedListener = object : InstallStateUpdatedListener {
-            override fun onStateUpdate(state: InstallState) {
-                if (state.installStatus() == InstallStatus.DOWNLOADED) {
-                    // notify user to install the update
-                    popupSnackbarForCompleteUpdate()
+        tokenCheckViewModel.getUserDetails().observe(this) {
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val token: String = tokenCheckViewModel.getUserToken()
+                    validateToken(accountID.toString().toInt(), token)
                 }
             }
         }
-        appUpdateManager.registerListener(installStateUpdatedListener)
+    }
 
+    private fun getDeepLink() {
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
             if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                if (deepLink?.lastPathSegment == NEWS_ARTICLE) {
+                if (deepLink?.lastPathSegment!!.equals(NEWS_ARTICLE)) {
                     val title = deepLink.getQueryParameter("title")
                     val desc = deepLink.getQueryParameter("content")
                     val image = deepLink.getQueryParameter("image")
                     val audioUrl = deepLink.getQueryParameter("audio")
                     val newsDate = deepLink.getQueryParameter("date")
                     val source = deepLink.getQueryParameter("source")
+                    val vansType = deepLink.getQueryParameter("vansType")
+
                     if (!title.isNullOrEmpty()) {
                         val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
+                        if(!vansType.isNullOrEmpty()){
+                            intent.putExtra("vansType", vansType)
+                        }
+                        else{
+                            intent.putExtra("vansType", "")
+                        }
                         intent.putExtra("title", title)
                         intent.putExtra("content", desc)
                         intent.putExtra("image", image)
                         intent.putExtra("audio", audioUrl)
                         intent.putExtra("date", newsDate)
                         intent.putExtra("source", source)
+
                         startActivity(intent)
                     }
-                } else if (deepLink?.lastPathSegment == "rating") {
+                }
+                else if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+
+                }
+                else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                        Uri.parse(PLAY_STORE_LINK)
                     )
                     startActivity(intent)
-                } else if (deepLink?.lastPathSegment!!.contains("call")) {
+                } else if (deepLink?.lastPathSegment!!.contains(CALL)) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
                     startActivity(intent)
-                } else if (deepLink?.lastPathSegment!!.contains("newslist")) {
+                } else if(dashboardDomain?.subscription?.iot == true){
+                    if (deepLink?.lastPathSegment!! =="irrigation") {
+                        val plotId = deepLink.getQueryParameter("plot_id")
+                        if(!plotId.isNullOrEmpty()){
+                            val args = Bundle()
+                            args.putInt("plotId", plotId.toInt())
+//                            val navHostFragment = supportFragmentManager.findFragmentById(
+//                                R.id.nav_host_mainactivity
+//                            ) as NavHostFragment
+//                            navController = navHostFragment.navController
+
+
+                           navController?.navigate(
+                            R.id.action_homePagePremiumFragment3_to_navigation_irrigation,
+                                args
+                            )
+                        }
+                    }
+                } else if (deepLink.lastPathSegment!!.contains("newslist")) {
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
                 } else if (deepLink.lastPathSegment == "videoslist") {
@@ -168,18 +207,19 @@ class MainActivity : AppCompatActivity() {
                     .enqueue()
             }
         }
+
     }
 
-    private fun popupSnackbarForCompleteUpdate() {
-        val snackbar = Snackbar.make(
-            findViewById(R.id.nav_home),
-            "An update has just been downloaded.",
-            Snackbar.LENGTH_INDEFINITE
-        )
-        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
-        snackbar.setActionTextColor(resources.getColor(R.color.red))
-        snackbar.show()
-    }
+//    private fun popupSnackbarForCompleteUpdate() {
+//        val snackbar = Snackbar.make(
+//            findViewById(R.id.nav_home),
+//            "An update has just been downloaded.",
+//            Snackbar.LENGTH_INDEFINITE
+//        )
+//        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
+//        snackbar.setActionTextColor(resources.getColor(R.color.red))
+//        snackbar.show()
+//    }
 
 //    fun checkUpdate(){
 //        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
@@ -224,9 +264,11 @@ class MainActivity : AppCompatActivity() {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
                         if (it.data?.subscription?.iot == true) {
                             setupBottomNavigationAndNavigationGraph(isPremium = true)
+
                         } else {
                             setupBottomNavigationAndNavigationGraph(isPremium = false)
                         }
+                        getDeepLink()
                     }
                     is Resource.Loading -> {
 
@@ -287,25 +329,25 @@ class MainActivity : AppCompatActivity() {
             TranslationsManager().getStringAsLiveData("home")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home_premium) != null) {
                     bottomNavigationView.menu.findItem(R.id.nav_home_premium).title =
-                        it?.appValue ?: "Home"
+                        it.appValue ?: "Home"
                 }
             }
             TranslationsManager().getStringAsLiveData("services")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
                     bottomNavigationView.menu.findItem(R.id.nav_home).title =
-                        it?.appValue ?: "Services"
+                        it.appValue ?: "Services"
                 }
             }
             TranslationsManager().getStringAsLiveData("my_farm")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_myfarms) != null) {
                     bottomNavigationView.menu.findItem(R.id.nav_myfarms).title =
-                        it?.appValue ?: "My Farms"
+                        it.appValue ?: "My Farms"
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
                     bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
-                        it?.appValue ?: "Profile"
+                        it.appValue ?: "Profile"
                 }
             }
         } else {
@@ -315,26 +357,26 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
             TranslationsManager().getStringAsLiveData("home")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Home"
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it.appValue ?: "Home"
                 }
             }
             TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_mandi) != null) {
                     bottomNavigationView.menu.findItem(R.id.navigation_mandi).title =
-                        it?.appValue ?: "Market Place"
+                        it.appValue ?: "Market Place"
                 }
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_crop_protect) != null) {
                     bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title =
-                        it?.appValue ?: "Crop Protection"
+                        it.appValue ?: "Crop Protection"
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
 
                     bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
-                        it?.appValue ?: "Profile"
+                        it.appValue ?: "Profile"
                 }
             }
         }
@@ -388,28 +430,28 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == APP_UPDATE_REQUEST_CODE) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    // The update was successfully installed
-                    if (appUpdateManager != null) {
-                        appUpdateManager.unregisterListener(installStateUpdatedListener)
-                    }
-                    // Step 5: Update the NavGraph
-                    val navController = findNavController(R.id.homePagesFragment)
-                    navController.navigate(R.id.homePagesFragment)
-                }
-                RESULT_CANCELED -> {
-                    // The user canceled the update
-                }
-                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
-                    // The update failed to install
-                }
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == APP_UPDATE_REQUEST_CODE) {
+//            when (resultCode) {
+//                RESULT_OK -> {
+//                    // The update was successfully installed
+//                    if (appUpdateManager != null) {
+//                        appUpdateManager.unregisterListener(installStateUpdatedListener)
+//                    }
+//                    // Step 5: Update the NavGraph
+//                    val navController = findNavController(R.id.homePagesFragment)
+//                    navController.navigate(R.id.homePagesFragment)
+//                }
+//                RESULT_CANCELED -> {
+//                    // The user canceled the update
+//                }
+//                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+//                    // The update failed to install
+//                }
+//            }
+//        }
+//    }
 
     fun <T> LiveData<T>.observeOnce(
         owner: LifecycleOwner,

@@ -189,7 +189,7 @@ class AddFarmSupportFragment : Fragment() {
                         is Resource.Error -> {
                             context?.let { it1 ->
                                 ToastStateHandling.toastError(
-                                    it1,it.message.toString(),Toast.LENGTH_SHORT
+                                    it1,"Contact all ready taken or Invalid number ",Toast.LENGTH_SHORT
                                 )
                             }
                         }

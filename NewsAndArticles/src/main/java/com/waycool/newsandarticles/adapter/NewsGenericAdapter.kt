@@ -16,8 +16,6 @@ import com.waycool.newsandarticles.databinding.ViewholderNewsGenricBinding
 class NewsGenericAdapter (private val context: Context?, private val onItemClick: onItemClick):
     PagingDataAdapter<VansFeederListDomain, NewsGenericAdapter.VideosViewHolder>(COMPARATOR) {
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
         val binding =
             ViewholderNewsGenricBinding.inflate(

@@ -77,6 +77,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
+
 class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
 
     private var handler: Handler? = null
@@ -160,19 +161,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
-
-//        val callback: OnBackPressedCallback =
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    findNavController().popBackStack()
-//                }
-//            }
-//        activity?.let {
-//            it.onBackPressedDispatcher.addCallback(
-//                it,
-//                callback
-//            )
-//        }
         setWishes()
         checkNetwork()
         initClick()
@@ -494,7 +482,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
-
         binding.IvNotification.setOnClickListener {
             EventClickHandling.calculateClickEvent("NotificationsHomePagesFragment")
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
@@ -1326,6 +1313,8 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         bundle.putString("audio", it?.audioUrl)
         bundle.putString("date", it?.startDate)
         bundle.putString("source", it?.sourceName)
+        bundle.putString("vansType", it?.vansType)
+
         findNavController().navigate(
             R.id.action_homePagesFragment_to_newsFullviewActivity2,
             bundle

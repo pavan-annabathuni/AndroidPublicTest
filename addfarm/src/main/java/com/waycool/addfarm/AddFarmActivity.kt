@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.ADD_FARM
 
 class AddFarmActivity : AppCompatActivity() {
     lateinit var navHost: Fragment
@@ -22,7 +23,7 @@ class AddFarmActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink?.lastPathSegment != null) {
-                if (deepLink?.lastPathSegment!! == "addfarm") {
+                if (deepLink?.lastPathSegment!! == ADD_FARM) {
                     this@AddFarmActivity.findNavController(R.id.fragmentContainerView)
                         .navigate(R.id.drawFarmFragment)
 

@@ -185,7 +185,9 @@ object NetworkSource {
     fun getVansFeederSinglePage(queryMap: MutableMap<String, String>) = flow<Resource<VansFeederDTO?>> {
 
         try {
-            val headerMap: Map<String, String> = LocalSource.getHeaderMapSanctum()?: emptyMap()
+            val headerMap: MutableMap<String, String> = (LocalSource.getHeaderMapSanctum()?: emptyMap()).toMutableMap()
+            headerMap["x-api-key"] = AppSecrets.getApiKey()
+
             queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
 
             val response = apiInterface.getVansFeeder(headerMap, queryMap)
@@ -721,7 +723,7 @@ object NetworkSource {
             }
         } catch (e: Exception) {
             CrashAnalytics.crashAnalyticsError("pdfDownload Exception--${e.message}")
-            emit(Resource.Error(e.message))
+//            emit(Resource.Error(e.message))
         }
     }
 
@@ -939,6 +941,7 @@ object NetworkSource {
         } catch (e: Exception) {
             Log.d("Mycrops","${e.message}")
             CrashAnalytics.crashAnalyticsError("getMyCrop2 Exception--${e.message}")
+            Log.d("mycrops","Message: ${e.message}")
             emit(Resource.Error(e.message))
         }
     }
@@ -1370,7 +1373,9 @@ object NetworkSource {
     }
 
     fun getNotification() = flow<Resource<NotificationModel?>> {
-        val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val map = (LocalSource.getHeaderMapSanctum() ?: emptyMap()).toMutableMap()
+        map["x-api-key"] = AppSecrets.getApiKey()
+
         emit(Resource.Loading())
         try {
             val response = apiInterface.getNotification(map)
@@ -1407,9 +1412,10 @@ object NetworkSource {
 
     fun getDisease(account_id: Int, plot_id: Int) = flow<Resource<PestAndDiseaseModel?>> {
         val map = LocalSource.getHeaderMapSanctum() ?: emptyMap()
+        val langCode = LocalSource.getLanguageCode() ?: "en"
         emit(Resource.Loading())
         try {
-            val response = apiInterface.getDisease(map, account_id, plot_id)
+            val response = apiInterface.getDisease(map, account_id, plot_id,lang = langCode)
             if (response.isSuccessful)
                 emit(Resource.Success(response.body()))
             else {

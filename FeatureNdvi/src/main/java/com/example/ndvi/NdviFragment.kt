@@ -3,6 +3,7 @@ package com.example.ndvi
 import android.animation.LayoutTransition
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -192,6 +193,10 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                                     position: Int,
                                     p3: Long
                                 ) {
+                                    binding.dateSpinner.isEnabled = false
+                                    Handler().postDelayed({
+                                      binding.dateSpinner.isEnabled = true
+                                    },1000)
                                     selectedNdvi = ndviDataList?.get(position)
                                     showTileNDVI()
 
@@ -246,14 +251,14 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             } else {
                 selectedNdvi?.tile?.truecolor
             }
-            if (tileUrl.isNullOrEmpty() && URLUtil.isValidUrl(tileUrl)) {
+            if (tileUrl.isNullOrEmpty() || !URLUtil.isValidUrl(tileUrl)) {
+                Log.d("g56", "NDVI Url: $tileUrl")
                 ToastStateHandling.toastError(
                     requireContext(),
                     "Image Not Available",
                     Toast.LENGTH_LONG
                 )
             } else {
-
                 val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
                         var url: String = if (selectedTileType == TileType.NDVI) {
@@ -264,7 +269,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                         url = url.replace("{x}", x.toString() + "")
                         url = url.replace("{y}", y.toString() + "")
                         url = url.replace("{z}", zoom.toString() + "")
-                        Log.d("g56", "NDVI Url: $url")
+                        Log.d("g56", "NDVI Url: $tileUrl")
                         return try {
                             URL(url)
                         } catch (e: MalformedURLException) {
