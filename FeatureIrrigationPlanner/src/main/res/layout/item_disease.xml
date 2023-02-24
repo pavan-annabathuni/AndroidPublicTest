@@ -65,11 +65,11 @@
             android:layout_width="208dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_index_des"
+            app:layout_constraintBottom_toBottomOf="@+id/slider"
             app:layout_constraintStart_toEndOf="@+id/cv_img"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            app:layout_constraintTop_toTopOf="@+id/slider" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/slider"
@@ -87,7 +87,7 @@
             app:thumbColor="#EC4544"
             app:thumbRadius="10dp"
             app:trackColor="#00000000"
-            app:trackHeight="8dp" />
+            app:trackHeight="10dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
