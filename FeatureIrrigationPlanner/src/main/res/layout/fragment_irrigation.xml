@@ -708,15 +708,15 @@
                     <TextView
                         android:id="@+id/noPest"
                         android:layout_width="wrap_content"
-                        android:layout_height="200dp"
+                        android:layout_height="150dp"
                         android:layout_gravity="center"
                         android:drawablePadding="6dp"
                         android:gravity="center"
                         android:visibility="gone"
                         tools:visibility="visible"
-                        android:text="No risk outbreak for this tab"
+                        android:text="No risk outbreak changes"
                         android:textColor="@color/DarkGreen"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

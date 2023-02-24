@@ -71,7 +71,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private lateinit var videosBinding: GenericLayoutVideosListBinding
 
     //    private var audio: AudioWife? = null
-    lateinit var mediaPlayer: MediaPlayer
+   private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
@@ -762,7 +762,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         var totalDuration: Long = 0
         if (mediaPlayer != null) {
             try {
-                totalDuration = mediaPlayer.getDuration().toLong()
+                totalDuration = mediaPlayer.duration.toLong()
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             } catch (e: java.lang.Exception) {
@@ -782,7 +782,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         } else {
             Log.w("pestdisease", "Something strage this audio track duration in zero")
         }
-        binding.totalTime.setText(playbackStr)
+        binding.totalTime.text = playbackStr
 
         // DebugLog.i(currentTime + " / " + totalDuration);
     }
