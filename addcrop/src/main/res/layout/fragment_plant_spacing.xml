@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/add_crop"
+                android:text="Add Crop"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -124,7 +124,7 @@
 
                     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
                         android:id="@+id/constraintLayout3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="@drawable/bg_search"
@@ -133,11 +133,12 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:singleSelection="true">
+                        app:toggle_requiredAmount="1"
+                        app:toggle_selectableAmount="1"> <!-- this attribute is from the underlying FlexboxLayout -->
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
@@ -160,7 +161,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn3"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginEnd="@dimen/space4"
@@ -291,8 +292,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayoutBedWidth"
                         app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
                         android:id="@+id/constraintLayoutBedWidth"
@@ -309,7 +309,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthFt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
@@ -322,7 +322,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthCm"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
 
                             android:layout_marginTop="@dimen/space4"
@@ -334,7 +334,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthMtr"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
 
                             android:layout_marginTop="@dimen/space4"
@@ -466,7 +466,6 @@
                         android:background="#fff"
                         android:hint="e.g 50 LPH"
                         android:inputType="numberDecimal"
-                        android:minHeight="48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3WidthDistance"
                         app:layout_constraintHorizontal_bias="0.5"
