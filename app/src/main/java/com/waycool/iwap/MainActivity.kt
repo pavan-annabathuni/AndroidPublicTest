@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
@@ -27,8 +28,8 @@ import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
-import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,7 +106,12 @@ class MainActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                if (deepLink?.lastPathSegment!!.equals(NEWS_ARTICLE)) {
+                if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+
+                }
+               else if (deepLink?.lastPathSegment!! == NEWS_ARTICLE) {
                     val title = deepLink.getQueryParameter("title")
                     val desc = deepLink.getQueryParameter("content")
                     val image = deepLink.getQueryParameter("image")
@@ -132,11 +138,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
-                else if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
-                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
-                    startActivity(intent)
 
-                }
                 else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
@@ -153,10 +155,6 @@ class MainActivity : AppCompatActivity() {
                         if(!plotId.isNullOrEmpty()){
                             val args = Bundle()
                             args.putInt("plotId", plotId.toInt())
-//                            val navHostFragment = supportFragmentManager.findFragmentById(
-//                                R.id.nav_host_mainactivity
-//                            ) as NavHostFragment
-//                            navController = navHostFragment.navController
 
 
                            navController?.navigate(
@@ -171,6 +169,11 @@ class MainActivity : AppCompatActivity() {
                 } else if (deepLink.lastPathSegment == "videoslist") {
                     val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
+                }
+                else if(deepLink.lastPathSegment=="invite"){
+                    findNavController(R.id.nav_host_mainactivity).navigate(
+                     R.id.nav_home)
+
                 }
             }
         }
