@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
@@ -20,11 +21,15 @@ import com.waycool.data.utils.Resource
 import com.waycool.data.worker.MasterDownloadWorker
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
 import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,13 +88,30 @@ class MainActivity : AppCompatActivity() {
 //        }
 //        appUpdateManager.registerListener(installStateUpdatedListener)
 
+        tokenCheckViewModel.getUserDetails().observe(this) {
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val token: String = tokenCheckViewModel.getUserToken()
+                    validateToken(accountID.toString().toInt(), token)
+                }
+            }
+        }
+    }
+
+    private fun getDeepLink() {
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
             if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                if (deepLink?.lastPathSegment == NEWS_ARTICLE) {
+                if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+
+                }
+               else if (deepLink?.lastPathSegment!! == NEWS_ARTICLE) {
                     val title = deepLink.getQueryParameter("title")
                     val desc = deepLink.getQueryParameter("content")
                     val image = deepLink.getQueryParameter("image")
@@ -115,22 +137,43 @@ class MainActivity : AppCompatActivity() {
 
                         startActivity(intent)
                     }
-                } else if (deepLink?.lastPathSegment == "rating") {
+                }
+
+                else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                        Uri.parse(PLAY_STORE_LINK)
                     )
                     startActivity(intent)
-                } else if (deepLink?.lastPathSegment!!.contains("call")) {
+                } else if (deepLink?.lastPathSegment!!.contains(CALL)) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse(Contants.CALL_NUMBER)
                     startActivity(intent)
+                } else if(dashboardDomain?.subscription?.iot == true){
+                    if (deepLink?.lastPathSegment!! =="irrigation") {
+                        val plotId = deepLink.getQueryParameter("plot_id")
+                        if(!plotId.isNullOrEmpty()){
+                            val args = Bundle()
+                            args.putInt("plotId", plotId.toInt())
+
+
+                           navController?.navigate(
+                            R.id.action_homePagePremiumFragment3_to_navigation_irrigation,
+                                args
+                            )
+                        }
+                    }
                 } else if (deepLink.lastPathSegment!!.contains("newslist")) {
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
                 } else if (deepLink.lastPathSegment == "videoslist") {
                     val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
+                }
+                else if(deepLink.lastPathSegment=="invite"){
+                    findNavController(R.id.nav_host_mainactivity).navigate(
+                     R.id.nav_home)
+
                 }
             }
         }
@@ -167,6 +210,7 @@ class MainActivity : AppCompatActivity() {
                     .enqueue()
             }
         }
+
     }
 
 //    private fun popupSnackbarForCompleteUpdate() {
@@ -223,9 +267,11 @@ class MainActivity : AppCompatActivity() {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
                         if (it.data?.subscription?.iot == true) {
                             setupBottomNavigationAndNavigationGraph(isPremium = true)
+
                         } else {
                             setupBottomNavigationAndNavigationGraph(isPremium = false)
                         }
+                        getDeepLink()
                     }
                     is Resource.Loading -> {
 

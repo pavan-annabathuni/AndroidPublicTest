@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.ADD_CROP
 
 class AddCropActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +18,7 @@ class AddCropActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink?.lastPathSegment != null) {
-                if (deepLink?.lastPathSegment!! == "addcrop") {
+                if (deepLink?.lastPathSegment!! == ADD_CROP) {
                     this.findNavController(R.id.fragmentContainerView)
                         .navigate(R.id.selectAddCropFragment)
 

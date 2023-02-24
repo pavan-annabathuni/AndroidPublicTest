@@ -21,9 +21,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/cropprotect"
-                    android:scheme="https" />
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -32,9 +32,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/pestdiseasedetail"
-                    android:scheme="https" />
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -43,9 +43,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/pestdisease"
-                    android:scheme="https" />
+                    android:scheme="http" />
             </intent-filter>
         </activity>
 

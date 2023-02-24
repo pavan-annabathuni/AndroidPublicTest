@@ -8,6 +8,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
@@ -40,12 +41,14 @@ import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
+import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +114,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-
                 val intent =
                     Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
                 startActivity(intent)
@@ -375,7 +377,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
             it?.thumbnailUrl
         } else{
-            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+            DeepLinkNavigator.DEFAULT_IMAGE_URL
         }
         val eventBundle=Bundle()
         eventBundle.putString("NewsAndArticlesTitle", it?.title)
@@ -383,12 +385,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_share",eventBundle)
+
+        Log.d("NewsAndArticlesShare","NewsAndArticles Domain $DOMAIN_URI_PREFIX")
+
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(
@@ -407,9 +412,14 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    Log.d("NewsAndArticlesShare","NewsAndArticles Short link ${shortLink.toString()}")
+
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
+                }
+                else{
+                    Log.d("NewsAndArticlesShare","NewsAndArticlesShare ${task.exception}")
                 }
             }
     }

@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/soiltesting"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
 
             <intent-filter >
@@ -34,9 +34,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/soiltestinghistory"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
 
             <intent-filter >
@@ -44,9 +44,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/soiltestinghistorystatus"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
         </activity>
         <provider
