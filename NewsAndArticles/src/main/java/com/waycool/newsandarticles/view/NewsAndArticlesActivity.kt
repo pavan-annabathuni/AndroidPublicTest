@@ -8,6 +8,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
@@ -384,6 +385,9 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_share",eventBundle)
+
+        Log.d("NewsAndArticlesShare","NewsAndArticles Domain $DOMAIN_URI_PREFIX")
+
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
             .setDomainUriPrefix(DOMAIN_URI_PREFIX)
@@ -408,9 +412,14 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    Log.d("NewsAndArticlesShare","NewsAndArticles Short link ${shortLink.toString()}")
+
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
+                }
+                else{
+                    Log.d("NewsAndArticlesShare","NewsAndArticlesShare ${task.exception}")
                 }
             }
     }

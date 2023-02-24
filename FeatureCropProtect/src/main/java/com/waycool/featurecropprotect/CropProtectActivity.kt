@@ -29,14 +29,12 @@ class CropProtectActivity : AppCompatActivity() {
 
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment!!.equals(
-                        PEST_DISEASE_DETAIL,
-                        ignoreCase = true
-                    )
-                ) {
+                if (deepLink.lastPathSegment!!.equals(PEST_DISEASE_DETAIL, ignoreCase = true)) {
                     val diseaseId = deepLink.getQueryParameter("disease_id")
                     val diseaseName = deepLink.getQueryParameter("disease_name")
-                    if (!diseaseId.isNullOrEmpty() && !diseaseName.isNullOrEmpty()) {
+                    Log.d("DeepLinkURL","DeepLinkURL Pest $deepLink    DiseaseDetail $diseaseName $diseaseId")
+
+                    if (!diseaseId.isNullOrEmpty()) {
                         val args = Bundle()
 
                         args.putInt("diseaseid", diseaseId.toInt())
@@ -47,7 +45,8 @@ class CropProtectActivity : AppCompatActivity() {
                             args
                         )
                     }
-                } else if (deepLink.lastPathSegment!!.equals(
+                }
+                else if (deepLink.lastPathSegment!!.equals(
                         PEST_DISEASE,
                         ignoreCase = true
                     )
