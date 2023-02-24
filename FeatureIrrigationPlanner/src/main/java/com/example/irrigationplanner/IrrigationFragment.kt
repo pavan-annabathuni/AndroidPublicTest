@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,8 +31,6 @@ import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
-import com.waycool.data.eventscreentime.EventClickHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
@@ -42,7 +41,6 @@ import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -653,10 +651,10 @@ setDetails()
                     val toastEnterFields = TranslationsManager().getString("toast_enter_all_field")
                     if(!toastEnterFields.isNullOrEmpty()){
                         context?.let { it1 -> ToastStateHandling.toastError(it1,toastEnterFields,
-                            Toast.LENGTH_SHORT
+                            LENGTH_SHORT
                         ) }}
                     else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please enter all the mandatory fields",
-                        Toast.LENGTH_SHORT
+                   LENGTH_SHORT
                     ) }}}
 
             }
