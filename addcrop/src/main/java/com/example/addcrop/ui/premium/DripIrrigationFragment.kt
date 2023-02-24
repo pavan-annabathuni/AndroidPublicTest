@@ -1,21 +1,21 @@
 package com.example.addcrop.ui.premium
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.databinding.ActivityAddCropBinding.inflate
-import com.example.addcrop.databinding.FragmentAddCropBinding.inflate
-import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.databinding.FragmentAddCropDetailsBinding.inflate
+import com.example.addcrop.R
+import com.example.addcrop.databinding.FragmentDripIrrigationBinding
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
-import com.example.addcrop.databinding.ItemEditCropBinding.inflate
-import com.example.addcrop.databinding.ItemSelectedCropListBinding.inflate
 import com.example.addcrop.viewmodel.AddCropViewModel
+import com.google.android.material.button.MaterialButton
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
@@ -25,8 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class PlantSpacingFragment : Fragment() {
-    private var _binding: FragmentPlantSpacingBinding? = null
+class DripIrrigationFragment : Fragment() {
+    private var _binding: FragmentDripIrrigationBinding? = null
     private val binding get() = _binding!!
     var area: String? = null
     var date: String? = null
@@ -47,17 +47,19 @@ class PlantSpacingFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPlantSpacingBinding.inflate(inflater, container, false)
+        _binding = FragmentDripIrrigationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         translationForPlantSpacingDripIrrigation()
+
         viewModel.getUserDetails().observe(viewLifecycleOwner) { userDetails ->
             val accountID = userDetails.data?.accountId
             if (arguments != null) {
@@ -109,6 +111,100 @@ class PlantSpacingFragment : Fragment() {
                 map["area_type"] = acrea_type.toString().lowercase()
                 map["len_drip"] = binding.etNumber.text
                 map["width_drip"] = binding.etNumberWidth.text
+
+                binding.buttonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                    try {
+                        if (binding.etNumber.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant to Plant Distance",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val selectedButton = group.findViewById<MaterialButton>(checkedId)
+                            selectedButton.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.selected
+                                )
+                            )
+                            selectedButton.backgroundTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.selected
+                                )
+                            )
+                            if (selectedButton.text == "ft") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                            } else if (selectedButton.text == "cm") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                            } else if ((selectedButton.text == "mtr")) {
+                                map["len_drip"] = binding.etNumber.text
+                            }
+
+                            for (button in group.children) {
+                                if (button.id != checkedId) {
+                                    button.backgroundTintList = ColorStateList.valueOf(
+                                        ContextCompat.getColor(
+                                            requireContext(),
+                                            R.color.un_selected
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    } catch (e: NumberFormatException) {
+                        println()
+                    }
+                }
+                binding.buttonToggleGroupOne.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                    try {
+                        if (binding.etNumberWidth.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant to Plant Distance",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val selectedButton = group.findViewById<MaterialButton>(checkedId)
+                            selectedButton.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.selected
+                                )
+                            )
+                            selectedButton.backgroundTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.selected
+                                )
+                            )
+                            if (selectedButton.text == "ft") {
+                                map["width_drip"] =
+                                    binding.etNumberWidth.text.toString().toInt() * 0.305
+                            } else if (selectedButton.text == "cm") {
+                                map["width_drip"] =
+                                    binding.etNumberWidth.text.toString().toInt() * 0.01
+                            } else if ((selectedButton.text == "mtr")) {
+                                map["width_drip"] = binding.etNumberWidth.text
+                            }
+
+                            for (button in group.children) {
+                                if (button.id != checkedId) {
+                                    button.backgroundTintList = ColorStateList.valueOf(
+                                        ContextCompat.getColor(
+                                            requireContext(),
+                                            R.color.un_selected
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    } catch (e: NumberFormatException) {
+                        println()
+                    }
+                }
+
 
 //                binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
 //                    try {
@@ -162,52 +258,53 @@ class PlantSpacingFragment : Fragment() {
 //
 //
 //                }
-                binding.cardCheckHealth.setOnClickListener {
-                    plantToPlant = binding.etNumber.text.toString().trim()
-                    planetBed = binding.etNumberWidth.text.toString().trim()
-                    dripEmitterRate = binding.etNumberWidthDistance.text.toString().trim()
-                    if (plantToPlant.isEmpty()) {
-                        binding.etNumber.error = "Enter Plant to Plant Distance"
-                    } else if (planetBed.isEmpty()) {
-                        binding.etNumberWidth.error = "Plant Bed width"
-                    } else if (dripEmitterRate.isEmpty()) {
-                        binding.etNumberWidthDistance.error = "Drip Emitter Rate Per Plant"
-                    } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
-                        binding.progressBar?.visibility = View.VISIBLE
-                        binding.cardCheckHealth.visibility = View.GONE
-                        viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip ->
-                            when (addCropDrip) {
-                                is Resource.Success -> {
-                                    binding.progressBar?.visibility = View.INVISIBLE
-                                    binding.cardCheckHealth.visibility = View.VISIBLE
-                                    activity?.finish()
-                                }
-                                is Resource.Error -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        addCropDrip.message.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                    binding.cardCheckHealth.setOnClickListener {
+                        plantToPlant = binding.etNumber.text.toString().trim()
+                        planetBed = binding.etNumberWidth.text.toString().trim()
+                        dripEmitterRate = binding.etNumberWidthDistance.text.toString().trim()
+                        if (plantToPlant.isEmpty()) {
+                            binding.etNumber.error = "Enter Plant to Plant Distance"
+                        } else if (planetBed.isEmpty()) {
+                            binding.etNumberWidth.error = "Plant Bed width"
+                        } else if (dripEmitterRate.isEmpty()) {
+                            binding.etNumberWidthDistance.error = "Drip Emitter Rate Per Plant"
+                        } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
+                            binding.progressBar?.visibility = View.VISIBLE
+                            binding.cardCheckHealth.visibility = View.GONE
+                            viewModel.addCropDataPass(map)
+                                .observe(requireActivity()) { addCropDrip ->
+                                    when (addCropDrip) {
+                                        is Resource.Success -> {
+                                            binding.progressBar?.visibility = View.INVISIBLE
+                                            binding.cardCheckHealth.visibility = View.VISIBLE
+                                            activity?.finish()
+                                        }
+                                        is Resource.Error -> {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                addCropDrip.message.toString(),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
+                                        }
+                                        is Resource.Loading -> {
+                                            AppUtils.translatedToastLoading(context)
+                                        }
+                                    }
                                 }
-                                is Resource.Loading -> {
-                                    AppUtils.translatedToastLoading(context)
-                                }
-                            }
                         }
+
                     }
 
+
+                }
+                binding.toolbar.setOnClickListener {
+                    val isSuccess = findNavController().navigateUp()
+                    if (!isSuccess) requireActivity().onBackPressed()
                 }
 
 
             }
-            binding.toolbar.setOnClickListener {
-                val isSuccess = findNavController().navigateUp()
-                if (!isSuccess) requireActivity().onBackPressed()
-            }
-
-
-        }
     }
 
     private fun translationForPlantSpacingDripIrrigation() {
@@ -237,6 +334,7 @@ class PlantSpacingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("PlantSpacingFragment")
+        EventScreenTimeHandling.calculateScreenTime("DripIrrigationFragment")
     }
+
 }

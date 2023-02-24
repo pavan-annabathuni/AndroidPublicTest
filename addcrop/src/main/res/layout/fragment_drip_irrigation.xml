@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.premium.PlantSpacingFragment">
+    tools:context=".ui.premium.DripIrrigationFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Add Crop"
+                android:text="@string/add_crop"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -117,116 +117,107 @@
                         android:hint="e.g 5 ft"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonToggleGroup"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-                        android:id="@+id/constraintLayout3"
-                        android:layout_width="120dp"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/buttonToggleGroup"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="@drawable/bg_search"
-                        app:justifyContent="center"
-
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:toggle_requiredAmount="1"
-                        app:toggle_selectableAmount="1"> <!-- this attribute is from the underlying FlexboxLayout -->
+                        app:singleSelection="true">
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn1"
-                            android:layout_width="@dimen/space40"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginStart="@dimen/space4"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="ft" />
-
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn2"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button1"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="cm" />
-
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn3"
-                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginEnd="@dimen/space4"
                             android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="mtr" />
+                            android:text="ft"
+                            android:textColor="#000000" />
 
-                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginEnd="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
+                            android:text="cm"
+                            android:textColor="@color/black"
+                            app:backgroundTint="#FFFFFF" />
 
-                    <!--                    <com.google.android.material.button.MaterialButtonToggleGroup-->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space40"
+                            android:layout_marginTop="@dimen/space4"
+                            android:layout_marginEnd="@dimen/space4"
+                            android:layout_marginBottom="@dimen/space4"
+                            android:text="mtr"
+                            android:textColor="@color/black"
+                            app:backgroundTint="#FFFFFF" />
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+                    <!--                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup-->
                     <!--                        android:id="@+id/constraintLayout3"-->
                     <!--                        android:layout_width="wrap_content"-->
                     <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_margin="@dimen/space4"-->
+                    <!--                        android:layout_margin="4dp"-->
+                    <!--                        android:background="@drawable/bg_search"-->
+                    <!--                        app:justifyContent="center"-->
+
                     <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
                     <!--                        app:layout_constraintEnd_toEndOf="parent"-->
                     <!--                        app:layout_constraintTop_toTopOf="parent"-->
                     <!--                        app:singleSelection="true"-->
                     <!--                        >-->
 
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvMtr"-->
-                    <!--                            style="@style/Praveen"-->
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/btn1"-->
                     <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="@string/mtr"-->
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent"-->
-                    <!--                            tools:text="@string/mtr" />-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+                    <!--                            android:layout_marginStart="@dimen/space4"-->
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="ft" />-->
 
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvCm"-->
-                    <!--                            style="@style/Praveen"-->
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/btn2"-->
                     <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="cm"-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="cm" />-->
 
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvMtr"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvFt"-->
-                    <!--                            style="@style/Praveen"-->
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/btn3"-->
                     <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="ft"-->
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvCm"-->
-                    <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginEnd="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="mtr" />-->
 
-                    <!--                    </com.google.android.material.button.MaterialButtonToggleGroup>-->
+                    <!--                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>-->
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -289,63 +280,107 @@
                         android:hint="e.g 5 ft"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/constraintLayoutBedWidth"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonToggleGroupOne"
                         app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="TouchTargetSizeCheck" />
 
-                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-                        android:id="@+id/constraintLayoutBedWidth"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/buttonToggleGroupOne"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:background="@drawable/bg_search"
-                        app:justifyContent="center"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:toggle_requiredAmount="1"
-                        app:toggle_selectableAmount="1"> <!-- this attribute is from the underlying FlexboxLayout -->
+                        app:singleSelection="true">
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthFt"
-                            android:layout_width="@dimen/space40"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button4"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginBottom="@dimen/space4"
-                            android:checked="true"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="ft" />
+                            android:text="ft"
+                            android:textColor="#FFFFFF" />
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthCm"
-                            android:layout_width="@dimen/space40"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button5"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/space40"
-
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="cm" />
+                            android:text="cm"
+                            android:textColor="@color/black"
+                            app:backgroundTint="#FFFFFF" />
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthMtr"
-                            android:layout_width="@dimen/space40"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button6"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/space40"
-
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginEnd="@dimen/space4"
                             android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="mtr" />
+                            android:text="mtr"
+                            android:textColor="@color/black"
+                            app:backgroundTint="#FFFFFF" />
 
-                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                    <!--                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup-->
+                    <!--                        android:id="@+id/constraintLayoutBedWidth"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_margin="4dp"-->
+                    <!--                        android:background="@drawable/bg_search"-->
+                    <!--                        app:justifyContent="center"-->
+                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+                    <!--                        app:toggle_requiredAmount="1"-->
+                    <!--                        app:toggle_selectableAmount="1"-->
+                    <!--                        > &lt;!&ndash; this attribute is from the underlying FlexboxLayout &ndash;&gt;-->
+
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/BedWidthFt"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+                    <!--                            android:layout_marginStart="@dimen/space4"-->
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            android:checked="true"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="ft" />-->
+
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/BedWidthCm"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="cm" />-->
+
+                    <!--                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+                    <!--                            android:id="@+id/BedWidthMtr"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="@dimen/space40"-->
+
+                    <!--                            android:layout_marginTop="@dimen/space4"-->
+                    <!--                            android:layout_marginEnd="@dimen/space4"-->
+                    <!--                            android:layout_marginBottom="@dimen/space4"-->
+                    <!--                            app:toggle_backgroundColor="#FFFFFF"-->
+                    <!--                            app:toggle_btnCornerRadius="8dp"-->
+                    <!--                            app:toggle_selectedBackgroundColor="#146133"-->
+                    <!--                            app:toggle_text="mtr" />-->
+
+                    <!--                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>-->
 
                     <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
                     <!--                        android:id="@+id/constraintLayout3Width"-->
@@ -466,6 +501,7 @@
                         android:background="#fff"
                         android:hint="e.g 50 LPH"
                         android:inputType="numberDecimal"
+                        android:minHeight="48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3WidthDistance"
                         app:layout_constraintHorizontal_bias="0.5"
