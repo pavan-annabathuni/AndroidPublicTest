@@ -31,13 +31,13 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -571,7 +571,6 @@ setDetails()
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
             val data = it.data?.first { plot ->
                 plot.id == plotId
-
             }
             cropId = data?.cropId
             cropLogo = data?.cropLogo
@@ -586,23 +585,40 @@ setDetails()
                 binding.clCropStage.visibility = View.GONE
             }
 
-            if (data?.irrigationRequired == null) {
+            if(data?.farmId == null){
                 binding.gwxIrrigation.visibility = View.GONE
-                binding.btHarvest.visibility = View.GONE
                 binding.noDeviceCv.visibility = View.VISIBLE
-            } else {
-                binding.gwxIrrigation.visibility = View.VISIBLE
-                binding.noDeviceCv.visibility = View.GONE
+                binding.tvIrrigationMessage.text = "Crop is not associated with the farm. Kindly add crop to the farm."
+            }else if(data.device == null){
+                binding.gwxIrrigation.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Device is not added to farm. Kindly add the device to farm."
+            }
+            else if(!data.device.equals("GWX", ignoreCase = true)){
+                binding.gwxIrrigation.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Irrigation planner is not availble. Contact the customer support for further information."
+            }
+            else if(data.irrigationPlannerForThisCrop != true){
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Currently irrigation planner is not avialble for the selected crop."
+            }
+            else if(checkForCropMissingInfo(data)){
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Crop have some missing information. Kindly delete the selected crop and add the same crop again with necessary information."
+            }
+            else if(checkingSowingFutureDate(data.sowingDate)){
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Irrigation planner will be available, once the sowing date is reached."
             }
 
-
-            if (data?.disease == false) {
-                binding.tabLayout.visibility = View.GONE
-                binding.rvDis.visibility = View.GONE
-            } else {
-                binding.tabLayout.visibility = View.VISIBLE
-                binding.rvDis.visibility = View.VISIBLE
+            if(data?.diseaseDetectionForThisCrop!= true){
+                binding.gwxDiseaseCl.visibility = View.GONE
             }
+
 
             viewModel.viewModelScope.launch {
                 if (data?.irrigationRequired == false) {
@@ -644,8 +660,20 @@ setDetails()
 
             CropStageDate = data?.sowingDate
 
-            CropStageDate?.let { it1 -> checkingFutureDate(it1) }
+//            CropStageDate?.let { it1 -> checkingSowingFutureDate(it1) }
         }
+    }
+
+    private fun checkForCropMissingInfo(data: MyCropDataDomain): Boolean {
+        if(data.sowingDate.isNullOrEmpty())
+            return true
+        if(data.area.isNullOrEmpty() || data.area?.toDouble()!! <= 0.0)
+            return true
+        if(data.soilType.isNullOrEmpty())
+            return true
+        if(data.irrigationType.isNullOrEmpty())
+            return true
+        return false
     }
 
     private fun translation() {
@@ -674,7 +702,7 @@ setDetails()
         TranslationsManager().loadString("str_edit", binding.tvEdit, "Edit")
         TranslationsManager().loadString(
             "str_risk_outbreak",
-            binding.textView9,
+            binding.tvTodayRisk,
             "Today Risk Outbreak Chances"
         )
         TranslationsManager().loadString(
@@ -810,19 +838,24 @@ setDetails()
         }
     }
 
-    private fun checkingFutureDate(sowingDate: String) {
+    private fun checkingSowingFutureDate(sowingDate: String?):Boolean {
         val currentTime = Calendar.getInstance().time
 
 // Create a Date object for the date you want to compare
         val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(sowingDate)
 
 // Compare the two dates
-        if (sowingDate.after(currentTime)) {
-            // The compareDate is in the future
-            // Do something
-            binding.FutureCv.visibility = View.VISIBLE
-            binding.gwxIrrigation.visibility = View.GONE
-            binding.btHarvest.visibility = View.GONE
+        if (sowingDate != null) {
+            if (sowingDate.after(currentTime)) {
+                return true
+                // The compareDate is in the future
+                // Do something
+//                binding.noDeviceCv.visibility = View.GONE
+//                binding.FutureCv.visibility = View.VISIBLE
+//                binding.gwxIrrigation.visibility = View.GONE
+//                binding.btHarvest.visibility = View.GONE
+            }
         }
+        return false
     }
 }

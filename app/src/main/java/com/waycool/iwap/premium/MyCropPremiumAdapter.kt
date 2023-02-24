@@ -7,6 +7,9 @@ import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.iwap.databinding.ItemPremiumCropsBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MyCropPremiumAdapter(val myCropListener: myCropListener) :
     RecyclerView.Adapter<MyCropPremiumViewHolder>() {
@@ -84,6 +87,14 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         holder.binding.cardAddDevice.setOnClickListener {
             myCropListener.myCropListener(myCrop)
         }
+
+        if(!myCrop.sowingDate.isNullOrEmpty()){
+        val currentTime = Calendar.getInstance().time
+        val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(myCrop.sowingDate)
+        if (sowingDate.after(currentTime)) {
+            holder.binding.tvCloudy.text = "-NA-"
+            holder.binding.tvCloudyNoDisease.text = "-NA-"
+        }}
     }
     override fun getItemCount(): Int {
         return details.size

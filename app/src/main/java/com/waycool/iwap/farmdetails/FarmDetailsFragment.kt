@@ -280,7 +280,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.toolbarTextFarm.text = myFarm?.farmName
         binding.tvPempDate.text = myFarm?.farmPumpHp ?: "NA"
         binding.totalFormDate.text = myFarm?.farmPumpType ?: "NA"
-        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize ?: "NA"
+        binding.totalHeightInches.text = myFarm?.farmPumpDepth ?: "NA"
+        binding.totalPempInches.text = myFarm?.farmPumpPipeSize?: "NA"
         binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate ?: "NA"
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE

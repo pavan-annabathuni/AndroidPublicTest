@@ -29,11 +29,11 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 
 object CropsRepository {
-    fun downloadPestDiseases(){
+    fun downloadPestDiseases() {
         PestDiseaseSyncer().downloadData()
     }
 
-  fun downloadCropInfo(){
+    fun downloadCropInfo() {
         CropInformationSyncer().downloadData()
     }
 
@@ -128,7 +128,7 @@ object CropsRepository {
         }
     }
 
-  fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
+    fun getIrrigationCrops(searchQuery: String? = ""): Flow<Resource<List<CropMasterDomain>?>> {
         return CropMasterSyncer.getIrrigationCrops(searchQuery).map {
             when (it) {
                 is Resource.Success -> {
@@ -267,7 +267,7 @@ object CropsRepository {
         }
     }
 
-    fun farmDetailsDelta(farmId:Int): Flow<Resource<FarmDetailsDTO?>> {
+    fun farmDetailsDelta(farmId: Int): Flow<Resource<FarmDetailsDTO?>> {
 //        GlobalScope.launch {
 //            MyCropSyncer().invalidateSync()
 //        }
@@ -293,12 +293,13 @@ object CropsRepository {
             }
         }
     }
+
     fun cropVariety(crop_id: Int): Flow<Resource<List<VarietyCropDomain>?>> {
         return NetworkSource.cropVariety(crop_id).map {
             when (it) {
                 is Resource.Success -> {
                     Resource.Success(
-                        VarietyCropDomainMapper().toDomainList(it.data?.data?: emptyList())
+                        VarietyCropDomainMapper().toDomainList(it.data?.data ?: emptyList())
 //                        SoilTestHistoryDomainMapper().toDomainList(it.data?: emptyList())
                     )
                 }
@@ -311,6 +312,7 @@ object CropsRepository {
             }
         }
     }
+
     fun pdfDownload(soil_test_request_id: Int): Flow<Resource<ResponseBody?>> {
         return NetworkSource.pdfDownload(soil_test_request_id)
     }
@@ -452,7 +454,7 @@ object CropsRepository {
         state: String,
         district: String,
         number: String,
-        crop_id:Int
+        crop_id: Int
     ): Flow<Resource<SoilTestResponseDTO?>> {
 
         return NetworkSource.postNewSoil(
@@ -513,6 +515,7 @@ object CropsRepository {
             }
 
     }
+
     fun getAiCropHistory(searchQuery: String? = ""): Flow<Resource<List<AiCropHistoryDomain>?>> {
         return AiCropHistorySyncer().getDataFromAiHistoryData(searchQuery).map {
             when (it) {
@@ -521,9 +524,9 @@ object CropsRepository {
                     var domainList =
                         AiCropHistoryDomainMapper().toDomainList(it.data ?: emptyList())
 
-                    domainList=domainList.map { history->
-                        history.disease_name= history.disease_id?.let { it1 ->
-                            LocalSource.getSelectedDiseaseEntity(it1)?.diseaseName?:"--"
+                    domainList = domainList.map { history ->
+                        history.disease_name = history.disease_id?.let { it1 ->
+                            LocalSource.getSelectedDiseaseEntity(it1)?.diseaseName ?: "--"
                         }
                         history
                     }
@@ -621,9 +624,38 @@ object CropsRepository {
             when (it) {
                 is Resource.Success -> {
                     Log.d("MyCrops", " ${it.data}")
+                    var myCropDataDomain = MyCropDomainMapper().toDomainList(it.data ?: emptyList())
+
+                    myCropDataDomain = myCropDataDomain.map { crop ->
+                        val device =
+                            crop.farmId?.let { it1 -> LocalSource.getDevicesByFarmEntity(it1) }
+                        crop.device = if (device?.firstOrNull()?.modelSeries.equals(
+                                "gwx",
+                                ignoreCase = true
+                            )
+                        ) "GWX" else if (device?.firstOrNull()?.modelSeries.equals(
+                                "gsx",
+                                ignoreCase = true
+                            )
+                        ) "GSX"
+                        else null
+                        crop.diseaseDetectionForThisCrop = crop.cropId?.let { it1 ->
+                            LocalSource.getCropFromMasterById(
+                                it1
+                            )?.diseasePrediction
+                        } == 1
+                        crop.irrigationPlannerForThisCrop = crop.cropId?.let { it1 ->
+                            LocalSource.getCropFromMasterById(
+                                it1
+                            )?.waterModel
+                        } == 1
+
+                        crop
+                    }
+
 
                     Resource.Success(
-                        MyCropDomainMapper().toDomainList(it.data ?: emptyList())
+                        myCropDataDomain
                     )
                 }
                 is Resource.Loading -> {

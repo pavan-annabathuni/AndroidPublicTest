@@ -48,7 +48,6 @@ class MyCropSyncer : SyncInterface {
                             when (it) {
                                 is Resource.Success -> {
                                     Log.d("MyCrops", " ${it.data}")
-
                                     LocalSource.insertMyCrop(
                                         MyCropEntityMapper().toEntityList(it.data?.data!!)
                                         //  CropInformationEntityMapper().toEntityList(it.data?.data!!)

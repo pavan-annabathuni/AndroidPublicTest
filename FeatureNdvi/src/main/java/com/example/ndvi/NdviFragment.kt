@@ -234,7 +234,10 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             binding.cardView2.visibility = View.GONE
             if (selectedNdvi.cl != null)
                 if (selectedNdvi.cl!! > 85) {
-                    binding.cardView2.visibility = View.VISIBLE
+                    viewModel.viewModelScope.launch {
+                        binding.tvTextAlert.text = TranslationsManager().getString("str_cloud_coverage")
+                            binding.cardView2.visibility = View.VISIBLE
+                    }
                 }
 
             selectedNdvi.stats?.ndvi?.let {
@@ -250,11 +253,14 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
             }
             if (tileUrl.isNullOrEmpty() || !URLUtil.isValidUrl(tileUrl)) {
                 Log.d("g56", "NDVI Url: $tileUrl")
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Image Not Available",
-                    Toast.LENGTH_LONG
-                )
+//                ToastStateHandling.toastError(
+//                    requireContext(),
+//                    "Image Not Available",
+//                    Toast.LENGTH_LONG
+                //)
+                binding.ndviMean.visibility = View.GONE
+                binding.cardView2.visibility = View.VISIBLE
+                binding.tvTextAlert.text = "Image Not Available"
             } else {
                 val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
@@ -279,6 +285,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                     TileOverlayOptions()
                         .tileProvider(tileProvider)
                 )
+                binding.ndviMean.visibility = View.VISIBLE
             }
         }
     }
