@@ -117,7 +117,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         // Inflate the layout for this fragment
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
 
-        binding.toolbar.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
 
             val isSuccess = findNavController().popBackStack()
             if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }

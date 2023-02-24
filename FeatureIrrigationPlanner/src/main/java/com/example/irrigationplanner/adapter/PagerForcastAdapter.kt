@@ -85,15 +85,13 @@ class PagerForcastAdapter(val myCropDataDomain: MyCropDataDomain)
             irrigationReq = TranslationsManager().getString("str_Irrigation_req")
 
         if (properties.mad[position] == 0.0) {
-            val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
-            if (value <= 0) {
+            val value = 0 - (properties.depletion[position]?.toFloat()?:0f)
+            if (value < 0) {
                 holder.irrigationReq.text = irrigationReq
                 holder.irImage.setImageResource(R.drawable.ic_red_irrigation)
                 holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightREd))
 
             } else {
-                val value = 30 - (properties.depletion[position]?.toFloat()?:0f)
-                val percentage = (value / 30) * 100
                 holder.irrigationReq.text = irrigationNotReq
                 holder.irImage.setImageResource(R.drawable.ic_green_irrigation)
                 holder.llIrrigation.setBackgroundColor(holder.itemView.resources.getColor(R.color.LightGreen))

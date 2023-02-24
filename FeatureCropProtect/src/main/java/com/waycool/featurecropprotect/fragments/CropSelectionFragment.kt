@@ -76,10 +76,10 @@ class CropSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         apiErrorHandlingBinding=binding.errorState
         networkErrorStateTranslations(apiErrorHandlingBinding)
-        binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) activity?.let { it1 -> it1.finish() }
-        }
+//        binding.toolbar.setOnClickListener {
+//            val isSuccess = findNavController().navigateUp()
+//            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+//        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
