@@ -51,9 +51,6 @@
         <action
             android:id="@+id/action_addCropPremiumFragment_to_plantSpacingFragment"
             app:destination="@id/plantSpacingFragment" />
-        <action
-            android:id="@+id/action_addCropPremiumFragment_to_dripIrrigationFragment"
-            app:destination="@id/dripIrrigationFragment" />
     </fragment>
     <fragment
         android:id="@+id/veriatyCropFragment"
@@ -64,9 +61,4 @@
             android:id="@+id/action_veriatyCropFragment_to_addCropFragment"
             app:destination="@id/addCropFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/dripIrrigationFragment"
-        android:name="com.example.addcrop.ui.premium.DripIrrigationFragment"
-        android:label="fragment_drip_irrigation"
-        tools:layout="@layout/fragment_drip_irrigation" />
 </navigation>

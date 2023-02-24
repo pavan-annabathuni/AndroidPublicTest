@@ -382,7 +382,7 @@ class AddCropPremiumFragment : Fragment() {
                             bundle.putString("numberOfPlanets", numberOfPlanets)
 
                             findNavController().navigate(
-                                R.id.action_addCropPremiumFragment_to_dripIrrigationFragment,
+                                R.id.action_addCropPremiumFragment_to_plantSpacingFragment,
                                 bundle
                             )
                         }
