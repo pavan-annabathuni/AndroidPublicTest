@@ -110,58 +110,58 @@ class PlantSpacingFragment : Fragment() {
                 map["len_drip"] = binding.etNumber.text
                 map["width_drip"] = binding.etNumberWidth.text
 
-//                binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
-//                    try {
-//                        if (selectPlantDistance.text.trim().isEmpty()) {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Please Enter Plant to Plant Distance",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        } else {
-//                            if (selectPlantDistance.text == "ft") {
-//                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-//                            } else if (selectPlantDistance.text == "cm") {
-//                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-//                            } else if ((selectPlantDistance.text == "mtr")) {
-//                                map["len_drip"] = binding.etNumber.text
-//                            } else {
-//                                map["len_drip"] = binding.etNumber.text
-//                            }
-//                        }
-//
-//                    } catch (e: NumberFormatException) {
-//
-//                    }
-//
-//                }
-//
-//                binding.constraintLayoutBedWidth.setOnSelectListener { selectBedWidth ->
-//                    try {
-//                        if (selectBedWidth.text.trim().isEmpty()) {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Please Enter Plant Bed width",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        } else {
-//                            if (selectBedWidth.text == "ft") {
-//                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.305
-//                            } else if (selectBedWidth.text == "cm") {
-//                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.01
-//                            } else if (selectBedWidth.text == "mtr") {
-//                                map["width_drip"] = binding.etNumberWidth.text
-//                            } else {
-//                                map["width_drip"] = binding.etNumberWidth.text
-//                            }
-//
-//                        }
-//                    } catch (e: NumberFormatException) {
-//
-//                    }
-//
-//
-//                }
+                binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
+                    try {
+                        if (selectPlantDistance.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant to Plant Distance",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            if (selectPlantDistance.text == "ft") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
+                            } else if (selectPlantDistance.text == "cm") {
+                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
+                            } else if ((selectPlantDistance.text == "mtr")) {
+                                map["len_drip"] = binding.etNumber.text
+                            } else {
+                                map["len_drip"] = binding.etNumber.text
+                            }
+                        }
+
+                    } catch (e: NumberFormatException) {
+
+                    }
+
+                }
+
+                binding.constraintLayoutBedWidth.setOnSelectListener { selectBedWidth ->
+                    try {
+                        if (selectBedWidth.text.trim().isEmpty()) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Enter Plant Bed width",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            if (selectBedWidth.text == "ft") {
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.305
+                            } else if (selectBedWidth.text == "cm") {
+                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.01
+                            } else if (selectBedWidth.text == "mtr") {
+                                map["width_drip"] = binding.etNumberWidth.text
+                            } else {
+                                map["width_drip"] = binding.etNumberWidth.text
+                            }
+
+                        }
+                    } catch (e: NumberFormatException) {
+
+                    }
+
+
+                }
                 binding.cardCheckHealth.setOnClickListener {
                     plantToPlant = binding.etNumber.text.toString().trim()
                     planetBed = binding.etNumberWidth.text.toString().trim()
