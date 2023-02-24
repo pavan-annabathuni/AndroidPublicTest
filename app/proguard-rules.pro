@@ -23,6 +23,7 @@
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 
+-keep class com.waycool.iwap.MainActivity { *; }
 #Firebase
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.** { *; }
