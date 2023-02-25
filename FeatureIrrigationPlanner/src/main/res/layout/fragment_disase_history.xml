@@ -75,4 +75,20 @@
         tools:itemCount="7"
         tools:listitem="@layout/item_disease_history" />
 
+    <TextView
+        android:id="@+id/noPest"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:text="No risk outbreak for this tab"
+        android:textColor="@color/DarkGreen"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

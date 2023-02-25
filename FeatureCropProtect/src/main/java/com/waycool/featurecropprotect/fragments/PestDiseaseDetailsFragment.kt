@@ -71,7 +71,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private lateinit var videosBinding: GenericLayoutVideosListBinding
 
     //    private var audio: AudioWife? = null
-    lateinit var mediaPlayer: MediaPlayer
+   private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
@@ -117,7 +117,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         // Inflate the layout for this fragment
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
 
-        binding.toolbar.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
 
             val isSuccess = findNavController().popBackStack()
             if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
@@ -343,18 +343,15 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
 //    }
 
     private fun screenShot(diseaseId: Int?, diseaseName: String?) {
-        val uriString =
-            "https://adminuat.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
-        val title = "Outgrow - Pest Disease Detail for $diseaseName"
-        val description = "Find Pest Management and more on Outgrow app"
-        binding.clShareProgress.visibility = View.VISIBLE
-        getDeepLinkAndScreenShot(context, shareLayout, uriString, title, description) { task, uri ->
+        val uriString="http://app.outgrowdigital.com/pestdiseasedetail?disease_id=$diseaseId&disease_name=${this.diseaseName}"
+        val title="Outgrow - Pest Disease Detail for $diseaseName"
+        val description="Find Pest Management and more on Outgrow app"
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description) { task, uri ->
             if (task.isSuccessful) {
                 binding.clShareProgress.visibility = View.GONE
                 Handler().postDelayed({
                     binding.imgShare.isEnabled = true
                 }, 1000)
-
                 val shortLink: Uri? = task.result.shortLink
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -362,9 +359,12 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                 sendIntent.type = "text/plain"
                 sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
                 startActivity(Intent.createChooser(sendIntent, "choose one"))
-
             }
+
         }
+
+
+
     }
 
     private fun setNews() {
@@ -762,7 +762,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         var totalDuration: Long = 0
         if (mediaPlayer != null) {
             try {
-                totalDuration = mediaPlayer.getDuration().toLong()
+                totalDuration = mediaPlayer.duration.toLong()
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             } catch (e: java.lang.Exception) {
@@ -782,7 +782,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         } else {
             Log.w("pestdisease", "Something strage this audio track duration in zero")
         }
-        binding.totalTime.setText(playbackStr)
+        binding.totalTime.text = playbackStr
 
         // DebugLog.i(currentTime + " / " + totalDuration);
     }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CROP_INFO
 
 class CropInfo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +18,7 @@ class CropInfo : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink?.lastPathSegment!= null) {
-                if (deepLink?.lastPathSegment == "cropinfo") {
+                if (deepLink?.lastPathSegment == CROP_INFO) {
                     this.findNavController(R.id.nav_host_dashboard).navigate(R.id.cropSelectionFragment)
 
                 }

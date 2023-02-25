@@ -124,7 +124,7 @@
 
                     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
                         android:id="@+id/constraintLayout3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="@drawable/bg_search"
@@ -138,7 +138,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
@@ -161,7 +161,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/btn3"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginTop="@dimen/space4"
                             android:layout_marginEnd="@dimen/space4"
@@ -309,7 +309,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthFt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
                             android:layout_marginStart="@dimen/space4"
                             android:layout_marginTop="@dimen/space4"
@@ -322,7 +322,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthCm"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
 
                             android:layout_marginTop="@dimen/space4"
@@ -334,7 +334,7 @@
 
                         <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                             android:id="@+id/BedWidthMtr"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/space40"
                             android:layout_height="@dimen/space40"
 
                             android:layout_marginTop="@dimen/space4"
@@ -561,6 +561,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

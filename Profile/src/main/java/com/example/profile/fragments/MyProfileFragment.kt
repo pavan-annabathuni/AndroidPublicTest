@@ -3,7 +3,6 @@ package com.example.profile.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +18,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.profile.databinding.FragmentMyProfileBinding
 import com.example.profile.viewModel.EditProfileViewModel
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -34,8 +31,10 @@ import com.waycool.data.utils.Resource
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.activity.PrivacyPolicyActivity
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.INVITE_SHARE_LINK
 import com.waycool.featurelogin.loginViewModel.LoginViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -66,14 +65,14 @@ class MyProfileFragment : Fragment() {
         binding = FragmentMyProfileBinding.inflate(inflater)
 
         apiErrorHandlingBinding = binding.errorState
-       AppUtils.networkErrorStateTranslations(apiErrorHandlingBinding)
+        AppUtils.networkErrorStateTranslations(apiErrorHandlingBinding)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.llInviteFarmer.setOnClickListener { it ->
+        binding.llInviteFarmer.setOnClickListener {
             it?.isEnabled = false
             EventClickHandling.calculateClickEvent("invite_farmer")
-            shareInviteLink(it)
+            shareInviteLink()
         }
 
         viewModel.viewModelScope.launch {
@@ -109,42 +108,14 @@ class MyProfileFragment : Fragment() {
         return binding.root
     }
 
-    /* this use for sharing app link with user and if user is already installed the it will
-    * it will redirect to app using dynamic links  */
-        private fun shareInviteLink(view: View) {
-            binding.progressBar.visibility = View.VISIBLE
 
-            FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://adminuat.outgrowdigital.com/invite"))
-                .setDomainUriPrefix("https://outgrowdev.page.link")
-                .setAndroidParameters(
-                    DynamicLink.AndroidParameters.Builder()
-                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
-                        .build()
-                )
-                .setSocialMetaTagParameters(
-                    DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(Uri.parse("https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"))
-                        .setTitle("Outgrow sends an invitation for you to join us and grow with us")
-                        .setDescription("Outgrow app-Let's grow together")
-                        .build()
-                )
-                .buildShortDynamicLink().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        binding.progressBar.visibility = View.GONE
-                        Handler().postDelayed({view.isEnabled = true
-                        },1000)
-
-                        val shortLink: Uri? = task.result.shortLink
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                        sendIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(sendIntent, "choose one"))
-
-                    }
-                }
-        }
+    private fun shareInviteLink() {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, INVITE_SHARE_LINK)
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, "choose one"))
+    }
 
         private fun networkCall() {
             if (NetworkUtil.getConnectivityStatusString(context) == 0) {
@@ -209,7 +180,7 @@ class MyProfileFragment : Fragment() {
                 EventClickHandling.calculateClickEvent("rate_us")
                 val intent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
+                    Uri.parse(PLAY_STORE_LINK)
                 )
                 startActivity(intent)
             }

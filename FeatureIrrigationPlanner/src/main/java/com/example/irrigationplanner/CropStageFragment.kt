@@ -16,6 +16,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,14 +49,14 @@ class CropStageFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCropStageBinding.inflate(inflater)
         onClick()
-
+        cropStageStartDate()
 
         mCropStageAdapter = CropStageAdapter(CropStageAdapter.OnClickListener {
              cropStageId = it.id
             Log.d("Date", "getCropStage: $cropStageId")
 
         })
-        cropStageStartDate()
+
         getCropStage()
         return binding.root
     }
@@ -84,11 +85,11 @@ class CropStageFragment : Fragment() {
 
         }
         /** Calling get crop stage api to show the list*/
-            viewModel.getCropStage(accountId, plotId).observe(viewLifecycleOwner) {
-                Log.d("Date", "getCropStage: ${it.data?.data?.get(0)?.id}")
-                binding.recycleViewHis.adapter = mCropStageAdapter
-                mCropStageAdapter.submitList(it.data?.data)
-            }
+//            viewModel.getCropStage(accountId, plotId).observe(viewLifecycleOwner) {
+//                Log.d("Date", "getCropStage: ${it.data?.data?.get(0)?.id}")
+//                binding.recycleViewHis.adapter = mCropStageAdapter
+//                mCropStageAdapter.submitList(it.data?.data)
+//            }
         /** saving the date for crop stage */
         binding.saveCropStage.setOnClickListener {
             if(cropStageId!=null) {
@@ -112,12 +113,23 @@ class CropStageFragment : Fragment() {
             }
 
             data?.sowingDate?.let { it1 ->
-                viewModel.updateCropStage(accountId, 1, plotId, it1)
-                    .observe(viewLifecycleOwner) {
-                        viewModel.getCropStage(accountId, plotId).observe(viewLifecycleOwner) {
-                            binding.recycleViewHis.adapter = mCropStageAdapter
-                            mCropStageAdapter.submitList(it.data?.data)
+                viewModel.updateCropStage(accountId, 1, plotId, it1).observe(viewLifecycleOwner) {
+                        when(it){
+                            is Resource.Success->{
+                                viewModel.getCropStage(accountId, plotId).observe(viewLifecycleOwner) {
+                                    binding.recycleViewHis.adapter = mCropStageAdapter
+                                    mCropStageAdapter.submitList(it.data?.data)
+                                }
+                            }
+                            is Resource.Loading->{
+
+                            }
+                            is Resource.Error->{
+
+                            }
                         }
+
+
                     }
             }
         }

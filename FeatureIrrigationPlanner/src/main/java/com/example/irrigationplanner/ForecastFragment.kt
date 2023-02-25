@@ -42,8 +42,8 @@ class ForecastFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             irrigation = it.getParcelable("IrrigationHis")!!
-            accountId = it.getInt("accountId")!!
-            plotId = it.getInt("plotId")!!
+            accountId = it.getInt("accountId")
+            plotId = it.getInt("plotId")
         }
     }
 
@@ -82,16 +82,16 @@ class ForecastFragment : Fragment() {
             accountId = it.data?.accountId ?: 0
         }
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
-            val data = it.data?.filter {itt->
+            val data = it.data?.first { itt->
                 itt.id == plotId
             }
             /** calculating are per plant */
-            if(data?.get(0)?.area !=null) {
-                area = data[0].area.toString()
-                length = data[0].lenDrip?:"0"
-                width = data[0].widthDrip?:"0"
+            if(data?.area !=null) {
+                area = data.area.toString()
+                length = data.lenDrip?:"0"
+                width = data.widthDrip?:"0"
               areaperPlant = (length.toDouble() * width.toDouble()).toString().trim()
-                mPagerForcastAdapter = PagerForcastAdapter(data[0])
+                mPagerForcastAdapter = PagerForcastAdapter(data)
 //            }else{
 //                if (data != null) {
 //                    mPagerForcastAdapter = PagerForcastAdapter(data[0])
@@ -136,7 +136,7 @@ class ForecastFragment : Fragment() {
     }
 
     private fun onclick(){
-        binding.topAppBar.setNavigationOnClickListener(){
+        binding.topAppBar.setNavigationOnClickListener {
             this.findNavController().navigateUp()
         }
     }
@@ -144,22 +144,8 @@ class ForecastFragment : Fragment() {
     /** Creating view pager for swipes in tab*/
     private fun viewPager(){
        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            // This method is triggered when there is any scrolling activity for the current page
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }
 
-            // triggered when you select a new page
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-            }
-
-            // triggered when there is
-            // scroll state will be changed
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-            }
-        })
+       })
     }
     override fun onResume() {
         super.onResume()

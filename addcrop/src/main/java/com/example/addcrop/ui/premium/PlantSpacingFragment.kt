@@ -8,7 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.addcrop.databinding.ActivityAddCropBinding.inflate
+import com.example.addcrop.databinding.FragmentAddCropBinding.inflate
+import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
+import com.example.addcrop.databinding.FragmentAddCropDetailsBinding.inflate
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
+import com.example.addcrop.databinding.ItemEditCropBinding.inflate
+import com.example.addcrop.databinding.ItemSelectedCropListBinding.inflate
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
@@ -36,6 +42,7 @@ class PlantSpacingFragment : Fragment() {
     var acrea_type: String? = null
     var plantToPlant: String = ""
     var planetBed: String = ""
+    var crop_year: String? = null
     var dripEmitterRate: String = ""
 
     private val viewModel by lazy { ViewModelProvider(this)[AddCropViewModel::class.java] }
@@ -65,8 +72,8 @@ class PlantSpacingFragment : Fragment() {
                 noOFPlants = arguments?.getString("numberOfPlanets")
                 farm_id = arguments?.getInt("farm_id")
                 acrea_type = arguments?.getString("area_type")
-                crop_season=arguments?.getString("crop_season")
-
+                crop_season = arguments?.getString("crop_season")
+                crop_year = arguments?.getString("crop_year")
 
 
                 val map = mutableMapOf<String, Any>()
@@ -87,7 +94,10 @@ class PlantSpacingFragment : Fragment() {
                     map["crop_variety_id"] = crop_variety.toString().toInt()
                 }
                 crop_season?.let {
-                    map.put("crop_season",it)
+                    map.put("crop_season", it)
+                }
+                crop_year?.let {
+                    map.put("crop_year", it)
                 }
                 crop_type?.let { map.put("soil_type_id", it) }
                 nickname?.let { map.put("plot_nickname", it) }
@@ -99,6 +109,7 @@ class PlantSpacingFragment : Fragment() {
                 map["area_type"] = acrea_type.toString().lowercase()
                 map["len_drip"] = binding.etNumber.text
                 map["width_drip"] = binding.etNumberWidth.text
+
                 binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
                     try {
                         if (selectPlantDistance.text.trim().isEmpty()) {

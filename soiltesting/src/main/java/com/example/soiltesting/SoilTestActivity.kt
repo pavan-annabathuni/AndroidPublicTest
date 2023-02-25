@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.SOIL_TESTING
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.SOIL_TESTING_HISTORY
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.SOIL_TESTING_HISTORY_STATUS
 
 class SoilTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,10 +19,16 @@ class SoilTestActivity : AppCompatActivity() {
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
-            if (deepLink?.lastPathSegment!= null) {
+            if (deepLink?.lastPathSegment!! == SOIL_TESTING) {
+                this.findNavController(R.id.fragmentContainerView).navigate(R.id.soilTestingHomeFragment)
 
+            }
+            else   if (deepLink?.lastPathSegment!! == SOIL_TESTING_HISTORY) {
+                this.findNavController(R.id.fragmentContainerView).navigate(R.id.allHistoryFragment)
 
-                 if (deepLink?.lastPathSegment!! == "soiltestinghistorystatus") {
+            }
+           else if (deepLink?.lastPathSegment!= null) {
+                if (deepLink?.lastPathSegment!! == SOIL_TESTING_HISTORY_STATUS) {
                     val id = deepLink.getQueryParameter ("id")
                     val soilTestNumber = deepLink.getQueryParameter ("soil_test_number")
 
@@ -32,14 +41,7 @@ class SoilTestActivity : AppCompatActivity() {
                             args)
                     }
                 }
-                 else   if (deepLink?.lastPathSegment!! == "soiltestinghistory") {
-                     this.findNavController(R.id.fragmentContainerView).navigate(R.id.allHistoryFragment)
 
-                 }
-               else if (deepLink?.lastPathSegment!! == "soiltesting") {
-                    this.findNavController(R.id.fragmentContainerView).navigate(R.id.soilTestingHomeFragment)
-
-                }
             }
 
         }
