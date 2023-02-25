@@ -636,14 +636,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
-                if (data.leafWetness != null && data.leafWetness!! == 1) {
-                    it.tvLeafWetnessDegree.text = "Wet"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
-                } else {
-                    it.tvLeafWetnessDegree.text = "Dry"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
-                }
+            it.totalAreeaTwo.text = data.deviceElevation.toString() + " m"
+            if (data.leafWetness != null && data.leafWetness!! == 1) {
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            } else {
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
 
             if (data.isApproved == 0) {
                 it.approvedCV.visibility = View.VISIBLE
@@ -692,9 +692,9 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             if (data.soilTemperature1.isNullOrEmpty()) {
                 it.clSoilTemp.visibility = View.GONE
             }
-            if (data.soilMoisture2 == null) {
+            if (data.soilMoisture2 == null || data.soilMoisture2 == 0.0) {
                 it.bottomTop.visibility = View.GONE
-            }else{
+            } else {
                 it.bottomTop.visibility = View.VISIBLE
             }
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
