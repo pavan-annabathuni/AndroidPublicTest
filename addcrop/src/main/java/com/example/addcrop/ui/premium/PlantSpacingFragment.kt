@@ -8,13 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.addcrop.databinding.ActivityAddCropBinding.inflate
-import com.example.addcrop.databinding.FragmentAddCropBinding.inflate
-import com.example.addcrop.databinding.FragmentAddCropDetailsBinding
-import com.example.addcrop.databinding.FragmentAddCropDetailsBinding.inflate
+import com.example.addcrop.R
 import com.example.addcrop.databinding.FragmentPlantSpacingBinding
-import com.example.addcrop.databinding.ItemEditCropBinding.inflate
-import com.example.addcrop.databinding.ItemSelectedCropListBinding.inflate
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
@@ -105,63 +100,9 @@ class PlantSpacingFragment : Fragment() {
                 irrigation_selected?.let { map.put("irrigation_type", it) }
                 date?.let { map.put("sowing_date", it) }
                 noOFPlants?.let { map.put("no_of_plants", it) }
-                map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
                 map["area_type"] = acrea_type.toString().lowercase()
-                map["len_drip"] = binding.etNumber.text
-                map["width_drip"] = binding.etNumberWidth.text
-
-                binding.constraintLayout3.setOnSelectListener { selectPlantDistance ->
-                    try {
-                        if (selectPlantDistance.text.trim().isEmpty()) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please Enter Plant to Plant Distance",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            if (selectPlantDistance.text == "ft") {
-                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.305
-                            } else if (selectPlantDistance.text == "cm") {
-                                map["len_drip"] = binding.etNumber.text.toString().toInt() * 0.01
-                            } else if ((selectPlantDistance.text == "mtr")) {
-                                map["len_drip"] = binding.etNumber.text
-                            } else {
-                                map["len_drip"] = binding.etNumber.text
-                            }
-                        }
-
-                    } catch (e: NumberFormatException) {
-
-                    }
-
-                }
-
-                binding.constraintLayoutBedWidth.setOnSelectListener { selectBedWidth ->
-                    try {
-                        if (selectBedWidth.text.trim().isEmpty()) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please Enter Plant Bed width",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            if (selectBedWidth.text == "ft") {
-                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.305
-                            } else if (selectBedWidth.text == "cm") {
-                                map["width_drip"] = binding.etNumberWidth.text.toString().toInt() * 0.01
-                            } else if (selectBedWidth.text == "mtr") {
-                                map["width_drip"] = binding.etNumberWidth.text
-                            } else {
-                                map["width_drip"] = binding.etNumberWidth.text
-                            }
-
-                        }
-                    } catch (e: NumberFormatException) {
-
-                    }
 
 
-                }
                 binding.cardCheckHealth.setOnClickListener {
                     plantToPlant = binding.etNumber.text.toString().trim()
                     planetBed = binding.etNumberWidth.text.toString().trim()
@@ -175,6 +116,11 @@ class PlantSpacingFragment : Fragment() {
                     } else if (plantToPlant.isNotEmpty() && planetBed.isNotEmpty() && dripEmitterRate.isNotEmpty()) {
                         binding.progressBar?.visibility = View.VISIBLE
                         binding.cardCheckHealth.visibility = View.GONE
+
+                        map["len_drip"] = binding.etNumber.text.toString().toDouble() * getunitsPlantDist(binding.plantDistanceUnitsToggle.checkedButtonId)
+                        map["width_drip"] = binding.etNumberWidth.text.toString().toDouble() * getUnitsBedWidth(binding.bedWidthUnitsToggle.checkedButtonId)
+                        map["drip_emitter_rate"] = binding.etNumberWidthDistance.text
+
                         viewModel.addCropDataPass(map).observe(requireActivity()) { addCropDrip ->
                             when (addCropDrip) {
                                 is Resource.Success -> {
@@ -238,5 +184,15 @@ class PlantSpacingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("PlantSpacingFragment")
+    }
+
+    private fun getUnitsBedWidth(checkedButtonId: Int): Double {
+        if (checkedButtonId == R.id.bed_width_ft_btn) return 0.3048
+        return if (checkedButtonId == R.id.bed_width_cm_btn) 0.01 else 1.0
+    }
+
+    private fun getunitsPlantDist(checkedButtonId: Int): Double {
+        if (checkedButtonId == R.id.plant_dist_ft_btn) return 0.3048
+        return if (checkedButtonId == R.id.plant_dist_cm_btn) 0.01 else 1.0
     }
 }
