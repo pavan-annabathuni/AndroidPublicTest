@@ -225,7 +225,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.tvPumpFlowRate,
             "Pump Flow Rate (in Ltre per hr)"
         )
-        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
+//        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
         TranslationsManager().loadString("str_mycrops", binding.myCropsTitle, "My Crops")
         TranslationsManager().loadString("my_device", binding.titleMyDevice, "My Devices")
         TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
