@@ -699,7 +699,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            it.tvLastUpdate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -881,7 +882,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun setupDeltaT(data: ViewDeviceDomain) {
 
-        if (data.modelSeries == "GSX") {
+        if (data.modelSeries == "GSX" || data.deltaT == null) {
             binding.currentDelta.visibility = View.GONE
             binding.deltaText.visibility = View.GONE
             binding.updateDate.visibility = View.GONE
@@ -889,7 +890,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.currentDelta.visibility = View.VISIBLE
             binding.deltaText.visibility = View.VISIBLE
             binding.updateDate.visibility = View.VISIBLE
-            binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            binding.updateDate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
         }
 
 //        binding.currentDelta.clearSections()
