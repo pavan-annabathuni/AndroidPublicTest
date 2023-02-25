@@ -635,14 +635,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
-                if (data.leafWetness != null && data.leafWetness!! == 1) {
-                    it.tvLeafWetnessDegree.text = "Wet"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
-                } else {
-                    it.tvLeafWetnessDegree.text = "Dry"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
-                }
+            it.totalAreeaTwo.text = data.deviceElevation.toString() + " m"
+            if (data.leafWetness != null && data.leafWetness!! == 1) {
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            } else {
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
 
             if (data.isApproved == 0) {
                 it.approvedCV.visibility = View.VISIBLE
@@ -691,14 +691,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             if (data.soilTemperature1.isNullOrEmpty()) {
                 it.clSoilTemp.visibility = View.GONE
             }
-            if (data.soilMoisture2 == null) {
+            if (data.soilMoisture2 == null || data.soilMoisture2 == 0.0) {
                 it.bottomTop.visibility = View.GONE
-            }else{
+            } else {
                 it.bottomTop.visibility = View.VISIBLE
             }
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            it.tvLastUpdate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -880,7 +881,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun setupDeltaT(data: ViewDeviceDomain) {
 
-        if (data.modelSeries == "GSX") {
+        if (data.modelSeries == "GSX" || data.deltaT == null) {
             binding.currentDelta.visibility = View.GONE
             binding.deltaText.visibility = View.GONE
             binding.updateDate.visibility = View.GONE
@@ -888,7 +889,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.currentDelta.visibility = View.VISIBLE
             binding.deltaText.visibility = View.VISIBLE
             binding.updateDate.visibility = View.VISIBLE
-            binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            binding.updateDate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
         }
 
 //        binding.currentDelta.clearSections()
