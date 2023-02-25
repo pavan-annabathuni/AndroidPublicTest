@@ -91,6 +91,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.let { it1 -> it1.finish() }
         }
+        viewModel.getMyFarms().observe(viewLifecycleOwner) {
+            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
+            myFarm = farm
+            farmDetailsObserve()
+            drawFarm()
+        }
         return binding.root
     }
 
@@ -113,12 +119,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         checkRole()
         myCrop()
 
-        viewModel.getMyFarms().observe(viewLifecycleOwner) {
-            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
-            myFarm = farm
-            farmDetailsObserve()
-            drawFarm()
-        }
+
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.onBackPressed()

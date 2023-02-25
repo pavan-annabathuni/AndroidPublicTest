@@ -3,6 +3,7 @@ package com.example.profile.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -71,6 +72,9 @@ class MyProfileFragment : Fragment() {
 
         binding.llInviteFarmer.setOnClickListener {
             it?.isEnabled = false
+            Handler().postDelayed({
+                it?.isEnabled = true
+            },2000)
             EventClickHandling.calculateClickEvent("invite_farmer")
             shareInviteLink()
         }
@@ -126,7 +130,6 @@ class MyProfileFragment : Fragment() {
                 binding.clInclude.visibility = View.GONE
                 apiErrorHandlingBinding.clInternetError.visibility = View.GONE
                 observer()
-
 
             }
 
