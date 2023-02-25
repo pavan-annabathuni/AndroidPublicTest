@@ -333,6 +333,9 @@ class IrrigationFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
 
+                    if(it.data?.data?.currentData.isNullOrEmpty()){
+                        binding.gwxDiseaseCl.visibility = View.GONE
+                    }
                     val data = it.data?.data?.currentData?.filter { itt ->
                         itt.disease?.diseaseType == "Disease"
                     }
