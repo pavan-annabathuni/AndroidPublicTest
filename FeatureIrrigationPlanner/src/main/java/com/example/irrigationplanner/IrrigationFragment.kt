@@ -58,7 +58,7 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
-    val myCalendar = Calendar.getInstance()
+    private var irrigationType:String? =null
 
     var myCrop: MyCropDataDomain? = null
 
@@ -71,7 +71,6 @@ class IrrigationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             plotId = it.getInt("plotId")
-
         }
     }
 
@@ -81,7 +80,6 @@ class IrrigationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentIrrigationBinding.inflate(inflater)
-        setDetails()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -92,6 +90,7 @@ class IrrigationFragment : Fragment() {
             requireActivity(),
             callback
         )
+        setDetails()
         /** calling user detail api and passing the value account id in set adapter function*/
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountId = it.data?.accountId!!
@@ -359,6 +358,9 @@ class IrrigationFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
 
+                    if(it.data?.data?.currentData.isNullOrEmpty()){
+                        binding.gwxDiseaseCl.visibility = View.GONE
+                    }
                     val data = it.data?.data?.currentData?.filter { itt ->
                         itt.disease?.diseaseType == "Disease"
                     }
@@ -521,8 +523,14 @@ class IrrigationFragment : Fragment() {
         val save = dialog.findViewById<Button>(R.id.savePreDayL) as Button
         val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
         val irrigationDone = dialog.findViewById<TextView>(R.id.textView13)
-        if (irrigationDone != null) {
-            TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone)
+        val etIrrigationGiven = dialog.findViewById<TextView>(R.id.textView14)
+        Log.d("irrigationType12", "dialog: $irrigationType")
+        if (irrigationType == "Drip Irrigation") {
+            TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone!!)
+            etIrrigationGiven?.text = "Enter water given per plant"
+        }else{
+            etIrrigationGiven?.text = "Enter water given per area"
+            TranslationsManager().loadString("str_irrigation_per_area", irrigationDone!!,"Irrigation required per area")
         }
         viewModel.viewModelScope.launch {
             val saveTv = TranslationsManager().getString("str_save")
@@ -601,10 +609,8 @@ class IrrigationFragment : Fragment() {
 
     private fun setDetails() {
 
-//        Log.d("CropName2", "setDetails: $cropName")
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
-            val data = it.data?.first { plot ->
+            val data = it.data?.firstOrNull { plot ->
                 plot.id == plotId
             }
 
@@ -693,6 +699,7 @@ class IrrigationFragment : Fragment() {
             }
 
             CropStageDate = data?.sowingDate
+            irrigationType = data?.irrigationType
 
             setAdapter()
 

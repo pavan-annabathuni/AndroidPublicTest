@@ -623,6 +623,32 @@ object CropsRepository {
                     Log.d("MyCrops", " ${it.data}")
                     var myCropDataDomain = MyCropDomainMapper().toDomainList(it.data ?: emptyList())
 
+                    Resource.Success(
+                        myCropDataDomain
+                    )
+                }
+                is Resource.Loading -> {
+                    Log.d("MyCrops", " ${it.data}")
+
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Log.d("MyCrops", " ${it.message}")
+
+                    Resource.Error(it.message)
+                }
+            }
+        }
+
+    }
+
+    fun getMyCropIrrigation(): Flow<Resource<List<MyCropDataDomain>>> {
+        return MyCropSyncer().getMyCrop().map {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("MyCrops", " ${it.data}")
+                    var myCropDataDomain = MyCropDomainMapper().toDomainList(it.data ?: emptyList())
+
                     myCropDataDomain = myCropDataDomain.map { crop ->
                         val device =
                             crop.farmId?.let { it1 -> LocalSource.getDevicesByFarmEntity(it1) }

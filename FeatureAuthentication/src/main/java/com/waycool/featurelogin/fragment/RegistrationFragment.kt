@@ -22,6 +22,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
@@ -392,7 +393,7 @@ class RegistrationFragment : Fragment() {
             UserTYpeTV!!.text = "Subscription"
             icon!!.visibility = View.VISIBLE
         }
-        if (audiourl.isNullOrEmpty()) {
+        if (audiourl.isNullOrEmpty()&&!URLUtil.isValidUrl(audiourl)) {
             audioLayout!!.visibility = View.GONE
         } else {
             audioLayout!!.visibility = View.VISIBLE
@@ -785,7 +786,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                val searchTag: String = Objects.requireNonNull(result)?.get(0) ?: ""
+                val searchTag: String = Objects.requireNonNull(result).get(0) ?: ""
                 binding.nameEt.setText(searchTag)
 
             }

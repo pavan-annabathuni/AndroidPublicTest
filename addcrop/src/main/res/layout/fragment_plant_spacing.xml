@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/add_crop"
+                android:text="Add Crop"
                 android:textColor="@color/textdark" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -71,8 +71,8 @@
 
                 <ImageView
                     android:id="@+id/ivSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
                     android:scaleType="fitXY"
@@ -112,120 +112,60 @@
                         android:id="@+id/etNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space16"
+                        android:layout_marginStart="8dp"
                         android:background="#fff"
                         android:hint="e.g 5 ft"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
+                        app:layout_constraintEnd_toStartOf="@+id/plant_distance_units_toggle"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-                        android:id="@+id/constraintLayout3"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/plant_distance_units_toggle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/bg_search"
-                        app:justifyContent="center"
-
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        app:checkedButton="@+id/plant_dist_ft_btn"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:selectionRequired="true"
                         app:singleSelection="true">
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn1"
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plant_dist_ft_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginStart="@dimen/space4"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="ft" />
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:textSize="14dp"
+                            android:text="ft"
+                            android:textAllCaps="false" />
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn2"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plant_dist_cm_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="cm" />
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:text="cm"
+                            android:textSize="14dp"
+                            android:textAllCaps="false" />
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/btn3"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plant_dist_mtr_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginEnd="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="mtr" />
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:text="mtr"
+                            android:textSize="14dp"
+                            android:textAllCaps="false" />
 
-                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
-
-                    <!--                    <com.google.android.material.button.MaterialButtonToggleGroup-->
-                    <!--                        android:id="@+id/constraintLayout3"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_margin="@dimen/space4"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintTop_toTopOf="parent"-->
-                    <!--                        app:singleSelection="true"-->
-                    <!--                        >-->
-
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvMtr"-->
-                    <!--                            style="@style/Praveen"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="@string/mtr"-->
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent"-->
-                    <!--                            tools:text="@string/mtr" />-->
-
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvCm"-->
-                    <!--                            style="@style/Praveen"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="cm"-->
-
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvMtr"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                        <Button-->
-                    <!--                            android:id="@+id/tvFt"-->
-                    <!--                            style="@style/Praveen"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="33dp"-->
-                    <!--                            android:text="ft"-->
-                    <!--                            android:textAllCaps="false"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvCm"-->
-                    <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                    </com.google.android.material.button.MaterialButtonToggleGroup>-->
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -243,8 +183,8 @@
 
                 <ImageView
                     android:id="@+id/ivSpinnerWidth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space16"
                     android:src="@drawable/ic_plant_bed_second"
@@ -288,113 +228,55 @@
                         android:hint="e.g 5 ft"
                         android:inputType="numberDecimal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/constraintLayoutBedWidth"
+                        app:layout_constraintEnd_toStartOf="@+id/bed_width_units_toggle"
                         app:layout_constraintHorizontal_bias="0.54"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-                        android:id="@+id/constraintLayoutBedWidth"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/bed_width_units_toggle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/bg_search"
-                        app:justifyContent="center"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="4dp"
+                        app:checkedButton="@+id/bed_width_ft_btn"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:toggle_requiredAmount="1"
-                        app:toggle_selectableAmount="1"> <!-- this attribute is from the underlying FlexboxLayout -->
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthFt"
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/bed_width_ft_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
-                            android:layout_marginStart="@dimen/space4"
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            android:checked="true"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="ft" />
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:text="ft"
+                            android:textSize="14dp"
+                            android:textAllCaps="false" />
 
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthCm"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/bed_width_cm_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:text="cm"
+                            android:textSize="14dp"
+                            android:textAllCaps="false" />
 
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="cm" />
-
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                            android:id="@+id/BedWidthMtr"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/bed_width_mtr_btn"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/space40"
+                            android:layout_height="match_parent"
+                            android:minWidth="0dp"
+                            android:textSize="14dp"
+                            android:text="mtr"
+                            android:textAllCaps="false" />
 
-                            android:layout_marginTop="@dimen/space4"
-                            android:layout_marginEnd="@dimen/space4"
-                            android:layout_marginBottom="@dimen/space4"
-                            app:toggle_backgroundColor="#FFFFFF"
-                            app:toggle_btnCornerRadius="8dp"
-                            app:toggle_selectedBackgroundColor="#146133"
-                            app:toggle_text="mtr" />
-
-                    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
-
-                    <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
-                    <!--                        android:id="@+id/constraintLayout3Width"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_margin="@dimen/space4"-->
-                    <!--                        android:background="@drawable/bg_acres"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintTop_toTopOf="parent">-->
-
-                    <!--                        <TextView-->
-                    <!--                            android:id="@+id/tvMtrWidth"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:padding="@dimen/space16"-->
-                    <!--                            android:text="mtr"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                        <TextView-->
-                    <!--                            android:id="@+id/tvCmWidth"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:padding="@dimen/space16"-->
-                    <!--                            android:text="cm"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            android:textSize="@dimen/txt12"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvMtrWidth"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                        <TextView-->
-                    <!--                            android:id="@+id/tvFtWidth"-->
-                    <!--                            android:layout_width="wrap_content"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:padding="@dimen/space16"-->
-                    <!--                            android:text="ft"-->
-                    <!--                            android:textColor="#000000"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toStartOf="@+id/tvCmWidth"-->
-                    <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                    <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -466,7 +348,6 @@
                         android:background="#fff"
                         android:hint="e.g 50 LPH"
                         android:inputType="numberDecimal"
-                        android:minHeight="48dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/constraintLayout3WidthDistance"
                         app:layout_constraintHorizontal_bias="0.5"

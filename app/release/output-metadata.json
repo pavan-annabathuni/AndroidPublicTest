@@ -5,15 +5,15 @@
     "kind": "Directory"
   },
   "applicationId": "com.waycool.iwap",
-  "variantName": "debug",
+  "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "2.5.20",
-      "outputFile": "app-debug.apk"
+      "versionName": "2.5.19",
+      "outputFile": "app-release.apk"
     }
   ],
   "elementType": "File"
