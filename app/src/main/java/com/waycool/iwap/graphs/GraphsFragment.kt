@@ -116,14 +116,21 @@ class GraphsFragment : Fragment() {
     }
 
     private fun populateGraph(paramType: String?, duration: GraphSelection) {
-        if (paramType != null && viewDevice != null) {
+        if(graphsData ==null){
+            binding.tvParamNote.text = "Loading..."
+            binding.paramProgressBar.visibility = View.VISIBLE
+            binding.lineChart.invalidate()
+        }
+        if (paramType != null && graphsData != null) {
 
             val keysList = getKeyList(duration)
             val valList = getValueList(duration)
 
             if (valList.isNullOrEmpty()) {
-                binding.tvParamNote.text = "Loading..."
-                binding.paramProgressBar.visibility = View.VISIBLE
+                binding.tvParamNote.text = "Data not available"
+                binding.paramProgressBar.visibility = View.INVISIBLE
+                binding.lineChart.invalidate()
+                binding.lineChart.clear();
                 return
             }
 
@@ -275,7 +282,7 @@ class GraphsFragment : Fragment() {
                 .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Last 7 Days")
+            binding.tabLayout.newTab().setText("7 Days")
                 .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(

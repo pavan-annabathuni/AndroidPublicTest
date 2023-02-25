@@ -56,7 +56,7 @@
                 app:cardBackgroundColor="#F4F7CE"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -94,8 +94,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Country Tomato"
                         android:padding="8dp"
+                        android:text="Country Tomato"
                         android:textColor="@color/darkGray"
                         android:textSize="14sp"
                         android:visibility="gone"
@@ -108,9 +108,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:padding="8dp"
                         android:drawableEnd="@drawable/ic_viewall"
                         android:drawablePadding="4dp"
+                        android:padding="8dp"
                         android:text="@string/crop_overview"
                         android:textAlignment="center"
                         android:textColor="@color/DarkGreen"
@@ -310,21 +310,112 @@
                                 app:layout_constraintStart_toEndOf="@+id/materialCardView2"
                                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+                            <LinearLayout
+                                android:id="@+id/irrigation_req_values_ll"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:visibility="gone"
+                                tools:visibility="visible"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/textView4"
+                                app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+                                <LinearLayout
+                                    android:id="@+id/linearla"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
+
+                                        <com.waycool.uicomponents.Text.SmallTextMedium
+                                            android:id="@+id/irrigation_req_area"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:padding="4dp"
+                                            android:text="for 3.5 Acre"
+                                            android:textColor="@color/textdark" />
+
+                                        <com.waycool.uicomponents.Text.Title3SemiBold
+                                            android:id="@+id/total_irrigation_req"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="marquee"
+                                            android:marqueeRepeatLimit="marquee_forever"
+                                            android:padding="4dp"
+                                            android:scrollHorizontally="true"
+                                            android:singleLine="true"
+                                            android:textColor="@color/textdark"
+                                            tools:text="for 3.5 Acre" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/per_plant_water_ll"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
+
+                                        <com.waycool.uicomponents.Text.SmallTextMedium
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:padding="4dp"
+                                            android:text="Per Plant"
+                                            android:textColor="@color/textdark" />
+
+                                        <com.waycool.uicomponents.Text.Title3SemiBold
+                                            android:id="@+id/irrigation_req_per_plant"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="marquee"
+                                            android:marqueeRepeatLimit="marquee_forever"
+                                            android:padding="4dp"
+                                            android:scrollHorizontally="true"
+                                            android:singleLine="true"
+                                            android:textColor="@color/textdark"
+                                            tools:text="for 3.5 Acre" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <com.waycool.uicomponents.Text.ParagraphMedium
+                                    android:id="@+id/water_in_hours_tv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/textdark"
+                                    tools:text="*Irrigate for 1 hrs"
+                                    tools:visibility="visible" />
+                            </LinearLayout>
+
+
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/cardView"
-                                android:layout_width="232dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:minWidth="230dp"
                                 app:cardBackgroundColor="#FFFAF0"
                                 app:cardCornerRadius="8dp"
                                 app:cardElevation="0dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/textView4"
-                                app:layout_constraintTop_toBottomOf="@+id/textView4">
+                                app:layout_constraintTop_toBottomOf="@+id/irrigation_req_values_ll">
+
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_gravity="center|start">
+                                    android:layout_gravity="center|start"
+                                    android:orientation="horizontal">
 
                                     <ImageView
                                         android:id="@+id/ivCloudy"
@@ -333,7 +424,7 @@
                                         android:layout_gravity="center|start"
                                         android:layout_marginStart="8dp"
                                         android:layout_marginTop="4dp"
-                                        android:layout_marginBottom="@dimen/txt8"
+                                        android:layout_marginBottom="8dp"
                                         android:src="@drawable/ic_green_irrigation"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -869,7 +960,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -903,7 +994,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

@@ -297,9 +297,9 @@ class MyProfileFragment : Fragment() {
             GlobalScope.launch {
                 LocalSource.deleteAllMyCrops()
                 LocalSource.deleteTags()
-                LocalSource.deleteCropMaster()
-                LocalSource.deleteCropInformation()
-                LocalSource.deletePestDisease()
+//                LocalSource.deleteCropMaster()
+//                LocalSource.deleteCropInformation()
+//                LocalSource.deletePestDisease()
                 LocalSource.deleteMyFarms()
                 SyncManager.invalidateAll()
                 DataStoreManager.clearData()
