@@ -1,5 +1,7 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.room.ColumnInfo
+
 
 data class CropMasterDomain(
     var cropId: Int? = null,
@@ -9,6 +11,8 @@ data class CropMasterDomain(
     var cropType: String? = null,
     var translation: String? = null,
     var cropNameTag: String? = null,
-    var isWaterModel:Int?
-)
+    var isWaterModel:Int?,
+    var diseasePrediction: Int? = 0,
+
+    )
 

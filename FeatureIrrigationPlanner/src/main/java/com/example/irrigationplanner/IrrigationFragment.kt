@@ -27,19 +27,20 @@ import com.google.android.material.tabs.TabLayout
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Network.NetworkModels.HistoricData
 import com.waycool.data.Network.NetworkModels.Irrigation
-import com.waycool.data.eventscreentime.EventClickHandling
-import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.Sync.syncer.MyCropSyncer
 import com.waycool.data.error.ToastStateHandling
+import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventScreenTimeHandling
+import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 
 class IrrigationFragment : Fragment() {
     private lateinit var binding: FragmentIrrigationBinding
@@ -57,8 +58,9 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
-    val myCalendar = Calendar.getInstance()
+    private var irrigationType:String? =null
 
+    var myCrop: MyCropDataDomain? = null
 
     //private lateinit var args:Bundle
     var dificiency: String = "noData"
@@ -69,7 +71,6 @@ class IrrigationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             plotId = it.getInt("plotId")
-
         }
     }
 
@@ -79,7 +80,6 @@ class IrrigationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentIrrigationBinding.inflate(inflater)
-setDetails()
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -90,11 +90,11 @@ setDetails()
             requireActivity(),
             callback
         )
+        setDetails()
         /** calling user detail api and passing the value account id in set adapter function*/
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
             accountId = it.data?.accountId!!
             if (accountId != null) {
-                setAdapter(accountId!!)
                 cropStageCheck(accountId!!)
             }
             /** checking user role id and */
@@ -241,10 +241,10 @@ setDetails()
 //                setDetails()
 //            }
 //        }
-        setDetails()
+//        setDetails()
     }
 
-    private fun setAdapter(accountId: Int) {
+    private fun setAdapter() {
         //  viewModel.viewModelScope.launch {
 //            viewModel.getIrrigationHis(accountId,plotId).observe(viewLifecycleOwner){
 //                // args.putO("allHistory",it.data?.data)
@@ -263,7 +263,7 @@ setDetails()
 
 
 
-        viewModel.getIrrigationHis(accountId, plotId).observe(viewLifecycleOwner) {
+        viewModel.getIrrigationHis(plotId).observe(viewLifecycleOwner) {
 //                if(it.data?.data?.irrigation?.currentData?.id!=null) {
 //                    irrigationId = it.data?.data?.irrigation?.currentData?.id!!
             //args.putParcelable("irrigationHis", it.data?.data?.irrigation)
@@ -315,6 +315,30 @@ setDetails()
                     if (it.data?.data?.irrigation?.irrigationForecast?.days.isNullOrEmpty()) {
                         binding.btForecast.visibility = View.GONE
                     }
+
+                    if (it.data?.data?.irrigation?.currentData != null && myCrop?.irrigationRequired == true) {
+
+                        Log.d("irrigation","vol per plant: ${it.data?.data?.irrigation?.currentData?.volPerPlant}")
+                        Log.d("irrigation","emiter: ${myCrop?.dripEmitterRate}")
+                        Log.d("irrigation","mycrops: ${myCrop}")
+
+                        if(it.data?.data?.irrigation?.currentData?.volPerPlant==null || myCrop?.dripEmitterRate.isNullOrEmpty()){
+                            binding.perPlantWaterLl.visibility=View.GONE
+                            binding.waterInHoursTv.visibility=View.GONE
+                        }else{
+                            binding.waterInHoursTv.text = "Irrigate for ${getIrrigationHrs(myCrop?.dripEmitterRate?.toDouble()!!,it.data?.data?.irrigation?.currentData?.volPerPlant!!)}"
+                        }
+
+                        binding.irrigationReqValuesLl.visibility = View.VISIBLE
+                        binding.irrigationReqArea.text = "For ${myCrop?.area} Acre"
+                        binding.totalIrrigationReq.text ="${String.format(Locale.ENGLISH,"%.0f",it.data?.data?.irrigation?.currentData?.volPerFarm)} L"
+                        binding.irrigationReqPerPlant.text ="${String.format(Locale.ENGLISH,"%.0f",it.data?.data?.irrigation?.currentData?.volPerPlant)} L"
+
+                    } else {
+                        binding.irrigationReqValuesLl.visibility = View.GONE
+
+                    }
+
                 }
             }
             /** setting adapter data for weekly data */
@@ -330,10 +354,13 @@ setDetails()
 
 
         /** calling disease api */
-        viewModel.getDisease(accountId, plotId).observe(viewLifecycleOwner) {
+        viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
 
+                    if(it.data?.data?.currentData.isNullOrEmpty()){
+                        binding.gwxDiseaseCl.visibility = View.GONE
+                    }
                     val data = it.data?.data?.currentData?.filter { itt ->
                         itt.disease?.diseaseType == "Disease"
                     }
@@ -364,6 +391,16 @@ setDetails()
         }
     }
 
+    private fun getIrrigationHrs(emiterRate:Double, volPerPlant:Double):String{
+        val driprate: Double = emiterRate
+        val totalmins: Double = volPerPlant * 60 / driprate
+        val hrs = (totalmins / 60).toInt()
+        val mins = (totalmins % 60).toInt()
+        if(hrs>0)
+            return "$hrs hrs $mins mins"
+        return "$mins mins"
+    }
+
     private fun tabs() {
 
         viewModel.viewModelScope.launch {
@@ -392,7 +429,7 @@ setDetails()
                     /** tab for disease */
                     0 -> viewModel.viewModelScope.launch {
                         accountId?.let {
-                            viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
                                 when (it) {
                                     is Resource.Loading -> {
                                         binding.noPest.visibility = View.GONE
@@ -421,7 +458,7 @@ setDetails()
                     1 -> {
                         viewModel.viewModelScope.launch {
                             accountId?.let {
-                                viewModel.getDisease(accountId!!, plotId)
+                                viewModel.getDisease( plotId)
                                     .observe(viewLifecycleOwner) {
                                         when (it) {
                                             is Resource.Loading -> {
@@ -451,7 +488,7 @@ setDetails()
                     2 -> {
                         viewModel.viewModelScope.launch {
                             accountId?.let {
-                                viewModel.getDisease(accountId!!, plotId)
+                                viewModel.getDisease( plotId)
                                     .observe(viewLifecycleOwner) {
                                         //                        val i = it.data?.data?.disease?.size?.minus(1)
                                         //                        while (i!=0) {
@@ -486,8 +523,14 @@ setDetails()
         val save = dialog.findViewById<Button>(R.id.savePreDayL) as Button
         val irrigation = dialog.findViewById<EditText>(R.id.etPerDay)
         val irrigationDone = dialog.findViewById<TextView>(R.id.textView13)
-        if (irrigationDone != null) {
-            TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone)
+        val etIrrigationGiven = dialog.findViewById<TextView>(R.id.textView14)
+        Log.d("irrigationType12", "dialog: $irrigationType")
+        if (irrigationType == "Drip Irrigation") {
+            TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone!!)
+            etIrrigationGiven?.text = "Enter water given per plant"
+        }else{
+            etIrrigationGiven?.text = "Enter water given per area"
+            TranslationsManager().loadString("str_irrigation_per_area", irrigationDone!!,"Irrigation required per area")
         }
         viewModel.viewModelScope.launch {
             val saveTv = TranslationsManager().getString("str_save")
@@ -566,13 +609,12 @@ setDetails()
 
     private fun setDetails() {
 
-//        Log.d("CropName2", "setDetails: $cropName")
-
         viewModel.getMyCrop2().observe(viewLifecycleOwner) {
-            val data = it.data?.first { plot ->
+            val data = it.data?.firstOrNull { plot ->
                 plot.id == plotId
-
             }
+
+            myCrop = data
             cropId = data?.cropId
             cropLogo = data?.cropLogo
             cropName = data?.cropName
@@ -586,23 +628,37 @@ setDetails()
                 binding.clCropStage.visibility = View.GONE
             }
 
-            if (data?.irrigationRequired == null) {
+            if (data?.farmId == null) {
                 binding.gwxIrrigation.visibility = View.GONE
-                binding.btHarvest.visibility = View.GONE
                 binding.noDeviceCv.visibility = View.VISIBLE
-            } else {
-                binding.gwxIrrigation.visibility = View.VISIBLE
-                binding.noDeviceCv.visibility = View.GONE
+                binding.tvIrrigationMessage.text = "Crop is not associated with the farm. Kindly add crop to the farm."
+            } else if (data.device == null) {
+                binding.gwxIrrigation.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Device is not added to farm. Kindly add the device to farm."
+            } else if (!data.device.equals("GWX", ignoreCase = true)) {
+                binding.gwxIrrigation.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Irrigation planner is not availble. Contact the customer support for further information."
+            } else if (data.irrigationPlannerForThisCrop != true) {
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Currently irrigation planner is not avialble for the selected crop."
+            } else if (checkForCropMissingInfo(data)) {
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text =
+                    "Crop have some missing information. Kindly delete the selected crop and add the same crop again with necessary information."
+            } else if (checkingSowingFutureDate(data.sowingDate)) {
+                binding.gwxIrrigationCl.visibility = View.GONE
+                binding.noDeviceCv.visibility = View.VISIBLE
+                binding.tvIrrigationMessage.text = "Irrigation planner will be available, once the sowing date is reached."
             }
 
-
-            if (data?.disease == false) {
-                binding.tabLayout.visibility = View.GONE
-                binding.rvDis.visibility = View.GONE
-            } else {
-                binding.tabLayout.visibility = View.VISIBLE
-                binding.rvDis.visibility = View.VISIBLE
+            if (data?.diseaseDetectionForThisCrop != true) {
+                binding.gwxDiseaseCl.visibility = View.GONE
             }
+
 
             viewModel.viewModelScope.launch {
                 if (data?.irrigationRequired == false) {
@@ -643,9 +699,24 @@ setDetails()
             }
 
             CropStageDate = data?.sowingDate
+            irrigationType = data?.irrigationType
 
-            CropStageDate?.let { it1 -> checkingFutureDate(it1) }
+            setAdapter()
+
+//            CropStageDate?.let { it1 -> checkingSowingFutureDate(it1) }
         }
+    }
+
+    private fun checkForCropMissingInfo(data: MyCropDataDomain): Boolean {
+        if (data.sowingDate.isNullOrEmpty())
+            return true
+        if (data.area.isNullOrEmpty() || data.area?.toDouble()!! <= 0.0)
+            return true
+        if (data.soilType.isNullOrEmpty())
+            return true
+        if (data.irrigationType.isNullOrEmpty())
+            return true
+        return false
     }
 
     private fun translation() {
@@ -674,7 +745,7 @@ setDetails()
         TranslationsManager().loadString("str_edit", binding.tvEdit, "Edit")
         TranslationsManager().loadString(
             "str_risk_outbreak",
-            binding.textView9,
+            binding.tvTodayRisk,
             "Today Risk Outbreak Chances"
         )
         TranslationsManager().loadString(
@@ -810,19 +881,24 @@ setDetails()
         }
     }
 
-    private fun checkingFutureDate(sowingDate: String) {
+    private fun checkingSowingFutureDate(sowingDate: String?): Boolean {
         val currentTime = Calendar.getInstance().time
 
 // Create a Date object for the date you want to compare
         val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(sowingDate)
 
 // Compare the two dates
-        if (sowingDate.after(currentTime)) {
-            // The compareDate is in the future
-            // Do something
-            binding.FutureCv.visibility = View.VISIBLE
-            binding.gwxIrrigation.visibility = View.GONE
-            binding.btHarvest.visibility = View.GONE
+        if (sowingDate != null) {
+            if (sowingDate.after(currentTime)) {
+                return true
+                // The compareDate is in the future
+                // Do something
+//                binding.noDeviceCv.visibility = View.GONE
+//                binding.FutureCv.visibility = View.VISIBLE
+//                binding.gwxIrrigation.visibility = View.GONE
+//                binding.btHarvest.visibility = View.GONE
+            }
         }
+        return false
     }
 }
