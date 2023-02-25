@@ -18,7 +18,7 @@ class IrrigationViewModel:ViewModel() {
     val cropHarvestedLiveData:MutableLiveData<Boolean> = MutableLiveData()
 
     fun getMyCrop2(): LiveData<Resource<List<MyCropDataDomain>>> =
-        CropsRepository.getMyCrop2().asLiveData()
+        CropsRepository.getMyCropIrrigation().asLiveData()
 
      fun getIrrigationHis(account_id: Int,plot_id: Int): LiveData<Resource<AdvIrrigationModel?>> =
         AdvIrrigationRepository.getAdvIrrigation(account_id,plot_id).asLiveData()
