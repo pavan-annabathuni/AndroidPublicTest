@@ -786,7 +786,7 @@ class RegistrationFragment : Fragment() {
                 val result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
                 )
-                val searchTag: String = Objects.requireNonNull(result).get(0) ?: ""
+                val searchTag: String = Objects.requireNonNull(result)?.get(0) ?: ""
                 binding.nameEt.setText(searchTag)
 
             }
