@@ -174,7 +174,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 when(it){
                     is Resource.Success ->{
                         ndviDataList = it.data?.data
-                            ?.filter { ndviData -> ndviData.dt != null }
+                            ?.filter { ndviData -> ndviData.tile?.ndvi != null }
 
                         val datesList: List<String?> = ndviDataList
                             ?.map { data -> changeDateFormat(data.dt) } ?: mutableListOf()
@@ -261,6 +261,8 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 binding.ndviMean.visibility = View.GONE
                 binding.cardView2.visibility = View.VISIBLE
                 binding.tvTextAlert.text = "Image Not Available"
+                binding.tabLayout.visibility = View.GONE
+                binding.cardView3.visibility = View.GONE
             } else {
                 val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
@@ -286,6 +288,8 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                         .tileProvider(tileProvider)
                 )
                 binding.ndviMean.visibility = View.VISIBLE
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.cardView3.visibility = View.VISIBLE
             }
         }
     }
