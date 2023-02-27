@@ -617,6 +617,7 @@ object CropsRepository {
 
 
     fun getMyCrop2(): Flow<Resource<List<MyCropDataDomain>>> {
+        CropMasterSyncer.getCropsMaster()
         return MyCropSyncer().getMyCrop().map {
             when (it) {
                 is Resource.Success -> {

@@ -585,7 +585,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
             binding.kpaTwo.text = "${data.soilMoisture2} kPa"
 
-            if (data.soilTemperature1.isNullOrEmpty()) {
+            if (data.soilTemperature1== null) {
                 it.clSoilTemp.visibility = View.GONE
             }
             if (data.soilMoisture2 == null || data.soilMoisture2 == 0.0) {
@@ -631,7 +631,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "temperature")
                     bundle.putString("toolbar", "Temperature")
-                    bundle.putString("temp_value", data.temperature)
+                    data.temperature?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -647,7 +647,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "rainfall")
                     bundle.putString("toolbar", "Rainfall")
-                    bundle.putString("temp_value", data.rainfall)
+                    data.rainfall?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -663,7 +663,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "humidity")
                     bundle.putString("toolbar", "Humidity")
-                    bundle.putString("temp_value", data.humidity)
+                    data.humidity?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -678,7 +678,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "windspeed")
                     bundle.putString("toolbar", "Wind Speed")
-                    bundle.putString("temp_value", data.windspeed)
+                    data.windspeed?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -695,7 +695,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
-                    bundle.putString("temp_value", data.leafWetness.toString())
+                    data.leafWetness?.toDouble()?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -710,7 +710,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "pressure")
                     bundle.putString("toolbar", "Pressure")
-                    bundle.putString("temp_value", data.pressure)
+                    data.pressure?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -725,7 +725,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_1_kpa")
                     bundle.putString("toolbar", "Soil Moisture Top")
-                    bundle.putString("temp_value", data.soilMoisture1.toString())
+                    data.soilMoisture1?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -741,7 +741,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_2_kpa")
                     bundle.putString("toolbar", "Soil Moisture Bottom")
-                    bundle.putString("temp_value", data.soilMoisture2?.toString())
+                    data.soilMoisture2?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -757,7 +757,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "lux")
                     bundle.putString("toolbar", "Light Intensity")
-                    bundle.putString("temp_value", data.lux)
+                    data.lux?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
@@ -774,7 +774,7 @@ class HomePagePremiumFragment : Fragment(), ViewDeviceFlexListener, Farmdetailsl
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_temperature_1")
                     bundle.putString("toolbar", "Soil Temperature")
-                    bundle.putString("temp_value", data.soilTemperature1)
+                    data.soilTemperature1?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_homePagePremiumFragment3_to_graphsFragment2,
