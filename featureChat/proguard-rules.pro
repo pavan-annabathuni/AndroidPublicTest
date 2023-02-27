@@ -20,5 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep class zendesk.messaging.** { *; }
 -keep class zendesk.** { *; }
+-keepnames class zendesk.** { *; }
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 
