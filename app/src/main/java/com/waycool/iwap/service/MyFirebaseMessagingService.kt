@@ -55,7 +55,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationId = NotificationID.iD
         val intent: Intent
 
-        message.data.get("link")
+//        message.data.get("link")
         if (message.data["link"] != null) {
             intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(message.data["link"])
