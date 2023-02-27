@@ -39,7 +39,7 @@ import java.util.*
 
 class GraphsFragment : Fragment() {
     private var updateDate: String? = null
-    private var paramValue: String? = null
+    private var paramValue: Double? = null
     private var paramType: String? = null
     private var deviceModelId: Int? = null
     private var serialNo: Int? = null
@@ -91,7 +91,7 @@ class GraphsFragment : Fragment() {
             serialNo = arguments?.getInt("serial_no")
             deviceModelId = arguments?.getInt("device_model_id")
             paramType = arguments?.getString("value")
-            paramValue = arguments?.getString("temp_value")
+            paramValue = arguments?.getDouble("temp_value")
             updateDate = arguments?.getString("date_time")
 
            val data = arguments?.getString("toolbar")
@@ -99,7 +99,7 @@ class GraphsFragment : Fragment() {
             binding.tvToolbar.text = arguments?.getString("toolbar")
             binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
             if(paramType.equals("leaf_wetness_hrs",ignoreCase = true)){
-                binding.paramValue.text = if(paramValue == "0") "Dry" else "Wet"
+                binding.paramValue.text = if(paramValue == 0.0) "Dry" else "Wet"
             }
             binding.date.text = DateFormatUtils.dateFormatterDevice(updateDate)
 
