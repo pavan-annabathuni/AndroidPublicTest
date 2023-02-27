@@ -1,7 +1,9 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class GeocodeDTO(
 
     @SerializedName("results" ) var results : ArrayList<ResultsDTO> = arrayListOf(),
@@ -9,6 +11,7 @@ data class GeocodeDTO(
 
 )
 
+@Keep
 data class ResultsDTO (
 
     @SerializedName("address_components" ) var addressComponents : ArrayList<AddressComponentsDTO> = arrayListOf(),
@@ -16,6 +19,7 @@ data class ResultsDTO (
 
 )
 
+@Keep
 data class AddressComponentsDTO (
 
     @SerializedName("long_name"  ) var longName  : String?           = null,

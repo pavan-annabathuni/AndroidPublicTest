@@ -17,11 +17,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.github.anastr.speedviewlib.components.Section
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.Chip
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.maps.android.SphericalUtil
@@ -680,11 +680,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
             it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
             it.deviceNumber.text = "Device Number : ${data.deviceNumber?.uppercase()}"
-            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
-            it.tvWindDegree.text = data.rainfall.toString() + " mm"
-            it.tvHumidityDegree.text = data.humidity.toString() + " %"
-            it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text = data.deviceElevation.toString() + " m"
+            it.tvTempDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.temperature)} \u2103"
+            it.tvWindDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.rainfall)} mm"
+            it.tvHumidityDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.humidity)} %"
+            it.tvWindSpeedDegree.text = "${String.format(Locale.ENGLISH,"%.2f",data.windspeed)} Km/h"
+            it.totalAreeaTwo.text = "${String.format(Locale.ENGLISH,"%.2f",data.deviceElevation)} m"
             if (data.leafWetness != null && data.leafWetness!! == 1) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
@@ -735,7 +735,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
             }
 
-            it.tvPressureDegree.text = data.pressure.toString() + " hPa"
+            it.tvPressureDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.pressure)} hPa"
 
             if (data.soilTemperature1==null) {
                 it.clSoilTemp.visibility = View.GONE
@@ -745,8 +745,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             } else {
                 it.bottomTop.visibility = View.VISIBLE
             }
-            it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
-            it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
+            it.ivSoilDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.soilTemperature1)} \u2103"
+            it.ivSoilDegreeOne.text = "${String.format(Locale.ENGLISH,"%.2f",data.lux)} Lux"
             it.tvLastUpdate.text =
                 "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()
@@ -897,7 +897,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         bundle
                     )
 
-                }
+                    }
 
             }
             binding.clSoilTemp.setOnClickListener {
@@ -914,13 +914,13 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                         bundle
                     )
 
+                    }
+
                 }
-
             }
+
+
         }
-
-
-    }
 
     private fun updateDevice() {
         binding.ivUpdate.visibility = View.INVISIBLE
@@ -950,7 +950,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             mMap = map
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -985,11 +985,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 20
+                        it, 20
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
                 val area: Double =
                     getArea(points) / 4046.86
                 binding.farmAreaSingleFarm.text = (String.format(
@@ -1002,13 +1006,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     }
 
 
-    private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
-        val builder = LatLngBounds.builder()
-        for (ll in points) {
-            builder.include(ll)
+        private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
+            val builder = LatLngBounds.builder()
+            for (ll in points) {
+                if (ll != null) {
+                    builder.include(ll)
+                }
+            }
+            return builder.build()
         }
-        return builder.build()
-    }
 
     private fun getArea(latLngs: List<LatLng?>?): Double {
         return SphericalUtil.computeArea(latLngs)

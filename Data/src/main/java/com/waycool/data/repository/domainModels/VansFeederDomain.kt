@@ -1,8 +1,10 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
+@Keep
 
 data class VansFeederDomain(
 
@@ -12,7 +14,7 @@ data class VansFeederDomain(
 
 )
 
-@Parcelize
+@Parcelize @Keep
 data class VansFeederListDomain(
 
      var id            : Int?            = null,

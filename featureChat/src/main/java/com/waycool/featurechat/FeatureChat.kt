@@ -2,6 +2,7 @@ package com.waycool.featurechat
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.Keep
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.Local.LocalSource
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +15,7 @@ import zendesk.android.events.ZendeskEventListener
 import zendesk.messaging.android.DefaultMessagingFactory
 import zendesk.messaging.android.push.PushNotifications
 
+@Keep
 object FeatureChat {
     var UNREAD_MESSAGES_COUNT = 0
     val zendeskEventListener: ZendeskEventListener = ZendeskEventListener { zendeskEvent ->

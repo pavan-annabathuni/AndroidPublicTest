@@ -1,11 +1,12 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "pest_disease")
+@Entity(tableName = "pest_disease") @Keep
 data class PestDiseaseEntity(
     @ColumnInfo(name = "crop_id") var cropId: Int? = null,
     @ColumnInfo(name = "disease_name") var diseaseName: String? = null,

@@ -1,13 +1,14 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class AddCropResponseDTO (
 
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data: AddCropResponseData)
-
+@Keep
     data class AddCropResponseData(
         @SerializedName("crop_id"           ) var cropId          : Int?    = null,
         @SerializedName("account_no_id"     ) var accountNoId     : Int?    = null,

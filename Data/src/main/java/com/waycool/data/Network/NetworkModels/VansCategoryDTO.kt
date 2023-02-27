@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class VansCategoryDTO(
 
     @SerializedName("data") var data: ArrayList<VansCategoryData> = arrayListOf()
 
 )
 
+@Keep
 data class VansCategoryData(
 
     @SerializedName("id") var id: Int? = null,

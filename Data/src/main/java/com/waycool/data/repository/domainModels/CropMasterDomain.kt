@@ -1,8 +1,9 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 
-
+@Keep
 data class CropMasterDomain(
     var cropId: Int? = null,
     var cropName: String? = null,

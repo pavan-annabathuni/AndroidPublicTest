@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class CropCategoryMasterDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: List<CropCategoryData> = arrayListOf()
 )
 
+@Keep
 data class CropCategoryData(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("category_name") var categoryName: String? = null,

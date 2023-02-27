@@ -1,5 +1,6 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,7 +8,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "crop_master")
+@Entity(tableName = "crop_master")@Keep
 data class CropMasterEntity(
 
     @PrimaryKey var cropId: Int,

@@ -1,7 +1,8 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class WeatherDTO (
 
     @SerializedName("lat"             ) var lat            : Double?           = null,
@@ -13,7 +14,7 @@ data class WeatherDTO (
     @SerializedName("daily"           ) var daily          : List<DailyNetwork>  = arrayListOf()
 
 )
-
+@Keep
 data class WeatherNetwork (
 
     @SerializedName("id"          ) var id          : Int?    = null,
@@ -23,7 +24,7 @@ data class WeatherNetwork (
 
 )
 
-
+@Keep
 data class CurrentNetwork (
 
     @SerializedName("dt"         ) var dt         : Int?               = null,
@@ -42,7 +43,7 @@ data class CurrentNetwork (
     @SerializedName("weather"    ) var weather    : List<WeatherNetwork> = arrayListOf()
 
 )
-
+@Keep
 data class HourlyNetwork (
 
     @SerializedName("dt"         ) var dt         : Int?               = null,
@@ -62,7 +63,7 @@ data class HourlyNetwork (
 
 )
 
-
+@Keep
 data class TempNetwork (
 
     @SerializedName("day"   ) var day   : Double? = null,
@@ -73,7 +74,7 @@ data class TempNetwork (
     @SerializedName("morn"  ) var morn  : Double? = null
 
 )
-
+@Keep
 data class FeelsLikeNetwork (
 
     @SerializedName("day"   ) var day   : Double? = null,
@@ -84,7 +85,7 @@ data class FeelsLikeNetwork (
 )
 
 
-
+@Keep
 data class DailyNetwork (
 
     @SerializedName("dt"         ) var dt        : Int?               = null,
