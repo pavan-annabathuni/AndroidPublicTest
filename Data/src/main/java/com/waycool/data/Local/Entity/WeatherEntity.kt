@@ -1,6 +1,8 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 
+@Keep
 data class WeatherMasterEntity(
     var lat: Double? = null,
     var lon: Double? = null,
@@ -11,7 +13,7 @@ data class WeatherMasterEntity(
     var daily: List<DailyEntity> = emptyList()
 
 )
-
+@Keep
 data class WeatherEntity(
 
     var id: Int? = null,
@@ -20,7 +22,7 @@ data class WeatherEntity(
     var icon: String? = null
 
 )
-
+@Keep
 data class CurrentEntity(
 
     var dt: Int? = null,
@@ -39,7 +41,7 @@ data class CurrentEntity(
     var weather: List<WeatherEntity> = arrayListOf()
 
 )
-
+@Keep
 data class HourlyEntity(
     var dt: Int? = null,
     var temp: Double? = null,
@@ -58,7 +60,7 @@ data class HourlyEntity(
 
 )
 
-
+@Keep
 data class TempEntity(
 
     var day: Double? = null,
@@ -69,7 +71,7 @@ data class TempEntity(
     var morn: Double? = null
 
 )
-
+@Keep
 data class FeelsLikeEntity(
 
     var day: Double? = null,
@@ -79,7 +81,7 @@ data class FeelsLikeEntity(
 
 )
 
-
+@Keep
 data class DailyEntity(
 
     var dt: Int? = null,

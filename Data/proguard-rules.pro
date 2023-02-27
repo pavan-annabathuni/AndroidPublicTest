@@ -21,8 +21,21 @@
 #-renamesourcefileattribute SourceFile
 
 
--keep class com.waycool.data.** { *; }
+#-keep class com.waycool.data.** { *; }
+-keep class com.waycool.data.Local.Entity.** { *; }
+-keep class com.waycool.data.repository.domainModels.** { *; }
+#-keep class com.waycool.data.repository.domainModels.weather.** { *; }
+-keep class com.waycool.data.Network.NetworkModels.** { *; }
+
+-keep @kotlinx.android.parcel.Parcelize public class *
+-keep class kotlinx.** { *; }
+-keep class kotlinx.parcelize.** { *; }
+-keep class * extends kotlinx.parcelize.Parcelize
+
 -keepnames class * extends android.os.Parcelable
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator CREATOR;
+}
 -keepnames class * extends java.io.Serializable
 
 # crashlytics

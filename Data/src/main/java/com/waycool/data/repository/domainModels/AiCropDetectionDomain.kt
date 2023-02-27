@@ -1,5 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
+
+@Keep
 data class AiCropDetectionDomain(
     var id: Int? = null,
     var imageUrl: String? = null,

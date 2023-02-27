@@ -1,5 +1,8 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
+
+@Keep
 class CropProtectionParent(
     var crop_id: Int?,
     var disease_name: String?,

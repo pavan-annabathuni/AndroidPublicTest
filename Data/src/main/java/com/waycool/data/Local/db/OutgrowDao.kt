@@ -1,5 +1,6 @@
 package com.waycool.data.Local.db
 
+import androidx.annotation.Keep
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,6 +12,7 @@ import com.waycool.data.Local.Entity.TagsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
+@Keep
 interface OutgrowDao {
 
     //Tags

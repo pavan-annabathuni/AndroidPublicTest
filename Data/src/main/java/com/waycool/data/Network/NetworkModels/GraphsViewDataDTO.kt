@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class GraphsViewDataDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: GraphViewData?
 )
 
+@Keep
 data class GraphViewData(
     @SerializedName("12_hours_data") var last12HrsData: Map<String, Double>?= emptyMap(),
     @SerializedName("30_days_data") var last30DaysData: Map<String, Double>?= emptyMap(),

@@ -1,6 +1,7 @@
 package com.waycool.data.Local.db
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,9 +12,9 @@ import java.lang.Exception
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
+@Keep
 @Database(entities = [TagsEntity::class, CropMasterEntity::class,PestDiseaseEntity::class,CropInformationEntityData::class,MyCropDataEntity::class,AppTranslationsEntity::class,MyFarmsEntity::class,ViewDeviceEntity::class,AiCropHistoryEntity::class,SoilTestHistoryEntity::class], version = 12, exportSchema = false)
 @TypeConverters(TypeConverter::class)
-
 abstract class OutgrowDB : RoomDatabase() {
 
     abstract fun outgrowDao(): OutgrowDao

@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 class MandiModel(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data    : MandiData?    = MandiData()
 )
 
+@Keep
 data class MandiData(
 @SerializedName("page"                   ) var page                   : Int?               = null,
 @SerializedName("numberOfRecordsPerPage" ) var numberOfRecordsPerPage : Int?               = null,
@@ -18,6 +21,7 @@ data class MandiData(
 
 )
 
+@Keep
 data class MandiRecord(
     @SerializedName("crop_te"         ) var cropTe        : String? = null,
     @SerializedName("market_te"       ) var marketTe      : String? = null,

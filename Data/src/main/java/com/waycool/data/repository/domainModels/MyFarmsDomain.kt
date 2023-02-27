@@ -1,10 +1,12 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
+@Parcelize @Keep
+
 data class MyFarmsDomain (
    var id               : Int?    = null,
    var farmName         : String? = null,

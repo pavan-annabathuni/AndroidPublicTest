@@ -1,15 +1,16 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.waycool.data.Network.NetworkModels.MandiData
 import com.waycool.data.repository.domainModels.MandiDomainRecord
-
+@Keep
 data class MandiEntity(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data    : MandiEntityData?    = MandiEntityData()
 )
-
+@Keep
 data class MandiEntityData(
     var numberOfRecordsPerPage : Int?               = null,
     var page                   : Int?               = null,
@@ -18,7 +19,7 @@ data class MandiEntityData(
     var totalPages             : Int?               = null,
     var totalResults           : Int?               = null,
 )
-
+@Keep
 data class MandiEntityRecord(
      var cropTe        : String? = null,
      var marketTe      : String? = null,

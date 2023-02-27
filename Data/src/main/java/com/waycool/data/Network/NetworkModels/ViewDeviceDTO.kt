@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class ViewDeviceDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: ArrayList<ViewDeviceData> = arrayListOf()
 )
 
+@Keep
 data class ViewDeviceData(
     @SerializedName("id"                        ) var id                    : Int?                   = null,
     @SerializedName("data_timestamp"            ) var dataTimestamp         : String?                = null,
@@ -41,18 +44,20 @@ data class ViewDeviceData(
     @SerializedName("model") var model: ViewIOTModelData? = ViewIOTModelData()
 )
 
+@Keep
 data class ViewIOTData(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("battery") var battery: String? = null
 )
 
+@Keep
 data class ViewIOTModelData(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("model_name") var modelName: String? = null,
     @SerializedName("series") var series: String? = null
 )
 
-
+@Keep
 data class RangesData (
 
     @SerializedName("min"    ) var min    : Double?    = null,

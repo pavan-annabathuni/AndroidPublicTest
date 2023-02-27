@@ -1,7 +1,9 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class FarmSupportModel(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
@@ -9,6 +11,7 @@ data class FarmSupportModel(
 
 )
 
+@Keep
 data class FarmSupportData (
 
     @SerializedName("name"     ) var name     : String? = null,
@@ -19,12 +22,15 @@ data class FarmSupportData (
 
 )
 
+@Keep
 data class GetFarmSupport(
     @SerializedName("status"  ) var status  : Boolean?        = null,
     @SerializedName("message" ) var message : String?         = null,
     @SerializedName("data"    ) var data    : ArrayList<GetFarmSupportData> = arrayListOf()
 
 )
+
+@Keep
 data class GetFarmSupportData (
 
     @SerializedName("id"                ) var id              : Int?               = null,
@@ -39,6 +45,7 @@ data class GetFarmSupportData (
 //    @SerializedName("account"           ) var account         : ArrayList<Account> = arrayListOf()
 
 )
+@Keep
 data class Roles (
 
     @SerializedName("id"          ) var id          : Int?    = null,
@@ -52,6 +59,7 @@ data class Roles (
 
 )
 
+@Keep
 data class DeleteFarmSupport(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,

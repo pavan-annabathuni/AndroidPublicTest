@@ -1,5 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
+
+@Keep
 data class UserDetailsDomain(
     var userId          : Int?     = null,
     var name            : String?  = null,
@@ -19,7 +22,7 @@ data class UserDetailsDomain(
 
 )
 
-
+@Keep
 data class ProfileDomain(
 
     var id             : Int?    = null,

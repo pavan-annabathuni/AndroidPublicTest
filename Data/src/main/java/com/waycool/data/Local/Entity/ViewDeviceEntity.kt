@@ -1,12 +1,13 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.waycool.data.Network.NetworkModels.*
 
-@Entity(tableName = "my_devices")
+@Entity(tableName = "my_devices") @Keep
 data class ViewDeviceEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "uniqueid"                    ) var uniqueId                 : String,

@@ -1,11 +1,12 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.waycool.data.Network.NetworkModels.CropDataData
-@Entity(tableName = "ai_history")
+@Entity(tableName = "ai_history") @Keep
 data class AiCropHistoryEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") var id: Int?    = null,

@@ -1,7 +1,8 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class DashboardEntity(
     var id: Int? = null,
     var name: String? = null,
@@ -12,7 +13,7 @@ data class DashboardEntity(
     var settings: String? = null,
     var subscription: SubscriptionEntity? = SubscriptionEntity()
 )
-
+@Keep
 data class SubscriptionEntity(
 
     var iot: Boolean? = null

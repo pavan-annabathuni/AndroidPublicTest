@@ -1,8 +1,9 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class ViewDeviceDomain (
         var id                 : Int?                = null,
         var dataTimestamp      : String?             = null,
@@ -33,7 +34,7 @@ data class ViewDeviceDomain (
         var isApproved         : Int?             = null,
 
         )
-
+@Keep
 data class RangesDomain (
 
       var min    : Double?    = null,

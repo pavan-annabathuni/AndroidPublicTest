@@ -1,6 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+@Keep
 
 data class MyCropsDomain(@SerializedName("status"  ) var status  : Boolean?        = null,
                          @SerializedName("message" ) var message : String?         = null,
@@ -14,6 +16,7 @@ data class MyCropsDomain(@SerializedName("status"  ) var status  : Boolean?     
 //    @SerializedName("crop_logo" ) var cropLogo : String? = null
 //
 //)
+@Keep
 
 data class MyCropDataDomain (
 

@@ -52,7 +52,7 @@
 
 # Keep the classes used by the KTX extensions for Navigation
 -keepnames class androidx.navigation.fragment.NavHostFragment
--keep class * extends androidx.fragment.app.Fragment{}
+#-keep class * extends androidx.fragment.app.Fragment{}
 -keep class androidx.navigation.ui.** { *; }
 
 

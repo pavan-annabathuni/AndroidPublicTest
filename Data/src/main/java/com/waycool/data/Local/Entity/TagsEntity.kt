@@ -1,12 +1,13 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "tags")
+@Entity(tableName = "tags") @Keep
 data class TagsEntity(
     @PrimaryKey
     val id: Int,

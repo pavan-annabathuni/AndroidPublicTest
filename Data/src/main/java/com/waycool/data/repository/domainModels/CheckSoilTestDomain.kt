@@ -1,11 +1,12 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
-@Parcelize
+@Parcelize @Keep
 data class CheckSoilTestDomain(
 //    val onp_address: @RawValue Any? = null,
 //    val onp_country: @RawValue Any? = null,

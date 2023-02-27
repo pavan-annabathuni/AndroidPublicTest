@@ -1,6 +1,8 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 
+@Keep
 data class UserDetailsEntity(
    var userId          : Int?     = null,
    var name            : String?  = null,
@@ -18,7 +20,7 @@ data class UserDetailsEntity(
    var roleId          : Int?     = null
 )
 
-
+@Keep
 data class ProfileEntity(
     var id             : Int?    = null,
     var remotePhotoUrl : String? = null,

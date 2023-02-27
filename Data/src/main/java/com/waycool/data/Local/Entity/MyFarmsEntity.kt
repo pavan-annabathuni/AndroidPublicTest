@@ -1,5 +1,6 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 
 @Entity(tableName = "my_farms")
 @TypeConverters
+@Keep
 data class MyFarmsEntity(
     @PrimaryKey
     @ColumnInfo(name="id"                  ) var id               : Int?    = null,

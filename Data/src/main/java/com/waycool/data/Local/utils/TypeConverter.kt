@@ -2,6 +2,7 @@ package com.waycool.data.Local.utils
 
 import android.util.Log
 import android.util.MalformedJsonException
+import androidx.annotation.Keep
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.android.gms.maps.model.LatLng
@@ -14,6 +15,7 @@ import com.waycool.data.Network.NetworkModels.DashBoardDTO
 import com.waycool.data.repository.domainModels.CropVarityDomain
 
 @ProvidedTypeConverter
+@Keep
 object TypeConverter {
 
     fun convertLanguageMasterToString(language: List<LanguageMasterEntity>): String {
