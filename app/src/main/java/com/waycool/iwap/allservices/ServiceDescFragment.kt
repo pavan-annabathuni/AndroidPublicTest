@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -38,7 +39,7 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentServiceDescBinding.inflate(inflater)
-        binding.privacyCloseBtn.setOnClickListener() {
+        binding.privacyCloseBtn.setOnClickListener {
             this.dismiss()
             audio?.release()
         }
@@ -56,11 +57,11 @@ class ServiceDescFragment : BottomSheetDialogFragment() {
 
     private fun audioPlayer() {
         Log.d("audioUrl", "audioPlayer: $audioUrl")
-        if (audioUrl.isNullOrEmpty()) {
+        if (audioUrl.isNullOrEmpty()&& !URLUtil.isValidUrl(audioUrl)) {
             binding.audioLayout.visibility = View.GONE
         }else{
             binding.audioLayout.visibility = View.VISIBLE
-            binding.playPauseLayout.setOnClickListener() {
+            binding.playPauseLayout.setOnClickListener {
             mediaPlayer = MediaPlayer()
             mediaPlayer!!.setOnCompletionListener {
                 binding.mediaSeekbar.progress = 0

@@ -56,7 +56,7 @@
                 app:cardBackgroundColor="#F4F7CE"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                         android:layout_marginStart="16dp"
                         android:background="@drawable/ic_white_circle"
                         android:padding="12dp"
-                        android:src="@drawable/tomato"
+                        android:src="@drawable/ic_outgrow"
                         app:civ_border_color="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Tomato"
+                        tools:text="Tomato"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -94,6 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:padding="8dp"
                         android:text="Country Tomato"
                         android:textColor="@color/darkGray"
                         android:textSize="14sp"
@@ -105,10 +106,11 @@
                         android:id="@+id/tv_crop_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:drawableEnd="@drawable/ic_viewall"
                         android:drawablePadding="4dp"
+                        android:padding="8dp"
                         android:text="@string/crop_overview"
                         android:textAlignment="center"
                         android:textColor="@color/DarkGreen"
@@ -123,81 +125,171 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noDeviceCv"
                 tools:visibility="visible">
 
-                <LinearLayout
-                    android:id="@+id/ll2"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/gwx_irrigation_cl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_cropStage"
+
+                    <LinearLayout
+                        android:id="@+id/ll2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:id="@+id/cropStage"
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:layout_marginEnd="16dp"
-                            android:drawableEnd="@drawable/ic_viewall"
-                            android:drawablePadding="8dp"
-                            android:text="View All"
-                            android:textColor="@color/DarkGreen"
-                            android:textStyle="bold"
-                            android:gravity="end"
-                            app:layout_constraintBottom_toBottomOf="@+id/graps"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.96"
-                            app:layout_constraintStart_toEndOf="@+id/graps"
-                            app:layout_constraintTop_toTopOf="@+id/graps" />
-
-                        <TextView
-                            android:id="@+id/graps"
-                            style="@style/Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Crop Stage"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_cropStageClick"
+                            android:id="@+id/cl_cropStage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="visible"
-                            android:layout_marginStart="16dp"
-                            app:layout_constraintStart_toStartOf="@+id/graps"
-                            app:layout_constraintTop_toBottomOf="@+id/graps">
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/cropStage"
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:layout_marginEnd="16dp"
+                                android:drawableEnd="@drawable/ic_viewall"
+                                android:drawablePadding="8dp"
+                                android:gravity="end"
+                                android:text="View All"
+                                android:textColor="@color/DarkGreen"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="@+id/graps"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.96"
+                                app:layout_constraintStart_toEndOf="@+id/graps"
+                                app:layout_constraintTop_toTopOf="@+id/graps" />
+
+                            <TextView
+                                android:id="@+id/graps"
+                                style="@style/Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:text="Crop Stage"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/cl_cropStageClick"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:visibility="visible"
+                                app:layout_constraintStart_toStartOf="@+id/graps"
+                                app:layout_constraintTop_toBottomOf="@+id/graps">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/materialCardViewGraps"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:layout_marginTop="16dp"
+                                    android:theme="@style/Theme.MaterialComponents.Light"
+                                    app:cardBackgroundColor="@color/white"
+                                    app:cardCornerRadius="8dp"
+
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:strokeColor="@color/LightGray"
+                                    app:strokeWidth="1dp">
+
+                                    <ImageView
+                                        android:id="@+id/cropStageImg"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_irrigation_2" />
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <TextView
+                                    android:id="@+id/topping"
+                                    style="@style/Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintStart_toEndOf="@+id/materialCardViewGraps"
+                                    app:layout_constraintTop_toTopOf="@+id/materialCardViewGraps"
+                                    tools:text="Topping" />
+
+
+                                <TextView
+                                    android:id="@+id/cropStageDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginTop="8dp"
+                                    android:drawablePadding="8dp"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintStart_toStartOf="@+id/topping"
+                                    app:layout_constraintTop_toBottomOf="@+id/topping"
+                                    tools:text="15 August 22 16:00pm" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <View
+                                android:id="@+id/viewCstage"
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp"
+                                android:layout_marginTop="24dp"
+                                android:background="@color/LightGray"
+                                app:layout_constraintTop_toBottomOf="@+id/cl_cropStageClick" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/LightGray"
+                            android:visibility="gone" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                style="@style/Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:text="Irrigation"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/materialCardViewGraps"
+                                android:id="@+id/materialCardView2"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="16dp"
                                 android:theme="@style/Theme.MaterialComponents.Light"
                                 app:cardBackgroundColor="@color/white"
                                 app:cardCornerRadius="8dp"
-
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView3"
                                 app:strokeColor="@color/LightGray"
                                 app:strokeWidth="1dp">
 
                                 <ImageView
-                                    android:id="@+id/cropStageImg"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -206,522 +298,594 @@
                             </com.google.android.material.card.MaterialCardView>
 
                             <TextView
-                                android:id="@+id/topping"
+                                android:id="@+id/textView4"
                                 style="@style/Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                tools:text="Topping"
+                                android:layout_marginTop="16dp"
+                                android:text="Today"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
-                                app:layout_constraintStart_toEndOf="@+id/materialCardViewGraps"
-                                app:layout_constraintTop_toTopOf="@+id/materialCardViewGraps" />
+                                app:layout_constraintStart_toEndOf="@+id/materialCardView2"
+                                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-
-                            <TextView
-                                android:id="@+id/cropStageDate"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/irrigation_req_values_ll"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center|start"
                                 android:layout_marginTop="8dp"
-                                android:drawablePadding="8dp"
-                                tools:text="15 August 22 16:00pm"
-                                android:textColor="@color/black"
-                                app:layout_constraintStart_toStartOf="@+id/topping"
-                                app:layout_constraintTop_toBottomOf="@+id/topping" />
+                                android:layout_marginEnd="16dp"
+                                android:visibility="gone"
+                                tools:visibility="visible"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/textView4"
+                                app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+                                <LinearLayout
+                                    android:id="@+id/linearla"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
+
+                                        <com.waycool.uicomponents.Text.SmallTextMedium
+                                            android:id="@+id/irrigation_req_area"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:padding="4dp"
+                                            android:text="for 3.5 Acre"
+                                            android:textColor="@color/textdark" />
+
+                                        <com.waycool.uicomponents.Text.Title3SemiBold
+                                            android:id="@+id/total_irrigation_req"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="marquee"
+                                            android:marqueeRepeatLimit="marquee_forever"
+                                            android:padding="4dp"
+                                            android:scrollHorizontally="true"
+                                            android:singleLine="true"
+                                            android:textColor="@color/textdark"
+                                            tools:text="for 3.5 Acre" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/per_plant_water_ll"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
+
+                                        <com.waycool.uicomponents.Text.SmallTextMedium
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:padding="4dp"
+                                            android:text="Per Plant"
+                                            android:textColor="@color/textdark" />
+
+                                        <com.waycool.uicomponents.Text.Title3SemiBold
+                                            android:id="@+id/irrigation_req_per_plant"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:ellipsize="marquee"
+                                            android:marqueeRepeatLimit="marquee_forever"
+                                            android:padding="4dp"
+                                            android:scrollHorizontally="true"
+                                            android:singleLine="true"
+                                            android:textColor="@color/textdark"
+                                            tools:text="for 3.5 Acre" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <com.waycool.uicomponents.Text.ParagraphMedium
+                                    android:id="@+id/water_in_hours_tv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/textdark"
+                                    tools:text="*Irrigate for 1 hrs"
+                                    tools:visibility="visible" />
+                            </LinearLayout>
+
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:minWidth="230dp"
+                                app:cardBackgroundColor="#FFFAF0"
+                                app:cardCornerRadius="8dp"
+                                app:cardElevation="0dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/textView4"
+                                app:layout_constraintTop_toBottomOf="@+id/irrigation_req_values_ll">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:id="@+id/ivCloudy"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center|start"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="4dp"
+                                        android:layout_marginBottom="8dp"
+                                        android:src="@drawable/ic_green_irrigation"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/irrigation_req"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center|start"
+                                        android:drawablePadding="8dp"
+                                        android:paddingStart="8dp"
+                                        android:text="Irrigation not required"
+                                        android:textColor="@color/black"
+                                        app:layout_constraintBottom_toBottomOf="@+id/ivCloudy"
+                                        app:layout_constraintStart_toEndOf="@+id/ivCloudy"
+                                        app:layout_constraintTop_toTopOf="@+id/ivCloudy" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </androidx.cardview.widget.CardView>
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
-                        <View
-                            android:id="@+id/viewCstage"
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="24dp"
-                            android:background="@color/LightGray"
-                            app:layout_constraintTop_toBottomOf="@+id/cl_cropStageClick" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
 
                     <View
+                        android:id="@+id/view1"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="24dp"
                         android:background="@color/LightGray"
-                        android:visibility="gone" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView3"
-                            style="@style/Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Irrigation"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/materialCardView2"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:theme="@style/Theme.MaterialComponents.Light"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="8dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView3"
-                            app:strokeColor="@color/LightGray"
-                            app:strokeWidth="1dp">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_irrigation_2" />
-
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <TextView
-                            android:id="@+id/textView4"
-                            style="@style/Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:text="Today"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toEndOf="@+id/materialCardView2"
-                            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cardView"
-                            android:layout_width="232dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="8dp"
-                            app:cardBackgroundColor="#FFFAF0"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="0dp"
-                            app:layout_constraintStart_toStartOf="@+id/textView4"
-                            app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-                            <TextView
-                                android:id="@+id/irrigation_req"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|start"
-                                android:drawableStart="@drawable/ic_yellow"
-                                android:drawablePadding="8dp"
-                                android:paddingStart="8dp"
-                                android:text="Irrigation not required"
-                                android:textColor="@color/black" />
-                        </androidx.cardview.widget.CardView>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </LinearLayout>
-
-
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@color/LightGray"
-                    app:layout_constraintTop_toBottomOf="@+id/ll2" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    style="@style/Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Weekly Irrigation Forecast"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view1" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleViewDis"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/item_weekly_irrgation"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/bt_forecast"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:theme="@style/Theme.MaterialComponents.Light"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardElevation="0dp"
-                    app:cornerRadius="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recycleViewDis"
-                    app:strokeColor="@color/DarkGreen"
-                    app:strokeWidth="1dp"
-                    tools:visibility="visible">
+                        app:layout_constraintTop_toBottomOf="@+id/ll2" />
 
                     <TextView
-                        android:id="@+id/tv_viewDeatils"
+                        android:id="@+id/textView5"
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableEnd="@drawable/ic_viewall"
-                        android:drawablePadding="6dp"
-                        android:text="View Details"
-                        android:textColor="@color/DarkGreen"
-                        android:textSize="16sp" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Weekly Irrigation Forecast"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view1" />
 
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="32dp"
-                    android:background="@color/LightGray"
-                    app:layout_constraintTop_toBottomOf="@+id/bt_forecast" />
-
-
-                <LinearLayout
-                    android:id="@+id/ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view2">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/dailyIrrigation"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleViewDis"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView5"
+                        tools:itemCount="7"
+                        tools:listitem="@layout/item_weekly_irrgation"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/bt_forecast"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardElevation="0dp"
+                        app:cornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/recycleViewDis"
+                        app:strokeColor="@color/DarkGreen"
+                        app:strokeWidth="1dp"
                         tools:visibility="visible">
 
                         <TextView
-                            android:id="@+id/textView6"
-                            style="@style/Bold"
-                            android:layout_width="196dp"
+                            android:id="@+id/tv_viewDeatils"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:text="@string/have_you_irrigated_your_crop_today"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:visibility="visible" />
+                            android:layout_gravity="center"
+                            android:drawableEnd="@drawable/ic_viewall"
+                            android:drawablePadding="6dp"
+                            android:text="View Details"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="16sp" />
+                    </com.google.android.material.card.MaterialCardView>
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/irrigation_no"
-                            android:layout_width="154dp"
-                            android:layout_height="48dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:backgroundTint="@color/white"
-                            android:gravity="center"
-                            android:paddingTop="8dp"
-                            android:text="No"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:theme="@style/AppTheme"
-                            app:cardCornerRadius="8dp"
-                            app:cornerRadius="8dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView6"
-                            app:strokeColor="@color/DarkGreen"
-                            app:strokeWidth="1dp" />
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="32dp"
+                        android:background="@color/LightGray"
+                        app:layout_constraintTop_toBottomOf="@+id/bt_forecast" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/irrigation_yes"
-                            android:layout_width="154dp"
-                            android:layout_height="48dp"
-                            android:layout_marginTop="24dp"
-                            android:layout_marginEnd="16dp"
-                            android:backgroundTint="@color/DarkGreen"
-                            android:gravity="center"
-                            android:text="Yes"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:theme="@style/AppTheme"
-                            app:cardCornerRadius="8dp"
-                            app:cornerRadius="8dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView6"
-                            app:strokeColor="@color/DarkGreen"
-                            app:strokeWidth="1dp" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/perDay"
+                    <LinearLayout
+                        android:id="@+id/ll"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/view2">
 
-                        <TextView
-                            android:id="@+id/tv_perDay"
-                            style="@style/Bold"
-                            android:layout_width="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/dailyIrrigation"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:text="Irrigation done today per Plant"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                style="@style/Bold"
+                                android:layout_width="196dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:text="@string/have_you_irrigated_your_crop_today"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:visibility="visible" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/irrigation_no"
+                                android:layout_width="154dp"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:backgroundTint="@color/white"
+                                android:gravity="center"
+                                android:paddingTop="8dp"
+                                android:text="No"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:theme="@style/AppTheme"
+                                app:cardCornerRadius="8dp"
+                                app:cornerRadius="8dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                                app:strokeColor="@color/DarkGreen"
+                                app:strokeWidth="1dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/irrigation_yes"
+                                android:layout_width="154dp"
+                                android:layout_height="48dp"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:backgroundTint="@color/DarkGreen"
+                                android:gravity="center"
+                                android:text="Yes"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:theme="@style/AppTheme"
+                                app:cardCornerRadius="8dp"
+                                app:cornerRadius="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                                app:strokeColor="@color/DarkGreen"
+                                app:strokeWidth="1dp" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/perDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/view2">
+
+                            <TextView
+                                android:id="@+id/tv_perDay"
+                                style="@style/Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:text="Irrigation done today per Plant"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textViewL"
+                                style="@style/Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="24dp"
+                                android:text="0 L"
+                                android:textColor="@color/black"
+                                android:textSize="24sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_perDay" />
+
+                            <TextView
+                                android:id="@+id/tv_edit"
+                                style="@style/Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:text="Edit"
+                                android:textColor="@color/DarkGreen"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/textViewL" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/LightGray"
+                        app:layout_constraintTop_toBottomOf="@+id/ll" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        style="@style/Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/irrigation_history"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view3" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleViewHis"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView8"
+                        tools:itemCount="7"
+                        tools:listitem="@layout/item_history"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/bt_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardElevation="0dp"
+                        app:cornerRadius="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/recycleViewHis"
+                        app:strokeColor="@color/DarkGreen"
+                        app:strokeWidth="1dp"
+                        tools:visibility="visible">
 
                         <TextView
-                            android:id="@+id/textViewL"
-                            style="@style/Bold"
+                            android:id="@+id/tv_viewDetails2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="24dp"
-                            android:text="0 L"
-                            android:textColor="@color/black"
-                            android:textSize="24sp"
+                            android:layout_gravity="center"
+                            android:drawableEnd="@drawable/ic_viewall"
+                            android:drawablePadding="6dp"
+                            android:text="View Details"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="16sp" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:id="@+id/view4"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/LightGray"
+                        app:layout_constraintTop_toBottomOf="@+id/bt_history" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/gwx_disease_cl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/gwx_irrigation_cl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_todayRisk"
+                        style="@style/Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Today Risk Outbreak Chances"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Today"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_todayRisk" />
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        android:theme="@style/Theme.AppCompat.Light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_today"
+                        app:tabIndicator="@drawable/tab_indicator"
+                        app:tabIndicatorColor="@color/DarkGreen"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabIndicatorHeight="4dp"
+                        app:tabMode="fixed"
+                        app:tabSelectedTextColor="@color/Green"
+                        app:tabTextColor="@color/black"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/LightGray"
+                        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_dis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_dis"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_perDay" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:itemCount="7"
+                            tools:listitem="@layout/item_disease_history"
+                            tools:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/tv_edit"
-                            style="@style/Bold"
+                            android:id="@+id/noPest"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:text="Edit"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:drawablePadding="6dp"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:text="No risk outbreak chances"
                             android:textColor="@color/DarkGreen"
                             android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textViewL" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/bt_disease"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardElevation="0dp"
+                        app:cornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_dis"
+                        app:strokeColor="@color/DarkGreen"
+                        app:strokeWidth="1dp"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/viewDetails3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:drawableEnd="@drawable/ic_viewall"
+                            android:drawablePadding="6dp"
+                            android:text="View Details"
+                            android:textColor="@color/DarkGreen"
+                            android:textSize="16sp" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:id="@+id/view5"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/LightGray"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/bt_disease" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <View
-                    android:id="@+id/view3"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/LightGray"
-                    app:layout_constraintTop_toBottomOf="@+id/ll" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    style="@style/Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/irrigation_history"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view3" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleViewHis"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/item_history"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/bt_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:theme="@style/Theme.MaterialComponents.Light"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardElevation="0dp"
-                    app:cornerRadius="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recycleViewHis"
-                    app:strokeColor="@color/DarkGreen"
-                    app:strokeWidth="1dp"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/tv_viewDetails2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableEnd="@drawable/ic_viewall"
-                        android:drawablePadding="6dp"
-                        android:text="View Details"
-                        android:textColor="@color/DarkGreen"
-                        android:textSize="16sp" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <View
-                    android:id="@+id/view4"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/LightGray"
-                    app:layout_constraintTop_toBottomOf="@+id/bt_history" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    style="@style/Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Today Risk Outbreak Chances"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-                <TextView
-                    android:id="@+id/tv_today"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Today"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@color/white"
-                    android:orientation="horizontal"
-                    android:theme="@style/Theme.AppCompat.Light"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_today"
-                    app:tabIndicator="@drawable/tab_indicator"
-                    app:tabIndicatorColor="@color/DarkGreen"
-                    app:tabIndicatorFullWidth="false"
-                    app:tabIndicatorHeight="4dp"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/Green"
-                    app:tabTextColor="@color/black"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/LightGray"
-                    app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_dis"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/item_disease_history"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/bt_disease"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:theme="@style/Theme.MaterialComponents.Light"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardElevation="0dp"
-                    app:cornerRadius="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_dis"
-                    app:strokeColor="@color/DarkGreen"
-                    app:strokeWidth="1dp"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/viewDetails3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableEnd="@drawable/ic_viewall"
-                        android:drawablePadding="6dp"
-                        android:text="View Details"
-                        android:textColor="@color/DarkGreen"
-                        android:textSize="16sp" />
-                </com.google.android.material.card.MaterialCardView>
-
-                <View
-                    android:id="@+id/view5"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/LightGray"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/bt_disease" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="@+id/bt_forecast"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -796,14 +960,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <com.waycool.uicomponents.Text.Title3SemiBold
-                        android:id="@+id/textView11"
+                        android:id="@+id/tvIrrigationMessage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -830,7 +994,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

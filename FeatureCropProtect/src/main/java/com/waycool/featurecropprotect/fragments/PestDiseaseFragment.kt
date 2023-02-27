@@ -67,7 +67,7 @@ class PestDiseaseFragment : Fragment() {
     ): View {
 
         binding = FragmentPestDiseaseBinding.inflate(inflater)
-        binding.toolbar.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             val isSuccess = findNavController().popBackStack()
             if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
         }

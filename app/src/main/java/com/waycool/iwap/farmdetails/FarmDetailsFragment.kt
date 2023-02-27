@@ -23,8 +23,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.Chip
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.Network.NetworkModels.DeltaT
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -44,7 +46,10 @@ import com.waycool.uicomponents.utils.DateFormatUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallback {
@@ -91,6 +96,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.let { it1 -> it1.finish() }
         }
+        viewModel.getMyFarms().observe(viewLifecycleOwner) {
+            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
+            myFarm = farm
+            farmDetailsObserve()
+            drawFarm()
+        }
         return binding.root
     }
 
@@ -113,12 +124,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         checkRole()
         myCrop()
 
-        viewModel.getMyFarms().observe(viewLifecycleOwner) {
-            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
-            myFarm = farm
-            farmDetailsObserve()
-            drawFarm()
-        }
+
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.onBackPressed()
@@ -225,7 +231,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.tvPumpFlowRate,
             "Pump Flow Rate (in Ltre per hr)"
         )
-        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
+//        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
         TranslationsManager().loadString("str_mycrops", binding.myCropsTitle, "My Crops")
         TranslationsManager().loadString("my_device", binding.titleMyDevice, "My Devices")
         TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
@@ -280,7 +286,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.toolbarTextFarm.text = myFarm?.farmName
         binding.tvPempDate.text = myFarm?.farmPumpHp ?: "NA"
         binding.totalFormDate.text = myFarm?.farmPumpType ?: "NA"
-        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize ?: "NA"
+        binding.totalHeightInches.text = myFarm?.farmPumpDepth ?: "NA"
+        binding.totalPempInches.text = myFarm?.farmPumpPipeSize ?: "NA"
         binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate ?: "NA"
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE
@@ -311,13 +318,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             binding.lineTwo.visibility = View.GONE
 
                         } else {
-                            deltaAdapter.setMovieList(it.data?.data?.Today)
+
+                            deltaAdapter.setMovieList(getSprayingItemsToday(it.data?.data?.Today))
                         }
                         if (it.data?.data?.Tomorrow.isNullOrEmpty()) {
                             binding.textView164.visibility = View.GONE
                             binding.sparayingRv2.visibility = View.GONE
                         } else {
-                            deltaTomAdapter.setMovieList(it.data?.data?.Tomorrow)
+                            deltaTomAdapter.setMovieList(getSprayingItems(it.data?.data?.Tomorrow))
                         }
                     }
                     is Resource.Error -> {
@@ -348,6 +356,43 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
             }
         }
+    }
+
+
+    //    private String getdeltaTLastUpdated(List<Spraying2Days.Day> today) {
+    //        Calendar calendar = Calendar.getInstance();
+    //        return today.get(calendar.get(Calendar.HOUR_OF_DAY)).getTime();
+    //    }
+    private fun getSprayingItemsToday(today: MutableList<DeltaT>?): List<DeltaT> {
+        if (today.isNullOrEmpty())
+            return emptyList()
+        val iterator = today.iterator()
+        while (iterator.hasNext()) {
+            val day = iterator.next()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH", Locale.ENGLISH)
+            try {
+                val date = dateFormat.parse(day.datetime)
+                val calendar = Calendar.getInstance()
+                val calendar1 = Calendar.getInstance()
+                calendar1.time = date
+                if (calendar1[Calendar.HOUR_OF_DAY] <= calendar[Calendar.HOUR_OF_DAY]) {
+                    iterator.remove()
+                } else if (calendar1[Calendar.HOUR_OF_DAY] >= 20) {
+                    iterator.remove()
+                }
+            } catch (e: ParseException) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        }
+        return today
+    }
+
+    private fun getSprayingItems(tomorrow: MutableList<DeltaT>?): List<DeltaT> {
+        if (tomorrow.isNullOrEmpty())
+            return mutableListOf()
+        if (tomorrow.size < 20)
+            return tomorrow
+        return tomorrow.subList(4, 20)
     }
 
     private fun myCrop() {
@@ -635,14 +680,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             it.tvWindDegree.text = data.rainfall.toString() + " mm"
             it.tvHumidityDegree.text = data.humidity.toString() + " %"
             it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
-                if (data.leafWetness != null && data.leafWetness!! == 1) {
-                    it.tvLeafWetnessDegree.text = "Wet"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
-                } else {
-                    it.tvLeafWetnessDegree.text = "Dry"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
-                }
+            it.totalAreeaTwo.text = data.deviceElevation.toString() + " m"
+            if (data.leafWetness != null && data.leafWetness!! == 1) {
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            } else {
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
 
             if (data.isApproved == 0) {
                 it.approvedCV.visibility = View.VISIBLE
@@ -691,12 +736,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             if (data.soilTemperature1.isNullOrEmpty()) {
                 it.clSoilTemp.visibility = View.GONE
             }
-            if (data.soilMoisture2 == null) {
+            if (data.soilMoisture2 == null || data.soilMoisture2 == 0.0) {
                 it.bottomTop.visibility = View.GONE
+            } else {
+                it.bottomTop.visibility = View.VISIBLE
             }
             it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
             it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            it.tvLastUpdate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -878,7 +926,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun setupDeltaT(data: ViewDeviceDomain) {
 
-        if (data.modelSeries == "GSX") {
+        if (data.modelSeries == "GSX" || data.deltaT == null) {
             binding.currentDelta.visibility = View.GONE
             binding.deltaText.visibility = View.GONE
             binding.updateDate.visibility = View.GONE
@@ -886,7 +934,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.currentDelta.visibility = View.VISIBLE
             binding.deltaText.visibility = View.VISIBLE
             binding.updateDate.visibility = View.VISIBLE
-            binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            binding.updateDate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
         }
 
 //        binding.currentDelta.clearSections()

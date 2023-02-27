@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
@@ -71,7 +72,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
     private lateinit var videosBinding: GenericLayoutVideosListBinding
 
     //    private var audio: AudioWife? = null
-    lateinit var mediaPlayer: MediaPlayer
+   private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     private lateinit var binding: FragmentPestDiseaseDetailsBinding
     private lateinit var shareLayout: ConstraintLayout
@@ -117,7 +118,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         // Inflate the layout for this fragment
         binding = FragmentPestDiseaseDetailsBinding.inflate(inflater)
 
-        binding.toolbar.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
 
             val isSuccess = findNavController().popBackStack()
             if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
@@ -173,16 +174,16 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
             cropId = it.getInt("cropId")
             diseaseId = it.getInt("diseaseid")
             diseaseName = it.getString("diseasename", "")
-            audioUrl = it.getString("audioUrl")
+           // audioUrl = it.getString("audioUrl")
 
         }
 
 
-        if (audioUrl.isNullOrEmpty()) {
-            binding.audioLayout.visibility = View.GONE
-        } else {
-            binding.audioLayout.visibility = View.VISIBLE
-        }
+//        if (audioUrl.isNullOrEmpty()) {
+//            binding.audioLayout.visibility = View.GONE
+//        } else {
+//            binding.audioLayout.visibility = View.VISIBLE
+//        }
 
 
         binding.toolbarTitle.text = diseaseName
@@ -232,6 +233,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                             binding.toolbarTitle.text = it.data?.diseaseName
                             binding.cropProtectDiseaseName.text = it.data?.diseaseName
                             audioUrl = it.data?.audioUrl
+                            if(!audioUrl.isNullOrEmpty())
                             audioUrl?.let { it1 -> initMediaPlayer(it1) }
 
                             if (it.data?.imageUrl == null)
@@ -258,7 +260,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                                     .show(true)
                             }
 
-                            if (it.data?.audioUrl != null)
+                            if (!it.data?.audioUrl.isNullOrEmpty()&&URLUtil.isValidUrl(it.data?.audioUrl))
                                 binding.audioLayout.visibility = VISIBLE
                             else
                                 binding.audioLayout.visibility = GONE
@@ -700,6 +702,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
                     .build()
             )
         }
+        if(!audioUrl.isNullOrEmpty())
         mediaPlayer.setDataSource(audioUrl)
         mediaPlayer.prepareAsync()
 
@@ -762,7 +765,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         var totalDuration: Long = 0
         if (mediaPlayer != null) {
             try {
-                totalDuration = mediaPlayer.getDuration().toLong()
+                totalDuration = mediaPlayer.duration.toLong()
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             } catch (e: java.lang.Exception) {
@@ -782,7 +785,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         } else {
             Log.w("pestdisease", "Something strage this audio track duration in zero")
         }
-        binding.totalTime.setText(playbackStr)
+        binding.totalTime.text = playbackStr
 
         // DebugLog.i(currentTime + " / " + totalDuration);
     }
@@ -877,6 +880,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         }
         EventScreenTimeHandling.calculateScreenTime("PestDiseaseDetailsFragment")
 
+        if(!audioUrl.isNullOrEmpty()&&URLUtil.isValidUrl(audioUrl))
         audioUrl?.let {
             initMediaPlayer(it)
         }

@@ -51,7 +51,8 @@ data class MyCropDataDomain (
     @SerializedName("crop_name_tag" ) var cropNameTag : String? = null,
     @SerializedName("crop_logo" ) var cropLogo : String? = null,
     @SerializedName("soil_type"   ) var soilType    : String? = null,
-
-
+    @SerializedName("device"   ) var device    : String? = null,
+    var diseaseDetectionForThisCrop    : Boolean? = false,
+    var irrigationPlannerForThisCrop    : Boolean? = false,
 
 )

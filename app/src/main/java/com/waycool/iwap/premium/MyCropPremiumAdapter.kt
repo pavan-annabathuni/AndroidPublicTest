@@ -7,6 +7,9 @@ import com.bumptech.glide.Glide
 import com.waycool.data.repository.domainModels.MyCropDataDomain
 import com.waycool.data.repository.domainModels.MyFarmsDomain
 import com.waycool.iwap.databinding.ItemPremiumCropsBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MyCropPremiumAdapter(val myCropListener: myCropListener) :
     RecyclerView.Adapter<MyCropPremiumViewHolder>() {
@@ -66,7 +69,6 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
         }
 //
         holder.binding.tvCloudyNoDisease.isSelected = true
-        if (myCrop.disease == true) {
             if (myCrop.disease == true) {
                 //red-ic_cloudy_deng
                 holder.binding.tvCloudyNoDisease.text = "Chances of multiple diseases"
@@ -82,12 +84,17 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
             }
 
 //        holder.binding.tvCloudy.text=details.
-
-            holder.binding.cardAddDevice.setOnClickListener {
-                myCropListener.myCropListener(myCrop)
-            }
-
+        holder.binding.cardAddDevice.setOnClickListener {
+            myCropListener.myCropListener(myCrop)
         }
+
+        if(!myCrop.sowingDate.isNullOrEmpty()){
+        val currentTime = Calendar.getInstance().time
+        val sowingDate = SimpleDateFormat("yyyy-MM-dd").parse(myCrop.sowingDate)
+        if (sowingDate.after(currentTime)) {
+            holder.binding.tvCloudy.text = "-NA-"
+            holder.binding.tvCloudyNoDisease.text = "-NA-"
+        }}
     }
     override fun getItemCount(): Int {
         return details.size
@@ -95,7 +102,4 @@ class MyCropPremiumAdapter(val myCropListener: myCropListener) :
 }
 
 class MyCropPremiumViewHolder(val binding: ItemPremiumCropsBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-
-}
+    RecyclerView.ViewHolder(binding.root)

@@ -7,7 +7,7 @@
     <string name="select_soil_type">Select Soil Type</string>
     <string name="next">Next</string>
     <string name="add_crop_information">Add Crop information</string>
-        <string name="crop_nickname">Crop Nickname</string>
+    <string name="crop_nickname">Crop Nickname</string>
     <string name="crop_area">Crop Area</string>
     <string name="e_g_50">e.g 50</string>
     <string name="sowing_date">Sowing Date</string>

@@ -15,8 +15,11 @@ import com.waycool.data.utils.Resource
 import okhttp3.ResponseBody
 
 class SoilTestRequestViewModel : ViewModel() {
+//    fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
+//        return CropsRepository.getAiCrops(searchQuery).asLiveData()
+//    }
     fun getCropMaster(searchQuery: String? = ""): LiveData<Resource<List<CropMasterDomain>?>> {
-        return CropsRepository.getAiCrops(searchQuery).asLiveData()
+        return CropsRepository.getAllCrops(searchQuery).asLiveData()
     }
 
     fun getCropCategory(): LiveData<Resource<List<CropCategoryMasterDomain>?>> {
