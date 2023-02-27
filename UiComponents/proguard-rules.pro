@@ -51,8 +51,12 @@
 -keep class android.arch.navigation.** { *; }
 
 # Keep the classes used by the KTX extensions for Navigation
--keep class androidx.navigation.fragment.** { *; }
+-keepnames class androidx.navigation.fragment.NavHostFragment
+-keep class * extends androidx.fragment.app.Fragment{}
 -keep class androidx.navigation.ui.** { *; }
+
+
+
 
 # Keep the Parcelable implementations used by the Navigation library
 -keepclassmembers class * implements android.os.Parcelable {

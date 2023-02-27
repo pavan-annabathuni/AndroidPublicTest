@@ -22,6 +22,8 @@
 
 
 -keep class com.waycool.data.** { *; }
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
 
 # crashlytics
 -keep class com.crashlytics.** { *; }

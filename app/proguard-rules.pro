@@ -24,6 +24,10 @@
 -keepattributes SourceFile,LineNumberTable
 
 -keep class com.waycool.iwap.MainActivity { *; }
+-keep class com.waycool.iwap.splash.SplashActivity { *; }
+-keep class * extends androidx.fragment.app.Fragment{}
+
+
 #Firebase
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.** { *; }
