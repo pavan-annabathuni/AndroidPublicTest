@@ -731,6 +731,7 @@ class DrawFarmFragment : Fragment(), OnMapReadyCallback {
 
         mMap?.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener { marker1 ->
             if (marker1 == currentMarker) return@OnMarkerClickListener true
+            if (marker1 == searchLocationMarker) return@OnMarkerClickListener true
             if (isMarkerSelected) {
                 isMarkerSelected = false
                 binding.markerImageview.visibility = View.INVISIBLE
