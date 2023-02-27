@@ -97,7 +97,7 @@ class GraphsFragment : Fragment() {
            val data = arguments?.getString("toolbar")
             translationToolBar(data.toString())
             binding.tvToolbar.text = arguments?.getString("toolbar")
-            binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
+            binding.paramValue.text = "${String.format(Locale.ENGLISH,"%.2f",paramValue)}${paramType?.let { getUnits(it) }}"
             if(paramType.equals("leaf_wetness_hrs",ignoreCase = true)){
                 binding.paramValue.text = if(paramValue == 0.0) "Dry" else "Wet"
             }
@@ -359,7 +359,7 @@ class GraphsFragment : Fragment() {
             "rainfall" -> " mm"
             "humidity" -> " %"
             "windspeed" -> " Kmph"
-            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " KPa"
+            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " kPa"
             "lux" -> " lux"
             "leaf_wetness_hrs" -> " Hrs"
             else -> " "

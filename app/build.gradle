@@ -113,6 +113,8 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:1.5.5"
 
+    implementation "zendesk.messaging:messaging-android:2.7.0"
+
 }
 repositories {
     mavenCentral()

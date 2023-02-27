@@ -680,11 +680,11 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
             it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
             it.deviceNumber.text = "Device Number : ${data.deviceNumber?.uppercase()}"
-            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
-            it.tvWindDegree.text = data.rainfall.toString() + " mm"
-            it.tvHumidityDegree.text = data.humidity.toString() + " %"
-            it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text = data.deviceElevation.toString() + " m"
+            it.tvTempDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.temperature)} \u2103"
+            it.tvWindDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.rainfall)} mm"
+            it.tvHumidityDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.humidity)} %"
+            it.tvWindSpeedDegree.text = "${String.format(Locale.ENGLISH,"%.2f",data.windspeed)} Km/h"
+            it.totalAreeaTwo.text = "${String.format(Locale.ENGLISH,"%.2f",data.deviceElevation)} m"
             if (data.leafWetness != null && data.leafWetness!! == 1) {
                 it.tvLeafWetnessDegree.text = "Wet"
                 it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
@@ -735,7 +735,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
             }
 
-            it.tvPressureDegree.text = data.pressure.toString() + " hPa"
+            it.tvPressureDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.pressure)} hPa"
 
             if (data.soilTemperature1==null) {
                 it.clSoilTemp.visibility = View.GONE
@@ -745,8 +745,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             } else {
                 it.bottomTop.visibility = View.VISIBLE
             }
-            it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
-            it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
+            it.ivSoilDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.soilTemperature1)} \u2103"
+            it.ivSoilDegreeOne.text = "${String.format(Locale.ENGLISH,"%.2f",data.lux)} Lux"
             it.tvLastUpdate.text =
                 "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()

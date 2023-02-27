@@ -21,6 +21,10 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class zendesk.messaging.** { *; }
+-keepclassmembers enum zendesk.** {
+    <fields>;
+    **[] values();
+}
 -keep class zendesk.** { *; }
 -keepnames class zendesk.** { *; }
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase

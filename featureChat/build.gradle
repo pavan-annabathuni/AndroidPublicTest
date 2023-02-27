@@ -16,7 +16,10 @@ android {
 
     buildTypes {
         release {
-            consumerProguardFiles 'proguard-project.txt'
+//            consumerProguardFiles 'proguard-project.txt'
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//
         }
 //        debug {
 //            minifyEnabled false
@@ -42,7 +45,7 @@ dependencies {
     implementation project(path: ':UiComponents')
 
 
-    api "zendesk.messaging:messaging-android:2.7.0"
+    implementation "zendesk.messaging:messaging-android:2.7.0"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

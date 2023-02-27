@@ -53,3 +53,17 @@
 
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+-keep class com.waycool.featurechat.**{ *;}
+-keep class zendesk.** { *; }
+-keepclassmembers enum zendesk.** {
+    <fields>;
+    **[] values();
+}
+-keep class zendesk.** { *; }
+-keepnames class zendesk.** { *; }
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
