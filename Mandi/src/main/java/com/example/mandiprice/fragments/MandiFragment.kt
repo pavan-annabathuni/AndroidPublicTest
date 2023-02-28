@@ -89,8 +89,6 @@ class MandiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMandiBinding.inflate(inflater)
-
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()
