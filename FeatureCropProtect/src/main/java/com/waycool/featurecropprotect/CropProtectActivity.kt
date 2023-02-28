@@ -65,7 +65,7 @@ class CropProtectActivity : AppCompatActivity() {
                         )
                     }
                 } else {
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.cropSelectionFragment)
+//                    findNavController(R.id.fragmentContainerView).navigate(R.id.cropSelectionFragment)
 
                 }
 

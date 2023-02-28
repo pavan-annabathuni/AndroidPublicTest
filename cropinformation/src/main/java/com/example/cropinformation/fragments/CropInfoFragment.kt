@@ -731,7 +731,7 @@ class CropInfoFragment : Fragment(), onItemClick {
     }
 
     override fun onItemClickListener(it: VansFeederListDomain?) {
-        EventClickHandling.calculateClickEvent(it?.title.toString())
+//        EventClickHandling.calculateClickEvent(it?.title.toString())
         val bundle = Bundle()
         bundle.putString("title", it?.title)
         bundle.putString("content", it?.desc)

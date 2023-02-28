@@ -3,16 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.adddevice">
 
-    <uses-feature android:name="android.hardware.camera.autoFocus" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera.any"
-        android:required="true" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autoFocus" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
     <application
         android:hardwareAccelerated="true">
         <activity

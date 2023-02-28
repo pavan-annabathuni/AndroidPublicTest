@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.Resource
@@ -128,7 +130,7 @@ class AddFarmSupportFragment : Fragment() {
             this.findNavController().navigateUp()
         }
         binding.farmManger.setOnClickListener {
-            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
+            EventItemClickHandling.calculateItemClickEvent("farm_support_account_type", bundleOf(Pair("roleId","$roleid")))
             binding.farmManger.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.text_border_gray)
             binding.mandiBench.background =
@@ -136,7 +138,7 @@ class AddFarmSupportFragment : Fragment() {
             binding.image1.visibility = View.VISIBLE
             binding.image2.visibility = View.GONE
             roleid = 30
-            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
+            EventItemClickHandling.calculateItemClickEvent("farm_support_account_type", bundleOf(Pair("roleId","$roleid")))
         }
         binding.mandiBench.setOnClickListener {
             binding.mandiBench.background =
@@ -146,7 +148,7 @@ class AddFarmSupportFragment : Fragment() {
             binding.image2.visibility = View.VISIBLE
             binding.image1.visibility = View.GONE
             roleid = 31
-            EventClickHandling.calculateClickEvent("farm_support_account_type$roleid")
+            EventItemClickHandling.calculateItemClickEvent("farm_support_account_type", bundleOf(Pair("roleId","$roleid")))
         }
         binding.submit.setOnClickListener {
             var contact: Long? = null
@@ -183,7 +185,7 @@ class AddFarmSupportFragment : Fragment() {
                 ).observe(viewLifecycleOwner) {
                     when (it) {
                         is Resource.Success -> {
-                            EventClickHandling.calculateClickEvent("farm_support_added$roleid")
+                            EventItemClickHandling.calculateItemClickEvent("farm_support_added", bundleOf(Pair("roleId","$roleid")))
                             findNavController().navigateUp()
                         }
                         is Resource.Error -> {

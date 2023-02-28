@@ -13,6 +13,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.waycool.data.Local.DataStorePref.DataStoreManager
@@ -47,12 +54,12 @@ class MainActivity : AppCompatActivity() {
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
 
-//    private lateinit var appUpdateManager: AppUpdateManager
-//    private val APP_UPDATE_REQUEST_CODE = 1001
-//    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val APP_UPDATE_REQUEST_CODE = 1001
+    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
 
-//    private var appUpdate:AppUpdateManager?=null
-//    private val REQUEST_CODE=100
+    private var appUpdate:AppUpdateManager?=null
+    private val REQUEST_CODE=100
 
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -62,34 +69,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getDashBoard()
-//        inAppUpdate = InAppUpdate(this)
-//        appUpdate= AppUpdateManagerFactory.create(this)
+//        var inAppUpdate = InAppUpdate(this)
+        appUpdate= AppUpdateManagerFactory.create(this)
 //        checkUpdate()
-//        appUpdateManager = AppUpdateManagerFactory.create(this)
-//        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-//
-//
-//        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-//                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-//                // Request the update
-//                appUpdateManager.startUpdateFlowForResult(
-//                    appUpdateInfo,
-//                    AppUpdateType.IMMEDIATE,
-//                    this,
-//                    APP_UPDATE_REQUEST_CODE
-//                )
-//            }
-//        }
-//        installStateUpdatedListener = object : InstallStateUpdatedListener {
-//            override fun onStateUpdate(state: InstallState) {
-//                if (state.installStatus() == InstallStatus.DOWNLOADED) {
-//                    // notify user to install the update
-//                    popupSnackbarForCompleteUpdate()
-//                }
-//            }
-//        }
-//        appUpdateManager.registerListener(installStateUpdatedListener)
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    APP_UPDATE_REQUEST_CODE
+                )
+            }
+        }
+        installStateUpdatedListener = InstallStateUpdatedListener { state ->
+            if (state.installStatus() == InstallStatus.DOWNLOADED) {
+                // notify user to install the update
+                popupSnackbarForCompleteUpdate()
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
 
         tokenCheckViewModel.getUserDetails().observe(this) {
             accountID = it.data?.accountId
@@ -216,16 +221,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    private fun popupSnackbarForCompleteUpdate() {
-//        val snackbar = Snackbar.make(
-//            findViewById(R.id.nav_home),
-//            "An update has just been downloaded.",
-//            Snackbar.LENGTH_INDEFINITE
-//        )
-//        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
-//        snackbar.setActionTextColor(resources.getColor(R.color.red))
-//        snackbar.show()
-//    }
+    private fun popupSnackbarForCompleteUpdate() {
+        val snackbar = Snackbar.make(
+            findViewById(R.id.nav_home),
+            "An update has just been downloaded.",
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
+        snackbar.setActionTextColor(resources.getColor(R.color.red))
+        snackbar.show()
+    }
 
 //    fun checkUpdate(){
 //        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->

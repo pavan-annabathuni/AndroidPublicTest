@@ -23,6 +23,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -108,7 +109,7 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            EventClickHandling.calculateClickEvent("crop_protection_myCrop${it.cropNameTag}")
+            EventItemClickHandling.calculateItemClickEvent("crop_protection_myCrop", bundleOf(Pair("selected_crop","${it.cropNameTag}")))
             val id = it.cropId
             var id2 = 0
             val args = Bundle()
@@ -256,28 +257,30 @@ class CropSelectionFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         binding.clProgressBar.visibility=View.VISIBLE
-        viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
-            when (res) {
-                is Resource.Success -> {
-                    if(!res.data.isNullOrEmpty()){
-                        Handler(Looper.myLooper()!!).postDelayed({
-                            binding.clProgressBar.visibility=View.GONE
-                        },500)
+        activity?.let {acti->
+            viewModel.getCropMaster(searchQuery).observe(acti) { res ->
+                when (res) {
+                    is Resource.Success -> {
+                        if(!res.data.isNullOrEmpty()){
+                            Handler(Looper.myLooper()!!).postDelayed({
+                                binding.clProgressBar.visibility=View.GONE
+                            },500)
+
+                        }
+                        if (categoryId == null) {
+                            adapter.submitList(res.data)
+                        } else {
+                            adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+    //                        binding.clProgressBar.visibility=View.GONE
+                        }
+
 
                     }
-                    if (categoryId == null) {
-                        adapter.submitList(res.data)
-                    } else {
-                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
-//                        binding.clProgressBar.visibility=View.GONE
+                    is Resource.Loading -> {
                     }
-
-
-                }
-                is Resource.Loading -> {
-                }
-                is Resource.Error -> {
-                    AppUtils.translatedToastServerErrorOccurred(context)
+                    is Resource.Error -> {
+                        AppUtils.translatedToastServerErrorOccurred(context)
+                    }
                 }
             }
         }

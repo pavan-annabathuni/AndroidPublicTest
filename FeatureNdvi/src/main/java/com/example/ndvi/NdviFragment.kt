@@ -246,7 +246,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
 
             selectedNdvi.stats?.ndvi?.let {
                 viewModel.getNdviMean(it).observe(viewLifecycleOwner) { it1 ->
-                    binding.ndviMean.text = String.format("%.2f", it1?.data?.mean)
+                    binding.ndviMean.text = if(it1?.data?.mean==null) "--" else String.format("%.2f",if(it1?.data?.mean!! > 1.0) 1.0 else it1?.data?.mean)
                 }
             }
 
