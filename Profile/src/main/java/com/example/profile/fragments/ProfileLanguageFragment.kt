@@ -20,6 +20,7 @@ import com.example.profile.viewModel.EditProfileViewModel
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -139,7 +140,9 @@ class ProfileLanguageFragment : Fragment() {
                 TranslationsManager().refreshTranslations()
                 viewModel.viewModelScope.launch {
                     val langCode = selectedLanguage!!.id
-                    EventClickHandling.calculateClickEvent("Profile_language_name$langCode")
+                    val bundleEvents = Bundle()
+                    bundleEvents.putString("", "Profile_language_name$langCode")
+                    EventItemClickHandling.calculateItemClickEvent("Profile_language", bundleEvents)
                     field = HashMap()
                     langCode?.let { it1 ->
                         field.put("lang_id", it1.toString())
