@@ -50,7 +50,7 @@ import java.util.*
 
 class MandiFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-    private lateinit var binding: FragmentMandiBinding
+    private val binding: FragmentMandiBinding by lazy { FragmentMandiBinding.inflate(layoutInflater) }
 
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
@@ -89,8 +89,6 @@ class MandiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMandiBinding.inflate(inflater)
-
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()

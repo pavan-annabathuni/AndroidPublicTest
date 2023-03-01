@@ -187,7 +187,7 @@ class GraphsFragment : Fragment() {
             binding.lineChart.axisRight.setDrawLabels(false)
             binding.lineChart.xAxis.labelRotationAngle = -45f
             binding.lineChart.axisLeft.axisMinimum = 0f
-            binding.lineChart.axisLeft.spaceTop = 150f
+//            binding.lineChart.axisLeft.spaceTop = 150f
             if (paramType.equals("humidity", ignoreCase = true)) {
                 binding.lineChart.axisLeft.axisMaximum = 100f
             }

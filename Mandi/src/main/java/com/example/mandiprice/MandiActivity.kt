@@ -48,8 +48,7 @@ class MandiActivity : AppCompatActivity() {
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                     }
                 } else if(deepLink.lastPathSegment.equals(MANDI)){
-                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
-
+//                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
                 }
 
             }

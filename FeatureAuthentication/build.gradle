@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.0.0'
 
     // used to trueCaller
-    implementation "com.truecaller.android.sdk:truecaller-sdk:2.6.0"
+    implementation "com.truecaller.android.sdk:truecaller-sdk:2.8.0"
 
     //MSG91
    // implementation 'com.github.walkovermsg91:walkover-sendOTP:1.1.8'

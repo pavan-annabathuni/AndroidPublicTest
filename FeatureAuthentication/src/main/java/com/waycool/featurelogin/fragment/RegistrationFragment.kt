@@ -429,7 +429,7 @@ class RegistrationFragment : Fragment() {
                     audiourl?.let { playAudio(context, it, play, pause, seekbar!!, totalTime!!) }
                 }
             //Event Click on clicking the audio play button
-            EventClickHandling.calculateClickEvent("Listen$tittle")
+            EventClickHandling.calculateClickEvent("Listen")
         }
 
     }
@@ -643,8 +643,8 @@ class RegistrationFragment : Fragment() {
 
 
                 }
-                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
-                EventClickHandling.calculateClickEvent("Login_Location${address}")
+//                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
+//                EventClickHandling.calculateClickEvent("Login_Location${address}")
             }
         } else {
             getLocation()

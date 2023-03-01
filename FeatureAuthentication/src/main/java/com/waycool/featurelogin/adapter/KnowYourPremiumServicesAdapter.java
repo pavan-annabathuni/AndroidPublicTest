@@ -1,6 +1,7 @@
 package com.waycool.featurelogin.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.waycool.data.eventscreentime.EventClickHandling;
+import com.waycool.data.eventscreentime.EventItemClickHandling;
 import com.waycool.data.repository.domainModels.ModuleMasterDomain;
 import com.waycool.featurelogin.R;
 import com.waycool.featurelogin.fragment.RegistrationFragment;
@@ -77,7 +79,11 @@ public class KnowYourPremiumServicesAdapter extends RecyclerView.Adapter<KnowYou
                     String.valueOf(listItem.get(getLayoutPosition()).getSubscription()),
                     listItem.get(getLayoutPosition()).getModuleIcon(),
                     context);
-            EventClickHandling.INSTANCE.calculateClickEvent(listItem.get(getLayoutPosition()).getTitle());
+//            EventClickHandling.INSTANCE.calculateClickEvent(listItem.get(getLayoutPosition()).getTitle());
+            Bundle bundle=new Bundle();
+            bundle.putString("selected_item",listItem.get(getLayoutPosition()).getTitle());
+
+            EventItemClickHandling.INSTANCE.calculateItemClickEvent("services_item_click", bundle );
         }
     }
 
