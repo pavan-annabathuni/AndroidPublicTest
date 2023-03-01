@@ -19,7 +19,7 @@ class CropInfo : AppCompatActivity() {
             }
             if (deepLink?.lastPathSegment!= null) {
                 if (deepLink?.lastPathSegment == CROP_INFO) {
-                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.cropSelectionFragment)
+//                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.cropSelectionFragment)
 
                 }
             }

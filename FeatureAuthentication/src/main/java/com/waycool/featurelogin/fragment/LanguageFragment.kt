@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast.LENGTH_SHORT
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.LanguageMasterDomain
 import com.waycool.data.translations.TranslationsManager
@@ -135,7 +137,7 @@ class LanguageFragment : Fragment() {
 
             }
             //Click event on selection of any language
-            EventClickHandling.calculateClickEvent("language_selection$selectedLanguage")
+            EventItemClickHandling.calculateItemClickEvent("language_selection", bundleOf(Pair("selected_lang","$selectedLanguage")))
         }
 
         //If internet is not available user get the screen Network Error

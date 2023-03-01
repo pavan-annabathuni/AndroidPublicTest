@@ -50,7 +50,7 @@ import java.util.*
 
 class MandiFragment : Fragment() {
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
-    private lateinit var binding: FragmentMandiBinding
+    private val binding: FragmentMandiBinding by lazy { FragmentMandiBinding.inflate(layoutInflater) }
 
     private val viewModel: MandiViewModel by lazy {
         ViewModelProviders.of(this).get(MandiViewModel::class.java)
@@ -89,8 +89,6 @@ class MandiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMandiBinding.inflate(inflater)
-
         binding.lifecycleOwner = this
         initClickListeners()
         setBanners()
@@ -293,7 +291,9 @@ class MandiFragment : Fragment() {
                             Log.d("spinnerId", "onItemSelected: $id")
                             binding.recycleViewDis.adapter = adapterMandi
                             val text = binding.spinner1.selectedItem.toString()
-                            EventClickHandling.calculateClickEvent("Mandi_category_filter_$text")
+                            val bundleEvents = Bundle()
+                            bundleEvents.putString("", "Mandi_category_filter_$text")
+                            EventItemClickHandling.calculateItemClickEvent("Market_place_category", bundleEvents)
                             if (position > 0) {
                                 selectedCropCategory = text
                                 mandiApiCall()
@@ -352,7 +352,10 @@ class MandiFragment : Fragment() {
                 id: Long
             ) {
                 val text = binding.spinner3.selectedItem.toString()
+                val bundleEvents = Bundle()
+                bundleEvents.putString("", "Mandi_state_filter_$text")
                 EventClickHandling.calculateClickEvent("Mandi_state_filter_$text")
+                EventItemClickHandling.calculateItemClickEvent("Market_place_state", bundleEvents)
                 if (position > 0) {
                     selectedState = text
                     mandiApiCall()
@@ -590,7 +593,9 @@ class MandiFragment : Fragment() {
 
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         val text = binding.spinner2.selectedItem.toString()
-                        EventClickHandling.calculateClickEvent("Mandi_crop_filter$text")
+                        val bundleEvents = Bundle()
+                        bundleEvents.putString("", "Mandi_crop_filter$text")
+                        EventItemClickHandling.calculateItemClickEvent("Market_Place_crop", bundleEvents)
                         if (position > 0) {
                             selectedCrop = text
                             mandiApiCall()

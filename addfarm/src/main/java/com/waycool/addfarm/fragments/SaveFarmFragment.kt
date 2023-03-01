@@ -35,6 +35,7 @@ import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 class SaveFarmFragment : Fragment(), OnMapReadyCallback {
 
@@ -200,6 +201,11 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
                         else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Farm name is Mandatory",
                             Toast.LENGTH_SHORT
                         ) }}}
+                }else if(checkForValidFarmArea(binding.farmareaEtAddfarm.text.toString())){
+                    ToastStateHandling.toastWarning(requireContext(),"Enter Farm Area in English.",Toast.LENGTH_SHORT)
+                }else if(binding.farmareaEtAddfarm.text.isNullOrEmpty()){
+                    ToastStateHandling.toastWarning(requireContext(),"Enter Farm Area",Toast.LENGTH_SHORT)
+
                 } else {
 
                     isPrimary = if (binding.setPrimaryFarm.isChecked) {
@@ -439,5 +445,13 @@ class SaveFarmFragment : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("SaveFarmFragment")
+    }
+
+//    String re = "^(\\d{0,9}\\.\\d{1,4}|\\d{1,9})$"
+    private fun checkForValidFarmArea(farmArea: String): Boolean {
+        val pattern = Pattern.compile("^(\\d{0,9}\\.\\d{1,4}|\\d{1,9})$")
+
+        val matcher = pattern.matcher(farmArea)
+        return matcher.find()
     }
 }

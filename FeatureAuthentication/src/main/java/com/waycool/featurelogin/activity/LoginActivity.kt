@@ -40,16 +40,20 @@ class LoginActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             /*First time user open Language screen*/
-            if (viewModel.getIsFirst()) { navHost.findNavController().setGraph(R.navigation.login_onboarding_nav) }
+            if (viewModel.getIsFirst()) {
+                navHost.findNavController().setGraph(R.navigation.login_onboarding_nav)
+            }
             /*Open the login nav graph*/
-            else { navHost.findNavController().setGraph(R.navigation.nav_graph_login) }
+            else {
+                navHost.findNavController().setGraph(R.navigation.nav_graph_login)
+            }
         }
 
         /*(FCM) generates unique tokens for each device and later using those for sending web push notifications to respective devices.*/
         getFCMToken()
 
         /*sending mobile details such as name and manufacturer to backend*/
-        viewModel.saveDeviceDetails(deviceManufacturer,deviceName)
+        viewModel.saveDeviceDetails(deviceManufacturer, deviceName)
     }
 
     private fun getFCMToken() {
