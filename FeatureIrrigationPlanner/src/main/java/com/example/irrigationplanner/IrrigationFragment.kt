@@ -58,7 +58,7 @@ class IrrigationFragment : Fragment() {
     private var cropName: String? = null
     private var cropLogo: String? = null
     private var irrigationId: Int? = null
-    private var irrigationType:String? =null
+    private var irrigationType: String? = null
 
     var myCrop: MyCropDataDomain? = null
 
@@ -318,21 +318,28 @@ class IrrigationFragment : Fragment() {
 
                     if (it.data?.data?.irrigation?.currentData != null && myCrop?.irrigationRequired == true) {
 
-                        Log.d("irrigation","vol per plant: ${it.data?.data?.irrigation?.currentData?.volPerPlant}")
-                        Log.d("irrigation","emiter: ${myCrop?.dripEmitterRate}")
-                        Log.d("irrigation","mycrops: ${myCrop}")
+                        Log.d("irrigation", "vol per plant: ${it.data?.data?.irrigation?.currentData?.volPerPlant}")
+                        Log.d("irrigation", "emiter: ${myCrop?.dripEmitterRate}")
+                        Log.d("irrigation", "mycrops: ${myCrop}")
 
-                        if(it.data?.data?.irrigation?.currentData?.volPerPlant==null || myCrop?.dripEmitterRate.isNullOrEmpty()){
-                            binding.perPlantWaterLl.visibility=View.GONE
-                            binding.waterInHoursTv.visibility=View.GONE
-                        }else{
-                            binding.waterInHoursTv.text = "Irrigate for ${getIrrigationHrs(myCrop?.dripEmitterRate?.toDouble()!!,it.data?.data?.irrigation?.currentData?.volPerPlant!!)}"
+                        if (it.data?.data?.irrigation?.currentData?.volPerPlant == null || myCrop?.dripEmitterRate.isNullOrEmpty()) {
+                            binding.perPlantWaterLl.visibility = View.GONE
+                            binding.waterInHoursTv.visibility = View.GONE
+                        } else {
+                            binding.waterInHoursTv.text = "Irrigate for ${
+                                getIrrigationHrs(
+                                    myCrop?.dripEmitterRate?.toDouble()!!,
+                                    it.data?.data?.irrigation?.currentData?.volPerPlant!!
+                                )
+                            }"
                         }
 
                         binding.irrigationReqValuesLl.visibility = View.VISIBLE
                         binding.irrigationReqArea.text = "For ${myCrop?.area} Acre"
-                        binding.totalIrrigationReq.text ="${String.format(Locale.ENGLISH,"%.0f",it.data?.data?.irrigation?.currentData?.volPerFarm)} L"
-                        binding.irrigationReqPerPlant.text ="${String.format(Locale.ENGLISH,"%.0f",it.data?.data?.irrigation?.currentData?.volPerPlant)} L"
+                        binding.totalIrrigationReq.text =
+                            "${String.format(Locale.ENGLISH, "%.0f", it.data?.data?.irrigation?.currentData?.volPerFarm)} L"
+                        binding.irrigationReqPerPlant.text =
+                            "${String.format(Locale.ENGLISH, "%.0f", it.data?.data?.irrigation?.currentData?.volPerPlant)} L"
 
                     } else {
                         binding.irrigationReqValuesLl.visibility = View.GONE
@@ -348,17 +355,18 @@ class IrrigationFragment : Fragment() {
                 )
             }
             /** setting irrigation id */
-            irrigationId = it.data?.data?.irrigation?.historicData?.get(0)?.id
+            if (!it.data?.data?.irrigation?.historicData.isNullOrEmpty())
+                irrigationId = it.data?.data?.irrigation?.historicData?.get(0)?.id
 
         }
 
 
         /** calling disease api */
-        viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
+        viewModel.getDisease(plotId).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
 
-                    if(it.data?.data?.currentData.isNullOrEmpty()){
+                    if (it.data?.data?.currentData.isNullOrEmpty()) {
                         binding.gwxDiseaseCl.visibility = View.GONE
                     }
                     val data = it.data?.data?.currentData?.filter { itt ->
@@ -391,12 +399,12 @@ class IrrigationFragment : Fragment() {
         }
     }
 
-    private fun getIrrigationHrs(emiterRate:Double, volPerPlant:Double):String{
+    private fun getIrrigationHrs(emiterRate: Double, volPerPlant: Double): String {
         val driprate: Double = emiterRate
         val totalmins: Double = volPerPlant * 60 / driprate
         val hrs = (totalmins / 60).toInt()
         val mins = (totalmins % 60).toInt()
-        if(hrs>0)
+        if (hrs > 0)
             return "$hrs hrs $mins mins"
         return "$mins mins"
     }
@@ -429,7 +437,7 @@ class IrrigationFragment : Fragment() {
                     /** tab for disease */
                     0 -> viewModel.viewModelScope.launch {
                         accountId?.let {
-                            viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease(plotId).observe(viewLifecycleOwner) {
                                 when (it) {
                                     is Resource.Loading -> {
                                         binding.noPest.visibility = View.GONE
@@ -458,7 +466,7 @@ class IrrigationFragment : Fragment() {
                     1 -> {
                         viewModel.viewModelScope.launch {
                             accountId?.let {
-                                viewModel.getDisease( plotId)
+                                viewModel.getDisease(plotId)
                                     .observe(viewLifecycleOwner) {
                                         when (it) {
                                             is Resource.Loading -> {
@@ -488,7 +496,7 @@ class IrrigationFragment : Fragment() {
                     2 -> {
                         viewModel.viewModelScope.launch {
                             accountId?.let {
-                                viewModel.getDisease( plotId)
+                                viewModel.getDisease(plotId)
                                     .observe(viewLifecycleOwner) {
                                         //                        val i = it.data?.data?.disease?.size?.minus(1)
                                         //                        while (i!=0) {
@@ -528,9 +536,9 @@ class IrrigationFragment : Fragment() {
         if (irrigationType == "Drip Irrigation") {
             TranslationsManager().loadString("str_irrigation_per_plant", irrigationDone!!)
             etIrrigationGiven?.text = "Enter water given per plant"
-        }else{
+        } else {
             etIrrigationGiven?.text = "Enter water given per area"
-            TranslationsManager().loadString("str_irrigation_per_area", irrigationDone!!,"Irrigation required per area")
+            TranslationsManager().loadString("str_irrigation_per_area", irrigationDone!!, "Irrigation required per area")
         }
         viewModel.viewModelScope.launch {
             val saveTv = TranslationsManager().getString("str_save")
