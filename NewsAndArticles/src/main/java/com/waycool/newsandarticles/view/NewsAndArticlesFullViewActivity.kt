@@ -10,6 +10,7 @@ import android.text.Html
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.squareup.picasso.Picasso
@@ -72,7 +73,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
         binding.newsHeading.text = "$vansType Updates"
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
-        binding.desc.text = Html.fromHtml(desc?:"")
+        binding.desc.text = HtmlCompat.fromHtml(desc?:"",HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding.newsDate.text = AppUtil.changeDateFormat(newsDate?:"" )
         binding.shareBtn.setTextColor(resources.getColor(com.waycool.uicomponents.R.color.primaryColor))
 

@@ -1,8 +1,10 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
+@Keep
 data class TagsAndKeywordsDTO(
     @SerializedName("status")
     @Expose
@@ -17,6 +19,7 @@ data class TagsAndKeywordsDTO(
     var data: List<TagsData>? = null
 )
 
+@Keep
 data class TagsData(
     @SerializedName("id")
     @Expose

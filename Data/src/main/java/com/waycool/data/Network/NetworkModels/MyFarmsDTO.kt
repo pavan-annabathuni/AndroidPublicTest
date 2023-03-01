@@ -1,14 +1,15 @@
 package com.waycool.data.Network.NetworkModels
 
-import com.google.android.libraries.maps.model.LatLng
+import androidx.annotation.Keep
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class MyFarmsDTO(
     @SerializedName("status"  ) var status  : Boolean?        = null,
     @SerializedName("message" ) var message : String?         = null,
     @SerializedName("data"    ) var data    : ArrayList<MyFarmsNetwork> = arrayListOf()
 )
-
+@Keep
 data class MyFarmsNetwork (
     @SerializedName("id"                  ) var id               : Int?    = null,
     @SerializedName("farm_name"           ) var farmName         : String? = null,

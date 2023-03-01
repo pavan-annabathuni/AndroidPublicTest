@@ -1,7 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class VarietyCropDomain(
     var id: Int? = null,
     var varietyTag: String? = null,

@@ -48,7 +48,7 @@ class DiseaseHistoryFragment : Fragment() {
         mHistoryAdapter = DiseaseHistoryAdapter()
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
+            viewModel.getDisease(plotId).observe(viewLifecycleOwner) {
                 when(it){
                     is Resource.Success->{
                         val data = it.data?.data?.historicData?.filter { itt ->
@@ -108,7 +108,7 @@ class DiseaseHistoryFragment : Fragment() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (binding.tabLayout.selectedTabPosition) {
                         0 -> viewModel.viewModelScope.launch {
-                            viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
+                            viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
                                 when(it){
                                     is Resource.Success->{
                                         val data = it.data?.data?.historicData?.filter { itt ->
@@ -131,7 +131,7 @@ class DiseaseHistoryFragment : Fragment() {
                         }
                         1 -> {
                             viewModel.viewModelScope.launch {
-                                viewModel.getDisease(accountId!!, plotId)
+                                viewModel.getDisease( plotId)
                                     .observe(viewLifecycleOwner) {
                                         when(it){
                                             is Resource.Success->{
@@ -159,7 +159,7 @@ class DiseaseHistoryFragment : Fragment() {
                         2 -> {
                             viewModel.viewModelScope.launch {
                                 accountId?.let {
-                                    viewModel.getDisease(accountId!!, plotId)
+                                    viewModel.getDisease(plotId)
                                         .observe(viewLifecycleOwner) {
                                             val data = it.data?.data?.historicData?.filter { itt ->
                                                 itt.disease?.diseaseType == "Deficiency"

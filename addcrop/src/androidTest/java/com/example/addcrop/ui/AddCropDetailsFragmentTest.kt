@@ -1,10 +1,13 @@
 package com.example.addcrop.ui
 
 
+import android.os.Bundle
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
@@ -18,6 +21,7 @@ import androidx.test.rule.ActivityTestRule
 import com.example.addcrop.AddCropActivity
 import com.example.addcrop.test.R
 import com.example.addcrop.ui.free.AddCropDetailsFragment
+import com.example.addcrop.viewmodel.AddCropViewModel
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -27,6 +31,38 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class AddCropDetailsFragmentTest {
+//    @RunWith(AndroidJUnit4::class)
+//    class AddCropDetailsFragmentTest {
+//
+//        @get:Rule
+//        var activityScenarioRule = activityScenarioRule<MainActivity>()
+//
+//        @Test
+//        fun test_add_crop_details() {
+//            val mockNavController = mock(NavController::class.java)
+//            val testViewModel = AddCropViewModel()
+//
+//            val bundle = Bundle()
+//            bundle.putInt("farmID", 1)
+//            val scenario = launchFragmentInContainer(bundle) {
+//                AddCropDetailsFragment().apply {
+//                    viewModel = testViewModel
+//                    viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
+//                        if (viewLifecycleOwner != null) {
+//                            Navigation.setViewNavController(requireView(), mockNavController)
+//                        }
+//                    }
+//                }
+//            }
+//
+//            onView(withId(R.id.area_edit_text)).perform(replaceText("10"))
+//            onView(withId(R.id.select_area_type_spinner)).perform(click())
+//            Espresso.onData(anything()).atPosition(1).perform(click())
+//            onView(withId(R.id.save_crop_details_button)).perform(click())
+//
+//            verify(mockNavController).navigateUp()
+//        }
+//    }
 //    @Test
 //    fun testAddCropFragmentNavigation(){
 //        val activityRule = ActivityScenarioRule(AddCropActivity::class.java)

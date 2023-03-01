@@ -1,5 +1,8 @@
 package com.waycool.data.Local.DataStorePref
 
+import androidx.annotation.Keep
+
+@Keep
 object StoreName {
     //Language Master
     const val LANGUAGE = "language"

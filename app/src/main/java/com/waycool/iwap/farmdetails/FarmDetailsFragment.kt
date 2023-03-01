@@ -17,14 +17,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.github.anastr.speedviewlib.components.Section
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.chip.Chip
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.maps.android.SphericalUtil
 import com.waycool.addfarm.AddFarmActivity
+import com.waycool.data.Network.NetworkModels.DeltaT
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
@@ -44,7 +46,10 @@ import com.waycool.uicomponents.utils.DateFormatUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallback {
@@ -91,6 +96,12 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.let { it1 -> it1.finish() }
         }
+        viewModel.getMyFarms().observe(viewLifecycleOwner) {
+            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
+            myFarm = farm
+            farmDetailsObserve()
+            drawFarm()
+        }
         return binding.root
     }
 
@@ -113,12 +124,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         checkRole()
         myCrop()
 
-        viewModel.getMyFarms().observe(viewLifecycleOwner) {
-            val farm = it.data?.firstOrNull { it1 -> myFarm?.id == it1.id }
-            myFarm = farm
-            farmDetailsObserve()
-            drawFarm()
-        }
+
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) activity?.onBackPressed()
@@ -225,7 +231,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.tvPumpFlowRate,
             "Pump Flow Rate (in Ltre per hr)"
         )
-        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
+//        TranslationsManager().loadString("submersible", binding.totalFormDate, "Submersible")
         TranslationsManager().loadString("str_mycrops", binding.myCropsTitle, "My Crops")
         TranslationsManager().loadString("my_device", binding.titleMyDevice, "My Devices")
         TranslationsManager().loadString("view_tepm", binding.tvTemp, "Temperature")
@@ -280,7 +286,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
         binding.toolbarTextFarm.text = myFarm?.farmName
         binding.tvPempDate.text = myFarm?.farmPumpHp ?: "NA"
         binding.totalFormDate.text = myFarm?.farmPumpType ?: "NA"
-        binding.totalHeightInches.text = myFarm?.farmPumpPipeSize ?: "NA"
+        binding.totalHeightInches.text = myFarm?.farmPumpDepth ?: "NA"
+        binding.totalPempInches.text = myFarm?.farmPumpPipeSize ?: "NA"
         binding.tvPumpFlowRateNUmber.text = myFarm?.farmPumpFlowRate ?: "NA"
         if (myFarm?.farmWaterSource != null) {
             binding.waterNotAvailable.visibility = View.INVISIBLE
@@ -311,13 +318,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             binding.lineTwo.visibility = View.GONE
 
                         } else {
-                            deltaAdapter.setMovieList(it.data?.data?.Today)
+
+                            deltaAdapter.setMovieList(getSprayingItemsToday(it.data?.data?.Today))
                         }
                         if (it.data?.data?.Tomorrow.isNullOrEmpty()) {
                             binding.textView164.visibility = View.GONE
                             binding.sparayingRv2.visibility = View.GONE
                         } else {
-                            deltaTomAdapter.setMovieList(it.data?.data?.Tomorrow)
+                            deltaTomAdapter.setMovieList(getSprayingItems(it.data?.data?.Tomorrow))
                         }
                     }
                     is Resource.Error -> {
@@ -348,6 +356,43 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
             }
         }
+    }
+
+
+    //    private String getdeltaTLastUpdated(List<Spraying2Days.Day> today) {
+    //        Calendar calendar = Calendar.getInstance();
+    //        return today.get(calendar.get(Calendar.HOUR_OF_DAY)).getTime();
+    //    }
+    private fun getSprayingItemsToday(today: MutableList<DeltaT>?): List<DeltaT> {
+        if (today.isNullOrEmpty())
+            return emptyList()
+        val iterator = today.iterator()
+        while (iterator.hasNext()) {
+            val day = iterator.next()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH", Locale.ENGLISH)
+            try {
+                val date = dateFormat.parse(day.datetime)
+                val calendar = Calendar.getInstance()
+                val calendar1 = Calendar.getInstance()
+                calendar1.time = date
+                if (calendar1[Calendar.HOUR_OF_DAY] <= calendar[Calendar.HOUR_OF_DAY]) {
+                    iterator.remove()
+                } else if (calendar1[Calendar.HOUR_OF_DAY] >= 20) {
+                    iterator.remove()
+                }
+            } catch (e: ParseException) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        }
+        return today
+    }
+
+    private fun getSprayingItems(tomorrow: MutableList<DeltaT>?): List<DeltaT> {
+        if (tomorrow.isNullOrEmpty())
+            return mutableListOf()
+        if (tomorrow.size < 20)
+            return tomorrow
+        return tomorrow.subList(4, 20)
     }
 
     private fun myCrop() {
@@ -616,6 +661,10 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             updateDevice()
 
         }
+        binding.ivUpdate.setOnClickListener {
+            EventClickHandling.calculateClickEvent("Device_card_Refresh")
+            updateDevice()
+        }
 
     }
 
@@ -631,18 +680,18 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             }
             it.tvAddDeviceStart.text = "${data.modelName} - ${data.deviceName}"
             it.deviceNumber.text = "Device Number : ${data.deviceNumber?.uppercase()}"
-            it.tvTempDegree.text = data.temperature.toString() + " \u2103"
-            it.tvWindDegree.text = data.rainfall.toString() + " mm"
-            it.tvHumidityDegree.text = data.humidity.toString() + " %"
-            it.tvWindSpeedDegree.text = data.windspeed.toString() + " Km/h"
-            it.totalAreeaTwo.text=data.deviceElevation.toString() +" m"
-                if (data.leafWetness != null && data.leafWetness!! == 1) {
-                    it.tvLeafWetnessDegree.text = "Wet"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
-                } else {
-                    it.tvLeafWetnessDegree.text = "Dry"
-                    it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
-                }
+            it.tvTempDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.temperature)} \u2103"
+            it.tvWindDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.rainfall)} mm"
+            it.tvHumidityDegree.text = "${String.format(Locale.ENGLISH, "%.2f", data.humidity)} %"
+            it.tvWindSpeedDegree.text = "${String.format(Locale.ENGLISH,"%.2f",data.windspeed)} Km/h"
+            it.totalAreeaTwo.text = "${String.format(Locale.ENGLISH,"%.2f",data.deviceElevation)} m"
+            if (data.leafWetness != null && data.leafWetness!! == 1) {
+                it.tvLeafWetnessDegree.text = "Wet"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_leaf_wetness)
+            } else {
+                it.tvLeafWetnessDegree.text = "Dry"
+                it.ivLeafWetness.setImageResource(R.drawable.ic_dry_image)
+            }
 
             if (data.isApproved == 0) {
                 it.approvedCV.visibility = View.VISIBLE
@@ -686,19 +735,20 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                 }
             }
 
-            it.tvPressureDegree.text = data.pressure.toString() + " hPa"
+            it.tvPressureDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.pressure)} hPa"
 
-            if (data.soilTemperature1.isNullOrEmpty()) {
+            if (data.soilTemperature1==null) {
                 it.clSoilTemp.visibility = View.GONE
             }
-            if (data.soilMoisture2 == null) {
+            if (data.soilMoisture2 == null || data.soilMoisture2 == 0.0) {
                 it.bottomTop.visibility = View.GONE
-            }else{
+            } else {
                 it.bottomTop.visibility = View.VISIBLE
             }
-            it.ivSoilDegree.text = data.soilTemperature1.toString() + " \u2103"
-            it.ivSoilDegreeOne.text = data.lux.toString() + " Lux"
-            it.tvLastUpdate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            it.ivSoilDegree.text =  "${String.format(Locale.ENGLISH,"%.2f",data.soilTemperature1)} \u2103"
+            it.ivSoilDegreeOne.text = "${String.format(Locale.ENGLISH,"%.2f",data.lux)} Lux"
+            it.tvLastUpdate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
 //            binding.soilMoistureOne.clearSections()
 //            binding.soilMoistureTwo.clearSections()
             binding.kpaOne.text = "${data.soilMoisture1} kPa"
@@ -715,7 +765,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "temperature")
                     bundle.putString("toolbar", "Temperature")
-                    bundle.putString("temp_value", data.temperature)
+                    data.temperature?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -730,7 +780,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "rainfall")
                     bundle.putString("toolbar", "Rainfall")
-                    bundle.putString("temp_value", data.rainfall)
+                    data.rainfall?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -746,7 +796,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "humidity")
                     bundle.putString("toolbar", "Humidity")
-                    bundle.putString("temp_value", data.humidity)
+                    data.humidity?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -761,7 +811,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "windspeed")
                     bundle.putString("toolbar", "Wind Speed")
-                    bundle.putString("temp_value", data.windspeed)
+                    data.windspeed?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -778,7 +828,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putString("value", "leaf_wetness_hrs")
                     bundle.putString("toolbar", "Leaf wetness")
 
-                    bundle.putString("temp_value", data.leafWetness.toString())
+                    data.leafWetness?.toDouble()?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -793,7 +843,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "pressure")
                     bundle.putString("toolbar", "Pressure")
-                    bundle.putString("temp_value", data.pressure)
+                    data.pressure?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -808,7 +858,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_1_kpa")
                     bundle.putString("toolbar", "Soil Moisture Top")
-                    bundle.putString("temp_value", data.soilMoisture1.toString())
+                    data.soilMoisture1?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -824,7 +874,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_moisture_2_kpa")
                     bundle.putString("toolbar", "Soil Moisture Bottom")
-                    bundle.putString("temp_value", data.soilMoisture2?.toString())
+                    data.soilMoisture2?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
@@ -840,14 +890,14 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "lux")
                     bundle.putString("toolbar", "Light Intensity")
-                    bundle.putString("temp_value", data.lux)
+                    data.lux?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
                         bundle
                     )
 
-                }
+                    }
 
             }
             binding.clSoilTemp.setOnClickListener {
@@ -857,20 +907,20 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                     bundle.putInt("device_model_id", data.modelId!!.toInt())
                     bundle.putString("value", "soil_temperature_1")
                     bundle.putString("toolbar", "Soil Temperature")
-                    bundle.putString("temp_value", data.soilTemperature1)
+                    data.soilTemperature1?.let { it1 -> bundle.putDouble("temp_value", it1) }
                     bundle.putString("date_time", data.dataTimestamp)
                     findNavController().navigate(
                         R.id.action_farmDetailsFragment4_to_graphsFragment3,
                         bundle
                     )
 
+                    }
+
                 }
-
             }
+
+
         }
-
-
-    }
 
     private fun updateDevice() {
         binding.ivUpdate.visibility = View.INVISIBLE
@@ -880,7 +930,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     private fun setupDeltaT(data: ViewDeviceDomain) {
 
-        if (data.modelSeries == "GSX") {
+        if (data.modelSeries == "GSX" || data.deltaT == null) {
             binding.currentDelta.visibility = View.GONE
             binding.deltaText.visibility = View.GONE
             binding.updateDate.visibility = View.GONE
@@ -888,7 +938,8 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
             binding.currentDelta.visibility = View.VISIBLE
             binding.deltaText.visibility = View.VISIBLE
             binding.updateDate.visibility = View.VISIBLE
-            binding.updateDate.text = "Last Updated: ${DateFormatUtils.dateFormatterDevice(data.dataTimestamp)}"
+            binding.updateDate.text =
+                "Last Updated: ${if (data.dataTimestamp != null) DateFormatUtils.dateFormatterDevice(data.dataTimestamp) else "--"}"
         }
 
 //        binding.currentDelta.clearSections()
@@ -899,7 +950,7 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
 
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             mMap = map
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -934,11 +985,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 20
+                        it, 20
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
                 val area: Double =
                     getArea(points) / 4046.86
                 binding.farmAreaSingleFarm.text = (String.format(
@@ -951,13 +1006,15 @@ class FarmDetailsFragment : Fragment(), ViewDeviceFlexListener, OnMapReadyCallba
     }
 
 
-    private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
-        val builder = LatLngBounds.builder()
-        for (ll in points) {
-            builder.include(ll)
+        private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
+            val builder = LatLngBounds.builder()
+            for (ll in points) {
+                if (ll != null) {
+                    builder.include(ll)
+                }
+            }
+            return builder.build()
         }
-        return builder.build()
-    }
 
     private fun getArea(latLngs: List<LatLng?>?): Double {
         return SphericalUtil.computeArea(latLngs)

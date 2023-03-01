@@ -1,14 +1,16 @@
 package com.waycool.data.repository.domainModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
-
+@Keep
 data class MandiDomain(
     var status: Boolean? = null,
     var message: String? = null,
     var data: MandiDomainData? = MandiDomainData()
 )
+@Keep
 
 data class MandiDomainData(
     var page: Int? = null,
@@ -19,7 +21,8 @@ data class MandiDomainData(
     var records: List<MandiDomainRecord> = emptyList()
 )
 
-@Parcelize
+@Parcelize @Keep
+
 data class MandiDomainRecord(
     var crop_te: String? = null,
     var market_te: String? = null,

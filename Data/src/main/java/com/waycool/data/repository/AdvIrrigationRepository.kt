@@ -11,8 +11,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object AdvIrrigationRepository {
-    fun getAdvIrrigation(account_id: Int, plot_id: Int): Flow<Resource<AdvIrrigationModel?>> {
-        return NetworkSource.getAdvIrrigation(account_id, plot_id)
+    fun getAdvIrrigation( plot_id: Int): Flow<Resource<AdvIrrigationModel?>> {
+        return NetworkSource.getAdvIrrigation( plot_id)
     }
 
     fun updateHarvest(plot_id: Int, account_id: Int, cropId: Int, harvest_date: String, actual_yield: Int): Flow<Resource<HarvestDateModel?>> {
@@ -38,8 +38,8 @@ object AdvIrrigationRepository {
         return NetworkSource.updateCropStage(account_id, cropStageId, plot_id, date)
     }
 
-    fun getDisease(account_id: Int, plot_id: Int): Flow<Resource<PestAndDiseaseModel?>> {
-        return NetworkSource.getDisease(account_id, plot_id).map {
+    fun getDisease( plot_id: Int): Flow<Resource<PestAndDiseaseModel?>> {
+        return NetworkSource.getDisease( plot_id).map {
             val currentData = it?.data?.data?.currentData
                 ?.map { it1 ->
                     it1.disease?.diseaseNameTranslated = it1.diseaseId?.let { it1 ->

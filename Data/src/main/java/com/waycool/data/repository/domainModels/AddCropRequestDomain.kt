@@ -1,5 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import com.google.errorprone.annotations.Keep
+
+@Keep
 data class AddCropRequestDomain(
     val account_no_id: Int?= null,
     val area: Int ?= null,

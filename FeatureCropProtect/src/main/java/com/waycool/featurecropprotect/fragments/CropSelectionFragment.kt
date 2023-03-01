@@ -260,7 +260,10 @@ class CropSelectionFragment : Fragment() {
             when (res) {
                 is Resource.Success -> {
                     if(!res.data.isNullOrEmpty()){
-                        binding.clProgressBar.visibility=View.GONE
+                        Handler(Looper.myLooper()!!).postDelayed({
+                            binding.clProgressBar.visibility=View.GONE
+                        },500)
+
                     }
                     if (categoryId == null) {
                         adapter.submitList(res.data)

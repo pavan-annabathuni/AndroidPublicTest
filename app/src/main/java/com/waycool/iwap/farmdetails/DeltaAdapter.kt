@@ -12,7 +12,7 @@ import com.waycool.iwap.databinding.ItemDeltaProgressBarBinding
 
 class DeltaAdapter(val context:Context) : RecyclerView.Adapter<DeltaViewHolder>() {
     var details = mutableListOf<DeltaT>()
-    fun setMovieList(movies: ArrayList<DeltaT>?) {
+    fun setMovieList(movies: List<DeltaT>) {
         if (movies != null) {
             this.details = movies.toMutableList()
         }
@@ -50,7 +50,7 @@ class DeltaAdapter(val context:Context) : RecyclerView.Adapter<DeltaViewHolder>(
 
 
         if (position == details.size - 1) {
-            holder.binding.timeTvSprayingVh .setText("12 AM")
+            holder.binding.timeTvSprayingVh.setText("8 PM")
             holder.binding.timeTvSprayingVh.setVisibility(View.VISIBLE)
         } else {
             holder.binding.timeTvSprayingVh.setVisibility(View.GONE)

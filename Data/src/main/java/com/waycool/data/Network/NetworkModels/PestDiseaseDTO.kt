@@ -1,12 +1,15 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class PestDiseaseDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: ArrayList<PestDiseaseData> = arrayListOf()
 )
+@Keep
 data class PestDiseaseData(
     @SerializedName("crop_id") var cropId: Int? = null,
     @SerializedName("disease_name") var diseaseName: String? = null,
@@ -25,6 +28,7 @@ data class PestDiseaseData(
 //    @SerializedName("audio_url") var audioUrl: String? = null,
 //    @SerializedName("translation") var translation: String? = null,
 //)
+@Keep
 data class RecommendationNetwork(
     @SerializedName("cultural") var cultural: String? = null,
     @SerializedName("biological") var biological: String? = null,

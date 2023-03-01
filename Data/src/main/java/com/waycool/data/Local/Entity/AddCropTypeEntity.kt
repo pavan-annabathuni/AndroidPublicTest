@@ -1,10 +1,12 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 //@Entity(tableName = "add_crop_type")
+@Keep
 data class AddCropTypeEntity(
     val id: Int? = null,
     val isSelected:Boolean?=null,

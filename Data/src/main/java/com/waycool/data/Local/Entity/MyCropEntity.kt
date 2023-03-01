@@ -1,11 +1,12 @@
 package com.waycool.data.Local.Entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "My_crop")
-
+@Keep
 data class MyCropDataEntity (
     @PrimaryKey
     @ColumnInfo(name="id"                    ) var id                  : Int?    = null,

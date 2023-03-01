@@ -1,21 +1,22 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class ViewDeviceDomain (
         var id                 : Int?                = null,
         var dataTimestamp      : String?             = null,
-        var temperature        : String?             = null,
-        var humidity           : String?             = null,
-        var pressure           : String?             = null,
-        var rainfall           : String?             = null,
-        var windspeed          : String?             = null,
+        var temperature        : Double?             = null,
+        var humidity           : Double?             = null,
+        var pressure           : Double?             = null,
+        var rainfall           : Double?             = null,
+        var windspeed          : Double?             = null,
         var soilMoisture1      : Double?                = null,
         var soilMoisture2      : Double?             = null,
         var leafWetness        : Int?             = null,
-        var soilTemperature1   : String?             = null,
-        var lux                : String?             = null,
+        var soilTemperature1   : Double?             = null,
+        var lux                : Double?             = null,
         var modelId            : Int?                = null,
         var serialNoId         : Int?                = null,
         var iotDevicesDataId   : Int?                = null,
@@ -33,7 +34,7 @@ data class ViewDeviceDomain (
         var isApproved         : Int?             = null,
 
         )
-
+@Keep
 data class RangesDomain (
 
       var min    : Double?    = null,

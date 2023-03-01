@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class OutgrowWeatherDTO(
     @SerializedName("status"  ) var status  : Boolean?        = null,
     @SerializedName("message" ) var message : String?         = null,
     @SerializedName("data"    ) var data    : ArrayList<WeatherDataNetwork> = arrayListOf()
 )
 
+@Keep
 data class DetailsNetwork (
 
     @SerializedName("dataProvider"   ) var dataProvider   : String? = null,
@@ -15,12 +18,14 @@ data class DetailsNetwork (
     @SerializedName("iconBaseUrl"    ) var iconBaseUrl    : String? = null
 
 )
+@Keep
 data class PinLocationNetwork (
 
     @SerializedName("lat" ) var lat : Double? = null,
     @SerializedName("lon" ) var lon : Double? = null
 
 )
+@Keep
 data class LocationDetailsNetwork (
 
     @SerializedName("stateName"       ) var stateName       : String?      = null,
@@ -39,6 +44,7 @@ data class LocationDetailsNetwork (
     @SerializedName("distance"        ) var distance        : Double?      = null
 
 )
+@Keep
 data class CurrentWeatherNetwork (
 
     @SerializedName("temperature"            ) var temperature            : Double?  = null,
@@ -57,6 +63,7 @@ data class CurrentWeatherNetwork (
     @SerializedName("daylight"               ) var daylight               : Boolean? = null
 
 )
+@Keep
 data class Hourly (
     @SerializedName("temperature"         ) var temperature         : Double? = null,
     @SerializedName("temperatureApparent" ) var temperatureApparent : Double? = null,
@@ -75,6 +82,7 @@ data class Hourly (
     @SerializedName("windDirection"       ) var windDirection       : String? = null
 
 )
+@Keep
 data class DailyWeatherNetwork (
 
     @SerializedName("apparentTemperatureMin" ) var apparentTemperatureMin : Double? = null,
@@ -92,6 +100,7 @@ data class DailyWeatherNetwork (
 
 )
 
+@Keep
 data class WeatherDataNetwork (
 
     @SerializedName("details"         ) var details         : DetailsNetwork?          = DetailsNetwork(),

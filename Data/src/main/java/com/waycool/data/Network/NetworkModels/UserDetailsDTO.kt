@@ -1,7 +1,9 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class UserDetailsDTO(
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
@@ -9,6 +11,7 @@ data class UserDetailsDTO(
 
 )
 
+@Keep
 data class UserDetailsData(
 
     @SerializedName("id") var id: Int? = null,
@@ -22,19 +25,21 @@ data class UserDetailsData(
 
 )
 
+@Keep
 data class RolesNetwork (
 
     @SerializedName("title" ) var title : String? = null,
     @SerializedName("pivot" ) var pivot : PivotNetwork?  = PivotNetwork()
 
 )
+@Keep
 data class PivotNetwork (
 
     @SerializedName("user_id" ) var userId : Int? = null,
     @SerializedName("role_id" ) var roleId : Int? = null
 
 )
-
+@Keep
 data class AccountNetwork(
 
     @SerializedName("id"              ) var id             : Int?    = null,
@@ -45,7 +50,7 @@ data class AccountNetwork(
     @SerializedName("subscription"    ) var subscription   : Int?    = null
 )
 
-
+@Keep
 data class ProfileNetwork(
     @SerializedName("id"               ) var id             : Int?    = null,
     @SerializedName("remote_photo_url" ) var remotePhotoUrl : String? = null,
@@ -62,6 +67,7 @@ data class ProfileNetwork(
     @SerializedName("lang"             ) var lang           : Lang?   = Lang()
 
 )
+@Keep
 data class Lang (
 
     @SerializedName("id"        ) var id       : Int?    = null,

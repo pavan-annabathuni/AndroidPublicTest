@@ -1,5 +1,6 @@
 package com.waycool.data.Local.db
 
+import androidx.annotation.Keep
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,6 +12,7 @@ import com.waycool.data.Local.Entity.TagsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
+@Keep
 interface OutgrowDao {
 
     //Tags
@@ -57,6 +59,9 @@ interface OutgrowDao {
 
     @Query("SELECT * FROM crop_master WHERE water_model = 1 AND crop_name LIKE '%' || :searchQuery || '%' ORDER BY crop_name Asc")
     fun getIrrigationCrops(searchQuery: String? = ""): Flow<List<CropMasterEntity>?>
+
+    @Query("SELECT * FROM crop_master WHERE cropId = :cropid")
+     suspend fun getCropById(cropid: Int): CropMasterEntity?
 
     @Query("DELETE FROM crop_master")
     fun deleteCropMaster()
@@ -131,6 +136,9 @@ interface OutgrowDao {
 
     @Query("SELECT * FROM my_devices WHERE farm_id = :farmId ORDER BY model_series DESC")
     fun getViewDevicesByFarm(farmId: Int): Flow<List<ViewDeviceEntity>>
+
+ @Query("SELECT * FROM my_devices WHERE farm_id = :farmId ORDER BY model_series DESC")
+   suspend fun getViewDevicesByFarmEntity(farmId: Int): List<ViewDeviceEntity>?
 
     @Query("DELETE FROM my_devices")
     fun deleteAllDevices()

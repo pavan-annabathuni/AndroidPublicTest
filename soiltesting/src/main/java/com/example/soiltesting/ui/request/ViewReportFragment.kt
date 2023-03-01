@@ -2,11 +2,15 @@ package com.example.soiltesting.ui.request
 
 
 import android.app.DownloadManager
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -75,7 +79,7 @@ class ViewReportFragment : Fragment() {
     var fullData: ReportDetails? = null
     var resultList: List<ReportResult> = ArrayList<ReportResult>()
     var trackerID: Int? = null
-    var file_Number:String?=null
+    var file_Number: String? = null
 
     //    var soilViewModel: SoilViewModel? = null
     private val viewModel by lazy { ViewModelProvider(this)[SoilTestRequestViewModel::class.java] }
@@ -102,9 +106,9 @@ class ViewReportFragment : Fragment() {
         macronutrient = "Macronutrient Fertilizer (in Kg/Bag)"
         micronutrient = "Micronutrient Fertilizer"
         scale = "Scale"
-        scale_text1 = "High, Acid, Saline,Highly Alkaline," + "Low (OC,OM)"
+        scale_text1 = "High, Acid, Saline,Highly Alkaline,"
         scale_text2 = "Low," + " Deficient"
-        scale_text3 = "Medium ,Normal"
+        scale_text3 = "Medium "
         scale_text4 = "Neutral,Sufficient, Alkaline," + "Slightly Acidic"
         scale_text5 = "High (OC,OM,mbc)"
         scale_text6 = "Not selected"
@@ -132,7 +136,7 @@ class ViewReportFragment : Fragment() {
         binding.scaleLayout.scaleTv2.text = scale_text2
         binding.scaleLayout.scaleTv3.text = scale_text3
         binding.scaleLayout.scaleTv4.text = scale_text4
-        binding.scaleLayout.scaleTv5.text = scale_text5
+//        binding.scaleLayout.scaleTv5.text = scale_text5
         binding.scaleLayout.scaleTv6.text = scale_text6
         binding.sampleLayout.othersTittle.text = sample_info
         binding.sampleLayout.soilReportTv1.text = selected_crop
@@ -170,7 +174,7 @@ class ViewReportFragment : Fragment() {
             binding.tvToolBar.text = "ID: ${soitestNumber ?: "N/A"}"
             Log.d("Praaasd", "onViewCreatedbdhsvbhdbvhb:$soitestNumber ")
             setData(trackerID!!)
-            file_Number=soitestNumber
+            file_Number = soitestNumber
 
         }
         binding.backBtn.setOnClickListener {
@@ -178,7 +182,7 @@ class ViewReportFragment : Fragment() {
             if (!isSuccess) requireActivity().onBackPressed()
         }
         binding.cardCheckHealth.setOnClickListener {
-            initDownloadReportAndShare(trackerID!!,file_Number.toString())
+            initDownloadReportAndShare(trackerID!!, file_Number.toString())
 
 
         }
@@ -187,31 +191,31 @@ class ViewReportFragment : Fragment() {
 
     private fun translations() {
 //        TranslationsManager().loadString("str_recommendation",binding.tvToolBar,"ID: ")
-        TranslationsManager().loadString(
-            "str_recommendation",
-            binding.recommandationText,
-            "Recommendation: "
-        )
-        TranslationsManager().loadString(
-            "str_recommendation",
-            binding.soilConditionerText,
-            "Recommendation: "
-        )
-        TranslationsManager().loadString(
-            "str_recommendation",
-            binding.macronutrientText,
-            "Recommendation: "
-        )
-        TranslationsManager().loadString(
-            "str_recommendation",
-            binding.micronutrientFertilizerText,
-            "Recommendation: "
-        )
-        TranslationsManager().loadString(
-            "str_recommendation",
-            binding.soilConditionerText,
-            "Recommendation: "
-        )
+//        TranslationsManager().loadString(
+//            "str_recommendation",
+//            binding.recommandationText,
+//            "Recommendation: "
+//        )
+//        TranslationsManager().loadString(
+//            "str_recommendation",
+//            binding.soilConditionerText,
+//            "Recommendation: "
+//        )
+//        TranslationsManager().loadString(
+//            "str_recommendation",
+//            binding.macronutrientText,
+//            "Recommendation: "
+//        )
+//        TranslationsManager().loadString(
+//            "str_recommendation",
+//            binding.micronutrientFertilizerText,
+//            "Recommendation: "
+//        )
+//        TranslationsManager().loadString(
+//            "str_recommendation",
+//            binding.soilConditionerText,
+//            "Recommendation: "
+//        )
         TranslationsManager().loadString(
             "str_high_acide",
             binding.scaleLayout.scaleTv1,
@@ -224,11 +228,11 @@ class ViewReportFragment : Fragment() {
             binding.scaleLayout.scaleTv4,
             scale_text4
         )
-        TranslationsManager().loadString(
-            "str_high_oc_om_mbc",
-            binding.scaleLayout.scaleTv5,
-            scale_text5
-        )
+//        TranslationsManager().loadString(
+//            "str_high_oc_om_mbc",
+//            binding.scaleLayout.scaleTv5,
+//            scale_text5
+//        )
         TranslationsManager().loadString("not_selected", binding.scaleLayout.scaleTv6, scale_text6)
         TranslationsManager().loadString("scale", binding.scaleLayout.scaleTittle, scale)
 
@@ -288,7 +292,8 @@ class ViewReportFragment : Fragment() {
 
     }
 
-    fun initDownloadReportAndShare(soil_test_id: Int,soitestNumber:String) {
+
+    private fun initDownloadReportAndShare(soil_test_id: Int, soitestNumber: String) {
         viewModel.pdfDownload(soil_test_id).observe(requireActivity()) {
             when (it) {
                 is Resource.Success -> {
@@ -316,7 +321,12 @@ class ViewReportFragment : Fragment() {
 //                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
 //                    downloadManager.enqueue(request)
 
-
+//                    val i = Intent()
+//                    i.action = Intent.ACTION_SEND
+//                    i.putExtra(Intent.EXTRA_STREAM, uri)
+//                    i.type = "application/pdf"
+//                    startActivity(i)
+//                    Log.d("TAG", "initObserveDataggvsx:$uri")
                 }
                 is Resource.Error -> {
                     AppUtils.translatedToastServerErrorOccurred(context)
@@ -345,6 +355,36 @@ class ViewReportFragment : Fragment() {
 
         }
     }
+    fun getPDFPath(uri: Uri?): String? {
+        val id: String = DocumentsContract.getDocumentId(uri)
+        val contentUri: Uri = ContentUris.withAppendedId(
+            Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
+        )
+        val projection = arrayOf<String>(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = requireContext().getContentResolver().query(contentUri, projection, null, null, null)
+        val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
+    }
+
+    private fun downloadFile(url: String, fileName: String) {
+
+//        val request = DownloadManager.Request(Uri.parse(url))
+//            .setTitle(title)
+//            .setDescription(description)
+//            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+//            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
+
+        val request = DownloadManager.Request(Uri.parse(url))
+            .setTitle(fileName)
+            .setDescription("Downloading file...")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+        val downloadManager =
+            requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        downloadManager.enqueue(request)
+    }
+
 //    private fun writeResponseBodyToDisk(body: ResponseBody, filename: String): String {
 //        val file = File(requireContext().externalCacheDir, filename)
 //
@@ -369,7 +409,7 @@ class ViewReportFragment : Fragment() {
 //    }
 
 
-    private fun writeResponseBodyToDisk(body: ResponseBody,soitestNumber:String): Uri {
+    private fun writeResponseBodyToDisk(body: ResponseBody, soitestNumber: String): Uri {
         return try {
 
             // todo change the file location/name according to your needs
@@ -383,7 +423,8 @@ class ViewReportFragment : Fragment() {
             //                test.mkdirs();
 
             //            }
-            var invoicePdfFile = File(requireContext().externalCacheDir, "$soitestNumber soiltestreport.pdf")
+            var invoicePdfFile =
+                File(requireContext().externalCacheDir, "$soitestNumber soiltestreport.pdf")
             var inputStream: InputStream? = null
             var outputStream: OutputStream? = null
             try {
@@ -430,7 +471,7 @@ class ViewReportFragment : Fragment() {
     }
 
     //
-    fun dataSetToRecommendation(list: List<Recommendation>) {
+    private fun dataSetToRecommendation(list: List<Recommendation>) {
         soilConditionerList.clear()
         macroList.clear()
         microList.clear()
@@ -481,7 +522,7 @@ class ViewReportFragment : Fragment() {
         if (data.FdAddress != null) binding.farmerLayout.soilReportTv2.text =
             address + data.FdAddress
         if (data.FdNumber != null) binding.farmerLayout.soilReportTv3.text =
-            mobile + data.FdAddress
+            mobile + data.FdNumber
         if (data.TcName != null) binding.testCenterLayout.soilReportTv1.text =
             name + data.TcName
         if (data.TcAddress != null) binding.testCenterLayout.soilReportTv2.text =

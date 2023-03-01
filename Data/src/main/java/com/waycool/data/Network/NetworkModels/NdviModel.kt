@@ -1,12 +1,15 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class NdviModel(
     @SerializedName("status"  ) var status  : Boolean?        = null,
     @SerializedName("message" ) var message : String?         = null,
     @SerializedName("data"    ) var data    : ArrayList<NdviData> = arrayListOf()
 )
+
+@Keep
 data class NdviData(
     @SerializedName("dt"    ) var dt    : Long?    = null,
     @SerializedName("type"  ) var type  : String? = null,
@@ -15,7 +18,7 @@ data class NdviData(
     @SerializedName("tile"  ) var tile  : Tile?   = Tile(),
     @SerializedName("stats" ) var stats : Stats?  = Stats()
 )
-
+@Keep
 data class Stats (
 
     @SerializedName("ndvi" ) var ndvi : String? = null,
@@ -26,7 +29,7 @@ data class Stats (
     @SerializedName("ndwi" ) var ndwi : String? = null
 
 )
-
+@Keep
 data class Tile (
 
     @SerializedName("truecolor"  ) var truecolor  : String? = null,
@@ -39,7 +42,7 @@ data class Tile (
     @SerializedName("ndwi"       ) var ndwi       : String? = null
 
 )
-
+@Keep
 data class NDVIMean(
     @SerializedName("mean"  ) var mean  : Double? = null,
     )

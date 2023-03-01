@@ -1,6 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+@Keep
 
 data class GeocodeDomain(
 
@@ -8,7 +10,7 @@ data class GeocodeDomain(
     var status: String? = null
 
 )
-
+@Keep
 data class ResultsDomain(
 
 //    var addressComponents: ArrayList<AddressComponentsDomain> = arrayListOf(),

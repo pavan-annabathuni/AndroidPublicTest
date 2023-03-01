@@ -23,7 +23,7 @@ ext {
     testRunnerVersion = "1.0.2"
     mockKVersion = "1.8.13.kotlin13"
     espressoVersion = "3.0.2"
-    firebaseVersion = '31.2.0'
+    firebaseVersion = '31.2.1'
     otpview = '2.0.0'
     truecaller = '2.6.0'
     googleAnalytics = '17.0.1'

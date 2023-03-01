@@ -64,7 +64,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
     private var scanResult: String? = null
     private var plotId: Int? = null
-//    private var plot_id_no:Int
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
 
@@ -157,24 +156,33 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Your current Location is far from your Farm",
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
                         LENGTH_SHORT
                     ) }}}
 
 
             } else if (nickName.isEmpty()) {
-                CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     val toastDeviceName=TranslationsManager().getString("device_name_empty")
-                    if(!toastDeviceName.isNullOrEmpty()){
-                        binding.device1.error = toastDeviceName}
+                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
                     else{ binding.device1.error= "Device Name should not be empty" }
                 }
 
 
                 return@setOnClickListener
-            }
+            } else if (scanResult.isNullOrEmpty()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastScan= TranslationsManager().getString("please_scan")
+                    if(!toastScan.isNullOrEmpty()){
+                        context?.let { it1 -> ToastStateHandling.toastError(it1,toastScan,
+                            LENGTH_SHORT
+                        ) }}
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Please scan the Device QR",
+                        LENGTH_SHORT
+                    ) }}}
 
-            else {
+
+            } else {
                 binding.progressBar.visibility=View.VISIBLE
                 binding.frameLayout2.visibility=View.GONE
                 val  eventBundle=Bundle()
@@ -303,9 +311,6 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     }
                     adapter.onItemClick = { plot ->
                         plotId = plot?.id
-
-
-
                     }
                 }
             }
@@ -457,7 +462,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
             mMap = map
@@ -542,7 +547,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         drawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-   private fun translationAddDevice() {
+    fun translationAddDevice() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("str_add_device")
             binding.topAppBar.title = title

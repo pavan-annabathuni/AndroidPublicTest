@@ -7,21 +7,21 @@
 
     <include app:graph="@navigation/nav_home" />
     <include app:graph="@navigation/navigation_profile" />
-    <include app:graph = "@navigation/navigation_weather"/>
+<!--    <include app:graph = "@navigation/navigation_weather"/>-->
 
-    <activity
-        android:id="@+id/cropProtectActivity"
-        android:name="com.waycool.featurecropprotect.CropProtectActivity"
-        android:label="CropProtectActivity" />
-    <activity
-        android:id="@+id/mandiActivity"
-        android:name="com.example.mandiprice.MandiActivity"
-        android:label="MandiActivity" />
+<!--    <activity-->
+<!--        android:id="@+id/cropProtectActivity"-->
+<!--        android:name="com.waycool.featurecropprotect.CropProtectActivity"-->
+<!--        android:label="CropProtectActivity" />-->
+<!--    <activity-->
+<!--        android:id="@+id/mandiActivity"-->
+<!--        android:name="com.example.mandiprice.MandiActivity"-->
+<!--        android:label="MandiActivity" />-->
     <include app:graph="@navigation/navigation_mandi" />
-    <activity
-        android:id="@+id/irrigationPlannerActivity"
-        android:name="com.example.irrigationplanner.IrrigationPlannerActivity"
-        android:label="IrrigationPlannerActivity" />
+<!--    <activity-->
+<!--        android:id="@+id/irrigationPlannerActivity"-->
+<!--        android:name="com.example.irrigationplanner.IrrigationPlannerActivity"-->
+<!--        android:label="IrrigationPlannerActivity" />-->
     <include app:graph="@navigation/nav_home_premium" />
     <fragment
         android:id="@+id/loadingFragment"

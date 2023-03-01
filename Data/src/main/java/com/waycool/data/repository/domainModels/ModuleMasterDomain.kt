@@ -1,5 +1,9 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
+
+@Keep
+
 data class ModuleMasterDomain(
     var id                 : Int?    = null,
     var moduleType         : String? = null,

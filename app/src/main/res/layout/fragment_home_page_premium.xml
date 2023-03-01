@@ -1038,6 +1038,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
+                                    android:visibility="gone"
                                     app:layout_constraintEnd_toStartOf="@+id/view"
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
@@ -1177,15 +1178,18 @@
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvLastUpdate"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
                                     android:layout_marginTop="@dimen/space12"
+                                    android:layout_marginEnd="16dp"
                                     android:layout_marginBottom="@dimen/space12"
+                                    android:singleLine="true"
                                     android:text="Last Updated: Today Tue 26, Jul"
                                     android:textColor="@color/textdark"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/tvLastUpdateRefresh"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
 

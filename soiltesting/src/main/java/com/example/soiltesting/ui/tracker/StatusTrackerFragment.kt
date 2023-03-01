@@ -161,7 +161,7 @@ class StatusTrackerFragment : Fragment(), FeedbackListerner {
                 val bundle = Bundle()
                 if (dataX.id != null) {
                     bundle.putString("soil_test_number",soil_test_number)
-                    bundle.putInt("id", dataX.id!!.toInt())
+                    bundle.putInt("id", id.toString().toInt())
                     findNavController().navigate(
                         R.id.action_statusTrackerFragment_to_viewReportFragment,
                         bundle

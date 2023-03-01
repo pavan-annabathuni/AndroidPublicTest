@@ -263,5 +263,9 @@ object LocalSource {
 
     fun getDevicesByFarm(farmId: Int) = outgrowDao.getViewDevicesByFarm(farmId)
 
+   suspend fun getDevicesByFarmEntity(farmId: Int) = outgrowDao.getViewDevicesByFarmEntity(farmId)
+
+
+    suspend fun getCropFromMasterById(cropid:Int) = outgrowDao.getCropById(cropid)
 
 }

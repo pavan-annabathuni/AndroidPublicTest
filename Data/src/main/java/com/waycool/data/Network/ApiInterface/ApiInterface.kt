@@ -402,7 +402,7 @@ interface ApiInterface {
     suspend fun farmDetailsDelta(
         @HeaderMap map: Map<String, String>?,
         @Query("farm_id") farmId: Int
-    ): Response<FarmDetailsDTO>
+    ): Response<DeltaTDTO>
 
     //variety crop
     @GET("api/v1/crop-variety")
