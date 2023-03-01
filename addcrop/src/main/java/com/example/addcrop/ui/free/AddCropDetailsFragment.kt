@@ -105,23 +105,8 @@ class AddCropDetailsFragment : Fragment() {
         selectAreaUnit()
         translationAddCropForFreeUser()
         mvvmInit()
-//        binding.viewModel=viewModel
     }
 
-    //    private fun mvvmInit() {
-//        viewModel.saveButtonPassData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//            postCropDetails()
-//        })
-//        viewModel.calenderShow .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//         selectCropDateFromCalender()
-//        })
-//        viewModel.navigateBack.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//            val isSuccess = findNavController().navigateUp()
-//            if (!isSuccess) requireActivity().onBackPressed()
-//        })
-//
-//
-//    }
     private fun mvvmInit() {
         viewModel.navigation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { action ->
                 when (action) {
@@ -259,7 +244,7 @@ class AddCropDetailsFragment : Fragment() {
         eventBundle.putString("cropCategoryTagName", "Crop_category_${cropCategoryTagName}")
         eventBundle.putString("cropTagName", cropNameTag)
         eventBundle.putString("sowingDate", binding.tvDateSelected.text.toString())
-        EventItemClickHandling.calculateItemClickEvent("Add_crop", eventBundle)
+        EventItemClickHandling.calculateItemClickEvent("add_crop", eventBundle)
         viewModel.addCropDataPass(
             map
         ).observe(requireActivity()) {

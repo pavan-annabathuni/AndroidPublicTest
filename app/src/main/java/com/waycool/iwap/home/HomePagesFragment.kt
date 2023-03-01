@@ -453,11 +453,11 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             findNavController().navigate(R.id.action_homePagesFragment_to_allServicesFragment)
         }
         binding.tvEditMyCrops.setOnClickListener {
-            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
+            EventClickHandling.calculateClickEvent("EditCropsClick")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.ivEditCrop.setOnClickListener {
-            EventClickHandling.calculateClickEvent("EditCropsHomePagesFragment")
+            EventClickHandling.calculateClickEvent("EditCropsClick")
             findNavController().navigate(R.id.action_homePagesFragment_to_editCropFragment)
         }
         binding.cvAddCrop.setOnClickListener {

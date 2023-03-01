@@ -45,6 +45,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.waycool.core.utils.AppSecrets
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
@@ -643,8 +644,10 @@ class RegistrationFragment : Fragment() {
 
 
                 }
-                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
-                EventClickHandling.calculateClickEvent("Login_Location${address}")
+                val eventBundle=Bundle()
+                eventBundle.putString("UserName",binding.nameEt.text.toString())
+                eventBundle.putString("UserLocation",address)
+                EventItemClickHandling.calculateItemClickEvent("LoginData",eventBundle)
             }
         } else {
             getLocation()

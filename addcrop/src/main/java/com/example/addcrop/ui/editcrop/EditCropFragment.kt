@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.addcrop.databinding.FragmentEditCropBinding
 import com.example.addcrop.viewmodel.AddCropViewModel
 import com.waycool.data.error.ToastStateHandling
-import com.waycool.data.eventscreentime.EventClickHandling
+import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
 import kotlinx.coroutines.launch
@@ -32,8 +32,8 @@ class EditCropFragment : Fragment() {
         myCropAdapter = EditMyCropsAdapter(EditMyCropsAdapter.DiffCallback.OnClickListener{
             //event listener when a crop is deleted
             val eventBundle=Bundle()
-            eventBundle.putString("",it.cropName)
-            EventClickHandling.calculateClickEvent("Edit_crop_${it.cropName}")
+            eventBundle.putString("cropName",it.cropName)
+            EventItemClickHandling.calculateItemClickEvent("Edit_crop",eventBundle)
             //translation of crop deleted
             viewModel.viewModelScope.launch {
                 val toast = TranslationsManager().getString("crop_deleted")

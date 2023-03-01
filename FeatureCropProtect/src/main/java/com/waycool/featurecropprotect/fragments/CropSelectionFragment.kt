@@ -108,7 +108,9 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            EventClickHandling.calculateClickEvent("crop_protection_myCrop${it.cropNameTag}")
+            val eventBundle=Bundle()
+            eventBundle.putString("cropNameTag",it.cropNameTag)
+            EventItemClickHandling.calculateItemClickEvent("crop_protection_myCrop",eventBundle)
             val id = it.cropId
             var id2 = 0
             val args = Bundle()
