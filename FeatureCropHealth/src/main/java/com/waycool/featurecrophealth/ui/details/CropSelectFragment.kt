@@ -150,7 +150,7 @@ class CropSelectFragment : Fragment() {
         }
     }
 
-    fun translationPestAndDisease() {
+  private  fun translationPestAndDisease() {
         viewModel.viewModelScope.launch {
             binding.searchView.hint = TranslationsManager().getString("search")
         }
@@ -159,7 +159,7 @@ class CropSelectFragment : Fragment() {
     }
 
 
-    fun initView() {
+  private fun initView() {
         binding.backBtn.setOnClickListener {
             val isSuccess = findNavController().navigateUp()
             if (!isSuccess) requireActivity().onBackPressed()
