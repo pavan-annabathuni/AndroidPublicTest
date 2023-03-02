@@ -164,7 +164,7 @@ class SelectCropSoilTestFragment : Fragment() {
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(context)
+        val chip = Chip(activity)
         chip.text = category.categoryName
         chip.isCheckable = true
         chip.isClickable = true
