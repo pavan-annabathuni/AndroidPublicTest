@@ -195,30 +195,32 @@ class AddCropDetailsFragment : Fragment() {
     }
 
     private fun createChip(farm: MyFarmsDomain) {
-        val chip = Chip(requireContext())
-        chip.text = farm.farmName
-        chip.isCheckable = true
-        chip.isClickable = true
-        chip.isCheckedIconVisible = true
-        chip.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireContext(),
-                com.waycool.uicomponents.R.color.bg_chip_text
+        if(activity!=null) {
+            val chip = Chip(activity)
+            chip.text = farm.farmName
+            chip.isCheckable = true
+            chip.isClickable = true
+            chip.isCheckedIconVisible = true
+            chip.setTextColor(
+                AppCompatResources.getColorStateList(
+                    requireContext(),
+                    com.waycool.uicomponents.R.color.bg_chip_text
+                )
             )
-        )
-        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
-        chip.chipStrokeWidth = 1f
-        chip.chipStrokeColor = AppCompatResources.getColorStateList(
-            requireContext(),
-            com.waycool.uicomponents.R.color.strokegrey
-        )
+            chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+            chip.chipStrokeWidth = 1f
+            chip.chipStrokeColor = AppCompatResources.getColorStateList(
+                requireContext(),
+                com.waycool.uicomponents.R.color.strokegrey
+            )
 
-        chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
-            if (b) {
-                selectedFarmId = farm.id
+            chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
+                if (b) {
+                    selectedFarmId = farm.id
+                }
             }
+            binding.myfarmsChipGroup.addView(chip)
         }
-        binding.myfarmsChipGroup.addView(chip)
     }
 
     //select area unit
