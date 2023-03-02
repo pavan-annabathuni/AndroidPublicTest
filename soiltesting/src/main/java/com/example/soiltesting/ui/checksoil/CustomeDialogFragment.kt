@@ -48,6 +48,7 @@ class CustomeDialogFragment : DialogFragment() {
 
 
 
+
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("CustomeDialogFragment")

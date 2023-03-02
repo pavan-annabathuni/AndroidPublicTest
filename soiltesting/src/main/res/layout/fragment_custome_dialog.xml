@@ -34,18 +34,33 @@
         app:layout_constraintStart_toStartOf="@id/tvInfo"
         app:layout_constraintTop_toBottomOf="@+id/tvInfo" />
 
-    <TextView
+<!--    <TextView-->
+<!--        android:id="@+id/tvOk"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="OK"-->
+<!--        android:padding="@dimen/space12"-->
+<!--        android:textColor="@color/primaryColor"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:textSize="@dimen/txt16"-->
+<!--        android:gravity="center"-->
+
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />-->
+    <Button
         android:id="@+id/tvOk"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
         android:text="OK"
-        android:padding="@dimen/space12"
+        android:background="#00000000"
+        android:padding="8dp"
         android:textColor="@color/primaryColor"
-        android:layout_margin="16dp"
-        android:textSize="@dimen/txt16"
-        android:gravity="center"
-
-        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

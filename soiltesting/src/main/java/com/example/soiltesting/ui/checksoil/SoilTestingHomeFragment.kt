@@ -2,10 +2,13 @@ package com.example.soiltesting.ui.checksoil
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -17,6 +20,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -85,7 +91,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     private var moduleId = "22"
     private val viewModel by lazy { ViewModelProvider(this)[HistoryViewModel::class.java] }
     private var handler: Handler? = null
-    private var runnable: Runnable?=null
+    private var runnable: Runnable? = null
     private val debounceInterval = 1000L
 
 
@@ -128,6 +134,9 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSoilTestingHomeBinding.inflate(layoutInflater)
+        viewModel.getUserDetails().observe(viewLifecycleOwner) {
+            accountID = it.data?.accountId
+        }
         soilHistoryAdapter = HistoryDataAdapter(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         videosBinding = binding.layoutVideos
@@ -139,7 +148,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.recyclerview.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         apiErrorHandlingBinding = binding.errorState
-    networkErrorStateTranslations(apiErrorHandlingBinding)
+        networkErrorStateTranslations(apiErrorHandlingBinding)
 
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
@@ -148,27 +157,28 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         handler = Handler(Looper.myLooper()!!)
 
         binding.recyclerview.adapter = soilHistoryAdapter
-        binding.tvCheckCrop.isSelected = true
-        initViewClick()
+//        binding.tvCheckCrop.isSelected = true
         initViewBackClick()
-        expandableView()
-        expandableViewTWo()
         binding.clProgressBar.visibility = View.VISIBLE
-        expandableViewThree()
+        getAllHistory()
+        initViewClick()
+//        locationClick()
         getVideos()
         fabButton()
-        getAllHistory()
         setBanners()
-        locationClick()
+        expandableView()
+        expandableViewTWo()
+        expandableViewThree()
         translationSoilTesting()
+
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    activity?.finish()
+            override fun handleOnBackPressed() {
+                activity?.finish()
 
 //                    val isSuccess = activity?.let { findNavController().popBackStack() }
 //                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
-                }
             }
+        }
         activity?.let {
             activity?.onBackPressedDispatcher?.addCallback(
                 it,
@@ -201,7 +211,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         binding.progressBar.visibility = View.VISIBLE
 
         val bannerAdapter = AdsAdapter(requireContext(), binding.bannerViewpager)
-        runnable =Runnable {
+        runnable = Runnable {
             if ((bannerAdapter.itemCount - 1) == binding.bannerViewpager.currentItem)
                 binding.bannerViewpager.currentItem = 0
             else
@@ -212,13 +222,13 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (runnable != null) {
-                    AppUtil.handlerSet(handler!!,runnable!!,3000)
+                    AppUtil.handlerSet(handler!!, runnable!!, 3000)
                 }
             }
         })
         viewModel.getVansAdsList(moduleId).observe(viewLifecycleOwner) {
 
-            bannerAdapter.submitList( it.data)
+            bannerAdapter.submitList(it.data)
             binding.clProgressBar.visibility = View.GONE
 
             TabLayoutMediator(
@@ -246,20 +256,18 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             page.scaleY = 0.85f + r * 0.15f
         }
         binding.bannerViewpager.setPageTransformer(compositePageTransformer)
-        bannerAdapter.onItemClick={
+        bannerAdapter.onItemClick = {
             EventClickHandling.calculateClickEvent("Soil_Testing_Adbanner")
         }
 
     }
 
     private fun getAllHistory() {
-        binding.clProgressBar.visibility = View.VISIBLE
-
+//        binding.clProgressBar.visibility = View.VISIBLE
         viewModel.getUserDetails().observe(viewLifecycleOwner) {
-            accountID = it.data?.accountId
-            if (accountID != null) {
-                bindObserversSoilTestHistory(accountID!!)
-
+        val  accountIDD = it.data?.accountId
+            if (accountIDD != null) {
+                bindObserversSoilTestHistory(accountIDD)
             }
         }
     }
@@ -271,16 +279,16 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             if (!isSuccess) requireActivity().onBackPressed()
         }
         binding.cardCheckHealth.setOnClickListener {
-            viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//            viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 binding.clProgressBar.visibility = View.VISIBLE
-
-                accountID = it.data?.accountId
+//
+//                accountID = it.data?.accountId
                 if (accountID != null) {
+//                    binding.cardCheckHealth.isClickable = true
                     isLocationPermissionGranted(accountID!!)
 //                    binding.cardCheckHealth.isClickable = false
-
                 }
-            }
+//            }
         }
 //        val debouncedClickListener = DebouncedClickListener(2000) {
 //            // Code to execute on click event
@@ -300,7 +308,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 //        }
 //        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
     }
-
     private fun initViewClick() {
         binding.tvViewAll.setOnClickListener {
             EventClickHandling.calculateClickEvent("Soiltesting_requesthistory_viewall")
@@ -329,10 +336,11 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             .distinctUntilChanged()
                             .collect { it1 ->
                                 if (it1 is LoadState.Error) {
-                                    if(adapter.itemCount == 0) {
+                                    if (adapter.itemCount == 0) {
                                         videosBinding.noDataVideo.visibility = View.VISIBLE
                                         videosBinding.ivViewAll.visibility = View.GONE
-                                        videosBinding.tvNoVANs.text="Videos are being loaded.Please wait for some time"
+                                        videosBinding.tvNoVANs.text =
+                                            "Videos are being loaded.Please wait for some time"
                                         videosBinding.viewAllVideos.visibility = View.GONE
                                         videosBinding.videoCardNoInternet.visibility = View.GONE
                                         videosBinding.videosListRv.visibility = View.INVISIBLE
@@ -368,17 +376,17 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
         adapter.onItemClick = {
-            val eventBundle=Bundle()
-            eventBundle.putString("title",it?.title)
-            EventItemClickHandling.calculateItemClickEvent("soil_testing_video",eventBundle)
+            val eventBundle = Bundle()
+            eventBundle.putString("title", it?.title)
+            EventItemClickHandling.calculateItemClickEvent("soil_testing_video", eventBundle)
             val bundle = Bundle()
             bundle.putParcelable("video", it)
-            try{
+            try {
                 findNavController().navigate(
                     R.id.action_soilTestingHomeFragment_to_playVideoFragment2,
                     bundle
                 )
-            }catch(e: IllegalArgumentException){
+            } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
             }
 
@@ -496,6 +504,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
 
     }
+
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val title = TranslationsManager().getString("soil_testing")
@@ -503,25 +512,62 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
         }
         TranslationsManager().loadString(
             "our_soil_testing_service_enables_you_with_a_better_understanding_of_your_soil_health_and_helps_you_to_get_a_better_yield",
-            binding.tvOurAll,"Our ‘Soil testing’ service enables you with a better understanding of your soil health and recommends you required nutrition to improve the yield."
+            binding.tvOurAll,
+            "Our ‘Soil testing’ service enables you with a better understanding of your soil health and recommends you required nutrition to improve the yield."
         )
-        TranslationsManager().loadString("str_about", binding.tvRaise,"Raise the Request")
-        TranslationsManager().loadString("soil_str_soil", binding.SoilSample,"Soil Sample Collection")
-        TranslationsManager().loadString("soil_lab_testing", binding.tvSoilLab,"Lab Testing")
-        TranslationsManager().loadString("soil_details_report", binding.tvDetaols,"Detailed Report")
+        TranslationsManager().loadString("str_about", binding.tvRaise, "Raise the Request")
+        TranslationsManager().loadString(
+            "soil_str_soil",
+            binding.SoilSample,
+            "Soil Sample Collection"
+        )
+        TranslationsManager().loadString("soil_lab_testing", binding.tvSoilLab, "Lab Testing")
+        TranslationsManager().loadString(
+            "soil_details_report",
+            binding.tvDetaols,
+            "Detailed Report"
+        )
 
-        TranslationsManager().loadString("request_history", binding.tvRequest,"Request History")
-        TranslationsManager().loadString("faq_s", binding.tvFAQ,"FAQ’s")
-        TranslationsManager().loadString("soil_test_q_one", binding.tvSoilText,"1. Why should I do a soil test?")
-        TranslationsManager().loadString("soil_test_a_one", binding.clExpandeble,"Regular testing helps develop and maintain more productive soils for farming. Soil tests indicate whether crop nutrients are deficient and, if so, what amounts are needed for optimum growth. It helps to identify problems related to imbalances in nutrients, pH, salts, and organic matter. On the basis of the test report, recommendations will be provided that help increase productivity and profits.")
-        TranslationsManager().loadString("soil_test_q_two", binding.tvSoilTextTwo,"2. What is the ideal time for soil sampling?")
-        TranslationsManager().loadString("soil_test_a_two", binding.clExpandebleTwo,"Soil Samples are taken anytime throughout the year, after harvesting Kharif and Rabi crops is a good time for most of the crops, or when there is no standing crop in the field.")
-        TranslationsManager().loadString("soil_test_q_three", binding.tvSoilTextThree,"3. How often do I soil Test?")
-        TranslationsManager().loadString("soil_test_a_three", binding.clExpandebleThree,"Sampling soil once a year is ideal to recommend soil nutrient application. The frequency of soil testing also depends on the crops grown. For annuals such as Corn, Mustard, Lettuce, Wheat, Maize, and Rice the soil should be tested once every year. For perennial plants such as Grapes, Lemons, Bananas, Figs, Asparagus, and Papayas the soil should be tested prior to planting and once every two to three years. However frequent soil testing helps to decide whether the current management is affecting future productivity and farm profitability.")
-        TranslationsManager().loadString("str_viewall", binding.tvViewAll,"View all")
-        TranslationsManager().loadString("check_soil_health", binding.tvCheckCrop,"Check your Soil health")
-        TranslationsManager().loadString("videos", videosBinding.videosTitle,"Videos")
-        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos,"View all")
+        TranslationsManager().loadString("request_history", binding.tvRequest, "Request History")
+        TranslationsManager().loadString("faq_s", binding.tvFAQ, "FAQ’s")
+        TranslationsManager().loadString(
+            "soil_test_q_one",
+            binding.tvSoilText,
+            "1. Why should I do a soil test?"
+        )
+        TranslationsManager().loadString(
+            "soil_test_a_one",
+            binding.clExpandeble,
+            "Regular testing helps develop and maintain more productive soils for farming. Soil tests indicate whether crop nutrients are deficient and, if so, what amounts are needed for optimum growth. It helps to identify problems related to imbalances in nutrients, pH, salts, and organic matter. On the basis of the test report, recommendations will be provided that help increase productivity and profits."
+        )
+        TranslationsManager().loadString(
+            "soil_test_q_two",
+            binding.tvSoilTextTwo,
+            "2. What is the ideal time for soil sampling?"
+        )
+        TranslationsManager().loadString(
+            "soil_test_a_two",
+            binding.clExpandebleTwo,
+            "Soil Samples are taken anytime throughout the year, after harvesting Kharif and Rabi crops is a good time for most of the crops, or when there is no standing crop in the field."
+        )
+        TranslationsManager().loadString(
+            "soil_test_q_three",
+            binding.tvSoilTextThree,
+            "3. How often do I soil Test?"
+        )
+        TranslationsManager().loadString(
+            "soil_test_a_three",
+            binding.clExpandebleThree,
+            "Sampling soil once a year is ideal to recommend soil nutrient application. The frequency of soil testing also depends on the crops grown. For annuals such as Corn, Mustard, Lettuce, Wheat, Maize, and Rice the soil should be tested once every year. For perennial plants such as Grapes, Lemons, Bananas, Figs, Asparagus, and Papayas the soil should be tested prior to planting and once every two to three years. However frequent soil testing helps to decide whether the current management is affecting future productivity and farm profitability."
+        )
+        TranslationsManager().loadString("str_viewall", binding.tvViewAll, "View all")
+        TranslationsManager().loadString(
+            "check_soil_health",
+            binding.tvCheckCrop,
+            "Check your Soil health"
+        )
+        TranslationsManager().loadString("videos", videosBinding.videosTitle, "Videos")
+        TranslationsManager().loadString("str_viewall", videosBinding.viewAllVideos, "View all")
     }
 
 
@@ -534,7 +580,6 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 when (it) {
                     is Resource.Success -> {
                         binding.clProgressBar.visibility = View.GONE
-
                         binding.clTopGuide.visibility = View.GONE
                         binding.clRequest.visibility = View.VISIBLE
                         if (it.data != null) {
@@ -555,7 +600,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                     is Resource.Error -> {
-                   AppUtils.translatedToastServerErrorOccurred(context)
+                        AppUtils.translatedToastServerErrorOccurred(context)
 
                     }
                     is Resource.Loading -> {
@@ -567,10 +612,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
     override fun statusTracker(data: SoilTestHistoryDomain) {
-        val  eventBundle=Bundle()
-        eventBundle.putString("id",data.soil_test_number)
+        val eventBundle = Bundle()
+        eventBundle.putString("id", data.soil_test_number)
 
-        EventItemClickHandling.calculateItemClickEvent("Soiltesting_viewstatus",eventBundle)
+        EventItemClickHandling.calculateItemClickEvent("Soiltesting_viewstatus", eventBundle)
 
         val bundle = Bundle()
         bundle.putInt("id", data.id!!)
@@ -619,7 +664,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                             when (it) {
                                 is Resource.Success -> {
                                     if (it.data!!.isEmpty()) {
-                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
+                                        dialog()
+//                                        CustomeDialogFragment.newInstance().show(requireActivity().supportFragmentManager, CustomeDialogFragment.TAG)
                                         binding.clProgressBar.visibility = View.GONE
                                         binding.cardCheckHealth.isClickable = true
                                     } else if (it.data!!.isNotEmpty()) {
@@ -638,7 +684,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                                                 R.id.action_soilTestingHomeFragment_to_checkSoilTestFragment,
                                                 bundle
                                             )
-                                        }catch (e:Exception){
+                                        } catch (e: Exception) {
                                         }
 
                                         binding.clProgressBar.visibility = View.GONE
@@ -646,11 +692,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                                 }
                                 is Resource.Error -> {
-                                    if(NetworkUtil.getConnectivityStatusString(context)==0){
+                                    if (NetworkUtil.getConnectivityStatusString(context) == 0) {
                                         AppUtils.translatedToastCheckInternet(context)
 
-                                    }
-                                    else{
+                                    } else {
                                         AppUtils.translatedToastServerErrorOccurred(context)
 
                                     }
@@ -783,7 +828,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                         }
                         binding.clProgressBar.visibility = View.GONE
-                                        binding.view.visibility=View.GONE
+                        binding.view.visibility = View.GONE
 
 
                     }
@@ -875,6 +920,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             }
         }
     }
+
     private fun fabButton() {
         var isVisible = false
         binding.addFab.setOnClickListener {
@@ -924,12 +970,42 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     companion object {
         private const val REQUEST_CODE_GPS = 1011
     }
+    private fun dialog() {
+
+        val dialog = Dialog(requireContext())
+        //dialog.setCancelable(false)
+        dialog.setContentView(R.layout.item_dialog_soil)
+        // val body = dialog.findViewById(R.id.body) as TextView
+        val yesBtn = dialog.findViewById(R.id.ok) as Button
+        val tvInformation = dialog.findViewById(R.id.textView14) as TextView
+        val tvMessage = dialog.findViewById(R.id.textView15) as TextView
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+            Log.d("Dialog", "dialog: Clicked")
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        TranslationsManager().loadString("str_information", tvInformation, "Information")
+        TranslationsManager().loadString(
+            "thank_you",
+            tvMessage,
+            "Thank you for showing interest Currently we are not available in your location we look forward to serve you shortly."
+        )
+        TranslationsManager().loadString("ok", yesBtn, "OK")
+        viewModel.viewModelScope.launch {
+            var ok = TranslationsManager().getString("str_ok")
+            if (ok.isNullOrEmpty())
+                yesBtn.text = "Ok"
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         if (runnable != null) {
             handler?.removeCallbacks(runnable!!)
         }
     }
+
     override fun onResume() {
         super.onResume()
 

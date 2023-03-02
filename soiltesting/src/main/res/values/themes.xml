@@ -13,4 +13,13 @@
     </style>
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+    <style name="Medium">
+        <item name="android:fontFamily">@font/notosans_medium</item>
+    </style>
+    <style name="SemiBold">
+        <item name="android:fontFamily">@font/notosans_semibold</item>
+    </style>
+    <style name="Bold">
+        <item name="android:fontFamily">@font/notosans_bold</item>
+    </style>
 </resources>
