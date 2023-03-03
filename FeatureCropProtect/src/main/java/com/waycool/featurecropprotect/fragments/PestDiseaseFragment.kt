@@ -69,20 +69,22 @@ class PestDiseaseFragment : Fragment() {
         binding = FragmentPestDiseaseBinding.inflate(inflater)
         binding.toolbar.setNavigationOnClickListener {
             val isSuccess = findNavController().popBackStack()
-            if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+            if (!isSuccess) activity?.let { it1 -> NavUtils.navigateUpFromSameTask(it1) }
         }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     val isSuccess = findNavController().popBackStack()
-                    if (!isSuccess) NavUtils.navigateUpFromSameTask(requireActivity())
+                    if (!isSuccess) activity?.let { NavUtils.navigateUpFromSameTask(it) }
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            requireActivity(),
-            callback
-        )
+        activity?.let {
+            requireActivity().onBackPressedDispatcher.addCallback(
+                it,
+                callback
+            )
+        }
         return binding.root
     }
 
