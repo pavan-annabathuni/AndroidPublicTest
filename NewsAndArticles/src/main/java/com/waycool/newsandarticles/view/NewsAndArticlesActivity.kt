@@ -80,10 +80,11 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-       // binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+          onBackPressed()
         }
+
+
 
         apiErrorHandlingBinding=binding.errorState
         networkErrorStateTranslations(apiErrorHandlingBinding)

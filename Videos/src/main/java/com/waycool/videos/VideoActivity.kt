@@ -4,9 +4,12 @@ package com.waycool.videos
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.waycool.data.utils.Resource
 import com.waycool.featurelogin.FeatureLogin
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
@@ -22,7 +25,7 @@ class VideoActivity : AppCompatActivity() {
 
     private val binding: ActivityVideoBinding by lazy { ActivityVideoBinding.inflate(layoutInflater) }
     lateinit var navHost: Fragment
-
+    private val videoViewModel: VideoViewModel by lazy { ViewModelProvider(this)[VideoViewModel::class.java] }
     private lateinit var adapterVideo: VideosPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,21 +53,43 @@ class VideoActivity : AppCompatActivity() {
             }
             if (deepLink != null) {
                 if (deepLink.lastPathSegment.equals(VIDEO_LIST)) {
-                    this.findNavController(R.id.nav_host_fragment_videos).navigate(R.id.videosListFragment)
+                    this.findNavController(R.id.nav_host_fragment_videos)
+                        .navigate(R.id.videosListFragment)
                 } else {
-                    val id = deepLink.getQueryParameter("video_id")
-                    val title = deepLink.getQueryParameter("video_name")
-                    val description = deepLink.getQueryParameter("video_desc")
-                    val contentUrl = deepLink.getQueryParameter("content_url")
-                    if (!id.isNullOrEmpty() && !title.isNullOrEmpty()) {
-                        val args = Bundle()
-                        args.putInt("id", id.toInt())
-                        args.putString("title", title)
-                        args.putString("description", description)
-                        args.putString("url", contentUrl)
-                        this.findNavController(R.id.nav_host_fragment_videos)
-                            .navigate(R.id.action_videosListFragment_to_playVideoFragment, args)
+                    val id = deepLink.getQueryParameter("id")
+                    if (!id.isNullOrEmpty()) {
+                        Log.d("NADeepLink", "NADeepLink2 $id")
+                        videoViewModel.getVansSharedData(id.toInt())
+                            .observe(this, androidx.lifecycle.Observer {
+                                when (it) {
+                                    is Resource.Success -> {
+                                        val vans = it.data
+                                        Log.d("NADeepLink", "NADeepLink2 $vans")
+
+                                        val args = Bundle()
+                                        args.putString("title", vans?.title)
+                                        args.putString("description", vans?.desc)
+                                        args.putString("url", vans?.content_url)
+                                        this.findNavController(R.id.nav_host_fragment_videos)
+                                            .navigate(
+                                                R.id.action_videosListFragment_to_playVideoFragment,
+                                                args
+                                            )
+                                    }
+                                    is Resource.Loading -> {
+                                        Log.d("NADeepLink", "NADeepLink2 load")
+
+                                    }
+                                    is Resource.Error -> {
+                                        Log.d("NADeepLink", "NADeepLink2 error ${it.message}")
+
+                                    }
+                                }
+
+                            })
                     }
+
+
                 }
             }
         }

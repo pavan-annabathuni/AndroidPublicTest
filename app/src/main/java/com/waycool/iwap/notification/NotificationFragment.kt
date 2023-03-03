@@ -72,6 +72,8 @@ class NotificationFragment : Fragment() {
                 val eventBundle=Bundle()
                 eventBundle.putString("",notification.title)
                 EventItemClickHandling.calculateItemClickEvent("NotificationItemClick",eventBundle)
+
+
                 val deepLink = notification.link
 
                 Log.d("Notification","Notification Link ${notification.link}")
