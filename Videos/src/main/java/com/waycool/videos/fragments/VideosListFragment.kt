@@ -394,7 +394,7 @@ class VideosListFragment : Fragment(), itemClick {
             DeepLinkNavigator.DEFAULT_IMAGE_URL
         }
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("http://app.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+            .setLink(Uri.parse("http://app.outgrowdigital.com/videoshare?id=${it?.id}"))
             .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()
