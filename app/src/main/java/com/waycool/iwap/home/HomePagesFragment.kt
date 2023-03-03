@@ -360,7 +360,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 }
 
             }
-//                    mandiAdapter.submitList()
 
         }
     }
@@ -1307,6 +1306,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
 
     override fun onItemClickListener(it: VansFeederListDomain?) {
         val bundle = Bundle()
+        bundle.putInt("id", it?.id!!)
         bundle.putString("title", it?.title)
         bundle.putString("content", it?.desc)
         bundle.putString("image", it?.thumbnailUrl)

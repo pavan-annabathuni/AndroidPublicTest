@@ -3,8 +3,6 @@ package com.waycool.data.Network.ApiInterface
 
 import android.text.Editable
 import com.waycool.data.Network.NetworkModels.*
-import com.waycool.data.Network.NetworkModels.LanguageMasterDTO
-import com.waycool.data.Network.NetworkModels.TagsAndKeywordsDTO
 import com.waycool.data.repository.domainModels.MandiDomain
 import com.waycool.data.repository.domainModels.MandiHistoryDomain
 import okhttp3.MultipartBody
@@ -12,10 +10,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
-import retrofit2.http.GET
-import retrofit2.http.HeaderMap
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
 import java.util.*
 
 interface ApiInterface {
@@ -89,6 +83,12 @@ interface ApiInterface {
         @QueryMap map1: Map<String, String>
     ): Response<VansFeederDTO?>
 
+    @GET("api/v1/get-specific-vans-data")
+    suspend fun getVansSharedData(
+        @HeaderMap map: Map<String, String>?,
+        @Query("vans_id") vans_id: Int
+    ): Response<VansSharedDataDTO>
+
     //news list
     @GET("api/v1/tags-keywords")
     suspend fun getTagsAndKeywords(
@@ -109,6 +109,8 @@ interface ApiInterface {
     suspend fun getUserDetails(
         @HeaderMap map: Map<String, String>,
     ): Response<UserDetailsDTO>
+
+
 
     @GET("api/v1/ai-crop-health/history")
     suspend fun getAiCropHistory(
