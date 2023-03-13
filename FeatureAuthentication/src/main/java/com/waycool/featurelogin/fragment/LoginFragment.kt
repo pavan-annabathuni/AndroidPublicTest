@@ -231,8 +231,8 @@ class LoginFragment : Fragment() {
             loginViewModel.setMobileNumber(mobileNo)
             fragmentLoginBinding.getotpBtn.isEnabled = false
 
-//            if (!trueCallerVerified && !com.waycool.featurelogin.BuildConfig.DEBUG) {
-            if (!trueCallerVerified) {
+            if (!trueCallerVerified && !com.waycool.featurelogin.BuildConfig.DEBUG) {
+//            if (!trueCallerVerified) {
                 moveToOtp(mobileNo)
                 EventClickHandling.calculateClickEvent("Login_Truecaller")
             } else {

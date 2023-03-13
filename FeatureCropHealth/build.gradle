@@ -38,7 +38,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-
     }
     buildFeatures {
         dataBinding true
@@ -50,6 +49,8 @@ android {
 
 dependencies {
     implementation project(path:':SquareCamera')
+//    implementation 'com.waycool:squarecamera:1.0.8'
+
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Videos')

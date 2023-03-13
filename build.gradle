@@ -1,6 +1,8 @@
 buildscript {
     ext.kotlin_version = '1.8.0'
     apply from: "dependencies.gradle"
+    group = "com.waycool"
+
     repositories {
         google()
         jcenter()
@@ -10,6 +12,13 @@ buildscript {
         mavenCentral()  // Maven Central repository
         maven {url "https://plugins.gradle.org/m2/"}
         gradlePluginPortal()
+        maven {
+            url = "https://maven.pkg.github.com/outgrowdigital/androidtest"
+            credentials {
+                username = 'pavan-annabathuni'
+                password = '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'
+            }
+        }
     }
 
     dependencies {
@@ -26,6 +35,8 @@ buildscript {
 }
 
 allprojects {
+    group = "com.waycool"
+
     repositories {
         google()
         jcenter()
@@ -34,6 +45,13 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
         mavenCentral()  // Maven Central repository
+        maven {
+            url = "https://maven.pkg.github.com/outgrowdigital/androidtest"
+            credentials {
+                username = 'pavan-annabathuni'
+                password = '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'
+            }
+        }
     }
 
 //    dependencyResolutionManagement {

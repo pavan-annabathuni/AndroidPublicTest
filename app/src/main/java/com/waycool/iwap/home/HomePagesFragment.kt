@@ -120,7 +120,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     ): View {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
 
-
         newsBinding = binding.layoutNews
 
         videosBinding = binding.layoutVideos
@@ -146,7 +145,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handler = Handler(Looper.myLooper()!!)
-
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {

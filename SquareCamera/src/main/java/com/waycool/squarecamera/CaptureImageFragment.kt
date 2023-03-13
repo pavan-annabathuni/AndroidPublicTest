@@ -53,9 +53,9 @@ class CaptureImageFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCaptureImageBinding.inflate(layoutInflater, container, false)
-        return binding.root;
+        return binding.root
     }
-
+    @androidx.camera.core.ExperimentalZeroShutterLag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.infoIv.setOnClickListener {
@@ -181,8 +181,8 @@ class CaptureImageFragment : Fragment() {
         )
     }
 
-
-    private fun startCamera() {
+    @androidx.camera.core.ExperimentalZeroShutterLag
+    private fun  startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireActivity())
 
         cameraProviderFuture.addListener({
@@ -276,6 +276,7 @@ class CaptureImageFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
+    @androidx.camera.core.ExperimentalZeroShutterLag
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
