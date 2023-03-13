@@ -37,7 +37,7 @@
     </style>
 
     <style name="BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetModal</item>
+<!--        <item name="bottomSheetStyle">@style/BottomSheetModal</item>-->
         <style name="BottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
             <item name="android:background">@android:color/transparent</item>
         </style>
