@@ -165,6 +165,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
         }
 
     //back button pressed method
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         audioWife?.release()

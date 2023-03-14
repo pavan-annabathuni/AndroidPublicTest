@@ -272,6 +272,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     }}
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, data: Intent?
     ) {
@@ -449,6 +450,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

@@ -330,6 +330,7 @@ class AddFarmSupportFragment : Fragment() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

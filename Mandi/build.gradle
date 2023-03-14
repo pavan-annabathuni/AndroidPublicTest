@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'maven-publish'
@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
-        versionCode 1
-        versionName '1.0.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
