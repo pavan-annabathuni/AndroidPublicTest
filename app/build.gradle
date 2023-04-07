@@ -3,11 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 apply plugin: 'com.google.firebase.firebase-perf'
-
 
 android {
     compileSdk appCompileSdkVersion
@@ -21,9 +20,9 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters "x86", "armeabi-v7a", "arm64-v8a", 'x86_64'
-        }
+//        ndk {
+//            abiFilters "x86", "armeabi-v7a", "arm64-v8a", 'x86_64'
+//        }
     }
     buildFeatures {
         dataBinding true
@@ -31,15 +30,15 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        debug {
-//            minifyEnabled true
-//            shrinkResources true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -55,6 +54,12 @@ dependencies {
     implementation project(path: ':Profile')
     implementation project(path: ':weather')
     implementation project(path: ':Mandi')
+//    implementation 'com.waycool:mandi:1.0.1'
+//    implementation 'com.waycool:squarecamera:1.0.6'
+//    api 'com.waycool:uicomponents:1.0.1'
+    implementation project(path: ':UiComponents')
+
+
     implementation project(path: ':cropinformation')
     implementation project(path: ':UiComponents')
     implementation project(path: ':FeatureAuthentication')
@@ -87,14 +92,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation platform('com.google.firebase:firebase-bom:31.1.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-perf'
 
-    //Google play services for authentications
-    implementation 'com.google.android.gms:play-services-base:18.1.0'
-    implementation 'com.google.android.gms:play-services-identity:18.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
 
     //For Firebase messaging Notifications services
     implementation 'com.google.firebase:firebase-messaging:23.1.1'
@@ -104,12 +106,20 @@ dependencies {
     //view page
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
 
-    implementation 'com.google.android.libraries.places:places:3.0.0'
 
     implementation 'com.github.Gruzer:simple-gauge-android:0.3.1'
 
     //browser
     implementation "androidx.browser:browser:1.5.0"
+
+    //google play store service
+    implementation 'com.google.android.play:core:1.10.3'
+
+
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
+
+    implementation "zendesk.messaging:messaging-android:2.7.0"
+
 }
 repositories {
     mavenCentral()

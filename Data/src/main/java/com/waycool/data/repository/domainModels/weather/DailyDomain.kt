@@ -1,12 +1,13 @@
 package com.waycool.data.repository.domainModels.weather
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.waycool.data.repository.domainModels.FeelsLikeDomain
 import com.waycool.data.repository.domainModels.TempDomain
 import com.waycool.data.repository.domainModels.WeatherDomain
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
+@Parcelize @Keep
 data class DailyDomain (
 
     var dt        : Int?               = null,

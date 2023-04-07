@@ -1,5 +1,8 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
+
+@Keep
 data class SoilTestHistoryDomain (
     val id: Int?=null,
     val plot_no: String?=null,

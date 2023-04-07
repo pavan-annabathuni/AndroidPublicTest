@@ -3,6 +3,8 @@ package com.example.ndvi
 import android.animation.LayoutTransition
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +20,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.ndvi.adapter.DateAdapter
 import com.example.ndvi.databinding.FragmentNdviBinding
 import com.example.ndvi.viewModel.NdviViewModel
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
@@ -103,12 +105,16 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         binding.floatingActionButton2.setOnClickListener {
             if (myFarm != null && googleMap != null) {
                 val points = myFarm?.farmJson as ArrayList
-                googleMap?.animateCamera(
+                getLatLnBounds(points)?.let { it1 ->
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points),
+                        it1,
                         50
                     )
-                )
+                }?.let { it2 ->
+                    googleMap?.animateCamera(
+                        it2
+                    )
+                }
             }
         }
 
@@ -133,12 +139,12 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                     0 -> {
                         EventClickHandling.calculateClickEvent("Vegitation_Index")
                         selectedTileType = TileType.NDVI
-                        showTileNDVI()
+                        showTileNDVI(selectedNdvi)
                     }
                     1 -> {
                         EventClickHandling.calculateClickEvent("True_colour")
                         selectedTileType = TileType.TRUE_COLOR
-                        showTileNDVI()
+                        showTileNDVI(selectedNdvi)
                     }
                 }
             }
@@ -153,11 +159,11 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         // val url = it.data?.data?.get(0)?.truecolorTile
 
         googleMap = map
-        map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
         drawFarmPolygon(map)
 
         getNdviFromAPI()
@@ -172,7 +178,7 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                 when(it){
                     is Resource.Success ->{
                         ndviDataList = it.data?.data
-                            ?.filter { ndviData -> ndviData.dt != null }
+                            ?.filter { ndviData -> ndviData.tile?.ndvi != null }
 
                         val datesList: List<String?> = ndviDataList
                             ?.map { data -> changeDateFormat(data.dt) } ?: mutableListOf()
@@ -188,8 +194,12 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                                     position: Int,
                                     p3: Long
                                 ) {
+                                    binding.dateSpinner.isEnabled = false
+                                    Handler(Looper.myLooper()!!).postDelayed({
+                                      binding.dateSpinner.isEnabled = true
+                                    },1000)
                                     selectedNdvi = ndviDataList?.get(position)
-                                    showTileNDVI()
+                                    showTileNDVI(selectedNdvi)
 
                                 }
 
@@ -219,43 +229,51 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-    private fun showTileNDVI() {
+    private fun showTileNDVI(selectedNdvi:NdviData?) {
         if (tileOverlay != null) {
             tileOverlay?.remove()
         }
         if (selectedNdvi != null) {
 //            binding.ndviMean.text = String.format("%.2f", selectedNdvi?.meanNdvi)
             binding.cardView2.visibility = View.GONE
-            if (selectedNdvi?.cl != null)
-                if (selectedNdvi?.cl!! > 85) {
-                    binding.cardView2.visibility = View.VISIBLE
+            if (selectedNdvi.cl != null)
+                if (selectedNdvi.cl!! > 85) {
+                    viewModel.viewModelScope.launch {
+                        binding.tvTextAlert.text = TranslationsManager().getString("str_cloud_coverage")
+                            binding.cardView2.visibility = View.VISIBLE
+                    }
                 }
 
-            selectedNdvi?.stats?.ndvi?.let {
+            selectedNdvi.stats?.ndvi?.let {
                 viewModel.getNdviMean(it).observe(viewLifecycleOwner) { it1 ->
-                    binding.ndviMean.text = String.format("%.2f", it1?.data?.mean)
+                    binding.ndviMean.text = if(it1?.data?.mean==null) "--" else String.format("%.2f",if(it1?.data?.mean!! > 1.0) 1.0 else it1?.data?.mean)
                 }
             }
 
             val tileUrl: String? = if (selectedTileType == TileType.NDVI) {
-                selectedNdvi?.tile?.ndvi
+                selectedNdvi.tile?.ndvi
             } else {
-                selectedNdvi?.tile?.truecolor
+                selectedNdvi.tile?.truecolor
             }
-            if (tileUrl.isNullOrEmpty() && URLUtil.isValidUrl(tileUrl)) {
-                ToastStateHandling.toastError(
-                    requireContext(),
-                    "Image Not Available",
-                    Toast.LENGTH_LONG
-                )
+            if (tileUrl.isNullOrEmpty() || !URLUtil.isValidUrl(tileUrl)) {
+                Log.d("g56", "NDVI Url: $tileUrl")
+//                ToastStateHandling.toastError(
+//                    requireContext(),
+//                    "Image Not Available",
+//                    Toast.LENGTH_LONG
+                //)
+                binding.ndviMean.visibility = View.GONE
+                binding.cardView2.visibility = View.VISIBLE
+                binding.tvTextAlert.text = "Image Not Available"
+                binding.tabLayout.visibility = View.GONE
+                binding.cardView3.visibility = View.GONE
             } else {
-
                 val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
                         var url: String = if (selectedTileType == TileType.NDVI) {
-                            "${selectedNdvi?.tile?.ndvi}&paletteid=4"
+                            "${selectedNdvi.tile?.ndvi}&paletteid=4"
                         } else {
-                            "${selectedNdvi?.tile?.truecolor}"
+                            "${selectedNdvi.tile?.truecolor}"
                         }
                         url = url.replace("{x}", x.toString() + "")
                         url = url.replace("{y}", y.toString() + "")
@@ -273,6 +291,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                     TileOverlayOptions()
                         .tileProvider(tileProvider)
                 )
+                binding.ndviMean.visibility = View.VISIBLE
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.cardView3.visibility = View.VISIBLE
             }
         }
     }
@@ -292,11 +313,15 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
                             )
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 50
+                        it, 50
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
@@ -305,7 +330,9 @@ class NdviFragment : Fragment(), OnMapReadyCallback {
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

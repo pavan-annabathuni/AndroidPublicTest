@@ -1,10 +1,11 @@
 package com.waycool.data.Network.NetworkModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
-
+@Keep
 data class CheckSoilTestLabDTO (
 //        @SerializedName("status"  ) var status  : Boolean?        = null,
 //        @SerializedName("message" ) var message : String?         = null,
@@ -13,6 +14,7 @@ data class CheckSoilTestLabDTO (
         @SerializedName("message" ) var message : String?         = null,
         @SerializedName("data"    ) var data    : List<CheckSoilTestData> = arrayListOf()
         )
+@Keep
 data class CheckSoilTestData(
 //        val onp_address: @RawValue Any? = null,
 //        val onp_country: @RawValue Any? = null,

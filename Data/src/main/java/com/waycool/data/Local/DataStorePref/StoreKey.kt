@@ -1,9 +1,11 @@
 package com.waycool.data.Local.DataStorePref
 
+import androidx.annotation.Keep
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
+@Keep
 object StoreKey {
 
     //Language Master

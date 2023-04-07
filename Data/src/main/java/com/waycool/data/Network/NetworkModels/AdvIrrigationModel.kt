@@ -1,16 +1,19 @@
 package com.waycool.data.Network.NetworkModels
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
-
+@Keep
 data class AdvIrrigationModel(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data    : AdvIrrigationData?    = AdvIrrigationData()
 
 )
+
+@Keep
 data class AdvIrrigationData (
 
     @SerializedName("irrigation" ) var irrigation : Irrigation?       = Irrigation(),
@@ -18,14 +21,14 @@ data class AdvIrrigationData (
 
 )
 
-@Parcelize
+@Parcelize @Keep
 data class Irrigation (
     @SerializedName("current_data"        ) var currentData        : CurrentData?        = CurrentData(),
     @SerializedName("historic_data"       ) var historicData       : ArrayList<HistoricData?>?   = arrayListOf(),
     @SerializedName("irrigation_forecast" ) var irrigationForecast : IrrigationForecast? = IrrigationForecast()
 ):Parcelable
 
-@Parcelize
+@Parcelize @Keep
 data class IrrigationForecast (
 
     @SerializedName("mad"         ) var mad        : ArrayList<Double?> = arrayListOf(),
@@ -37,7 +40,7 @@ data class IrrigationForecast (
 
 ):Parcelable
 
-@Parcelize
+@Parcelize @Keep
 data class HistoricData (
 
     @SerializedName("id"                ) var id               : Int?    = null,
@@ -51,11 +54,12 @@ data class HistoricData (
     @SerializedName("vol_per_farm"      ) var volPerFarm       : String? = null,
     @SerializedName("created_at"        ) var createdAt        : String? = null,
     @SerializedName("updated_at"        ) var updatedAt        : String? = null,
+    @SerializedName("rainfall"          ) var rainfall         : String? = null,
     @SerializedName("deleted_at"        ) var deletedAt        : String? = null
 
 ):Parcelable
 
-
+@Keep
 data class Gdd (
 
     @SerializedName("id"           ) var id          : Int?    = null,
@@ -73,7 +77,7 @@ data class Gdd (
 
 )
 
-@Parcelize
+@Parcelize @Keep
 data class CurrentData (
 
     @SerializedName("id"                ) var id               : Int?    = null,

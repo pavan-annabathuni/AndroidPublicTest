@@ -99,13 +99,14 @@ class SelectCropSoilTestFragment : Fragment() {
         myCrops()
 
     }
+
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
             val search = TranslationsManager().getString("search")
             binding.searchView.hint = search
         }
-        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle,"Select Crop")
-        TranslationsManager().loadString("select_crop", binding.toolbarTitle,"Select Crop")
+        TranslationsManager().loadString("str_mycrops", binding.myCropsTitle, "Select Crop")
+        TranslationsManager().loadString("select_crop", binding.toolbarTitle, "Select Crop")
     }
 
     fun myCrops() {
@@ -150,7 +151,7 @@ class SelectCropSoilTestFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-AppUtils.translatedToastServerErrorOccurred(context)
+                    AppUtils.translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
                     ToastStateHandling.toastWarning(requireContext(), "Loading", Toast.LENGTH_SHORT)
@@ -163,7 +164,7 @@ AppUtils.translatedToastServerErrorOccurred(context)
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(context)
+        val chip = Chip(activity)
         chip.text = category.categoryName
         chip.isCheckable = true
         chip.isClickable = true
@@ -264,6 +265,7 @@ AppUtils.translatedToastServerErrorOccurred(context)
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?

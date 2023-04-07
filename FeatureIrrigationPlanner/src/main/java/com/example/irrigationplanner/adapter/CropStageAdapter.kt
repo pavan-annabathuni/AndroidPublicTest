@@ -42,7 +42,7 @@ class CropStageAdapter(val onClickListener:OnClickListener):ListAdapter<CropStag
       holder.name.text = properties.stageName
         Glide.with(holder.itemView.context).load(properties.stageIcon).into(holder.image)
 
-        holder.date.setOnClickListener(){
+        holder.date.setOnClickListener {
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
@@ -52,8 +52,9 @@ class CropStageAdapter(val onClickListener:OnClickListener):ListAdapter<CropStag
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in textbox
                   holder.date.text = ("$year-$monthOfYear-$dayOfMonth")
+                    val month = monthOfYear+1
                   // date1 = binding.cal1.text.toString()
-                    onDateSelected?.invoke("$year-$monthOfYear-$dayOfMonth")
+                    onDateSelected?.invoke("$year-$month-$dayOfMonth")
                 },
                 year,
                 month,

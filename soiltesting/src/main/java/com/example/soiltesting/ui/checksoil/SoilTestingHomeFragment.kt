@@ -34,6 +34,7 @@ import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.addcrop.ui.selectcrop.DebouncedClickListener
 import com.example.soiltesting.R
 import com.example.soiltesting.databinding.FragmentSoilTestingHomeBinding
 import com.example.soiltesting.ui.history.HistoryDataAdapter
@@ -276,11 +277,28 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 accountID = it.data?.accountId
                 if (accountID != null) {
                     isLocationPermissionGranted(accountID!!)
-                    binding.cardCheckHealth.isClickable = false
+//                    binding.cardCheckHealth.isClickable = false
 
                 }
             }
         }
+//        val debouncedClickListener = DebouncedClickListener(2000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch {
+////                postCropDetails()
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    binding.clProgressBar.visibility = View.VISIBLE
+//
+//                    accountID = it.data?.accountId
+//                    if (accountID != null) {
+//                        isLocationPermissionGranted(accountID!!)
+//                        binding.cardCheckHealth.isClickable = false
+//
+//                    }
+//                }
+//            }
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
     }
 
     private fun initViewClick() {
@@ -454,13 +472,29 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
     private fun locationClick() {
         binding.cardCheckHealth.setOnClickListener {
+            binding.clProgressBar.visibility = View.VISIBLE
             EventClickHandling.calculateClickEvent("Soiltesting_checksoilhealth")
             viewModel.getUserDetails().observe(viewLifecycleOwner) {
                 accountID = it.data?.accountId
                 isLocationPermissionGranted(accountID!!)
+//                binding.cardCheckHealth.isClickable = false
 
             }
         }
+//        val debouncedClickListener = DebouncedClickListener(2000) {
+//            // Code to execute on click event
+//            CoroutineScope(Dispatchers.Main).launch {
+//                EventClickHandling.calculateClickEvent("Soiltesting_checksoilhealth")
+//                viewModel.getUserDetails().observe(viewLifecycleOwner) {
+//                    accountID = it.data?.accountId
+//                    isLocationPermissionGranted(accountID!!)
+//
+//                }
+//            }
+//        }
+//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
+
+
     }
     fun translationSoilTesting() {
         CoroutineScope(Dispatchers.Main).launch {
@@ -556,6 +590,8 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            binding.clProgressBar.visibility = View.GONE
+            binding.cardCheckHealth.isClickable = true
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
@@ -564,6 +600,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
                 ),
                 100
             )
+            binding.cardCheckHealth.isClickable = true
             // use your location object
             false
         } else {
@@ -633,7 +670,10 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
 
                     }
                 }
+//            binding.clProgressBar.visibility = View.GONE
+//            binding.cardCheckHealth.isClickable = true
             true
+
         }
     }
 
@@ -711,6 +751,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
             binding.clProgressBar.visibility = View.VISIBLE
             when (it) {
                 is Resource.Success -> {
+                    binding.clProgressBar.visibility = View.GONE
                     if (it.data!!.isEmpty()) {
 
                         CustomeDialogFragment.newInstance().show(
@@ -821,6 +862,7 @@ class SoilTestingHomeFragment : Fragment(), StatusTrackerListener {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

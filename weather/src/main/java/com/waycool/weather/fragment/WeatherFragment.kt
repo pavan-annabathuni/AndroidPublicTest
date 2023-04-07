@@ -34,6 +34,7 @@ import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
 import com.waycool.data.utils.Resource
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.WEATHER_SHARE_LINK
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
 import com.waycool.videos.adapter.AdsAdapter
@@ -153,9 +154,7 @@ class WeatherFragment : Fragment() {
 
  /** function that takes screen-shot and share the scree-shot and dynamic link with it*/
     fun screenShot() {
-     val uriString="https://outgrowdev.page.link/weathershare"
-     val title="Outgrow - Weather Details"
-     val description="View weather details"
+
         val now = Date()
         android.text.format.DateFormat.format("", now)
         val path = context?.getExternalFilesDir(null)?.absolutePath + "/" + now + ".jpg"
@@ -176,7 +175,7 @@ class WeatherFragment : Fragment() {
      share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
      share.putExtra(Intent.EXTRA_SUBJECT, "View weather details")
      share.putExtra(Intent.EXTRA_STREAM, URI)
-     share.putExtra(Intent.EXTRA_TEXT, "https://outgrowdev.page.link/weathershare")
+     share.putExtra(Intent.EXTRA_TEXT, WEATHER_SHARE_LINK)
      binding.clShareProgress.visibility=View.GONE
      Handler().postDelayed({ binding.imgShare.isEnabled = true
      },1000)

@@ -1,19 +1,23 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class PestAndDiseaseModel(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data    : DiseaseData?    = DiseaseData()
 )
 
+@Keep
 data class DiseaseData (
 
     @SerializedName("current_data"  ) var currentData  : ArrayList<DiseaseCurrentData>  = arrayListOf(),
     @SerializedName("historic_data" ) var historicData : ArrayList<DiseaseHistoricData> = arrayListOf()
 
 )
+@Keep
 data class DiseaseCurrentData (
     @SerializedName("probability"      ) var probability     : Int?     = null,
     @SerializedName("crop_id"          ) var cropId          : Int?     = null,
@@ -26,15 +30,18 @@ data class DiseaseCurrentData (
     @SerializedName("disease"          ) var disease         : DiseaseDetails? = DiseaseDetails()
 
 )
+@Keep
 data class DiseaseDetails (
 
     @SerializedName("id"           ) var id          : Int?    = null,
     @SerializedName("disease_name" ) var diseaseName : String? = null,
+    @SerializedName("disease_name_tag" ) var diseaseNameTag : String? = null,
     @SerializedName("disease_name_translated" ) var diseaseNameTranslated : String? = null,
     @SerializedName("disease_type" ) var diseaseType : String? = null,
     @SerializedName("disease_img"  ) var diseaseImg  : String? = null
 
 )
+@Keep
 data class DiseaseHistoricData (
 
     @SerializedName("probability"      ) var probability     : Int?     = null,

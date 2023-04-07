@@ -1,11 +1,14 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class MyCropsModel(
     @SerializedName("status"  ) var status  : Boolean?        = null,
                         @SerializedName("message" ) var message : String?         = null,
                         @SerializedName("data"    ) var data    : ArrayList<MyCropDataModel> = arrayListOf())
+@Keep
 data class CropModel (
 
     @SerializedName("id"        ) var id       : Int?    = null,
@@ -14,7 +17,7 @@ data class CropModel (
     @SerializedName("crop_logo" ) var cropLogo : String? = null
 
 )
-
+@Keep
 data class MyCropDataModel (
 
     @SerializedName("id"                    ) var id                  : Int?    = null,
@@ -48,6 +51,7 @@ data class MyCropDataModel (
     @SerializedName("crop"                  ) var crop                : CropModel?   = CropModel(),
     @SerializedName("soil_type"             ) var soilType            : SoilType? = SoilType()
 )
+@Keep
 data class SoilType (
 
     @SerializedName("id"          ) var id          : Int?    = null,

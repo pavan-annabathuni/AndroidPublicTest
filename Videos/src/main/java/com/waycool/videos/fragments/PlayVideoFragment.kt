@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,7 +25,10 @@ import com.waycool.data.repository.domainModels.VansFeederListDomain
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
+import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.R
 import com.waycool.videos.VideoViewModel
 import com.waycool.videos.adapter.VideosPagerAdapter
@@ -58,7 +62,6 @@ class PlayVideoFragment : Fragment(), itemClick {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -75,11 +78,30 @@ class PlayVideoFragment : Fragment(), itemClick {
         }
 
         if (videoSelected != null) {
-            binding.ytTitleTv.text = videoSelected?.title
-            binding.ytDescriptionTv.text = videoSelected?.desc
+            binding.ytTitleTv.text = videoSelected?.title?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+            binding.ytDescriptionTv.text = videoSelected?.desc?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+
         } else {
-            binding.ytTitleTv.text = videoTitle
-            binding.ytDescriptionTv.text = videoDesc
+            binding.ytTitleTv.text= videoTitle?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+            binding.ytDescriptionTv.text = HtmlCompat.fromHtml(
+                videoDesc.toString(),
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
         }
 
         val callback: OnBackPressedCallback =
@@ -231,14 +253,14 @@ class PlayVideoFragment : Fragment(), itemClick {
         val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
             it?.thumbnailUrl
         } else{
-            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+            DeepLinkNavigator.DEFAULT_IMAGE_URL
         }
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setLink(Uri.parse("http://app.outgrowdigital.com/videoshare?id=${it?.id}"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(

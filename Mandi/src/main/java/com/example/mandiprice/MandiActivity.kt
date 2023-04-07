@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.MANDI
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.MANDI_GRAPH
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 
 
@@ -25,16 +26,16 @@ class MandiActivity : AppCompatActivity() {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
-                Log.d("MandiGraph","MandiGraph Deeplink $deepLink")
-                if (deepLink.lastPathSegment.equals("/mandi")) {
-                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
-                } else{
+
+                if (deepLink.lastPathSegment.equals(MANDI_GRAPH)) {
                     val cropMasterId = deepLink.getQueryParameter("crop_master_id")
                     val mandiMasterId = deepLink.getQueryParameter("mandi_master_id")
                     val subRecordId = deepLink.getQueryParameter("sub_record_id")
                     val cropName = deepLink.getQueryParameter("crop_name")
                     val marketName = deepLink.getQueryParameter("market_name")
                     val fragment = deepLink.getQueryParameter("fragment")
+
+
 
                     if (!cropMasterId.isNullOrEmpty() && !mandiMasterId.isNullOrEmpty()) {
                         val args = Bundle()
@@ -46,6 +47,8 @@ class MandiActivity : AppCompatActivity() {
                         args.putString("fragment", fragment)
                         this.findNavController(R.id.nav_host_dashboard).navigate(R.id.action_mandiFragment_to_mandiGraphFragment, args)
                     }
+                } else if(deepLink.lastPathSegment.equals(MANDI)){
+//                    this.findNavController(R.id.nav_host_dashboard).navigate(R.id.mandiFragment)
                 }
 
             }

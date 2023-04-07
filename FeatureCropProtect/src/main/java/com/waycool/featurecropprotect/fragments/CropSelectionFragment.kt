@@ -23,6 +23,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -76,10 +77,10 @@ class CropSelectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         apiErrorHandlingBinding=binding.errorState
         networkErrorStateTranslations(apiErrorHandlingBinding)
-        binding.toolbar.setOnClickListener {
-            val isSuccess = findNavController().navigateUp()
-            if (!isSuccess) activity?.let { it1 -> it1.finish() }
-        }
+//        binding.toolbar.setOnClickListener {
+//            val isSuccess = findNavController().navigateUp()
+//            if (!isSuccess) activity?.let { it1 -> it1.finish() }
+//        }
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
@@ -108,7 +109,7 @@ class CropSelectionFragment : Fragment() {
 
         binding.cropsRv.adapter = adapter
         myCropAdapter = MyCropsAdapter(MyCropsAdapter.DiffCallback.OnClickListener {
-            EventClickHandling.calculateClickEvent("crop_protection_myCrop${it.cropNameTag}")
+            EventItemClickHandling.calculateItemClickEvent("crop_protection_myCrop", bundleOf(Pair("selected_crop","${it.cropNameTag}")))
             val id = it.cropId
             var id2 = 0
             val args = Bundle()
@@ -256,25 +257,30 @@ class CropSelectionFragment : Fragment() {
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
         binding.clProgressBar.visibility=View.VISIBLE
-        viewModel.getCropMaster(searchQuery).observe(requireActivity()) { res ->
-            when (res) {
-                is Resource.Success -> {
-                    if(!res.data.isNullOrEmpty()){
-                        binding.clProgressBar.visibility=View.GONE
-                    }
-                    if (categoryId == null) {
-                        adapter.submitList(res.data)
-                    } else {
-                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
-//                        binding.clProgressBar.visibility=View.GONE
-                    }
+        activity?.let {acti->
+            viewModel.getCropMaster(searchQuery).observe(acti) { res ->
+                when (res) {
+                    is Resource.Success -> {
+                        if(!res.data.isNullOrEmpty()){
+                            Handler(Looper.myLooper()!!).postDelayed({
+                                binding.clProgressBar.visibility=View.GONE
+                            },500)
+
+                        }
+                        if (categoryId == null) {
+                            adapter.submitList(res.data)
+                        } else {
+                            adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })
+    //                        binding.clProgressBar.visibility=View.GONE
+                        }
 
 
-                }
-                is Resource.Loading -> {
-                }
-                is Resource.Error -> {
-                    AppUtils.translatedToastServerErrorOccurred(context)
+                    }
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Error -> {
+                        AppUtils.translatedToastServerErrorOccurred(context)
+                    }
                 }
             }
         }
@@ -304,6 +310,7 @@ class CropSelectionFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?

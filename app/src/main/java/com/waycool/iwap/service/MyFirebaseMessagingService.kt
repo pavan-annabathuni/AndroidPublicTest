@@ -31,8 +31,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Log.d(TAG, "Message Data Body: ${message.data}")
-
-
         when (PushNotifications.shouldBeDisplayed(message.data)) {
             PushResponsibility.MESSAGING_SHOULD_DISPLAY -> {
                 // This push belongs to Messaging and the SDK is able to display it to the end user
@@ -55,7 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationId = NotificationID.iD
         val intent: Intent
 
-        message.data.get("link")
+//        message.data.get("link")
         if (message.data["link"] != null) {
             intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(message.data["link"])
@@ -90,9 +88,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
-                    .bigLargeIcon(null)
             ).setLargeIcon(bitmap)
         }
+//        if (message.data["image"] != null) {
+//            val bitmap = getBitmapFromUrl(message.data["image"].toString())
+//            notificationBuilder.setStyle(
+//                NotificationCompat.BigPictureStyle()
+//                    .bigPicture(bitmap)
+//                    .bigLargeIcon(null as Bitmap?)
+//            ).setLargeIcon(bitmap)
+//        }
+
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Creating Channel

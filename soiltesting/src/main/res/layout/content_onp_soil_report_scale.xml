@@ -26,7 +26,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale1"
+            android:src="@drawable/ic_red_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv1"
@@ -49,7 +49,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale2"
+            android:src="@drawable/ic_yellow_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv2"
@@ -71,7 +71,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale3"
+            android:src="@drawable/ic_yellow_two_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv3"
@@ -94,7 +94,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale4"
+            android:src="@drawable/ic_green_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv4"
@@ -106,29 +106,29 @@
             android:layout_marginLeft="@dimen/space16"
             android:textColor="@color/black_two"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/scale_layout5"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space50"
-        android:orientation="horizontal"
-        android:layout_marginRight="@dimen/space45"
-        android:layout_marginLeft="@dimen/space16"
-        android:layout_marginTop="@dimen/space8">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale5"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/scale_tv5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"
+<!--    <LinearLayout-->
+<!--        android:id="@+id/scale_layout5"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/space50"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_marginRight="@dimen/space45"-->
+<!--        android:layout_marginLeft="@dimen/space16"-->
+<!--        android:layout_marginTop="@dimen/space8">-->
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_red_image"-->
+<!--            android:layout_gravity="center"/>-->
+<!--        <TextView-->
+<!--            android:id="@+id/scale_tv5"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="High, Acid, Saline,Highly Alkaline Low (OC,OM)"-->
 
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/space16"
-            android:textColor="@color/black_two"/>
-    </LinearLayout>
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginLeft="@dimen/space16"-->
+<!--            android:textColor="@color/black_two"/>-->
+<!--    </LinearLayout>-->
     <LinearLayout
         android:id="@+id/scale_layout6"
         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_onp_scale6"
+            android:src="@drawable/ic_brown_image"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/scale_tv6"

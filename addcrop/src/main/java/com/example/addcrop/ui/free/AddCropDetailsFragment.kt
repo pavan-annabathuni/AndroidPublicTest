@@ -126,7 +126,7 @@ class AddCropDetailsFragment : Fragment() {
         viewModel.navigation.observe(viewLifecycleOwner, androidx.lifecycle.Observer { action ->
                 when (action) {
                     "SUBMIT_BUTTON" -> postCropDetails()
-                    "CALENDER_SHOW" -> selectCropDateFromCalender()
+                    "CALENDER_SHOW" -> showCalendar()
                     "BACK_BUTTON" -> navigateBack()
                     else -> Log.w("mvvmInit", "Unexpected value: $action")
                 }
@@ -142,28 +142,6 @@ class AddCropDetailsFragment : Fragment() {
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             checkInternet()
         }
-//        binding.cardCheckHealth.setOnClickListener {
-//            it.hideSoftInput()
-//            viewModel.eventHandler.saveButtonClicked()
-//        }
-//        binding.clCalenderDateSelect.setOnClickListener {
-//            viewModel.eventHandler.calenderShow()
-//        }
-
-//        binding.backBtn.setOnClickListener {
-//            viewModel.eventHandler.backButton()
-//        }
-
-//
-//        val debouncedClickListener = DebouncedClickListener(1000) {
-//            // Code to execute on click event
-//            CoroutineScope(Dispatchers.Main).launch{
-//                postCropDetails()
-//            }
-//
-//
-//        }
-//        binding.cardCheckHealth. setOnClickListener(debouncedClickListener)
 
     }
 
@@ -217,30 +195,32 @@ class AddCropDetailsFragment : Fragment() {
     }
 
     private fun createChip(farm: MyFarmsDomain) {
-        val chip = Chip(requireContext())
-        chip.text = farm.farmName
-        chip.isCheckable = true
-        chip.isClickable = true
-        chip.isCheckedIconVisible = true
-        chip.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireContext(),
-                com.waycool.uicomponents.R.color.bg_chip_text
+        if(activity!=null) {
+            val chip = Chip(activity)
+            chip.text = farm.farmName
+            chip.isCheckable = true
+            chip.isClickable = true
+            chip.isCheckedIconVisible = true
+            chip.setTextColor(
+                AppCompatResources.getColorStateList(
+                    requireContext(),
+                    com.waycool.uicomponents.R.color.bg_chip_text
+                )
             )
-        )
-        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
-        chip.chipStrokeWidth = 1f
-        chip.chipStrokeColor = AppCompatResources.getColorStateList(
-            requireContext(),
-            com.waycool.uicomponents.R.color.strokegrey
-        )
+            chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+            chip.chipStrokeWidth = 1f
+            chip.chipStrokeColor = AppCompatResources.getColorStateList(
+                requireContext(),
+                com.waycool.uicomponents.R.color.strokegrey
+            )
 
-        chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
-            if (b) {
-                selectedFarmId = farm.id
+            chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
+                if (b) {
+                    selectedFarmId = farm.id
+                }
             }
+            binding.myfarmsChipGroup.addView(chip)
         }
-        binding.myfarmsChipGroup.addView(chip)
     }
 
     //select area unit
@@ -294,6 +274,7 @@ class AddCropDetailsFragment : Fragment() {
 
                 }
                 is Resource.Error -> {
+//                    ToastStateHandling.toastError(requireContext(),it.message.toString(), Toast.LENGTH_LONG)
             translatedToastServerErrorOccurred(context)
                 }
                 is Resource.Loading -> {
@@ -305,18 +286,13 @@ class AddCropDetailsFragment : Fragment() {
 
     }
 
-    private fun selectCropDateFromCalender() {
-        val date: DatePickerDialog.OnDateSetListener? =
-            DatePickerDialog.OnDateSetListener { view, year, month, day ->
-                myCalendar.set(Calendar.YEAR, year)
-                myCalendar.set(Calendar.MONTH, month)
-                myCalendar.set(Calendar.DAY_OF_MONTH, day)
-                myCalendar.add(Calendar.YEAR, 0)
-                view.minDate = myCalendar.timeInMillis
-                updateLabel(myCalendar)
-                myCalendar.add(Calendar.YEAR, 0)
-                view.maxDate = myCalendar.timeInMillis
-            }
+    private fun showCalendar() {
+        val date = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            myCalendar.set(Calendar.YEAR, year)
+            myCalendar.set(Calendar.MONTH, month)
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateLabel(myCalendar)
+        }
 
         val dialog = DatePickerDialog(
             requireContext(),
@@ -325,19 +301,27 @@ class AddCropDetailsFragment : Fragment() {
             myCalendar.get(Calendar.MONTH),
             myCalendar.get(Calendar.DAY_OF_MONTH)
         )
-        dateCrop = cropSelectedDate.format(myCalendar.time)
-        myCalendar.add(Calendar.YEAR, -1)
-        dialog.datePicker.minDate = myCalendar.timeInMillis
-        myCalendar.add(Calendar.YEAR, 2) // add 4 years to min date to have 2 years after now
-        dialog.datePicker.maxDate = myCalendar.timeInMillis
+
+        // Set the minimum and maximum dates
+        val minDate = Calendar.getInstance()
+        minDate.set(Calendar.YEAR, minDate.get(Calendar.YEAR) - 1) // set the minimum year to the previous year
+        dialog.datePicker.minDate = minDate.timeInMillis
+
+        val maxDate = Calendar.getInstance()
+        maxDate.set(Calendar.YEAR, maxDate.get(Calendar.YEAR) + 1) // set the maximum year to the next year
+        dialog.datePicker.maxDate = maxDate.timeInMillis
+
+        // Preview current year and previous and next years
+//        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+//        val prevYear = currentYear - 1
+//        val nextYear = currentYear + 1
+//        val previewText = "Preview: $prevYear, $currentYear, $nextYear"
+//        dialog.setTitle(previewText)
+
         dialog.show()
-        dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
-            Color.parseColor("#7946A9")
-        )
-        dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
-            Color.parseColor("#7946A9")
-        )
-//        viewModel.selectedDate.value=dateCrop
+
+        dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#7946A9"))
+        dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#7946A9"))
     }
 
     //translation for this fragment

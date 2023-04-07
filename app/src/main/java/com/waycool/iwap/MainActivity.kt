@@ -5,12 +5,23 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.waycool.data.Local.DataStorePref.DataStoreManager
 import com.waycool.data.Local.LocalSource
 import com.waycool.data.Sync.SyncManager
@@ -20,11 +31,13 @@ import com.waycool.data.utils.Resource
 import com.waycool.data.worker.MasterDownloadWorker
 import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
-import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
-import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
+import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +45,19 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-
+@Keep
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
     private var dashboardDomain: DashboardDomain? = null
     private var accountID: Int? = null
+
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val APP_UPDATE_REQUEST_CODE = 1001
+    private lateinit var installStateUpdatedListener: InstallStateUpdatedListener
+
+    private var appUpdate:AppUpdateManager?=null
+    private val REQUEST_CODE=100
 
     private val tokenCheckViewModel by lazy { ViewModelProvider(this)[TokenViewModel::class.java] }
 
@@ -47,48 +67,90 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getDashBoard()
+//        var inAppUpdate = InAppUpdate(this)
+        appUpdate= AppUpdateManagerFactory.create(this)
+//        checkUpdate()
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
+
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    APP_UPDATE_REQUEST_CODE
+                )
+            }
+        }
+        installStateUpdatedListener = InstallStateUpdatedListener { state ->
+            if (state.installStatus() == InstallStatus.DOWNLOADED) {
+                // notify user to install the update
+                popupSnackbarForCompleteUpdate()
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
+
+        tokenCheckViewModel.getUserDetails().observe(this) {
+            accountID = it.data?.accountId
+            if (accountID != null) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val token: String = tokenCheckViewModel.getUserToken()
+                    validateToken(accountID.toString().toInt(), token)
+                }
+            }
+        }
+    }
+
+    private fun getDeepLink() {
         navigateFromDeeplink(this@MainActivity) { pendingDynamicLinkData ->
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
             if (!deepLink?.lastPathSegment.isNullOrEmpty()) {
-                if (deepLink?.lastPathSegment == NEWS_ARTICLE) {
-                    val title = deepLink.getQueryParameter("title")
-                    val desc = deepLink.getQueryParameter("content")
-                    val image = deepLink.getQueryParameter("image")
-                    val audioUrl = deepLink.getQueryParameter("audio")
-                    val newsDate = deepLink.getQueryParameter("date")
-                    val source = deepLink.getQueryParameter("source")
-                    if (!title.isNullOrEmpty()) {
-                        val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
-                        intent.putExtra("title", title)
-                        intent.putExtra("content", desc)
-                        intent.putExtra("image", image)
-                        intent.putExtra("audio", audioUrl)
-                        intent.putExtra("date", newsDate)
-                        intent.putExtra("source", source)
-                        startActivity(intent)
-                    }
-                } else if (deepLink?.lastPathSegment == "rating") {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap")
-                    )
-                    startActivity(intent)
-                } else if (deepLink?.lastPathSegment!!.contains("call")) {
-                    val intent = Intent(Intent.ACTION_DIAL)
-                    intent.data = Uri.parse(Contants.CALL_NUMBER)
-                    startActivity(intent)
-                }
-                else if(deepLink?.lastPathSegment!!.contains("newslist")){
+                if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
                 }
-                else if (deepLink.lastPathSegment == "videoslist") {
+                else if (deepLink?.lastPathSegment == RATING) {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(PLAY_STORE_LINK)
+                    )
+                    startActivity(intent)
+                } else if (deepLink?.lastPathSegment!!.contains(CALL)) {
+                    val intent = Intent(Intent.ACTION_DIAL)
+                    intent.data = Uri.parse(Contants.CALL_NUMBER)
+                    startActivity(intent)
+                } else if(dashboardDomain?.subscription?.iot == true){
+                    if (deepLink?.lastPathSegment!! =="irrigation") {
+                        val plotId = deepLink.getQueryParameter("plot_id")
+                        if(!plotId.isNullOrEmpty()){
+                            val args = Bundle()
+                            args.putInt("plotId", plotId.toInt())
+
+
+                           navController?.navigate(
+                            R.id.action_homePagePremiumFragment3_to_navigation_irrigation,
+                                args
+                            )
+                        }
+                    }
+                } else if (deepLink.lastPathSegment!!.contains("newslist")) {
+                    val intent = Intent(this, NewsAndArticlesActivity::class.java)
+                    startActivity(intent)
+                } else if (deepLink.lastPathSegment == "videoslist") {
                     val intent = Intent(this, VideoActivity::class.java)
                     startActivity(intent)
+                }
+                else if(deepLink.lastPathSegment=="invite"){
+                    findNavController(R.id.nav_host_mainactivity).navigate(
+                     R.id.nav_home)
+
                 }
             }
         }
@@ -111,16 +173,43 @@ class MainActivity : AppCompatActivity() {
                 val constraints: Constraints = Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
-                val oneTimeWorkRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MasterDownloadWorker::class.java)
-                    .setConstraints(constraints)
-                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
-                    .build()
+                val oneTimeWorkRequest: OneTimeWorkRequest =
+                    OneTimeWorkRequest.Builder(MasterDownloadWorker::class.java)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
+                        .build()
                 WorkManager.getInstance(this@MainActivity)
-                    .beginUniqueWork("MasterDownload", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest)
+                    .beginUniqueWork(
+                        "MasterDownload",
+                        ExistingWorkPolicy.REPLACE,
+                        oneTimeWorkRequest
+                    )
                     .enqueue()
             }
         }
+
     }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        val snackbar = Snackbar.make(
+            findViewById(R.id.nav_home),
+            "An update has just been downloaded.",
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackbar.setAction("INSTALL") { appUpdateManager.completeUpdate() }
+        snackbar.setActionTextColor(resources.getColor(R.color.red))
+        snackbar.show()
+    }
+
+//    fun checkUpdate(){
+//        appUpdate?.appUpdateInfo?.addOnSuccessListener { updateInfo->
+//            if (updateInfo.updateAvailability()==UpdateAvailability.UPDATE_AVAILABLE && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+//                appUpdate?.startUpdateFlowForResult(updateInfo,AppUpdateType.FLEXIBLE,this,REQUEST_CODE)
+//            }
+//
+//        }
+//    }
+
 
     private fun validateToken(user_id: Int, token: String) {
         tokenCheckViewModel.checkToken(user_id, token).observe(this) {
@@ -153,11 +242,14 @@ class MainActivity : AppCompatActivity() {
                 when (it) {
                     is Resource.Success -> {
                         Log.d("dashboard", "${it.data?.subscription?.iot}")
+                        it.data?.contact?.let { it1 -> Firebase.crashlytics.setUserId(it1) }
                         if (it.data?.subscription?.iot == true) {
                             setupBottomNavigationAndNavigationGraph(isPremium = true)
+
                         } else {
                             setupBottomNavigationAndNavigationGraph(isPremium = false)
                         }
+                        getDeepLink()
                     }
                     is Resource.Loading -> {
 
@@ -217,22 +309,26 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.inflateMenu(R.menu.nav_menu_premium)
             TranslationsManager().getStringAsLiveData("home")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home_premium) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home_premium).title = it?.appValue ?: "Home"
+                    bottomNavigationView.menu.findItem(R.id.nav_home_premium).title =
+                        it.appValue ?: "Home"
                 }
             }
             TranslationsManager().getStringAsLiveData("services")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Services"
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title =
+                        it.appValue ?: "Services"
                 }
             }
             TranslationsManager().getStringAsLiveData("my_farm")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_myfarms) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title = it?.appValue ?: "My Farms"
+                    bottomNavigationView.menu.findItem(R.id.nav_myfarms).title =
+                        it.appValue ?: "My Farms"
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
-                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title = it?.appValue ?: "Profile"
+                    bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
+                        it.appValue ?: "Profile"
                 }
             }
         } else {
@@ -242,25 +338,26 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.inflateMenu(R.menu.nav_menu_free)
             TranslationsManager().getStringAsLiveData("home")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_home) != null) {
-                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it?.appValue ?: "Home"
+                    bottomNavigationView.menu.findItem(R.id.nav_home).title = it.appValue ?: "Home"
                 }
             }
             TranslationsManager().getStringAsLiveData("mandi_price")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_mandi) != null) {
-                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title = it?.appValue ?: "Market Place"
+                    bottomNavigationView.menu.findItem(R.id.navigation_mandi).title =
+                        it.appValue ?: "Market Place"
                 }
             }
             TranslationsManager().getStringAsLiveData("crop_protection")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.nav_crop_protect) != null) {
                     bottomNavigationView.menu.findItem(R.id.nav_crop_protect).title =
-                        it?.appValue ?: "Crop Protection"
+                        it.appValue ?: "Crop Protection"
                 }
             }
             TranslationsManager().getStringAsLiveData("profile")?.observe(this) {
                 if (bottomNavigationView.menu.findItem(R.id.navigation_profile) != null) {
 
                     bottomNavigationView.menu.findItem(R.id.navigation_profile).title =
-                        it?.appValue ?: "Profile"
+                        it.appValue ?: "Profile"
                 }
             }
         }
@@ -314,6 +411,28 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == APP_UPDATE_REQUEST_CODE) {
+//            when (resultCode) {
+//                RESULT_OK -> {
+//                    // The update was successfully installed
+//                    if (appUpdateManager != null) {
+//                        appUpdateManager.unregisterListener(installStateUpdatedListener)
+//                    }
+//                    // Step 5: Update the NavGraph
+//                    val navController = findNavController(R.id.homePagesFragment)
+//                    navController.navigate(R.id.homePagesFragment)
+//                }
+//                RESULT_CANCELED -> {
+//                    // The user canceled the update
+//                }
+//                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+//                    // The update failed to install
+//                }
+//            }
+//        }
+//    }
 
     fun <T> LiveData<T>.observeOnce(
         owner: LifecycleOwner,

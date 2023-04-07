@@ -13,6 +13,11 @@ class MasterDownloadWorker(val context: Context, workerParams: WorkerParameters)
     override fun doWork(): Result {
 
             CoroutineScope(Dispatchers.IO).launch {
+
+                //My Crops Master
+                MyCropSyncer().invalidateSync()
+                MyCropSyncer().getMyCrop()
+
                 //CropMaster
                 CropMasterSyncer.invalidateSync()
                 CropMasterSyncer.getCropsMaster()

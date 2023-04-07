@@ -1,14 +1,15 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 data class VansFeederDTO(
 
     @SerializedName("status") var status: Boolean? = null,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: VansNetwork? = VansNetwork()
 )
-
+@Keep
 data class VansNetwork(
 
     @SerializedName("current_page") var currentPage: Int? = null,
@@ -26,6 +27,7 @@ data class VansNetwork(
     @SerializedName("total") var total: Int? = null
 )
 
+@Keep
 data class LinksNetwork(
 
     @SerializedName("url") var url: String? = null,
@@ -35,6 +37,7 @@ data class LinksNetwork(
 )
 
 
+@Keep
 data class VansFeederListNetwork(
 
     @SerializedName("id") var id: Int? = null,

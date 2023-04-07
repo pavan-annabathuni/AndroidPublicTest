@@ -1,9 +1,11 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Keep
 data class SoilTestReportMaster(
     @SerializedName("status") var status: Boolean,
     @SerializedName("message") var message: String,
@@ -11,6 +13,7 @@ data class SoilTestReportMaster(
 )
 
 
+@Keep
 data class ReportDetails(
     @SerializedName("id") var id: Int,
     @SerializedName("Tag") var tag: String,
@@ -34,14 +37,20 @@ data class ReportDetails(
     @SerializedName("test_center_country") var TcCountry: String,
     @SerializedName("test_center_latitude") var TcLatitude: String,
     @SerializedName("test_center_longitude") var TcLongitude: String,
-    @SerializedName("result") var results: Result
+    @SerializedName("result") var results: Result,
+    @SerializedName("crop_name")var crop_name:String,
+    @SerializedName("soil_test_testing_date")var soil_test_testing_date:String,
+
+
 )
 
+@Keep
 data class Result(
     @SerializedName("results") var results: ResultData,
     @SerializedName("reportData") var reportData: ReportData
 )
 
+@Keep
 data class ResultData(
     @SerializedName("B") var B: Float,
     @SerializedName("S") var S: Float,
@@ -56,18 +65,18 @@ data class ResultData(
     @SerializedName("pH") var pH: Float
 
 )
-
+@Keep
 data class ReportData(
     @SerializedName("parameterInfos") var parameterInfos: ArrayList<ReportResult> = arrayListOf(),
     @SerializedName("ferilizerRecomendations") var ferilizerRecomendations: ArrayList<Recommendation> = arrayListOf()
 )
-
+@Keep
 data class Recommendation(
     @SerializedName("fertilizer") var fertilizer: String,
     @SerializedName("quantity") var quantity: String,
     @SerializedName("category") var category: String,
 )
-
+@Keep
 data class ReportResult(
     @SerializedName("name") var name: String,
     @SerializedName("key") var key: String,
@@ -78,7 +87,7 @@ data class ReportResult(
     @SerializedName("rating") var rating: String,
     @SerializedName("Nutrient Recommendation (kg/ha)") var nutrient: String,
 )
-
+@Keep
 data class SoilTestResult(
     @SerializedName("status") var status: Boolean,
     @SerializedName("message") var message: String,

@@ -8,6 +8,7 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
@@ -32,20 +33,24 @@ import com.waycool.data.eventscreentime.EventClickHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.VansSharedDataDomain
 import com.waycool.data.translations.TranslationsManager
 import com.waycool.data.utils.AppUtils
 import com.waycool.data.utils.AppUtils.networkErrorStateTranslations
 import com.waycool.data.utils.NetworkUtil
+import com.waycool.data.utils.Resource
 import com.waycool.data.utils.SpeechToText
 import com.waycool.featurechat.Contants
 import com.waycool.featurechat.FeatureChat
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.DOMAIN_URI_PREFIX
 import com.waycool.newsandarticles.adapter.NewsPagerAdapter
 import com.waycool.newsandarticles.adapter.onItemClickNews
 import com.waycool.newsandarticles.databinding.ActivityNewsAndArticlesBinding
 import com.waycool.newsandarticles.viewmodel.NewsAndArticlesViewModel
 import com.waycool.uicomponents.databinding.ApiErrorHandlingBinding
 import com.waycool.uicomponents.utils.AppUtil
+import com.waycool.uicomponents.utils.Constants
 import com.waycool.videos.adapter.AdsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +58,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
+    private var vans: VansSharedDataDomain? = null
     private var searchTag: CharSequence? = ""
     private lateinit var apiErrorHandlingBinding: ApiErrorHandlingBinding
     private var selectedCategory: String? = null
@@ -74,10 +80,11 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-       // binding.toolbarTitle.text = "News & Articles"
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+          onBackPressed()
         }
+
+
 
         apiErrorHandlingBinding=binding.errorState
         networkErrorStateTranslations(apiErrorHandlingBinding)
@@ -111,10 +118,41 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 deepLink = pendingDynamicLinkData.link
             }
             if (deepLink != null) {
+                if (deepLink?.lastPathSegment!! == DeepLinkNavigator.NEWS_ARTICLE) {
+                    val id = deepLink.getQueryParameter("id")
+                    Log.d("NADeepLink","NADeepLink1 $deepLink  $id")
+                    if (!id.isNullOrEmpty()) {
+                        Log.d("NADeepLink","NADeepLink2 $id")
+                        viewModel.getVansSharedData(id.toInt()).observe(this,androidx.lifecycle.Observer{
+                            when(it){
+                                is Resource.Success->{
+                                    val vans =it.data
+                                    Log.d("NADeepLink","NADeepLink2 $vans")
+                                    val intent = Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
+                                    intent.putExtra("id",vans?.id)
+                                    intent.putExtra("title", vans?.title)
+                                    intent.putExtra("content", vans?.desc)
+                                    intent.putExtra("image", vans?.thumbnail_url)
+                                    intent.putExtra("audio", vans?.audio_url)
+                                    intent.putExtra("date", vans?.updated_at)
+                                    intent.putExtra("source", vans?.source_name)
+                                    intent.putExtra("vansType", vans?.vans_type)
+                                    startActivity(intent)
+                                }
+                                is Resource.Loading->{
+                                    Log.d("NADeepLink","NADeepLink2 load")
 
-                val intent =
-                    Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
-                startActivity(intent)
+                                }
+                                is Resource.Error->{
+                                    Log.d("NADeepLink","NADeepLink2 error ${it.message}")
+
+                                }
+                            }
+
+                        })
+                    }
+                }
+
             }
         }
 
@@ -126,11 +164,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 searchCharSequence = charSequence
                 handler!!.removeCallbacks(searchRunnable)
                 handler!!.postDelayed(searchRunnable, 150)
-//                if (charSequence.isNotEmpty()) {
-//                    binding.micBtn.visibility = View.GONE
-//                } else {
-//                    binding.micBtn.visibility = View.VISIBLE
-//                }
+
             }
 
             override fun afterTextChanged(editable: Editable) {}
@@ -249,9 +283,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                 }
             }
         })
-        viewModel.getVansAdsList(moduleId).observe(this) {
-
-            bannerAdapter.submitList(it.data)
+        viewModel.getVansAdsList(moduleId).observe(this) { bannerAdapter.submitList(it.data)
             TabLayoutMediator(
                 binding.bannerIndicators, binding.bannerViewpager
             ) { tab: TabLayout.Tab, position: Int ->
@@ -301,6 +333,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?
@@ -359,12 +392,14 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_landing",eventBundle)
         val intent = Intent(this@NewsAndArticlesActivity, NewsAndArticlesFullViewActivity::class.java)
+        intent.putExtra("id", it?.id)
         intent.putExtra("title", it?.title)
         intent.putExtra("content", it?.desc)
         intent.putExtra("image", it?.thumbnailUrl)
         intent.putExtra("audio", it?.audioUrl)
         intent.putExtra("date", it?.startDate)
         intent.putExtra("source", it?.sourceName)
+        intent.putExtra("vansType", it?.vansType)
         startActivity(intent)
     }
 
@@ -373,7 +408,7 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         val thumbnail = if(!it?.thumbnailUrl.isNullOrEmpty()){
             it?.thumbnailUrl
         } else{
-            "https://admindev.outgrowdigital.com/img/OutgrowLogo500X500.png"
+            DeepLinkNavigator.DEFAULT_IMAGE_URL
         }
         val eventBundle=Bundle()
         eventBundle.putString("NewsAndArticlesTitle", it?.title)
@@ -381,12 +416,15 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
             eventBundle.putString("selectedCategory","NewsArticles_$selectedCategory")
         }
         EventItemClickHandling.calculateItemClickEvent("NewsArticles_share",eventBundle)
+
+        Log.d("NewsAndArticlesShare","NewsAndArticles Domain $DOMAIN_URI_PREFIX")
+
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("https://adminuat.outgrowdigital.com/newsandarticlesfullscreen?title=${it?.title}&content=${it?.desc}&image=${it?.thumbnailUrl}&audio=${it?.audioUrl}&date=${it?.startDate}&source=${it?.sourceName}"))
-            .setDomainUriPrefix("https://outgrowdev.page.link")
+            .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?id=${it?.id}"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()
-                    .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.waycool.iwap"))
+                    .setFallbackUrl(Uri.parse(Constants.PLAY_STORE_LINK))
                     .build()
             )
             .setSocialMetaTagParameters(
@@ -405,9 +443,14 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    Log.d("NewsAndArticlesShare","NewsAndArticles Short link ${shortLink.toString()}")
+
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, "choose one"))
 
+                }
+                else{
+                    Log.d("NewsAndArticlesShare","NewsAndArticlesShare ${task.exception}")
                 }
             }
     }
@@ -431,3 +474,6 @@ class NewsAndArticlesActivity : AppCompatActivity(), onItemClickNews {
         EventScreenTimeHandling.calculateScreenTime("NewsAndArticlesActivity")
     }
 }
+
+
+

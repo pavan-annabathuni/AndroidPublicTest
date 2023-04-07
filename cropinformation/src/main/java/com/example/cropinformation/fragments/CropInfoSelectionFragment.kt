@@ -216,45 +216,47 @@ class CropInfoSelectionFragment : Fragment() {
     }
 
     private fun createChip(category: CropCategoryMasterDomain) {
-        val chip = Chip(requireContext())
-        chip.text = category.categoryName
-        chip.isCheckable = true
-        chip.isClickable = true
-        chip.isCheckedIconVisible = false
-        chip.setTextColor(
-            AppCompatResources.getColorStateList(
+        if(activity!=null) {
+            val chip = Chip(activity)
+            chip.text = category.categoryName
+            chip.isCheckable = true
+            chip.isClickable = true
+            chip.isCheckedIconVisible = false
+            chip.setTextColor(
+                AppCompatResources.getColorStateList(
+                    requireContext(),
+                    com.waycool.uicomponents.R.color.bg_chip_text
+                )
+            )
+            chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
+            chip.chipStrokeWidth = 1f
+            chip.chipStrokeColor = AppCompatResources.getColorStateList(
                 requireContext(),
                 com.waycool.uicomponents.R.color.bg_chip_text
             )
-        )
-        chip.setChipBackgroundColorResource(com.waycool.uicomponents.R.color.chip_bg_selector)
-        chip.chipStrokeWidth = 1f
-        chip.chipStrokeColor = AppCompatResources.getColorStateList(
-            requireContext(),
-            com.waycool.uicomponents.R.color.bg_chip_text
-        )
 
-        if (selectedCategory == null) {
-            chip.isChecked = true
-            selectedCategory = category
-            getSelectedCategoryCrops(
-                categoryId = category.id,
-                searchQuery = searchCharSequence.toString()
-            )
-        }
-
-
-        chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
-            if (b) {
+            if (selectedCategory == null) {
+                chip.isChecked = true
                 selectedCategory = category
                 getSelectedCategoryCrops(
                     categoryId = category.id,
                     searchQuery = searchCharSequence.toString()
                 )
             }
-          //  EventClickHandling.calculateClickEvent(chip.text.toString())
+
+
+            chip.setOnCheckedChangeListener { _: CompoundButton?, b: Boolean ->
+                if (b) {
+                    selectedCategory = category
+                    getSelectedCategoryCrops(
+                        categoryId = category.id,
+                        searchQuery = searchCharSequence.toString()
+                    )
+                }
+                //  EventClickHandling.calculateClickEvent(chip.text.toString())
+            }
+            binding.cropCategoryChipGroup.addView(chip)
         }
-        binding.cropCategoryChipGroup.addView(chip)
     }
 
     private fun getSelectedCategoryCrops(categoryId: Int? = null, searchQuery: String? = "") {
@@ -302,6 +304,7 @@ class CropInfoSelectionFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?

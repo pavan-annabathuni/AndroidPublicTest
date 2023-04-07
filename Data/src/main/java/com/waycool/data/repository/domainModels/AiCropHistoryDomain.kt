@@ -1,9 +1,10 @@
 package com.waycool.data.repository.domainModels
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class AiCropHistoryDomain(
     val crop_id: Int? = null,
     val disease_id: Int? = null,

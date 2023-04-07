@@ -53,9 +53,9 @@ class CaptureImageFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCaptureImageBinding.inflate(layoutInflater, container, false)
-        return binding.root;
+        return binding.root
     }
-
+    @androidx.camera.core.ExperimentalZeroShutterLag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.infoIv.setOnClickListener {
@@ -181,8 +181,8 @@ class CaptureImageFragment : Fragment() {
         )
     }
 
-
-    private fun startCamera() {
+    @androidx.camera.core.ExperimentalZeroShutterLag
+    private fun  startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireActivity())
 
         cameraProviderFuture.addListener({
@@ -276,6 +276,8 @@ class CaptureImageFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
+    @Deprecated("Deprecated in Java")
+    @androidx.camera.core.ExperimentalZeroShutterLag
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -293,6 +295,7 @@ class CaptureImageFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {

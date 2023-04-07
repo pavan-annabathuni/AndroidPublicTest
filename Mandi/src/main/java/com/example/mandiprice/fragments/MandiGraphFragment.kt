@@ -80,9 +80,9 @@ class MandiGraphFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            mandiDomain = it.getParcelable("mandiRecord")
-        }
+//        arguments?.let {
+//            mandiDomain = it.getParcelable("mandiRecord")
+//        }
         if (arguments != null) {
             if (arguments?.containsKey("mandiRecord") == true){
                 mandiDomain = arguments?.getParcelable("mandiRecord")
@@ -124,11 +124,18 @@ class MandiGraphFragment : Fragment() {
             cropName = mandiDomain?.crop
             marketName = mandiDomain?.market
             sub_record_id = mandiDomain?.sub_record_id
+            checkLang()
         }
+        else{
+            binding.cropName.text=cropName
+            binding.tvMarket.text=marketName
 
+        }
 
         binding.imgShare.setOnClickListener {
             binding.clShareProgress.visibility=View.VISIBLE
+            Log.d("MandiGraph", "MandiGraph: Share clicked")
+
             binding.imgShare.isEnabled = false
             val bundle=Bundle()
             bundle.putString("","$marketName")
@@ -146,9 +153,6 @@ class MandiGraphFragment : Fragment() {
 
         binding.tvMarket.isSelected = true
         binding.cropName.isSelected = true
-        if(mandiDomain!=null) {
-            checkLang()
-        }
         EventClickHandling.calculateClickEvent("Mandi_graph_landing")
         return binding.root
     }
@@ -347,15 +351,16 @@ class MandiGraphFragment : Fragment() {
         market_name: String?,
         fragment: String?
     ) {
-        val uriString="https://adminuat.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"
+        val uriString="http://app.outgrowdigital.com/mandigraph?crop_master_id=$crop_master_id&mandi_master_id=$mandi_master_id&sub_record_id=$sub_record_id&crop_name=$crop_name&market_name=$market_name&fragment=$fragment"
         val title="Outgrow - Mandi Detail for $crop_name"
         val description="Find Mandi details and more on Outgrow app"
-        binding.clShareProgress.visibility=View.VISIBLE
-        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description){ task, uri ->
+        getDeepLinkAndScreenShot(context,shareLayout,uriString,title,description) { task, uri ->
             if (task.isSuccessful) {
-                binding.clShareProgress.visibility=View.GONE
-                Handler().postDelayed({ binding.imgShare.isEnabled = true
-                },1000)
+                Log.d("MandiGraph", "MandiGraph: Share Success")
+                binding.clShareProgress.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.imgShare.isEnabled = true
+                }, 1000)
                 val shortLink: Uri? = task.result.shortLink
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
@@ -366,7 +371,6 @@ class MandiGraphFragment : Fragment() {
             }
 
         }
-
 
     }
 

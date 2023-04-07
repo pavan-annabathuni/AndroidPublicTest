@@ -105,7 +105,7 @@ class LoginFragment : Fragment() {
                     trueCallerSDK.setLocale(Locale(langCode ?: "en"))
                     trueCallerSDK.getUserProfile(requireActivity())
                 }
-            }, 700)
+            }, 400)
         }
 
         fragmentLoginBinding.getotpBtn.setOnClickListener {
@@ -231,10 +231,12 @@ class LoginFragment : Fragment() {
             loginViewModel.setMobileNumber(mobileNo)
             fragmentLoginBinding.getotpBtn.isEnabled = false
 
-            if (!trueCallerVerified) {
+            if (!trueCallerVerified && !com.waycool.featurelogin.BuildConfig.DEBUG) {
+//            if (!trueCallerVerified) {
                 moveToOtp(mobileNo)
                 EventClickHandling.calculateClickEvent("Login_Truecaller")
             } else {
+                loginViewModel.setIsFirst(false)
                 loginViewModel.login(mobileNo, fcmToken!!, deviceModel!!, deviceManufacturer!!)
                     .observe(
                         requireActivity()

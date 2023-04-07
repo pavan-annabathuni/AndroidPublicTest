@@ -21,7 +21,22 @@
 #-renamesourcefileattribute SourceFile
 
 
--keep class com.waycool.data.** { *; }
+#-keep class com.waycool.data.** { *; }
+-keep class com.waycool.data.Local.Entity.** { *; }
+-keep class com.waycool.data.repository.domainModels.** { *; }
+#-keep class com.waycool.data.repository.domainModels.weather.** { *; }
+-keep class com.waycool.data.Network.NetworkModels.** { *; }
+
+-keep @kotlinx.android.parcel.Parcelize public class *
+-keep class kotlinx.** { *; }
+-keep class kotlinx.parcelize.** { *; }
+-keep class * extends kotlinx.parcelize.Parcelize
+
+-keepnames class * extends android.os.Parcelable
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator CREATOR;
+}
+-keepnames class * extends java.io.Serializable
 
 # crashlytics
 -keep class com.crashlytics.** { *; }
@@ -51,12 +66,8 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 # A resource is loaded with a relative path so the package of this class must be preserved.
--keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 ##---------------End: proguard configuration for OkHttp  ---------------
 
-
-#Google Play Services
--keep class com.google.android.gms.measurement.** { *; }
 
 #navigation component
 -keep class androidx.navigation.** { *; }
@@ -83,15 +94,7 @@
 -keep class androidx.lifecycle.** {
     *;
 }
--keepclasseswithmembers class * {
-    @androidx.lifecycle.OnLifecycleEvent *;
-}
--keepclassmembers class * extends androidx.lifecycle.ViewModel {
-    <init>(...);
-}
--keepclassmembers class * implements androidx.lifecycle.LifecycleObserver {
-    *;
-}
+
 #room db
 -keep class androidx.room.** {
     *;
@@ -106,18 +109,97 @@
     *;
 }
 
-# For code using Room annotations
--keepclassmembers @androidx.room.* {
-    *;
-}
 
-# For Kotlin code using Room annotations
--dontwarn kotlin.Unit
--keepclassmembers class * implements androidx.room.RoomDatabase {
-    public static ** getDatabase(android.content.Context);
-}
+#Firebase
+-keepattributes *Annotation*
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
 
+-keep class com.google.firebase.analytics.** { *; }
+-keepnames class com.google.android.gms.common.internal.safeparcel.SafeParcelable
+
+
+# Keep the classes and methods used by Firebase Crashlytics
+-keep class com.google.firebase.crashlytics.** { *; }
+-keep class com.google.android.gms.common.internal.safeparcel.SafeParcelable { *; }
+-keep class com.google.android.gms.tasks.Task { *; }
+
+-keepattributes Signature
+
+# Keep the classes and methods used by Firebase Dynamic Links
+-keep class com.google.firebase.dynamiclinks.** { *; }
+
+
+# Keep any custom classes or methods that are accessed by name reflectively by your app
+#-keepclassmembers class com.yourcompany.yourapp.YourClass {
+ #  private void yourMethod(java.lang.String);}
+
+
+# Google Play Services Location
+-keep,allowoptimization class com.google.android.libraries.maps.** { *; }
+
+-keep class com.google.android.gms.location.** { *; }
+-keep interface com.google.android.gms.location.** { *; }
+-dontwarn com.google.android.gms.location.**
+
+# Google Play Services Maps
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.** { *; }
+-dontwarn com.google.android.gms.maps.**
+
+# Google Maps Utils
+-keep class com.google.maps.android.clustering.** { *; }
+-keep interface com.google.maps.android.clustering.** { *; }
+-keep class com.google.maps.android.heatmaps.** { *; }
+-keep interface com.google.maps.android.heatmaps.** { *; }
+-keep class com.google.maps.android.ui.** { *; }
+-keep interface com.google.maps.android.ui.** { *; }
+-dontwarn com.google.maps.android.**
+
+# Google Maps
+-keep class com.google.android.libraries.maps.** { *; }
+-keep interface com.google.android.libraries.maps.** { *; }
+-dontwarn com.google.android.libraries.maps.**
+
+-keep class com.google.android.libraries.places.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class com.google.android.gms.common.api.** { *; }
+-keep class com.google.android.gms.common.internal.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class com.google.android.gms.auth.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-keep class com.google.android.gms.auth.api.phone.** { *; }
+-keep class com.google.android.gms.common.api.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.reflect.jvm.internal.**
+
+-dontwarn kotlinx.coroutines.**
 -keep class kotlinx.coroutines.** { *; }
+-keepclassmembers class kotlinx.coroutines.internal.MainDispatcherFactory { *; }
+
+
+#--------------------------------
+
+
+
+
 
 
 

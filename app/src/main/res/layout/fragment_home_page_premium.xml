@@ -1018,6 +1018,7 @@
                                     android:layout_marginTop="12dp"
                                     android:text="Device 1 : GWX G555 "
                                     android:textColor="#111827"
+                                    android:textIsSelectable="true"
                                     android:textSize="@dimen/txt16"
                                     app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1038,6 +1039,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
+                                    android:visibility="gone"
                                     app:layout_constraintEnd_toStartOf="@+id/view"
                                     app:layout_constraintHorizontal_bias="0.5"
                                     app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
@@ -1177,15 +1179,18 @@
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvLastUpdate"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
                                     android:layout_marginTop="@dimen/space12"
+                                    android:layout_marginEnd="16dp"
                                     android:layout_marginBottom="@dimen/space12"
+                                    android:singleLine="true"
                                     android:text="Last Updated: Today Tue 26, Jul"
                                     android:textColor="@color/textdark"
                                     android:textSize="@dimen/txt12"
                                     app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/tvLastUpdateRefresh"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
 
@@ -1195,6 +1200,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/space12"
                                     android:layout_marginEnd="14dp"
+                                    android:padding="4dp"
                                     android:src="@drawable/ic_update_refresh"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -1205,6 +1211,7 @@
                                     style="?android:attr/progressBarStyle"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
+                                    android:padding="4dp"
                                     android:indeterminate="true"
                                     android:visibility="invisible"
                                     app:layout_constraintBottom_toBottomOf="@+id/tvLastUpdateRefresh"
@@ -1232,6 +1239,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:textColor="@color/textlight"
+                                    android:textIsSelectable="true"
                                     app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
                                     app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart"
                                     tools:text="Device Number : 23cewn" />

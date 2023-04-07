@@ -23,7 +23,7 @@ ext {
     testRunnerVersion = "1.0.2"
     mockKVersion = "1.8.13.kotlin13"
     espressoVersion = "3.0.2"
-    firebaseVersion = '31.2.0'
+    firebaseVersion = '31.2.1'
     otpview = '2.0.0'
     truecaller = '2.6.0'
     googleAnalytics = '17.0.1'
@@ -46,7 +46,7 @@ ext {
     libraries = [
             appCompat              : "androidx.appcompat:appcompat:$appCompatVersion",
             material               : "com.google.android.material:material:$materialVersion",
-            kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+//            kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             constraintLayout       : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
             gson                   : "com.google.code.gson:gson:$gsonVersion",
             glide                  : "com.github.bumptech.glide:glide:" + glideVersion,

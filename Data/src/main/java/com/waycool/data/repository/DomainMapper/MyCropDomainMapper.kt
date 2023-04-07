@@ -20,6 +20,7 @@ class MyCropDomainMapper:DomainMapper<MyCropDataDomain,MyCropDataEntity> {
             noOfPlants= dto.noOfPlants,
             lenDrip=dto.lenDrip,
             widthDrip=dto.widthDrip,
+            dripEmitterRate=dto.dripEmitterRate,
             area= dto.area,
             cropYear=dto.cropYear,
             cropSeason = dto.cropSeason,

@@ -10,7 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
-import java.net.URLDecoder
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.PEST_DISEASE
+import com.waycool.featurelogin.deeplink.DeepLinkNavigator.PEST_DISEASE_DETAIL
 
 class CropProtectActivity : AppCompatActivity() {
     lateinit var navHost: Fragment
@@ -24,18 +25,16 @@ class CropProtectActivity : AppCompatActivity() {
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
-                Log.d("cropprotect","$deepLink")
+                Log.d("DeepLinkURL","DeepLinkURL Pest $deepLink")
 
             }
             if (deepLink != null) {
-                if (deepLink.lastPathSegment!!.contains(
-                        "pestdiseasedetail",
-                        ignoreCase = true
-                    )
-                ) {
+                if (deepLink.lastPathSegment!!.equals(PEST_DISEASE_DETAIL, ignoreCase = true)) {
                     val diseaseId = deepLink.getQueryParameter("disease_id")
                     val diseaseName = deepLink.getQueryParameter("disease_name")
-                    if (!diseaseId.isNullOrEmpty() && !diseaseName.isNullOrEmpty()) {
+                    Log.d("DeepLinkURL","DeepLinkURL Pest $deepLink    DiseaseDetail $diseaseName $diseaseId")
+
+                    if (!diseaseId.isNullOrEmpty()) {
                         val args = Bundle()
 
                         args.putInt("diseaseid", diseaseId.toInt())
@@ -46,16 +45,15 @@ class CropProtectActivity : AppCompatActivity() {
                             args
                         )
                     }
-                } else if (deepLink.lastPathSegment!!.contains(
-                        "pestdisease",
+                }
+                else if (deepLink.lastPathSegment!!.equals(
+                        PEST_DISEASE,
                         ignoreCase = true
                     )
                 ) {
                     val cropId = deepLink.getQueryParameter("crop_id")
                     val cropName = deepLink.getQueryParameter("crop_name")
 
-                    Log.d("cropprotect","$cropId ${URLDecoder.decode(cropName,"UTF-8")}")
-                    Log.d("cropprotect","$cropId $cropName")
 
                     if (!cropId.isNullOrEmpty() && !cropName.isNullOrEmpty()) {
                         val args = Bundle()
@@ -67,8 +65,7 @@ class CropProtectActivity : AppCompatActivity() {
                         )
                     }
                 } else {
-                    Log.d("CropProtectNavigation", "CropProtectNavigation1")
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.cropSelectionFragment)
+//                    findNavController(R.id.fragmentContainerView).navigate(R.id.cropSelectionFragment)
 
                 }
 

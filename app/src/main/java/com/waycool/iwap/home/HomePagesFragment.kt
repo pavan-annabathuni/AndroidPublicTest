@@ -27,11 +27,11 @@ import com.example.addcrop.AddCropActivity
 import com.example.cropinformation.adapter.MyCropsAdapter
 import com.example.mandiprice.viewModel.MandiViewModel
 import com.example.soiltesting.SoilTestActivity
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics.*
@@ -77,6 +77,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
+
 class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelectedListener {
 
     private var handler: Handler? = null
@@ -119,7 +120,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     ): View {
         _binding = FragmentHomePagesBinding.inflate(inflater, container, false)
 
-
         newsBinding = binding.layoutNews
 
         videosBinding = binding.layoutVideos
@@ -145,7 +145,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handler = Handler(Looper.myLooper()!!)
-
         binding.recyclerview.layoutManager =
             GridLayoutManager(requireActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mandiAdapter = MandiHomePageAdapter(MandiHomePageAdapter.DiffCallback.OnClickListener {
@@ -160,19 +159,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 .navigate(R.id.action_homePagesFragment_to_mandiGraphFragment22, args)
         })
 
-
-//        val callback: OnBackPressedCallback =
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    findNavController().popBackStack()
-//                }
-//            }
-//        activity?.let {
-//            it.onBackPressedDispatcher.addCallback(
-//                it,
-//                callback
-//            )
-//        }
         setWishes()
         checkNetwork()
         initClick()
@@ -372,7 +358,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                 }
 
             }
-//                    mandiAdapter.submitList()
 
         }
     }
@@ -494,7 +479,6 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
             val intent = Intent(activity, AddFarmActivity::class.java)
             startActivity(intent)
         }
-
         binding.IvNotification.setOnClickListener {
             EventClickHandling.calculateClickEvent("NotificationsHomePagesFragment")
             this.findNavController().navigate(R.id.action_homePagesFragment_to_notificationFragment)
@@ -654,11 +638,15 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             )
                     )
 
-                    mMap?.animateCamera(
+                    getLatLnBounds(points)?.let {
                         CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(points), 10
+                            it, 10
                         )
-                    )
+                    }?.let {
+                        mMap?.animateCamera(
+                            it
+                        )
+                    }
                 } else {
                     mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(points[0], 16f))
                 }
@@ -669,7 +657,9 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
     fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }
@@ -1275,7 +1265,7 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
         return Gson().fromJson(s, listType)
     }
 
-    override fun onMapReady(mMap: GoogleMap?) {
+    override fun onMapReady(p0: GoogleMap) {
         mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
         if (farmjson != null) {
             val points = convertStringToLatLnList(farmjson)
@@ -1299,23 +1289,30 @@ class HomePagesFragment : Fragment(), OnMapReadyCallback, onItemClick, FarmSelec
                             .flat(true)
                     )
                 }
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 50
+                        it, 50
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
 
     override fun onItemClickListener(it: VansFeederListDomain?) {
         val bundle = Bundle()
+        bundle.putInt("id", it?.id!!)
         bundle.putString("title", it?.title)
         bundle.putString("content", it?.desc)
         bundle.putString("image", it?.thumbnailUrl)
         bundle.putString("audio", it?.audioUrl)
         bundle.putString("date", it?.startDate)
         bundle.putString("source", it?.sourceName)
+        bundle.putString("vansType", it?.vansType)
+
         findNavController().navigate(
             R.id.action_homePagesFragment_to_newsFullviewActivity2,
             bundle

@@ -1,4 +1,3 @@
-# Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
 # proguardFiles setting in build.gradle.
 #
@@ -52,8 +51,12 @@
 -keep class android.arch.navigation.** { *; }
 
 # Keep the classes used by the KTX extensions for Navigation
--keep class androidx.navigation.fragment.** { *; }
+-keepnames class androidx.navigation.fragment.NavHostFragment
+#-keep class * extends androidx.fragment.app.Fragment{}
 -keep class androidx.navigation.ui.** { *; }
+
+
+
 
 # Keep the Parcelable implementations used by the Navigation library
 -keepclassmembers class * implements android.os.Parcelable {
@@ -99,8 +102,12 @@
 -keep class de.hdodenhof.circleimageview.** { *; }
 
 
-# -----SpeedView
+#-----SpeedView
 -keep class com.github.anastr.speedviewlib.** { *; }
 -keepclassmembers class com.github.anastr.speedviewlib.** { *; }
+
+# AudioWife
+-keep class com.saki4510tice.audio.AudioWife.*
+
 
 

@@ -22,6 +22,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
@@ -392,7 +393,7 @@ class RegistrationFragment : Fragment() {
             UserTYpeTV!!.text = "Subscription"
             icon!!.visibility = View.VISIBLE
         }
-        if (audiourl.isNullOrEmpty()) {
+        if (audiourl.isNullOrEmpty()&&!URLUtil.isValidUrl(audiourl)) {
             audioLayout!!.visibility = View.GONE
         } else {
             audioLayout!!.visibility = View.VISIBLE
@@ -428,7 +429,7 @@ class RegistrationFragment : Fragment() {
                     audiourl?.let { playAudio(context, it, play, pause, seekbar!!, totalTime!!) }
                 }
             //Event Click on clicking the audio play button
-            EventClickHandling.calculateClickEvent("Listen$tittle")
+            EventClickHandling.calculateClickEvent("Listen")
         }
 
     }
@@ -568,6 +569,7 @@ class RegistrationFragment : Fragment() {
     }
 
     //This code is handling the result of a request for permissions to access the device's location. The requestCode of 2 is used to identify this specific request. If the grant results array is not empty and the first element (corresponding to the first requested permission) is equal to PackageManager.PERMISSION_GRANTED, then the getLocation() method is called.
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -642,8 +644,8 @@ class RegistrationFragment : Fragment() {
 
 
                 }
-                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
-                EventClickHandling.calculateClickEvent("Login_Location${address}")
+//                EventClickHandling.calculateClickEvent("Login_Name${binding.nameEt.text}")
+//                EventClickHandling.calculateClickEvent("Login_Location${address}")
             }
         } else {
             getLocation()
@@ -774,6 +776,7 @@ class RegistrationFragment : Fragment() {
     }
 
     //This code handles the result of the speech-to-text and GPS activities.
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         @Nullable data: Intent?

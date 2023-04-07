@@ -1,6 +1,7 @@
 package com.waycool.featurecrophealth.ui.detect
 
 
+import android.app.Activity
 import android.content.Intent
 
 import android.net.Uri
@@ -124,6 +125,11 @@ class CropDetailsCaptureFragment : Fragment() {
     }
 
     fun selectImageInAlbum() {
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+//            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
+//        }
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
@@ -132,6 +138,7 @@ class CropDetailsCaptureFragment : Fragment() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //     super.onActivityResult(requestCode, resultCode, data)
 
@@ -153,35 +160,19 @@ class CropDetailsCaptureFragment : Fragment() {
             binding.previewImage.visibility = View.VISIBLE
             binding.closeImage?.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(selecteduri)
+        }
 
-//            binding.cardCheckHealth.setOnClickListener {
-//                binding.closeImage?.visibility = View.GONE
-//                binding.uploadedImg.isEnabled = true
-//                val file:File=File(selecteduri?.path)
-//
-//                val requestFile: RequestBody =
-//                    RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
-//                val profileImage: RequestBody = RequestBody.create(
-//                    "image/jpg".toMediaTypeOrNull(),
-//                    file
-//                )
-//
-//                val profileImageBody: MultipartBody.Part =
-//                    MultipartBody.Part.createFormData(
-//                        "image_url",
-//                        file.name, profileImage
-//                    )
-//                binding.progressBar?.visibility = View.VISIBLE
-//                binding.cardCheckHealth.visibility = View.GONE
-//
-//                postImage(
-//                    crop_id!!,
-//                    crop_name!!,
-//                    profileImageBody
-//                )
-//
-//            }
-        } else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
+//            if (selectedImage != null)
+//                UCrop.of(selectedImage, Uri.fromFile(pic))
+//                    .withAspectRatio(1F, 1F)
+//                    .withMaxResultSize(1000, 1000)
+//                    .withOptions(options)
+//                    .start(requireActivity())
+//            binding.previewImage.visibility = View.VISIBLE
+//            binding.closeImage?.visibility = View.VISIBLE
+//            binding.uploadedImg.setImageURI(selecteduri)
+
+        else if (resultCode == AppCompatActivity.RESULT_OK && requestCode == SquareCamera.REQUEST_CODE) {
             val uri: Uri? = data?.data
             selecteduri = uri!!
             binding.previewImage.visibility = View.VISIBLE
@@ -195,6 +186,14 @@ class CropDetailsCaptureFragment : Fragment() {
             binding.closeImage?.visibility = View.VISIBLE
             binding.uploadedImg.setImageURI(uri)
 
+        }
+        else {
+            // User cancelled the image picker, reset state or clear UI elements
+            // For example:
+            selecteduri = null
+            binding.previewImage.visibility = View.GONE
+            binding.closeImage?.visibility = View.GONE
+            binding.uploadedImg.setImageDrawable(null)
         }
     }
 
@@ -294,20 +293,22 @@ class CropDetailsCaptureFragment : Fragment() {
 
 
     }
-
     private fun uploadImage() {
         binding.closeImage?.visibility = View.GONE
-        val file = selecteduri?.toFile()
-        binding.uploadedImg.isEnabled = true
-        val requestFile: RequestBody = file!!.asRequestBody("image/*".toMediaTypeOrNull())
+        val inputStream = context?.contentResolver?.openInputStream(selecteduri!!)
+        val tempFile = createTempFile("temp", null, context?.cacheDir)
+        tempFile.outputStream().use { outputStream ->
+            inputStream?.copyTo(outputStream)
+        }
+        val requestFile: RequestBody = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
 
-        val profileImage: RequestBody = file
+        val profileImage: RequestBody = tempFile
             .asRequestBody("image/jpg".toMediaTypeOrNull())
 
         val profileImageBody: MultipartBody.Part =
             MultipartBody.Part.createFormData(
                 "image_url",
-                file.name, profileImage
+                tempFile.name, profileImage
             )
 
         binding.progressBar?.visibility = View.VISIBLE
@@ -318,8 +319,34 @@ class CropDetailsCaptureFragment : Fragment() {
             crop_Tag_Name!!,
             profileImageBody
         )
-
     }
+
+
+    //    private fun uploadImage() {
+//        binding.closeImage?.visibility = View.GONE
+//        val file = selecteduri?.toFile()
+//        binding.uploadedImg.isEnabled = true
+//        val requestFile: RequestBody = file!!.asRequestBody("image/*".toMediaTypeOrNull())
+//
+//        val profileImage: RequestBody = file
+//            .asRequestBody("image/jpg".toMediaTypeOrNull())
+//
+//        val profileImageBody: MultipartBody.Part =
+//            MultipartBody.Part.createFormData(
+//                "image_url",
+//                file.name, profileImage
+//            )
+//
+//        binding.progressBar?.visibility = View.VISIBLE
+//        binding.cardCheckHealth.visibility = View.GONE
+//
+//        postImage(
+//            crop_id!!,
+//            crop_Tag_Name!!,
+//            profileImageBody
+//        )
+//
+//    }
     override fun onResume() {
         super.onResume()
         EventScreenTimeHandling.calculateScreenTime("CropDetailsCaptureFragment")

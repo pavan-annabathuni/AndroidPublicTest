@@ -37,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SelectAddCropFragment : Fragment() {
@@ -236,11 +237,20 @@ class SelectAddCropFragment : Fragment() {
             binding.clProgressBar.visibility=View.VISIBLE
             when (res) {
                 is Resource.Success -> {
+                    val cropListIOT= if (dashboardDomain?.subscription?.iot == true){
+                        res.data?.filter {
+                            it.isWaterModel == 1
+                        }
+                    }else{
+                        res.data
+
+                    }
+
 
                     if (categoryId == null) {
-                        adapter.submitList(res.data)
+                        adapter.submitList(cropListIOT)
                     } else{
-                        adapter.submitList(res.data?.filter { it.cropCategory_id == categoryId })}
+                        adapter.submitList(cropListIOT?.filter { it.cropCategory_id == categoryId })}
                     binding.clProgressBar.visibility=View.GONE
 
                 }
@@ -276,6 +286,7 @@ class SelectAddCropFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         data: Intent?

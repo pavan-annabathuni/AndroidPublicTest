@@ -30,12 +30,12 @@ class SplashActivity : AppCompatActivity() {
 
         if (splashBinding.imageSplash.drawable is AnimatedVectorDrawable) {
             imageSplashAnim = splashBinding.imageSplash.drawable as AnimatedVectorDrawable
-            imageSplashAnim!!.start()
+            imageSplashAnim?.start()
         }
 
         if (splashBinding.logoAvdIv.drawable is AnimatedVectorDrawable) {
             logoAnim = splashBinding.logoAvdIv.drawable as AnimatedVectorDrawable
-            logoAnim!!.start()
+            logoAnim?.start()
         }
 
 
@@ -56,6 +56,6 @@ class SplashActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        EventScreenTimeHandling.calculateScreenTime("SplashActivity")
+        EventScreenTimeHandling.calculateScreenTime("Splash Screen")
     }
 }

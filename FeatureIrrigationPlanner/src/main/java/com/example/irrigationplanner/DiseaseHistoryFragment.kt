@@ -15,6 +15,7 @@ import com.example.irrigationplanner.viewModel.IrrigationViewModel
 import com.google.android.material.tabs.TabLayout
 import com.waycool.data.eventscreentime.EventScreenTimeHandling
 import com.waycool.data.translations.TranslationsManager
+import com.waycool.data.utils.Resource
 import kotlinx.coroutines.launch
 
 class DiseaseHistoryFragment : Fragment() {
@@ -47,7 +48,24 @@ class DiseaseHistoryFragment : Fragment() {
         mHistoryAdapter = DiseaseHistoryAdapter()
         binding.recycleViewHis.adapter = mHistoryAdapter
         viewModel.viewModelScope.launch {
-            viewModel.getDisease(accountId!!,plotId).observe(viewLifecycleOwner) {
+            viewModel.getDisease(plotId).observe(viewLifecycleOwner) {
+                when(it){
+                    is Resource.Success->{
+                        val data = it.data?.data?.historicData?.filter { itt ->
+                            itt.disease?.diseaseType == "Disease"
+                        }
+                        if (data.isNullOrEmpty()) {
+                            binding.noPest.visibility = View.VISIBLE
+                        } else {
+                            binding.noPest.visibility = View.GONE
+                        }
+                        mHistoryAdapter.submitList(data)
+                    }
+                    is Resource.Loading->{
+                        binding.noPest.visibility = View.GONE
+                    }
+                    is Resource.Error->{}
+                }
                 val data = it.data?.data?.historicData?.filter { itt ->
                     itt.disease?.diseaseType == "Disease"
                 }
@@ -90,21 +108,50 @@ class DiseaseHistoryFragment : Fragment() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (binding.tabLayout.selectedTabPosition) {
                         0 -> viewModel.viewModelScope.launch {
-                            viewModel.getDisease(accountId!!, plotId).observe(viewLifecycleOwner) {
-                                val data = it.data?.data?.historicData?.filter { itt ->
-                                    itt.disease?.diseaseType == "Disease"
+                            viewModel.getDisease( plotId).observe(viewLifecycleOwner) {
+                                when(it){
+                                    is Resource.Success->{
+                                        val data = it.data?.data?.historicData?.filter { itt ->
+                                            itt.disease?.diseaseType == "Disease"
+                                        }
+                                        if (data.isNullOrEmpty()) {
+                                            binding.noPest.visibility = View.VISIBLE
+                                        } else {
+                                            binding.noPest.visibility = View.GONE
+                                        }
+                                        mHistoryAdapter.submitList(data)
+                                    }
+                                    is Resource.Loading->{
+                                        binding.noPest.visibility = View.GONE
+                                    }
+                                    is Resource.Error->{}
                                 }
-                                mHistoryAdapter.submitList(data)
+
                             }
                         }
                         1 -> {
                             viewModel.viewModelScope.launch {
-                                viewModel.getDisease(accountId!!, plotId)
+                                viewModel.getDisease( plotId)
                                     .observe(viewLifecycleOwner) {
-                                        val data = it.data?.data?.historicData?.filter { itt ->
-                                            itt.disease?.diseaseType == "Pest"
+                                        when(it){
+                                            is Resource.Success->{
+                                                val data = it.data?.data?.historicData?.filter { itt ->
+                                                    itt.disease?.diseaseType == "Pest"
+                                                }
+
+                                                if (data.isNullOrEmpty()) {
+                                                    binding.noPest.visibility = View.VISIBLE
+                                                } else {
+                                                    binding.noPest.visibility = View.GONE
+                                                }
+                                                mHistoryAdapter.submitList(data)
+                                            }
+                                            is Resource.Loading->{
+                                                binding.noPest.visibility = View.GONE
+                                            }
+                                            is Resource.Error->{}
                                         }
-                                        mHistoryAdapter.submitList(data)
+
                                         Log.d("hostry", "setAdapter: ${it.message}")
                                     }
                             }
@@ -112,7 +159,7 @@ class DiseaseHistoryFragment : Fragment() {
                         2 -> {
                             viewModel.viewModelScope.launch {
                                 accountId?.let {
-                                    viewModel.getDisease(accountId!!, plotId)
+                                    viewModel.getDisease(plotId)
                                         .observe(viewLifecycleOwner) {
                                             val data = it.data?.data?.historicData?.filter { itt ->
                                                 itt.disease?.diseaseType == "Deficiency"

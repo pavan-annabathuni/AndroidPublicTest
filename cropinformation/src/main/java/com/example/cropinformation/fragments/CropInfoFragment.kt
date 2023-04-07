@@ -731,15 +731,16 @@ class CropInfoFragment : Fragment(), onItemClick {
     }
 
     override fun onItemClickListener(it: VansFeederListDomain?) {
-        EventClickHandling.calculateClickEvent(it?.title.toString())
+//        EventClickHandling.calculateClickEvent(it?.title.toString())
         val bundle = Bundle()
+        bundle.putInt("id", it?.id!!)
         bundle.putString("title", it?.title)
         bundle.putString("content", it?.desc)
         bundle.putString("image", it?.thumbnailUrl)
         bundle.putString("audio", it?.audioUrl)
         bundle.putString("date", it?.startDate)
         bundle.putString("source", it?.sourceName)
-
+        bundle.putString("vansType", it?.vansType)
         findNavController().navigate(
             R.id.action_cropInfoFragment_to_newsFullviewActivity,
             bundle

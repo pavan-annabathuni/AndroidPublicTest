@@ -1,13 +1,16 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class ProfileUpdateResponseDTO(
     @SerializedName("status"  ) var status  : Boolean? = null,
     @SerializedName("message" ) var message : String?  = null,
     @SerializedName("data"    ) var data    : Data?    = Data()
 )
 
+@Keep
 data class Data (
 
     @SerializedName("user"    ) var user    : User?    = User(),
@@ -15,6 +18,7 @@ data class Data (
 
 )
 
+@Keep
 data class User (
 
     @SerializedName("name" ) var name : String? = null,
@@ -22,6 +26,7 @@ data class User (
 
 )
 
+@Keep
 data class Profile (
 
     @SerializedName("id"           ) var id          : Int?    = null,

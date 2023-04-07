@@ -18,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -33,12 +32,13 @@ import com.example.adddevice.viewmodel.AddDeviceViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
-import com.google.android.libraries.maps.CameraUpdateFactory
-import com.google.android.libraries.maps.GoogleMap
-import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.SupportMapFragment
-import com.google.android.libraries.maps.model.*
 import com.google.zxing.integration.android.IntentIntegrator
 import com.waycool.data.error.ToastStateHandling
 import com.waycool.data.eventscreentime.EventItemClickHandling
@@ -157,18 +157,17 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                         context?.let { it1 -> ToastStateHandling.toastError(it1,toastDeviceLoc,
                             LENGTH_SHORT
                         ) }}
-                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Your current Location is far from your Farm",
+                    else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Device Location is far from your Farm",
                         LENGTH_SHORT
                     ) }}}
 
 
             } else if (nickName.isEmpty()) {
-                binding.device1.error =  "Device Name should not be empty"
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
-//                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
-//                    else{ binding.device1.error= "Device Name should not be empty" }
-//                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val toastDeviceName=TranslationsManager().getString("device_name_empty")
+                    if(!toastDeviceName.isNullOrEmpty()){ binding.device1.error = toastDeviceName}
+                    else{ binding.device1.error= "Device Name should not be empty" }
+                }
 
 
                 return@setOnClickListener
@@ -199,8 +198,11 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
                     map["device_lat"] = latitude!!
                 if (longitutde != null)
                     map["device_long"] = longitutde!!
-                map["device_number"] = scanResult!!
+//                map["device_number"] = scanResult!!
                 map["is_device_qr"] = if (isQRScanned) 1 else 0
+////
+                map["device_number"]=binding.imeiAddress.text
+                plotId?.let { map.put("plot_id", it) }
                 activityDevice(map)
             }
 
@@ -252,23 +254,16 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 
                 }
                 is Resource.Error -> {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val toastServerError = TranslationsManager().getString("server_error")
-                        if(!toastServerError.isNullOrEmpty()){
-                            context?.let { it1 -> ToastStateHandling.toastError(it1,toastServerError,
-                                Toast.LENGTH_SHORT
-                            ) }}
-                        else {context?.let { it1 -> ToastStateHandling.toastError(it1,"Server Error Occurred",
-                            Toast.LENGTH_SHORT
-                        ) }}}
+                ToastStateHandling.toastError(requireContext(),"Device already registered", LENGTH_SHORT)
+                    binding.progressBar.visibility=View.GONE
+                    binding.frameLayout2.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
                     viewModel.viewModelScope.launch {
                         val toastLoading = TranslationsManager().getString("alert_valid_number")
                         if(!toastLoading.isNullOrEmpty()){
                             context?.let { it1 -> ToastStateHandling.toastError(it1,toastLoading,
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ) }}
 
                 }
@@ -277,6 +272,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     }}
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, data: Intent?
     ) {
@@ -399,11 +395,15 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
             val points = myFarm?.farmJson?.toMutableList()
             points?.add(latLng)
             if (!points.isNullOrEmpty()) {
-                mMap?.animateCamera(
+                getLatLnBounds(points)?.let {
                     CameraUpdateFactory.newLatLngBounds(
-                        getLatLnBounds(points), 10
+                        it, 10
                     )
-                )
+                }?.let {
+                    mMap?.animateCamera(
+                        it
+                    )
+                }
             }
         }
     }
@@ -450,6 +450,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -464,7 +465,7 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap) {
         if (map != null) {
             map.mapType = GoogleMap.MAP_TYPE_HYBRID
             mMap = map
@@ -494,11 +495,15 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
 //                                .flat(true)
 //                        )
 //                    }
-                    map.animateCamera(
+                    getLatLnBounds(points)?.let {
                         CameraUpdateFactory.newLatLngBounds(
-                            getLatLnBounds(points), 20
+                            it, 20
                         )
-                    )
+                    }?.let {
+                        map.animateCamera(
+                            it
+                        )
+                    }
 
                 }
             }
@@ -508,7 +513,9 @@ class AddDeviceFragment : Fragment(), OnMapReadyCallback {
     private fun getLatLnBounds(points: List<LatLng?>): LatLngBounds? {
         val builder = LatLngBounds.builder()
         for (ll in points) {
-            builder.include(ll)
+            if (ll != null) {
+                builder.include(ll)
+            }
         }
         return builder.build()
     }

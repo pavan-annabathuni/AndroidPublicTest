@@ -1,11 +1,14 @@
 package com.waycool.data.Network.NetworkModels
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class ModuleMasterDTO(@SerializedName("status") var status: Boolean? = null,
                            @SerializedName("message") var message: String? = null,
                            @SerializedName("data") var data: ArrayList<ModuleData> = arrayListOf())
 
+@Keep
 data class ModuleData(
     @SerializedName("id"                  ) var id                 : Int?    = null,
     @SerializedName("module_type"         ) var moduleType         : String? = null,

@@ -39,7 +39,7 @@ import java.util.*
 
 class GraphsFragment : Fragment() {
     private var updateDate: String? = null
-    private var paramValue: String? = null
+    private var paramValue: Double? = null
     private var paramType: String? = null
     private var deviceModelId: Int? = null
     private var serialNo: Int? = null
@@ -91,13 +91,16 @@ class GraphsFragment : Fragment() {
             serialNo = arguments?.getInt("serial_no")
             deviceModelId = arguments?.getInt("device_model_id")
             paramType = arguments?.getString("value")
-            paramValue = arguments?.getString("temp_value")
+            paramValue = arguments?.getDouble("temp_value")
             updateDate = arguments?.getString("date_time")
 
            val data = arguments?.getString("toolbar")
             translationToolBar(data.toString())
             binding.tvToolbar.text = arguments?.getString("toolbar")
-            binding.paramValue.text = "$paramValue${paramType?.let { getUnits(it) }}"
+            binding.paramValue.text = "${String.format(Locale.ENGLISH,"%.2f",paramValue)}${paramType?.let { getUnits(it) }}"
+            if(paramType.equals("leaf_wetness_hrs",ignoreCase = true)){
+                binding.paramValue.text = if(paramValue == 0.0) "Dry" else "Wet"
+            }
             binding.date.text = DateFormatUtils.dateFormatterDevice(updateDate)
 
             populateGraph(paramType, GraphSelection.LAST12HRS)
@@ -113,14 +116,21 @@ class GraphsFragment : Fragment() {
     }
 
     private fun populateGraph(paramType: String?, duration: GraphSelection) {
-        if (paramType != null && viewDevice != null) {
+        if(graphsData ==null){
+            binding.tvParamNote.text = "Loading..."
+            binding.paramProgressBar.visibility = View.VISIBLE
+            binding.lineChart.invalidate()
+        }
+        if (paramType != null && graphsData != null) {
 
             val keysList = getKeyList(duration)
             val valList = getValueList(duration)
 
             if (valList.isNullOrEmpty()) {
-                binding.tvParamNote.text = "Loading..."
-                binding.paramProgressBar.visibility = View.VISIBLE
+                binding.tvParamNote.text = "Data not available"
+                binding.paramProgressBar.visibility = View.INVISIBLE
+                binding.lineChart.invalidate()
+                binding.lineChart.clear();
                 return
             }
 
@@ -153,7 +163,7 @@ class GraphsFragment : Fragment() {
                     ignoreCase = true
                 ) && duration == GraphSelection.LAST12HRS
             ) {
-                lDataSet.mode = LineDataSet.Mode.STEPPED
+                lDataSet.mode = LineDataSet.Mode.LINEAR
                 val yAxisVals = ArrayList(Arrays.asList("Dry", "Wet"))
                 binding.lineChart.axisLeft.valueFormatter = IndexAxisValueFormatter(yAxisVals)
                 binding.lineChart.axisLeft.labelCount = 2
@@ -177,12 +187,13 @@ class GraphsFragment : Fragment() {
             binding.lineChart.axisRight.setDrawLabels(false)
             binding.lineChart.xAxis.labelRotationAngle = -45f
             binding.lineChart.axisLeft.axisMinimum = 0f
-            binding.lineChart.axisLeft.spaceTop = 150f
+//            binding.lineChart.axisLeft.spaceTop = 150f
             if (paramType.equals("humidity", ignoreCase = true)) {
                 binding.lineChart.axisLeft.axisMaximum = 100f
             }
 
-            binding.lineChart.xAxis.setLabelCount(keysList!!.size, true)
+//            binding.lineChart.xAxis.setLabelCount(keysList!!.size, false)
+
             binding.lineChart.data = LineData(line)
             binding.lineChart.setTouchEnabled(true)
             val mv2: IMarker = CustomMarkerView(
@@ -271,7 +282,7 @@ class GraphsFragment : Fragment() {
                 .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(
-            binding.tabLayout.newTab().setText("Last 7 Days")
+            binding.tabLayout.newTab().setText("7 Days")
                 .setCustomView(com.example.mandiprice.R.layout.item_tab)
         )
         binding.tabLayout.addTab(
@@ -348,7 +359,7 @@ class GraphsFragment : Fragment() {
             "rainfall" -> " mm"
             "humidity" -> " %"
             "windspeed" -> " Kmph"
-            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " KPa"
+            "pressure", "soil_moisture_1_kpa", "soil_moisture_2_kpa" -> " kPa"
             "lux" -> " lux"
             "leaf_wetness_hrs" -> " Hrs"
             else -> " "

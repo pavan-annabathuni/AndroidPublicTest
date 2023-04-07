@@ -11,6 +11,7 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -59,63 +60,70 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/invite"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
+
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/call"
-                    android:scheme="https"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/rating"
-                    android:scheme="https"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/newsandarticle"
-                    android:scheme="https"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
                     android:path="/newslist"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
-                    android:path="/newsandarticlesfullscreen"
-                    android:scheme="https"/>
+                    android:host="app.outgrowdigital.com"
+                    android:path="/irrigation"
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="adminuat.outgrowdigital.com"
+                    android:host="app.outgrowdigital.com"
+                    android:path="/call"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="app.outgrowdigital.com"
+                    android:path="/rating"
+                    android:scheme="http"/>
+            </intent-filter>
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--                <category android:name="android.intent.category.BROWSABLE"/>-->
+<!--                <data-->
+<!--                    android:host="app.outgrowdigital.com"-->
+<!--                    android:path="/newsandarticlesfullscreen"-->
+<!--                    android:scheme="http"/>-->
+<!--                <data-->
+<!--                    android:host="app.outgrowdigital.com"-->
+<!--                    android:path="/newsandarticlesfullscreen"-->
+<!--                    android:scheme="https"/>-->
+<!--            </intent-filter>-->
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="app.outgrowdigital.com"
                     android:path="/videoslist"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
 
 

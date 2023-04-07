@@ -92,7 +92,7 @@
 
                     <fragment
                         android:id="@+id/map_farmdetails"
-                        android:name="com.google.android.libraries.maps.SupportMapFragment"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="0dp"
                         android:layout_height="140dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -731,6 +731,7 @@
                                 android:layout_marginTop="12dp"
                                 android:text="Device 1 : GWX G555 "
                                 android:textColor="#111827"
+                                android:textIsSelectable="true"
                                 android:textSize="@dimen/txt16"
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -741,9 +742,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:textColor="@color/textlight"
-                                tools:text="Device Number : 23cewn"
+                                android:textIsSelectable="true"
                                 app:layout_constraintStart_toStartOf="@+id/tvAddDeviceStart"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart" />
+                                app:layout_constraintTop_toBottomOf="@+id/tvAddDeviceStart"
+                                tools:text="Device Number : 23cewn" />
 
 
                             <ImageView
@@ -763,7 +765,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 app:layout_constraintEnd_toStartOf="@+id/view"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/ivAddDeviceEnd"
@@ -902,18 +904,20 @@
                             </androidx.cardview.widget.CardView>
 
 
-
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvLastUpdate"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="@dimen/space12"
+                                android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="@dimen/space12"
+                                android:singleLine="true"
                                 android:text="Last Updated: Today Tue 26, Jul"
                                 android:textColor="@color/textdark"
                                 android:textSize="@dimen/txt12"
                                 app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/tvLastUpdateRefresh"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/belowBattery" />
 
@@ -926,7 +930,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/belowBattery"
-                                tools:visibility="invisible" />
+                                tools:visibility="visible" />
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/tvLastUpdateRefresh"
@@ -1683,25 +1687,6 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
-
-                                    <!--                                    <ProgressBar-->
-                                    <!--                                        android:id="@+id/soil_moisture_one"-->
-                                    <!--                                        android:layout_width="100dp"-->
-                                    <!--                                        android:layout_height="100dp"-->
-                                    <!--                                        android:indeterminateOnly="false"-->
-                                    <!--                                        android:max="140"-->
-                                    <!--                                        android:progressDrawable="@drawable/pb_circular_determinative"-->
-                                    <!--                                        android:rotation="-120"-->
-                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
-                                    <!--                                        app:layout_constraintTop_toTopOf="parent"-->
-                                    <!--                                        />-->
-                                    <!--                                    <com.ekn.gruzer.gaugelibrary.HalfGauge-->
-                                    <!--                                        android:id="@+id/soil_smoisture_one"-->
-                                    <!--                                        android:layout_width="100dp"-->
-                                    <!--                                        android:layout_height="100dp"-->
-                                    <!--                                        app:layout_constraintStart_toStartOf="parent"-->
-                                    <!--                                        app:layout_constraintTop_toTopOf="parent"-->
-                                    <!--                                      />-->
                                     <com.github.anastr.speedviewlib.SpeedView
                                         android:id="@+id/current_delta"
                                         android:layout_width="100dp"

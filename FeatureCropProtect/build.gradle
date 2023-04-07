@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 //    id 'kotlin-android-extensions'
 }
 
@@ -20,6 +20,10 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -60,6 +64,9 @@ dependencies {
 
 
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+
+//    implementation "com.google.android.exoplayer:exoplayer-core:2.14.1"
+//    implementation "com.google.android.exoplayer:exoplayer-ui:2.14.1"
 
 
 
