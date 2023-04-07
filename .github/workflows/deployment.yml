@@ -129,4 +129,4 @@ jobs:
           appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
-          file: app-signed.apk
+          file: app-release-unsigned-signed.apk
