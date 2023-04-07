@@ -1,6 +1,8 @@
 buildscript {
     ext.kotlin_version = '1.8.0'
     apply from: "dependencies.gradle"
+    group = "com.waycool"
+
     repositories {
         google()
         jcenter()
@@ -10,15 +12,22 @@ buildscript {
         mavenCentral()  // Maven Central repository
         maven {url "https://plugins.gradle.org/m2/"}
         gradlePluginPortal()
+        maven {
+            url = "https://maven.pkg.github.com/outgrowdigital/androidtest"
+            credentials {
+                username = 'pavan-annabathuni'
+                password = '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'
+            }
+        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath 'com.google.gms:google-services:4.3.15'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
         classpath 'com.google.firebase:perf-plugin:1.4.2'
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
@@ -26,6 +35,8 @@ buildscript {
 }
 
 allprojects {
+    group = "com.waycool"
+
     repositories {
         google()
         jcenter()
@@ -34,6 +45,13 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
         mavenCentral()  // Maven Central repository
+        maven {
+            url = "https://maven.pkg.github.com/outgrowdigital/androidtest"
+            credentials {
+                username = 'pavan-annabathuni'
+                password = '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'
+            }
+        }
     }
 
 //    dependencyResolutionManagement {

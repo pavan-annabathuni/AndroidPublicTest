@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 //    id 'kotlin-android-extensions'
 
 //    id 'com.google.gms.google-services'
@@ -38,7 +38,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-
     }
     buildFeatures {
         dataBinding true
@@ -50,6 +49,8 @@ android {
 
 dependencies {
     implementation project(path:':SquareCamera')
+//    implementation 'com.waycool:squarecamera:1.0.8'
+
     implementation project(path: ':UiComponents')
     implementation project(path: ':Data')
     implementation project(path: ':Videos')
@@ -67,9 +68,9 @@ dependencies {
 
 
 
-    def room_version = "2.4.3"
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt "androidx.room:room-compiler:$room_version"
+//    def room_version = "2.4.3"
+//    annotationProcessor("androidx.room:room-compiler:$room_version")
+//    kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'com.google.android.gms:play-services-mlkit-image-labeling:16.0.8'
 

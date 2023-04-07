@@ -46,7 +46,7 @@ ext {
     libraries = [
             appCompat              : "androidx.appcompat:appcompat:$appCompatVersion",
             material               : "com.google.android.material:material:$materialVersion",
-            kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+//            kotlinStdLib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             constraintLayout       : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
             gson                   : "com.google.code.gson:gson:$gsonVersion",
             glide                  : "com.github.bumptech.glide:glide:" + glideVersion,

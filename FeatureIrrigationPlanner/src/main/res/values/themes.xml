@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/darkGray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#022E0E</item>
-        <item name="textColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/notosans_medium</item>
         <item name="toolbarStyle">@style/Base_ToolbarStyle</item>
 <!--        <item name="textColor">@color/black</item>-->
