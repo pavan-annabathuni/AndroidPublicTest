@@ -63,7 +63,7 @@ jobs:
         uses: anothrNick/github-tag-action@master
         env:
           DEFAULT_BUMP: patch
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
           WITH_V: false
           RELEASE_BRANCHES: qa,staging,main
           if: github.ref == 'refs/heads/development'
@@ -81,7 +81,7 @@ jobs:
           if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
           prerelease: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
   dev_deployment:
     if: github.ref == 'refs/heads/development'
     needs: [ tagging_releases ]
