@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
-    name: 🧿Tagging and Releasing Application
+    name: 🧿Tagging & Releasing Application
     steps:
       - name: Extract branch name
         shell: bash
