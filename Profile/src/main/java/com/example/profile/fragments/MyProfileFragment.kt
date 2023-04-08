@@ -1,6 +1,8 @@
 package com.example.profile.fragments
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -84,9 +86,22 @@ class MyProfileFragment : Fragment() {
             binding.version.text = buildString {
                 append(appVer)
                 append(" ")
-                append(com.example.profile.BuildConfig.VERSION_NAME)
+                try {
+                    val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+                    val version: String = pInfo.versionName
+                    append (version)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                }
             }
         }
+//        try {
+//            val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+//            val version: String = pInfo.versionName
+//            binding.version.text = (version)
+//        } catch (e: PackageManager.NameNotFoundException) {
+//            e.printStackTrace()
+//        }
         networkCall()
         apiErrorHandlingBinding.clBtnTryAgainInternet.setOnClickListener {
             networkCall()
