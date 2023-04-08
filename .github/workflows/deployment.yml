@@ -68,6 +68,7 @@ jobs:
           RELEASE_BRANCHES: qa,staging,main
           if: github.ref == 'refs/heads/development'
           PRERELEASE: true
+          INITIAL_VERSION: "2.5.23"
       - name: 🔃 Building Version Output
         id: new_tag_builder
         run: echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
