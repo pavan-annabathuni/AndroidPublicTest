@@ -74,11 +74,13 @@ object NetworkSource {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
 
             if (response.isSuccessful) {
+                Log.d("LanguageSync","${response.body()}")
                 emit(Resource.Success(response.body()))
             } else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("LanguageSync","${e.message}")
             CrashAnalytics.crashAnalyticsError("getLanguageMaster Exception--${e.message}")
             //emit(Resource.Error(e.message))
         }

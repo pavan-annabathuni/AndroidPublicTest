@@ -35,12 +35,12 @@ android {
         viewBinding true
     }
 
-    def versionName = VERSION_NAME
-    def versionCode = VERSION_CODE
-    buildTypes.all {
-        buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
-        buildConfigField "int", "VERSION_CODE", "$versionCode"
-    }
+//    def versionName = VERSION_NAME
+//    def versionCode = VERSION_CODE
+//    buildTypes.all {
+//        buildConfigField "String", "VERSION_NAME", "\"$versionName\"" // Escaping quote marks to convert property to String
+//        buildConfigField "int", "VERSION_CODE", "$versionCode"
+//    }
     lintOptions {
         abortOnError false
     }

@@ -15,8 +15,8 @@ android {
         applicationId "com.waycool.iwap"
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
-        versionCode VERSION_CODE.toInteger()
-        versionName VERSION_NAME
+        versionCode 34
+        versionName "2.5.23"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
