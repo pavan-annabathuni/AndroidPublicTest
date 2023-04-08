@@ -4,5 +4,26 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+        <activity
+            android:name=".view.NewsAndArticlesActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true"
+           >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="app.outgrowdigital.com"
+                    android:path="/newsandarticlesfullscreen"
+                    android:scheme="http"/>
+            </intent-filter>
+
+        </activity>
+
+
+
+    </application>
 
 </manifest>

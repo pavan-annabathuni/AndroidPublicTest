@@ -31,8 +31,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Log.d(TAG, "Message Data Body: ${message.data}")
-
-
         when (PushNotifications.shouldBeDisplayed(message.data)) {
             PushResponsibility.MESSAGING_SHOULD_DISPLAY -> {
                 // This push belongs to Messaging and the SDK is able to display it to the end user

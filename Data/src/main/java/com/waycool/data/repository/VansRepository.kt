@@ -3,16 +3,18 @@ package com.waycool.data.repository
 import android.util.Log
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.waycool.data.Network.NetworkModels.VansFeederDTO
+import com.waycool.data.Network.NetworkModels.VansSharedData
 import com.waycool.data.Network.NetworkSource
+import com.waycool.data.Sync.syncer.TagsSyncer
+import com.waycool.data.Sync.syncer.VansCategorySyncer
 import com.waycool.data.repository.DomainMapper.TagsKeywordsDomainMapper
 import com.waycool.data.repository.DomainMapper.VansCategoryDomainMapper
 import com.waycool.data.repository.DomainMapper.VansFeederDomainMapper
+import com.waycool.data.repository.DomainMapper.VansSharedDataDomainMapper
 import com.waycool.data.repository.domainModels.TagsAndKeywordsDomain
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
-import com.waycool.data.Sync.syncer.TagsSyncer
-import com.waycool.data.Sync.syncer.VansCategorySyncer
+import com.waycool.data.repository.domainModels.VansSharedDataDomain
 import com.waycool.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -61,22 +63,9 @@ object VansRepository {
     fun getVansFeeder(queryMap: MutableMap<String, String>): Flow<PagingData<VansFeederListDomain>> {
         return NetworkSource.getVansFeeder(queryMap).map {
             it.map {
-                Log.d("Vans", it.title ?: "VansDefault")
                 VansFeederDomainMapper.VansFeederListDomainMapper().mapToDomain(it)
             }
-//            when (it) {
-//                is Resource.Success -> {
-//                    Resource.Success(
-//                        VansFeederDomainMapper().mapToDomain(it.data?.data ?: VansNetwork())
-//                    )
-//                }
-//                is Resource.Loading -> {
-//                    Resource.Loading()
-//                }
-//                is Resource.Error -> {
-//                    Resource.Error(it.message)
-//                }
-//            }
+
         }
     }
 
@@ -96,4 +85,21 @@ object VansRepository {
         }
     }
 
+    fun getVansSharedData(vans_id: Int): Flow<Resource<VansSharedDataDomain>> {
+        return NetworkSource.getVansSharedData(vans_id).map {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("NADeepLink","NADeepLinkRepo")
+                    Resource.Success(VansSharedDataDomainMapper().mapToDomain(it.data?.data ?: VansSharedData()))
+
+                }
+                is Resource.Loading -> {
+                    Resource.Loading()
+                }
+                is Resource.Error -> {
+                    Resource.Error(it.message)
+                }
+            }
+        }
+    }
 }

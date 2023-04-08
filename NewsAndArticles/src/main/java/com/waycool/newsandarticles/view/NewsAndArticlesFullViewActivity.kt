@@ -6,7 +6,7 @@ import android.media.MediaPlayer.OnCompletionListener
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.text.Html
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +29,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
     private lateinit var audioNewLayout: AudioNewLayoutBinding
     private lateinit var  binding: ActivityNewsFullLayoutBinding
     var title: String? = null
+    var id: Int? = null
     var desc: String? = null
     var image: String? = null
     var audioUrl: String? = null
@@ -47,6 +48,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         if (bundle != null) {
+            id = bundle.getInt("id")
             title = bundle.getString("title")
             desc = bundle.getString("content")
             image = bundle.getString("image")
@@ -55,11 +57,6 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             source = bundle.getString("source")
             vansType = bundle.getString("vansType")
 
-        }
-        if (audioUrl.isNullOrEmpty()) {
-            audioNewLayout.root.visibility = View.GONE
-        } else {
-            audioNewLayout.root.visibility = View.VISIBLE
         }
         if(vansType=="news"){
             vansType="News"
@@ -71,6 +68,7 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             vansType="Latest"
         }
         binding.newsHeading.text = "$vansType Updates"
+        binding.newsHeading.text = vansType
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.text = title?:""
         binding.desc.text = HtmlCompat.fromHtml(desc?:"",HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -86,8 +84,9 @@ class NewsAndArticlesFullViewActivity : AppCompatActivity() {
             } else{
                 DeepLinkNavigator.DEFAULT_IMAGE_URL
             }
+            Log.d("NADeepLink","NADeepLinkId $id")
             FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?title=${title}&content=${desc}&image=${image}&audio=${audioUrl}&date=${newsDate}&source=${source}&vansType=${vansType}"))
+                .setLink(Uri.parse("http://app.outgrowdigital.com/newsandarticlesfullscreen?id=$id"))
                 .setDomainUriPrefix(DOMAIN_URI_PREFIX)
                 .setAndroidParameters(
                     DynamicLink.AndroidParameters.Builder()

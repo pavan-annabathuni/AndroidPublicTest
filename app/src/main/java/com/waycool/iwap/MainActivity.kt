@@ -33,12 +33,10 @@ import com.waycool.featurechat.Contants
 import com.waycool.featurelogin.activity.LoginActivity
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.CALL
-import com.waycool.featurelogin.deeplink.DeepLinkNavigator.NEWS_ARTICLE
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.RATING
 import com.waycool.featurelogin.deeplink.DeepLinkNavigator.navigateFromDeeplink
 import com.waycool.iwap.databinding.ActivityMainBinding
 import com.waycool.newsandarticles.view.NewsAndArticlesActivity
-import com.waycool.newsandarticles.view.NewsAndArticlesFullViewActivity
 import com.waycool.uicomponents.utils.Constants.PLAY_STORE_LINK
 import com.waycool.videos.VideoActivity
 import kotlinx.coroutines.CoroutineScope
@@ -117,36 +115,7 @@ class MainActivity : AppCompatActivity() {
                 if (deepLink?.lastPathSegment.equals(DeepLinkNavigator.NEWS_LIST)){
                     val intent = Intent(this, NewsAndArticlesActivity::class.java)
                     startActivity(intent)
-
                 }
-               else if (deepLink?.lastPathSegment!! == NEWS_ARTICLE) {
-                    val title = deepLink.getQueryParameter("title")
-                    val desc = deepLink.getQueryParameter("content")
-                    val image = deepLink.getQueryParameter("image")
-                    val audioUrl = deepLink.getQueryParameter("audio")
-                    val newsDate = deepLink.getQueryParameter("date")
-                    val source = deepLink.getQueryParameter("source")
-                    val vansType = deepLink.getQueryParameter("vansType")
-
-                    if (!title.isNullOrEmpty()) {
-                        val intent = Intent(this, NewsAndArticlesFullViewActivity::class.java)
-                        if(!vansType.isNullOrEmpty()){
-                            intent.putExtra("vansType", vansType)
-                        }
-                        else{
-                            intent.putExtra("vansType", "")
-                        }
-                        intent.putExtra("title", title)
-                        intent.putExtra("content", desc)
-                        intent.putExtra("image", image)
-                        intent.putExtra("audio", audioUrl)
-                        intent.putExtra("date", newsDate)
-                        intent.putExtra("source", source)
-
-                        startActivity(intent)
-                    }
-                }
-
                 else if (deepLink?.lastPathSegment == RATING) {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
