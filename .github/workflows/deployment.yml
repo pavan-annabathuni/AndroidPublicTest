@@ -61,7 +61,7 @@ jobs:
         with:
           gradlePath: app/build.gradle
           versionCode: ${{github.run_number}}
-          versionName: ${{needs.tagging_releases.outputs.new_tag_version}}
+          versionName: ${{needs.tagging_releases_dev.outputs.new_tag_version}}
 
       - name: Assemble Release
         run: ./gradlew assembleRelease
@@ -151,7 +151,7 @@ jobs:
         with:
           gradlePath: app/build.gradle
           versionCode: ${{github.run_number}}
-          versionName: ${{needs.tagging_releases.outputs.new_tag_version}}
+          versionName: ${{needs.tagging_releases_staging.outputs.new_tag_version}}
 
       - name: Assemble Release
         run: ./gradlew assembleRelease
