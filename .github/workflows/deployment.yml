@@ -2,48 +2,10 @@ name: Outgrow Pipeline Action
 
 on:
   push:
-    branches: [ "qa","development", "staging","main" ]
+    branches: [ "development", "staging","main" ]
 jobs:
-#  application_cleaning_building:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Code checkout
-#        uses: actions/checkout@v3
-#      - uses: actions/setup-java@v3
-#        with:
-#          distribution: temurin
-#          java-version: 11
-#      - name: Touch local properties
-#        run: touch local.properties
-#      - name: Setup Gradle
-#        uses: gradle/gradle-build-action@v2
-#
-#      - uses: actions/cache@v2
-#        with:
-#          path: |
-#              ~/.gradle/caches
-#              ~/.gradle/wrapper
-#          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
-#
-#      - name: Make gradlew executable
-#        run: chmod +x ./gradlew
-#      - name: execute gradle clean
-#        run: ./gradlew clean
-#      - name: Build
-#        run: ./gradlew assembleDebug
-#  application_testing:
-#    needs: [ application_cleaning_building ]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: code checkout
-#        uses: actions/checkout@v3
-#      - name: Touch local properties
-#        run: touch local.properties
-#      - name: Make gradlew executable
-#        run: chmod +x ./gradlew
-#      - name: execute gradle test
-#        run: ./gradlew test
-  tagging_releases:
+  tagging_releases_dev:
+    if: github.ref == 'refs/heads/development'
     runs-on: ubuntu-latest
     outputs:
       new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
@@ -65,10 +27,8 @@ jobs:
           DEFAULT_BUMP: patch
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
           WITH_V: false
-          RELEASE_BRANCHES: qa,staging,main
-          if: github.ref == 'refs/heads/development'
           PRERELEASE: true
-          INITIAL_VERSION: "2.5.23"
+          PRERELEASE_SUFFIX: "alpha"
       - name: 🔃 Building Version Output
         id: new_tag_builder
         run: echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
@@ -85,7 +45,96 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
   dev_deployment:
     if: github.ref == 'refs/heads/development'
-    needs: [ tagging_releases ]
+    needs: [ tagging_releases_dev ]
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v3
+      - name: Touch local properties
+        run: touch local.properties
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Bump version
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{github.run_number}}
+          versionName: ${{needs.tagging_releases.outputs.new_tag_version}}
+
+      - name: Assemble Release
+        run: ./gradlew assembleRelease
+      - name: Sign Release
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
+          alias: ${{ secrets.OUTGROW_APP_ALIAS }}
+          keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.OUTGROW_APP_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "33.0.1"
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/apk/release
+      - name: download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app
+      - name: list files
+        run: ls -l
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
+          groups: testers
+          file: app-release-unsigned-signed.apk
+
+  tagging_releases_staging:
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
+    name: 🧿Tagging & Release Application
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: '0'
+      - name: 🔖 Tag version Alpha / Beta
+        id: tag_version
+        uses: anothrNick/github-tag-action@master
+        env:
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
+          WITH_V: false
+          PRERELEASE: true
+          PRERELEASE_SUFFIX: "beta"
+      - name: 🔃 Building Version Output
+        id: new_tag_builder
+        run: echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
+      - name: 🛎️ Create a GitHub release
+        uses: release-drafter/release-drafter@master
+        with:
+          version: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          publish: true
+          if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
+  staging_deployment:
+    if: github.ref == 'refs/heads/staging'
+    needs: [ tagging_releases_staging ]
     environment: development
     runs-on: ubuntu-latest
     steps:
