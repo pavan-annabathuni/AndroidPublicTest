@@ -27,6 +27,7 @@ jobs:
           DEFAULT_BUMP: patch
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
           WITH_V: false
+          RELEASE_BRANCHES: main
           PRERELEASE: true
           PRERELEASE_SUFFIX: "alpha"
       - name: 🔃 Building Version Output
@@ -116,6 +117,7 @@ jobs:
           DEFAULT_BUMP: patch
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
           WITH_V: false
+          RELEASE_BRANCHES: main
           PRERELEASE: true
           PRERELEASE_SUFFIX: "beta"
       - name: 🔃 Building Version Output
