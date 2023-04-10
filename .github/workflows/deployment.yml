@@ -1,4 +1,4 @@
-name: Outgrow Pipeline Action
+name: Outgrow CD Pipeline Action
 
 on:
   push:
