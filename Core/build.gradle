@@ -6,6 +6,7 @@ plugins {
 //    id 'kotlin-android-extensions'
 }
 apply plugin: 'kotlin-android'
+apply from: "${rootProject.projectDir}/flavors.gradle"
 
 android {
     compileSdk appCompileSdkVersion
@@ -20,6 +21,7 @@ android {
 
     }
 
+    with flavourConfigLibrary
     buildTypes {
         release {
             minifyEnabled true
@@ -48,6 +50,21 @@ android {
     lintOptions {
         abortOnError false
     }
+
+//    productFlavors {
+//        QA {
+//            buildConfigField "String", "BASE_URL", '"https://adminqa.outgrowdigital.com/"'
+//            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+//        }
+//        Staging {
+//            buildConfigField "String", "BASE_URL", '"https://adminstaging.outgrowdigital.com/"'
+//            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+//        }
+//        Production{
+//            buildConfigField "String", "BASE_URL", '"https://admin.outgrowdigital.com/"'
+//            buildConfigField "String", "API_KEY", '"mzwbr9eki1yjxd0pcv275gsn3t6alq-u48ofh"'
+//        }
+//    }
 }
 
 dependencies {

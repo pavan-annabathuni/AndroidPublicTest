@@ -5,7 +5,6 @@ import android.util.Log
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.GsonBuilder
-import com.waycool.core.BuildConfig
 import com.waycool.core.utils.AppSecrets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
