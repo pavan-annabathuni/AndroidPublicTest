@@ -857,6 +857,7 @@ class PestDiseaseDetailsFragment : Fragment(), onItemClick {
         bundleEvents.putString("", "${vans?.title}")
         EventItemClickHandling.calculateItemClickEvent("cropprotection_news", bundleEvents)
         val bundle = Bundle()
+        bundle.putInt("id", vans?.id!!)
         bundle.putString("title", vans?.title)
         bundle.putString("content", vans?.desc)
         bundle.putString("image", vans?.thumbnailUrl)

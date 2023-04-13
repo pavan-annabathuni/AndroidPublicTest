@@ -2,9 +2,10 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 //    id 'kotlin-android-extensions'
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
 
 android {
     namespace 'com.waycool.featurecropprotect'
@@ -17,6 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {
@@ -65,8 +67,8 @@ dependencies {
 
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 
-    implementation "com.google.android.exoplayer:exoplayer-core:2.14.1"
-    implementation "com.google.android.exoplayer:exoplayer-ui:2.14.1"
+//    implementation "com.google.android.exoplayer:exoplayer-core:2.14.1"
+//    implementation "com.google.android.exoplayer:exoplayer-ui:2.14.1"
 
 
 

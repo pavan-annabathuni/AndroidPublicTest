@@ -180,7 +180,7 @@
                         style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_rain"
+                        android:drawableStart="@drawable/ic_wi_rain"
                         android:drawablePadding="8dp"
                         android:text='@{String.format("%.0f",viewModel.selectedProperty.pop*100)+"%"}'
                         android:textColor="@color/black"

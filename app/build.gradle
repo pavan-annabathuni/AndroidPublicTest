@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -15,8 +15,8 @@ android {
         applicationId "com.waycool.iwap"
         minSdk appMinSdkVersion
         targetSdk appTargetSdkVersion
-        versionCode VERSION_CODE.toInteger()
-        versionName VERSION_NAME
+        versionCode 34
+        versionName "2.5.23"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -46,6 +46,26 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    flavorDimensions "default"
+    productFlavors {
+        QA {
+//            applicationIdSuffix ".qa"
+            resValue "string", "app_name", "Outgrow QA"
+            buildConfigField "String", "BASE_URL", '"https://adminqa.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+        }
+        Staging {
+//            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "Outgrow Staging"
+            buildConfigField "String", "BASE_URL", '"https://adminstaging.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+        }
+        Production{
+            resValue "string", "app_name", "Outgrow"
+            buildConfigField "String", "BASE_URL", '"https://admin.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"mzwbr9eki1yjxd0pcv275gsn3t6alq-u48ofh"'
+        }
     }
 }
 
@@ -116,9 +136,9 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.3'
 
 
-    implementation "androidx.fragment:fragment-ktx:1.5.5"
+    implementation "androidx.fragment:fragment-ktx:1.5.6"
 
-    implementation "zendesk.messaging:messaging-android:2.7.0"
+    implementation "zendesk.messaging:messaging-android:2.8.0"
 
 }
 repositories {

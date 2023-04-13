@@ -8,8 +8,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.OnBackPressedCallback
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -62,7 +62,6 @@ class PlayVideoFragment : Fragment(), itemClick {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,11 +78,30 @@ class PlayVideoFragment : Fragment(), itemClick {
         }
 
         if (videoSelected != null) {
-            binding.ytTitleTv.text = videoSelected?.title
-            binding.ytDescriptionTv.text = videoSelected?.desc
+            binding.ytTitleTv.text = videoSelected?.title?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+            binding.ytDescriptionTv.text = videoSelected?.desc?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+
         } else {
-            binding.ytTitleTv.text = videoTitle
-            binding.ytDescriptionTv.text = videoDesc
+            binding.ytTitleTv.text= videoTitle?.let {
+                HtmlCompat.fromHtml(
+                    it,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+            binding.ytDescriptionTv.text = HtmlCompat.fromHtml(
+                videoDesc.toString(),
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
         }
 
         val callback: OnBackPressedCallback =
@@ -238,7 +256,7 @@ class PlayVideoFragment : Fragment(), itemClick {
             DeepLinkNavigator.DEFAULT_IMAGE_URL
         }
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("http://app.outgrowdigital.com/videoshare?video_id=${it?.id}&video_name=${it?.title}&video_desc=${it?.desc}&content_url=${it?.contentUrl}"))
+            .setLink(Uri.parse("http://app.outgrowdigital.com/videoshare?id=${it?.id}"))
             .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(
                 DynamicLink.AndroidParameters.Builder()

@@ -569,6 +569,7 @@ class RegistrationFragment : Fragment() {
     }
 
     //This code is handling the result of a request for permissions to access the device's location. The requestCode of 2 is used to identify this specific request. If the grant results array is not empty and the first element (corresponding to the first requested permission) is equal to PackageManager.PERMISSION_GRANTED, then the getLocation() method is called.
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -775,6 +776,7 @@ class RegistrationFragment : Fragment() {
     }
 
     //This code handles the result of the speech-to-text and GPS activities.
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int, resultCode: Int,
         @Nullable data: Intent?

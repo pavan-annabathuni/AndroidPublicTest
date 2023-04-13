@@ -3,10 +3,12 @@ plugins {
 //    id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 //    id 'kotlin-android-extensions'
 
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 
 android {
     compileSdk appCompileSdkVersion
@@ -18,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {

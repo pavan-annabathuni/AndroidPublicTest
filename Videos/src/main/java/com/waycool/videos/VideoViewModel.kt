@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.VansCategoryDomain
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.VansSharedDataDomain
 import com.waycool.data.utils.Resource
 import kotlin.collections.set
 
@@ -47,6 +48,9 @@ class VideoViewModel : ViewModel() {
         queryMap["vans_type"] = "banners"
         queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
+    }
+    fun getVansSharedData(vans_id: Int): LiveData<Resource<VansSharedDataDomain>>{
+        return VansRepository.getVansSharedData(vans_id).asLiveData()
     }
 
 }

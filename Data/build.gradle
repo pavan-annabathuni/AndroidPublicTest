@@ -6,6 +6,8 @@ plugins {
     id "org.jetbrains.kotlin.plugin.parcelize"
     id 'kotlin-parcelize'
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 
 android {
     compileSdkVersion appCompileSdkVersion
@@ -17,6 +19,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {
@@ -91,21 +94,24 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
 
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
+
+
 
 
     //lifecycle-view model
     //beta version
-    def lifecycle_beta_version = "2.6.0-beta01"
+    def lifecycle_beta_version = "2.6.0"
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_beta_version"
     api "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_beta_version"
 
-    //stable version
-    def lifecycle_stable_version = "2.5.1"
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_stable_version"
+//    //stable version
+//    def lifecycle_stable_version = "2.5.1"
+//    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_stable_version"
 
-    //alpha version
-    api(lifecycle.viewmodel)
-    api(lifecycle.livedata)
+//    //alpha version
+//    api(lifecycle.viewmodel)
+//    api(lifecycle.livedata)
 
     //retrofit
     api(retrofit.retrofit)
@@ -123,7 +129,7 @@ dependencies {
     //
     api(retrofit.scalarconversion)
     //
-    api(libraries.kotlinStdLib)
+//    api(libraries.kotlinStdLib)
 
     //coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
@@ -136,7 +142,7 @@ dependencies {
     api "androidx.paging:paging-common-ktx:$paging_version"
 
     //
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //firebase
     api 'com.google.firebase:firebase-analytics-ktx:21.2.0'

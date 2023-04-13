@@ -3,11 +3,13 @@ plugins {
 //    id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 //    id 'kotlin-android-extensions'
     id 'maven-publish'
 
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 apply plugin: 'kotlin-android'
 
 android {
@@ -20,6 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {
@@ -102,31 +105,31 @@ repositories {
     mavenCentral()
 }
 
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs, android.sourceSets.release.java.srcDirs
-    archiveClassifier = "sources"
-}
+//task sourceJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs, android.sourceSets.release.java.srcDirs
+//    archiveClassifier = "sources"
+//}
 
-afterEvaluate {
-
-    publishing {
-        publications {
-            releaseAndroidLibrary(MavenPublication) {
-                artifactId = 'uicomponents'
-                version = '1.0.1'
-                artifact(sourceJar)
-                artifact tasks.getByName("bundleReleaseAar")
-            }
-        }
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/outgrowdigital/androidtest/")
-                credentials {
-                    username = 'pavan-annabathuni'
-                    password = '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'
-                }
-            }
-        }
-    }
-}
+//afterEvaluate {
+//
+//    publishing {
+//        publications {
+//            releaseAndroidLibrary(MavenPublication) {
+//                artifactId = 'uicomponents'
+//                version = '1.0.1'
+//                artifact(sourceJar)
+//                artifact tasks.getByName("bundleReleaseAar")
+//            }
+//        }
+//        repositories {
+//            maven {
+//                name = "GitHubPackages"
+//                url = uri("https://maven.pkg.github.com/outgrowdigital/androidtest/")
+//                credentials {
+//                    username = 'pavan-annabathuni'
+//                    password = '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'
+//                }
+//            }
+//        }
+//    }
+//}

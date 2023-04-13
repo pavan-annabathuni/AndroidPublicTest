@@ -8,9 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.waycool.data.repository.VansRepository
 import com.waycool.data.repository.domainModels.VansFeederListDomain
+import com.waycool.data.repository.domainModels.VansSharedDataDomain
 import com.waycool.data.utils.Resource
-import kotlin.collections.List
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 
 class NewsAndArticlesViewModel : ViewModel() {
@@ -33,4 +32,9 @@ class NewsAndArticlesViewModel : ViewModel() {
         queryMap["module_id"] = moduleId
         return VansRepository.getVansFeederSinglePage(queryMap).asLiveData()
     }
+    fun getVansSharedData(vans_id: Int): LiveData<Resource<VansSharedDataDomain>>{
+        return VansRepository.getVansSharedData(vans_id).asLiveData()
+    }
+
+
 }

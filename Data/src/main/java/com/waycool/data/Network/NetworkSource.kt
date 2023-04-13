@@ -74,11 +74,13 @@ object NetworkSource {
             val response = apiInterface.getLanguageMaster(headerMapPublic)
 
             if (response.isSuccessful) {
+                Log.d("LanguageSync","${response.body()}")
                 emit(Resource.Success(response.body()))
             } else {
                 emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
             }
         } catch (e: Exception) {
+            Log.d("LanguageSync","${e.message}")
             CrashAnalytics.crashAnalyticsError("getLanguageMaster Exception--${e.message}")
             //emit(Resource.Error(e.message))
         }
@@ -187,9 +189,7 @@ object NetworkSource {
         try {
             val headerMap: MutableMap<String, String> = (LocalSource.getHeaderMapSanctum()?: emptyMap()).toMutableMap()
             headerMap["x-api-key"] = AppSecrets.getApiKey()
-
             queryMap["lang_id"] = "${LocalSource.getLanguageId() ?: 1}"
-
             val response = apiInterface.getVansFeeder(headerMap, queryMap)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()))
@@ -200,6 +200,24 @@ object NetworkSource {
             //emit(Resource.Error(e.message))
         }
     }
+    fun getVansSharedData(vansId: Int) =
+        flow<Resource<VansSharedDataDTO?>> {
+            try {
+                val headerMap: Map<String, String>? = LocalSource.getHeaderMapSanctum()
+//                val headerMap: Map<String, String>? = AppSecrets.getHeaderPublic()
+                val response = apiInterface.getVansSharedData(headerMap,vansId)
+                if (response.isSuccessful) {
+                    emit(Resource.Success(response.body()))
+                    Log.d("NADeepLink","NADeepLinkNetwork")
+                } else {
+                    emit(Resource.Error(response.errorBody()?.charStream()?.readText()))
+                }
+            } catch (e: Exception) {
+                //emit(Resource.Error(e.message))
+                Log.d("NADeepLink","NADeepLinkNetwork ${e.message}")
+
+            }
+        }
 
 
     fun getCropCategoryMaster(headerMap: Map<String, String>) =
