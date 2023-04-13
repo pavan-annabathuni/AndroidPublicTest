@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "166284570361",
+    "firebase_url": "https://outgrow-dev-default-rtdb.firebaseio.com",
+    "project_id": "outgrow-dev",
+    "storage_bucket": "outgrow-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166284570361:android:9267e0eb19865ccfbfbc28",
+        "android_client_info": {
+          "package_name": "com.waycool.iwap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvpy8eAQIyOuIRmh_dBmlrCWJrwZnVPZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166284570361:android:607911691975970cbfbc28",
+        "android_client_info": {
+          "package_name": "com.waycool.iwap.qa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvpy8eAQIyOuIRmh_dBmlrCWJrwZnVPZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166284570361:android:d9467f59a41ea12abfbc28",
+        "android_client_info": {
+          "package_name": "com.waycool.iwap.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvpy8eAQIyOuIRmh_dBmlrCWJrwZnVPZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166284570361-jvhk0qu81d80hq7lq39kq7a8cosib8ah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
