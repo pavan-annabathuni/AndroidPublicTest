@@ -68,7 +68,7 @@ jobs:
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/debug
+          releaseDirectory: app/build/outputs/apk/QA/debug
           signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
           alias: ${{ secrets.OUTGROW_APP_ALIAS }}
           keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app
-          path: app/build/outputs/apk/debug
+          path: app/build/outputs/apk/QA/debug
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
