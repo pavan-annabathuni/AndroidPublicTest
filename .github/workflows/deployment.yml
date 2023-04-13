@@ -92,7 +92,7 @@ jobs:
           appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
-          file: app-release-unsigned-signed.apk
+          file: app-QA-debug-signed.apk
 
   tagging_releases_staging:
     if: github.ref == 'refs/heads/staging'
@@ -154,11 +154,11 @@ jobs:
           versionName: ${{needs.tagging_releases_staging.outputs.new_tag_version}}
 
       - name: Assemble Release
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleStagingDebug
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/staging/debug
           signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
           alias: ${{ secrets.OUTGROW_APP_ALIAS }}
           keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
@@ -169,7 +169,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app
-          path: app/build/outputs/apk/release
+          path: app/build/outputs/apk/staging/debug
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
@@ -182,4 +182,4 @@ jobs:
           appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
-          file: app-release-unsigned-signed.apk
+          file: app-Staging-debug-signed.apk
