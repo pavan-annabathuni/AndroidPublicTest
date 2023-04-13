@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs"
 
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 android {
     compileSdk appCompileSdkVersion
 
@@ -15,6 +17,7 @@ android {
         consumerProguardFiles "consumer-rules.pro"
         manifestPlaceholders = [MAPS_API_KEY: MAPS_API_KEY]
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {

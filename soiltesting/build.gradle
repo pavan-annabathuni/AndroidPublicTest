@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-parcelize'
 //    id 'kotlin-kapt'
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
 
 android {
     compileSdk appCompileSdkVersion
@@ -16,6 +17,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {

@@ -47,6 +47,26 @@ android {
     lintOptions {
         abortOnError false
     }
+    flavorDimensions "default"
+    productFlavors {
+        QA {
+//            applicationIdSuffix ".qa"
+            resValue "string", "app_name", "Outgrow QA"
+            buildConfigField "String", "BASE_URL", '"https://adminqa.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+        }
+        Staging {
+//            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "Outgrow Staging"
+            buildConfigField "String", "BASE_URL", '"https://adminstaging.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"hln20-zym7q6jkcsowdx3ie9bv4tfr1pug8a5"'
+        }
+        Production{
+            resValue "string", "app_name", "Outgrow"
+            buildConfigField "String", "BASE_URL", '"https://admin.outgrowdigital.com/"'
+            buildConfigField "String", "API_KEY", '"mzwbr9eki1yjxd0pcv275gsn3t6alq-u48ofh"'
+        }
+    }
 }
 
 dependencies {

@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id "androidx.navigation.safeargs.kotlin"
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 
 android {
 //    namespace 'com.waycool.addfarm'
@@ -16,6 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {
