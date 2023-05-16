@@ -1,4 +1,4 @@
-name: Outgrow Pipeline Action
+name: Outgrow CI Pipeline Action
 
 on:
   pull_request:
@@ -43,6 +43,10 @@ jobs:
         run: chmod +x ./gradlew
       - name: execute gradle test
         run: ./gradlew test
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+
 #  tagging_releases:
 #    needs: [ application_cleaning_building ]
 #    runs-on: ubuntu-22.04

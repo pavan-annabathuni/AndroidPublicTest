@@ -1,14 +1,16 @@
 package com.waycool.core.utils
 
+import com.waycool.core.BuildConfig
+
 object AppSecrets {
 
     init {
         System.loadLibrary("native-lib")
     }
 
-    external fun getBASEURLDebug(): String
+    fun getBASEURLDebug(): String = BuildConfig.BASE_URL
     external fun getOTPBaseURL(): String
-    external fun getApiKey(): String
+    fun getApiKey(): String = BuildConfig.API_KEY
 
     external fun getWeatherBaseUrl(): String
     external fun getWeatherApiKey(): String
@@ -16,12 +18,12 @@ object AppSecrets {
     external fun getOTPKey(): String
     external fun getOTPTemplateId(): String
 
-    external fun getGeoBaseUrl():String
+    external fun getGeoBaseUrl(): String
     external fun getYoutubeKey(): String
     external fun getChatAppId(): String
-    external fun getChatChannelKey():String
+    external fun getChatChannelKey(): String
     external fun getAccountKey(): String
-    external fun getMapsKey():String
+    external fun getMapsKey(): String
 
 
     fun getHeaderPublic(): Map<String, String> =

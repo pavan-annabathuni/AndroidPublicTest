@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs"
 
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
+
 android {
     compileSdk 31
 
@@ -12,6 +15,7 @@ android {
         targetSdk 31
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    with flavourConfigLibrary
 
     buildTypes {
         release {

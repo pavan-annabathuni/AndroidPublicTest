@@ -8,6 +8,8 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 }
+apply from: "${rootProject.projectDir}/flavors.gradle"
+
 
 android {
     compileSdk appCompileSdkVersion
@@ -29,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    with flavourConfigLibrary
+
     buildTypes {
         release {
             manifestPlaceholders = [TRUECALLER_API_KEY: TRUECALLER_RELEASE]

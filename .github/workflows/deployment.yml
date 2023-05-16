@@ -1,4 +1,4 @@
-name: Outgrow Pipeline Action
+name: Outgrow CD Pipeline Action
 
 on:
   push:
@@ -64,11 +64,11 @@ jobs:
           versionName: ${{needs.tagging_releases_dev.outputs.new_tag_version}}
 
       - name: Assemble Release
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleQADebug
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/QA/debug
           signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
           alias: ${{ secrets.OUTGROW_APP_ALIAS }}
           keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app
-          path: app/build/outputs/apk/release
+          path: app/build/outputs/apk/QA/debug
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
@@ -89,10 +89,10 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID_QA}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
-          file: app-release-unsigned-signed.apk
+          file: app-QA-debug-signed.apk
 
   tagging_releases_staging:
     if: github.ref == 'refs/heads/staging'
@@ -137,7 +137,6 @@ jobs:
   staging_deployment:
     if: github.ref == 'refs/heads/staging'
     needs: [ tagging_releases_staging ]
-    environment: development
     runs-on: ubuntu-latest
     steps:
       - name: code checkout
@@ -154,11 +153,11 @@ jobs:
           versionName: ${{needs.tagging_releases_staging.outputs.new_tag_version}}
 
       - name: Assemble Release
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleStagingDebug
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/staging/debug
           signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
           alias: ${{ secrets.OUTGROW_APP_ALIAS }}
           keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
@@ -169,7 +168,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app
-          path: app/build/outputs/apk/release
+          path: app/build/outputs/apk/staging/debug
       - name: download artifact
         uses: actions/download-artifact@v2
         with:
@@ -179,7 +178,102 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID_STAGING}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
-          file: app-release-unsigned-signed.apk
+          file: app-Staging-debug-signed.apk
+
+  tagging_releases_main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag_version: ${{ steps.new_tag_builder.outputs.new_tag }}
+    name: 🧿Tagging & Release Application
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: '0'
+      - name: 🔖 Tag version
+        id: tag_version
+        uses: anothrNick/github-tag-action@master
+        env:
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
+          WITH_V: false
+          RELEASE_BRANCHES: main
+          PRERELEASE: false
+      - name: 🔃 Building Version Output
+        id: new_tag_builder
+        run: echo "new_tag=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
+      - name: 🛎️ Create a GitHub release
+        uses: release-drafter/release-drafter@master
+        with:
+          version: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          publish: true
+          if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
+
+  main_deployment:
+    if: github.ref == 'refs/heads/main'
+    needs: [ tagging_releases_main ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v3
+      - name: Touch local properties
+        run: touch local.properties
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Bump version
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{github.run_number}}
+          versionName: ${{needs.tagging_releases_staging.outputs.new_tag_version}}
+
+      - name: Assemble Release
+        run: ./gradlew bundleProductionRelease
+      - name: Sign Release
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/ProductionRelease
+          signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
+          alias: ${{ secrets.OUTGROW_APP_ALIAS }}
+          keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.OUTGROW_APP_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "33.0.1"
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/bundle/ProductionRelease
+      - name: download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app
+      - name: list files
+        run: ls -l
+      - name: Upload Android Release to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.waycool.iwap
+          releaseFiles: app-Production-debug-signed.aab
+          track: beta
+          inAppUpdatePriority: 5
+          userFraction: 1
+#          whatsNewDirectory: distribution/whatsnew
+#          mappingFile: app/build/outputs/mapping/release/mapping.txt
+#          debugSymbols: app/intermediates/merged_native_libs/release/out/lib
+#          file: app-Production-debug-signed.aab
