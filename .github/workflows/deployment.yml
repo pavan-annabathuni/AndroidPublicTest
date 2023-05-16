@@ -89,7 +89,7 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID_QA}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
           file: app-QA-debug-signed.apk
@@ -178,7 +178,7 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID}}
+          appId: ${{secrets.OUTGROW_APP_FIREBASE_APP_ID_STAGING}}
           serviceCredentialsFileContent: ${{ secrets.OUTGROW_APP_PRIVATE_KEY }}
           groups: testers
           file: app-Staging-debug-signed.apk
