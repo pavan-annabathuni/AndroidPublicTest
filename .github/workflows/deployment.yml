@@ -218,8 +218,7 @@ jobs:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           tag: ${{ steps.tag_version.outputs.new_tag }}
           publish: true
-          if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
-          prerelease: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
 
