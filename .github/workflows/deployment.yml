@@ -218,8 +218,7 @@ jobs:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           tag: ${{ steps.tag_version.outputs.new_tag }}
           publish: true
-          if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/staging'
-          prerelease: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_SECRET }}
 
@@ -272,7 +271,7 @@ jobs:
           releaseFiles: app-Production-debug-signed.aab
           track: beta
           inAppUpdatePriority: 5
-          userFraction: 1
+#          userFraction: 1.0
 #          whatsNewDirectory: distribution/whatsnew
 #          mappingFile: app/build/outputs/mapping/release/mapping.txt
 #          debugSymbols: app/intermediates/merged_native_libs/release/out/lib
