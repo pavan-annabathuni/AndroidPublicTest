@@ -271,7 +271,7 @@ jobs:
           releaseFiles: app-Production-debug-signed.aab
           track: beta
           inAppUpdatePriority: 5
-          userFraction: 1.0
+#          userFraction: 1.0
 #          whatsNewDirectory: distribution/whatsnew
 #          mappingFile: app/build/outputs/mapping/release/mapping.txt
 #          debugSymbols: app/intermediates/merged_native_libs/release/out/lib
