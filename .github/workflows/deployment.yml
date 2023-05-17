@@ -157,7 +157,7 @@ jobs:
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/apk/staging/debug
+          releaseDirectory: app/build/outputs/apk/Staging/debug
           signingKeyBase64: ${{ secrets.OUTGROW_APP_SIGNING_KEY }}
           alias: ${{ secrets.OUTGROW_APP_ALIAS }}
           keyStorePassword: ${{ secrets.OUTGROW_APP_KEY_STORE_PASSWORD }}
